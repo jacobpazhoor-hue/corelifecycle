@@ -1,0 +1,25 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "beats": [
+    {
+      "id": "attend",
+      "template": "hospitalRounds",
+      "focus": [0.30, 0.5],
+      "shots": [
+        { "type": "wide", "dur": 66 },
+        { "type": "closeup", "dur": 54 }
+      ]
+    },
+    {
+      "id": "money",
+      "template": "hospitalRounds",
+      "focus": [0.30, 0.5],
+      "shots": [
+        { "type": "medium", "dur": 45 },
+        { "type": "insert", "dur": 130, "numberFx": { "from": 90000, "to": 475000, "label": "Attending — first real pay" } }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+# Python deps the GitHub Actions render runner installs (free cloud render).
+# The cloud REGENERATES audio (edge-tts + numpy) and RENDERS — it never touches YouTube,
+# so no Google/OAuth libs are needed here (upload happens locally after review).
+numpy
+scipy
+soundfile
+edge-tts
+imageio-ffmpeg

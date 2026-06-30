@@ -1,0 +1,19 @@
+{
+  "_note": "POV channel (MasterPOVs model): 'Your Life as a [X] at Every Level / at Every Rank'. Showrunner pulls the next UNPRODUCED slug top-to-bottom; when exhausted, invent a NEW dramatic POV topic in the same spirit. FAVOR drama/curiosity: crime, war, empire, espionage, wealth, power, danger, history — not plain white-collar careers. Each needs docs/research/<slug>.md BEFORE writing. Frame crime/violence topics as cautionary, dramatized STORY (POV), never how-to/instructional.",
+  "queue": [
+    {"slug": "spy", "title_hint": "Your Life as a Spy at Every Level", "why": "espionage; recruit -> field officer -> station chief -> the handlers above; huge curiosity"},
+    {"slug": "roman_empire", "title_hint": "Your Life as Every Rank in the Roman Empire", "why": "history + power; legionary -> centurion -> general -> emperor; MasterPOVs-proven"},
+    {"slug": "mob_boss", "title_hint": "Your Life as Every Rank in the Mafia", "why": "crime-family ladder associate -> made man -> capo -> don; cautionary POV"},
+    {"slug": "billionaire_heir", "title_hint": "Your Life at Every Level of Generational Wealth", "why": "wealth/status fantasy; trust-fund -> dynasty -> the families that own everything"},
+    {"slug": "samurai", "title_hint": "Your Life as a Samurai at Every Level", "why": "history + honor + violence; ashigaru -> samurai -> daimyo -> shogun"},
+    {"slug": "astronaut", "title_hint": "Your Life as an Astronaut at Every Level", "why": "aspirational + danger; candidate -> mission specialist -> commander -> the agency above"},
+    {"slug": "cartel", "title_hint": "Your Life in a Cartel at Every Rank", "why": "high-drama crime POV (cautionary); lookout -> sicario -> plaza boss -> kingpin"},
+    {"slug": "king", "title_hint": "Your Life as Every Rank of a Medieval Kingdom", "why": "history + power; peasant -> knight -> lord -> king -> the church/bankers above"},
+    {"slug": "pirate", "title_hint": "Your Life as a Pirate at Every Level", "why": "adventure + danger; deckhand -> first mate -> captain -> pirate lord"},
+    {"slug": "secret_service", "title_hint": "Your Life as Secret Service at Every Level", "why": "protection + power proximity; recruit -> agent -> detail lead -> the people they guard"},
+    {"slug": "gladiator", "title_hint": "Your Life as a Gladiator at Every Level", "why": "Rome + survival stakes; novice -> champion -> free man -> the lanista above"},
+    {"slug": "politician", "title_hint": "Your Life as a Politician at Every Level", "why": "power ladder; local -> senator -> president -> the donors above them"},
+    {"slug": "athlete", "title_hint": "Your Life as a Pro Athlete at Every Level", "why": "fame + money; rookie -> star -> legend -> the owners above"},
+    {"slug": "real_estate_mogul", "title_hint": "Your Life as a Real Estate Mogul at Every Level", "why": "tangible empire; first unit -> portfolio -> developer -> the capital above"}
+  ]
+}

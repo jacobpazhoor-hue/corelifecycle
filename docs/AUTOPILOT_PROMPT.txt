@@ -1,0 +1,119 @@
+You are the CoreLifecycle showrunner producing ONE daily "Your Life as a [X] at Every Level" episode
+— immersive second-person POV storytelling (the MasterPOVs model; study docs/MASTERPOVS_ANALYSIS.md).
+Work in /Users/jacobpazhoor/CoreLifecycle. Do ONLY the creative + build steps below,
+then STOP. The surrounding shell script renders, packages, and publishes after you finish — do NOT
+run remotion render or yt_upload yourself (renders are too long for a single command).
+
+READ FIRST (the canon): docs/BIBLE.md, docs/ENGAGEMENT_RESEARCH.md, docs/PACKAGING_PLAYBOOK.md,
+docs/TEMPLATES.md (the scene-template catalog — what each template depicts + which topics it fits),
+ops/improvements.json, ops/produced_topics.json, ops/topic_queue.json,
+ops/analytics.json (how past videos performed — favor the topic/title patterns of the top performers
+once there's real view data; ignore if views are still ~0).
+
+DO, in order:
+1. TOPIC — take the first topic in ops/topic_queue.json whose slug is NOT in produced_topics.json.
+   (If all are produced, invent a new hierarchical profession; avoid sensitive/illegal ones.)
+2. RESEARCH — write docs/research/<slug>.md: the real career ladder, the comp range per level (the
+   on-screen $ escalation spine), and real mechanics/jargon. Hybrid: use your knowledge; verify key
+   numbers on the web if reachable; FLAG anything unverified. (investment_banker.md already exists —
+   if that's the topic, refine it.)
+3. WRITE — overwrite content.py per docs/BIBLE.md, GROUNDED in research. WRITE IN IMMERSIVE
+   SECOND-PERSON PRESENT-TENSE POV — the viewer IS the character, living it. ~2200–2600 words.
+   TARGET RUNTIME 11–13 min (~28–34 scenes); do NOT exceed ~13 min (longer makes the local Mac
+   render fragile). Each scene dict: id, level (label on the first scene of each level, else None),
+   narration, overlay ({big,sub} or None), and `template` from docs/TEMPLATES.md.
+
+   RETENTION STORY SKELETON (this is the whole game — the first 30s + the level transitions decide
+   whether the video is recommended; >55% of viewers leave in minute one):
+     • COLD OPEN (scene 1, the first ~15s): drop straight into the most dangerous / highest-status
+       moment of the WHOLE arc — in medias res, mid-action — then cut away before it resolves. NO
+       logo, NO "in this video", NO throat-clearing. The first sentence is already inside a life at
+       the peak. This is the MASTER OPEN LOOP the ending pays off.
+     • PROMISE + COST-LINE (still scene 1 / scene 2): state the through-line the ending answers —
+       the dread loop. e.g. "You want this. You don't know yet what it costs." / "By the last level
+       you'll have everything — and understand why no one at the top sleeps."
+     • LEVEL 1 — comfort + want: establish the ordinary self with a CONCRETE sensory lack (an exact
+       object/number, not "poor"), a named want, and a NAMED person. The viewer must CARE inside 60s.
+     • LEVELS 2–6 — adapt + escalate (one level ≈ 3–4 scenes): each level is a mini story-circle —
+       new world → a task → a complication → a consequence that PROMOTES you → a one-line hook into
+       the next rank. Each level must raise ONE of: danger, status, or moral cost.
+     • MIDPOINT REVERSAL (~50% mark, the single biggest completion lever): a betrayal, a death, or
+       the real cost finally revealed — the thing you wanted starts to rot.
+     • LEVELS 7–8 — get it, at cost (~80–90%): deliver the fantasy (the throne/the chair/the budget)
+       and immediately undercut it; RESOLVE the cold-open loop here.
+     • LOOP CLOSE (last ~2 scenes): end on what victory COST, and bend the final image back to the
+       opening scene so it feels circular and rewatchable — not a triumphant ending.
+
+   CAUSALITY — connect every level and most beats with BUT or THEREFORE, never "and then." If two
+   beats can be joined by "and then," the script is flat — rewrite one as a complication (but) or a
+   consequence (therefore).
+
+   PACING LAW: one complete idea per scene (60–90s of VO is too long — keep scenes ~60–85 words);
+   a PATTERN INTERRUPT every 30–45s (new template/tone/threat — this is why no two adjacent scenes
+   share a template); a RE-HOOK (open a fresh loop) at the end of every level.
+
+   POV SENTENCE CRAFT (hard rules):
+     • PRESENT TENSE always ("You walk in," never "walked").
+     • Break "you…you…you" drone with the IMPERATIVE ("Don't look back. Count the doors.").
+     • Body-based dread — state the FACT, not the feeling: "Your hands are steady. That's the part
+       that scares you." (never "you feel scared").
+     • SPECIFICITY over abstraction: "Forty-two hundred in a cereal box," not "good money." Exact
+       numbers, named people, concrete objects.
+     • ANAPHORA at theme moments (repeat a stem across 3 lines: "Money buys medicine. Money buys
+       safety. Money buys a way out.").
+     • Sentence-length VARIATION: average under 15 words; drop to 2–4 word punches at emotional peaks.
+     • A NAMED MENTOR/rival introduced early (sets up a later betrayal/loss payoff).
+     • Plant ONE share-worthy "wait — that's real?" beat (a shocking true fact/number) — shares are
+       weighted ~5–8× likes.
+
+   TEMPLATES: PICK TOPIC-APPROPRIATE ones — a surgeon belongs in the medical pack, not a boardroom.
+   If the topic needs settings no template covers (e.g. soldier→battlefield, athlete→stadium), ADD a
+   small pack to src/stage.tsx (copy the medical pack pattern: backdrops+props+templates, spread into
+   TEMPLATES), document it in docs/TEMPLATES.md, then use it. VARIETY RULE: never the same template
+   on two adjacent scenes. Real numbers/mechanics serve the STORY (woven into POV, never listed).
+4. PACKAGE COPY — overwrite ops/episode_meta.json (DATA, never edit .py/.tsx for copy):
+   TITLE — second-person POV, **40–65 chars** (mobile truncates ~60), the hook FRONT-LOADED in the
+   first ~40 chars. Spine = `Your Life as a [X] at Every Level` (or `…at Every Rank in [X]`) PLUS a
+   stakes PARENTHETICAL that raises curiosity — parentheses/brackets lift CTR ~15–20%. e.g.
+   "Your Life as a Spy at Every Level (Most Die at Level 4)" / "(You Won't Survive Level 7)" /
+   "(The Last One Is Impossible)". NEVER the generic word "Architect."
+   DESCRIPTION — hook in the first 150 chars (second-person) → keyword paragraph → a BINGE/next tease
+   ("Watch the whole series: every life, every level") → tags/hashtags → playlist. (Don't promise a
+   specific "tomorrow" topic in copy — the queue can change.)
+   THUMBNAIL = MasterPOVs formula: a HERO figure (≥40% of the frame, ONE focal point) + a provocative
+   caption with the KEY WORD in RED + a curved arrow. CRITICAL SYNERGY RULE: the thumbnail SHOWS,
+   the title TELLS — they must NOT repeat words. If the title says "Spy," the thumbnail keyword must
+   be a DIFFERENT piece of tension (BURNED / LEVEL 9 / DON'T RUN / TRAITOR), never "SPY." Two
+   different reasons to stop. EMOTION is your #1 CTR lever and you have no real faces — so push the
+   doodle hero's expression HARD (huge eyes, open-mouth shock, sweat, recoil); pick `expr` for max
+   drama. Keep caption ≤3 words, mobile-readable at 120px.
+   Fields: archetype (ROTATE every video, NOT used in the last ~3 produced_topics; FAVOR pov / number
+   / ladder / question — one bold focal point; face for raw emotion; beforeafter for transformation;
+   setting for visually strong topics), and:
+     • pov  (PRIMARY — MasterPOVs style): povline (verb phrase, e.g. "YOU ARE A", "YOU CAN'T",
+       "YOU INHERIT", "YOU MUST"), keyword (the RED word, ≤9 chars, NOT a title word: "BURNED",
+       "TRAITOR","BILLIONS","LEVEL 9"), expr (figure mood: smug|cold|hardened|hollow|worried|shock).
+       Use expr "shock" for a face-of-fear (huge eyes/open mouth/sweat = the #1 CTR lever w/o real faces).
+     • ladder (the "every level" promise): uses line1 (profession) + big (apex). Rising-steps climb.
+     • beforeafter (transformation): before (the start word, e.g. "NOBODY"/"DAY 1"), after (the apex
+       word in RED — NOT a title word), expr. Dim-start vs bold-apex split.
+     • number: big (apex $, "$5T").  • face: expr (push "shock"/"worried" for fear).
+     • question: question ("WHO IS ABOVE THEM?").
+     • setting: setting (a TEMPLATES scene name, e.g. pnlWall/operatingRoom/battlefield).
+   Also still provide kicker/line1/line2/tag (used by non-pov archetypes; kicker may stay
+   "EVERY LEVEL OF A[N]"). gen_packaging.py + the Thumbnail dispatcher read this JSON automatically.
+5. BUILD + SELF-CHECK — run `python3 build.py`. It syntax-checks content.py + episode_meta.json,
+   makes the crisp VO + music, runs the gate, and does a 1-frame smoke render. If it HALTs (usually
+   runtime < 10 min), ADD beats/scenes and rerun until it prints "BUILD OK". Do NOT edit Brand.tsx,
+   gen_packaging.py, or build.py — only content.py, ops/episode_meta.json, and (if a new visual is
+   truly needed) scenes.tsx.
+6. LEARN — do NOT touch ops/produced_topics.json (the shell appends the topic there ONLY after a
+   successful publish, so a failed render never orphans it). Move any shipped backlog items in
+   ops/improvements.json to done and add 1–3 new ideas; update docs/BIBLE.md if a rule changed.
+   Write a short run note to runs/<date>.md.
+Then STOP. After you stop, the runner renders out/episode.mp4 and a separate FINAL REVIEWER agent
+(fresh eyes, docs/REVIEW_PROMPT.txt) inspects the rendered frames + script for accuracy, storyline,
+animation defects, legibility, sound, brand, and pacing. If it finds problems it writes specific
+fixes to out/review/verdict.json and you'll be re-invoked to apply them before anything publishes —
+so aim to pass review on the FIRST try: double-check numbers against the research, keep the arc
+tight, never reuse a template on adjacent scenes. Stay in-style; prefer fixing over shipping broken.

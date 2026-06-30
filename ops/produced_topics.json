@@ -1,0 +1,56 @@
+{
+  "produced": [
+    {
+      "topic": "lawyer",
+      "title": "Every Level of a Lawyer \u2014 From Associate to Managing Partner",
+      "url": "https://youtu.be/ZQpAzns70b4",
+      "date": "2026-06-20",
+      "note": "10-min crisp v2; old 5.4min SP3fs8c0BD0 unlisted"
+    },
+    {
+      "topic": "investment_banker",
+      "title": "Every Level of an Investment Banker \u2014 From Analyst to Managing Director",
+      "url": "https://youtu.be/iCRh1imgBgo",
+      "date": "2026-06-21",
+      "note": "doodle style, reviewer-approved"
+    },
+    {
+      "topic": "surgeon",
+      "title": "Every Level of a Surgeon \u2014 From Med Student to Chief of Surgery",
+      "url": "https://youtu.be/YqDfplJCd9I",
+      "date": "2026-06-22",
+      "note": "first medical-pack episode (scrubIn/operatingRoom/hospitalRounds/scanReview/erTrauma/consult + lectureHall/podium). Spine $0(-$235K debt)->$68K->$77K->$90K->$475K->$960K->$1.5M->$5.3T. 34 scenes, 12.4 min, gate PASS."
+    },
+    {
+      "topic": "founder",
+      "title": "Every Level of a Founder \u2014 From First Idea to IPO",
+      "url": "https://youtu.be/kgZJpNNajQQ",
+      "date": "2026-06-23"
+    },
+    {
+      "topic": "hedge_fund_manager",
+      "title": "Every Level of a Hedge Fund Manager \u2014 From Analyst to Billionaire",
+      "url": "https://youtu.be/PqRq-2Rmbbo",
+      "date": "2026-06-24"
+    },
+    {
+      "topic": "soldier",
+      "title": "Every Level of a Soldier \u2014 From Recruit to Four-Star General",
+      "url": "https://youtu.be/TkA8BAwwjCQ",
+      "date": "2026-06-26"
+    },
+    {
+      "topic": "real_estate_mogul",
+      "title": "Every Level of a Real Estate Mogul \u2014 From Agent to Global Landlord",
+      "url": "https://youtu.be/jTfmhC3peEM",
+      "date": "2026-06-27"
+    },
+    {
+      "topic": "spy",
+      "title": "Your Life as a Spy at Every Level \u2014 Recruit to Spymaster",
+      "url": "https://youtu.be/4Qu5gDLhBzA",
+      "date": "2026-06-28"
+    }
+  ],
+  "_note": "Showrunner must NOT repeat a produced topic. Auto-generate a new hierarchical profession each run."
+}

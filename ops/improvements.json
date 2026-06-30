@@ -1,0 +1,275 @@
+{
+  "backlog": [
+    {
+      "id": "number-motion",
+      "impact": "low",
+      "note": "animate the $ overlays (count-up) for dopamine on the escalation beats"
+    },
+    {
+      "id": "negative-number-color",
+      "impact": "med",
+      "note": "surgeon ep introduced COST/negative overlays (-$235K debt, -$4.1M closed unit) rendered in the same gold as income. A red/amber treatment for negative numbers vs gold for income would sharpen the money-vs-cost contrast and underline the moral-erosion beats. Thumbnail tag too (the '$0 ->' state)."
+    },
+    {
+      "id": "non-finance-spine-validated",
+      "impact": "low",
+      "note": "surgeon proved the escalation spine works for a NON-money ladder where the bottom is DEBT and the apex is a SYSTEM ($5.3T), not a personal salary. Reusable pattern for soldier/doctor/politician: open on the system's total scale, end on 'they decide what X is worth.' Medical pack + lectureHall/podium covered every beat with no bespoke scenes."
+    },
+    {
+      "id": "valuation-vs-personal-spine",
+      "impact": "med",
+      "note": "founder ep used COMPANY VALUATION as the on-screen big-number spine ($0->$6M->...->$1B->$6B->$209B) with the founder's lagging personal money (salary, paper stake, % owned) in the SUB-caption. Sharpens the gap between what you BUILT and what you KEEP \u2014 reusable for any equity/ownership ladder (real_estate_mogul, hedge_fund, software_engineer FAANG->founder->VC). The dilution beat '100% -> 36%' as a non-dollar ratio overlay landed well."
+    },
+    {
+      "id": "ratio-overlay-treatment",
+      "impact": "low",
+      "note": "founder ep introduced non-dollar overlays for dramatic beats: a dilution ratio ('100% -> 36%') and a stat-as-power line ('9 IN 10 FAIL'). These read fine in the gold number style but a distinct visual treatment (e.g. arrow/percentage glyph, or the red/amber from negative-number-color) would let ratios/odds register as a different KIND of number than the $ spine. Pairs with the still-open negative-number-color item."
+    },
+    {
+      "id": "inverted-spine-validated",
+      "impact": "low",
+      "note": "soldier ep proved an INVERTED spine: the on-screen big number is NON-MONEY power (TROOPS UNDER YOUR COMMAND: 0 -> 9 -> 150 -> 700 -> 4,500 -> 20,000 -> 200,000) while PERSONAL PAY stays small, flat, and CAPS in the sub-caption (~$25K -> ~$221K). The drama is the GAP between exploding power and frozen pay \u2014 the opposite of the finance ladders where money is the spine. Apex flips to the system that POINTS the force ($895B budget / $2.7T global spend) and the civilians who never bleed. Reusable for politician (constituents/votes commanded vs a fixed salary), and any rank/authority ladder where power, not pay, is the escalation. RE-VALIDATED by spy: REACH (ASSETS 0 -> 4 -> ~20 -> ONE STATION -> A REGION -> EVERY COVERT OP -> 21,000 OFFICERS -> THE PEOPLE ABOVE) explodes in the overlay while GS pay stays capped in the sub ($66K -> ~$200K, 'you never get rich'); the only $ count-up is the apex $106B secret budget at cold-open + close. Pairs with [[non-finance-spine-validated]]."
+    },
+    {
+      "id": "negative-overlay-recurring",
+      "impact": "high",
+      "note": "NOW 6th+ episode with a COST/loss overlay rendered in the SAME gold as income: surgeon -$235K debt, hedge -$22M drawdown, soldier -1 KIA, real_estate 'FIRST EVICTION' + '100 UNITS CLEARED', spy 'BURNED', and roman_empire 'THE FARM IS SOLD' + 'ONE IN TEN' (decimation) + 'MURDERED'. The pattern is now load-bearing on the moral-erosion beats of EVERY topic. Bumped to HIGH: a red/amber treatment for negative/cost overlays (and a distinct glyph for ratio/stat overlays per [[ratio-overlay-treatment]]) vs gold for gain is the single highest-value visual upgrade left. Pairs with the still-open [[negative-number-color]]."
+    },
+    {
+      "id": "control-vs-own-spine-validated",
+      "impact": "med",
+      "note": "real_estate_mogul ep validated a LEVERAGE spine: the on-screen big number is ASSETS YOU CONTROL ($0 -> 300K -> 4M -> 40M -> 250M -> 2B -> 600B -> $393T) driven by debt + other people's money, while the personal cut / down payment / equity lags in the gold SUB-caption ('~$60K DOWN', 'NONE OF IT YOURS'). It's the third spine flavor after [[valuation-vs-personal-spine]] (what you BUILT vs KEEP) and [[inverted-spine-validated]] (power vs frozen pay): here it's what you CONTROL vs what you OWN. Reusable for any leverage/OPM ladder (private equity, leveraged trading, franchising). Apex flips to the asset class itself + the capital that prices it."
+    },
+    {
+      "id": "restage-reused-template-by-level",
+      "impact": "low",
+      "note": "spy reviewer (approve, score 8) flagged that the 'station' template at LEVEL 04 (chief of station, t11) is visually near-identical to LEVEL 02 (case officer, t04) \u2014 both correct & non-adjacent, so no BIBLE rule broken, but the jump in REACH reads only from the overlay text, not the staging. When the same topic-appropriate template is the right fit at two different LEVELS, the director engine could scale the staging by level depth (wider frame / more background figures / bigger desk count at the higher rung) so a reused template still reads as escalation, not repetition. Generalizes beyond spy (any ladder where one setting is the natural home for two ranks: tradingFloor analyst->PM, operatingRoom resident->attending). Cheap win in src/stage.tsx or director.tsx; pairs with the multi-shot director.",
+      "scene": "spy t11 vs t04"
+    },
+    {
+      "id": "faceless-secondary-figures",
+      "impact": "low",
+      "note": "spy reviewer noted secondary characters (Yusuf at dinner, junior officers in debriefs, boardroom figures) render as grey faceless silhouettes against the always-faced black POV figure. In spy it read as a deliberate 'they stopped being faces' motif and was consistent, so harmless here \u2014 but confirm it's intentional per-topic: for warmer relationship beats (a mentor, a spouse, a co-founder) a faced secondary figure could land more empathy. Low priority; flag only because it could read as a defect on a topic where the other person is meant to be sympathetic.",
+      "scene": "spy t05/t10/t13"
+    },
+    {
+      "id": "spy-pack-validated",
+      "impact": "low",
+      "note": "spy ep validated the SPY/espionage pack already in src/stage.tsx (tradecraft/surveillance/deadDrop/safehouse/station/debrief) + universal beats (deskClose/dinner/boardroomNotes/boardroomHead/atrium/window/revolvingDoor/warRoom/emptyChair). Covered the full Farm->DCIA->people-above ladder with zero bespoke scenes and no adjacent repeats across 28 scenes. Reusable for secret_service, FBI/undercover, cartel-counterintel beats. Confirms the pack-compose approach scales to crime/espionage topics."
+    },
+    {
+      "id": "smoke-covers-only-endpoints",
+      "impact": "med",
+      "note": "build.py smoke render only checks frame 0 (which is the fade-in -> BLANK) + the last frame, so a bespoke prop/backdrop used only mid-scene is NEVER smoke-tested and a render-time error or an ugly composition (the roman 'chariot' first read as ambiguous blobs) ships unseen. For roman I had to hand-render ~12 mid-scene stills to catch it. Cheap fix: when content.py introduces NEW template keys not in the previous episode, build.py should auto-render one mid-scene still per new template (pick frame = scene.startFrame + dur/2 from timeline.json) into out/_smoke_packs/ and HALT/warn on render error. Closes the QA gap between the 1-frame smoke and the post-render reviewer."
+    },
+    {
+      "id": "reusable-vehicle-mount-primitives",
+      "impact": "low",
+      "note": "The roman chariot (quadriga: gold car + spoked wheel + a 2-horse profile team) was bespoke and took a restage to read clearly. A small reusable library of side-profile ANIMAL/VEHICLE primitives (horse, cart, mounted rider, boat) in stage.tsx would speed up upcoming queue topics that need them: samurai (mounted), gladiator (chariot), pirate (ship/deck), king (horse/cavalry), astronaut (capsule). Keep the clean doodle profile shape from roman's chariot horses as the template."
+    },
+    {
+      "id": "roman-dual-spine-validated",
+      "impact": "low",
+      "note": "roman_empire validated a DUAL spine that combines the money ladder and the reach ladder in ONE overlay: gold $ census steps (0 DENARII -> 225/yr -> ~450 -> ~3,375 -> 400,000 SESTERCES -> 1,000,000 -> ALL OF ROME) interleaved with non-$ reach/cost beats (ONE IN TEN decimation, THE FARM IS SOLD, 15,000/GUARD donativum, 9,000 GUARDS, MURDERED, 25,000 SESTERCES/MAN auction). The apex twist 'even the throne has a per-man price (the 193 AD auction)' is a strong share beat. Reusable for any historical rank ladder where real coin AND real power both escalate (samurai/daimyo, medieval king, mongol). Pairs with [[non-finance-spine-validated]] and [[negative-overlay-recurring]]."
+    },
+    {
+      "id": "quality-max-plan",
+      "impact": "high",
+      "note": "docs/bibles/QUALITY_MAX_PLAN.md. Phases 1-5 SHIPPED 06-28 (Story+Packaging, Audio, Animation, Color, Thumbnails). Remaining: 6 Polish(transitions/boil/static-grain/sectioned score) \u2014 the deferred heavier/riskier set."
+    },
+    {
+      "id": "voice-gen-cache-and-parallel",
+      "impact": "med",
+      "note": "Follow-up to [[edge-tts-retry-resilience]]. gen_voice_edge.py still re-synthesizes ALL 28 scenes from the network on every build run, even when only content changed for a few (or a prior run already produced 27 good wavs). Two cheap wins: (1) per-scene CACHE keyed by a hash of (narration text + VOICE + RATE) -> skip synth+master when the cached wav matches, so a HALT-and-rerun reuses good scenes and only the failed/edited one re-hits the network (turns a ~2-3min voice step into seconds on reruns); (2) optionally a small bounded asyncio.gather pool (2-3 concurrent) to shorten cold builds. Caution: cache must invalidate on any narration edit (hash the text, not just the scene id) or it ships stale audio. Lives in gen_voice_edge.py."
+    }
+  ],
+  "done": [
+    {
+      "id": "edge-tts-retry-resilience",
+      "impact": "high",
+      "shipped": "2026-06-30",
+      "note": "gen_voice_edge.py had NO retry: a single transient edge-tts NoAudioReceived (a server/rate-limit blip) on ANY of the 28 sequential scenes aborted the whole build, and because nothing is cached the retry re-synthesized all 28 -> more dice rolls -> the 06-30 roman_empire build HALTed twice at DIFFERENT scenes (t28 then t12). Fixed: synth_mp3 now buffers the stream and retries up to 5x with linear backoff (1.5s,3s,...) on any exception incl. empty-stream, and the main loop sleeps 0.25s between scenes to ease rate-limiting. Build then passed clean (gate 13.1min, smoke OK). Pairs with the still-open [[voice-gen-cache-and-parallel]]."
+    },
+    {
+      "id": "roman-pack",
+      "impact": "high",
+      "shipped": "2026-06-29",
+      "note": "Added ROMAN EMPIRE pack to src/stage.tsx for roman_empire: backdrops romanForum (temple facade+columns+crowd), marchCamp (rampart of stakes + standard), tentCamp (rows of leather tents + campfire), battleLine (shield wall of scuta + spear tips + ridge/smoke), formation (helmeted century + standards), eagleField (the golden aquila/SPQR), triumphStreet (triumphal arch + crowd + falling laurel), throneHall (columns + purple drape + dais + throne), curia (tiered senator benches), praetorianCastra (crenellated wall + helmeted guards + crossed spears); props altar (oath flame) + chariot (quadriga: gold car + wheel + horse team); 12 templates (romanOath/legionDrill/legionCamp/shieldWall/centurionVitis/firstSpear/forumScene/warCouncil/triumph/throne/senate/praetorians) spread into PACK_TEMPLATES. Documented in docs/TEMPLATES.md. Used across 28 scenes, gate PASS, 0 warnings, 13.1 min. Validated all 12 via mid-scene stills (smoke only renders frame 0 + last). Reusable for samurai (formation/shieldWall), gladiator (forumScene/triumph), king/medieval (throne/senate/warCouncil), any empire/legion topic."
+    },
+    {
+      "id": "realestate-pack",
+      "impact": "med",
+      "shipped": "2026-06-27",
+      "note": "Added REAL ESTATE pack to src/stage.tsx for real_estate_mogul: backdrops suburbHouse (house + FOR SALE yard sign), apartmentBlock (lit-window facade), constructionSite (tower crane + steel frame), blueprintWall, cityRoof (rooftop railing over a night skyline); prop scaleModel (scale model of a development); templates openHouse/rentalUnits/constructionSite/modelReview/rooftopEmpire spread into PACK_TEMPLATES. Documented in docs/TEMPLATES.md. Used across the ep with no adjacent repeats; gate + smoke PASS, 10.5 min."
+    },
+    {
+      "id": "voice-crisp-master",
+      "note": "edge Andrew + 48k mastering chain (de-mud/presence/de-ess/exciter) \u2014 crisp, no static"
+    },
+    {
+      "id": "white-figure-clean",
+      "note": "connected limbs, full face both eyes, expression arc, real props"
+    },
+    {
+      "id": "packaging-step",
+      "note": "gen_packaging.py builds title+desc+auto-chapters+tags from playbook"
+    },
+    {
+      "id": "reliability-hardening",
+      "impact": "high",
+      "note": "data-driven packaging (episode_meta.json, stop editing tsx/py nightly) + syntax/smoke gates + render verify + run lock + notify. ROADMAP #3. DONE: episode_meta.json data-driven packaging+thumbnail, build.py syntax/smoke gates, runner lock+render-verify+notify.",
+      "shipped": "2026-06-21"
+    },
+    {
+      "id": "audio-review",
+      "impact": "med",
+      "note": "qa_audio.py faster-whisper transcript vs script + loudness check -> reviewer reads audio_report.json. ROADMAP #4.",
+      "shipped": "2026-06-21"
+    },
+    {
+      "id": "cloud-render",
+      "impact": "high",
+      "note": "Remotion Lambda render (parallel ~3-5min) then VPS/Modal to go laptop-free. See ROADMAP #1. DONE: modal_render.py PARALLEL frame-sharding (12 containers, ffmpeg stitch), wired into daily_autopilot render() with local fallback. Single-container was slower than M2; sharding gets it off laptop AND faster.",
+      "shipped": "2026-06-21"
+    },
+    {
+      "id": "topic-scene-packs",
+      "impact": "high",
+      "note": "ENGINE DONE: src/stage.tsx composable Stage (backdrop+prop+figure planes, parallax, figBehind) + BG/PROP libraries; medical pack (operatingRoom/hospitalRounds/scrubIn/scanReview/erTrauma/consult) + generic (lectureHallScene/podiumScene); spread into TEMPLATES; docs/TEMPLATES.md catalog; AUTOPILOT_PROMPT picks topic-appropriate + adds packs; gate.py reads stage keys. Validated via StageTest contact sheet.",
+      "shipped": "2026-06-21"
+    },
+    {
+      "id": "music-variation",
+      "impact": "med",
+      "note": "superseded by music-variety (done 2026-06-21).",
+      "shipped": "2026-06-21"
+    },
+    {
+      "id": "music-variety",
+      "impact": "med",
+      "note": "DONE: make_ambient.py reads ops/episode_meta.json topic -> deterministic seed varies root note/swell/pulse so every video sounds distinct (still original numpy, copyright-clean). Also vectorized the one-pole noise filter (scipy lfilter) -> build music step minutes->4.6s. Removed dead ambience.wav.",
+      "shipped": "2026-06-21"
+    },
+    {
+      "id": "voice-premium",
+      "impact": "med",
+      "note": "DEFERRED: user wants 100% free; staying on edge-TTS Andrew Multilingual + mastering chain. Revisit only if user opts into ElevenLabs (~$5-22/mo).",
+      "shipped": "2026-06-21"
+    },
+    {
+      "id": "fps-24",
+      "impact": "low",
+      "note": "DEFERRED (deliberate): 24fps benefit was faster render, but Modal sharding already solved render speed, so it only risks altering animation feel + needs coordinating with the nightly content.py rewrite. Not worth it; revisit only if Modal cost matters.",
+      "shipped": "2026-06-21"
+    },
+    {
+      "id": "repo-hygiene",
+      "impact": "low",
+      "note": "DONE: archived 8 dead one-off scripts + ambience.wav (29M) to experiments/; removed dead SCENE_COMPONENTS map + its unreachable fallback in Video.tsx (gate guarantees a valid template). Smoke-tested render path.",
+      "shipped": "2026-06-21"
+    },
+    {
+      "id": "analytics-loop",
+      "impact": "high-later",
+      "note": "DONE (Data-API tier): scripts/yt_analytics.py pulls per-video views/likes/comments -> ops/analytics.json, run at start of daily_autopilot, showrunner reads it (AUTOPILOT_PROMPT). FOLLOW-UP: CTR/retention need Analytics API scope (one-time re-auth). Sparse now (new channel) \u2014 value grows with views.",
+      "shipped": "2026-06-21"
+    },
+    {
+      "id": "shorts-track",
+      "impact": "med",
+      "note": "DONE: native 1080x1920 Shorts pipeline. shorts_cut.py picks hook+climax(+mid) beats <58s -> src/short.json; src/Short.tsx vertical comp (brand header + framed scene art + big gold number + CTA, reuses real per-scene VO + music); gen_short_packaging.py -> out/short_kit.json (links to full video); yt_upload.py gained --kit; wired into daily_autopilot step 7 (after main publish, non-fatal). Validated: render 14.7MB/45s, both beats stills look polished.",
+      "shipped": "2026-06-21"
+    },
+    {
+      "id": "shorts",
+      "impact": "high-later",
+      "note": "DONE: native 1080x1920 Shorts pipeline. shorts_cut.py picks hook+climax(+mid) beats <58s -> src/short.json; src/Short.tsx vertical comp (brand header + framed scene art + big gold number + CTA, reuses real per-scene VO + music); gen_short_packaging.py -> out/short_kit.json (links to full video); yt_upload.py gained --kit; wired into daily_autopilot step 7 (after main publish, non-fatal). Validated: render 14.7MB/45s, both beats stills look polished.",
+      "shipped": "2026-06-21"
+    },
+    {
+      "id": "more-domain-packs",
+      "impact": "high",
+      "note": "DONE (queue topics): added STARTUP (garageStart/startupGrow/serverScale/ipoBell -> founder, software_engineer), MILITARY (bootcamp/barracksLife/frontline/commandPost/decoration -> soldier), SPORTS (training/lockerRoomScene/gameDay/victory -> athlete) packs to src/stage.tsx; combined export PACK_TEMPLATES; docs/TEMPLATES.md updated; validated via StageTest. hedge_fund/real_estate/politician reuse office/finance+generic+revolvingDoor/podiumScene. Agent still adds bespoke packs for any uncovered topic.",
+      "shipped": "2026-06-21"
+    },
+    {
+      "id": "scene-template-registry",
+      "impact": "high",
+      "note": "refactor scenes into reusable templates keyed by name+params so ANY topic composes without bespoke code (BLOCKS topic-general autopilot) [shipped earlier; ledger tidied 2026-06-21]",
+      "shipped": "2026-06-20"
+    },
+    {
+      "id": "runtime-10min",
+      "impact": "high",
+      "note": "beat sheet 3-4 scenes/level, ~2000-2400 words, runtime gate enforces >=10min [shipped earlier; ledger tidied 2026-06-21]",
+      "shipped": "2026-06-20"
+    },
+    {
+      "id": "scene-variety-check",
+      "impact": "high",
+      "note": "no two adjacent scenes share a background template; gate flags repeats [shipped earlier; ledger tidied 2026-06-21]",
+      "shipped": "2026-06-20"
+    },
+    {
+      "id": "watch-real-render",
+      "impact": "high",
+      "shipped": "2026-06-21",
+      "note": "Reviewer now WATCHES the actual encoded render (technique from bradautomates/claude-video). qa_watch.py samples ~48 adaptive frames from out/episode.mp4 via Remotion BUNDLED ffmpeg/ffprobe (minimal build: seek-per-frame, no filters; DYLD/LD_LIBRARY_PATH to compositor dir) \u2014 no system install/brew, free. Wired into daily_autopilot review() (falls back to qa_sample source stills). REVIEW_PROMPT reads out/review/watch/*.png + flags encode/shard-boundary/sync defects that source-stills missed. Closes the QA blind spot opened by Modal sharded render + ffmpeg concat."
+    },
+    {
+      "id": "short-review-gate",
+      "impact": "med",
+      "shipped": "2026-06-21",
+      "note": "Short is now WATCHED + gated before auto-posting: qa_watch.py samples ~20 frames from out/short.mp4; short_gate.py (deterministic: <=60s Shorts limit, valid file, audio present, via bundled ffprobe) HALTs bad shorts; a lightweight reviewer (docs/SHORT_REVIEW_PROMPT.txt) watches the frames for vertical framing/legibility/defects -> out/review/short_verdict.json; daily_autopilot step 7 posts the Short ONLY on gate PASS + reviewer approve. All non-fatal (main video already live). Tested: 44.8s short -> 20 frames, gate PASS."
+    },
+    {
+      "id": "direction-engine",
+      "impact": "high",
+      "shipped": "2026-06-22",
+      "note": "QUALITY PLAN #1 DONE: director/animation engine. src/director.tsx (FramedScene wide/medium/closeup w/ per-template FOCUS face map; CountUp animated money overlay; NumberReveal full-screen insert). src/Video2.tsx = whole-video director renderer: each scene -> 2-3 SHOTS (wide->medium->short closeup) cut together with the money number COUNTING UP, shot durs sum to scene VO duration so audio stays synced; reads same timeline.json. Root: EveryLevelLawyer now = Video2 (live), old kept as EveryLevelV1. Validated: Slice demo (out/slice_demo.mp4) + 90s sample (out/v2_sample.mp4) + stills. Pipeline unchanged downstream (same comp id). NEXT: QUALITY PLAN #2 sound (arc-aware music + stingers + VO prosody + ducking)."
+    },
+    {
+      "id": "thumbnail-ab",
+      "impact": "med",
+      "note": "THUMBNAIL VARIETY DONE: src/thumbs.tsx = 5 rotating archetypes (number/face/climb/setting/question), each \u22644 words + one bold color pop + expressive face/curiosity per 2026 CTR research. Dispatcher picks thumb.archetype else rotates by topic hash. AUTOPILOT_PROMPT: agent rotates archetype every video + provides big/expr/setting/question. build.py syncs topic+thumb. yt_manage.py + thumbnails.set for retitle/rethumb of live videos. (True A/B Test&Compare still TODO.) ",
+      "shipped": "2026-06-24"
+    },
+    {
+      "id": "dup-title-guard-fix",
+      "impact": "high",
+      "shipped": "2026-06-24",
+      "note": "Fixed: founder DUPLICATE (deleted jFrZRKNvk6o) caused by transient claude 401 -> pipeline re-posted stale content. Added topic-advanced GUARD (HALT if creative agent did not reach a NEW unproduced topic). Retitled all live videos to per-profession apexes (no more generic Architect); AUTOPILOT_PROMPT title rule fixed. Unlisted old lawyer SP3fs8c0BD0. yt_manage.py added (delete/retitle/list)."
+    },
+    {
+      "id": "fixloop-overlay-render-fixes",
+      "impact": "high",
+      "shipped": "2026-06-27",
+      "note": "Fixed the 3 systemic bugs behind the 06-27 failures: (1) FIX-LOOP could only edit content.py/episode_meta/scenes.tsx so any reviewer note about stage.tsx/Video2.tsx/director.tsx -> revise->revise->HALT; revision prompt now allows all of src/. (2) OVERLAY/FIGURE COLLISION (number+level reveal looked unfinished) -> added paper scrim cards behind the level label + CountUp + static overlay (Video2.tsx + director.tsx) so they read over any figure; verified. (3) RENDER RETRY aborted on zsh nomatch glob (/tmp/remotion-*) + retried at same concurrency -> added setopt NO_NOMATCH + retry now drops to --concurrency=1 (lower memory, survives the seekToFrame/waitForReady stall from 8GB+Sammi contention) + timeout 180s."
+    },
+    {
+      "id": "quality-phase1-story-packaging",
+      "date": "2026-06-28",
+      "note": "Hardwired research-backed retention structure into the standing brain: AUTOPILOT_PROMPT WRITE step = cold-open in-medias-res + promise/cost-line + Harmon story-circle over levels + but/therefore causality + ~50% midpoint reversal + get-it-at-cost + cyclical loop-close + pacing law + POV craft (present-tense, imperative anti-drone, body-dread, specificity, anaphora, share-worthy beat). PACKAGE step + BIBLE = title 40-65 chars w/ stakes parenthetical, title<->thumbnail SYNERGY rule (no shared words), emotion-pushed doodle thumbnails. REVIEW_PROMPT enforces all of it. gen_packaging.py added non-fatal lint (title len / parenthetical / Architect / synergy overlap) \u2014 tested, correctly flags the pre-rules spy ep. Applies from roman_empire onward."
+    },
+    {
+      "id": "quality-phase2-audio",
+      "date": "2026-06-28",
+      "note": "Audio master, render-safe, all-numpy + full ffmpeg(imageio_ffmpeg). (1) duck_music.py: sidechain-style ducks ambient.wav under real VO windows (floor 0.42, 0.18s smooth) + synthesizes a tasteful SFX layer public/music/sfx.wav (whoosh-into-cut on normal cuts, riser+boom on level starts) \u2014 transients only (~2.8% nonzero), not a noise bed. Run in build.py step 1b (non-fatal, always writes sfx.wav). Video2 plays sfx.wav as a 0.5 Audio layer (smoke still verified OK). (2) audio_master.py: 2-pass loudnorm to -14 LUFS/-1 dBTP via imageio_ffmpeg full build, video stream COPIED; wired into render() + short render (non-fatal). Tested on spy episode: was -16.35 LUFS -> -14.0. No new fragile deps (pedalboard/pyloudnorm skipped)."
+    },
+    {
+      "id": "quality-phase3-animation",
+      "date": "2026-06-28",
+      "note": "Animation upgrade, render-safe (pure transform math, no new per-frame filters; cost unchanged ~0.072s/frame @ concurrency2, no flicker/thrash). director.tsx: camera push is now EXPO-OUT dolly (Easing.bezier(0.16,1,0.3,1)) per shot type (wide 1.075 / med 1.05 / closeup 1.03) + subpixel vertical settle, replacing the flat linear Ken-Burns; CountUp pop is now spring()-driven (overshoot+settle = earned reveal) + gold bar draws in via expo. Video2.tsx: level label slides in expo; static overlay has a staggered rise+fade entrance. Validated by 2 segment renders (cold-open count-up @0-120, level-start @820-915) + extracted frames: choreographed entrances, count-up spring pop, clean. Parallax already existed in stage.tsx Stage (far/near sway) for pack templates. NOT done (deferred to Phase 6 to limit risk): SVG draw-on of full line-art, @remotion/transitions, boil/grain."
+    },
+    {
+      "id": "quality-phase4-color",
+      "date": "2026-06-28",
+      "note": "Per-level COLOR DRAMATURGY in Video2.tsx, CSS-ONLY (no SVG filters -> render-safe; cost ~0.078s/frame vs 0.072 baseline, ~8%, no thrash). Video2 derives levelProgress 0->1 from LEVEL labels (lvlOf regex + maxLv) and passes prog to Beat. gradeTint() interpolates a 4-stop ramp warm gold(0)->cool teal(0.4)->ember red(0.75)->rich gold(1.0). Beat applies: a saturation/contrast/brightness CSS filter on the shots layer (lifts with prog), a soft-light tint overlay (op 0.05->0.16), a multiply darkening overlay (op 0->0.20), and a faint warm radial bloom (screen). All above shots, below text (text has paper scrims -> stays legible). Validated stills at L1(warm)/L5(cool teal)/L8(rich dark gold) \u2014 escalation reads, text crisp. Automatic: writer just labels levels, grade escalates itself. Deliberately did NOT add feTurbulence grain (full-frame per-frame SVG filter = the render-killer lesson; deferred to Phase 6 as a static pre-baked PNG if ever)."
+    },
+    {
+      "id": "quality-phase5-thumbnails",
+      "date": "2026-06-28",
+      "note": "Thumbnail formula rotation (thumbs.tsx; stills only, no render risk). Added 2 archetypes: LADDER (rising steps, climber->hero, metallic gold apex pill = the every-level promise) + BEFOREAFTER (dim NOBODY vs bold red apex split = transformation). BigHead gained a SHOCK/face-of-fear mood (huge eyes, open-mouth O, raised brows, sweat drop) for expr shock/fear/worried. Premium finish: metallic gold gradient #tgold (GoldPill helper) replacing flat yellow + drop-shadow #tdrop lifting heroes off the page (pov/climb/ladder/beforeafter). Fixed pre-existing question legibility bug (indigo block hid the T in THE SPIES). ARCHES=8, ORDER favors pov/number/ladder/question, climb rare. Validated via ThumbAll contact sheet (2 layout fixes: ladder hero clipping + beforeafter text/head collision) + real Thumbnail render. New optional meta fields: before/after (fallbacks NOBODY/keyword); expr shock. Prompt+BIBLE updated."
+    }
+  ]
+}

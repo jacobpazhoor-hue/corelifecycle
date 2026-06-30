@@ -1,0 +1,14 @@
+{
+  "cron": "0 2 * * *",
+  "publishMode": "public",
+  "autoUpload": true,
+  "minMinutes": 11,
+  "improvementsPerRun": 2,
+  "topics": "auto-generate",
+  "channel": "@corelifecycle",
+  "playlist": "Every Level",
+  "enabled": true,
+  "useModal": false,
+  "_note": "LIVE: produces+reviews+publishes daily at 2AM (doodle). Off: enabled:false or launchctl unload.",
+  "_useModal_note": "false=render locally (~28min on Mac). Set true for Modal sharded cloud render (~7-9min) once the Modal billing-cycle spend limit resets / credits added (capped 2026-06-22)."
+}

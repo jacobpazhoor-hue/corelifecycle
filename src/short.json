@@ -1,0 +1,41 @@
+{
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "totalFrames": 1650,
+  "topic": "spy",
+  "brand": {
+    "kicker": "EVERY LEVEL OF A",
+    "line1": "SPY",
+    "line2": "MASTER",
+    "tag": "RECRUIT \u2192 $106B"
+  },
+  "scenes": [
+    {
+      "id": "t00",
+      "template": "emptyChair",
+      "level": null,
+      "overlay": {
+        "big": "$106,000,000,000",
+        "sub": "THE PRICE OF THE WORLD'S SECRETS"
+      },
+      "audio": "audio/t00.wav",
+      "audioStartFrame": 6,
+      "durationInFrames": 825,
+      "startFrame": 0
+    },
+    {
+      "id": "t25",
+      "template": "warRoom",
+      "level": null,
+      "overlay": {
+        "big": "$106,000,000,000",
+        "sub": "THE SECRET BUDGET \u00b7 IT PRICES EVERY SECRET"
+      },
+      "audio": "audio/t25.wav",
+      "audioStartFrame": 6,
+      "durationInFrames": 825,
+      "startFrame": 825
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+# secrets never leave the Mac (OAuth/upload stays local; cloud never needs them)
+secrets/
+
+# generated audio/video — the cloud REGENERATES audio from content.py and renders;
+# these are huge (100s of MB) and exceed GitHub's 100MB file limit, so never commit them
+public/audio/
+public/music/
+out/
+*.mp3
+*.wav
+*.mp4
+
+# deps + caches + local run state
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+runs/
+voice_samples*/
+experiments/
+.remotion/

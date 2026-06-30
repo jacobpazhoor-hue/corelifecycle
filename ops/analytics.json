@@ -1,0 +1,165 @@
+{
+  "updated": "2026-06-30T17:24:07.800675+00:00",
+  "channel": {
+    "videos": 14,
+    "views": 516,
+    "subscribers": 4
+  },
+  "videos": [
+    {
+      "id": "kgZJpNNajQQ",
+      "topic": "founder",
+      "title": "Every Level of a Founder \u2014 From First Idea to IPO",
+      "published": "2026-06-23T16:56:30Z",
+      "views": 394,
+      "likes": 12,
+      "comments": 1,
+      "duration": "PT14M5S"
+    },
+    {
+      "id": "YqDfplJCd9I",
+      "topic": "surgeon",
+      "title": "Every Level of a Surgeon \u2014 From Med Student to Chief of Surgery",
+      "published": "2026-06-22T16:54:12Z",
+      "views": 48,
+      "likes": 1,
+      "comments": 0,
+      "duration": "PT12M23S"
+    },
+    {
+      "id": "PqRq-2Rmbbo",
+      "topic": "hedge_fund_manager",
+      "title": "Every Level of a Hedge Fund Manager \u2014 From Analyst to Billionaire",
+      "published": "2026-06-24T20:32:02Z",
+      "views": 24,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT13M3S"
+    },
+    {
+      "id": "iCRh1imgBgo",
+      "topic": "investment_banker",
+      "title": "Every Level of an Investment Banker \u2014 From Analyst to Managing Director",
+      "published": "2026-06-21T17:04:36Z",
+      "views": 21,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT10M49S"
+    },
+    {
+      "id": "4Qu5gDLhBzA",
+      "topic": "spy",
+      "title": "Your Life as a Spy at Every Level \u2014 Recruit to Spymaster",
+      "published": "2026-06-28T18:47:28Z",
+      "views": 10,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M56S"
+    },
+    {
+      "id": "TkA8BAwwjCQ",
+      "topic": "soldier",
+      "title": "Every Level of a Soldier \u2014 From Recruit to Four-Star General",
+      "published": "2026-06-26T15:08:40Z",
+      "views": 9,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT10M41S"
+    },
+    {
+      "id": "AWmf0DwSC-g",
+      "topic": null,
+      "title": "Every Level of a Surgeon \ud83d\udcb0 #shorts",
+      "published": "2026-06-22T16:55:36Z",
+      "views": 8,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT53S"
+    },
+    {
+      "id": "jTfmhC3peEM",
+      "topic": "real_estate_mogul",
+      "title": "Every Level of a Real Estate Mogul \u2014 From Agent to Global Landlord",
+      "published": "2026-06-28T04:12:48Z",
+      "views": 5,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M26S"
+    },
+    {
+      "id": "Gzcgp5W0asg",
+      "topic": null,
+      "title": "Every Level of a Soldier \ud83d\udcb0 #shorts",
+      "published": "2026-06-26T15:10:58Z",
+      "views": 4,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT53S"
+    },
+    {
+      "id": "ilBfri70z-U",
+      "topic": null,
+      "title": "Every Level of a Spy Master \ud83d\udcb0 #shorts",
+      "published": "2026-06-28T18:56:03Z",
+      "views": 3,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT56S"
+    },
+    {
+      "id": "ZQpAzns70b4",
+      "topic": "lawyer",
+      "title": "Every Level of a Lawyer \u2014 From Associate to Managing Partner",
+      "published": "2026-06-21T01:34:05Z",
+      "views": 2,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT10M8S"
+    },
+    {
+      "id": "pg08o0QpUqI",
+      "topic": null,
+      "title": "Every Level of a Hedge Fund \ud83d\udcb0 #shorts",
+      "published": "2026-06-24T20:34:03Z",
+      "views": 1,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT1M2S"
+    },
+    {
+      "id": "SP3fs8c0BD0",
+      "topic": null,
+      "title": "Every Level of a Lawyer \u2014 From Associate to Architect",
+      "published": "2026-06-21T00:25:51Z",
+      "views": 1,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT5M22S"
+    },
+    {
+      "id": "tUNzS85pGhQ",
+      "topic": null,
+      "title": "Every Level of a Property Mogul \ud83d\udcb0 #shorts",
+      "published": "2026-06-28T04:25:51Z",
+      "views": 0,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT56S"
+    },
+    {
+      "id": "ZX2asF5dLSM",
+      "topic": null,
+      "title": "Every Level of a Founder \ud83d\udcb0 #shorts",
+      "published": "2026-06-23T16:58:11Z",
+      "views": 0,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT57S"
+    }
+  ],
+  "insights": [
+    "Best so far: 'Every Level of a Founder \u2014 From First Idea to IPO' (394 views).",
+    "Lean into the patterns of the top performers (topic + title shape)."
+  ],
+  "note": "CTR/retention need the Analytics API (re-auth); these are Data-API stats."
+}

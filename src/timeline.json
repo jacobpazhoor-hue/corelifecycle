@@ -1,0 +1,337 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "totalFrames": 23544,
+  "voice": "en-US-AndrewMultilingualNeural",
+  "scenes": [
+    {
+      "id": "t00",
+      "level": null,
+      "overlay": {
+        "big": "ALL OF ROME",
+        "sub": "THE TRIUMPH \u00b7 REMEMBER YOU ARE MORTAL"
+      },
+      "template": "triumph",
+      "audio": "audio/t00.wav",
+      "audioStartFrame": 6,
+      "startFrame": 0,
+      "durationInFrames": 735
+    },
+    {
+      "id": "t01",
+      "level": "LEVEL 01  \u00b7  THE TIRO",
+      "overlay": {
+        "big": "0 DENARII",
+        "sub": "THE TIRO \u00b7 A DEBT AND ONE TUNIC"
+      },
+      "template": "romanOath",
+      "audio": "audio/t01.wav",
+      "audioStartFrame": 6,
+      "startFrame": 735,
+      "durationInFrames": 873
+    },
+    {
+      "id": "t02",
+      "level": null,
+      "overlay": null,
+      "template": "legionDrill",
+      "audio": "audio/t02.wav",
+      "audioStartFrame": 6,
+      "startFrame": 1608,
+      "durationInFrames": 861
+    },
+    {
+      "id": "t03",
+      "level": null,
+      "overlay": null,
+      "template": "legionCamp",
+      "audio": "audio/t03.wav",
+      "audioStartFrame": 6,
+      "startFrame": 2469,
+      "durationInFrames": 852
+    },
+    {
+      "id": "t04",
+      "level": "LEVEL 02  \u00b7  THE LEGIONARY",
+      "overlay": {
+        "big": "225 DENARII / YR",
+        "sub": "THE LEGIONARY \u00b7 THE PAY TO STAND AND DIE"
+      },
+      "template": "shieldWall",
+      "audio": "audio/t04.wav",
+      "audioStartFrame": 6,
+      "startFrame": 3321,
+      "durationInFrames": 837
+    },
+    {
+      "id": "t05",
+      "level": null,
+      "overlay": null,
+      "template": "legionDrill",
+      "audio": "audio/t05.wav",
+      "audioStartFrame": 6,
+      "startFrame": 4158,
+      "durationInFrames": 668
+    },
+    {
+      "id": "t07",
+      "level": "LEVEL 03  \u00b7  THE OPTIO",
+      "overlay": {
+        "big": "~450 DENARII / YR",
+        "sub": "THE OPTIO \u00b7 DOUBLE PAY \u00b7 80 MEN AT YOUR BACK"
+      },
+      "template": "centurionVitis",
+      "audio": "audio/t07.wav",
+      "audioStartFrame": 6,
+      "startFrame": 4826,
+      "durationInFrames": 961
+    },
+    {
+      "id": "t08",
+      "level": null,
+      "overlay": null,
+      "template": "shieldWall",
+      "audio": "audio/t08.wav",
+      "audioStartFrame": 6,
+      "startFrame": 5787,
+      "durationInFrames": 719
+    },
+    {
+      "id": "t09",
+      "level": null,
+      "overlay": {
+        "big": "ONE IN TEN",
+        "sub": "DECIMATION \u00b7 KILLED BY THE NINE BESIDE HIM"
+      },
+      "template": "legionDrill",
+      "audio": "audio/t09.wav",
+      "audioStartFrame": 6,
+      "startFrame": 6506,
+      "durationInFrames": 924
+    },
+    {
+      "id": "t10",
+      "level": "LEVEL 04  \u00b7  THE CENTURION",
+      "overlay": null,
+      "template": "shieldWall",
+      "audio": "audio/t10.wav",
+      "audioStartFrame": 6,
+      "startFrame": 7430,
+      "durationInFrames": 868
+    },
+    {
+      "id": "t11",
+      "level": null,
+      "overlay": {
+        "big": "~3,375 DENARII / YR",
+        "sub": "THE CENTURION \u00b7 80 MEN \u00b7 THE VINE STAFF"
+      },
+      "template": "centurionVitis",
+      "audio": "audio/t11.wav",
+      "audioStartFrame": 6,
+      "startFrame": 8298,
+      "durationInFrames": 801
+    },
+    {
+      "id": "t12",
+      "level": null,
+      "overlay": null,
+      "template": "legionCamp",
+      "audio": "audio/t12.wav",
+      "audioStartFrame": 6,
+      "startFrame": 9099,
+      "durationInFrames": 699
+    },
+    {
+      "id": "t13",
+      "level": "LEVEL 05  \u00b7  PRIMUS PILUS",
+      "overlay": {
+        "big": "400,000 SESTERCES",
+        "sub": "FIRST SPEAR \u00b7 A KNIGHT BY PROPERTY"
+      },
+      "template": "firstSpear",
+      "audio": "audio/t13.wav",
+      "audioStartFrame": 6,
+      "startFrame": 9798,
+      "durationInFrames": 852
+    },
+    {
+      "id": "t14",
+      "level": null,
+      "overlay": {
+        "big": "THE FARM IS SOLD",
+        "sub": "EVERYTHING TO SPEND \u00b7 NOWHERE TO RETURN"
+      },
+      "template": "forumScene",
+      "audio": "audio/t14.wav",
+      "audioStartFrame": 6,
+      "startFrame": 10650,
+      "durationInFrames": 853
+    },
+    {
+      "id": "t15",
+      "level": null,
+      "overlay": null,
+      "template": "shieldWall",
+      "audio": "audio/t15.wav",
+      "audioStartFrame": 6,
+      "startFrame": 11503,
+      "durationInFrames": 835
+    },
+    {
+      "id": "t16",
+      "level": "LEVEL 06  \u00b7  THE GENERAL",
+      "overlay": {
+        "big": "1,000,000 SESTERCES",
+        "sub": "THE GENERAL \u00b7 A SENATOR \u00b7 IMPERATOR"
+      },
+      "template": "warCouncil",
+      "audio": "audio/t16.wav",
+      "audioStartFrame": 6,
+      "startFrame": 12338,
+      "durationInFrames": 897
+    },
+    {
+      "id": "t17",
+      "level": null,
+      "overlay": {
+        "big": "THE TRIUMPH",
+        "sub": "YOUR FACE PAINTED AS A GOD"
+      },
+      "template": "triumph",
+      "audio": "audio/t17.wav",
+      "audioStartFrame": 6,
+      "startFrame": 13235,
+      "durationInFrames": 853
+    },
+    {
+      "id": "t18",
+      "level": null,
+      "overlay": null,
+      "template": "banquet",
+      "audio": "audio/t18.wav",
+      "audioStartFrame": 6,
+      "startFrame": 14088,
+      "durationInFrames": 794
+    },
+    {
+      "id": "t19",
+      "level": "LEVEL 07  \u00b7  CAESAR",
+      "overlay": {
+        "big": "ALL OF ROME",
+        "sub": "CAESAR \u00b7 THE TREASURY OF THE WORLD"
+      },
+      "template": "senate",
+      "audio": "audio/t19.wav",
+      "audioStartFrame": 6,
+      "startFrame": 14882,
+      "durationInFrames": 913
+    },
+    {
+      "id": "t20",
+      "level": null,
+      "overlay": {
+        "big": "15,000 / GUARD",
+        "sub": "THE DONATIVUM \u00b7 RENT ON THE THRONE"
+      },
+      "template": "throne",
+      "audio": "audio/t20.wav",
+      "audioStartFrame": 6,
+      "startFrame": 15795,
+      "durationInFrames": 794
+    },
+    {
+      "id": "t21",
+      "level": null,
+      "overlay": null,
+      "template": "banquet",
+      "audio": "audio/t21.wav",
+      "audioStartFrame": 6,
+      "startFrame": 16589,
+      "durationInFrames": 843
+    },
+    {
+      "id": "t22",
+      "level": "LEVEL 08  \u00b7  ABOVE CAESAR",
+      "overlay": {
+        "big": "9,000 GUARDS",
+        "sub": "THEY MAKE EMPERORS \u00b7 AND KILL THEM"
+      },
+      "template": "praetorians",
+      "audio": "audio/t22.wav",
+      "audioStartFrame": 6,
+      "startFrame": 17432,
+      "durationInFrames": 756
+    },
+    {
+      "id": "t23",
+      "level": null,
+      "overlay": null,
+      "template": "centurionVitis",
+      "audio": "audio/t23.wav",
+      "audioStartFrame": 6,
+      "startFrame": 18188,
+      "durationInFrames": 895
+    },
+    {
+      "id": "t24",
+      "level": null,
+      "overlay": null,
+      "template": "forumScene",
+      "audio": "audio/t24.wav",
+      "audioStartFrame": 6,
+      "startFrame": 19083,
+      "durationInFrames": 893
+    },
+    {
+      "id": "t25",
+      "level": null,
+      "overlay": {
+        "big": "MURDERED",
+        "sub": "MORE CAESARS DIED BY THE KNIFE THAN IN BED"
+      },
+      "template": "throne",
+      "audio": "audio/t25.wav",
+      "audioStartFrame": 6,
+      "startFrame": 19976,
+      "durationInFrames": 849
+    },
+    {
+      "id": "t26",
+      "level": null,
+      "overlay": {
+        "big": "25,000 SESTERCES / MAN",
+        "sub": "193 AD \u00b7 THE GUARD AUCTIONED ROME"
+      },
+      "template": "praetorians",
+      "audio": "audio/t26.wav",
+      "audioStartFrame": 6,
+      "startFrame": 20825,
+      "durationInFrames": 899
+    },
+    {
+      "id": "t27",
+      "level": null,
+      "overlay": null,
+      "template": "senate",
+      "audio": "audio/t27.wav",
+      "audioStartFrame": 6,
+      "startFrame": 21724,
+      "durationInFrames": 933
+    },
+    {
+      "id": "t28",
+      "level": null,
+      "overlay": {
+        "big": "ALL OF ROME",
+        "sub": "THE CHARIOT IS ALWAYS WAITING"
+      },
+      "template": "romanOath",
+      "audio": "audio/t28.wav",
+      "audioStartFrame": 6,
+      "startFrame": 22657,
+      "durationInFrames": 887
+    }
+  ]
+}
