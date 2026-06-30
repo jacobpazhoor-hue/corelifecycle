@@ -113,10 +113,12 @@ def main():
     if not art:
         sys.exit("cloud_render: no artifact found on the completed run")
     blob, _ = api(cfg, "GET", art["archive_download_url"], raw=True)
-    out = os.path.join(ROOT, "out"); os.makedirs(out, exist_ok=True)
+    # the artifact zip preserves repo-relative paths (out/episode.mp4, src/timeline.json, ...),
+    # so extract at the repo ROOT — NOT into out/ (that would nest as out/out/episode.mp4)
+    os.makedirs(os.path.join(ROOT, "out"), exist_ok=True)
     with zipfile.ZipFile(io.BytesIO(blob)) as z:
-        z.extractall(out)
-    ep = os.path.join(out, "episode.mp4")
+        z.extractall(ROOT)
+    ep = os.path.join(ROOT, "out", "episode.mp4")
     if not (os.path.exists(ep) and os.path.getsize(ep) > 50_000_000):
         sys.exit("cloud_render: artifact missing a valid out/episode.mp4")
     print(f"cloud_render: downloaded render -> out/ ({os.path.getsize(ep)//1_000_000} MB episode.mp4)")
