@@ -68,12 +68,19 @@ finish() {  # always runs (trap): release lock + record outcome
 }
 trap finish EXIT
 
-render() {  # render on Modal (parallel shards, off the laptop); fall back to local. VERIFY by file size.
-  rm -f out/episode.mp4
-  if grep -q '"useModal": *true' ops/routine.json && python3 modal_render.py; then
+render() {  # FREE CLOUD (GitHub Actions) -> Modal -> local. VERIFY by file size.
+  rm -f out/episode.mp4 out/short.mp4
+  CLOUD_OK=0   # global: step 7 reuses the cloud-rendered Short + skips a double audio master
+  # 1) FREE CLOUD RENDER — keeps the heavy render off the 8GB Mac (which thrashes on full episodes).
+  #    Requires secrets/gh.env (GH_OWNER/GH_REPO/GH_TOKEN). cloud_render.py pushes -> triggers the
+  #    Action -> downloads out/episode.mp4 + out/short.mp4 + kits (already -14 LUFS). See docs/CLOUD_RENDER.md.
+  if [ -f secrets/gh.env ] && python3 scripts/cloud_render.py "$NEWTOPIC"; then
+    echo "rendered on GitHub Actions (cloud) — artifact already mastered + includes the Short"
+    CLOUD_OK=1
+  elif grep -q '"useModal": *true' ops/routine.json && python3 modal_render.py; then
     echo "rendered on Modal (parallel shards)"
   else
-    echo "rendering LOCALLY (Modal disabled in routine.json or failed)"
+    echo "rendering LOCALLY (no cloud config / Modal disabled or failed)"
     # --gl=angle = stable headless GL; concurrency 4 (proven on this Mac by Sammi); --log=error keeps
     # the log small; caffeinate belt-and-suspenders. Retry once after purging caches on failure.
     _local_render() { caffeinate -dimsu npx remotion render EveryLevelLawyer out/episode.mp4 --gl=angle --concurrency="${1:-2}" --log=error --timeout=180000; }
@@ -89,8 +96,8 @@ render() {  # render on Modal (parallel shards, off the laptop); fall back to lo
   local sz=$(stat -f%z out/episode.mp4 2>/dev/null || stat -c%s out/episode.mp4)
   [ "$sz" -gt 50000000 ] || { echo "render file too small: ${sz} bytes"; return 1; }
   echo "render verified: ${sz} bytes"
-  # Phase-2 final loudness master to -14 LUFS (non-fatal; reviewer then watches the mastered file).
-  python3 audio_master.py out/episode.mp4 || echo "audio_master failed (non-fatal)"
+  # Final loudness master to -14 LUFS — SKIP if the cloud already did it (avoids a double AAC encode).
+  [ "$CLOUD_OK" = 1 ] || python3 audio_master.py out/episode.mp4 || echo "audio_master failed (non-fatal)"
 }
 review() { python3 qa_watch.py out/episode.mp4 || python3 qa_sample.py; python3 qa_audio.py || echo "qa_audio failed (non-fatal)"; "$CLAUDE" --print "$(cat docs/REVIEW_PROMPT.txt)"; }
 decision() { python3 -c "import json;print(json.load(open('out/review/verdict.json')).get('decision','reject'))" 2>/dev/null || echo reject; }
@@ -168,8 +175,9 @@ if t and t not in [x.get('topic') for x in p['produced']]:
     date +%F > runs/last_post.txt
     # 7) SHORT — auto-cut a vertical Short, WATCH + gate + review it, then publish (growth; non-fatal)
     echo "--- short ---"
-    if python3 shorts_cut.py && npx remotion render Short out/short.mp4 --timeout=120000; then
-      python3 audio_master.py out/short.mp4 || echo "short audio_master failed (non-fatal)"
+    # reuse the cloud-rendered Short if we have it; else cut + render it locally
+    if { [ "$CLOUD_OK" = 1 ] && [ -f out/short.mp4 ]; } || { python3 shorts_cut.py && npx remotion render Short out/short.mp4 --timeout=120000; }; then
+      [ "$CLOUD_OK" = 1 ] || python3 audio_master.py out/short.mp4 || echo "short audio_master failed (non-fatal)"
       python3 qa_watch.py out/short.mp4 out/review/short_watch || echo "short qa_watch failed (non-fatal)"
       if python3 short_gate.py out/short.mp4; then
         "$CLAUDE" --print "$(cat docs/SHORT_REVIEW_PROMPT.txt)"

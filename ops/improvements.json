@@ -270,6 +270,11 @@
       "id": "quality-phase5-thumbnails",
       "date": "2026-06-28",
       "note": "Thumbnail formula rotation (thumbs.tsx; stills only, no render risk). Added 2 archetypes: LADDER (rising steps, climber->hero, metallic gold apex pill = the every-level promise) + BEFOREAFTER (dim NOBODY vs bold red apex split = transformation). BigHead gained a SHOCK/face-of-fear mood (huge eyes, open-mouth O, raised brows, sweat drop) for expr shock/fear/worried. Premium finish: metallic gold gradient #tgold (GoldPill helper) replacing flat yellow + drop-shadow #tdrop lifting heroes off the page (pov/climb/ladder/beforeafter). Fixed pre-existing question legibility bug (indigo block hid the T in THE SPIES). ARCHES=8, ORDER favors pov/number/ladder/question, climb rare. Validated via ThumbAll contact sheet (2 layout fixes: ladder hero clipping + beforeafter text/head collision) + real Thumbnail render. New optional meta fields: before/after (fallbacks NOBODY/keyword); expr shock. Prompt+BIBLE updated."
+    },
+    {
+      "id": "engagement-short-attention",
+      "date": "2026-06-30",
+      "note": "Research-backed engagement pass (3 streams). Voice gen_voice_edge.py: RATE+8% ~190WPM, GAP .25 (+per-scene gap=0.7 dramatic), LEAD .1, trim_silence, WPM readout -> runtime ~13.1->~11.7min. Animation: Video2 planShots capShots (no shot >8s), director FramedScene continuous micro-sway. Thumbnail thumbs.tsx: +scaleterror/redacted/eyeline (withheld-question intrigue), ORDER favors intrigue, shock face already added. Story: AUTOPILOT_PROMPT WRITE pacing rewritten (45-70w scenes, front-load hooks, no dead beats, 25/50/75% re-hooks, causal connectives, hottest intro, gap=0.7 field). BIBLE+ENGAGEMENT_PLAN.md updated. Validated: gen_voice WPM/runtime, ThumbAll contact sheet, segment render."
     }
   ]
 }
