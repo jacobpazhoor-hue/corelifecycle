@@ -50,10 +50,12 @@ export const FramedScene: React.FC<{template: string; type: string; focus: [numb
   const s = base * interpolate(f, [0, dur], [1.0, PUSH_TO[type] ?? 1.05],
     {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
   const driftY = interpolate(f, [0, dur], [0.5, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
+  // continuous gentle sway so the frame is NEVER fully static (short-attention retention) — sub-pixel, cheap
+  const swayX = Math.sin(f * 0.03) * 0.28;
   const [fx, fy] = focus;
   return (
     <AbsoluteFill style={{backgroundColor: PAPER, overflow: 'hidden'}}>
-      <AbsoluteFill style={{transform: `scale(${s}) translateY(${driftY}%)`, transformOrigin: `${fx * 100}% ${fy * 100}%`}}>
+      <AbsoluteFill style={{transform: `scale(${s}) translate(${swayX}%, ${driftY}%)`, transformOrigin: `${fx * 100}% ${fy * 100}%`}}>
         {Art ? <Art /> : null}
       </AbsoluteFill>
     </AbsoluteFill>

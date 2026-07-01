@@ -2,7 +2,7 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 23544,
+  "totalFrames": 20219,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
@@ -14,9 +14,9 @@
       },
       "template": "triumph",
       "audio": "audio/t00.wav",
-      "audioStartFrame": 6,
+      "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 735
+      "durationInFrames": 658
     },
     {
       "id": "t01",
@@ -27,9 +27,9 @@
       },
       "template": "romanOath",
       "audio": "audio/t01.wav",
-      "audioStartFrame": 6,
-      "startFrame": 735,
-      "durationInFrames": 873
+      "audioStartFrame": 3,
+      "startFrame": 658,
+      "durationInFrames": 773
     },
     {
       "id": "t02",
@@ -37,9 +37,9 @@
       "overlay": null,
       "template": "legionDrill",
       "audio": "audio/t02.wav",
-      "audioStartFrame": 6,
-      "startFrame": 1608,
-      "durationInFrames": 861
+      "audioStartFrame": 3,
+      "startFrame": 1431,
+      "durationInFrames": 772
     },
     {
       "id": "t03",
@@ -47,9 +47,9 @@
       "overlay": null,
       "template": "legionCamp",
       "audio": "audio/t03.wav",
-      "audioStartFrame": 6,
-      "startFrame": 2469,
-      "durationInFrames": 852
+      "audioStartFrame": 3,
+      "startFrame": 2203,
+      "durationInFrames": 766
     },
     {
       "id": "t04",
@@ -60,9 +60,9 @@
       },
       "template": "shieldWall",
       "audio": "audio/t04.wav",
-      "audioStartFrame": 6,
-      "startFrame": 3321,
-      "durationInFrames": 837
+      "audioStartFrame": 3,
+      "startFrame": 2969,
+      "durationInFrames": 766
     },
     {
       "id": "t05",
@@ -70,9 +70,9 @@
       "overlay": null,
       "template": "legionDrill",
       "audio": "audio/t05.wav",
-      "audioStartFrame": 6,
-      "startFrame": 4158,
-      "durationInFrames": 668
+      "audioStartFrame": 3,
+      "startFrame": 3735,
+      "durationInFrames": 592
     },
     {
       "id": "t07",
@@ -83,9 +83,9 @@
       },
       "template": "centurionVitis",
       "audio": "audio/t07.wav",
-      "audioStartFrame": 6,
-      "startFrame": 4826,
-      "durationInFrames": 961
+      "audioStartFrame": 3,
+      "startFrame": 4327,
+      "durationInFrames": 852
     },
     {
       "id": "t08",
@@ -93,9 +93,9 @@
       "overlay": null,
       "template": "shieldWall",
       "audio": "audio/t08.wav",
-      "audioStartFrame": 6,
-      "startFrame": 5787,
-      "durationInFrames": 719
+      "audioStartFrame": 3,
+      "startFrame": 5179,
+      "durationInFrames": 621
     },
     {
       "id": "t09",
@@ -106,9 +106,9 @@
       },
       "template": "legionDrill",
       "audio": "audio/t09.wav",
-      "audioStartFrame": 6,
-      "startFrame": 6506,
-      "durationInFrames": 924
+      "audioStartFrame": 3,
+      "startFrame": 5800,
+      "durationInFrames": 790
     },
     {
       "id": "t10",
@@ -116,9 +116,9 @@
       "overlay": null,
       "template": "shieldWall",
       "audio": "audio/t10.wav",
-      "audioStartFrame": 6,
-      "startFrame": 7430,
-      "durationInFrames": 868
+      "audioStartFrame": 3,
+      "startFrame": 6590,
+      "durationInFrames": 763
     },
     {
       "id": "t11",
@@ -129,9 +129,9 @@
       },
       "template": "centurionVitis",
       "audio": "audio/t11.wav",
-      "audioStartFrame": 6,
-      "startFrame": 8298,
-      "durationInFrames": 801
+      "audioStartFrame": 3,
+      "startFrame": 7353,
+      "durationInFrames": 58
     },
     {
       "id": "t12",
@@ -139,9 +139,9 @@
       "overlay": null,
       "template": "legionCamp",
       "audio": "audio/t12.wav",
-      "audioStartFrame": 6,
-      "startFrame": 9099,
-      "durationInFrames": 699
+      "audioStartFrame": 3,
+      "startFrame": 7411,
+      "durationInFrames": 625
     },
     {
       "id": "t13",
@@ -152,9 +152,9 @@
       },
       "template": "firstSpear",
       "audio": "audio/t13.wav",
-      "audioStartFrame": 6,
-      "startFrame": 9798,
-      "durationInFrames": 852
+      "audioStartFrame": 3,
+      "startFrame": 8036,
+      "durationInFrames": 761
     },
     {
       "id": "t14",
@@ -165,9 +165,9 @@
       },
       "template": "forumScene",
       "audio": "audio/t14.wav",
-      "audioStartFrame": 6,
-      "startFrame": 10650,
-      "durationInFrames": 853
+      "audioStartFrame": 3,
+      "startFrame": 8797,
+      "durationInFrames": 741
     },
     {
       "id": "t15",
@@ -175,9 +175,9 @@
       "overlay": null,
       "template": "shieldWall",
       "audio": "audio/t15.wav",
-      "audioStartFrame": 6,
-      "startFrame": 11503,
-      "durationInFrames": 835
+      "audioStartFrame": 3,
+      "startFrame": 9538,
+      "durationInFrames": 742
     },
     {
       "id": "t16",
@@ -188,9 +188,9 @@
       },
       "template": "warCouncil",
       "audio": "audio/t16.wav",
-      "audioStartFrame": 6,
-      "startFrame": 12338,
-      "durationInFrames": 897
+      "audioStartFrame": 3,
+      "startFrame": 10280,
+      "durationInFrames": 788
     },
     {
       "id": "t17",
@@ -201,9 +201,9 @@
       },
       "template": "triumph",
       "audio": "audio/t17.wav",
-      "audioStartFrame": 6,
-      "startFrame": 13235,
-      "durationInFrames": 853
+      "audioStartFrame": 3,
+      "startFrame": 11068,
+      "durationInFrames": 768
     },
     {
       "id": "t18",
@@ -211,9 +211,9 @@
       "overlay": null,
       "template": "banquet",
       "audio": "audio/t18.wav",
-      "audioStartFrame": 6,
-      "startFrame": 14088,
-      "durationInFrames": 794
+      "audioStartFrame": 3,
+      "startFrame": 11836,
+      "durationInFrames": 704
     },
     {
       "id": "t19",
@@ -224,9 +224,9 @@
       },
       "template": "senate",
       "audio": "audio/t19.wav",
-      "audioStartFrame": 6,
-      "startFrame": 14882,
-      "durationInFrames": 913
+      "audioStartFrame": 3,
+      "startFrame": 12540,
+      "durationInFrames": 819
     },
     {
       "id": "t20",
@@ -237,9 +237,9 @@
       },
       "template": "throne",
       "audio": "audio/t20.wav",
-      "audioStartFrame": 6,
-      "startFrame": 15795,
-      "durationInFrames": 794
+      "audioStartFrame": 3,
+      "startFrame": 13359,
+      "durationInFrames": 699
     },
     {
       "id": "t21",
@@ -247,9 +247,9 @@
       "overlay": null,
       "template": "banquet",
       "audio": "audio/t21.wav",
-      "audioStartFrame": 6,
-      "startFrame": 16589,
-      "durationInFrames": 843
+      "audioStartFrame": 3,
+      "startFrame": 14058,
+      "durationInFrames": 744
     },
     {
       "id": "t22",
@@ -260,9 +260,9 @@
       },
       "template": "praetorians",
       "audio": "audio/t22.wav",
-      "audioStartFrame": 6,
-      "startFrame": 17432,
-      "durationInFrames": 756
+      "audioStartFrame": 3,
+      "startFrame": 14802,
+      "durationInFrames": 693
     },
     {
       "id": "t23",
@@ -270,9 +270,9 @@
       "overlay": null,
       "template": "centurionVitis",
       "audio": "audio/t23.wav",
-      "audioStartFrame": 6,
-      "startFrame": 18188,
-      "durationInFrames": 895
+      "audioStartFrame": 3,
+      "startFrame": 15495,
+      "durationInFrames": 785
     },
     {
       "id": "t24",
@@ -280,9 +280,9 @@
       "overlay": null,
       "template": "forumScene",
       "audio": "audio/t24.wav",
-      "audioStartFrame": 6,
-      "startFrame": 19083,
-      "durationInFrames": 893
+      "audioStartFrame": 3,
+      "startFrame": 16280,
+      "durationInFrames": 774
     },
     {
       "id": "t25",
@@ -293,9 +293,9 @@
       },
       "template": "throne",
       "audio": "audio/t25.wav",
-      "audioStartFrame": 6,
-      "startFrame": 19976,
-      "durationInFrames": 849
+      "audioStartFrame": 3,
+      "startFrame": 17054,
+      "durationInFrames": 737
     },
     {
       "id": "t26",
@@ -306,9 +306,9 @@
       },
       "template": "praetorians",
       "audio": "audio/t26.wav",
-      "audioStartFrame": 6,
-      "startFrame": 20825,
-      "durationInFrames": 899
+      "audioStartFrame": 3,
+      "startFrame": 17791,
+      "durationInFrames": 804
     },
     {
       "id": "t27",
@@ -316,9 +316,9 @@
       "overlay": null,
       "template": "senate",
       "audio": "audio/t27.wav",
-      "audioStartFrame": 6,
-      "startFrame": 21724,
-      "durationInFrames": 933
+      "audioStartFrame": 3,
+      "startFrame": 18595,
+      "durationInFrames": 835
     },
     {
       "id": "t28",
@@ -329,9 +329,9 @@
       },
       "template": "romanOath",
       "audio": "audio/t28.wav",
-      "audioStartFrame": 6,
-      "startFrame": 22657,
-      "durationInFrames": 887
+      "audioStartFrame": 3,
+      "startFrame": 19430,
+      "durationInFrames": 789
     }
   ]
 }

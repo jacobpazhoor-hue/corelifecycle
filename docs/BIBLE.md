@@ -7,12 +7,15 @@ bottom to the anonymous people at the top. Money + power + moral erosion, but fe
 Topics are dramatic / exotic / high-stakes (crime, war, empire, espionage, wealth, power, danger),
 not just white-collar careers — that is where the curiosity + clicks live.
 
-## Voice & audio
-- Engine: **edge-tts `en-US-AndrewMultilingualNeural`** (natural). Rate +6%.
+## Voice & audio  (tuned for short attention spans — see docs/bibles/ENGAGEMENT_PLAN.md)
+- Engine: **edge-tts `en-US-AndrewMultilingualNeural`**. **RATE `+8%`** (~190 WPM — faster/energetic;
+  Andrew's default is already brisk ~174; hard stop +15%). **GAP `0.25s`** after each scene (was 0.5 —
+  cutting dead air is the biggest "feels fast" lever), with a per-scene `gap=0.7` override ONLY on
+  dramatic reveal/cliffhanger beats. **LEAD `0.1s`**. Each clip is **silence-trimmed** (breaths/tails).
 - ALWAYS run through the **mastering chain** in gen_voice_edge.py `master()`: 48kHz upsample,
   HP 85Hz, de-mud 320Hz, presence shelf ~3.2k, de-ess 7.2k, gentle harmonic exciter (air),
-  soft compression, normalize 0.97. Crisp + clear, never staticy. (No synthetic-noise ambience —
-  it reads as static. Music bed only: numpy ambient @0.16.)
+  soft compression, normalize 0.97. Crisp + clear, never staticy. Final mix is loudnorm'd to −14 LUFS
+  (audio_master.py) with music ducked under VO + transient SFX on cuts (duck_music.py).
 
 ## Script (writer) — POV STORYTELLING (study docs/MASTERPOVS_ANALYSIS.md + docs/bibles/QUALITY_MAX_PLAN.md §2.1)
 RETENTION IS THE METRIC. North-star: hold **≥78% of viewers at 0:30**, **45–55% average-percent-viewed**

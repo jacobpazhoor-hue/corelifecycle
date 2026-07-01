@@ -42,18 +42,33 @@ type SceneT = {id: string; level: string | null; overlay: Overlay; template: str
   audio: string; audioStartFrame?: number; startFrame: number; durationInFrames: number};
 type Shot = {type: string; dur: number};
 
+// RETENTION pacing: something must visibly change every 5–8s, never hold a static frame past ~10s.
+const MAX_SHOT = 240; // 8s @30fps — any planned shot longer than this gets re-cut
+
+// split any over-long shot into equal sub-cuts (each restarts the camera push -> a visible change)
+function capShots(shots: Shot[]): Shot[] {
+  const out: Shot[] = [];
+  for (const sh of shots) {
+    if (sh.dur <= MAX_SHOT) {out.push(sh); continue;}
+    const n = Math.ceil(sh.dur / MAX_SHOT);
+    const base = Math.floor(sh.dur / n);
+    for (let i = 0; i < n; i++) out.push({type: sh.type, dur: i === n - 1 ? sh.dur - base * (n - 1) : base});
+  }
+  return out;
+}
+
 // distribute a scene's duration across shots (always sums to D) for editing rhythm
 function planShots(s: SceneT): Shot[] {
   const D = s.durationInFrames;
   const hasFace = !!FOCUS[s.template];
   if (D < 95) return [{type: hasFace ? 'closeup' : 'medium', dur: D}];
-  if (D < 200) {const a = Math.round(D * 0.55); return [{type: 'wide', dur: a}, {type: hasFace ? 'closeup' : 'medium', dur: D - a}];}
+  if (D < 200) {const a = Math.round(D * 0.55); return capShots([{type: 'wide', dur: a}, {type: hasFace ? 'closeup' : 'medium', dur: D - a}]);}
   // long scene: wide -> medium -> short closeup (closeup only if the face is locatable)
   const cu = hasFace ? Math.min(64, Math.round(D * 0.22)) : 0;
   const wide = Math.round((D - cu) * 0.55);
   const med = D - cu - wide;
-  return cu > 0 ? [{type: 'wide', dur: wide}, {type: 'medium', dur: med}, {type: 'closeup', dur: cu}]
-                : [{type: 'wide', dur: wide}, {type: 'medium', dur: D - wide}];
+  return capShots(cu > 0 ? [{type: 'wide', dur: wide}, {type: 'medium', dur: med}, {type: 'closeup', dur: cu}]
+                : [{type: 'wide', dur: wide}, {type: 'medium', dur: D - wide}]);
 }
 
 const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({scene, from, prog}) => {

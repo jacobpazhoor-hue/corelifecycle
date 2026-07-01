@@ -2,40 +2,40 @@
   "fps": 30,
   "width": 1080,
   "height": 1920,
-  "totalFrames": 1650,
-  "topic": "spy",
+  "totalFrames": 1622,
+  "topic": "roman_empire",
   "brand": {
-    "kicker": "EVERY LEVEL OF A",
-    "line1": "SPY",
-    "line2": "MASTER",
-    "tag": "RECRUIT \u2192 $106B"
+    "kicker": "EVERY RANK OF",
+    "line1": "ROME",
+    "line2": "EMPIRE",
+    "tag": "TIRO \u2192 CAESAR"
   },
   "scenes": [
     {
       "id": "t00",
-      "template": "emptyChair",
+      "template": "triumph",
       "level": null,
       "overlay": {
-        "big": "$106,000,000,000",
-        "sub": "THE PRICE OF THE WORLD'S SECRETS"
+        "big": "ALL OF ROME",
+        "sub": "THE TRIUMPH \u00b7 REMEMBER YOU ARE MORTAL"
       },
       "audio": "audio/t00.wav",
       "audioStartFrame": 6,
-      "durationInFrames": 825,
+      "durationInFrames": 735,
       "startFrame": 0
     },
     {
-      "id": "t25",
-      "template": "warRoom",
+      "id": "t28",
+      "template": "romanOath",
       "level": null,
       "overlay": {
-        "big": "$106,000,000,000",
-        "sub": "THE SECRET BUDGET \u00b7 IT PRICES EVERY SECRET"
+        "big": "ALL OF ROME",
+        "sub": "THE CHARIOT IS ALWAYS WAITING"
       },
-      "audio": "audio/t25.wav",
+      "audio": "audio/t28.wav",
       "audioStartFrame": 6,
-      "durationInFrames": 825,
-      "startFrame": 825
+      "durationInFrames": 887,
+      "startFrame": 735
     }
   ]
 }

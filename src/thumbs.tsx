@@ -242,10 +242,68 @@ const ThumbBefore: React.FC = () => {
   );
 };
 
-const ARCHES: Record<string, React.FC> = {pov: ThumbPov, ladder: ThumbLadder, beforeafter: ThumbBefore, number: ThumbNumber, face: ThumbFace, setting: ThumbSetting, question: ThumbQuestion, climb: ThumbClimb};
-// weighted to FAVOR the MasterPOVs POV thumbnail + the other high-click single-focal archetypes
-// (ladder = the "every level" promise; beforeafter = transformation). The busy old "climb" is rare.
-const ORDER = ['pov', 'number', 'ladder', 'question', 'pov', 'beforeafter', 'face', 'number', 'setting', 'pov', 'ladder', 'question', 'climb'];
+// ---- 8. SCALE-TERROR — tiny hero dwarfed by a huge looming threat ("how does he survive THAT?") ----
+const ThumbScaleTerror: React.FC = () => {
+  const mood = (FACES as any)[t.expr || 'worried'] || FACES.worried;
+  const kw = Math.min(150, Math.floor(900 / Math.max(KEYWORD.length, 1) * 0.95));
+  return (
+    <Wrap>
+      {/* colossal ominous silhouette looming over the frame */}
+      <g opacity={0.85} filter="url(#troughT)">
+        <circle cx={940} cy={300} r={250} fill={INK} />
+        <path d="M 700 560 Q 940 470 1180 560 L 1250 1080 L 630 1080 Z" fill={INK} />
+      </g>
+      {/* tiny hero, lower-left, craning up at it */}
+      <StickFigure pose={A.lookUp(0)} x={300} y={694} scale={1.5} facing={1} view="front" expr={mood} pal={LIGHT} rough frame={0} />
+      <text x={70} y={140} fontFamily={SANS} fontSize={44} fontWeight={800} letterSpacing={2} fill={INK}>{KICKER} {L1}</text>
+      <text x={66} y={140 + kw} fontFamily={SANS} fontSize={kw} fontWeight={800} letterSpacing={-1} fill={RED}>{KEYWORD}</text>
+    </Wrap>
+  );
+};
+
+// ---- 9. REDACTED — block the key element so the brain MUST resolve it (~+43% CTR from obscuring) ----
+const ThumbRedacted: React.FC = () => {
+  const mood = (FACES as any)[t.expr || 'cold'] || FACES.cold;
+  return (
+    <Wrap>
+      <g filter="url(#tdrop)"><StickFigure pose={A.stand(0)} x={1050} y={706} scale={4.3} facing={-1} view="front" expr={mood} pal={LIGHT} rough frame={0} /></g>
+      {/* the withheld element: a rough black redaction box with a red ? */}
+      <g filter="url(#troughT)" transform="rotate(-3 340 430)">
+        <rect x={120} y={300} width={440} height={260} rx={10} fill={INK} />
+        <text x={340} y={500} textAnchor="middle" fontFamily={SANS} fontSize={210} fontWeight={800} fill={RED}>?</text>
+      </g>
+      <text x={70} y={140} fontFamily={SANS} fontSize={44} fontWeight={800} letterSpacing={2} fill={INK}>{KICKER} {L1}</text>
+      <text x={120} y={650} fontFamily={SANS} fontSize={Math.min(116, Math.floor(900 / Math.max(KEYWORD.length, 1)))} fontWeight={800} fill={RED}>{KEYWORD}</text>
+    </Wrap>
+  );
+};
+
+// ---- 10. EYELINE — hero's gaze + arrow aimed at a PARTLY-shown mystery (fixes "arrow at nothing") ----
+const ThumbEyeline: React.FC = () => {
+  const mood = (FACES as any)[t.expr || 'worried'] || FACES.worried;
+  return (
+    <Wrap>
+      <g filter="url(#tdrop)"><StickFigure pose={A.lookUp(0)} x={330} y={706} scale={4.1} facing={1} view="front" expr={mood} pal={LIGHT} rough frame={0} /></g>
+      {/* partly-shown glowing mystery at the right edge (half off-frame = withheld) */}
+      <g filter="url(#troughT)">
+        <rect x={1095} y={300} width={260} height={430} rx={14} fill="url(#tgold)" stroke={INK} strokeWidth={6} opacity={0.94} />
+        <text x={1185} y={580} textAnchor="middle" fontFamily={SANS} fontSize={230} fontWeight={800} fill={INK}>?</text>
+      </g>
+      {/* curved arrow from the hero's eyeline -> the mystery */}
+      <g filter="url(#troughT)" stroke={INK} strokeWidth={9} fill="none" strokeLinecap="round">
+        <path d="M 540 360 Q 820 280 1075 430" />
+        <path d="M 1075 430 L 1034 414 M 1075 430 L 1050 462" />
+      </g>
+      <text x={70} y={140} fontFamily={SANS} fontSize={44} fontWeight={800} letterSpacing={2} fill={INK}>{KICKER} {L1}</text>
+      <text x={70} y={684} fontFamily={SANS} fontSize={Math.min(108, Math.floor(900 / Math.max(KEYWORD.length, 1)))} fontWeight={800} fill={RED}>{KEYWORD}</text>
+    </Wrap>
+  );
+};
+
+const ARCHES: Record<string, React.FC> = {pov: ThumbPov, scaleterror: ThumbScaleTerror, redacted: ThumbRedacted, eyeline: ThumbEyeline, ladder: ThumbLadder, beforeafter: ThumbBefore, number: ThumbNumber, face: ThumbFace, setting: ThumbSetting, question: ThumbQuestion, climb: ThumbClimb};
+// FAVOR the intrigue archetypes (each = ONE withheld question, the 2026 high-CTR pattern). The busy
+// old "climb" is rare; "setting" only when a topic's scene is visually strong.
+const ORDER = ['pov', 'scaleterror', 'number', 'redacted', 'ladder', 'eyeline', 'beforeafter', 'question', 'scaleterror', 'pov', 'redacted', 'face', 'eyeline', 'number', 'setting', 'climb'];
 
 // pick: explicit archetype, else deterministic rotation by topic so consecutive videos differ
 function pick(): React.FC {

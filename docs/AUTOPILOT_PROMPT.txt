@@ -48,9 +48,16 @@ DO, in order:
    beats can be joined by "and then," the script is flat — rewrite one as a complication (but) or a
    consequence (therefore).
 
-   PACING LAW: one complete idea per scene (60–90s of VO is too long — keep scenes ~60–85 words);
-   a PATTERN INTERRUPT every 30–45s (new template/tone/threat — this is why no two adjacent scenes
-   share a template); a RE-HOOK (open a fresh loop) at the end of every level.
+   PACING LAW (short attention spans — the video must FEEL fast): keep scenes SHORT — **~45–70 words
+   each** (one complete beat), never a slow/expository scene. Front-load EVERY scene on tension or a
+   question, not setup. NO DEAD BEATS: every line either raises a question or pays one off — cut any
+   line that's just "necessary to explain." A pattern interrupt every ~30s (new template/tone/threat —
+   why no two adjacent scenes share a template). Make the FIRST ~3 scenes the shortest + punchiest
+   (the intro decides everything). RE-HOOKS at the 25% / 50% / 75% marks and at every level change —
+   use causal connectives, not "next level": "but reaching Level 4 means nothing if you don't survive
+   Level 5." The 50% mark is the biggest mid-video drop — put a real twist/reversal there.
+   DRAMATIC-BEAT PAUSE: on a big reveal/cliffhanger scene, add `gap=0.7` to that scene dict (a longer
+   hold); leave normal scenes at the default tight gap. Use sparingly — contrast makes fast feel fast.
 
    POV SENTENCE CRAFT (hard rules):
      • PRESENT TENSE always ("You walk in," never "walked").

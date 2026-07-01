@@ -10,9 +10,12 @@ import soundfile as sf
 from content import SCENES, FPS
 
 VOICE = "en-US-AndrewMultilingualNeural"  # most natural/human free voice; alts in voice_samples_v2/
-RATE = "+0%"                   # measured (not the rejected slow rates); content carries length
-GAP = 0.5                      # silence after each scene (breathing + gravitas)
-LEAD = 0.2                     # quiet before narration starts within a scene
+# Engagement tuning (2026-06-30, research-backed): faster delivery + far less dead air = the biggest
+# "feels fast" lever for short attention spans. +10% ≈ ~165 WPM (sweet spot; hard cliff ~+15%/180 WPM).
+RATE = "+8%"                   # ~190 WPM (Andrew's default is already ~174; +8% is faster-but-clear). Bump to +10% for ~195 if you want it hotter.
+GAP = 0.25                     # silence after each scene (was 0.5 — cut dead air); per-scene `gap` overrides
+LEAD = 0.1                     # quiet before narration starts within a scene (was 0.2)
+BEAT_GAP = 0.7                 # longer hold for dramatic reveal/cliffhanger scenes (scene dict: gap=0.7)
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 AUDIO = os.path.join(ROOT, "public", "audio")
@@ -69,18 +72,33 @@ def master(y, sr):
     out = out / (np.max(np.abs(out)) + 1e-9) * 0.97
     return out.astype(np.float32), sr
 
+def trim_silence(y, sr, thresh=0.012, pad=0.04):
+    """Trim leading/trailing near-silence (TTS breaths/tails) so dead air doesn't accumulate per scene."""
+    a = np.abs(y)
+    idx = np.where(a > thresh)[0]
+    if len(idx) == 0:
+        return y
+    p = int(pad * sr)
+    return y[max(0, idx[0] - p):min(len(y), idx[-1] + p)]
+
 async def main():
     scenes_out = []
     cursor = 0
+    nwords = 0
+    speech_total = 0.0
     for sc in SCENES:
         mp3 = os.path.join(AUDIO, f"{sc['id']}.mp3")
         await synth_mp3(sc["narration"], mp3)
         y, sr = sf.read(mp3, dtype="float32")
         y, sr = master(y, sr)
+        y = trim_silence(y, sr)                                   # cut TTS breaths/tails (dead air)
         wav = os.path.join(AUDIO, f"{sc['id']}.wav")
         sf.write(wav, y, sr)
         speech = len(y) / sr
-        total = LEAD + speech + GAP
+        gap = float(sc.get("gap", GAP))                           # per-scene override for dramatic holds
+        total = LEAD + speech + gap
+        nwords += len(sc["narration"].split())
+        speech_total += speech
         dur_f = max(1, round(total * FPS))
         scenes_out.append({
             "id": sc["id"], "level": sc["level"], "overlay": sc["overlay"],
@@ -95,6 +113,7 @@ async def main():
     timeline = {"fps": FPS, "width": 1920, "height": 1080, "totalFrames": cursor, "voice": VOICE, "scenes": scenes_out}
     out = os.path.join(ROOT, "src", "timeline.json")
     json.dump(timeline, open(out, "w"), indent=2)
-    print(f"\nTOTAL: {cursor} frames = {cursor/FPS:.1f}s  (voice={VOICE}) -> {out}")
+    wpm = nwords / (speech_total / 60) if speech_total else 0
+    print(f"\nTOTAL: {cursor} frames = {cursor/FPS:.1f}s  ({nwords} words, ~{wpm:.0f} WPM, voice={VOICE} rate={RATE}) -> {out}")
 
 asyncio.run(main())
