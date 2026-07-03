@@ -23,9 +23,13 @@ export const FOCUS: Record<string, [number, number]> = {
   startupGrow: [0.30, 0.64], lectureHallScene: [0.51, 0.16],
   supervisor: [0.17, 0.66], atrium: [0.50, 0.78], warRoom: [0.51, 0.78], layoffs: [0.19, 0.78],
   boardroomHead: [0.50, 0.56], emptyChair: [0.29, 0.78], fileWall: [0.22, 0.74], podiumScene: [0.58, 0.78],
+  countRoom: [0.28, 0.62],
 };
 
-export const fmt = (v: number) => '$' + Math.round(v).toLocaleString('en-US');
+// dp = decimal places to keep. Count-ups pass the precision of their SETTLED target so a
+// fractional figure like 6.8 ("$6.8B") never rounds up to "$7" mid- or end-of-count.
+export const fmt = (v: number, dp = 0) => '$' + v.toLocaleString('en-US', {minimumFractionDigits: dp, maximumFractionDigits: dp});
+export const decimalsOf = (v: number) => {const s = String(v); const i = s.indexOf('.'); return i < 0 ? 0 : s.length - i - 1;};
 // parse "$475,000" / "$5,300,000,000,000" -> number; non-numeric (e.g. "1 IN 3") -> null
 export const parseNum = (s?: string | null): number | null => {
   if (!s) return null;
@@ -33,6 +37,16 @@ export const parseNum = (s?: string | null): number | null => {
   if (!m || !/\d/.test(s)) return null;
   const v = parseFloat(m[1]);
   return Number.isFinite(v) ? v : null;
+};
+// split a $-overlay into the part that counts up and the literal remainder that must
+// stay on screen: "$250K / YR" -> {num: 250, suffix: "K / YR"}. The count-up animates
+// only the leading digits; the suffix renders verbatim so the FULL label always shows
+// ("$250K / YR", never a truncated "$250"). Non-$ strings -> null (render static).
+export const splitMoney = (s?: string | null): {num: number; suffix: string} | null => {
+  const m = s?.trim().match(/^\$\s*(-?[\d,]+(?:\.\d+)?)(.*)$/);
+  if (!m) return null;
+  const v = parseFloat(m[1].replace(/,/g, ''));
+  return Number.isFinite(v) ? {num: v, suffix: m[2]} : null;
 };
 
 // ---- framed shot of a scene template (wide/medium/closeup focus on a point) ----
@@ -63,8 +77,8 @@ export const FramedScene: React.FC<{template: string; type: string; focus: [numb
 };
 
 // ---- positioned count-up overlay (sits on the scene shots, lower-left, while framing cuts) ----
-export const CountUp: React.FC<{from: number; to: number; sub?: string | null; dur: number}> =
-({from, to, sub, dur}) => {
+export const CountUp: React.FC<{from: number; to: number; suffix?: string; sub?: string | null; dur: number}> =
+({from, to, suffix = '', sub, dur}) => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
   const p = interpolate(f, [16, Math.min(dur - 12, 84)], [0, 1], {
@@ -75,12 +89,16 @@ export const CountUp: React.FC<{from: number; to: number; sub?: string | null; d
   const sp = spring({frame: Math.max(0, f - 8), fps, config: {damping: 11, mass: 0.6, stiffness: 170}});
   const pop = interpolate(sp, [0, 1], [0.8, 1]);
   const barW = interpolate(f, [18, 40], [0, 340], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
+  const dp = decimalsOf(to);
+  // size to the SETTLED full label ("$500M / YR"), so long suffixes never overflow
+  const settled = fmt(to, dp) + suffix;
+  const fs = settled.length > 12 ? 84 : 128;
   return (
     <div style={{position: 'absolute', bottom: 96, left: 72, opacity: op, transformOrigin: 'left bottom', transform: `scale(${pop})`, fontFamily: FONT,
       background: 'rgba(246,242,233,0.80)', padding: '20px 26px 22px', borderRadius: 16, boxShadow: '0 6px 30px rgba(20,15,8,0.18)'}}>
       <div style={{width: barW, height: 7, background: GOLD, marginBottom: 14, borderRadius: 4}} />
-      <div style={{display: 'inline-block', color: INK, fontSize: 128, fontWeight: 800, letterSpacing: -2, lineHeight: 1.05,
-        background: 'linear-gradient(transparent 58%, rgba(232,181,75,0.55) 58%)', padding: '0 8px'}}>{fmt(val)}</div>
+      <div style={{display: 'inline-block', color: INK, fontSize: fs, fontWeight: 800, letterSpacing: -2, lineHeight: 1.05,
+        background: 'linear-gradient(transparent 58%, rgba(232,181,75,0.55) 58%)', padding: '0 8px'}}>{fmt(val, dp)}{suffix}</div>
       {sub && <div style={{color: '#9a7322', fontSize: 27, fontWeight: 800, letterSpacing: 5, marginTop: 14, textTransform: 'uppercase'}}>{sub}</div>}
     </div>
   );
@@ -93,13 +111,14 @@ export const NumberReveal: React.FC<{from: number; to: number; label: string; du
   const p = interpolate(f, [10, Math.min(dur - 14, 78)], [0, 1], {
     extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
   const val = from + (to - from) * p;
+  const dp = decimalsOf(to);
   const pop = interpolate(f, [6, 16, 24], [0.8, 1.06, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const labelOp = interpolate(f, [Math.min(dur - 10, 70), Math.min(dur - 2, 80)], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (
     <AbsoluteFill style={{backgroundColor: PAPER, justifyContent: 'center', alignItems: 'center', fontFamily: FONT}}>
       <div style={{height: 16, width: `${interpolate(p, [0, 1], [60, 760])}px`, background: GOLD, borderRadius: 8, marginBottom: 40}} />
       <div style={{transform: `scale(${pop})`, color: INK, fontSize: 188, fontWeight: 800, letterSpacing: -4,
-        background: 'linear-gradient(transparent 60%, rgba(232,181,75,0.55) 60%)', padding: '0 18px'}}>{fmt(val)}</div>
+        background: 'linear-gradient(transparent 60%, rgba(232,181,75,0.55) 60%)', padding: '0 18px'}}>{fmt(val, dp)}</div>
       <div style={{opacity: labelOp, color: '#9a7322', fontSize: 40, fontWeight: 800, letterSpacing: 6, marginTop: 34, textTransform: 'uppercase'}}>{label}</div>
     </AbsoluteFill>
   );

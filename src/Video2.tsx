@@ -1,7 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame, Easing} from 'remotion';
 import timeline from './timeline.json';
-import {FramedScene, FOCUS, CountUp, parseNum} from './director';
+import {FramedScene, FOCUS, CountUp, splitMoney} from './director';
 
 // expo-out: fast in, slow settle — the entrance easing the count-up + camera already use, applied to text
 const EXPO = Easing.bezier(0.16, 1, 0.3, 1);
@@ -87,7 +87,9 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
   // (string starts with '$'). Otherwise — command counts ("~150 UNDER YOUR
   // COMMAND") and cost beats ("-1 KIA") — render the full string verbatim as
   // static big text instead of mis-formatting it as a dollar amount.
-  const num = scene.overlay?.big?.trim().startsWith('$') ? parseNum(scene.overlay.big) : null;
+  // splitMoney keeps the unit suffix ("K / YR", "/ WK") so the count-up shows the
+  // FULL label, never a truncated "$250".
+  const money = splitMoney(scene.overlay?.big);
   const lvlX = interpolate(f, [20, 42], [-36, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
   const lvlOp = interpolate(f, [20, 36, D - 18, D], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
@@ -132,8 +134,8 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
       )}
 
       {/* money: animated count-up if numeric, else static styled text */}
-      {scene.overlay && (num !== null
-        ? <CountUp from={from ?? 0} to={num} sub={scene.overlay.sub} dur={D} />
+      {scene.overlay && (money !== null
+        ? <CountUp from={from ?? 0} to={money.num} suffix={money.suffix} sub={scene.overlay.sub} dur={D} />
         : (
           <div style={{position: 'absolute', bottom: 96, left: 72, opacity: staticOp, fontFamily: FONT, transform: `translateY(${staticRise}px)`,
             background: 'rgba(246,242,233,0.80)', padding: '18px 24px 20px', borderRadius: 16, boxShadow: '0 6px 30px rgba(20,15,8,0.18)'}}>
@@ -159,18 +161,22 @@ const lvlOf = (lab: string | null) => {const m = lab ? /LEVEL\s*0?(\d+)/i.exec(l
 export const Video2: React.FC = () => {
   const scenes = timeline.scenes as SceneT[];
   const maxLv = scenes.reduce((mx, s) => Math.max(mx, lvlOf(s.level) ?? 0), 1);
-  let last: number | null = null;
+  // carry the previous figure into the next count-up ONLY when the unit suffix matches
+  // ("$5M / YR" -> "$500M / YR" counts 5->500; "$200 / WK" -> "$250K / YR" restarts at 0
+  // instead of counting across incompatible units)
+  let last: {num: number; suffix: string} | null = null;
   let cur = 0;
   const out: React.ReactNode[] = [];
   for (const s of scenes) {
     const n = lvlOf(s.level); if (n) cur = n;
     const prog = maxLv > 1 ? Math.min(1, Math.max(0, (cur - 1) / (maxLv - 1))) : 0;
-    const num = s.overlay?.big?.trim().startsWith('$') ? parseNum(s.overlay.big) : null;
+    const money = splitMoney(s.overlay?.big);
+    const from = money && last && last.suffix === money.suffix ? last.num : null;
     out.push(
       <Sequence key={s.id} from={s.startFrame} durationInFrames={s.durationInFrames}>
-        <Beat scene={s} from={last} prog={prog} />
+        <Beat scene={s} from={from} prog={prog} />
       </Sequence>);
-    if (num !== null) last = num;
+    if (money !== null) last = money;
   }
   return (
     <AbsoluteFill style={{backgroundColor: PAPER}}>

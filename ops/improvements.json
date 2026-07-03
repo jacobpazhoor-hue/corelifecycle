@@ -1,9 +1,14 @@
 {
   "backlog": [
     {
-      "id": "number-motion",
+      "id": "package-before-review",
+      "impact": "high",
+      "note": "mob_boss (07-01) got a 'revise' verdict whose ONLY blocker was pipeline order: daily_autopilot renders out/thumbnail.png + gen_packaging.py (upload_kit.json) at step 5 AFTER the review loop, so the reviewer sees the PREVIOUS episode's stale files on disk and correctly refuses to approve (a Roman 'YOU ARE MORTAL' thumb would have shipped on the Mafia video if not caught). Cheap fix: move `npx remotion still Thumbnail` + `python3 gen_packaging.py` to right after build (or into build.py step order) so the on-disk packaging always matches the episode under review; publish step can re-run them idempotently. Costs one 5s still per build; saves a whole render->review->fix cycle. MITIGATED MANUALLY on billionaire_heir (07-03): showrunner rendered the Thumbnail still + ran gen_packaging.py right after BUILD OK, so on-disk packaging matches the episode under review. The pipeline-order fix in daily_autopilot/build.py is still the real cure."
+    },
+    {
+      "id": "fix-agent-artifact-hygiene",
       "impact": "low",
-      "note": "animate the $ overlays (count-up) for dopamine on the escalation beats"
+      "note": "docs/research/mob_boss.md ended with stray literal '</content>\\n</invoke>' lines \u2014 a prior agent's tool-call syntax leaked into the written file. Harmless here (research doc), but if it happened inside content.py or episode_meta.json the syntax gate would HALT a build. Idea: build.py (or gate.py) grep the creative-owned text files for tool-call markers (</invoke>, </content>, <function_results) and warn, so a corrupted write is caught at build time, not at review."
     },
     {
       "id": "negative-number-color",
@@ -43,8 +48,8 @@
     {
       "id": "restage-reused-template-by-level",
       "impact": "low",
-      "note": "spy reviewer (approve, score 8) flagged that the 'station' template at LEVEL 04 (chief of station, t11) is visually near-identical to LEVEL 02 (case officer, t04) \u2014 both correct & non-adjacent, so no BIBLE rule broken, but the jump in REACH reads only from the overlay text, not the staging. When the same topic-appropriate template is the right fit at two different LEVELS, the director engine could scale the staging by level depth (wider frame / more background figures / bigger desk count at the higher rung) so a reused template still reads as escalation, not repetition. Generalizes beyond spy (any ladder where one setting is the natural home for two ranks: tradingFloor analyst->PM, operatingRoom resident->attending). Cheap win in src/stage.tsx or director.tsx; pairs with the multi-shot director.",
-      "scene": "spy t11 vs t04"
+      "note": "spy reviewer (approve, score 8) flagged that the 'station' template at LEVEL 04 (chief of station, t11) is visually near-identical to LEVEL 02 (case officer, t04) \u2014 both correct & non-adjacent, so no BIBLE rule broken, but the jump in REACH reads only from the overlay text, not the staging. When the same topic-appropriate template is the right fit at two different LEVELS, the director engine could scale the staging by level depth (wider frame / more background figures / bigger desk count at the higher rung) so a reused template still reads as escalation, not repetition. Generalizes beyond spy (any ladder where one setting is the natural home for two ranks: tradingFloor analyst->PM, operatingRoom resident->attending). Cheap win in src/stage.tsx or director.tsx; pairs with the multi-shot director. RECONFIRMED by mob_boss (07-01): reviewer flagged the 'two figures at a bar' look recurring ~6x across redSauce+socialClub (associate rules -> made-man earn -> capo sit-down -> Sal's murder -> the rat) with no visual escalation between ranks; one swap (t18->backAlley) reduced it but the by-level staging scaler remains the real fix.",
+      "scene": "spy t11 vs t04; mob_boss redSauce/socialClub"
     },
     {
       "id": "faceless-secondary-figures",
@@ -81,9 +86,47 @@
       "id": "voice-gen-cache-and-parallel",
       "impact": "med",
       "note": "Follow-up to [[edge-tts-retry-resilience]]. gen_voice_edge.py still re-synthesizes ALL 28 scenes from the network on every build run, even when only content changed for a few (or a prior run already produced 27 good wavs). Two cheap wins: (1) per-scene CACHE keyed by a hash of (narration text + VOICE + RATE) -> skip synth+master when the cached wav matches, so a HALT-and-rerun reuses good scenes and only the failed/edited one re-hits the network (turns a ~2-3min voice step into seconds on reruns); (2) optionally a small bounded asyncio.gather pool (2-3 concurrent) to shorten cold builds. Caution: cache must invalidate on any narration edit (hash the text, not just the scene id) or it ships stale audio. Lives in gen_voice_edge.py."
+    },
+    {
+      "id": "named-character-plant-gate",
+      "impact": "med",
+      "note": "mob_boss revise: Nicky (the entire Level-8 payoff) was first named at ~85% of runtime. Add a cheap gate check: any proper name appearing in the last third of content.py must also appear in the first two-thirds (plant before payoff). Catches unplanted-payoff bugs at build time instead of review."
+    },
+    {
+      "id": "template-room-distinctness",
+      "impact": "med",
+      "note": "mob_boss reviewer: cardGame/socialClub/redSauce/mobTable all read as the same beige bar-counter room (same bottle shelf/pictures/candle), so Sal's murder, the made-man payday and the rat reveal play in what looks like one location and pattern interrupts don't register. Give each template in a pack a distinct dominant palette + one unmistakable signature prop (card table felt, espresso bar, checkered tablecloth, long dark table) so cuts read as NEW rooms at 120px."
+    },
+    {
+      "id": "meta-topic-mismatch-guard",
+      "impact": "high",
+      "note": "billionaire_heir (07-03) run started from an INTERRUPTED prior run: content.py + research + dynasty pack were already written for billionaire_heir, but ops/episode_meta.json still held mob_boss. If build+render had run in that state, the heir video would have shipped with the Mafia title/description/thumbnail. Cheap guard: build.py already parses both files — add an assert that meta['topic'] (or its slug) appears in content.py's docstring/first 40 lines, HALT on mismatch. Catches every stale-meta / partial-run state for free. Same failure family as [[package-before-review]] (on-disk artifacts lagging the episode)."
+    },
+    {
+      "id": "centered-landmark-figure-collision",
+      "impact": "low",
+      "note": "heirGates first render placed the POV figure at x=960 — dead center on the estateGrounds fountain (also centered) — so the basin+jet read as a thought bubble sitting on the figure's head. Fixed by offsetting the figure to x=700 (still behind the bars, clear of fountain + crest). Rule of thumb for new templates: when a backdrop has a centered landmark (fountain, crest, vault door, podium), stage the figure off-center; the mid-scene pack still (per [[smoke-covers-only-endpoints]]) is what caught it.",
+      "scene": "billionaire_heir t01/t23/t30 heirGates"
+    },
+    {
+      "id": "want-object-visual-plant",
+      "impact": "low",
+      "note": "mob_boss: the black Cadillac (the named want-object opening and closing the loop) was never drawn \u2014 the cyclical echo was audio-only. Rule of thumb: if the script names a physical want-object in scene 1 and the loop close, stage.tsx should actually draw it in both (a small prop primitive is enough); the visual rhyme is what makes the ending feel circular."
     }
   ],
   "done": [
+    {
+      "id": "dynasty-pack",
+      "impact": "high",
+      "shipped": "2026-07-03",
+      "note": "Added DYNASTY/generational-wealth pack to src/stage.tsx for billionaire_heir: backdrops estateGrounds (mansion + fountain + hedgerows), portraitWall (4 gilt ancestor portraits + ONE EMPTY FRAME — the signature), seaDeck, ballroom, vaultHall (circular trust-vault door in a wall of deed boxes); prop estateGates (pillars + gold-finial bars + 'H' crest); 5 templates (heirGates/portraitHall/yachtDeck/galaBallroom/familyVault) spread into PACK_TEMPLATES, documented in docs/TEMPLATES.md. Used across 31 scenes with universal templates, no adjacent repeats, gate PASS 12.8min 0 warnings. All 5 validated via mid-scene stills (closing the [[smoke-covers-only-endpoints]] gap by hand); one fix: heirGates figure offset off the centered fountain (see [[centered-landmark-figure-collision]]). Reusable for king/medieval (portraitHall/galaBallroom), politician (galaBallroom), old-money finance topics (familyVault)."
+    },
+    {
+      "id": "mafia-pack",
+      "impact": "high",
+      "shipped": "2026-07-01",
+      "note": "Added MAFIA/Cosa Nostra pack to src/stage.tsx for mob_boss: 14 templates (mobTable/streetCorner/socialClub/cardGame/backAlley/madeCeremony/redSauce/waterfront/donOffice/commission/countRoom/courtroom/prisonCell/wiretap), documented in docs/TEMPLATES.md. Used across 30 scenes with no adjacent repeats; reviewer scored the episode 8 ('one of the strongest in the series', accuracy airtight). Post-review polish: t18 socialClub->backAlley (bar-look recurred 6x across redSauce+socialClub), countRoom figure restaged from behind the counting machine (head was fully hidden at the two peak-earn beats) to beside the table + director FOCUS entry so closeups land on the face. Reusable for cartel (streetCorner/backAlley/countRoom/courtroom/prisonCell/wiretap map directly), secret_service (wiretap/courtroom), casino topics (countRoom)."
+    },
     {
       "id": "edge-tts-retry-resilience",
       "impact": "high",
@@ -275,6 +318,11 @@
       "id": "engagement-short-attention",
       "date": "2026-06-30",
       "note": "Research-backed engagement pass (3 streams). Voice gen_voice_edge.py: RATE+8% ~190WPM, GAP .25 (+per-scene gap=0.7 dramatic), LEAD .1, trim_silence, WPM readout -> runtime ~13.1->~11.7min. Animation: Video2 planShots capShots (no shot >8s), director FramedScene continuous micro-sway. Thumbnail thumbs.tsx: +scaleterror/redacted/eyeline (withheld-question intrigue), ORDER favors intrigue, shock face already added. Story: AUTOPILOT_PROMPT WRITE pacing rewritten (45-70w scenes, front-load hooks, no dead beats, 25/50/75% re-hooks, causal connectives, hottest intro, gap=0.7 field). BIBLE+ENGAGEMENT_PLAN.md updated. Validated: gen_voice WPM/runtime, ThumbAll contact sheet, segment render."
+    },
+    {
+      "id": "number-motion",
+      "impact": "low",
+      "note": "animate the $ overlays (count-up) for dopamine on the escalation beats \u2014 SHIPPED: CountUp/NumberReveal in director.tsx animate the $ overlays; 07-02 fix made the count-up render the FULL label (splitMoney counts digits, suffix verbatim) after the truncation blocker."
     }
   ]
 }

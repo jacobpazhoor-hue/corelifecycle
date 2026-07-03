@@ -129,7 +129,7 @@ const ThumbNumber: React.FC = () => {
       {/* crimson UNDERLINE under the number (emphasis, not a strike-through) */}
       <rect x={600 - uw / 2} y={500} width={uw} height={30} rx={4} fill={POP.crimson} />
       <text x={66} y={684} fontFamily={SANS} fontSize={50} fontWeight={800} fill={POP.crimson}>{TAG}</text>
-      <StickFigure pose={A.lookUp(0)} x={1170} y={712} scale={2.5} facing={-1} view="front" expr={FACES.worried} pal={LIGHT} rough frame={0} />
+      <StickFigure pose={A.lookUp(0)} x={1170} y={712} scale={2.5} facing={-1} view="front" expr={(FACES as any)[t.expr || 'worried'] || FACES.worried} pal={LIGHT} rough frame={0} />
     </Wrap>
   );
 };
@@ -238,6 +238,12 @@ const ThumbBefore: React.FC = () => {
       {/* AFTER — right, bold + red, lifted off the page */}
       <g filter="url(#tdrop)"><StickFigure pose={A.stand(0)} x={968} y={714} scale={2.9} facing={-1} view="front" expr={mood} pal={LIGHT} rough frame={0} /></g>
       <text x={968} y={176} textAnchor="middle" fontFamily={SANS} fontSize={Math.min(96, Math.floor(740 / Math.max(AFTER.length, 1)))} fontWeight={800} fill={RED}>{AFTER}</text>
+      {/* premium finish: hand-drawn curved arrow before -> after + metallic-gold apex pill on the divide */}
+      <g filter="url(#troughT)" stroke={INK} strokeWidth={9} fill="none" strokeLinecap="round">
+        <path d="M 470 250 Q 640 165 800 235" />
+        <path d="M 800 235 L 760 218 M 800 235 L 777 271" />
+      </g>
+      {BIG ? <GoldPill x={640 - Math.max(300, BIG.length * 48) / 2} y={610} w={Math.max(300, BIG.length * 48)} h={80} label={BIG} fs={56} /> : null}
     </Wrap>
   );
 };

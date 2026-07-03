@@ -1,250 +1,280 @@
 #!/usr/bin/env python3
-"""Your Life as Every Rank in the Roman Empire — POV doodle build, ~12.5 min, template-driven.
-Grounded in docs/research/roman_empire.md (legion ranks + the cursus, early/high Empire / Principate).
-Second-person, present-tense POV: the viewer IS the soldier, climbing tiro -> legionary -> optio ->
-centurion -> primus pilus (knight) -> legate/general/imperator -> Caesar -> the people ABOVE Caesar
-(the Praetorian Guard, the frontier legions, the Senate, the mob, the gods).
+"""Your Life as a Billionaire Heir at Every Level — POV doodle build, ~12 min, template-driven.
+Grounded in docs/research/billionaire_heir.md (the generational-wealth ladder: heir -> student ->
+trust fund at 25/30/35 -> family office -> successor -> steward -> dynasty architect -> the invisible
+families no list names). Second-person present-tense POV: the viewer IS the third-generation heir of
+the fictional Halloran freight dynasty ($8.2B, founded 1954 with one truck). Dramatization layer on
+verified mechanics: buy-borrow-die/step-up basis, spendthrift trusts + HEMS, 25/30/35 vesting,
+family offices (~8,000 worldwide), South Dakota perpetual trusts (>$500B), Nevada 365-year trusts,
+the foundation 5% rule, Williams Group 70%/90% curse, Cerulli $124T Great Wealth Transfer,
+Cargill-MacMillan's 21 billionaires.
 
-DUAL SPINE (money + reach): a real MONEY/property escalation in the gold overlay — 0 DENARII (a debt
-and one tunic) -> 225 DENARII/YR (the Augustan legionary wage, minus deductions) -> ~450 (optio,
-double pay) -> ~3,375 (centurion, ~15x a ranker) -> 400,000 SESTERCES (primus pilus = the equestrian
-census, a knight) -> 1,000,000 SESTERCES (legate = the senatorial census) -> ALL OF ROME (Caesar, the
-treasury) -> 25,000 SESTERCES/MAN (the per-soldier price the Guard literally auctioned the Empire for
-in 193 AD). The apex twist: even the throne has a price, and it is the least safe seat on earth.
+SPINE (what is actually YOURS, against the fortune around you): $0 as a child in a $8.2B world ->
+$130K/yr tuition -> a $70M jet that is NOT yours -> $2M at 25 on the trust's terms -> a $40M exit
+that was secretly bought -> you RUN $6.8B -> the dynasty trust runs 365 years -> and the apex twist:
+you personally own $0 — ownership is the vulnerability; CONTROL is the only inheritance. The cold
+open (the will says "you inherit nothing") resolves at the vault: nothing is yours BY DESIGN.
 
-STORY: mentor DRUSUS — a grizzled centurion with the vine staff (vitis) who trains you, names his
-dead, and teaches the brutal truth ("most men don't get the land"). He falls in battle and presses the
-vitis into your hands (your promotion-into-centurion payoff); his dying line "hold them" recurs and pays
-off at your assassination. The home you climb for: your sister LIVIA, eating barley paste in the village,
-and the seized family farm you swore to buy back. The cost: the higher you rise, the further from home —
-at the top you own the world and have nowhere to return (the L5 homecoming reversal). Open loop (cold
-open): the TRIUMPH — gold chariot, red-painted face, the slave's whisper "remember you are mortal" —
-lived at L6 and paid off at L8 as you are murdered. Cyclical close: a new boy of seventeen swears the
-same oath; the chariot is always waiting, it only changes who stands in it.
+STORY: mentor HENRY — the grandfather-founder, one truck in 1954, grilled-cheese Thursdays, the
+portrait hall with ONE EMPTY FRAME and the sentence that runs the whole video: "None of this is
+yours. All of it is your problem." He dies at the ~50% mark; the will skips your father RICHARD
+(gen 2, secretly -$1.9B in the hole — the 70%-by-gen-2 curse on schedule) and names YOU successor.
+Rival: cousin PRESTON ("You know it's mine, right?"). The succession war: Halloran v. Halloran,
+the 9-6 family council vote, your father leaving without a word. The echo-engine: "11 minutes" of
+father-time, counted at 9 years old at the estate gates — recounted by YOUR son at the same gates —
+and by your granddaughter at the loop close. The gates (gilded bars, figBehind) are the want-object
+drawn in scene 1, scene 23 and the final scene.
 
-Theme (anaphora): "Money buys silver. Money buys rank. Money cannot buy the road home." /
-"You climb to be safe; the throne is the most dangerous chair ever built."
-Share-worthy true beats: the pay-minus-deductions ("you pay Rome to die for it"); DECIMATION; the
-TRIUMPH whisper; CLAUDIUS found behind a curtain; the 193 AD AUCTION of the Empire; Vespasian's joke.
+Theme (anaphora): "The money bought the room. The money bought the silence in it. The money bought
+you — the day you were born." Share-worthy true beats: buy-borrow-die = $0 tax; $500B parked in
+South Dakota forever-trusts; 70%/90% of fortunes dead by gen 2/3; one family with 21 billionaires;
+the $124T Great Wealth Transfer inside 2% of families.
 
-Topic templates: ROMAN pack (triumph/romanOath/legionDrill/legionCamp/shieldWall/centurionVitis/
-firstSpear/forumScene/warCouncil/throne/senate/praetorians) + universal dinner. No two adjacent scenes
-share a template. Each scene: id, level (label on first scene of each level, else None), narration
-(~70 words POV), overlay ({big,sub} or None), template. Dramatized/cautionary history, never how-to.
+Topic templates: DYNASTY pack (heirGates/portraitHall/portraitHallFilled — filled fifth frame,
+t29 only/yachtDeck/galaBallroom/familyVault) +
+universal (boardroomNotes/dinner/window/jet/signing/desk/deskClose/atrium/fileWall/boardroomHead/
+warRoom/revolvingDoor/emptyChair) + lectureHallScene + pnlWall + courtroom. No two adjacent scenes
+share a template. gap=0.7 only on the five biggest reveals.
 """
 
 FPS = 30
 
 SCENES = [
-    # ---- COLD OPEN — the triumph (the apex; cut away before it resolves) ----
-    dict(id="t00", level=None, template="triumph",
-         narration=("Gold wheels grind over stone. Four white horses. A whole city screaming your name. Your face is "
-                    "painted red — like Jupiter, like a god. And behind you in the chariot a slave leans close and "
-                    "whispers the only true thing said all day: remember you are mortal. You climbed your entire life "
-                    "to stand here, in the most dangerous chair on earth. You just don't know that yet."),
-         overlay=dict(big="ALL OF ROME", sub="THE TRIUMPH · REMEMBER YOU ARE MORTAL")),
+    # ---- COLD OPEN — the will reading (the page that makes no sense yet) ----
+    dict(id="t00", level=None, template="boardroomNotes", gap=0.7,
+         narration=("Four hours after your grandfather stops breathing, fourteen lawyers are seated at his table. "
+                    "You are thirty-one. The folder in front of you holds eight point two billion dollars — and the "
+                    "lawyer slides one page across the mahogany. You read it twice. You inherit: nothing. Not the "
+                    "house. Not the money. Nothing is yours. Your whole life was aimed at this room. You don't "
+                    "understand the page yet. You will."),
+         overlay=dict(big="$8,200,000,000", sub="THE WILL · AND THE PAGE SAYS: NOTHING")),
 
-    # ---- LEVEL 1 — THE TIRO (recruit) ----
-    dict(id="t01", level="LEVEL 01  ·  THE TIRO", template="romanOath",
-         narration=("Rewind. You are seventeen. A village you could spit across. A sister, Livia, who eats barley "
-                    "paste twice a day. A family farm the tax men took. You want it back, so you walk to the recruiter "
-                    "and swear the sacramentum — the soldier's oath — to an emperor a thousand miles away. Twenty-five "
-                    "years of service. No pay yet. One tunic, a debt, and a promise: survive, and Rome gives you land. "
-                    "You believe it."),
-         overlay=dict(big="0 DENARII", sub="THE TIRO · A DEBT AND ONE TUNIC")),
-    dict(id="t02", level=None, template="legionDrill",
-         narration=("Training is built to break you. It works. Twenty Roman miles a day under full load — armor, "
-                    "shield, stakes, three days' grain. You build a marching camp at dusk. You tear it down at dawn. "
-                    "You build it again. Your feet split; your hands harden. A centurion named Drusus runs you ragged, "
-                    "a worn vine staff in his fist. Most men, he says, never get the land. You decide, quietly, to be "
-                    "the exception."),
+    # ---- LEVEL 1 — THE HEIR ----
+    dict(id="t01", level="LEVEL 01  ·  THE HEIR", template="heirGates",
+         narration=("Start at the gates. You're nine. The driveway is half a mile long, the house at the end of it "
+                    "has forty-one rooms, and your father is in none of them. He runs the empire your grandfather "
+                    "started in 1954 with one rusted truck. Today you saw your father for eleven minutes. You "
+                    "counted. Other kids want bikes. You want an appointment."),
+         overlay=dict(big="41 ROOMS", sub="AND YOUR FATHER IN NONE OF THEM")),
+    dict(id="t02", level=None, template="portraitHall",
+         narration=("The only person in the house who talks to you like a person is the man who built it. Your "
+                    "grandfather Henry walks you down the portrait hall: his mother and father — farmers, painted "
+                    "in gold from the only photographs he had — then Henry himself, then your father Richard, "
+                    "painted at forty, already looking guarded. At the end hangs an empty frame. 'That one's "
+                    "yours,' Henry says. 'None of this is yours. All of it is your problem.'"),
          overlay=None),
-    dict(id="t03", level=None, template="legionCamp",
-         narration=("Night in the camp. Eight of you to a tent — your contubernium, the only family the legion gives "
-                    "you. One fire, one millstone, one fear nobody says aloud. Drusus sits against a stake and names "
-                    "his dead — Gaius, Maximus, the boy whose name he never learned. You ask why he stays. He watches "
-                    "the fire a long time. Because out there, he says, there is nothing left to go back to. You don't "
-                    "understand him yet."),
+    dict(id="t03", level=None, template="dinner",
+         narration=("Henry eats with you every Thursday. Cook's night off, grilled cheese, just you two. He keeps a "
+                    "photograph in his wallet — one rusted truck, 1954. 'I was poorer than anyone you will ever "
+                    "meet,' he says, and taps the picture. You ask him what it feels like to earn a dollar. He goes "
+                    "quiet for a long time. 'You'll have to fight harder than I did to find out.' You're nine. You "
+                    "think it's a riddle. It's a warning."),
+         overlay=dict(big="ONE TRUCK · 1954", sub="WHAT THE WHOLE THING GREW FROM")),
+
+    # ---- LEVEL 2 — THE STUDENT ----
+    dict(id="t04", level="LEVEL 02  ·  THE STUDENT", template="lectureHallScene",
+         narration=("But heirs aren't raised — they're placed. At fourteen you're sent to a school in Switzerland "
+                    "that costs a hundred and thirty thousand dollars a year — the most expensive school on Earth. "
+                    "Your roommate's father owns a shipping line. The boy across the hall is an actual prince. "
+                    "Nobody asks what your family does; asking is the one thing that isn't done. First rule of old "
+                    "money: never count another man's money out loud."),
+         overlay=dict(big="$130K / YR", sub="THE TUITION · THE MOST EXPENSIVE SCHOOL ON EARTH")),
+    dict(id="t05", level=None, template="window",
+         narration=("Your cousin Preston is three years older and already dresses like a board member. Christmas "
+                    "break, you two watch the adults through the library window — lawyers, even at Christmas, "
+                    "always lawyers. 'You know it's mine, right?' he says. Not cruel. Certain. 'I'm oldest. That's "
+                    "how this works.' You're fourteen, and something new and ugly switches on in your chest. Keep "
+                    "it. You're going to need it."),
+         overlay=None),
+    dict(id="t06", level=None, template="jet",
+         narration=("Sixteen. The jet waits for you now — seventy million dollars of aluminum that leaves when you "
+                    "say leave. You test it once: four friends, Portugal, a weekend, because you can. Monday, a "
+                    "polite man from something called the family office calls. The card you used isn't yours. The "
+                    "jet isn't yours. Nothing you touch is yours — every dollar you will ever spend is approved by "
+                    "a committee you've never met. The cage has wonderful catering."),
+         overlay=dict(big="$70M", sub="THE JET · NOT YOURS. NOTHING IS.")),
+
+    # ---- LEVEL 3 — THE TRUST FUND ----
+    dict(id="t07", level="LEVEL 03  ·  THE TRUST FUND", template="signing",
+         narration=("Twenty-five. A conference room, a trustee, a pen. Your trust vests today — the first of three "
+                    "doors: twenty-five, thirty, thirty-five. Ten thousand a month becomes two million, all at "
+                    "once. There are conditions, printed small. Health, education, maintenance, support — and the "
+                    "trust decides what those four words mean. Men you have never met wrote the rules of your life "
+                    "before you could read. You sign where the tab says sign."),
+         overlay=dict(big="$2M AT 25", sub="DOORS AT 25 · 30 · 35 — ON THEIR TERMS")),
+    dict(id="t08", level=None, template="yachtDeck",
+         narration=("The summer you turn twenty-six, you have four hundred friends. They find you — Monaco, "
+                    "Sardinia, a deck full of laughter you're quietly paying for. A woman you love signs a "
+                    "nondisclosure agreement before your third date; the lawyers insist. Everyone laughs at your "
+                    "jokes now. Your jokes have not gotten better. And the ugly switch Preston installed keeps "
+                    "asking: which of these people would stay for the version of you with nothing?"),
+         overlay=dict(big="400 FRIENDS", sub="AND AN NDA BEFORE THE THIRD DATE")),
+    dict(id="t09", level=None, template="desk",
+         narration=("So you try to become someone instead of something. You start a logistics-software company "
+                    "under a clean name — no Halloran anywhere on it. Eighteen-hour days, for the first time in "
+                    "your life, and it feels like health. Investors fight to get in; the round closes in a week. "
+                    "You allow yourself one night of pride. But at the closing dinner, an investor toasts you by "
+                    "your real name. Everyone knew. They always knew."),
+         overlay=None),
+    dict(id="t10", level=None, template="deskClose", gap=0.7,
+         narration=("Two years later a rival offers forty million for the company, and for one afternoon you feel "
+                    "earned. Then you read the diligence file. Your biggest customer — sixty percent of revenue — "
+                    "is a freight subsidiary your family quietly owns. Your father routed it to you. To keep you "
+                    "busy. To keep you contained. The exit was bought before you started. You sell anyway. Your "
+                    "hands don't shake when you sign. That's the part that scares you."),
+         overlay=dict(big="$40M EXIT", sub="SOLD · AND STILL NOT EARNED")),
+
+    # ---- LEVEL 4 — THE FAMILY OFFICE ----
+    dict(id="t11", level="LEVEL 04  ·  THE FAMILY OFFICE", template="atrium",
+         narration=("If the money is going to own you, you decide to learn how it works. The family office: one "
+                    "quiet floor in Manhattan, sixty-one employees, one client — your last name. There are about "
+                    "eight thousand offices like it on Earth, running fortunes like yours, and almost nobody knows "
+                    "they exist. Henry, ninety now, insists on walking you in himself. 'Took you long enough,' he "
+                    "says, and his grip on your arm is the proudest thing you've ever felt."),
+         overlay=dict(big="61 EMPLOYEES", sub="ONE CLIENT: YOUR LAST NAME")),
+    dict(id="t12", level=None, template="familyVault",
+         narration=("They show you the vault. No gold. Paper. Trust deeds, four hundred LLCs, a family constitution "
+                    "older than your father. And they teach you old money's favorite trick: buy, borrow, die. Never "
+                    "sell — borrow against the stock at two percent and live on the loan, tax-free. Die, and the "
+                    "step-up wipes the gains clean for your heirs. The estate tax is forty percent on paper. The "
+                    "family has paid almost none of it in seventy years. All of it legal."),
+         overlay=dict(big="$0 TAX", sub="BUY · BORROW · DIE — AND THE STEP-UP WIPES IT")),
+    dict(id="t13", level=None, template="fileWall",
+         narration=("Weeks in the files teach you the shape of the thing. The foundation with your name on a museum "
+                    "wing. The freeport vault in Geneva where the paintings live, duty-free, in the dark. The trust "
+                    "in South Dakota — because South Dakota lets a trust live forever, and half a trillion dollars "
+                    "of family money now sits there in quiet buildings tourists walk past. You finally see it: the "
+                    "family doesn't own things. The family is a legal weather system."),
+         overlay=dict(big="$500B", sub="PARKED IN SOUTH DAKOTA TRUSTS · FOREVER")),
+    dict(id="t14", level=None, template="dinner",
+         narration=("Thursday. Grilled cheese, like you're nine again. Henry is ninety-one and doesn't eat much "
+                    "now. 'Listen,' he says. 'Seventy percent of families lose it all by the second generation. "
+                    "Ninety by the third.' He looks at you a long, level moment. 'You're the third.' Then, quieter: "
+                    "'Watch your father. He's been losing since the day I didn't die on schedule.' You laugh. Henry "
+                    "doesn't. That is the last dinner."),
+         overlay=dict(big="70% → 90%", sub="FORTUNES DEAD BY GEN 2 · GEN 3 — YOU'RE GEN 3")),
+
+    # ---- MIDPOINT — the founder dies; the will skips a generation ----
+    dict(id="t15", level=None, template="portraitHall",
+         narration=("Henry dies on a Tuesday, in the house, in the room he was born poor enough to remember. "
+                    "Ninety-one years. One truck to eight point two billion. At the funeral, four hundred people "
+                    "fill the hall, and a black ribbon hangs on his gold frame. Your father doesn't cry; he checks "
+                    "his phone. Preston squeezes your shoulder like a handshake he's been practicing. You are "
+                    "thirty-one. The will is read in four hours."),
+         overlay=dict(big="91 YEARS", sub="ONE TRUCK TO $8.2B · THE FOUNDER IS GONE")),
+    dict(id="t16", level=None, template="boardroomNotes", gap=0.7,
+         narration=("The same table from the beginning. Fourteen lawyers. The folder. The page. You inherit "
+                    "nothing — because everything is already in trust. Nothing to tax. Nothing to sue. Nothing a "
+                    "divorce or a creditor can ever touch. That was Henry's design: own nothing, control "
+                    "everything. Then the lawyer turns to the second page. The trusts require a successor. Henry "
+                    "chose one, in his own hand. It is not your father. It's you."),
+         overlay=dict(big="YOU. NOT HIM.", sub="THE SUCCESSION SKIPS A GENERATION")),
+
+    # ---- LEVEL 5 — THE SUCCESSION WAR ----
+    dict(id="t17", level="LEVEL 05  ·  THE SUCCESSION WAR", template="pnlWall",
+         narration=("You ask the office for the full books — a successor's right. It takes them nine days to "
+                    "comply, and on the tenth you understand why Henry skipped a generation. Your father has been "
+                    "borrowing against the family's collateral for a decade. Bad hotels. A vanity airline. Margin. "
+                    "The hole is one point nine billion dollars, papered over with newer debt. Henry knew. The "
+                    "curse doesn't skip generations — it books them in advance."),
+         overlay=dict(big="-$1.9B", sub="YOUR FATHER'S HOLE · THE CURSE, ON SCHEDULE")),
+    dict(id="t18", level=None, template="courtroom",
+         narration=("Your father sues. To break the trust, to void the succession, to finally become the thing his "
+                    "father never let him be. Preston joins him — he was always certain. Halloran versus Halloran: "
+                    "two years, forty lawyers, billed hourly. You learn the ugliest true thing about money this "
+                    "size: it doesn't tear families apart. It just pays for the tearing, by the hour, for as long "
+                    "as anyone can stand it. Your mother stops hosting Christmas. There is no Christmas now."),
+         overlay=dict(big="2 YEARS", sub="HALLORAN v. HALLORAN · 40 LAWYERS, HOURLY")),
+    dict(id="t19", level=None, template="window",
+         narration=("Your father asks to meet. No lawyers. A window, two glasses, the skyline he tells himself he "
+                    "built. Up close he looks old for the first time, and small. 'Step aside,' he says. 'I'm his "
+                    "son.' And here is the moment: you could give it back. You could just be a son. Instead you "
+                    "hear Henry — all of it is your problem. 'No,' you say. One word. Your father's face closes "
+                    "like a door, and you hear the lock turn."),
+         overlay=None),
+    dict(id="t20", level=None, template="boardroomHead", gap=0.7,
+         narration=("The family council votes on a Sunday, because the constitution says it must. Nine to six. For "
+                    "you. Your father stands, buttons his jacket, and leaves without one word. Preston follows him "
+                    "out. You now control eight point two billion dollars, minus a one point nine billion dollar "
+                    "hole, and the chair at the head of the table is finally yours. It's warmer than you expected. "
+                    "Someone was sitting in it your whole life."),
+         overlay=dict(big="9 – 6", sub="THE VOTE · IT COST HIM HIS FATHER'S CHAIR")),
+
+    # ---- LEVEL 6 — THE STEWARD ----
+    dict(id="t21", level="LEVEL 06  ·  THE STEWARD", template="galaBallroom",
+         narration=("Rebuilding takes six years. You sell the airline, feed the hole, and the machine heals — money "
+                    "this size heals anything, if you stop wounding it. Now the galas. Your foundation gives away "
+                    "two hundred million a year; the law only requires five percent of it ever move at all. "
+                    "Senators find you at these parties. Museum directors laugh before your jokes land. Giving it "
+                    "away, you discover, buys more than spending it ever did."),
+         overlay=dict(big="$200M / YR", sub="GIVEN AWAY · IT BUYS MORE THAN IT SPENDS")),
+    dict(id="t22", level=None, template="warRoom",
+         narration=("The screens say six point eight billion and climbing — past Henry's peak by next year. "
+                    "Compounding does the work; your only job is refusing to interrupt it. You approve allocations "
+                    "before dawn and sleep at the office twice a week. There's a boy at home with your eyes. You "
+                    "named him Henry. This morning, your assistant blocked him into the calendar. Nine-forty to "
+                    "nine-fifty-one."),
+         overlay=dict(big="$6.8B", sub="YOURS TO RUN · NOT YOURS TO KEEP")),
+    dict(id="t23", level=None, template="heirGates", gap=0.7,
+         narration=("Sunday. Your son stands at the gates with a soccer ball, watching your car crunch up the "
+                    "half-mile drive. He's nine. You had eleven minutes for him today. He counted — the way you "
+                    "counted once, on the other side of these same black bars. Your body understands before you "
+                    "do: your hand is on the iron, and you can't remember getting out of the car. The bars were "
+                    "never for keeping people out."),
+         overlay=dict(big="11 MINUTES", sub="YOUR SON, TODAY · HE COUNTED")),
+    dict(id="t24", level=None, template="revolvingDoor",
+         narration=("You try to be different. The machine has other plans. A merger needs a regulator soothed — "
+                    "you make one call. A senator calls you sir; he's sixty-two, you're forty-four. The family bank "
+                    "knows your cash flow before you feel hungry. Somewhere in these years you stop asking what "
+                    "things cost — not because you're rich, but because the asking was the last muscle of the "
+                    "person you almost got to be."),
          overlay=None),
 
-    # ---- LEVEL 2 — THE LEGIONARY ----
-    dict(id="t04", level="LEVEL 02  ·  THE LEGIONARY", template="shieldWall",
-         narration=("Your first battle. You are a miles gregarius now — a ranker in the line. The shields lock. The "
-                    "man beside you is your wall; you are his. Drusus's voice cuts over the screaming, the same two "
-                    "words again and again: hold them. Hold them. A spear takes the man on your right through the "
-                    "throat. You step into his place. You do not run. And the pay for standing where men die is two "
-                    "hundred twenty-five denarii a year."),
-         overlay=dict(big="225 DENARII / YR", sub="THE LEGIONARY · THE PAY TO STAND AND DIE")),
-    dict(id="t05", level=None, template="legionDrill",
-         narration=("Here is what no recruiter says. From those two hundred twenty-five denarii, the legion takes its "
-                    "cut — for your food, your boots, your tent. They even charge you into the burial club, so that "
-                    "when you fall, the others can bury what's left. You do the sum on a "
-                    "march and laugh until it isn't funny: you are paying Rome for the privilege of dying for it."),
-         overlay=None),
-    # ---- LEVEL 3 — THE OPTIO ----
-    dict(id="t07", level="LEVEL 03  ·  THE OPTIO", template="centurionVitis",
-         narration=("You are good at this — alive at the end of days that kill better men, and people notice. So they "
-                    "make you optio. Double pay — four hundred and fifty denarii — and a darker job. You no "
-                    "longer just hold the line; you stop eighty other men from breaking it. You stand behind them in "
-                    "battle so they cannot run without going through you. The first time you shove a terrified boy "
-                    "back into the shields, you see your own first battle in his eyes. You do it anyway. Rank is just "
-                    "being the one who makes others stay."),
-         overlay=dict(big="~450 DENARII / YR", sub="THE OPTIO · DOUBLE PAY · 80 MEN AT YOUR BACK")),
-    dict(id="t08", level=None, template="shieldWall",
-         narration=("A mountain campaign. The line buckles — a flank gives, men start to peel away — and it is your "
-                    "job to weld them back. You scream Drusus's words until your voice tears: hold them, hold them. "
-                    "You drive your own men forward, and somehow the line holds, and the day is won. Afterward your "
-                    "hands are steady. That is the part that should frighten you."),
-         overlay=None),
-    dict(id="t09", level=None, template="legionDrill",
-         narration=("Another cohort runs. Not yours — but Rome does not forgive cowardice. The legate orders the old "
-                    "punishment, the one you prayed never to see: decimation. The cohort is lined up. Lots are drawn. "
-                    "One man in every ten is chosen, then beaten to death by the nine who stood beside him. You watch "
-                    "a man club his own tentmate into the dirt to avoid joining him. That is Rome's logic, naked: fear "
-                    "costs less than loyalty."),
-         overlay=dict(big="ONE IN TEN", sub="DECIMATION · KILLED BY THE NINE BESIDE HIM")),
+    # ---- LEVEL 7 — THE DYNASTY ----
+    dict(id="t25", level="LEVEL 07  ·  THE DYNASTY", template="signing",
+         narration=("Then one gray afternoon you sign what Henry once signed: the dynasty trust, re-armed for "
+                    "another century. In Nevada, a trust can run three hundred and sixty-five years. In South "
+                    "Dakota — forever. Every heir a beneficiary, never an owner. Untaxable, undivorceable, "
+                    "untouchable, for as long as law exists. Your pen hovers over the line, and the empty frame in "
+                    "the hall flickers behind your eyes. You sign. Of course you sign."),
+         overlay=dict(big="365 YEARS", sub="THE TRUST OUTLIVES YOUR NAME")),
+    dict(id="t26", level=None, template="familyVault", gap=0.7,
+         narration=("And standing in the vault, you finally read the page from the beginning the way Henry meant "
+                    "it. You inherit nothing, because ownership is the weakness. Owners get taxed. Owners get sued, "
+                    "divorced, kidnapped, blamed. The trust owns. You merely control — and control is the only "
+                    "inheritance. You will die richer than most nations, and your personal estate will fit in one "
+                    "drawer. It is the family's masterpiece. It is also your cage, notarized."),
+         overlay=dict(big="$0", sub="WHAT YOU OWN · CONTROL IS THE INHERITANCE")),
 
-    # ---- LEVEL 4 — THE CENTURION (Drusus falls — the staff passes) ----
-    dict(id="t10", level="LEVEL 04  ·  THE CENTURION", template="shieldWall",
-         narration=("Level four begins the way everything in the legion ends — in blood. A river crossing, an ambush, "
-                    "the line folding. Drusus is in front of you when the spear finds him, low, under the ribs. He "
-                    "goes down in the mud still saying it, quieter now: hold them. You drag him behind the shields. He "
-                    "presses the vine staff into your hands. Take it, he says. Earn the land. Go home. Then the old "
-                    "man is gone."),
-         overlay=None),
-    dict(id="t11", level=None, template="centurionVitis",
-         narration=("They confirm what the dead man started: you are a centurion now. Eighty men answer your whistle. "
-                    "The vitis in your fist is more than a staff — it is a licence to flog, and you use it. Three "
-                    "thousand denarii a year, fifteen times a ranker's wage. "
-                    "And when a boy of seventeen swears the oath in front of you, you hear your own voice promise him "
-                    "the land — and wonder if Drusus ever believed it."),
-         overlay=dict(big="~3,375 DENARII / YR", sub="THE CENTURION · 80 MEN · THE VINE STAFF")),
-    dict(id="t12", level=None, template="legionCamp",
-         narration=("You name your dead now, the way he did. You sit against a stake and say "
-                    "the names to the fire, and you finally understand him: there is nothing to go back to, because "
-                    "the going-back is what you traded away, one campaign at a time. Livia's letters come slower. The "
-                    "farm in them is a farm in a story. Money buys silver. Money buys rank. Money cannot buy the road "
-                    "home."),
-         overlay=None),
+    # ---- LEVEL 8 — THE INVISIBLE FAMILIES ----
+    dict(id="t27", level="LEVEL 08  ·  THE INVISIBLE FAMILIES", template="dinner",
+         narration=("There is a level above you. You meet it exactly once — a dinner, eleven families, no phones, "
+                    "no press, no names on the door. Across the table sits a man from the family with twenty-one "
+                    "billionaires in it. They own the largest private company in America, and your neighbors have "
+                    "never once said their name out loud. Up here there is only one rule, and he says it like a "
+                    "toast: stay off the lists. Lists are for new money."),
+         overlay=dict(big="21 BILLIONAIRES", sub="ONE FAMILY · A NAME YOU'VE NEVER SAID")),
+    dict(id="t28", level=None, template="emptyChair",
+         narration=("Over the next twenty years, one hundred and twenty-four trillion dollars changes hands — the "
+                    "largest transfer of money in human history, old hands to young ones. More than half of it "
+                    "moves inside two percent of families. The heirs are already chosen. Most were chosen before "
+                    "they were born, the way you were. Nobody voted. Nobody will. The chair at the very top of the "
+                    "world sits empty on purpose — a trust doesn't need a face."),
+         overlay=dict(big="$124T", sub="THE GREAT TRANSFER · INSIDE 2% OF FAMILIES")),
 
-    # ---- LEVEL 5 — THE FIRST SPEAR (knight — and the homecoming reversal) ----
-    dict(id="t13", level="LEVEL 05  ·  PRIMUS PILUS", template="firstSpear",
-         narration=("Level five. Primus pilus — the first spear, chief centurion of the whole legion. The eagle, the "
-                    "aquila, stands beside you now; lose it and the legion is disgraced forever. And reaching this "
-                    "rank makes you a knight — four hundred thousand "
-                    "sesterces, the property of an equestrian, nobility bought with money. The boy with one tunic "
-                    "could buy the family farm back a hundred times. So you go home to do it."),
-         overlay=dict(big="400,000 SESTERCES", sub="FIRST SPEAR · A KNIGHT BY PROPERTY")),
-    dict(id="t14", level=None, template="forumScene",
-         narration=("The village is smaller than your memory of it. The farm is someone else's now — sold years ago, "
-                    "the new owner polite and afraid of the scarred man with a sword. You ask after Livia. A long "
-                    "silence. She married, moved two valleys over, buried a husband, grew old without you. The "
-                    "barley-paste girl you climbed twenty-five years to save does not need saving anymore. You have "
-                    "the money. There is nothing left to spend it on."),
-         overlay=dict(big="THE FARM IS SOLD", sub="EVERYTHING TO SPEND · NOWHERE TO RETURN")),
-    dict(id="t15", level=None, template="shieldWall",
-         narration=("So you return to the only home that's left — the eagle, the line, the war. And you are "
-                    "extraordinary at it now. A frontier breaks; you hold a breach for three days that should have "
-                    "fallen in one. When the relief column arrives, your own men lift their swords and roar the word a "
-                    "soldier's whole life bends toward: imperator. Commander. The general above you hears it. He does "
-                    "not look pleased. He looks at you the way a man looks at a knife."),
-         overlay=None),
-
-    # ---- LEVEL 6 — THE GENERAL / IMPERATOR (live the triumph) ----
-    dict(id="t16", level="LEVEL 06  ·  THE GENERAL", template="warCouncil",
-         narration=("They cannot stop your rise, so they raise you — legate, then a province, then three legions "
-                    "moving on your word. You are a senator now: a million sesterces to your name and a share of all "
-                    "your soldiers take. You stop counting men and start counting eagles. From the command tent the "
-                    "war is clean — lines on vellum, not faces in the mud. You give the order; a boy of seventeen "
-                    "steps into a dead man's place. You used to be that boy."),
-         overlay=dict(big="1,000,000 SESTERCES", sub="THE GENERAL · A SENATOR · IMPERATOR")),
-    dict(id="t17", level=None, template="triumph",
-         narration=("And then the day from the very beginning arrives. Rome votes you a triumph. Gold wheels on "
-                    "stone, four white horses, your face painted red like a god, a whole city screaming your name. You "
-                    "have everything the boy with one tunic dreamed of. And in the chariot behind you the slave leans "
-                    "close and whispers it: remember you are mortal. You barely hear him over the crowd. That is the "
-                    "mistake — the whisper is the only voice telling you the truth."),
-         overlay=dict(big="THE TRIUMPH", sub="YOUR FACE PAINTED AS A GOD")),
-    dict(id="t18", level=None, template="banquet",
-         narration=("At the banquet the wine is gold and the smiles are not. You have become the most dangerous thing "
-                    "in Rome — a general the soldiers love. Senators lean in. Some toast you as the next Caesar. Some "
-                    "are already deciding you must never be. You read the room the way Drusus read a battlefield, and "
-                    "you see it clearly: there is one rank left above you, and the only way to be safe from the throne "
-                    "is to sit on it."),
-         overlay=None),
-
-    # ---- LEVEL 7 — CAESAR ----
-    dict(id="t19", level="LEVEL 07  ·  CAESAR", template="senate",
-         narration=("Level seven. You take it — by acclaim, by the legions at your back, by a Senate that has learned "
-                    "what happens to men who refuse. They drape you in purple and call you Augustus, Caesar, Princeps. "
-                    "Imperium over every legion, every province, every grain ship that feeds the city. The boy who "
-                    "paid Rome for his own boots now owns the treasury of the world. You climbed your whole life to be "
-                    "safe — and you have never been in so much danger."),
-         overlay=dict(big="ALL OF ROME", sub="CAESAR · THE TREASURY OF THE WORLD")),
-    dict(id="t20", level=None, template="throne",
-         narration=("Your first act as master of the world is to pay. Not the people — the Praetorian Guard, the only "
-                    "armed men allowed inside Rome. The donativum, they call it. A gift, they call it. Everyone knows "
-                    "the truth: you hand each guardsman more gold than a legionary earns in fifteen years, simply so they "
-                    "will not kill you this week. The throne does not sit above the army. It pays rent."),
-         overlay=dict(big="15,000 / GUARD", sub="THE DONATIVUM · RENT ON THE THRONE")),
-    dict(id="t21", level=None, template="banquet",
-         narration=("You eat nothing a slave has not tasted first. You sleep behind a barred door, in a different room "
-                    "each night. Your wife, your sons, your oldest friend — each is a door an assassin could walk "
-                    "through, so you trust none of them, and the loneliness is total. This is the secret no one tells "
-                    "the boy at the altar: every rank you climbed, you climbed to be safe. And the safest-looking seat "
-                    "on earth has the most knives at its back."),
-         overlay=None),
-
-    # ---- LEVEL 8 — THE PEOPLE ABOVE CAESAR ----
-    dict(id="t22", level="LEVEL 08  ·  ABOVE CAESAR", template="praetorians",
-         narration=("Who could be above Caesar? The men you are paying. The Praetorian Guard makes emperors and "
-                    "unmakes them. They cut down Caligula in a corridor — then found a trembling man named Claudius "
-                    "hiding behind a curtain, dragged him out, and made him emperor on the spot, because he would pay. "
-                    "The Guard does not serve the throne. The throne serves the Guard. You are the most powerful "
-                    "person alive, and you belong to your own bodyguards."),
-         overlay=dict(big="9,000 GUARDS", sub="THEY MAKE EMPERORS · AND KILL THEM")),
-    dict(id="t23", level=None, template="centurionVitis",
-         narration=("And above the Guard: the legions. The same shield line you bled in for twenty-five years. Out on "
-                    "the frontier an army grows tired of a distant Caesar, lifts some general on a shield, and roars "
-                    "that word — imperator — exactly as your men once roared it for you. In one year Rome had four "
-                    "emperors in twelve months, each made and murdered by soldiers. Every throne rests on men with "
-                    "spears. And men with spears can always choose another."),
-         overlay=None),
-    dict(id="t24", level=None, template="forumScene",
-         narration=("Above the legions, one more power, and it carries no sword at all: the people. The mob of Rome — "
-                    "a million mouths that must be fed and amused, or they burn the city down. Bread and circuses, "
-                    "the poets sneer, but it is iron law — free grain, free games, or no emperor at all. You, who "
-                    "command every legion on earth, lie awake over the price of wheat. The man atop the world serves "
-                    "the hungriest man in it."),
-         overlay=None),
-    dict(id="t25", level=None, template="throne",
-         narration=("It comes the way it always comes. Not an army — a few familiar faces, a blade you trusted, a "
-                    "corridor with no Guard in it because the Guard was paid to look away. Two old sounds return as it "
-                    "happens: Drusus in the mud saying hold them, hold them — and the slave in the gold chariot "
-                    "whispering remember you are mortal. The most dangerous chair ever built does not let you leave it "
-                    "standing. You climbed your whole life to die in it."),
-         overlay=dict(big="MURDERED", sub="MORE CAESARS DIED BY THE KNIFE THAN IN BED")),
-    dict(id="t26", level=None, template="praetorians",
-         narration=("And here is the part they will not believe is true. In the year 193, after they killed one "
-                    "emperor, the Praetorian Guard did not bother choosing the next. They auctioned him. They stood on "
-                    "the camp wall and sold the Roman Empire to the highest bidder. A rich man named Didius Julianus "
-                    "won — twenty-five thousand sesterces promised to every guardsman — and was made master of the "
-                    "world. He ruled nine weeks before they killed him too. That is the price of the throne."),
-         overlay=dict(big="25,000 SESTERCES / MAN", sub="193 AD · THE GUARD AUCTIONED ROME")),
-
-    # ---- LOOP CLOSE ----
-    dict(id="t27", level=None, template="senate",
-         narration=("When a Caesar dies well, the Senate can vote him a god — temples, priests, a star to carry his "
-                    "soul to heaven, for the right corpse. One emperor, Vespasian, felt death coming and made "
-                    "the joke that outlived him: dear me, I think I am becoming a god. He understood it to the end. "
-                    "The purple, the eagle, the throne, the godhood — all a costume the city dressed you in. And the "
-                    "city undresses a corpse as easily as it crowned a man."),
-         overlay=None),
-    dict(id="t28", level=None, template="romanOath",
-         narration=("Somewhere this morning, in a village you could spit across, a boy of seventeen walks to a "
-                    "recruiter. He has a sister who eats barley paste, a farm someone took, a debt and one tunic. He "
-                    "swears the sacramentum to an emperor he will never meet, and dreams of the land, and the road "
-                    "home. He does not know the chariot is already waiting — gold wheels, four horses, a slave with a "
-                    "whisper — and that it does not care who stands in it. It only changes who."),
-         overlay=dict(big="ALL OF ROME", sub="THE CHARIOT IS ALWAYS WAITING")),
+    # ---- LOOP CLOSE — the fifth frame; the gates ----
+    dict(id="t29", level=None, template="portraitHallFilled",
+         narration=("You're sixty. A painter comes on Thursdays now, and the fifth frame in the hall — your frame — "
+                    "is no longer empty. The money bought the room. The money bought the silence in it. The money "
+                    "bought you, the day you were born, before you could object. Seventy percent gone by the second "
+                    "generation. Ninety by the third. You beat the curse. Say it slower. The curse is the only "
+                    "thing you ever beat."),
+         overlay=dict(big="90%", sub="DIE BY GENERATION THREE · YOU'RE THE EXCEPTION")),
+    dict(id="t30", level=None, template="heirGates",
+         narration=("Sunday, at the gates. Your son is grown. His daughter stands where you stood — nine years old, "
+                    "small hands on the black iron, watching the house. Her father was inside it for eleven minutes "
+                    "today. She counted. You walk down the drive, past the fountain, and hand her the only true "
+                    "thing you own — Henry's sentence, four generations old now. 'None of this is yours,' you say. "
+                    "'All of it is your problem.' The gates close. They always close."),
+         overlay=dict(big="GENERATION FIVE", sub="THE GATES CLOSE · THEY ALWAYS CLOSE")),
 ]

@@ -2,336 +2,396 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 20219,
+  "totalFrames": 23100,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t00",
       "level": null,
       "overlay": {
-        "big": "ALL OF ROME",
-        "sub": "THE TRIUMPH \u00b7 REMEMBER YOU ARE MORTAL"
+        "big": "$8,200,000,000",
+        "sub": "THE WILL \u00b7 AND THE PAGE SAYS: NOTHING"
       },
-      "template": "triumph",
+      "template": "boardroomNotes",
       "audio": "audio/t00.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 658
+      "durationInFrames": 728
     },
     {
       "id": "t01",
-      "level": "LEVEL 01  \u00b7  THE TIRO",
+      "level": "LEVEL 01  \u00b7  THE HEIR",
       "overlay": {
-        "big": "0 DENARII",
-        "sub": "THE TIRO \u00b7 A DEBT AND ONE TUNIC"
+        "big": "41 ROOMS",
+        "sub": "AND YOUR FATHER IN NONE OF THEM"
       },
-      "template": "romanOath",
+      "template": "heirGates",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
-      "startFrame": 658,
-      "durationInFrames": 773
+      "startFrame": 728,
+      "durationInFrames": 573
     },
     {
       "id": "t02",
       "level": null,
       "overlay": null,
-      "template": "legionDrill",
+      "template": "portraitHall",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 1431,
-      "durationInFrames": 772
+      "startFrame": 1301,
+      "durationInFrames": 715
     },
     {
       "id": "t03",
       "level": null,
-      "overlay": null,
-      "template": "legionCamp",
+      "overlay": {
+        "big": "ONE TRUCK \u00b7 1954",
+        "sub": "WHAT THE WHOLE THING GREW FROM"
+      },
+      "template": "dinner",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 2203,
-      "durationInFrames": 766
+      "startFrame": 2016,
+      "durationInFrames": 693
     },
     {
       "id": "t04",
-      "level": "LEVEL 02  \u00b7  THE LEGIONARY",
+      "level": "LEVEL 02  \u00b7  THE STUDENT",
       "overlay": {
-        "big": "225 DENARII / YR",
-        "sub": "THE LEGIONARY \u00b7 THE PAY TO STAND AND DIE"
+        "big": "$130K / YR",
+        "sub": "THE TUITION \u00b7 THE MOST EXPENSIVE SCHOOL ON EARTH"
       },
-      "template": "shieldWall",
+      "template": "lectureHallScene",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 2969,
-      "durationInFrames": 766
+      "startFrame": 2709,
+      "durationInFrames": 738
     },
     {
       "id": "t05",
       "level": null,
       "overlay": null,
-      "template": "legionDrill",
+      "template": "window",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 3735,
-      "durationInFrames": 592
+      "startFrame": 3447,
+      "durationInFrames": 707
+    },
+    {
+      "id": "t06",
+      "level": null,
+      "overlay": {
+        "big": "$70M",
+        "sub": "THE JET \u00b7 NOT YOURS. NOTHING IS."
+      },
+      "template": "jet",
+      "audio": "audio/t06.wav",
+      "audioStartFrame": 3,
+      "startFrame": 4154,
+      "durationInFrames": 783
     },
     {
       "id": "t07",
-      "level": "LEVEL 03  \u00b7  THE OPTIO",
+      "level": "LEVEL 03  \u00b7  THE TRUST FUND",
       "overlay": {
-        "big": "~450 DENARII / YR",
-        "sub": "THE OPTIO \u00b7 DOUBLE PAY \u00b7 80 MEN AT YOUR BACK"
+        "big": "$2M AT 25",
+        "sub": "DOORS AT 25 \u00b7 30 \u00b7 35 \u2014 ON THEIR TERMS"
       },
-      "template": "centurionVitis",
+      "template": "signing",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 4327,
-      "durationInFrames": 852
+      "startFrame": 4937,
+      "durationInFrames": 801
     },
     {
       "id": "t08",
       "level": null,
-      "overlay": null,
-      "template": "shieldWall",
+      "overlay": {
+        "big": "400 FRIENDS",
+        "sub": "AND AN NDA BEFORE THE THIRD DATE"
+      },
+      "template": "yachtDeck",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 5179,
-      "durationInFrames": 621
+      "startFrame": 5738,
+      "durationInFrames": 740
     },
     {
       "id": "t09",
       "level": null,
-      "overlay": {
-        "big": "ONE IN TEN",
-        "sub": "DECIMATION \u00b7 KILLED BY THE NINE BESIDE HIM"
-      },
-      "template": "legionDrill",
+      "overlay": null,
+      "template": "desk",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 5800,
-      "durationInFrames": 790
+      "startFrame": 6478,
+      "durationInFrames": 703
     },
     {
       "id": "t10",
-      "level": "LEVEL 04  \u00b7  THE CENTURION",
-      "overlay": null,
-      "template": "shieldWall",
+      "level": null,
+      "overlay": {
+        "big": "$40M EXIT",
+        "sub": "SOLD \u00b7 AND STILL NOT EARNED"
+      },
+      "template": "deskClose",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 6590,
-      "durationInFrames": 763
+      "startFrame": 7181,
+      "durationInFrames": 741
     },
     {
       "id": "t11",
-      "level": null,
+      "level": "LEVEL 04  \u00b7  THE FAMILY OFFICE",
       "overlay": {
-        "big": "~3,375 DENARII / YR",
-        "sub": "THE CENTURION \u00b7 80 MEN \u00b7 THE VINE STAFF"
+        "big": "61 EMPLOYEES",
+        "sub": "ONE CLIENT: YOUR LAST NAME"
       },
-      "template": "centurionVitis",
+      "template": "atrium",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 7353,
-      "durationInFrames": 58
+      "startFrame": 7922,
+      "durationInFrames": 772
     },
     {
       "id": "t12",
       "level": null,
-      "overlay": null,
-      "template": "legionCamp",
+      "overlay": {
+        "big": "$0 TAX",
+        "sub": "BUY \u00b7 BORROW \u00b7 DIE \u2014 AND THE STEP-UP WIPES IT"
+      },
+      "template": "familyVault",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 7411,
-      "durationInFrames": 625
+      "startFrame": 8694,
+      "durationInFrames": 818
     },
     {
       "id": "t13",
-      "level": "LEVEL 05  \u00b7  PRIMUS PILUS",
+      "level": null,
       "overlay": {
-        "big": "400,000 SESTERCES",
-        "sub": "FIRST SPEAR \u00b7 A KNIGHT BY PROPERTY"
+        "big": "$500B",
+        "sub": "PARKED IN SOUTH DAKOTA TRUSTS \u00b7 FOREVER"
       },
-      "template": "firstSpear",
+      "template": "fileWall",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 8036,
-      "durationInFrames": 761
+      "startFrame": 9512,
+      "durationInFrames": 786
     },
     {
       "id": "t14",
       "level": null,
       "overlay": {
-        "big": "THE FARM IS SOLD",
-        "sub": "EVERYTHING TO SPEND \u00b7 NOWHERE TO RETURN"
+        "big": "70% \u2192 90%",
+        "sub": "FORTUNES DEAD BY GEN 2 \u00b7 GEN 3 \u2014 YOU'RE GEN 3"
       },
-      "template": "forumScene",
+      "template": "dinner",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 8797,
-      "durationInFrames": 741
+      "startFrame": 10298,
+      "durationInFrames": 732
     },
     {
       "id": "t15",
       "level": null,
-      "overlay": null,
-      "template": "shieldWall",
+      "overlay": {
+        "big": "91 YEARS",
+        "sub": "ONE TRUCK TO $8.2B \u00b7 THE FOUNDER IS GONE"
+      },
+      "template": "portraitHall",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 9538,
-      "durationInFrames": 742
+      "startFrame": 11030,
+      "durationInFrames": 725
     },
     {
       "id": "t16",
-      "level": "LEVEL 06  \u00b7  THE GENERAL",
+      "level": null,
       "overlay": {
-        "big": "1,000,000 SESTERCES",
-        "sub": "THE GENERAL \u00b7 A SENATOR \u00b7 IMPERATOR"
+        "big": "YOU. NOT HIM.",
+        "sub": "THE SUCCESSION SKIPS A GENERATION"
       },
-      "template": "warCouncil",
+      "template": "boardroomNotes",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 10280,
-      "durationInFrames": 788
+      "startFrame": 11755,
+      "durationInFrames": 813
     },
     {
       "id": "t17",
-      "level": null,
+      "level": "LEVEL 05  \u00b7  THE SUCCESSION WAR",
       "overlay": {
-        "big": "THE TRIUMPH",
-        "sub": "YOUR FACE PAINTED AS A GOD"
+        "big": "-$1.9B",
+        "sub": "YOUR FATHER'S HOLE \u00b7 THE CURSE, ON SCHEDULE"
       },
-      "template": "triumph",
+      "template": "pnlWall",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 11068,
-      "durationInFrames": 768
+      "startFrame": 12568,
+      "durationInFrames": 773
     },
     {
       "id": "t18",
       "level": null,
-      "overlay": null,
-      "template": "banquet",
+      "overlay": {
+        "big": "2 YEARS",
+        "sub": "HALLORAN v. HALLORAN \u00b7 40 LAWYERS, HOURLY"
+      },
+      "template": "courtroom",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 11836,
-      "durationInFrames": 704
+      "startFrame": 13341,
+      "durationInFrames": 849
     },
     {
       "id": "t19",
-      "level": "LEVEL 07  \u00b7  CAESAR",
-      "overlay": {
-        "big": "ALL OF ROME",
-        "sub": "CAESAR \u00b7 THE TREASURY OF THE WORLD"
-      },
-      "template": "senate",
+      "level": null,
+      "overlay": null,
+      "template": "window",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 12540,
-      "durationInFrames": 819
+      "startFrame": 14190,
+      "durationInFrames": 729
     },
     {
       "id": "t20",
       "level": null,
       "overlay": {
-        "big": "15,000 / GUARD",
-        "sub": "THE DONATIVUM \u00b7 RENT ON THE THRONE"
+        "big": "9 \u2013 6",
+        "sub": "THE VOTE \u00b7 IT COST HIM HIS FATHER'S CHAIR"
       },
-      "template": "throne",
+      "template": "boardroomHead",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 13359,
-      "durationInFrames": 699
+      "startFrame": 14919,
+      "durationInFrames": 739
     },
     {
       "id": "t21",
-      "level": null,
-      "overlay": null,
-      "template": "banquet",
+      "level": "LEVEL 06  \u00b7  THE STEWARD",
+      "overlay": {
+        "big": "$200M / YR",
+        "sub": "GIVEN AWAY \u00b7 IT BUYS MORE THAN IT SPENDS"
+      },
+      "template": "galaBallroom",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 14058,
-      "durationInFrames": 744
+      "startFrame": 15658,
+      "durationInFrames": 780
     },
     {
       "id": "t22",
-      "level": "LEVEL 08  \u00b7  ABOVE CAESAR",
+      "level": null,
       "overlay": {
-        "big": "9,000 GUARDS",
-        "sub": "THEY MAKE EMPERORS \u00b7 AND KILL THEM"
+        "big": "$6.8B",
+        "sub": "YOURS TO RUN \u00b7 NOT YOURS TO KEEP"
       },
-      "template": "praetorians",
+      "template": "warRoom",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 14802,
-      "durationInFrames": 693
+      "startFrame": 16438,
+      "durationInFrames": 682
     },
     {
       "id": "t23",
       "level": null,
-      "overlay": null,
-      "template": "centurionVitis",
+      "overlay": {
+        "big": "11 MINUTES",
+        "sub": "YOUR SON, TODAY \u00b7 HE COUNTED"
+      },
+      "template": "heirGates",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 15495,
-      "durationInFrames": 785
+      "startFrame": 17120,
+      "durationInFrames": 631
     },
     {
       "id": "t24",
       "level": null,
       "overlay": null,
-      "template": "forumScene",
+      "template": "revolvingDoor",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 16280,
-      "durationInFrames": 774
+      "startFrame": 17751,
+      "durationInFrames": 672
     },
     {
       "id": "t25",
-      "level": null,
+      "level": "LEVEL 07  \u00b7  THE DYNASTY",
       "overlay": {
-        "big": "MURDERED",
-        "sub": "MORE CAESARS DIED BY THE KNIFE THAN IN BED"
+        "big": "365 YEARS",
+        "sub": "THE TRUST OUTLIVES YOUR NAME"
       },
-      "template": "throne",
+      "template": "signing",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 17054,
-      "durationInFrames": 737
+      "startFrame": 18423,
+      "durationInFrames": 855
     },
     {
       "id": "t26",
       "level": null,
       "overlay": {
-        "big": "25,000 SESTERCES / MAN",
-        "sub": "193 AD \u00b7 THE GUARD AUCTIONED ROME"
+        "big": "$0",
+        "sub": "WHAT YOU OWN \u00b7 CONTROL IS THE INHERITANCE"
       },
-      "template": "praetorians",
+      "template": "familyVault",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 17791,
-      "durationInFrames": 804
+      "startFrame": 19278,
+      "durationInFrames": 859
     },
     {
       "id": "t27",
-      "level": null,
-      "overlay": null,
-      "template": "senate",
+      "level": "LEVEL 08  \u00b7  THE INVISIBLE FAMILIES",
+      "overlay": {
+        "big": "21 BILLIONAIRES",
+        "sub": "ONE FAMILY \u00b7 A NAME YOU'VE NEVER SAID"
+      },
+      "template": "dinner",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 18595,
-      "durationInFrames": 835
+      "startFrame": 20137,
+      "durationInFrames": 722
     },
     {
       "id": "t28",
       "level": null,
       "overlay": {
-        "big": "ALL OF ROME",
-        "sub": "THE CHARIOT IS ALWAYS WAITING"
+        "big": "$124T",
+        "sub": "THE GREAT TRANSFER \u00b7 INSIDE 2% OF FAMILIES"
       },
-      "template": "romanOath",
+      "template": "emptyChair",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 19430,
-      "durationInFrames": 789
+      "startFrame": 20859,
+      "durationInFrames": 735
+    },
+    {
+      "id": "t29",
+      "level": null,
+      "overlay": {
+        "big": "90%",
+        "sub": "DIE BY GENERATION THREE \u00b7 YOU'RE THE EXCEPTION"
+      },
+      "template": "portraitHallFilled",
+      "audio": "audio/t29.wav",
+      "audioStartFrame": 3,
+      "startFrame": 21594,
+      "durationInFrames": 688
+    },
+    {
+      "id": "t30",
+      "level": null,
+      "overlay": {
+        "big": "GENERATION FIVE",
+        "sub": "THE GATES CLOSE \u00b7 THEY ALWAYS CLOSE"
+      },
+      "template": "heirGates",
+      "audio": "audio/t30.wav",
+      "audioStartFrame": 3,
+      "startFrame": 22282,
+      "durationInFrames": 818
     }
   ]
 }

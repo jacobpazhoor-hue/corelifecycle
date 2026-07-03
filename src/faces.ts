@@ -14,6 +14,7 @@ export const FACES: Record<string, Expr> = {
   hollow: {brow: 0, browRaise: 0, lid: 0.42, mouth: 'flat', look: 0},               // empty, blank
   awe: {brow: 0.4, browRaise: 0.85, lid: 0, mouth: 'open', look: 0},
   smug: {brow: -0.12, browRaise: 0, lid: 0.24, mouth: 'smirk', look: 0},
+  shock: {brow: 0.85, browRaise: 1, lid: 0, mouth: 'open', look: 0.2},           // shock-tier for thumbnails (CTR)
 };
 
 // Blend two expressions (t: 0..1). Mouth snaps at the midpoint.

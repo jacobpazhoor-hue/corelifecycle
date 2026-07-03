@@ -107,6 +107,34 @@ adjacent scenes. Registry lives in src/scenes.tsx `TEMPLATES`; composable packs 
 | senate | figure on the open floor of the curia (tiered senator benches) | the Senate, deification, taking the purple |
 | praetorians | figure among helmeted guards (crenellated wall, crossed spears) | the Praetorian Guard above the throne, the auction of the Empire |
 
+## Mafia / Cosa Nostra pack (mob boss / made man / crime family)
+| template | depicts | good for |
+|---|---|---|
+| mobTable | figure at the head of a long banquet table, dim figures seated on the sides | the cold-open boss's table, taking the throne, the family gross |
+| streetCorner | figure on a dusk tenement corner under a lamppost (fire escape, stoop) | the poor block, the want, the cyclical loop close |
+| socialClub | figure in a social-club interior (saint picture, tricolore, espresso machine) | the rules/omertà, a sit-down, the Dapper Don holding court |
+| cardGame | two at a back-room card/sit-down table under a low hanging lamp | the earn, running errands, getting your own crew |
+| backAlley | figure in a dark brick alley under a caged door bulb (trash cans) | making your bones, a hit, going to the mattresses |
+| madeCeremony | figure before a burning saint's card, a ring of dim men behind | getting made, the omertà oath |
+| redSauce | two at an Italian-restaurant table (red-check cloth, candle, chianti) | the sit-down, the earn as a made man, the classic restaurant hit |
+| redSauceAlone | ONE figure at the restaurant table, the far chair visibly empty | the rat reveal — "the chair is empty", dining alone at the top |
+| waterfront | figure on the docks (gantry crane, shipping containers, harbor) | the rackets, the docks/construction, the mob tax on the city |
+| donOffice | figure behind the boss's desk (blinded window, high-back chair) | the sit-down where you give the order, made underboss |
+| commission | figure at the Commission's round table of dim bosses, a dark hall | the board of bosses above the family |
+| countRoom | figure over a table piled with banded cash under a naked bulb | the cut of everything, the Vegas skim |
+| courtroom | figure at the defense table before the bench + seal, a witness in the stand | RICO, the trial, the rat on the stand |
+| prisonCell | figure behind foreground bars (brick, a bunk, a barred window) | the box or the cell, the fall |
+| wiretap | figure before a reel-to-reel deck + a wall of surveillance photos | the Feds listening, omertà cracking, the tape |
+
+## Dynasty / generational wealth pack (billionaire heir, old money, family office)
+| template | depicts | good for |
+|---|---|---|
+| heirGates | small figure BEHIND wrought-iron estate gates (gold finials, "H" crest), mansion + fountain beyond | the child heir, the gilded cage, the cyclical loop close |
+| portraitHall | hall of gilt-framed ancestor portraits — four painted, ONE FRAME EMPTY | the dynasty's weight, the funeral, your portrait joining the wall |
+| yachtDeck | figure at a yacht railing over open sea, sun glitter, superstructure | the trust-fund years, the crowd that appears, isolation at sea |
+| galaBallroom | figure under a chandelier among dim guests holding flutes | the foundation gala, society, access, reputation |
+| familyVault | figure before a great circular trust-vault door in a wall of deed boxes | the family office's paper heart, "own nothing, control everything", the $0 reveal |
+
 ## Adding a new domain pack
 If a topic needs settings none of these cover (e.g. soldier→battlefield, athlete→stadium,
 founder→garage), add backdrop/prop entries + a small template set to src/stage.tsx following the

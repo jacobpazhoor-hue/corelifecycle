@@ -60,6 +60,9 @@ const Face: React.FC<{cx: number; cy: number; R: number; expr: Expr; lid: number
   else if (expr.mouth === 'frown') mouth = <path d={`M ${cx - mw / 2} ${my + R * 0.05} Q ${cx} ${my - R * 0.1} ${cx + mw / 2} ${my + R * 0.05}`} fill="none" stroke={ink} strokeWidth={ms} strokeLinecap="round" />;
   else if (expr.mouth === 'smirk') mouth = <path d={`M ${cx - mw / 2} ${my + R * 0.05} Q ${cx + mw * 0.1} ${my + R * 0.04} ${cx + mw / 2} ${my - R * 0.07}`} fill="none" stroke={ink} strokeWidth={ms} strokeLinecap="round" />;
   else if (expr.mouth === 'tight') mouth = <line x1={cx - mw * 0.34} y1={my} x2={cx + mw * 0.34} y2={my} stroke={ink} strokeWidth={ms * 1.3} strokeLinecap="round" />;
+  // 'flat' MUST be a dead-straight line (hardened/hollow/cold). Before this branch it fell
+  // through to the smiling default, which put a faint pleasant smile on every late-arc face.
+  else if (expr.mouth === 'flat') mouth = <line x1={cx - mw * 0.4} y1={my} x2={cx + mw * 0.4} y2={my} stroke={ink} strokeWidth={ms} strokeLinecap="round" />;
   else mouth = <path d={`M ${cx - mw * 0.4} ${my} Q ${cx} ${my + R * 0.06} ${cx + mw * 0.4} ${my}`} fill="none" stroke={ink} strokeWidth={ms} strokeLinecap="round" />;
 
   return (<g>

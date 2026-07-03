@@ -235,15 +235,31 @@ const S04: React.FC = () => {
   </Frame>);
 };
 const S05: React.FC = () => {
-  const f = useCurrentFrame(); const {fps, durationInFrames: d} = useVideoConfig();
-  // the moral turn: starts focused, shifts to conflicted as he buries the email
+  // deskClose — a CLOSE-UP INSERT, not another laptop-and-skyline wide (t09 owns that framing):
+  // the diligence folder + a contract page filling the frame, ONE customer line highlighted.
+  const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+  // the moral turn: starts focused, shifts to conflicted as he reads the buried line
   const t = interpolate(f, [d * 0.35, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  // the highlight + red circle draw ON as the realization lands
+  const hl = interpolate(f, [d * 0.3, d * 0.55], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (<Frame>
-    <Skyline frame={f} baseY={520} tint="#0d1722" o={0.55} /><Rain frame={f} o={0.16} />
-    <StickFigure pose={A.type_(f, fps)} x={760} y={846} scale={1.85} facing={1} view="profile" expr={blendExpr(FACES.focused, FACES.conflicted, t)} pal={LIGHT} frame={f} />
-    <Desk y={828} />
-    <Laptop cx={870} deskY={828} frame={f} w={250} h={150} />
-    <Coffee x={600} y={808} frame={f} />
+    <StickFigure pose={A.sit(f)} x={400} y={880} scale={1.9} facing={1} view="profile" expr={blendExpr(FACES.focused, FACES.conflicted, t)} pal={LIGHT} frame={f} />
+    <Desk y={840} />
+    {/* diligence folder under the page */}
+    <g transform="rotate(-3 1100 620)">
+      <rect x={690} y={330} width={820} height={560} rx={10} fill="#e3d5ae" stroke={INK} strokeWidth={5} />
+      <path d="M 690 348 L 690 330 Q 690 316 704 316 L 930 316 L 972 348" fill="#e3d5ae" stroke={INK} strokeWidth={4} />
+    </g>
+    {/* the contract page (the insert itself) */}
+    <g transform="rotate(2 1120 620)">
+      <rect x={780} y={362} width={680} height={516} rx={6} fill={PAPER} stroke={INK} strokeWidth={5} />
+      <rect x={830} y={402} width={300} height={10} rx={5} fill={INK} opacity={0.7} />
+      {[0, 1, 2, 3, 5, 6, 7].map((i) => <rect key={i} x={830} y={452 + i * 46} width={i % 3 ? 560 : 420} height={7} rx={3.5} fill={COL.line} />)}
+      {/* THE buried customer line: gold highlight + a hand-drawn red circle around it */}
+      <rect x={822} y={622} width={580 * hl} height={28} fill={COL.gold} opacity={0.5} />
+      <rect x={830} y={636} width={560} height={7} rx={3.5} fill={INK} opacity={0.85} />
+      <ellipse cx={1112} cy={638} rx={314} ry={40} fill="none" stroke="#c0392b" strokeWidth={5} opacity={hl} />
+    </g>
   </Frame>);
 };
 const S06: React.FC = () => {
@@ -296,8 +312,13 @@ const Dinner: React.FC<{f: number; mainExpr: any}> = ({f, mainExpr}) => (
     <StickFigure pose={A.sit(f)} x={700} y={762} scale={1.2} facing={1} view="profile" expr={mainExpr} pal={LIGHT} frame={f} />
     <StickFigure pose={A.sit(f + 50)} x={1240} y={762} scale={1.2} facing={-1} view="profile" pal={DIM} showFace={false} frame={f} />
     <rect x={0} y={722} width={1920} height={358} fill={COL.floor} /><rect x={0} y={722} width={1920} height={8} fill={INK} />
-    <rect x={964} y={694} width={10} height={28} fill="#e9eef4" /><ellipse cx={969} cy={688} rx={6} ry={11} fill="#ffd9a0" />
-    <rect x={840} y={700} width={8} height={22} rx={2} fill="#9fb6cf" opacity={0.6} /><rect x={1100} y={700} width={8} height={22} rx={2} fill="#9fb6cf" opacity={0.6} />
+    {/* the dinner table between them — top + two legs, so it reads as a MEAL, not a street */}
+    <rect x={800} y={694} width={340} height={16} rx={6} fill={PAPER} stroke={INK} strokeWidth={4} />
+    <line x1={846} y1={710} x2={834} y2={806} stroke={INK} strokeWidth={5} strokeLinecap="round" />
+    <line x1={1094} y1={710} x2={1106} y2={806} stroke={INK} strokeWidth={5} strokeLinecap="round" />
+    {/* candle + glasses ON the tabletop */}
+    <rect x={964} y={666} width={10} height={28} fill="#e9eef4" /><ellipse cx={969} cy={660} rx={6} ry={11} fill="#ffd9a0" />
+    <rect x={860} y={672} width={8} height={22} rx={2} fill="#9fb6cf" opacity={0.6} /><rect x={1080} y={672} width={8} height={22} rx={2} fill="#9fb6cf" opacity={0.6} />
   </>
 );
 
@@ -393,7 +414,7 @@ const S17: React.FC = () => {  // the trust — no title; empty chair, others si
   return (<Frame>
     <Skyline frame={f} baseY={820} tint="#13202e" /><Mullions o={0.45} />
     {/* empty high-back executive chair, back to viewer */}
-    <rect x={870} y={560} width={180} height={300} rx={28} fill={PAPER} stroke={INK} strokeWidth={2} stroke={INK} strokeWidth={4} />
+    <rect x={870} y={560} width={180} height={300} rx={28} fill={PAPER} stroke={INK} strokeWidth={4} />
     <rect x={900} y={840} width={120} height={70} fill={PAPER} stroke={INK} strokeWidth={2} />
     <ellipse cx={960} cy={905} rx={130} ry={20} fill="#000" opacity={0.3} />
     {/* faint trust -> holding -> SPV node diagram, top-left */}

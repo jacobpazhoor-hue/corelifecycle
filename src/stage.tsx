@@ -38,6 +38,38 @@ const Floor: React.FC<{y: number}> = ({y}) => (
   <g><rect x={0} y={y} width={1920} height={1080 - y} fill={FLOOR} /><line x1={0} y1={y} x2={1920} y2={y} stroke={INK} strokeWidth={5} strokeLinecap="round" /></g>
 );
 
+// the ancestor portrait hall — shared by the empty-frame (t02/t15) and filled-frame (t29)
+// backdrops. `filled`: the fifth frame holds YOUR portrait — fresher ink than the ancestors,
+// lit by its own glow, so the loop-close payoff is unmistakable at a glance.
+const PortraitWallArt: React.FC<{frame: number; filled?: boolean}> = ({frame, filled = false}) => (
+  <g>
+    <rect x={0} y={840} width={1920} height={240} fill={FLOOR} /><line x1={0} y1={840} x2={1920} y2={840} stroke={INK} strokeWidth={5} />
+    <rect x={0} y={120} width={1920} height={720} fill="#d9cba8" stroke="none" opacity={0.35} />
+    <line x1={0} y1={620} x2={1920} y2={620} stroke={INK} strokeWidth={3} opacity={0.5} />
+    {Array.from({length: 12}).map((_, i) => <line key={i} x1={80 + i * 165} y1={620} x2={80 + i * 165} y2={840} stroke={INK} strokeWidth={2} opacity={0.3} />)}
+    {/* four gilt ancestor portraits + the fifth frame (empty until the loop closes) */}
+    {[{x: 240, fifth: false}, {x: 570, fifth: false}, {x: 900, fifth: false}, {x: 1230, fifth: false}, {x: 1560, fifth: true}].map((p, i) => {
+      const empty = p.fifth && !filled;
+      const fresh = p.fifth && filled;
+      return (
+        <g key={i}>
+          {fresh && <ellipse cx={p.x + 120} cy={370} rx={230} ry={280} fill="url(#sglow)" opacity={0.7} />}
+          <rect x={p.x - 14} y={186} width={268} height={368} fill={GOLD} stroke={INK} strokeWidth={4} opacity={fresh ? 0.95 : 0.75} />
+          <rect x={p.x} y={200} width={240} height={340} fill={empty ? '#efe8d8' : PAPERC} stroke={INK} strokeWidth={4} />
+          {!empty && <g opacity={fresh ? 1 : 0.6}>
+            <circle cx={p.x + 120} cy={310} r={44} fill="none" stroke={INK} strokeWidth={3.5} />
+            <path d={`M ${p.x + 42} 540 q 78 -140 156 0`} fill="none" stroke={INK} strokeWidth={3.5} />
+            <path d={`M ${p.x + 96} 300 q 8 -10 16 0 M ${p.x + 128} 300 q 8 -10 16 0`} fill="none" stroke={INK} strokeWidth={2.5} />
+            <line x1={p.x + 104} y1={336} x2={p.x + 136} y2={336} stroke={INK} strokeWidth={2.5} />
+          </g>}
+          <rect x={p.x + 70} y={560} width={100} height={22} rx={4} fill={GOLD} stroke={INK} strokeWidth={2.5} opacity={fresh ? 1 : 0.8} />
+        </g>
+      );
+    })}
+    <ellipse cx={960} cy={360} rx={620} ry={260} fill="url(#sglow)" opacity={0.25} />
+  </g>
+);
+
 // =================== BACKDROPS (far plane) ===================
 const BG: Record<string, React.FC<{frame: number}>> = {
   // tiered lecture hall — med school / training / any "learning" beat
@@ -510,6 +542,239 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       <rect x={0} y={722} width={1920} height={358} fill={FLOOR} /><line x1={0} y1={722} x2={1920} y2={722} stroke={INK} strokeWidth={5} />
     </g>
   ),
+  // --- Mafia / Cosa Nostra ---
+  // tenement street corner at dusk: brick facade, lit windows, stoop steps, a lamppost glow — the block
+  tenement: ({frame}) => (
+    <g>
+      <rect x={0} y={860} width={1920} height={220} fill={FLOOR} /><line x1={0} y1={860} x2={1920} y2={860} stroke={INK} strokeWidth={5} />
+      <rect x={1080} y={200} width={620} height={660} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      {Array.from({length: 5}).map((_, r) => Array.from({length: 4}).map((_, c) => {const lit = (r * 4 + c + Math.floor(frame / 45)) % 5 === 0; return <rect key={r + '_' + c} x={1120 + c * 140} y={250 + r * 118} width={80} height={82} fill={lit ? GOLD : '#cbb48a'} stroke={INK} strokeWidth={3} opacity={lit ? 0.6 : 1} />;}))}
+      {[0, 1, 2, 3].map((i) => <line key={'fe' + i} x1={1110} y1={332 + i * 130} x2={1360} y2={332 + i * 130} stroke={INK} strokeWidth={3} opacity={0.5} />)}
+      <line x1={1120} y1={332} x2={1120} y2={852} stroke={INK} strokeWidth={3} opacity={0.5} />
+      {[0, 1, 2].map((i) => <rect key={'st' + i} x={1040 - i * 40} y={800 + i * 20} width={220 + i * 80} height={22} fill={PAPERC} stroke={INK} strokeWidth={3} />)}
+      <line x1={360} y1={860} x2={360} y2={360} stroke={INK} strokeWidth={6} /><path d="M 360 360 q 0 -22 44 -22" fill="none" stroke={INK} strokeWidth={6} /><circle cx={408} cy={344} r={15} fill={GOLD} opacity={0.9} /><ellipse cx={408} cy={360} rx={150} ry={320} fill="url(#sglow)" opacity={0.4} />
+    </g>
+  ),
+  // social-club interior: a saint picture, a tricolore stripe, an espresso machine, a warm hanging lamp
+  clubInterior: ({frame}) => (
+    <g>
+      <rect x={0} y={780} width={1920} height={300} fill={FLOOR} /><line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={5} />
+      <g opacity={0.5}><rect x={200} y={220} width={70} height={220} fill="#4a7a4a" stroke={INK} strokeWidth={2} /><rect x={270} y={220} width={70} height={220} fill={PAPERC} stroke={INK} strokeWidth={2} /><rect x={340} y={220} width={70} height={220} fill="#a23a3a" stroke={INK} strokeWidth={2} /></g>
+      <rect x={860} y={300} width={200} height={210} fill="#efe8d6" stroke={INK} strokeWidth={4} /><path d="M 860 300 q 100 -70 200 0" fill="#efe8d6" stroke={INK} strokeWidth={4} /><circle cx={960} cy={366} r={30} fill="none" stroke={INK} strokeWidth={3} /><path d="M 902 500 q 58 -54 116 0" fill="none" stroke={INK} strokeWidth={2} opacity={0.5} />
+      <rect x={1360} y={520} width={420} height={40} fill={PAPERC} stroke={INK} strokeWidth={4} /><rect x={1480} y={410} width={180} height={110} rx={8} fill={PAPERC} stroke={INK} strokeWidth={4} /><rect x={1520} y={430} width={40} height={30} fill={INK} opacity={0.25} /><circle cx={1622} cy={442} r={12} fill={GOLD} opacity={0.6} /><line x1={1560} y1={520} x2={1560} y2={542} stroke={INK} strokeWidth={3} />
+      <line x1={620} y1={140} x2={620} y2={230} stroke={INK} strokeWidth={3} /><path d="M 578 230 h 84 l -16 42 h -52 z" fill={PAPERC} stroke={INK} strokeWidth={3} /><ellipse cx={620} cy={320} rx={130} ry={70} fill="url(#sglow)" opacity={0.55} />
+    </g>
+  ),
+  // dim back room for the card game / sit-down: paneled wall, a bottle shelf, a low lamp cone
+  cardRoom: ({frame}) => (
+    <g>
+      <rect x={0} y={800} width={1920} height={280} fill={FLOOR} /><line x1={0} y1={800} x2={1920} y2={800} stroke={INK} strokeWidth={5} />
+      {[300, 1500].map((x) => <g key={x} opacity={0.5}><rect x={x} y={220} width={140} height={300} fill={PAPERC} stroke={INK} strokeWidth={3} />{[0, 1, 2].map((k) => <rect key={k} x={x + 20} y={260 + k * 90} width={100} height={8} fill={INK} opacity={0.3} />)}</g>)}
+      <rect x={760} y={300} width={400} height={12} fill={PAPERC} stroke={INK} strokeWidth={3} />
+      {[800, 860, 920, 1040, 1100].map((x) => <g key={x}><rect x={x} y={250} width={22} height={50} fill={PAPERC} stroke={INK} strokeWidth={2.5} /><rect x={x + 6} y={232} width={10} height={20} fill={PAPERC} stroke={INK} strokeWidth={2} /></g>)}
+      <line x1={960} y1={140} x2={960} y2={250} stroke={INK} strokeWidth={3} /><path d="M 900 250 h 120 l -20 46 h -80 z" fill={PAPERC} stroke={INK} strokeWidth={4} /><ellipse cx={960} cy={540} rx={340} ry={170} fill="url(#sglow)" opacity={0.72} />
+    </g>
+  ),
+  // Italian restaurant: wood wainscot, a chianti shelf, framed photos, warm lamplight — the sit-down / the hit
+  restaurant: ({frame}) => (
+    <g>
+      <rect x={0} y={760} width={1920} height={320} fill={FLOOR} /><line x1={0} y1={760} x2={1920} y2={760} stroke={INK} strokeWidth={5} />
+      <rect x={0} y={560} width={1920} height={200} fill="#d9c3a0" opacity={0.4} /><line x1={0} y1={560} x2={1920} y2={560} stroke={INK} strokeWidth={3} opacity={0.5} />
+      {Array.from({length: 12}).map((_, i) => <line key={i} x1={i * 170} y1={560} x2={i * 170} y2={760} stroke={INK} strokeWidth={2} opacity={0.22} />)}
+      <rect x={120} y={300} width={360} height={12} fill={PAPERC} stroke={INK} strokeWidth={3} />
+      {[150, 210, 270, 330, 390].map((x) => <g key={x}><rect x={x} y={244} width={26} height={56} fill={PAPERC} stroke={INK} strokeWidth={2.5} /><rect x={x + 7} y={222} width={12} height={24} fill={PAPERC} stroke={INK} strokeWidth={2} /><rect x={x} y={280} width={26} height={20} fill="#a23a3a" opacity={0.4} /></g>)}
+      {[1360, 1560].map((x) => <g key={x}><rect x={x} y={250} width={150} height={190} fill="#efe8d6" stroke={INK} strokeWidth={4} /><circle cx={x + 75} cy={322} r={28} fill="none" stroke={INK} strokeWidth={2} opacity={0.5} /></g>)}
+      <ellipse cx={960} cy={520} rx={360} ry={150} fill="url(#sglow)" opacity={0.6} />
+    </g>
+  ),
+  // dark brick alley at night: converging walls, a caged door bulb, trash cans — making your bones / a hit
+  alley: ({frame}) => (
+    <g>
+      <path d="M 0 120 L 620 300 L 620 820 L 0 1080 Z" fill="#cfc3ab" stroke={INK} strokeWidth={4} opacity={0.5} />
+      <path d="M 1920 120 L 1300 300 L 1300 820 L 1920 1080 Z" fill="#cfc3ab" stroke={INK} strokeWidth={4} opacity={0.5} />
+      <rect x={620} y={300} width={680} height={520} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      {Array.from({length: 5}).map((_, r) => Array.from({length: 6}).map((_, c) => <rect key={r + '_' + c} x={620 + c * 114 + (r % 2 ? 57 : 0)} y={300 + r * 104} width={100} height={90} fill="none" stroke={LINE} strokeWidth={1.5} opacity={0.35} />))}
+      <rect x={900} y={560} width={120} height={260} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <circle cx={960} cy={520} r={14} fill={GOLD} opacity={0.85} /><ellipse cx={960} cy={540} rx={150} ry={220} fill="url(#sglow)" opacity={0.4} />
+      <rect x={0} y={820} width={1920} height={260} fill={FLOOR} /><line x1={0} y1={820} x2={1920} y2={820} stroke={INK} strokeWidth={5} />
+      {[1170, 1272].map((x) => <g key={x}><rect x={x} y={700} width={90} height={120} rx={8} fill={PAPERC} stroke={INK} strokeWidth={4} /><ellipse cx={x + 45} cy={700} rx={46} ry={12} fill={PAPERC} stroke={INK} strokeWidth={3} /></g>)}
+    </g>
+  ),
+  // the making ceremony: a ring of dim men, a low table, a single candle glow — omertà sworn on a saint
+  ceremonyRoom: ({frame}) => (
+    <g>
+      <rect x={0} y={800} width={1920} height={280} fill={FLOOR} /><line x1={0} y1={800} x2={1920} y2={800} stroke={INK} strokeWidth={5} />
+      {Array.from({length: 7}).map((_, i) => {const x = 360 + i * 200; return <g key={i} opacity={0.38}><circle cx={x} cy={520} r={28} fill={INK} /><rect x={x - 30} y={548} width={60} height={230} fill={INK} /></g>;})}
+      <rect x={760} y={640} width={400} height={26} rx={4} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <ellipse cx={960} cy={600} rx={240} ry={150} fill="url(#sglow)" opacity={0.6} />
+    </g>
+  ),
+  // the waterfront: harbor water, a gantry crane, stacked shipping containers, a bollard — the rackets / docks
+  waterfront: ({frame}) => (
+    <g>
+      <rect x={0} y={420} width={1920} height={180} fill="#b9c6cc" opacity={0.4} />
+      {Array.from({length: 5}).map((_, i) => <path key={i} d={`M 0 ${470 + i * 26} q 480 12 960 0 t 960 0`} fill="none" stroke={INK} strokeWidth={1.5} opacity={0.14} />)}
+      <path d="M 1360 560 L 1820 560 L 1740 620 L 1440 620 Z" fill={PAPERC} stroke={INK} strokeWidth={4} opacity={0.7} /><line x1={1520} y1={560} x2={1520} y2={440} stroke={INK} strokeWidth={4} opacity={0.6} />
+      <g><line x1={300} y1={760} x2={300} y2={220} stroke={INK} strokeWidth={6} /><line x1={560} y1={760} x2={560} y2={220} stroke={INK} strokeWidth={6} /><line x1={260} y1={220} x2={720} y2={220} stroke={INK} strokeWidth={6} /><line x1={640} y1={220} x2={640} y2={380 + Math.sin(frame * 0.05) * 16} stroke={INK} strokeWidth={2} /><rect x={616} y={380 + Math.sin(frame * 0.05) * 16} width={48} height={40} fill={PAPERC} stroke={INK} strokeWidth={3} /></g>
+      <rect x={0} y={760} width={1920} height={320} fill={FLOOR} /><line x1={0} y1={760} x2={1920} y2={760} stroke={INK} strokeWidth={5} />
+      {[{x: 760, y: 600, c: '#7a5a3a'}, {x: 960, y: 600, c: '#4a6a7a'}, {x: 860, y: 480, c: '#6a4a4a'}].map((b, i) => <g key={i}><rect x={b.x} y={b.y} width={190} height={160} fill={b.c} stroke={INK} strokeWidth={4} opacity={0.3} /><rect x={b.x} y={b.y} width={190} height={160} fill="none" stroke={INK} strokeWidth={4} />{Array.from({length: 9}).map((_, k) => <line key={k} x1={b.x + 18 + k * 19} y1={b.y} x2={b.x + 18 + k * 19} y2={b.y + 160} stroke={INK} strokeWidth={1.5} opacity={0.3} />)}</g>)}
+      <path d="M 1360 760 q 0 -46 40 -46 q 40 0 40 46 Z" fill={PAPERC} stroke={INK} strokeWidth={4} />
+    </g>
+  ),
+  // the boss's back-office / study: blinded window, a framed picture, a wall sconce glow
+  donStudy: ({frame}) => (
+    <g>
+      <rect x={0} y={780} width={1920} height={300} fill={FLOOR} /><line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={5} />
+      <rect x={220} y={200} width={420} height={360} fill="#2a313a" stroke={INK} strokeWidth={4} />
+      {Array.from({length: 9}).map((_, i) => <line key={i} x1={220} y1={240 + i * 38} x2={640} y2={240 + i * 38} stroke={PAPERC} strokeWidth={4} opacity={0.5} />)}
+      <rect x={1360} y={260} width={200} height={150} fill="#efe8d6" stroke={INK} strokeWidth={4} /><path d="M 1400 384 q 60 -50 120 0" fill="none" stroke={INK} strokeWidth={2} opacity={0.5} />
+      <ellipse cx={1660} cy={360} rx={90} ry={160} fill="url(#sglow)" opacity={0.4} />
+    </g>
+  ),
+  // the Commission room: a dark paneled hall, a low chandelier cone over a round table (with roundTable prop)
+  commissionRoom: ({frame}) => (
+    <g>
+      <rect x={0} y={820} width={1920} height={260} fill={FLOOR} /><line x1={0} y1={820} x2={1920} y2={820} stroke={INK} strokeWidth={5} />
+      <rect x={0} y={140} width={1920} height={520} fill="#3a332a" opacity={0.22} />
+      {Array.from({length: 8}).map((_, i) => <rect key={i} x={60 + i * 230} y={200} width={180} height={360} fill="none" stroke={INK} strokeWidth={2} opacity={0.28} />)}
+      <line x1={960} y1={140} x2={960} y2={240} stroke={INK} strokeWidth={3} /><path d="M 880 240 h 160 l -30 60 h -100 z" fill={PAPERC} stroke={INK} strokeWidth={4} /><ellipse cx={960} cy={620} rx={540} ry={220} fill="url(#sglow)" opacity={0.5} />
+    </g>
+  ),
+  // the count room: a naked bulb over the dark, a small barred window, a shelf — the skim
+  countRoomBg: ({frame}) => (
+    <g>
+      <rect x={0} y={800} width={1920} height={280} fill={FLOOR} /><line x1={0} y1={800} x2={1920} y2={800} stroke={INK} strokeWidth={5} />
+      <line x1={960} y1={0} x2={960} y2={150} stroke={INK} strokeWidth={3} /><circle cx={960} cy={166} r={16} fill={GOLD} opacity={0.9} /><path d="M 960 166 L 640 800 L 1280 800 Z" fill="url(#sglow)" opacity={0.5} />
+      <rect x={240} y={240} width={180} height={140} fill="#2a313a" stroke={INK} strokeWidth={4} />{[0, 1, 2].map((i) => <line key={i} x1={288 + i * 48} y1={240} x2={288 + i * 48} y2={380} stroke={INK} strokeWidth={3} />)}
+      <rect x={1480} y={360} width={300} height={12} fill={PAPERC} stroke={INK} strokeWidth={3} />
+    </g>
+  ),
+  // the courtroom: a raised judge's bench, a seal, a flag, a gallery rail — RICO / the stand
+  courtroomBg: ({frame}) => (
+    <g>
+      <rect x={0} y={820} width={1920} height={260} fill={FLOOR} /><line x1={0} y1={820} x2={1920} y2={820} stroke={INK} strokeWidth={5} />
+      <rect x={620} y={520} width={680} height={300} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={700} y={440} width={520} height={90} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <circle cx={960} cy={360} r={70} fill={PAPERC} stroke={INK} strokeWidth={4} /><circle cx={960} cy={360} r={48} fill="none" stroke={INK} strokeWidth={2} /><path d="M 960 320 l 16 40 l -16 40 l -16 -40 Z" fill={GOLD} stroke={INK} strokeWidth={2} opacity={0.6} />
+      <line x1={1360} y1={820} x2={1360} y2={300} stroke={INK} strokeWidth={5} /><path d="M 1360 320 L 1500 342 L 1360 402 Z" fill={PAPERC} stroke={INK} strokeWidth={3} />
+      <rect x={0} y={780} width={1920} height={16} fill={PAPERC} stroke={INK} strokeWidth={4} />{Array.from({length: 20}).map((_, i) => <line key={i} x1={60 + i * 98} y1={796} x2={60 + i * 98} y2={820} stroke={INK} strokeWidth={3} />)}
+    </g>
+  ),
+  // the cell: brick wall, a bunk, a small barred window with moonlight (bars are the cellBars prop, in front)
+  cellBlock: ({frame}) => (
+    <g>
+      <rect x={0} y={820} width={1920} height={260} fill={FLOOR} /><line x1={0} y1={820} x2={1920} y2={820} stroke={INK} strokeWidth={5} />
+      {Array.from({length: 6}).map((_, r) => Array.from({length: 12}).map((_, c) => <rect key={r + '_' + c} x={c * 170 + (r % 2 ? 85 : 0)} y={200 + r * 104} width={150} height={90} fill="none" stroke={LINE} strokeWidth={2} opacity={0.32} />))}
+      <rect x={1380} y={240} width={200} height={160} fill="#2a313a" stroke={INK} strokeWidth={4} />{[0, 1, 2].map((i) => <line key={i} x1={1430 + i * 50} y1={240} x2={1430 + i * 50} y2={400} stroke={INK} strokeWidth={3} />)}<ellipse cx={1480} cy={320} rx={150} ry={190} fill="url(#sglow)" opacity={0.3} />
+      <rect x={200} y={640} width={360} height={40} fill={PAPERC} stroke={INK} strokeWidth={4} /><rect x={200} y={680} width={24} height={140} fill={PAPERC} stroke={INK} strokeWidth={3} /><rect x={536} y={680} width={24} height={140} fill={PAPERC} stroke={INK} strokeWidth={3} />
+    </g>
+  ),
+  // the Feds' listening post: a wall of pinned surveillance photos + red string, a blinded window (reelDeck prop)
+  wiretapRoom: ({frame}) => (
+    <g>
+      <rect x={0} y={780} width={1920} height={300} fill={FLOOR} /><line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={5} />
+      <rect x={1180} y={140} width={680} height={520} fill="#d8cdb4" stroke={INK} strokeWidth={5} />
+      {[{x: 1220, y: 190}, {x: 1400, y: 210}, {x: 1600, y: 180}, {x: 1300, y: 400}, {x: 1540, y: 420}].map((p, i) => <g key={i}><rect x={p.x} y={p.y} width={130} height={150} fill={PAPERC} stroke={INK} strokeWidth={3} /><circle cx={p.x + 65} cy={p.y + 62} r={26} fill="none" stroke={INK} strokeWidth={2} /><circle cx={p.x + 65} cy={p.y + 16} r={8} fill="#c0392b" opacity={0.7} /></g>)}
+      <path d="M 1285 252 L 1465 272 L 1665 242 L 1365 462 L 1605 482" fill="none" stroke="#c0392b" strokeWidth={2} opacity={0.55} />
+      <rect x={140} y={200} width={360} height={300} fill="#2a313a" stroke={INK} strokeWidth={4} />{Array.from({length: 8}).map((_, i) => <line key={i} x1={140} y1={236 + i * 34} x2={500} y2={236 + i * 34} stroke={PAPERC} strokeWidth={4} opacity={0.5} />)}
+    </g>
+  ),
+  // --- Dynasty / generational wealth ---
+  // the estate seen from the gates: a columned mansion on a rise, hedgerows, a fountain, dusk glow
+  estateGrounds: ({frame}) => (
+    <g>
+      <rect x={0} y={840} width={1920} height={240} fill={FLOOR} /><line x1={0} y1={840} x2={1920} y2={840} stroke={INK} strokeWidth={5} />
+      <ellipse cx={960} cy={330} rx={520} ry={240} fill="url(#sglow)" opacity={0.5} />
+      {/* mansion: center block + portico + two wings, roof balustrade */}
+      <g opacity={0.92}>
+        <rect x={560} y={330} width={240} height={180} fill={PAPERC} stroke={INK} strokeWidth={4} />
+        <rect x={1120} y={330} width={240} height={180} fill={PAPERC} stroke={INK} strokeWidth={4} />
+        <rect x={790} y={280} width={340} height={230} fill={PAPERC} stroke={INK} strokeWidth={4} />
+        <path d="M 770 280 L 960 200 L 1150 280 Z" fill={PAPERC} stroke={INK} strokeWidth={4} />
+        {[830, 890, 1030, 1090].map((x) => <line key={x} x1={x} y1={510} x2={x} y2={330} stroke={INK} strokeWidth={3.5} />)}
+        {Array.from({length: 4}).map((_, c) => <rect key={'wl' + c} x={584 + c * 56} y={366} width={30} height={44} fill="none" stroke={INK} strokeWidth={2.5} opacity={0.7} />)}
+        {Array.from({length: 4}).map((_, c) => <rect key={'wr' + c} x={1144 + c * 56} y={366} width={30} height={44} fill="none" stroke={INK} strokeWidth={2.5} opacity={0.7} />)}
+        {[584, 640, 1224, 1280].map((x) => <rect key={'w2' + x} x={x} y={440} width={30} height={44} fill={GOLD} stroke={INK} strokeWidth={2.5} opacity={0.55} />)}
+        {Array.from({length: 16}).map((_, i) => <line key={'b' + i} x1={572 + i * 50} y1={330} x2={572 + i * 50} y2={310} stroke={INK} strokeWidth={2.5} opacity={0.6} />)}
+        <line x1={560} y1={310} x2={1360} y2={310} stroke={INK} strokeWidth={3} opacity={0.6} />
+      </g>
+      {/* driveway sweeping to the portico + fountain */}
+      <path d="M 960 510 L 900 840 L 1200 840 L 1000 510 Z" fill={FLOOR} stroke={INK} strokeWidth={3} opacity={0.6} />
+      <g><ellipse cx={960} cy={640} rx={110} ry={30} fill={PAPERC} stroke={INK} strokeWidth={4} /><line x1={960} y1={636} x2={960} y2={560} stroke={INK} strokeWidth={4} /><path d={`M 940 ${566 + Math.sin(frame * 0.15) * 3} q 20 -26 40 0`} fill="none" stroke={INK} strokeWidth={3} opacity={0.7} /></g>
+      {/* hedgerows */}
+      {[240, 430, 1490, 1680].map((x, i) => <g key={x}><path d={`M ${x - 90} 840 q 90 -${120 + (i % 2) * 26} 180 0 Z`} fill={PAPERC} stroke={INK} strokeWidth={4} /></g>)}
+    </g>
+  ),
+  // the portrait hall: dark panelled wall, gilt-framed ancestors, ONE EMPTY FRAME waiting (the signature)
+  portraitWall: ({frame}) => <PortraitWallArt frame={frame} />,
+  // the loop-close payoff (t29): the SAME hall, but the fifth frame now HOLDS a portrait —
+  // "your frame is no longer empty" made visible. t02/t15 keep portraitWall (empty).
+  portraitWallFilled: ({frame}) => <PortraitWallArt frame={frame} filled />,
+  // the yacht deck: railing over open sea, sun glitter, superstructure + mast lines — nowhere near land
+  seaDeck: ({frame}) => (
+    <g>
+      {/* sea + horizon */}
+      <rect x={0} y={470} width={1920} height={310} fill="#dfe7e4" opacity={0.8} />
+      <line x1={0} y1={470} x2={1920} y2={470} stroke={INK} strokeWidth={2.5} opacity={0.5} />
+      {Array.from({length: 14}).map((_, i) => {const x = (rnd(i * 2.3) * 1920 + frame * (0.4 + rnd(i) * 0.5)) % 1920; return <line key={i} x1={x} y1={510 + rnd(i * 1.7) * 220} x2={x + 46} y2={510 + rnd(i * 1.7) * 220} stroke={GOLD} strokeWidth={3} opacity={0.5} />;})}
+      <circle cx={1520} cy={330} r={70} fill={GOLD} opacity={0.35} />
+      {/* superstructure block + raked mast */}
+      <g opacity={0.9}>
+        <rect x={60} y={430} width={430} height={350} rx={14} fill={PAPERC} stroke={INK} strokeWidth={4} />
+        {[110, 230, 350].map((x) => <rect key={x} x={x} y={480} width={90} height={50} rx={10} fill="#2a313a" stroke={INK} strokeWidth={3} opacity={0.75} />)}
+        <line x1={430} y1={430} x2={560} y2={250} stroke={INK} strokeWidth={4} /><line x1={560} y1={250} x2={330} y2={300} stroke={INK} strokeWidth={3} opacity={0.7} />
+      </g>
+      {/* deck + railing */}
+      <rect x={0} y={780} width={1920} height={300} fill={FLOOR} /><line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={5} />
+      {Array.from({length: 20}).map((_, i) => <line key={i} x1={i * 101} y1={780} x2={i * 101} y2={646} stroke={INK} strokeWidth={3.5} opacity={0.85} />)}
+      <line x1={0} y1={646} x2={1920} y2={646} stroke={INK} strokeWidth={5} /><line x1={0} y1={712} x2={1920} y2={712} stroke={INK} strokeWidth={3} opacity={0.7} />
+      {Array.from({length: 10}).map((_, i) => <line key={'p' + i} x1={40 + i * 210} y1={800 + (i % 2) * 30} x2={160 + i * 210} y2={800 + (i % 2) * 30} stroke={INK} strokeWidth={2} opacity={0.25} />)}
+    </g>
+  ),
+  // the gala ballroom: chandelier, arched windows with swags, dim guests holding flutes
+  ballroom: ({frame}) => (
+    <g>
+      <rect x={0} y={860} width={1920} height={220} fill={FLOOR} /><line x1={0} y1={860} x2={1920} y2={860} stroke={INK} strokeWidth={5} />
+      {/* arched windows + drape swags */}
+      {[240, 730, 1220].map((x) => <g key={x}>
+        <path d={`M ${x} 660 L ${x} 300 Q ${x + 130} 190 ${x + 260} 300 L ${x + 260} 660 Z`} fill="#2a313a" stroke={INK} strokeWidth={4} opacity={0.5} />
+        <line x1={x + 130} y1={230} x2={x + 130} y2={660} stroke={PAPERC} strokeWidth={4} opacity={0.5} />
+        <line x1={x} y1={430} x2={x + 260} y2={430} stroke={PAPERC} strokeWidth={4} opacity={0.5} />
+        <path d={`M ${x - 20} 300 Q ${x + 130} 400 ${x + 280} 300 L ${x + 280} 250 L ${x - 20} 250 Z`} fill="#7a2d2d" stroke={INK} strokeWidth={3} opacity={0.4} />
+      </g>)}
+      {/* chandelier */}
+      <g>
+        <line x1={1700} y1={0} x2={1700} y2={170} stroke={INK} strokeWidth={4} />
+        <ellipse cx={1700} cy={240} rx={170} ry={130} fill="url(#sglow)" opacity={0.9} />
+        {[0, 1, 2].map((t) => <g key={t}>{Array.from({length: 5 + t * 2}).map((_, i) => {const n = 5 + t * 2; const dx = (i - (n - 1) / 2) * (150 - t * 40) / n; return <g key={i}><line x1={1700} y1={170} x2={1700 + dx} y2={200 + t * 42} stroke={INK} strokeWidth={2} opacity={0.6} /><circle cx={1700 + dx} cy={208 + t * 42} r={7} fill={GOLD} stroke={INK} strokeWidth={2} /></g>;})}</g>)}
+      </g>
+      {/* dim guests with champagne flutes */}
+      {[140, 420, 620, 1060, 1320, 1560].map((x, i) => <g key={x} opacity={0.4}>
+        <circle cx={x} cy={720 - (i % 2) * 14} r={24} fill={INK} />
+        <path d={`M ${x - 30} ${744 - (i % 2) * 14} q 30 -22 60 0 L ${x + 34} 860 L ${x - 34} 860 Z`} fill={INK} />
+        <line x1={x + 40} y1={730 - (i % 2) * 14} x2={x + 52} y2={700 - (i % 2) * 14} stroke={INK} strokeWidth={3} />
+        <path d={`M ${x + 48} ${700 - (i % 2) * 14} l 4 -18 l 10 0 l 4 18 Z`} fill="none" stroke={INK} strokeWidth={2.5} />
+      </g>)}
+    </g>
+  ),
+  // the family vault: a great circular trust-vault door in a wall of deed boxes — paper, not gold
+  vaultHall: ({frame}) => (
+    <g>
+      <rect x={0} y={840} width={1920} height={240} fill={FLOOR} /><line x1={0} y1={840} x2={1920} y2={840} stroke={INK} strokeWidth={5} />
+      {/* deed-box walls flanking the door */}
+      {[0, 1400].map((x0) => <g key={x0}>{Array.from({length: 7}).map((_, r) => Array.from({length: 4}).map((_, c) => (
+        <g key={r + '_' + c}><rect x={x0 + 40 + c * 120} y={180 + r * 92} width={104} height={76} fill={PAPERC} stroke={INK} strokeWidth={2.5} opacity={0.8} />
+        <circle cx={x0 + 92 + c * 120} cy={218 + r * 92} r={6} fill="none" stroke={INK} strokeWidth={2} opacity={0.7} /></g>)))}</g>)}
+      {/* the circular vault door, slightly lit */}
+      <ellipse cx={960} cy={520} rx={330} ry={330} fill="url(#sglow)" opacity={0.4} />
+      <circle cx={960} cy={520} r={300} fill={PAPERC} stroke={INK} strokeWidth={6} />
+      <circle cx={960} cy={520} r={252} fill="none" stroke={INK} strokeWidth={3.5} opacity={0.7} />
+      <circle cx={960} cy={520} r={120} fill="none" stroke={INK} strokeWidth={4} />
+      {[0, 60, 120].map((a) => {const rad = ((a + frame * 0.1) * Math.PI) / 180; const c = Math.cos(rad), s = Math.sin(rad); return <line key={a} x1={960 - c * 116} y1={520 - s * 116} x2={960 + c * 116} y2={520 + s * 116} stroke={INK} strokeWidth={5} />;})}
+      {Array.from({length: 12}).map((_, i) => {const rad = (i * 30 * Math.PI) / 180; return <circle key={i} cx={960 + Math.cos(rad) * 276} cy={520 + Math.sin(rad) * 276} r={10} fill={GOLD} stroke={INK} strokeWidth={2.5} opacity={0.8} />;})}
+      <rect x={1250} y={430} width={40} height={180} rx={8} fill={PAPERC} stroke={INK} strokeWidth={4} />
+    </g>
+  ),
   plain: () => <g />,
 };
 // tiny helper so inline math reads cleanly above
@@ -652,6 +917,123 @@ const PROP: Record<string, React.FC<{frame: number}>> = {
       {[0, 1].map((k) => <path key={k} d={`M ${956 + k * 8} 656 q ${-3 + Math.sin(frame * 0.3 + k) * 4} -20 3 -36`} fill="none" stroke={GOLD} strokeWidth={3} opacity={0.7} />)}
       {/* two wine cups */}
       {[836, 1060].map((x) => <path key={x} d={`M ${x} 684 q 12 24 24 0 Z`} fill={GOLD} stroke={INK} strokeWidth={3} opacity={0.6} />)}
+    </g>
+  ),
+  // the boss's long banquet table seen head-on: plates + candles (figure at the head, extras dim on the sides)
+  longTable: ({frame}) => (
+    <g>
+      <rect x={520} y={720} width={880} height={34} rx={8} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={540} y={754} width={840} height={120} fill={PAPERC} stroke={INK} strokeWidth={3} />
+      {[640, 780, 920, 1060, 1200].map((x) => <ellipse key={x} cx={x} cy={716} rx={34} ry={12} fill={PAPERC} stroke={INK} strokeWidth={3} />)}
+      {[720, 1120].map((x) => <g key={x}><rect x={x} y={678} width={10} height={38} fill="#efe8d6" stroke={INK} strokeWidth={2} /><ellipse cx={x + 5} cy={670} rx={6} ry={11} fill={GOLD} opacity={0.85} /></g>)}
+    </g>
+  ),
+  // the intimate dinner table: red-check cloth, a candle, two wine glasses — the sit-down / the restaurant hit
+  dinerTable: ({frame}) => (
+    <g>
+      <rect x={700} y={720} width={520} height={30} rx={6} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={716} y={750} width={488} height={110} fill={PAPERC} stroke={INK} strokeWidth={3} />
+      {Array.from({length: 8}).map((_, c) => <line key={'v' + c} x1={716 + c * 61} y1={750} x2={716 + c * 61} y2={860} stroke="#a23a3a" strokeWidth={2} opacity={0.32} />)}
+      {[0, 1].map((r) => <line key={'h' + r} x1={716} y1={786 + r * 38} x2={1204} y2={786 + r * 38} stroke="#a23a3a" strokeWidth={2} opacity={0.32} />)}
+      <rect x={954} y={676} width={12} height={44} fill="#efe8d6" stroke={INK} strokeWidth={2} /><ellipse cx={960} cy={666} rx={7} ry={13} fill={GOLD} opacity={0.85} />
+      {[0, 1].map((k) => <path key={k} d={`M ${957 + k * 6} 666 q ${-3 + Math.sin(frame * 0.3 + k) * 4} -18 3 -34`} fill="none" stroke={GOLD} strokeWidth={3} opacity={0.7} />)}
+      {[836, 1084].map((x) => <g key={x}><path d={`M ${x} 690 q 12 26 24 0 Z`} fill="#a23a3a" stroke={INK} strokeWidth={3} opacity={0.5} /><line x1={x + 12} y1={708} x2={x + 12} y2={722} stroke={INK} strokeWidth={2} /></g>)}
+    </g>
+  ),
+  // the dinner table with the far seat EMPTY: same red-check table, but an unoccupied chair pulled
+  // up to the far place setting — "the chair is empty" made visually true (the rat reveal)
+  dinerTableEmptySeat: ({frame}) => (
+    <g>
+      {React.createElement(PROP.dinerTable, {frame})}
+      {/* empty chair at the far seat: backrest, seat, legs — nobody in it */}
+      <rect x={1348} y={596} width={16} height={172} rx={6} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={1246} y={756} width={114} height={16} rx={4} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <line x1={1258} y1={772} x2={1258} y2={856} stroke={INK} strokeWidth={4} strokeLinecap="round" />
+      <line x1={1352} y1={768} x2={1352} y2={856} stroke={INK} strokeWidth={4} strokeLinecap="round" />
+      <line x1={1258} y1={820} x2={1352} y2={820} stroke={INK} strokeWidth={3} opacity={0.6} />
+    </g>
+  ),
+  // the saint's card held to a flame at chest height — the omertà oath (figBehind so it reads as held)
+  saintCard: ({frame}) => (
+    <g>
+      <rect x={904} y={628} width={112} height={150} rx={6} fill="#efe8d6" stroke={INK} strokeWidth={4} />
+      <circle cx={960} cy={678} r={26} fill="none" stroke={INK} strokeWidth={3} /><path d="M 934 678 q 26 -34 52 0" fill="none" stroke={INK} strokeWidth={2} opacity={0.6} /><path d="M 926 742 q 34 -30 68 0" fill="none" stroke={INK} strokeWidth={2} opacity={0.5} />
+      <ellipse cx={960} cy={628} rx={44} ry={28} fill="url(#sglow)" opacity={0.8} />
+      {[0, 1, 2].map((k) => <path key={k} d={`M ${944 + k * 16} 638 q ${-4 + Math.sin(frame * 0.35 + k) * 6} -30 4 -56`} fill="none" stroke="#c0392b" strokeWidth={4} opacity={0.75} />)}
+    </g>
+  ),
+  // the boss's desk + a high-back chair (figBehind sits in the chair behind it)
+  bigDesk: ({frame}) => (
+    <g>
+      <rect x={900} y={560} width={120} height={210} rx={16} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={640} y={740} width={640} height={40} rx={6} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={680} y={780} width={560} height={100} fill={PAPERC} stroke={INK} strokeWidth={3} />
+      <line x1={1180} y1={740} x2={1180} y2={694} stroke={INK} strokeWidth={3} /><path d="M 1180 694 q 0 -14 30 -14" fill="none" stroke={INK} strokeWidth={3} /><ellipse cx={1210} cy={722} rx={72} ry={30} fill="url(#sglow)" opacity={0.6} />
+      <rect x={720} y={716} width={90} height={24} fill={PAPERC} stroke={INK} strokeWidth={3} transform="skewX(-8)" />
+    </g>
+  ),
+  // the Commission's round table, ringed by dim seated bosses on the far side
+  roundTable: ({frame}) => (
+    <g>
+      <ellipse cx={960} cy={780} rx={430} ry={124} fill={PAPERC} stroke={INK} strokeWidth={5} />
+      <ellipse cx={960} cy={772} rx={360} ry={92} fill="#e9e2d0" stroke={INK} strokeWidth={2} opacity={0.6} />
+      {[{x: 620, y: 694}, {x: 790, y: 662}, {x: 960, y: 650}, {x: 1130, y: 662}, {x: 1300, y: 694}].map((p, i) => <g key={i} opacity={0.5}><circle cx={p.x} cy={p.y} r={30} fill={INK} /><rect x={p.x - 34} y={p.y + 24} width={68} height={96} fill={INK} /></g>)}
+    </g>
+  ),
+  // a table piled with banded cash, an adding machine, a duffel — the count room / the skim
+  cashPiles: ({frame}) => (
+    <g>
+      <rect x={600} y={740} width={720} height={30} rx={5} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      {[{x: 660, h: 48}, {x: 742, h: 72}, {x: 824, h: 36}, {x: 1120, h: 60}, {x: 1202, h: 48}].map((b, i) => <g key={i}>{Array.from({length: Math.floor(b.h / 12)}).map((_, k) => <rect key={k} x={b.x} y={740 - 12 - k * 12} width={70} height={12} fill={k % 2 ? '#cde0c4' : '#bcd4b0'} stroke={INK} strokeWidth={2} />)}<line x1={b.x + 35} y1={740 - b.h} x2={b.x + 35} y2={740} stroke="#a23a3a" strokeWidth={4} opacity={0.5} /></g>)}
+      <rect x={900} y={696} width={150} height={46} rx={6} fill={PAPERC} stroke={INK} strokeWidth={4} /><rect x={960} y={664} width={40} height={40} fill={PAPERC} stroke={INK} strokeWidth={3} />{[0, 1, 2].map((r) => [0, 1, 2].map((c) => <rect key={r + '_' + c} x={912 + c * 20} y={706 + r * 10} width={12} height={7} fill={INK} opacity={0.4} />))}
+      <path d="M 1300 770 q 90 -50 180 0 l 0 40 q -90 30 -180 0 Z" fill={PAPERC} stroke={INK} strokeWidth={4} /><line x1={1330} y1={758} x2={1450} y2={758} stroke={INK} strokeWidth={3} />
+    </g>
+  ),
+  // the witness stand box beside the bench — the rat takes the stand
+  witnessStand: ({frame}) => (
+    <g>
+      <rect x={1360} y={640} width={220} height={180} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={1360} y={600} width={220} height={44} fill={PAPERC} stroke={INK} strokeWidth={4} />
+    </g>
+  ),
+  // foreground cell bars (figBehind puts the figure behind them — behind bars)
+  cellBars: ({frame}) => (
+    <g opacity={0.9}>
+      {Array.from({length: 11}).map((_, i) => <line key={i} x1={80 + i * 180} y1={80} x2={80 + i * 180} y2={1080} stroke={INK} strokeWidth={9} />)}
+      <line x1={0} y1={150} x2={1920} y2={150} stroke={INK} strokeWidth={9} />
+      <line x1={0} y1={1000} x2={1920} y2={1000} stroke={INK} strokeWidth={9} />
+    </g>
+  ),
+  // a reel-to-reel tape deck + headphones on a table — the wiretap
+  reelDeck: ({frame}) => (
+    <g>
+      <rect x={600} y={720} width={520} height={30} rx={5} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={660} y={640} width={340} height={80} rx={8} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      {[730, 930].map((x, i) => <g key={x}><circle cx={x} cy={680} r={30} fill={PAPERC} stroke={INK} strokeWidth={4} transform={`rotate(${(frame * (i ? -3 : 3)) % 360} ${x} 680)`} /><circle cx={x} cy={680} r={8} fill={INK} /></g>)}
+      <line x1={760} y1={680} x2={900} y2={680} stroke={INK} strokeWidth={2} opacity={0.5} />
+      <path d="M 1060 700 q 0 -60 60 -60 q 60 0 60 60" fill="none" stroke={INK} strokeWidth={4} /><rect x={1050} y={696} width={20} height={42} rx={6} fill={PAPERC} stroke={INK} strokeWidth={3} /><rect x={1170} y={696} width={20} height={42} rx={6} fill={PAPERC} stroke={INK} strokeWidth={3} />
+    </g>
+  ),
+  // wrought-iron estate gates with gold finials + a crest — the heir looks through them (figBehind)
+  estateGates: ({frame}) => (
+    <g>
+      {/* stone pillars with lantern caps */}
+      {[430, 1370].map((x) => <g key={x}>
+        <rect x={x} y={300} width={120} height={560} fill={PAPERC} stroke={INK} strokeWidth={5} />
+        {[0, 1, 2, 3, 4].map((k) => <line key={k} x1={x} y1={392 + k * 92} x2={x + 120} y2={392 + k * 92} stroke={INK} strokeWidth={2} opacity={0.4} />)}
+        <rect x={x - 12} y={272} width={144} height={30} fill={PAPERC} stroke={INK} strokeWidth={4} />
+        <rect x={x + 34} y={200} width={52} height={72} fill={PAPERC} stroke={INK} strokeWidth={4} /><path d={`M ${x + 26} 200 L ${x + 60} 168 L ${x + 94} 200 Z`} fill={PAPERC} stroke={INK} strokeWidth={4} /><circle cx={x + 60} cy={236} r={12} fill={GOLD} opacity={0.7} />
+      </g>)}
+      {/* bars + top rail arch + gold finials */}
+      <path d="M 550 396 Q 960 300 1370 396" fill="none" stroke={INK} strokeWidth={7} />
+      <line x1={550} y1={520} x2={1370} y2={520} stroke={INK} strokeWidth={5} opacity={0.8} />
+      {Array.from({length: 13}).map((_, i) => {const x = 580 + i * 63.3; const top = 388 - Math.sin(((x - 550) / 820) * Math.PI) * 84;
+        return <g key={i}><line x1={x} y1={860} x2={x} y2={top} stroke={INK} strokeWidth={6} />
+          <path d={`M ${x - 8} ${top} L ${x} ${top - 22} L ${x + 8} ${top} Z`} fill={GOLD} stroke={INK} strokeWidth={2} /></g>;})}
+      {/* the crest */}
+      <circle cx={960} cy={470} r={54} fill={PAPERC} stroke={INK} strokeWidth={5} />
+      <circle cx={960} cy={470} r={54} fill="none" stroke={GOLD} strokeWidth={3} opacity={0.8} />
+      <text x={960} y={492} textAnchor="middle" fontFamily="Georgia, serif" fontSize={60} fontWeight={700} fill={INK} opacity={0.85}>H</text>
     </g>
   ),
   none: () => <g />,
@@ -905,4 +1287,118 @@ const ROMAN = {
       extras={[{pose: A.sit(f + 50), x: 1240, y: 762, scale: 1.2, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN};
+// Mafia / Cosa Nostra pack (associate -> soldier -> capo -> underboss -> boss -> Commission -> the fall)
+const MAFIA = {
+  // the boss at the head of a long table, others seated in the dim — the cold open + taking the throne.
+  // The boss STANDS behind the table: y=720 puts his feet (~y 855) below the table line, hidden by
+  // the table front (754-874), so he presides over it — never perched ON the tabletop.
+  mobTable: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="restaurant" prop="longTable" bg="url(#swarm)" figBehind
+      fig={{pose: A.stand(f), x: 960, y: 720, scale: 1.25, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}}
+      extras={[{pose: A.sit(f + 30), x: 620, y: 748, scale: 1.05, view: 'profile', facing: 1, pal: DIM, face: false},
+               {pose: A.sit(f + 60), x: 1300, y: 748, scale: 1.05, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+  // the block: a kid on the corner under the lamppost — the want, and the cyclical loop close
+  streetCorner: () => {const f = useCurrentFrame();
+    return <Stage backdrop="tenement" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 560, y: 892, scale: 1.35, view: 'front', expr: FACES.earnest}} />;},
+  // hanging out at the social club — the rules, omertà, the Dapper Don holding court
+  socialClub: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="clubInterior" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 620, y: 892, scale: 1.35, view: 'front', expr: blendExpr(FACES.focused, FACES.smug, t)}}
+      extras={[{pose: A.sit(f + 40), x: 1180, y: 900, scale: 1.15, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+  // the back-room card table under the low lamp — the earn, a sit-down, your crew
+  cardGame: () => {const f = useCurrentFrame();
+    return <Stage backdrop="cardRoom" prop="dinerTable" bg="url(#spaper)" figBehind
+      fig={{pose: A.sit(f), x: 700, y: 762, scale: 1.2, view: 'profile', facing: 1, expr: FACES.focused}}
+      extras={[{pose: A.sit(f + 45), x: 1220, y: 762, scale: 1.2, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+  // the dark alley under a caged bulb — making your bones / going to the mattresses
+  backAlley: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="alley" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 700, y: 892, scale: 1.35, view: 'front', expr: blendExpr(FACES.worried, FACES.hardened, t)}} />;},
+  // the making ceremony: the saint card to a flame, a ring of dim men behind — omertà sworn
+  madeCeremony: () => {const f = useCurrentFrame();
+    return <Stage backdrop="ceremonyRoom" prop="saintCard" bg="url(#spaper)" figBehind
+      fig={{pose: A.stand(f), x: 960, y: 800, scale: 1.3, view: 'front', expr: FACES.hardened}} />;},
+  // the restaurant sit-down / the classic mob hit — two at the table by candlelight
+  redSauce: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="restaurant" prop="dinerTable" bg="url(#swarm)" figBehind
+      fig={{pose: A.sit(f), x: 700, y: 762, scale: 1.2, view: 'profile', facing: 1, expr: blendExpr(FACES.cold, FACES.conflicted, t)}}
+      extras={[{pose: A.sit(f + 50), x: 1220, y: 762, scale: 1.2, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+  // the restaurant table with the far chair EMPTY — the rat reveal (t25): no companion figure,
+  // just the boss staring across at an unoccupied chair. "THE CHAIR IS EMPTY" is visually true.
+  redSauceAlone: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="restaurant" prop="dinerTableEmptySeat" bg="url(#swarm)" figBehind
+      fig={{pose: A.sit(f), x: 700, y: 762, scale: 1.2, view: 'profile', facing: 1, expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
+  // the docks: crane, containers, harbor — the rackets, the mob tax on the city
+  waterfront: () => {const f = useCurrentFrame();
+    return <Stage backdrop="waterfront" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 1250, y: 884, scale: 1.4, view: 'front', expr: FACES.cold}} />;},
+  // behind the boss's desk — the sit-down where you give the order / made underboss
+  donOffice: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="donStudy" prop="bigDesk" bg="url(#sclean)" figBehind
+      fig={{pose: A.sit(f), x: 960, y: 700, scale: 1.2, view: 'front', expr: blendExpr(FACES.cold, FACES.hardened, t)}} />;},
+  // the Commission: the round table of bosses in the dark — the board above the family
+  commission: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="commissionRoom" prop="roundTable" bg="url(#spaper)" figBehind
+      fig={{pose: A.sit(f), x: 960, y: 720, scale: 1.15, view: 'front', expr: blendExpr(FACES.cold, FACES.smug, t)}} />;},
+  // the count room: cash piled under a naked bulb — the skim
+  countRoom: () => {const f = useCurrentFrame();
+    return <Stage backdrop="countRoomBg" prop="cashPiles" bg="url(#spaper)" figBehind
+      fig={{pose: A.stand(f), x: 545, y: 892, scale: 1.25, view: 'front', expr: FACES.smug}} />;},
+  // the courtroom: the defendant before the bench, a witness in the stand — RICO / the rat
+  courtroom: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="courtroomBg" prop="witnessStand" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 820, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.worried, FACES.hollow, t)}}
+      extras={[{pose: A.sit(f), x: 1470, y: 800, scale: 1.0, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+  // the cell: the figure behind bars — the box or the cell
+  prisonCell: () => {const f = useCurrentFrame();
+    return <Stage backdrop="cellBlock" prop="cellBars" bg="url(#spaper)" figBehind
+      fig={{pose: A.sit(f), x: 380, y: 640, scale: 1.15, view: 'front', expr: FACES.hollow}} />;},
+  // the Feds' listening post: the reel-to-reel + the photo wall — omertà cracks, the tape
+  wiretap: () => {const f = useCurrentFrame();
+    return <Stage backdrop="wiretapRoom" prop="reelDeck" bg="url(#sclean)" figBehind
+      fig={{pose: A.stand(f), x: 700, y: 892, scale: 1.3, view: 'front', expr: FACES.worried}} />;},
+};
+
+// Dynasty / generational wealth pack (billionaire_heir, old money)
+const DYNASTY = {
+  // the child heir at the wrought-iron gates, the mansion beyond — behind the bars (the gilded cage)
+  heirGates: () => {const f = useCurrentFrame();
+    return <Stage backdrop="estateGrounds" prop="estateGates" bg="url(#swarm)" figBehind
+      fig={{pose: A.stand(f), x: 700, y: 888, scale: 1.15, view: 'front', expr: FACES.earnest}} />;},
+  // the hall of ancestor portraits — four gilt frames and one EMPTY one, waiting
+  portraitHall: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="portraitWall" bg="url(#spaper)"
+      fig={{pose: A.lookUp(f), x: 560, y: 892, scale: 1.4, view: 'front', expr: blendExpr(FACES.neutral, FACES.conflicted, t)}} />;},
+  // the loop closes (t29 ONLY): the same hall, but the fifth frame is no longer empty —
+  // your portrait hangs in it, exactly when the VO says so
+  portraitHallFilled: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="portraitWallFilled" bg="url(#spaper)"
+      fig={{pose: A.lookUp(f), x: 560, y: 892, scale: 1.4, view: 'front', expr: blendExpr(FACES.neutral, FACES.hollow, t)}} />;},
+  // the yacht deck at sea — the trust-fund years, the crowd that appears
+  yachtDeck: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="seaDeck" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 1180, y: 892, scale: 1.4, view: 'front', expr: blendExpr(FACES.smug, FACES.hollow, t)}} />;},
+  // the foundation gala — chandelier, dim guests with flutes, you hold court
+  galaBallroom: () => {const f = useCurrentFrame();
+    return <Stage backdrop="ballroom" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 840, y: 900, scale: 1.42, view: 'front', expr: FACES.cold}} />;},
+  // the family vault — a great trust-vault door in a wall of deed boxes; paper, not gold
+  familyVault: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="vaultHall" bg="url(#sclean)"
+      fig={{pose: A.lookUp(f), x: 500, y: 888, scale: 1.4, view: 'front', expr: blendExpr(FACES.focused, FACES.hollow, t)}} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY};
