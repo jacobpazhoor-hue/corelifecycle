@@ -20,6 +20,22 @@ import os, sys, json, time, ssl, zipfile, io, subprocess, urllib.request, urllib
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 API = "https://api.github.com"
+_CTX = None  # cached SSL context (probed once)
+
+
+def _ssl_ctx():
+    """The launchd framework Python has no system CA bundle -> ssl.create_default_context()
+    fails CERTIFICATE_VERIFY_FAILED. Fall back to certifi's bundle when the default can't verify."""
+    ctx = ssl.create_default_context()
+    try:
+        with urllib.request.urlopen("https://api.github.com", context=ctx, timeout=10):
+            return ctx
+    except Exception:
+        try:
+            import certifi
+            return ssl.create_default_context(cafile=certifi.where())
+        except Exception:
+            return ctx
 WORKFLOW = "render.yml"
 POLL_SECS = 20
 MAX_WAIT = 50 * 60  # 50 min hard cap
@@ -50,8 +66,10 @@ def api(cfg, method, path, body=None, raw=False):
     req.add_header("User-Agent", "corelifecycle-autopilot")
     if data:
         req.add_header("Content-Type", "application/json")
-    ctx = ssl.create_default_context()
-    with urllib.request.urlopen(req, context=ctx, timeout=120) as r:
+    global _CTX
+    if _CTX is None:
+        _CTX = _ssl_ctx()
+    with urllib.request.urlopen(req, context=_CTX, timeout=120) as r:
         blob = r.read()
         if raw:
             return blob, r.status
