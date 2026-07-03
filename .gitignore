@@ -19,3 +19,6 @@ runs/
 voice_samples*/
 experiments/
 .remotion/
+
+# workflow file lives on GitHub only (repo-scope token cannot push it); dispatched via API
+.github/workflows/

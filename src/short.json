@@ -2,40 +2,40 @@
   "fps": 30,
   "width": 1080,
   "height": 1920,
-  "totalFrames": 1402,
-  "topic": "mob_boss",
+  "totalFrames": 1514,
+  "topic": "billionaire_heir",
   "brand": {
-    "kicker": "THE CLIMB COSTS",
-    "line1": "EVERYTHING",
+    "kicker": "THE GREAT",
+    "line1": "WEALTH TRANSFER",
     "line2": "",
-    "tag": "NOBODY \u2192 THE DON"
+    "tag": "90% GONE BY GEN 3"
   },
   "scenes": [
     {
       "id": "t00",
-      "template": "mobTable",
+      "template": "boardroomNotes",
       "level": null,
       "overlay": {
-        "big": "$500M / YR",
-        "sub": "THE FAMILY \u00b7 AND A WIRE UNDER THE TABLE"
+        "big": "$8,200,000,000",
+        "sub": "THE WILL \u00b7 AND THE PAGE SAYS: NOTHING"
       },
       "audio": "audio/t00.wav",
       "audioStartFrame": 3,
-      "durationInFrames": 653,
+      "durationInFrames": 728,
       "startFrame": 0
     },
     {
-      "id": "t16",
-      "template": "mobTable",
-      "level": "LEVEL 05  \u00b7  THE BOSS",
+      "id": "t13",
+      "template": "fileWall",
+      "level": null,
       "overlay": {
-        "big": "$500M / YR",
-        "sub": "THE BOSS \u00b7 THE FAMILY'S GROSS \u00b7 A TARGET ON YOUR BACK"
+        "big": "$500B",
+        "sub": "PARKED IN SOUTH DAKOTA TRUSTS \u00b7 FOREVER"
       },
-      "audio": "audio/t16.wav",
+      "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "durationInFrames": 749,
-      "startFrame": 653
+      "durationInFrames": 786,
+      "startFrame": 728
     }
   ]
 }
