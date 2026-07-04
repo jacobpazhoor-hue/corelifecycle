@@ -2,7 +2,7 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 23100,
+  "totalFrames": 23074,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
@@ -251,7 +251,7 @@
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
       "startFrame": 14190,
-      "durationInFrames": 729
+      "durationInFrames": 709
     },
     {
       "id": "t20",
@@ -263,7 +263,7 @@
       "template": "boardroomHead",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 14919,
+      "startFrame": 14899,
       "durationInFrames": 739
     },
     {
@@ -276,7 +276,7 @@
       "template": "galaBallroom",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 15658,
+      "startFrame": 15638,
       "durationInFrames": 780
     },
     {
@@ -289,7 +289,7 @@
       "template": "warRoom",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 16438,
+      "startFrame": 16418,
       "durationInFrames": 682
     },
     {
@@ -302,7 +302,7 @@
       "template": "heirGates",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 17120,
+      "startFrame": 17100,
       "durationInFrames": 631
     },
     {
@@ -312,7 +312,7 @@
       "template": "revolvingDoor",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 17751,
+      "startFrame": 17731,
       "durationInFrames": 672
     },
     {
@@ -325,7 +325,7 @@
       "template": "signing",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 18423,
+      "startFrame": 18403,
       "durationInFrames": 855
     },
     {
@@ -338,8 +338,8 @@
       "template": "familyVault",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 19278,
-      "durationInFrames": 859
+      "startFrame": 19258,
+      "durationInFrames": 853
     },
     {
       "id": "t27",
@@ -351,7 +351,7 @@
       "template": "dinner",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 20137,
+      "startFrame": 20111,
       "durationInFrames": 722
     },
     {
@@ -364,7 +364,7 @@
       "template": "emptyChair",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 20859,
+      "startFrame": 20833,
       "durationInFrames": 735
     },
     {
@@ -377,7 +377,7 @@
       "template": "portraitHallFilled",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 21594,
+      "startFrame": 21568,
       "durationInFrames": 688
     },
     {
@@ -390,7 +390,7 @@
       "template": "heirGates",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 22282,
+      "startFrame": 22256,
       "durationInFrames": 818
     }
   ]
