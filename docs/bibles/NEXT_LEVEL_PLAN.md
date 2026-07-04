@@ -75,11 +75,12 @@ Do NOT animate SVG filters. Pre-generate **2–3 seeded variants** of stroke pat
 ## PHASE 2 — SOUND DESIGN 2.0 (`duck_music.py` + new `sfx_place.py` + `gen_voice_edge.py`)
 *After the script, audio is the #1 amateur-vs-pro tell. Concrete mix numbers throughout.*
 
-### 2.1 Real SFX library (one-time setup, CC0/royalty-free)
-Download into `public/sfx/` (gitignored like other audio; regenerated/cached in cloud via a fetch script with pinned URLs, or committed if small):
-- **Sonniss #GameAudioGDC** (pick ~30 curated: whooshes, thuds, risers, paper, coins, doors, heartbeat) — royalty-free, monetized YT explicitly OK, no attribution.
-- **Kenney.nl** (CC0 pops/clicks), **Pixabay SFX** (Pixabay license), **freesound CC0-filter only**. AVOID BBC archive (non-commercial).
-Keep a `docs/SFX_MANIFEST.md` with source+license per file.
+### 2.1 SFX source — DONE (2026-07-04): built PROCEDURALLY in `sfx_lib.py`, not downloaded
+Decision during execution: instead of downloading CC0 sample files, `sfx_lib.py` SYNTHESISES every
+SFX + ambience in numpy — 100% free, deterministic, zero-dependency, identical on the cloud shards
+(no fetch step / committed binaries), copyright-bulletproof, and consistent with make_ambient/
+duck_music. If a future session wants richer *real* samples: Sonniss #GameAudioGDC (royalty-free,
+monetized-YT OK), Kenney.nl / Pixabay / freesound-CC0 — but the procedural route is preferred here.
 
 ### 2.2 SFX placement engine (replace synthesized whoosh/boom in `duck_music.py` with placed samples)
 Rules: every camera move = whoosh (peak 1–2f BEFORE visual impact); every contact/slam = thud synced to hit-stop; every overlay pop-in = soft foley pop; level-card reveal = signature "stamp" sound (brand). Music ducks −6dB under SFX hits.
@@ -174,7 +175,7 @@ Survival scenarios: zombie day 1 (770K), lost at sea (7.7M nick kratka), dinosau
 ## EXECUTION ORDER & FILE MAP
 | # | Phase | Files | Est. sessions |
 |---|-------|-------|----|
-| 1 | Sound 2.2–2.4 (SFX place, beds, TTS humanize) | duck_music.py, make_ambient.py, gen_voice_edge.py, public/sfx | 1 |
+| 1 | **✅ DONE 2026-07-04** — Sound 2.0 (sfx_lib.py synths, 3-act score, per-level diegetic beds, placed SFX, silence beat, climax heartbeat, TTS nasal-cut/breath/per-scene-rate). Validated gate PASS + true mix peak 0.994 (no clip) + build green. Commit 883ff42. | sfx_lib.py (new), duck_music.py, make_ambient.py, gen_voice_edge.py, BIBLE.md | done |
 | 2 | Anim 1.1–1.6 (lag, springs, idle, arcs, boil, impacts) | src/anim.ts (new), figure.tsx, director.tsx | 1–2 |
 | 3 | Story 3.1–3.6 + dialogue voice 2.5 | AUTOPILOT_PROMPT.txt, BIBLE.md, REVIEW_PROMPT.txt, gen_voice_edge.py, content.py schema | 1 |
 | 4 | Anim 1.7–1.8 (camera 2.0, parallax/occluders) | director.tsx, stage.tsx | 1 |
