@@ -21,13 +21,14 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 AUDIO = os.path.join(ROOT, "public", "audio")
 os.makedirs(AUDIO, exist_ok=True)
 
-async def synth_mp3(text, path, tries=5):
+async def synth_mp3(text, path, rate=RATE, tries=5):
     """Synth one scene to mp3. edge-tts intermittently throws NoAudioReceived (transient
-    server/rate-limit hiccup) — retry with backoff so one blip doesn't kill the whole build."""
+    server/rate-limit hiccup) — retry with backoff so one blip doesn't kill the whole build.
+    `rate` may be overridden per scene (e.g. '-10%' for gravity, '+12%' for action)."""
     last = None
     for attempt in range(tries):
         try:
-            comm = edge_tts.Communicate(text, VOICE, rate=RATE)
+            comm = edge_tts.Communicate(text, VOICE, rate=rate)
             data = bytearray()
             async for chunk in comm.stream():
                 if chunk["type"] == "audio":
@@ -59,6 +60,7 @@ def master(y, sr):
     g = np.ones_like(fr)
     g *= 1.0 / (1.0 + (85.0 / np.maximum(fr, 1.0)) ** 6)          # high-pass 85Hz
     g *= 1.0 - 0.32 * np.exp(-((fr - 320.0) / 140.0) ** 2)        # de-mud dip @320Hz
+    g *= 1.0 - 0.25 * np.exp(-((fr - 2600.0) / 650.0) ** 2)       # nasal/boxy cut ~2.6k (-2.5dB, TTS tell)
     g *= 1.0 + 0.85 * (1.0 / (1.0 + np.exp(-(fr - 3200.0) / 600.0)))  # presence shelf ~+5dB
     g *= 1.0 - 0.5 * np.exp(-((fr - 7200.0) / 700.0) ** 2)        # de-ess notch @7.2k
     y_eq = np.fft.irfft(X * g, n=n).astype(np.float32)
@@ -81,23 +83,43 @@ def trim_silence(y, sr, thresh=0.012, pad=0.04):
     p = int(pad * sr)
     return y[max(0, idx[0] - p):min(len(y), idx[-1] + p)]
 
+def breath(sr, dur=0.24, peak=0.085, seed=0):
+    """A soft, airy inhale to prepend before longer lines — brains flag impossible breathlessness
+    as synthetic ~90s into TTS, so a real breath every so often reads as human. Crude band-pass
+    noise (air, not hiss) under a smooth inhale envelope. Deterministic per seed."""
+    rng = np.random.default_rng(seed)
+    n = int(sr * dur); tt = np.linspace(0, 1, n, endpoint=False)
+    noise = rng.standard_normal(n).astype(np.float32)
+    k1 = max(2, int(sr * 0.0006)); k2 = max(2, int(sr * 0.004))
+    band = np.convolve(noise, np.ones(k1) / k1, mode="same") - np.convolve(noise, np.ones(k2) / k2, mode="same")
+    env = np.sin(np.pi * tt) ** 1.5                              # inhale: rise then settle
+    b = (band * env).astype(np.float32)
+    m = float(np.max(np.abs(b)))
+    return (b / m * peak).astype(np.float32) if m > 1e-9 else b
+
 async def main():
     scenes_out = []
     cursor = 0
     nwords = 0
     speech_total = 0.0
-    for sc in SCENES:
+    for i, sc in enumerate(SCENES):
         mp3 = os.path.join(AUDIO, f"{sc['id']}.mp3")
-        await synth_mp3(sc["narration"], mp3)
+        rate = sc.get("rate", RATE)                              # per-scene prosody override
+        await synth_mp3(sc["narration"], mp3, rate=rate)
         y, sr = sf.read(mp3, dtype="float32")
         y, sr = master(y, sr)
         y = trim_silence(y, sr)                                   # cut TTS breaths/tails (dead air)
+        nw = len(sc["narration"].split())
+        # prepend a soft real breath before longer lines (not the cold open) — human-izes the TTS
+        if i > 0 and (nw > 48 or sc.get("breath")):
+            br = breath(sr, seed=(hash(sc["id"]) & 0xffff))
+            y = np.concatenate([br, np.zeros(int(0.05 * sr), np.float32), y]).astype(np.float32)
         wav = os.path.join(AUDIO, f"{sc['id']}.wav")
         sf.write(wav, y, sr)
         speech = len(y) / sr
         gap = float(sc.get("gap", GAP))                           # per-scene override for dramatic holds
         total = LEAD + speech + gap
-        nwords += len(sc["narration"].split())
+        nwords += nw
         speech_total += speech
         dur_f = max(1, round(total * FPS))
         scenes_out.append({

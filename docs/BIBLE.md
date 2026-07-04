@@ -13,9 +13,21 @@ not just white-collar careers — that is where the curiosity + clicks live.
   cutting dead air is the biggest "feels fast" lever), with a per-scene `gap=0.7` override ONLY on
   dramatic reveal/cliffhanger beats. **LEAD `0.1s`**. Each clip is **silence-trimmed** (breaths/tails).
 - ALWAYS run through the **mastering chain** in gen_voice_edge.py `master()`: 48kHz upsample,
-  HP 85Hz, de-mud 320Hz, presence shelf ~3.2k, de-ess 7.2k, gentle harmonic exciter (air),
-  soft compression, normalize 0.97. Crisp + clear, never staticy. Final mix is loudnorm'd to −14 LUFS
-  (audio_master.py) with music ducked under VO + transient SFX on cuts (duck_music.py).
+  HP 85Hz, de-mud 320Hz, **nasal/boxy cut ~2.6k (−2.5dB — the TTS tell)**, presence shelf ~3.2k,
+  de-ess 7.2k, gentle harmonic exciter (air), soft compression, normalize 0.97. Crisp, never staticy.
+- **Human-izing (Sound 2.0):** a soft real **breath** is prepended before longer lines (>48 words,
+  not the cold open) — impossible breathlessness reads as synthetic ~90s in. Scenes may set a per-scene
+  `rate` (e.g. `-10%` gravity / `+12%` action) overriding the +8% default.
+- **Sound design (Sound 2.0 — sfx_lib.py + make_ambient.py + duck_music.py, all numpy, copyright-clean):**
+  - Score = **3 ACTS** (setup/escalation/climax) in different keys + tempo, crossfaded at act breaks
+    (music changing at act boundaries is a real retention lever).
+  - **Per-level diegetic beds** (rain/office hum/casino/cell block/street/wind/crowd/night, chosen by
+    template keyword) mixed WAY under the voice so narration is never "floating in a digital void".
+  - **SFX layer** placed on structure: whoosh INTO every cut; **riser + brand STAMP + thud** on every
+    LEVEL cut; a soft **pop** on every number/overlay reveal; cold-open thud.
+  - **One silence beat** (~1.3s, music+SFX to near-silence) right before the midpoint-reversal line,
+    then swell back. A single soft **heartbeat** leads into the final level. Music dips extra under SFX hits.
+  - Final mix loudnorm'd to −14 LUFS (audio_master.py). Keep synths deterministic (topic-seeded).
 
 ## Script (writer) — POV STORYTELLING (study docs/MASTERPOVS_ANALYSIS.md + docs/bibles/QUALITY_MAX_PLAN.md §2.1)
 RETENTION IS THE METRIC. North-star: hold **≥78% of viewers at 0:30**, **45–55% average-percent-viewed**
