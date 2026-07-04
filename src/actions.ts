@@ -1,4 +1,5 @@
 import {Pose} from './figure';
+import {idleBreath} from './anim';
 
 const TAU = Math.PI * 2;
 const sin = Math.sin;
@@ -9,13 +10,18 @@ const STAND: Pose = {
   legNearHip: 9, legNearKnee: 2, legFarHip: 9, legFarKnee: 2, bob: 0,
 };
 
-// breathing / idle sway applied on top of any base pose
-const breathe = (p: Pose, f: number, amt = 1): Pose => ({
-  ...p,
-  spineLean: p.spineLean + sin(f * 0.05) * 0.8 * amt,
-  headTilt: p.headTilt + sin(f * 0.045 + 1) * 0.6 * amt,
-  bob: p.bob + sin(f * 0.05) * 1.4 * amt,
-});
+// breathing / idle sway applied on top of any base pose. The head LAGS the chest by ~4 frames
+// (secondary motion — the single biggest 'alive' cue for a rigid figure).
+const breathe = (p: Pose, f: number, amt = 1): Pose => {
+  const br = idleBreath(f, 30, 15);          // chest, ~15 breaths/min
+  const brLag = idleBreath(f - 4, 30, 15);   // head follows the body, delayed
+  return {
+    ...p,
+    spineLean: p.spineLean + br * 0.9 * amt,
+    headTilt: p.headTilt + brLag * 0.7 * amt,
+    bob: p.bob + br * 1.5 * amt,
+  };
+};
 
 export const stand = (f: number): Pose => breathe(STAND, f);
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, Sequence, interpolate, useCurrentFrame, useVideoConfig, spring, Easing} from 'remotion';
 import {TEMPLATES} from './scenes';
+import {noise1} from './anim';
 import slice from './slice.json';
 
 // ============================================================================
@@ -64,12 +65,14 @@ export const FramedScene: React.FC<{template: string; type: string; focus: [numb
   const s = base * interpolate(f, [0, dur], [1.0, PUSH_TO[type] ?? 1.05],
     {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
   const driftY = interpolate(f, [0, dur], [0.5, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
-  // continuous gentle sway so the frame is NEVER fully static (short-attention retention) — sub-pixel, cheap
-  const swayX = Math.sin(f * 0.03) * 0.28;
+  // ORGANIC HANDHELD: gentle sine + value-noise so the frame is never static AND never a robotic
+  // metronome (a real operator drifts). Sub-pixel, transform-only, cheap.
+  const swayX = Math.sin(f * 0.03) * 0.20 + noise1(f * 0.045, 1) * 0.12;
+  const swayY = noise1(f * 0.05, 7) * 0.10;
   const [fx, fy] = focus;
   return (
     <AbsoluteFill style={{backgroundColor: PAPER, overflow: 'hidden'}}>
-      <AbsoluteFill style={{transform: `scale(${s}) translate(${swayX}%, ${driftY}%)`, transformOrigin: `${fx * 100}% ${fy * 100}%`}}>
+      <AbsoluteFill style={{transform: `scale(${s}) translate(${swayX}%, ${driftY + swayY}%)`, transformOrigin: `${fx * 100}% ${fy * 100}%`}}>
         {Art ? <Art /> : null}
       </AbsoluteFill>
     </AbsoluteFill>

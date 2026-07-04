@@ -1,4 +1,5 @@
 import React from 'react';
+import {blink as idleBlink, gaze as idleGaze, boil} from './anim';
 
 // Hand-drawn DOODLE / whiteboard stick figure: black ink on light paper, expressive face,
 // little hands + feet, hair tuft, ground shadow, and a subtle "rough" (sketched) filter.
@@ -27,7 +28,6 @@ export const SEG = {spine: 94, neck: 12, head: 36, upperArm: 50, foreArm: 46, th
 
 type P = {x: number; y: number};
 const down = (p: P, deg: number, len: number, facing: number): P => ({x: p.x + Math.sin(deg * D) * len * facing, y: p.y + Math.cos(deg * D) * len});
-const blinkAt = (frame: number, seed = 0) => {const bc = (frame + seed) % 132; return bc < 7 ? Math.sin((bc / 7) * Math.PI) : 0;};
 
 const Face: React.FC<{cx: number; cy: number; R: number; expr: Expr; lid: number; profile: boolean; facing: number; lookY: number; ink: string}> =
 ({cx, cy, R, expr, lid, profile, facing, lookY, ink}) => {
@@ -105,13 +105,17 @@ export const StickFigure: React.FC<{
     const ang = Math.atan2(f.y - k.y, f.x - k.x) * 180 / Math.PI;
     return <ellipse key={key} cx={f.x} cy={f.y} rx={lineW * 2.0} ry={lineW * 1.0} fill={PAPER} stroke={ink} strokeWidth={lineW * 0.7} transform={`rotate(${ang + 90} ${f.x} ${f.y})`} />;
   };
-  const lid = Math.min(1, expr.lid + blinkAt(frame, Math.round(x)));
+  const seed = Math.round(x);
+  const lid = Math.min(1, expr.lid + idleBlink(frame, seed));
   const R = SEG.head;
   const rid = 'rgh' + Math.round(x) + '_' + Math.round(scale * 100);
   const far = pal === DIM ? ink : ink;
+  // hand-drawn BOIL: whole-figure wobble on a ~5fps "shot on threes" clock (transform-only, cheap).
+  // Amplitude shrinks with scale so big close-ups don't jitter. Only when the sketchy look is on.
+  const bl = rough ? boil(frame, seed, 30, 1 / Math.max(1, scale * 0.7)) : {x: 0, y: 0, rot: 0};
 
   return (
-    <g transform={`translate(${x} ${y}) scale(${scale})`}>
+    <g transform={`translate(${x + bl.x} ${y + bl.y}) scale(${scale}) rotate(${bl.rot})`}>
       {rough && (<defs><filter id={rid} x="-15%" y="-15%" width="130%" height="130%">
         <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="7" result="n" />
         <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" />
@@ -128,8 +132,8 @@ export const StickFigure: React.FC<{
         <ellipse cx={headC.x} cy={headC.y} rx={R * 0.92} ry={R} fill={PAPER} stroke={ink} strokeWidth={lineW} />
         {[-0.4, -0.1, 0.2].map((o, i) => <path key={i} d={`M ${headC.x + o * R} ${headC.y - R * 0.9} q ${R * 0.08} ${-R * 0.3} ${R * 0.22} ${-R * 0.28}`} fill="none" stroke={ink} strokeWidth={lineW * 0.7} strokeLinecap="round" />)}
         {showFace && view !== 'back' && <Face cx={headC.x} cy={headC.y} R={R} lid={lid} profile={false} facing={facing} ink={ink}
-          lookY={Math.sin(frame * 0.02 + 1) * 0.3 + pose.headTilt * 0.02}
-          expr={{...expr, look: expr.look + Math.sin(frame * 0.027 + x) * 0.22 + (Math.sin(frame * 0.013 + x) > 0.97 ? 0.6 : 0)}} />}
+          lookY={idleGaze(frame, seed + 5) * 0.3 + pose.headTilt * 0.02}
+          expr={{...expr, look: expr.look + idleGaze(frame, seed) * 0.6}} />}
         {/* near limbs */}
         {bone(hip, kneeN, lineW, ink, 'nl1')}{bone(kneeN, footN, lineW, ink, 'nl2')}{foot(kneeN, footN, 'nf')}
         {bone(shoulder, elbowN, lineW, ink, 'na1')}{bone(elbowN, handN, lineW, ink, 'na2')}{hand(handN, 'nh')}
