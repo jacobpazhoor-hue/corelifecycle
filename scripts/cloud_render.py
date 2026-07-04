@@ -38,7 +38,7 @@ def _ssl_ctx():
             return ctx
 WORKFLOW = "render.yml"
 POLL_SECS = 20
-MAX_WAIT = 50 * 60  # 50 min hard cap
+MAX_WAIT = 115 * 60  # hard cap; must exceed the workflow's timeout-minutes (120) headroom
 
 
 def load_cfg():
