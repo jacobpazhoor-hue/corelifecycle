@@ -61,7 +61,7 @@ jobs:
           import json, math, sys
           tl = json.load(open("src/timeline.json"))
           total = int(tl["totalFrames"])
-          shards = max(6, min(16, math.ceil(total / 1800)))
+          shards = max(8, min(20, math.ceil(total / 1250)))   # smaller shards -> each finishes well under the cap
           per = math.ceil(total / shards)
           inc = []
           for i in range(shards):
@@ -88,9 +88,9 @@ jobs:
   render:
     needs: prepare
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 70
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
@@ -161,8 +161,9 @@ jobs:
           path: dl
       - name: Restore prepared assets into workspace
         run: |
+          mkdir -p public/audio public/music
           cp -r dl/prepared/public/audio/* public/audio/ 2>/dev/null || true
-          mkdir -p public/music && cp -r dl/prepared/public/music/* public/music/ 2>/dev/null || true
+          cp -r dl/prepared/public/music/* public/music/ 2>/dev/null || true
           cp dl/prepared/src/timeline.json src/timeline.json
       - name: Concatenate video shards + mux the full audio track
         run: |
