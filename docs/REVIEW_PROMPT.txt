@@ -26,9 +26,15 @@ EVALUATE against this rubric. For each problem, name the scene id or the frame f
    - A master OPEN LOOP planted in scene 1 + a cost-line promise, PAID OFF at the end.
    - CAUSALITY: levels connect by but/therefore, not "and then." Flag flat "and then" transitions.
    - MIDPOINT REVERSAL (~50%): a betrayal/death/cost-revealed beat where the win starts to rot.
+   - MINUTE-3 RE-ENGAGEMENT (~2:30–3:30): a delivered spectacle/reversal in act one, not a coast to
+     the midpoint. Flag a saggy minutes 2–4.
    - Escalation (numbers + power + moral cost rising each level); a named mentor/rival; one
      share-worthy "that's real?" beat; a cyclical loop-close that echoes the opening image.
-   - Coherent, no contradictions, no repeated lines. POV is present-tense throughout.
+   - PROMISE→PAYOFF: check the ledger comment atop content.py — every planted loop pays off (except
+     one deliberate universe thread). Flag any promise the ending never delivers (the retention cliff).
+   - POV CRAFT: present-tense throughout; NO perception filters ("you see/notice/feel/watch/realize" —
+     flag them); a sensory anchor motif recurs across levels; 2–4 sparse in-world dialogue lines exist.
+   - Coherent, no contradictions, no repeated lines.
 3. ANIMATION / VISUAL DEFECTS — detached or broken limbs; a face missing an eye/brow, or NO face
    where a character should have one; props broken/duplicated/misaligned/floating; elements off the
    edge or overlapping the text; two ADJACENT scenes that look identical; anything unfinished.

@@ -44,10 +44,13 @@ the graph bleeds — that's where the craft goes. >55% of viewers leave in minut
      know yet what it costs.").
   3. **LEVEL 1 — comfort + want**: concrete sensory lack (an exact object/number, not "poor"), a
      named want, a named person. CARE inside 60s.
+  3b. **MINUTE-3 RE-ENGAGEMENT (~2:30–3:30)**: the FIRST delivered spectacle/reversal of act one (not
+     a tease) — minute 1 sells the watch, minute 3 re-buys it. Don't coast to the midpoint.
   4. **LEVELS 2–6 — adapt + escalate**: each level a mini story-circle (new world → task →
      complication → promotion → hook into next rank); each raises danger, status, OR moral cost.
   5. **MIDPOINT REVERSAL (~50%)**: betrayal / death / the real cost revealed — the biggest completion
-     lever. The thing you wanted starts to rot.
+     lever. The thing you wanted starts to rot. Set `gap=1.4` on the scene BEFORE the reversal line so
+     the sound engine drops to near-silence and the line lands raw (once per episode).
   6. **LEVELS 7–8 — get it, at cost**: deliver the fantasy, undercut it, resolve the cold-open loop.
   7. **LOOP CLOSE**: end on what victory COST; bend the last image back to the opening (cyclical,
      rewatchable). Never a triumphant ending.
@@ -61,10 +64,23 @@ the graph bleeds — that's where the craft goes. >55% of viewers leave in minut
   - Break "you…you…you" drone with the **IMPERATIVE** ("Don't look back. Count the doors.").
   - **Body-based dread — state the FACT, not the feeling** ("Your hands are steady. That's what
     scares you."), never "you feel scared."
+  - **BAN perception filters** — never "you see/notice/feel/watch/realize"; describe the world
+    directly (the "you" is assumed). Filters push the viewer out of the body.
+  - **Sensory anchor motif** — one recurring sensation/object per episode, re-triggered each level-up
+    (a callback engine). 2–3 senses per scene, favor sound + smell.
   - **SPECIFICITY over abstraction** ("Forty-two hundred in a cereal box," not "good money").
   - **Anaphora** at theme moments ("Money buys medicine. Money buys safety. Money buys a way out.").
   - One **share-worthy** "wait — that's real?" beat (shocking true fact/number; shares ≈ 5–8× likes).
 - **A NAMED MENTOR / rival** introduced early — attach to them, set up a betrayal/loss payoff.
+- **DIALOGUE (2nd voice)** — 2–4 short in-world lines/episode via scene `dialogue=dict(text=..)`
+  (mentor's warning / rival's taunt / one pre-ending line); a deeper voice places them in the scene.
+  Sparse — never a conversation. Also structurally varies the episode (YPP authenticity).
+- **SHARED UNIVERSE** — reuse a recurring fixer character (gets the dialogue lines), bar, or object
+  across episodes; resolve this episode's loops but leave ONE unresolved universe thread (binge/session).
+- **STRUCTURAL VARIATION** — never two consecutive episodes with the same cold-open type / act-2 shape /
+  ending flavor (check produced_topics.json).
+- **PROMISE→PAYOFF LEDGER** — a comment atop content.py lists every open loop + its payoff scene id;
+  all pay off except the one universe thread. Broken promises = the mid-video cliff the algorithm punishes.
 - **Escalation spine**: each level's number bigger; power widens; morality erodes
   (earnest → exhausted → hardened → hollow). Numbers serve the STORY (woven into POV, never listed).
 

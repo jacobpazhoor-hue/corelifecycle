@@ -34,11 +34,18 @@ DO, in order:
        you'll have everything — and understand why no one at the top sleeps."
      • LEVEL 1 — comfort + want: establish the ordinary self with a CONCRETE sensory lack (an exact
        object/number, not "poor"), a named want, and a NAMED person. The viewer must CARE inside 60s.
+     • MINUTE-3 RE-ENGAGEMENT (~2:30–3:30, the biggest early-drop patch): land the FIRST real
+       spectacle/reversal of act one HERE — not a tease, a DELIVERED jaw-drop (the biggest number so
+       far, the first betrayal, the first body, the first door that locks behind you). Minute 1 sells
+       the watch; minute 3 re-buys it. Do not coast from the cold open to the midpoint.
      • LEVELS 2–6 — adapt + escalate (one level ≈ 3–4 scenes): each level is a mini story-circle —
        new world → a task → a complication → a consequence that PROMOTES you → a one-line hook into
        the next rank. Each level must raise ONE of: danger, status, or moral cost.
      • MIDPOINT REVERSAL (~50% mark, the single biggest completion lever): a betrayal, a death, or
        the real cost finally revealed — the thing you wanted starts to rot.
+       SILENCE BEFORE IT (once per episode): on the scene IMMEDIATELY BEFORE the reversal line, set
+       `gap=1.4` in that scene dict — the sound engine drops music+SFX to near-silence in that gap so
+       the reversal line lands raw. Silence is the strongest emphasis tool; spend it here only.
      • LEVELS 7–8 — get it, at cost (~80–90%): deliver the fantasy (the throne/the chair/the budget)
        and immediately undercut it; RESOLVE the cold-open loop here.
      • LOOP CLOSE (last ~2 scenes): end on what victory COST, and bend the final image back to the
@@ -64,6 +71,13 @@ DO, in order:
      • Break "you…you…you" drone with the IMPERATIVE ("Don't look back. Count the doors.").
      • Body-based dread — state the FACT, not the feeling: "Your hands are steady. That's the part
        that scares you." (never "you feel scared").
+     • BAN PERCEPTION FILTERS — never "you see / you notice / you feel / you watch / you realize".
+       Describe the world DIRECTLY ("The ledger doesn't balance.") — the "you" is assumed. Filters
+       put the viewer OVER the character's shoulder instead of inside them (DM-craft finding).
+     • 2–3 SENSES per scene, favoring sound + smell as the second impression (not just sight).
+     • SENSORY ANCHOR MOTIF — pick ONE recurring physical sensation/object for the whole episode (the
+       ring on your finger, the smell of gun oil, the weight of the envelope) and RE-TRIGGER it at
+       every level-up. It becomes a callback engine and the through-line the viewer feels tighten.
      • SPECIFICITY over abstraction: "Forty-two hundred in a cereal box," not "good money." Exact
        numbers, named people, concrete objects.
      • ANAPHORA at theme moments (repeat a stem across 3 lines: "Money buys medicine. Money buys
@@ -72,6 +86,27 @@ DO, in order:
      • A NAMED MENTOR/rival introduced early (sets up a later betrayal/loss payoff).
      • Plant ONE share-worthy "wait — that's real?" beat (a shocking true fact/number) — shares are
        weighted ~5–8× likes.
+
+   DIALOGUE (2nd voice — a pattern-interrupt + anti-"templated" signal): give 2–4 SHORT in-world
+   lines across the whole episode via a scene-dict field, e.g.
+       dict(id="t14", ..., narration="The old man leans in.", dialogue=dict(text="You don't belong here."))
+   (optional `voice=`, `rate=`). Place them at: the mentor's first warning (act 1), the rival's taunt
+   at the midpoint, and one line just before the loop-close. A deeper 2nd voice renders them "in the
+   scene" vs the intimate narrator. SPARSE is the craft — never a back-and-forth conversation.
+
+   SHARED UNIVERSE (binge / session-contribution engine — the top 2026 long-form signal): reuse
+   recurring elements across episodes when natural — the SAME fixer/lawyer character (the one who gets
+   the `dialogue` lines), the same bar, a recurring object. Resolve THIS episode's own loops, but plant
+   exactly ONE unresolved universe thread (a name, a debt, a locked door) for the next life to pick up.
+
+   STRUCTURAL VARIATION (YPP authenticity + freshness): do NOT ship two consecutive episodes with the
+   same structure. Vary the cold-open TYPE (mid-action / aftermath / flash-forward), the act-2 shape
+   (rise-then-fall vs fall-then-rise), and the ending flavor (cyclical vs one-door-left-open). Check
+   the last ~2 entries in produced_topics.json and deliberately differ.
+
+   PROMISE→PAYOFF LEDGER: at the TOP of content.py, write a short comment listing every OPEN LOOP you
+   plant and the scene id where each pays off. Every loop must pay off EXCEPT the one deliberate
+   universe thread above. A broken promise creates the mid-video cliff the algorithm punishes.
 
    TEMPLATES: PICK TOPIC-APPROPRIATE ones — a surgeon belongs in the medical pack, not a boardroom.
    If the topic needs settings no template covers (e.g. soldier→battlefield, athlete→stadium), ADD a

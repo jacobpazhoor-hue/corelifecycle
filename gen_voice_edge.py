@@ -10,6 +10,7 @@ import soundfile as sf
 from content import SCENES, FPS
 
 VOICE = "en-US-AndrewMultilingualNeural"  # most natural/human free voice; alts in voice_samples_v2/
+DIALOGUE_VOICE = "en-US-ChristopherNeural"  # 2nd voice for in-world dialogue (mentor/rival) — deeper, distinct from the narrator
 # Engagement tuning (2026-06-30, research-backed): faster delivery + far less dead air = the biggest
 # "feels fast" lever for short attention spans. +10% ≈ ~165 WPM (sweet spot; hard cliff ~+15%/180 WPM).
 RATE = "+8%"                   # ~190 WPM (Andrew's default is already ~174; +8% is faster-but-clear). Bump to +10% for ~195 if you want it hotter.
@@ -74,6 +75,32 @@ def master(y, sr):
     out = out / (np.max(np.abs(out)) + 1e-9) * 0.97
     return out.astype(np.float32), sr
 
+def master_dialogue(y, sr):
+    """In-world treatment for the 2nd voice (dialogue): thinner + a tight room slap so it sits
+    'in the scene' next to the dry, intimate narrator (a real pattern-interrupt). Returns (audio, sr)."""
+    if y.ndim > 1:
+        y = y.mean(axis=1)
+    y = y.astype(np.float32)
+    tgt = 48000
+    if sr != tgt:
+        n2 = int(len(y) * tgt / sr)
+        y = np.interp(np.linspace(0, len(y) - 1, n2), np.arange(len(y)), y).astype(np.float32)
+        sr = tgt
+    n = len(y); X = np.fft.rfft(y); fr = np.fft.rfftfreq(n, 1 / sr)
+    g = np.ones_like(fr)
+    g *= 1.0 / (1.0 + (120.0 / np.maximum(fr, 1.0)) ** 6)         # thinner low end (HP 120)
+    g *= 1.0 + 0.30 * np.exp(-((fr - 1900.0) / 700.0) ** 2)      # slight mid presence (intelligible)
+    g *= 1.0 / (1.0 + (fr / 6200.0) ** 4)                         # roll highs >6.2k (less 'air' than narrator)
+    y = np.fft.irfft(X * g, n=n).astype(np.float32)
+    # tight room: two short slaps (~34/63 ms) -> places the voice in a space
+    room = y.copy()
+    for ms, amp in ((34, 0.22), (63, 0.12)):
+        d = int(sr * ms / 1000)
+        if d < n:
+            room[d:] += y[:-d] * amp
+    out = np.tanh(room * 1.4) / np.tanh(1.4)
+    return (out / (np.max(np.abs(out)) + 1e-9) * 0.9).astype(np.float32), sr
+
 def trim_silence(y, sr, thresh=0.012, pad=0.04):
     """Trim leading/trailing near-silence (TTS breaths/tails) so dead air doesn't accumulate per scene."""
     a = np.abs(y)
@@ -114,6 +141,21 @@ async def main():
         if i > 0 and (nw > 48 or sc.get("breath")):
             br = breath(sr, seed=(hash(sc["id"]) & 0xffff))
             y = np.concatenate([br, np.zeros(int(0.05 * sr), np.float32), y]).astype(np.float32)
+        # in-world DIALOGUE (2nd voice) — a mentor's warning / rival's taunt, appended after the
+        # narration as a pattern-interrupt. scene: dialogue=dict(text=..,[voice=..,rate=..]) or a list.
+        dlg = sc.get("dialogue")
+        if dlg:
+            for j, d in enumerate(dlg if isinstance(dlg, list) else [dlg]):
+                dtext = d["text"] if isinstance(d, dict) else str(d)
+                dvoice = (d.get("voice") if isinstance(d, dict) else None) or DIALOGUE_VOICE
+                drate = (d.get("rate") if isinstance(d, dict) else None) or "+0%"
+                dmp3 = os.path.join(AUDIO, f"{sc['id']}_d{j}.mp3")
+                await synth_mp3(dtext, dmp3, rate=drate)
+                dy, dsr = sf.read(dmp3, dtype="float32")
+                dy, dsr = master_dialogue(dy, dsr)
+                dy = trim_silence(dy, dsr)
+                y = np.concatenate([y, np.zeros(int(BEAT_GAP * sr), np.float32), dy]).astype(np.float32)
+            print(f"  {sc['id']}: +{len(dlg if isinstance(dlg,list) else [dlg])} in-world dialogue line(s)")
         wav = os.path.join(AUDIO, f"{sc['id']}.wav")
         sf.write(wav, y, sr)
         speech = len(y) / sr
