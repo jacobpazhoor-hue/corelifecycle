@@ -1,18 +1,18 @@
 {
   "thumb": {
-    "kicker": "EVERY LEVEL OF A",
-    "line1": "SAMURAI",
+    "kicker": "EVERY RANK OF",
+    "line1": "SPECIAL FORCES",
     "line2": "",
-    "tag": "YOU END WITH NOTHING",
+    "tag": "MOST DIE AT SELECTION",
     "archetype": "pov",
-    "big": "0 KOKU",
-    "before": "PEASANT",
-    "after": "NO SWORD",
-    "expr": "hollow",
-    "povline": "YOU KNEEL",
-    "keyword": "SEPPUKU",
-    "setting": "keepTop",
-    "question": "WHO OWNS THE SWORD?"
+    "big": "1 OF 200",
+    "before": "NOBODY",
+    "after": "SPENT",
+    "expr": "hardened",
+    "povline": "YOU ARE",
+    "keyword": "AMMO",
+    "setting": "frontline",
+    "question": "WHO SIGNS THE TARGET?"
   },
-  "topic": "samurai"
+  "topic": "special_forces"
 }

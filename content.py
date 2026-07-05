@@ -1,280 +1,285 @@
 #!/usr/bin/env python3
-"""Your Life as a Samurai at Every Level — POV doodle build, ~12 min, template-driven.
-Grounded in docs/research/samurai.md (the warrior ladder of late-Sengoku -> Edo -> Meiji Japan:
-ashigaru -> samurai -> mounted retainer -> karō -> daimyō -> great lord -> the sword abolished).
-Second-person present-tense POV: the viewer IS a peasant boy of a fictional domain (Lord Arima) who
-rises to lord and lives to see the sword class dismantled in 1876. Dramatization layer over VERIFIED
-feudal-Japan mechanics: KOKU as the measure of rank/pay (1 koku ~= one person's rice for a year),
-the 10,000-koku daimyō threshold, the daishō (two swords), Hideyoshi's katanagari sword hunt (1588),
-bushidō + seppuku + the kaishakunin (the second), sankin-kōtai (alternate attendance, ~1635),
-the chōnin as legally the lowest of the four estates yet holding the daimyō's debt, the Dōjima Rice
-Exchange (licensed 1730, one of the first futures markets), the House of Kōnoike (real Osaka bankers
-to daimyō), the Meiji Restoration (1868), stipends commuted to bonds (kinroku-kōsai, ~1876), the
-Haitōrei sword ban (1876), and the Satsuma Rebellion (1877, Saigō — the last samurai, beaten by a
-conscript rifle army). Illustrative koku figures (30/500/4,000) are dramatized to clean numbers; the
-THRESHOLDS (10,000 daimyō; ~1,000,000 Kaga; ~4M shogunal / ~30M national) are real per the research.
+"""Your Life as Every Rank in Special Forces — POV doodle build, ~12 min, template-driven.
+Grounded in docs/research/special_forces.md (the special-operations ladder: selection candidate ->
+operator on an ODA -> team sergeant -> the tier-1 Unit -> assault/troop commander -> squadron ->
+the joint task force that spends operators -> the anonymous signature above it all). Second-person
+present-tense POV: the viewer IS a nobody who climbs from a selection roster number to the man who
+signs the targets, and learns he was ammunition the whole way. Dramatization layer over VERIFIED,
+NON-INSTRUCTIONAL mechanics: SELECTION attrition (most wash out), the Q Course and the tab, the ODA
+(12-man Operational Detachment Alpha, 18-series specialties), unconventional warfare / foreign internal
+defense / direct action, the tier-1 special mission unit under JSOC running STERILE (no rank, no name,
+"you don't exist"), the find-fix-finish HVT raid cycle, ISR/exfil/the bird, and the interagency /
+National Command Authority / a case officer above the whole enterprise. NO real tradecraft or methods
+are depicted — selection events and jargon are named only as career milestones (cautionary POV).
 
-SPINE (koku = rice = the on-screen gold number, interleaved with cost beats): 0 KOKU (borrowed spear,
-two rice balls) -> ~30 KOKU (the two swords + a surname) -> ~500 KOKU (a horse, men) -> 4,000 KOKU
-(karō, a castle to run) -> the seppuku order (cost, not koku) -> 10,000 KOKU (you become a lord) ->
-1,000,000 KOKU (Kaga-scale great lord) -> the shogun's ~30,000,000-koku Japan -> the merchant with no
-sword who holds your debt (Dōjima) -> 1876: the sword is worth 0. Personal honor rises as personal
-freedom falls; the domain's own wealth is the leash. Rice was always the wealth. Then paper was.
+SPINE (a command + attrition STAT, not $ — special forces is a modest salary; the drama is who you
+spend): ROSTER 47 / most quit -> 1 OF 12 (the ODA + the tab) -> 12 MEN die on your call -> NO NAME
+(the Unit, sterile) -> 40 DOORS A NIGHT (assault commander) -> 100+ OPERATORS (squadron) -> 3
+CONTINENTS (the task force that spends you) -> ONE SIGNATURE (the man who signs, whom you never see).
+You climb from being SPENT (the tip of the spear is the part that breaks off in the wound) to being
+the one who SPENDS others — and above even you sits a civilian who never trained, never bled.
 
-STORY: mentor ICHIRŌ (the old bushi who gives you the code and the warning "a debt you pay with your
-life"); rival KENJI (climbs beside you from the ranks, taunts at the siege, kneels three places down
-at the Restoration). MIDPOINT: Ichirō is ordered to commit seppuku to carry a lost battle's blame,
-and YOU are named his kaishakunin — the code you served makes you kill the man who taught it to you.
-Sensory anchor motif: THE WEIGHT OF THE TWO SWORDS AT YOUR LEFT HIP — it arrives at t04, is
-re-triggered at every level-up, and is stripped bare at t25 (the sword ban). Second motif: the smell
-of wet rice (origin + close). Master open loop: the cold open (t00) — you kneeling on the white mat,
-a second's sword raised — resolves at t27, where the blade never falls because the ritual itself is
-abolished; the final image bends back to the rice paddy (t28).
+STORY: mentor MASTER SERGEANT COLE (the cadre who runs your selection, then your team sergeant; gives
+you the code and the warning "quitting is a bullet"); rival VEGA (climbs beside you from selection,
+faster, crueler, makes the Unit with you, taunts as a rival troop leader at the midpoint). MIDPOINT:
+on an HVT raid the exfil bird is pulled to protect a source, and Cole is killed holding the stairwell —
+you carry his taped tags out and learn the truth: you are not the spear, you are what the spear is
+made of. Ammunition. And ammunition gets spent. Sensory anchor motif: YOUR DOG TAGS, TAPED SO THEY
+DON'T RATTLE (sound discipline) — loud at selection (t01), taped the night of the first infil (t05),
+checked on the team (t07), NONE at the sterile Unit (t10), a dead man's tags carried out (t14), a
+drawer of them (t17), and a new candidate's rattling on a ruck run at the loop-close (t28). Master
+open loop: the cold open (t00) — first man through a door, a hostage in the third room, a shape
+rising with a rifle — resolves at t26 (you make the shot, the hostage lives, you take the round);
+the final image bends back to a selection ruck run in the dark (t28).
 
 PROMISE->PAYOFF LEDGER:
-  * t00 cold-open (you on the white mat, sword raised behind)      -> t27 (the blade never falls; abolished)
-  * t01 want-object: the two swords                                -> t04 (granted); t25 (hip goes bare)
-  * t05/t06 Ichirō + his warning "a debt you pay with your life"   -> t12/t13 (his seppuku; you the second)
-  * t08 rival Kenji                                                -> t22 (kneels down the row, dissolved)
-  * t16 the polite Osaka debt / "a quiet man"                      -> t20/t21 (the merchant owns your sword; Dōjima)
-  * rice/koku spine ("rice the wealth, then paper")               -> t21, t24, t28
-  * UNRESOLVED universe thread (deliberate): the House of Kōnoike  -> the merchant/bank lineage that
-    outlives every sword — left open for a future episode.
+  * t00 cold-open (the breach, hostage in the third room, a shape rising)  -> t26 (you make the shot; you take the round)
+  * t01 want: the tab / to belong + finish                                 -> t04 (you earn it)
+  * anchor: dog tags taped so they don't rattle                            -> t05, t07, t10 (none/sterile), t14, t17, t28
+  * t02 mentor Cole + his warning "quitting is a bullet"                    -> t13/t14 (Cole killed; you carry his tags out)
+  * t02 rival Vega                                                          -> t15 (his taunt); t23 (what you both became)
+  * t14 cost line "you are ammunition"                                     -> t23/t24 (you become the one who spends)
+  * UNRESOLVED universe thread (deliberate): the case officer who signs     -> the man from Langley whose name you're never
+    the folder ("Mr. Gray")                                                    cleared to know — left open for a future episode.
 
-Templates: SAMURAI pack (riceField/dojo/daisho/sengokuField/castleGate/teaCeremony/lordAudience/
-keepTop/seppukuRite/shogunCourt/merchantHouse) + universal (signing). No two adjacent scenes share a
-template. Structural variation vs last 2 (mob_boss aftermath / heir will-reading): cold open is an
-in-medias-res FLASH-FORWARD to the near-end mat; act-2 is RISE-THEN-FALL (rise to great lord, then
-the class is abolished); ending is cyclical-with-a-one-way-door (back to the paddy, sword gone forever).
+Templates: MILITARY pack (bootcamp/barracksLife/frontline/commandPost/decoration) + SPY pack
+(tradecraft/surveillance/safehouse/debrief/station) + universal (warRoom/emptyChair/signing/jet).
+No two adjacent scenes share a template. Structural variation vs last 2 (billionaire_heir will-reading /
+samurai flash-forward mat): cold open is an in-medias-res MID-ACTION breach; act-2 is a straight RISE
+that curdles at the midpoint (rise-into-rot); ending is CYCLICAL (back to a ruck run in the dark) with
+one universe door left open (the man who signs).
 """
 
 FPS = 30
 
 SCENES = [
-    # ---- COLD OPEN — the white mat (the master loop, a flash-forward) ----
-    dict(id="t00", level=None, template="seppukuRite", gap=0.7,
-         narration=("Raked white gravel. A single pine. A folded white mat — and on it, you, kneeling. "
-                    "The short blade rests on a stand within reach, and a friend stands behind you with his "
-                    "sword already raised. Your hands are steady. That is the part that should frighten you. "
-                    "Sixty years ago you were born in a rice paddy owning nothing but hunger. Everything since "
-                    "has walked you here, to this mat. Don't look yet at how it ends."),
-         overlay=dict(big="1,000,000 KOKU", sub="AND IT ENDS ON THIS WHITE MAT")),
+    # ---- COLD OPEN — the breach (the master loop, mid-action) ----
+    dict(id="t00", level=None, template="frontline", gap=0.7,
+         narration=("Zero three-thirty. You're first on the door, stacked tight, four men breathing on your "
+                    "spine. The charge blows. Flashbang. White. You go in low through the smoke, rifle up, and "
+                    "the hostage is exactly where the source swore — third room, zip-tied to a chair. But a "
+                    "shape rises in the corner with a long gun coming level, and you have half a second to be "
+                    "right. Your tags are taped silent against your chest. Your hands are steady. Hold there."),
+         overlay=dict(big="0330 · BREACH", sub="THE HOSTAGE IS IN THE THIRD ROOM")),
 
-    # ---- LEVEL 1 — ASHIGARU ----
-    dict(id="t01", level="LEVEL 01  ·  ASHIGARU", template="riceField",
-         narration=("Start in the mud. You're nine, shin-deep in the paddy, and the smell of wet rice is the "
-                    "whole world. Your family has no surname — only warriors get names. Two rice balls a day. "
-                    "The lord's castle floats on the far hill like a promise meant for someone else. An old "
-                    "warrior named Ichirō rides the path with two swords at his hip, and you can't stop looking "
-                    "at them. Other boys want supper. You want the swords."),
-         overlay=dict(big="0 KOKU", sub="NO NAME · TWO RICE BALLS A DAY")),
-    dict(id="t02", level=None, template="castleGate",
-         narration=("But want is cheap, and war is hungry. At fourteen the drums come for the levy. They hand "
-                    "you a bamboo spear you must give back, a sack of rice, and a place in the front rank where "
-                    "the peasants go. You are ashigaru — a foot-tool, not a warrior. The men with swords stand "
-                    "behind you, where the arrows can't reach. Learn the first rule fast: you are the thing that "
-                    "is spent."),
-         overlay=dict(big="A BORROWED SPEAR", sub="ASHIGARU · THE FRONT RANK IS FOR THE POOR")),
-    dict(id="t03", level=None, template="sengokuField", gap=0.7,
-         narration=("Then the field opens, and everything you believed about yourself burns off in one breath. "
-                    "Banners the height of trees. A wall of spear tips. The man beside you drops with an arrow "
-                    "through the mouth — he was talking to you a moment ago. You don't run. Your hands move on "
-                    "their own. When it ends you are holding a stranger's head by the hair, and an officer nods "
-                    "and writes your name. Your first. It buys your first coin."),
-         overlay=dict(big="1 HEAD", sub="THE PROOF OF VALOR · AND THEY WRITE YOUR NAME")),
-
-    # ---- LEVEL 2 — SAMURAI (the two swords) ----
-    dict(id="t04", level="LEVEL 02  ·  SAMURAI", template="daisho",
-         narration=("Valor is a currency, and you keep spending it. Three campaigns later, Lord Arima's steward "
-                    "sets a lacquered stand before you — and on it, two swords. The long katana. The short "
-                    "wakizashi. The daishō. Only a samurai may wear both, and today that is you. A surname. A "
-                    "stipend of thirty koku — thirty years of a man's rice, yours by right. You tie the swords "
-                    "at your left hip. The weight is small. It will never leave you again."),
-         overlay=dict(big="~30 KOKU", sub="THE TWO SWORDS · AND A NAME OF YOUR OWN")),
-    dict(id="t05", level=None, template="dojo",
-         narration=("Ichirō is old now, and he takes you as his own. Dawns in the dojo, the plank floor cold "
-                    "under your feet, wooden swords cracking until your palms split and scar. He drills the cuts, "
-                    "then the thing beneath the cuts — the code. Loyalty above your life. Service above your "
-                    "fear. One evening he stops, and holds the blade flat in the space between you."),
+    # ---- LEVEL 1 — THE CANDIDATE (selection) ----
+    dict(id="t01", level="LEVEL 01  ·  THE CANDIDATE", template="bootcamp",
+         narration=("Rewind. You're a nobody from a nothing town, a name-tape and a roster number — forty-"
+                    "seven — and nothing else. No team. No tab. Fresh dog tags rattle on your chest with "
+                    "every step of the ruck, loud as coins in a can. Two hundred men started this morning. "
+                    "The mountain doesn't care about any of you. Other guys want to be soldiers. You want in "
+                    "somewhere that would never let you quit."),
+         overlay=dict(big="ROSTER 47", sub="200 START · A NAME TAPE, NOTHING ELSE")),
+    dict(id="t02", level=None, template="tradecraft",
+         narration=("Selection is built to break you, and it's honest about it. Land nav alone in the black. "
+                    "A ruck that grinds your spine into your hips. Sleep measured in minutes. A cadre named "
+                    "Master Sergeant Cole runs the course, flat-eyed, never yelling. A recruit called Vega "
+                    "moves up front like the weight is nothing. At the truck a man drops his ruck and climbs "
+                    "aboard — done. Cole doesn't even look. He looks at you."),
          overlay=None,
-         dialogue=dict(text="These are not a gift. They are a debt you pay with your life.")),
-    dict(id="t06", level=None, template="teaCeremony",
-         narration=("You kneel across a low table from him, steam rising off the tea, rain on the tile outside. "
-                    "He tells you what the debt means, plainly, the way you tell a child a true thing. Your "
-                    "lord's word can order you into fire. Your lord's word can order you to die by your own hand "
-                    "— in a garden, on a white mat — and you will bow and thank him for the honor. You drink. "
-                    "The tea is bitter. So is the future you just agreed to."),
+         dialogue=dict(text="You don't get to quit here. Quitting is a bullet — it only takes one.")),
+    dict(id="t03", level=None, template="barracksLife", gap=0.7,
+         narration=("By day three the barracks tells the whole story without a word. Two hundred bunks this "
+                    "morning. Count them now — most are stripped bare, mattresses rolled, the men who owned "
+                    "them gone in the night. Nobody was thrown out. They walked. That's the trick of it: no "
+                    "one makes you fail. You unmake yourself, quietly, at three a.m., and ring a bell. Your "
+                    "tags still rattle. Vega's bunk is still made. So is yours."),
+         overlay=dict(big="MOST QUIT", sub="SELECTION · NOBODY FAILS YOU — YOU FAIL YOURSELF")),
+
+    # ---- LEVEL 2 — THE OPERATOR (the tab, the ODA) ----
+    dict(id="t04", level="LEVEL 02  ·  THE OPERATOR", template="decoration",
+         narration=("Selection only earns you the right to be trained. Months of the pipeline — the Q Course, "
+                    "weapons and demolitions and languages beaten into you — and then a plain morning under "
+                    "the flags, and they hand you the tab. You made it. You're an operator now, one of twelve "
+                    "on an Operational Detachment Alpha — an A-team, a whole small war in a dozen men. Cole is "
+                    "your team sergeant. The boy from the ruck run belongs to something at last."),
+         overlay=dict(big="1 OF 12", sub="THE TAB · YOU MADE THE TEAM")),
+    dict(id="t05", level=None, template="surveillance",
+         narration=("First infil. A dim street in a country the news won't name, midnight, the smell of diesel "
+                    "and wet concrete. Before you step off, you do the thing Cole taught you — you tape your "
+                    "dog tags flat so they can't rattle, can't catch light, can't give you away. Sound "
+                    "discipline. The tags go silent against your skin and stay that way for twenty years. "
+                    "Out here you don't announce yourself. Out here, quiet is alive."),
+         overlay=dict(big="TAPE THE TAGS", sub="SOUND DISCIPLINE · QUIET IS ALIVE")),
+    dict(id="t06", level=None, template="frontline",
+         narration=("Then a doorway lights up, and the training becomes true in one second. Muzzle flash. The "
+                    "copper taste floods your mouth before you understand you bit your cheek. Your hands move "
+                    "on their own — stack, breach, clear — the way Cole drilled it ten thousand times. When "
+                    "it's over a man is down who was standing, and you're still standing who could be down. "
+                    "That's the whole math. You did the job. It bought you the next one."),
+         overlay=dict(big="FIRST", sub="THE COPPER TASTE · AND YOU DID THE JOB")),
+
+    # ---- LEVEL 3 — THE TEAM SERGEANT ----
+    dict(id="t07", level="LEVEL 03  ·  THE TEAM SERGEANT", template="commandPost",
+         narration=("Therefore they give you the team. Cole moves up, and the ODA is yours — twelve men, "
+                    "twelve families, one plan, and your name on it. Before every bird you walk the line and "
+                    "check each man: kit, ammo, and the tags, taped flat, because a rattle is a funeral. "
+                    "Twelve lives now ride on a call you make in the dark on half the facts. The weight isn't "
+                    "the ruck anymore. The weight is that every one of them believes you."),
+         overlay=dict(big="12 MEN", sub="THE TEAM SERGEANT · THEY DIE ON YOUR CALL")),
+    dict(id="t08", level=None, template="safehouse",
+         narration=("The work is quieter than the movies. A corkboard of faces, a map stuck with red string, "
+                    "a village you're meant to turn into a partner and a weapon. Foreign internal defense — "
+                    "you train other men to fight so fewer of yours have to. But intel is a rumor wearing a "
+                    "suit, and one night the string points at the wrong house. A door you clear holds a "
+                    "family, not a target. You carry that home. It doesn't tape down quiet."),
+         overlay=None),
+    dict(id="t09", level=None, template="debrief",
+         narration=("But being good at this only buys a harder door. In a bare room under a single bulb, two "
+                    "men with no patches and no names slide a folder across the table. There is a place above "
+                    "Special Forces — a Unit that doesn't officially exist, its own selection, worse than the "
+                    "first. Vega already got the tap; he'll be in your class. You sign. Reaching the top means "
+                    "nothing if you can't survive being chosen for it first."),
+         overlay=dict(big="THE TAP", sub="A UNIT THAT DOESN'T EXIST · SELECTION, AGAIN")),
+
+    # ---- LEVEL 4 — THE UNIT (tier-1, sterile) ----
+    dict(id="t10", level="LEVEL 04  ·  THE UNIT", template="tradecraft",
+         narration=("The Unit erases you to make you. No rank on your chest. No unit patch. No name tape. You "
+                    "grow your hair out, wear civilian clothes, and carry no ID at all — and here's the part "
+                    "that's actually real: you take off your dog tags. Sterile kit. If you die tonight, "
+                    "there's nothing on your body to say who you were. You spent your whole life earning a "
+                    "name. They just took it back. On paper, you don't exist."),
+         overlay=dict(big="NO NAME", sub="THE UNIT · STERILE · YOU DON'T EXIST")),
+    dict(id="t11", level=None, template="safehouse",
+         narration=("Now the board is a hunt. A high-value target's face, patterns of life, the F3EA cycle — "
+                    "find, fix, finish, exploit, analyze — a machine that turns a name into a raid into "
+                    "another name by dawn. Drones hold overwatch like patient birds. You are the finish. The "
+                    "sharp end. The tip of the spear — and nobody says the quiet part: the tip is the part "
+                    "that snaps off in the wound. You're too busy being the best in the world to hear it."),
+         overlay=None),
+    dict(id="t12", level=None, template="frontline",
+         narration=("So you finish. Raid after raid, the same brutal ballet — infil, breach, clear, exfil "
+                    "before the block wakes. Rotor wash, cordite, the copper taste that never fully leaves. "
+                    "Vega runs the next team over, counting kills against yours like a scoreboard. You're "
+                    "untouchable, the both of you. That feeling — that nothing can reach you up here — is "
+                    "exactly the lie the next night is built to teach you."),
+         overlay=dict(big="THE TIP OF THE SPEAR", sub="FIND · FIX · FINISH · BEFORE DAWN")),
+
+    # ---- MIDPOINT — the bird is pulled; Cole ----
+    dict(id="t13", level=None, template="surveillance", gap=1.4,
+         narration=("One target looks like all the others until it isn't. A compound, a stairwell, Cole on "
+                    "point because he never stopped going through doors. You're on the roof running the "
+                    "assault. The exfil bird is inbound, minutes out, blades already a rumor on the horizon. "
+                    "Cole's voice in your ear, calm, holding the stairwell so the team can pull the hostage. "
+                    "Then command comes up on the net. And the bird banks away."),
+         overlay=None),
+    dict(id="t14", level=None, template="frontline", gap=0.7,
+         narration=("A source somewhere is worth more than the man on the stairs. The exfil is diverted to "
+                    "protect an asset you'll never be briefed on. No QRF. Cole holds anyway, because that's "
+                    "the code he taught you, until he can't. You bring him out yourself, and his tags are "
+                    "taped flat, silent, the way he showed you at the truck. That's when it lands, cold and "
+                    "final: you are not the spear. You are what the spear is made of. Ammunition. And "
+                    "ammunition gets spent."),
+         overlay=dict(big="AMMUNITION", sub="THE BIRD BANKED AWAY · AND HE HELD ANYWAY")),
+
+    # ---- LEVEL 5 — TROOP / ASSAULT COMMANDER ----
+    dict(id="t15", level="LEVEL 05  ·  ASSAULT COMMANDER", template="commandPost",
+         narration=("You should quit. Instead grief burns down to something harder, and you take the troop. "
+                    "You stop kicking the door and start choosing it. Multiple objectives a night, the whole "
+                    "assault force moving on your word, HVTs crossed off a list before breakfast. Vega runs "
+                    "the troop beside yours, and he grins across the planning table with Cole barely buried."),
+         overlay=dict(big="40 DOORS A NIGHT", sub="YOU CHOOSE THE DOOR NOW"),
+         dialogue=dict(text="Still counting the dead, farmer? Up here you don't count them. You spend them.")),
+    dict(id="t16", level=None, template="surveillance",
+         narration=("And you're good at it — that's the horror. You move men across a city like pieces, and "
+                    "the ones who don't come back become a line in a report you sign before the coffee's "
+                    "cold. Money bought nothing here; the job pays a schoolteacher's wage. What it buys is "
+                    "this: the power to decide which of your own men walks into the room that's wrong. You "
+                    "make that call clean now. Your hands are steady. That's the part that should frighten you."),
+         overlay=None),
+    dict(id="t17", level=None, template="barracksLife",
+         narration=("In your desk there's a drawer you don't open in daylight. Dog tags, taped flat, silent — "
+                    "one set for every man you spent. You could name each one, the town, the kid, the joke he "
+                    "always told. The rattle you silenced twenty years ago to stay alive is the sound you "
+                    "can't get back. You wanted in somewhere that would never let you quit. It never will. "
+                    "That was the trap, and you walked into it grinning."),
+         overlay=dict(big="A DRAWER OF TAGS", sub="ONE SET FOR EVERY MAN YOU SPENT")),
+
+    # ---- LEVEL 6 — SQUADRON COMMANDER ----
+    dict(id="t18", level="LEVEL 06  ·  SQUADRON COMMANDER", template="station",
+         narration=("Still you climb, because stopping is the only door you can't make yourself open. They "
+                    "give you a squadron — a hundred-plus operators plus the enablers, intel and aviation and "
+                    "the drones that never blink, spread across theaters you used to only infil. You don't "
+                    "wear the kit now. You sign for the target and hand the mission to a younger version of "
+                    "yourself, tags already taped, already gone into the dark."),
+         overlay=dict(big="100+ OPERATORS", sub="YOU SIGN THE TARGET NOW")),
+    dict(id="t19", level=None, template="signing",
+         narration=("A name crosses your desk, a face, a pattern of life, a window of maybe two hours. You "
+                    "sign. Somewhere a stack forms on a door, a charge blows, a man goes in low through the "
+                    "smoke — and you are warm and dry a thousand miles away, moving him like you were once "
+                    "moved. You have become the calm voice on the net. The one who banks the bird away when "
+                    "the math says a source is worth more than the man on the stairs."),
+         overlay=None),
+    dict(id="t20", level=None, template="debrief",
+         narration=("But every command answers to a bigger one. Under a bulb in a bare room, a folder slides "
+                    "toward you again — the same ritual as the tap, older now. The joint task force. The "
+                    "level where special operations stops being a knife and becomes a machine that runs the "
+                    "whole hunt at once. You take it. Of course you take it. You never learned how to be a "
+                    "man who doesn't."),
+         overlay=dict(big="THE TASK FORCE", sub="THE KNIFE BECOMES A MACHINE")),
+
+    # ---- LEVEL 7 — THE TASK FORCE (JSOC) ----
+    dict(id="t21", level="LEVEL 07  ·  THE JOINT COMMAND", template="warRoom",
+         narration=("A dark room the size of a hangar, a wall of live feeds, a globe pinned with every target "
+                    "worth a raid. Three continents run through your hands at once. The industrial version of "
+                    "the thing that made you: find, fix, finish, on a schedule, forever, a raid a night in "
+                    "cities most of the country couldn't place on a map. You are the command now. The command "
+                    "that spends operators. The command that once spent you."),
+         overlay=dict(big="3 CONTINENTS", sub="THE COMMAND THAT SPENDS OPERATORS")),
+    dict(id="t22", level=None, template="commandPost",
+         narration=("The wall calls it find-fix-finish. Everyone in the room says it flat, like weather. A "
+                    "green figure on a screen becomes a dot, becomes a decision, becomes nothing, and the "
+                    "next slide is already up. You approve targets by the dozen between sips of cold coffee. "
+                    "The boy on the ruck run couldn't have carried this. The man on the stairwell died so "
+                    "someone could. Turns out that someone is you."),
+         overlay=None),
+    dict(id="t23", level=None, template="emptyChair",
+         narration=("Vega's chair is empty across the command floor — burned out, or buried, you're never told "
+                    "which, and you don't ask. You won the race the two of you ran from the mud. This is the "
+                    "prize: a room where you become the exact voice that banked the bird away from Cole. You "
+                    "swore you'd never be it. You are it. The only question left is who taps a man like you — "
+                    "and there's a folder for that too."),
          overlay=None),
 
-    # ---- LEVEL 3 — MOUNTED RETAINER ----
-    dict(id="t07", level="LEVEL 03  ·  MOUNTED RETAINER", template="lordAudience",
-         narration=("Therefore you climb, because a debt that size has to be worth something. You take heads, "
-                    "hold lines, and Lord Arima notices. In the audience hall, forehead to the tatami, you are "
-                    "named a mounted retainer — five hundred koku, a horse, and men who now live or die on your "
-                    "word. You rise from the mat taller than your father ever stood. The swords are heavier "
-                    "today. You understand, finally, that the weight was never the steel."),
-         overlay=dict(big="~500 KOKU", sub="A HORSE · AND MEN WHO DIE ON YOUR WORD")),
-    dict(id="t08", level=None, template="sengokuField",
-         narration=("But every rung already has a man standing on it. Kenji climbed from the ranks beside you, "
-                    "and he is faster, crueler, better-born by a hair. At the siege of a burning castle you fight "
-                    "through the same gate, counting each other's heads like coins. He wipes his blade and grins "
-                    "at you through the smoke. Keep the anger he hands you. Bank it. You will need it at the top."),
-         overlay=None,
-         dialogue=dict(text="You still smell of the rice paddy, farmer.")),
-    dict(id="t09", level=None, template="riceField",
-         narration=("Then word comes down from the great unifier, Hideyoshi, and it changes the shape of the "
-                    "world. The sword hunt. Soldiers walk the paddies where you were born and take every blade, "
-                    "spear, and knife from the peasants' hands — melted, they say, into a giant statue of the "
-                    "Buddha. The line between farmer and warrior is now iron law. The boy you were could never "
-                    "become the man you are. That door is bricked shut behind you. Forever."),
-         overlay=dict(big="1588", sub="THE SWORD HUNT · THE CLASS LINE, SEALED")),
-
-    # ---- LEVEL 4 — KARŌ ----
-    dict(id="t10", level="LEVEL 04  ·  KARŌ", template="teaCeremony",
-         narration=("Rank stops being about the sword and starts being about the room. Lord Arima raises you to "
-                    "karō — chief retainer, the man who runs the domain while the lord is away. Sit-downs, "
-                    "ledgers, marriages arranged like troop movements. You settle a feud between two villages "
-                    "before breakfast and seal a death warrant after it. Thousands of koku pass through your "
-                    "hands. None of it slows the small cold thing that has started growing behind your ribs."),
-         overlay=dict(big="4,000 KOKU", sub="KARŌ · YOU RUN THE DOMAIN NOW")),
-    dict(id="t11", level=None, template="lordAudience",
-         narration=("Now you sit near the dais, and the hall kneels to you as you once knelt to it. A castle "
-                    "answers to your seal. Every life in the valley — the tax, the harvest, who marries, who is "
-                    "punished — bends around a word you sign. You are forty. You have everything the boy in the "
-                    "paddy prayed for. Say it plainly: you cannot remember the last night you slept without the "
-                    "ledger open behind your eyes."),
+    # ---- LEVEL 8 — THE MAN WHO SIGNS ----
+    dict(id="t24", level="LEVEL 08  ·  THE MAN WHO SIGNS", template="station", gap=0.7,
+         narration=("Above the whole enterprise sits a chain you were never cleared to see. An interagency "
+                    "man from Langley — call him Mr. Gray, because you never get a real name — sets a folder "
+                    "on the table. Inside is a target, a country, and a signature line that is not yours. "
+                    "He never trained. He never bled. He never taped a tag. He decides, and you execute, and "
+                    "the war stays a secret because officially none of it happened at all."),
+         overlay=dict(big="ONE SIGNATURE", sub="THE MAN WHO SIGNS · YOU NEVER SEE HIM"),
+         dialogue=dict(text="There's no medal for this one. You were never here. Sign it.")),
+    dict(id="t25", level=None, template="jet",
+         narration=("You did point the spear once. You forget that, up here, warm and briefed and clean. So "
+                    "walk it back — all the way back — to the thing the whole climb was built to answer. That "
+                    "first breach. Zero three-thirty. The third room. The hostage in the chair, and the shape "
+                    "rising in the corner with a long gun coming level. You've spent twenty years becoming the "
+                    "man who could sign this. Once, you were the man who had to be right."),
          overlay=None),
 
-    # ---- MIDPOINT — the mentor's ordered death ----
-    dict(id="t12", level=None, template="dojo", gap=1.4,
-         narration=("Then a letter arrives with the lord's seal, and the floor tilts under you. A battle was "
-                    "lost. Someone must carry the blame to keep the clan whole — and the name chosen is Ichirō. "
-                    "The order is seppuku. The letter names his kaishakunin, his second, the one who ends his "
-                    "pain with a single clean cut. It names you. The dojo where he made you stands empty now. "
-                    "Your first wooden sword still hangs on his rack."),
-         overlay=dict(big="THE ORDER", sub="SEPPUKU · AND YOU ARE NAMED HIS SECOND")),
-    dict(id="t13", level=None, template="seppukuRite", gap=0.7,
-         narration=("The garden. Raked gravel, a single pine, the white mat. Ichirō kneels, calm, and bares "
-                    "himself to the waist. You stand behind him, sword up, and your hands are steady — that is "
-                    "the part that breaks you. He lifts the short blade. He looks back at you, once. He cuts. "
-                    "You cut. The code you gave your whole life to has just made you kill the man who gave it "
-                    "to you."),
-         overlay=dict(big="ONE CUT", sub="THE CODE · IT TAKES YOUR TEACHER THROUGH YOUR HAND"),
-         dialogue=dict(text="Don't look away. That is the last thing I can teach you.")),
-
-    # ---- LEVEL 5 — DAIMYŌ (you cross the line) ----
-    dict(id="t14", level="LEVEL 05  ·  DAIMYŌ", template="keepTop", gap=0.7,
-         narration=("You should break. Instead you rise — grief burns clean and leaves something harder behind. "
-                    "Within three years, a war won and a marriage made and a lord's line failing, you cross the "
-                    "one line that matters. Ten thousand koku. Below it, a retainer. At it, a daimyō — a lord in "
-                    "your own right. You stand at the top of your own keep, the domain spread grey and gold "
-                    "below you, and the swords at your hip finally match the weight of the man wearing them."),
-         overlay=dict(big="10,000 KOKU", sub="THE LINE · YOU ARE A LORD NOW")),
-    dict(id="t15", level=None, template="castleGate",
-         narration=("But the throne comes with a chain, and its name is sankin-kōtai. The shogun's law: every "
-                    "other year you must live in Edo, and when you ride home, your wife and your son stay behind "
-                    "— hostages in all but the word. You ride out the great gate at the head of a procession you "
-                    "cannot afford, banners and bearers and horses, all of it performed for a capital that is "
-                    "quietly counting your coin as it passes."),
-         overlay=dict(big="EVERY OTHER YEAR", sub="SANKIN-KŌTAI · YOUR FAMILY STAYS AS HOSTAGES")),
-    dict(id="t16", level=None, template="teaCeremony",
-         narration=("Two households now, a thousand miles apart, and both of them bleeding money. The "
-                    "processions alone could drown a domain. So you do what lords do — you borrow. A quiet man "
-                    "from Osaka pours your tea and lends against next year's rice, and the year after that. The "
-                    "debt is polite. The debt is patient. The debt never once raises its voice. You have never "
-                    "in your life met a weapon like it."),
-         overlay=None),
-
-    # ---- LEVEL 6 — THE GREAT LORD ----
-    dict(id="t17", level="LEVEL 06  ·  THE GREAT LORD", template="keepTop",
-         narration=("Still you climb, because stopping is the only thing that frightens a man like you now. "
-                    "Marriages, alliances, a rival house swallowed whole — and your domain swells past a size "
-                    "that has a legend of its own. A million koku. Kaga scale. The largest holding no shogun "
-                    "rules directly. From the keep you cannot see the edge of what answers to your seal. You own "
-                    "more rice than some nations own bread. You feel nothing. Note that."),
-         overlay=dict(big="1,000,000 KOKU", sub="KAGA-SCALE · THE GREATEST DOMAIN IN JAPAN")),
-    dict(id="t18", level=None, template="shogunCourt",
-         narration=("Then you kneel again — because there is always a higher hall. Edo. The shogun's court, "
-                    "gilded screens the length of a river, and you, a million-koku lord, are one small mark in a "
-                    "long kneeling row. He holds four million koku outright. The whole country assesses near "
-                    "thirty million, and he moves it like a game board. Five men in a hundred wear the swords. "
-                    "You rule the other ninety-five. And one man rules you."),
-         overlay=dict(big="30,000,000 KOKU", sub="ALL OF JAPAN · AND ONE MAN MOVES IT ALL")),
-    dict(id="t19", level=None, template="keepTop",
-         narration=("Home again, you walk the balcony over a domain worth a million koku and count what it "
-                    "actually buys you. Not sleep. Not your son, raised by letter in a hostage city. Not one "
-                    "hour the ledgers do not own. You could buy a province. You cannot buy back the paddy, the "
-                    "two rice balls, the boy who wanted only the swords. But none of it matters if you can't "
-                    "survive the men who truly hold the money — and you are about to meet one."),
-         overlay=None),
-
-    # ---- LEVEL 7 — THE MERCHANT OWNS THE SWORD ----
-    dict(id="t20", level="LEVEL 07  ·  THE MERCHANT", template="merchantHouse", gap=0.7,
-         narration=("Osaka. A merchant's counting house — rice bales to the rafters, an abacus clicking, gold "
-                    "koban stacked like roof tiles. The chōnin, the merchant class, rank legally last: below the "
-                    "samurai, below the farmers, dead bottom of the four estates. And this man holds your debt. "
-                    "He never touched a sword in his life; he owns yours. The ledger carries a name older than "
-                    "your clan — the House of Kōnoike — and it will outlive every blade in Japan."),
-         overlay=dict(big="LAST OF FOUR", sub="THE MERCHANT'S RANK · AND HE OWNS YOUR SWORD")),
-    dict(id="t21", level=None, template="signing",
-         narration=("He slides the ledger across, and you sign your own harvest away before it grows. Your pay "
-                    "is rice; the rice must be sold for coin; and the price is set here, in Osaka, at the Dōjima "
-                    "Rice Exchange — where men trade paper claims on rice that does not yet exist. The world's "
-                    "first futures market, and your stipend rides on it. The men with no swords set the price of "
-                    "the sword. Remember it: rice was always the wealth. Then paper was."),
-         overlay=dict(big="DŌJIMA · 1730", sub="THE FIRST FUTURES MARKET · IT PRICES YOUR PAY")),
-
-    # ---- LEVEL 8 — THE END OF THE SWORD ----
-    dict(id="t22", level="LEVEL 08  ·  THE END OF THE SWORD", template="lordAudience",
-         narration=("Then the age itself turns, and no sword can cut it. Black ships, foreign guns, a "
-                    "boy-emperor raised up in Kyoto, and the shogun who ruled you for two centuries simply hands "
-                    "it all back. One by one the great lords bow and return their domains to the throne. Kenji "
-                    "kneels three places down the same row, his house dissolving beside yours — the race you ran "
-                    "for sixty years, ending in one empty hall. A million koku, gone with a signature."),
-         overlay=dict(big="1868", sub="THE RESTORATION · THE LORDS GIVE IT ALL BACK")),
-    dict(id="t23", level=None, template="castleGate",
-         narration=("Your castle is not yours. In 1871 the domains are abolished outright, redrawn into "
-                    "prefectures run by clerks. The gate your ancestors held for three hundred years now opens "
-                    "for a governor with an inkstone. Your title thins to a single word — shizoku, former "
-                    "warrior — and the leash you never once saw is finally clear. It was never the shogun. It "
-                    "was the domain's own wealth. And they have simply taken the domain."),
-         overlay=dict(big="1871", sub="THE DOMAINS ABOLISHED · A CLERK HOLDS THE GATE")),
-    dict(id="t24", level=None, template="signing",
-         narration=("They pay you off. Your hereditary stipend — the rice that measured your family for ten "
-                    "generations — is commuted to a stack of government bonds and pushed across a desk. Sign "
-                    "here. The warriors are bought out and cut loose, all at once, a whole class retired by "
-                    "paperwork. The paper is worth something for now. Most who take it will be poor inside a "
-                    "decade. You hold your family's entire honor in one thin envelope."),
-         overlay=dict(big="1876", sub="YOUR STIPEND → A PAPER BOND · SIGN HERE")),
-    dict(id="t25", level=None, template="merchantHouse", gap=0.7,
-         narration=("Then they come for the last thing. The Haitōrei edict: no swords worn in public. A clerk "
-                    "with a ledger and a bored young policeman wait at the merchant's door where you came to beg "
-                    "terms. You untie the daishō from your left hip — the weight that arrived the day you became "
-                    "someone, the weight that never left in fifty years. Your hip goes light. Your hip goes "
-                    "wrong. The sword is worth nothing now, by law."),
-         overlay=dict(big="0", sub="HAITŌREI · THE SWORD IS WORTH NOTHING"),
-         dialogue=dict(text="Swords are prohibited, citizen. Hand it over.")),
-    dict(id="t26", level=None, template="sengokuField",
-         narration=("One last time, the old world stands and fights. 1877 — the southern samurai rise behind "
-                    "Saigō, the last true warrior, steel against an empire. They meet a conscript army: farmers' "
-                    "sons, the ninety-five you once ruled, holding rifles any peasant can be taught to fire in a "
-                    "week. The swords lose in an afternoon. Three hundred years of the blade, ended not by a "
-                    "better sword — by a factory, a rifle line, and a government office."),
-         overlay=dict(big="1877", sub="THE LAST SAMURAI · BEATEN BY PEASANTS WITH RIFLES")),
-
-    # ---- LOOP CLOSE — the mat, then the paddy ----
-    dict(id="t27", level=None, template="seppukuRite", gap=0.7,
-         narration=("So you come back to the garden. Raked gravel, a single pine, the white mat — the death a "
-                    "samurai is owed. You kneel. A friend stands behind you, sword raised, the way you once "
-                    "stood behind Ichirō. Your hands are steady. But the blade does not fall. Even this is "
-                    "forbidden now — the ritual, the honor, the ending, all abolished, like the sword, like the "
-                    "domain. They took your death too. You are made to live."),
-         overlay=dict(big="THE MAT", sub="EVEN YOUR DEATH · ABOLISHED")),
-    dict(id="t28", level=None, template="riceField",
-         narration=("An old man walks back into a rice paddy. The smell of wet rice is the whole world again; it "
-                    "always was. You began here with a borrowed spear and two rice balls, owning nothing. You "
-                    "end here owning no sword at all — by law. The koku, the castle, the million — all of it was "
-                    "rice, and the rice was always someone else's to price. Five in a hundred wore the blade. In "
-                    "the end, none of you did. The circle closes in the mud where it opened."),
-         overlay=dict(big="THE CIRCLE", sub="A BORROWED SPEAR → NO SWORD AT ALL")),
+    # ---- LOOP CLOSE — resolve the breach, then the ruck run ----
+    dict(id="t26", level=None, template="frontline", gap=0.7,
+         narration=("Half a second. Your tags are taped silent, your hands are steady, and you make the shot "
+                    "because Cole drilled it into your spine ten thousand times. The shape drops. The hostage "
+                    "lives. But the corner had a second gun, and a round punches through your shoulder like a "
+                    "hot wire, and you go down grinning in the smoke, alive, having done the job. That's the "
+                    "whole math. It bought you every level after. And every level cost you the boy who taped "
+                    "his tags that first night."),
+         overlay=dict(big="YOU MAKE THE SHOT", sub="THE HOSTAGE LIVES · AND YOU TAKE THE ROUND")),
+    dict(id="t27", level=None, template="decoration",
+         narration=("There is no medal for most of it, and the ones they give you, you can't wear where "
+                    "anyone would understand. You have a drawer of silent tags and a folder signed by a man "
+                    "with no name and a shoulder that aches before rain. You wanted in somewhere that would "
+                    "never let you quit. You got it. It kept its promise all the way down. It never once let "
+                    "you go."),
+         overlay=dict(big="NO MEDAL", sub="IT NEVER ONCE LET YOU GO")),
+    dict(id="t28", level=None, template="bootcamp",
+         narration=("Before dawn, a mountain, a line of nobodies under rucks in the black. You're the cadre "
+                    "now, flat-eyed, standing where Cole stood. Two hundred started. A kid near the back, "
+                    "roster number rattling, fresh tags loud as coins in a can — same as you, all those "
+                    "years ago. He's about to unmake himself, or not. You step in close and tell him the only "
+                    "true thing anyone ever told you. Tape your tags, son. Quiet is alive. The circle closes "
+                    "in the dark where it opened."),
+         overlay=dict(big="ROSTER 01", sub="A NEW NAME TAPE · THE CIRCLE BEGINS AGAIN")),
 ]

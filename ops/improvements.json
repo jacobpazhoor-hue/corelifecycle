@@ -1,6 +1,17 @@
 {
   "backlog": [
     {
+      "id": "sf-composed-from-military-spy-packs",
+      "impact": "med",
+      "note": "special_forces (07-04) shipped with NO new template pack — it composed the whole 8-level ladder (candidate/selection -> operator/ODA -> team sergeant -> the tier-1 Unit -> assault commander -> squadron -> joint task force -> the man who signs) entirely from the existing MILITARY pack (bootcamp=selection ruck+the loop, barracksLife=empty bunks/drawer of tags, frontline=the breach/combat/raid, commandPost=team & troop command, decoration=the tab/no-medal) + the SPY pack (tradecraft=selection ground/kill house, surveillance=night infil, safehouse=the HVT target wall, debrief=the tasking/mentor warning, station=the joint command) + universal (warRoom=JSOC apex, emptyChair=the rival's empty chair, signing=the order, jet=deployment). No adjacent repeats across 30 scenes. Confirms the SPY+MILITARY packs cover the whole special-operations / covert-military space — reusable for fbi_undercover, secret_service, PMC/mercenary, hostage-rescue topics with zero bespoke TSX. Pairs with [[spy-pack-validated]] + [[more-domain-packs]]."
+    },
+    {
+      "id": "dog-tags-anchor-visual-plant",
+      "impact": "low",
+      "note": "special_forces made 'dog tags, TAPED so they don't rattle' (sound discipline) the sensory anchor — loud at selection (t01), taped before the first infil (t05), checked on the team (t07), NONE/sterile at the Unit (t10), a dead man's tags carried out at the midpoint (t14), a drawer of them (t17), a new candidate's rattling at the loop-close (t28). Strong callback engine, but like samurai's daishō [[worn-swords-hip-prop]] and the mob Cadillac [[want-object-visual-plant]] it is AUDIO-ONLY — the taped tags are never drawn on the POV figure, so the 'sterile/empty' and 'drawer of the dead' payoffs don't read visually. Same fix family: a tiny 'tags at the chest' figure primitive that MILITARY/SPY templates toggle ON (loose) at L1, TAPED from L2, OFF (sterile) at L4, so the anchor the narration keeps tightening tightens on screen. Generalizes to any small worn/carried anchor object (ring, badge, tags, coin).",
+      "scene": "special_forces t01/t05/t10/t14/t17/t28"
+    },
+    {
       "id": "worn-swords-hip-prop",
       "impact": "med",
       "note": "samurai (07-04) made THE WEIGHT OF THE TWO SWORDS AT THE LEFT HIP the sensory anchor motif — it 'arrives' at t04 (daisho), is re-triggered at every level-up ('the swords are heavier today'), and is stripped bare at t25 (Haitōrei ban, 'your hip goes light'). But the daishō is only DRAWN once, on the sword stand at t04; the POV figure never visibly WEARS the swords across the climb, and the t25 payoff ('hip goes bare') is audio-only. Same failure family as [[want-object-visual-plant]] (mob_boss's undrawn Cadillac). Fix: a small 'sheathed daishō at the left hip' figure primitive in stage.tsx (a short + long line at the belt) that the SAMURAI templates toggle ON from L2 and OFF at the ban scene — so the anchor the narration keeps tightening is actually visible tightening, and the empty hip at the end reads at a glance. Generalizes to any worn want-object anchor (a ring, a badge, a holster).",
