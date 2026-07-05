@@ -9,6 +9,9 @@
   "playlist": "Every Level",
   "enabled": true,
   "useModal": false,
+  "_cadence": "Currently DAILY (cron 0 2 * * *). Data (AIR 18k-channel study) favors 3-4 longs/week + 2-3 Shorts/week over daily; recommendation pending user decision — see docs/WEEKLY_OPS.md. To switch: edit ops/com.corelifecycle.daily.plist StartCalendarInterval to Mon/Wed/Fri/Sun and reload.",
+  "kpi_targets": {"retention_30s": 0.70, "avg_pct_viewed": 0.48, "browse_ctr": 0.07, "endscreen_ctr": 0.055},
+  "growth_ops_doc": "docs/WEEKLY_OPS.md",
   "_note": "LIVE: produces+reviews+publishes daily at 2AM (doodle). Off: enabled:false or launchctl unload.",
   "_useModal_note": "false=render locally (~28min on Mac). Set true for Modal sharded cloud render (~7-9min) once the Modal billing-cycle spend limit resets / credits added (capped 2026-06-22)."
 }

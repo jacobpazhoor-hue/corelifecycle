@@ -37,10 +37,20 @@ for sc in tl["scenes"]:
 description = (
     f"{HOOK}\n\n{BODY}\n\n"
     "⏱ Chapters\n" + "\n".join(chapters) + "\n\n"
-    "Subscribe to climb — new stories on power, money, and ambition.\n\n"
+    "▶ Watch the whole series — every life, every level: https://www.youtube.com/@corelifecycle\n"
+    "Subscribe to climb — a new life every episode.\n\n"
     f"{HASHTAGS}\n\n"
     "Dramatization for educational and entertainment purposes."
 )
+
+# GROWTH OPS (Step 6): a debate PINNED COMMENT (comments are an active-engagement ranking signal;
+# challenge-style pins get ~37% more replies) + a "which life next?" COMMUNITY POLL suggestion. The
+# creative agent may set meta["pinned"] / meta["poll"]; else derive sensible defaults from the title.
+_lvl = next((sc["level"] for sc in tl["scenes"] if sc.get("level")), None)
+pinned = meta.get("pinned") or (
+    f"Be honest — would you have made it past {pretty(_lvl).split(':')[0] if _lvl else 'Level 1'}? "
+    "And which was the point of no return? 👇 (reply, don't just like)")
+poll = meta.get("poll") or "Which life should you live next? (drop it below — top comment gets made)"
 
 # --- non-fatal packaging lint (Phase 1: title/thumbnail CTR rules; warns only, never HALTs) ---
 STOP = {"a","an","the","at","of","to","in","as","is","you","your","every","level","life",
@@ -63,7 +73,8 @@ for w in _warn:
     print("  ⚠ packaging:", w)
 
 kit = {"video": VIDEO, "title": TITLE, "description": description, "tags": TAGS,
-       "thumbnail": "out/thumbnail.png", "playlist": PLAYLIST, "privacy": PRIVACY, "categoryId": "27"}
+       "thumbnail": "out/thumbnail.png", "playlist": PLAYLIST, "privacy": PRIVACY, "categoryId": "27",
+       "pinned_comment": pinned, "community_poll": poll}
 out = os.path.join(ROOT, "out", "upload_kit.json")
 os.makedirs(os.path.dirname(out), exist_ok=True)
 json.dump(kit, open(out, "w"), indent=2)
