@@ -2,364 +2,358 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 24737,
+  "totalFrames": 21897,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t00",
       "level": null,
       "overlay": {
-        "big": "THE MORNING IT ENDS",
-        "sub": "THE DOGS WENT QUIET \u00b7 THE PHONE STOPPED"
+        "big": "0330 \u00b7 BREACH",
+        "sub": "THE HOSTAGE IS IN THE THIRD ROOM"
       },
-      "template": "ranchCompound",
+      "template": "frontline",
       "audio": "audio/t00.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 907
+      "durationInFrames": 861
     },
     {
       "id": "t01",
-      "level": "LEVEL 01  \u00b7  EL HALC\u00d3N  (THE LOOKOUT)",
+      "level": "LEVEL 01  \u00b7  THE CANDIDATE",
       "overlay": {
-        "big": "~$600 / MONTH",
-        "sub": "A PHONE, A WHISTLE, AND A NAME NOBODY KNOWS YET"
+        "big": "ROSTER 47",
+        "sub": "200 START \u00b7 A NAME TAPE, NOTHING ELSE"
       },
-      "template": "lookoutCorner",
+      "template": "bootcamp",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
-      "startFrame": 907,
-      "durationInFrames": 888
+      "startFrame": 861,
+      "durationInFrames": 695
     },
     {
       "id": "t02",
       "level": null,
       "overlay": null,
-      "template": "narcoShrineRite",
+      "template": "tradecraft",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 1795,
-      "durationInFrames": 835
+      "startFrame": 1556,
+      "durationInFrames": 884
     },
     {
       "id": "t03",
       "level": null,
       "overlay": {
-        "big": "FIRST BODY",
-        "sub": "THE TOWN LEARNS TO LOOK AT ITS SHOES"
+        "big": "MOST QUIT",
+        "sub": "SELECTION \u00b7 NOBODY FAILS YOU \u2014 YOU FAIL YOURSELF"
       },
-      "template": "backAlley",
+      "template": "barracksLife",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 2630,
-      "durationInFrames": 892
+      "startFrame": 2440,
+      "durationInFrames": 798
     },
     {
       "id": "t04",
-      "level": "LEVEL 02  \u00b7  EL BURRERO  (THE MULE)",
+      "level": "LEVEL 02  \u00b7  THE OPERATOR",
       "overlay": {
-        "big": "$5,000 / LOAD",
-        "sub": "THE FIRST THING YOU CARRY THAT CAN END YOU"
+        "big": "1 OF 12",
+        "sub": "THE TAB \u00b7 YOU MADE THE TEAM"
       },
-      "template": "sierraRoute",
+      "template": "decoration",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 3522,
-      "durationInFrames": 809
+      "startFrame": 3238,
+      "durationInFrames": 752
     },
     {
       "id": "t05",
       "level": null,
-      "overlay": null,
-      "template": "waterfront",
+      "overlay": {
+        "big": "TAPE THE TAGS",
+        "sub": "SOUND DISCIPLINE \u00b7 QUIET IS ALIVE"
+      },
+      "template": "surveillance",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 4331,
-      "durationInFrames": 801
+      "startFrame": 3990,
+      "durationInFrames": 755
     },
     {
       "id": "t06",
       "level": null,
       "overlay": {
-        "big": "PLATA O PLOMO",
-        "sub": "THE SILVER OR THE LEAD \u00b7 YOU DON'T GET A THIRD DOOR"
+        "big": "FIRST",
+        "sub": "THE COPPER TASTE \u00b7 AND YOU DID THE JOB"
       },
-      "template": "cardGame",
+      "template": "frontline",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 5132,
-      "durationInFrames": 845
+      "startFrame": 4745,
+      "durationInFrames": 688
     },
     {
       "id": "t07",
-      "level": "LEVEL 03  \u00b7  EL SICARIO  (THE GUNMAN)",
+      "level": "LEVEL 03  \u00b7  THE TEAM SERGEANT",
       "overlay": {
-        "big": "$85 / BODY",
-        "sub": "THE CHEAPEST THING IN THE WHOLE MACHINE"
+        "big": "12 MEN",
+        "sub": "THE TEAM SERGEANT \u00b7 THEY DIE ON YOUR CALL"
       },
-      "template": "plazaTown",
+      "template": "commandPost",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 5977,
-      "durationInFrames": 878
+      "startFrame": 5433,
+      "durationInFrames": 769
     },
     {
       "id": "t08",
       "level": null,
-      "overlay": {
-        "big": "3-YEAR LIFE",
-        "sub": "THE AVERAGE GUNMAN DOESN'T SEE A FOURTH"
-      },
-      "template": "narcoShrineRite",
+      "overlay": null,
+      "template": "safehouse",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 6855,
-      "durationInFrames": 799
+      "startFrame": 6202,
+      "durationInFrames": 721
     },
     {
       "id": "t09",
       "level": null,
       "overlay": {
-        "big": "A DEAD MAN'S DESK",
-        "sub": "YOU HELD ON \u00b7 SO THEY HAND YOU THE TOWN"
+        "big": "THE TAP",
+        "sub": "A UNIT THAT DOESN'T EXIST \u00b7 SELECTION, AGAIN"
       },
-      "template": "donOffice",
+      "template": "debrief",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 7654,
-      "durationInFrames": 767
+      "startFrame": 6923,
+      "durationInFrames": 771
     },
     {
       "id": "t10",
-      "level": "LEVEL 04  \u00b7  JEFE DE PLAZA  (THE PLAZA BOSS)",
+      "level": "LEVEL 04  \u00b7  THE UNIT",
       "overlay": {
-        "big": "THE FINCA",
-        "sub": "A WALLED CORRIDOR \u00b7 AND YOU CAN'T GO HOME"
+        "big": "NO NAME",
+        "sub": "THE UNIT \u00b7 STERILE \u00b7 YOU DON'T EXIST"
       },
-      "template": "ranchCompound",
+      "template": "tradecraft",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 8421,
-      "durationInFrames": 838
+      "startFrame": 7694,
+      "durationInFrames": 717
     },
     {
       "id": "t11",
       "level": null,
-      "overlay": {
-        "big": "$40M / YEAR",
-        "sub": "EL PISO \u00b7 THE TAX ON THE GROUND ITSELF"
-      },
-      "template": "plazaTown",
+      "overlay": null,
+      "template": "safehouse",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 9259,
-      "durationInFrames": 932
+      "startFrame": 8411,
+      "durationInFrames": 793
     },
     {
       "id": "t12",
       "level": null,
-      "overlay": null,
-      "template": "sierraRoute",
+      "overlay": {
+        "big": "THE TIP OF THE SPEAR",
+        "sub": "FIND \u00b7 FIX \u00b7 FINISH \u00b7 BEFORE DAWN"
+      },
+      "template": "frontline",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 10191,
-      "durationInFrames": 780
+      "startFrame": 9204,
+      "durationInFrames": 766
     },
     {
       "id": "t13",
       "level": null,
       "overlay": null,
-      "template": "dinner",
+      "template": "surveillance",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 10971,
-      "durationInFrames": 907
+      "startFrame": 9970,
+      "durationInFrames": 745
     },
     {
       "id": "t14",
       "level": null,
       "overlay": {
-        "big": "EL T\u00cdO",
-        "sub": "YOU WERE NEVER THE KNIFE \u00b7 YOU ARE WHAT IT'S FOR"
+        "big": "AMMUNITION",
+        "sub": "THE BIRD BANKED AWAY \u00b7 AND HE HELD ANYWAY"
       },
-      "template": "backAlley",
+      "template": "frontline",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 11878,
-      "durationInFrames": 869
+      "startFrame": 10715,
+      "durationInFrames": 828
     },
     {
       "id": "t15",
-      "level": "LEVEL 05  \u00b7  EL LUGARTENIENTE  (THE LIEUTENANT)",
+      "level": "LEVEL 05  \u00b7  ASSAULT COMMANDER",
       "overlay": {
-        "big": "$300M",
-        "sub": "THE DEAD STOP BEING PEOPLE \u00b7 THEY BECOME A COLUMN"
+        "big": "40 DOORS A NIGHT",
+        "sub": "YOU CHOOSE THE DOOR NOW"
       },
-      "template": "warRoom",
+      "template": "commandPost",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 12747,
-      "durationInFrames": 801
+      "startFrame": 11543,
+      "durationInFrames": 785
     },
     {
       "id": "t16",
       "level": null,
-      "overlay": {
-        "big": "A ROOM OF CASH",
-        "sub": "IT BUYS EVERYTHING BUT THE ONE DOOR YOU WANT"
-      },
-      "template": "countRoom",
+      "overlay": null,
+      "template": "surveillance",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 13548,
-      "durationInFrames": 845
+      "startFrame": 12328,
+      "durationInFrames": 700
     },
     {
       "id": "t17",
       "level": null,
       "overlay": {
-        "big": "ROSA",
-        "sub": "EVERYTHING YOU BUILT \u00b7 AND SHE DIED ALONE"
+        "big": "A DRAWER OF TAGS",
+        "sub": "ONE SET FOR EVERY MAN YOU SPENT"
       },
-      "template": "narcoShrineRite",
+      "template": "barracksLife",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 14393,
-      "durationInFrames": 825
+      "startFrame": 13028,
+      "durationInFrames": 697
     },
     {
       "id": "t18",
-      "level": "LEVEL 06  \u00b7  EL PATR\u00d3N  (THE KINGPIN)",
+      "level": "LEVEL 06  \u00b7  SQUADRON COMMANDER",
       "overlay": {
-        "big": "$1 BILLION",
-        "sub": "EL PATR\u00d3N \u00b7 A NAME ON A LIST ON TWO CONTINENTS"
+        "big": "100+ OPERATORS",
+        "sub": "YOU SIGN THE TARGET NOW"
       },
-      "template": "ranchCompound",
+      "template": "station",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 15218,
-      "durationInFrames": 923
+      "startFrame": 13725,
+      "durationInFrames": 688
     },
     {
       "id": "t19",
       "level": null,
       "overlay": null,
-      "template": "jet",
+      "template": "signing",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 16141,
-      "durationInFrames": 863
+      "startFrame": 14413,
+      "durationInFrames": 784
     },
     {
       "id": "t20",
       "level": null,
       "overlay": {
-        "big": "THEY SING YOUR NAME",
-        "sub": "AND YOU CAN'T WALK DOWN A SINGLE STREET"
+        "big": "THE TASK FORCE",
+        "sub": "THE KNIFE BECOMES A MACHINE"
       },
-      "template": "window",
+      "template": "debrief",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 17004,
-      "durationInFrames": 841
+      "startFrame": 15197,
+      "durationInFrames": 641
     },
     {
       "id": "t21",
-      "level": "LEVEL 07  \u00b7  LA RED  (THE NETWORK)",
+      "level": "LEVEL 07  \u00b7  THE JOINT COMMAND",
       "overlay": {
-        "big": "LA RED",
-        "sub": "TAKE OUT THE KINGPIN \u00b7 THE PRICE DOESN'T MOVE"
+        "big": "3 CONTINENTS",
+        "sub": "THE COMMAND THAT SPENDS OPERATORS"
       },
       "template": "warRoom",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 17845,
-      "durationInFrames": 891
+      "startFrame": 15838,
+      "durationInFrames": 734
     },
     {
       "id": "t22",
       "level": null,
       "overlay": null,
-      "template": "wiretap",
+      "template": "commandPost",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 18736,
-      "durationInFrames": 798
+      "startFrame": 16572,
+      "durationInFrames": 705
     },
     {
       "id": "t23",
       "level": null,
       "overlay": null,
-      "template": "dinner",
+      "template": "emptyChair",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 19534,
-      "durationInFrames": 865
+      "startFrame": 17277,
+      "durationInFrames": 674
     },
     {
       "id": "t24",
-      "level": "LEVEL 08  \u00b7  LA DEMANDA  (THE DEMAND)",
+      "level": "LEVEL 08  \u00b7  THE MAN WHO SIGNS",
       "overlay": {
-        "big": "THE ROAD CLIMBS",
-        "sub": "TEN STEPS TO THE TUNNEL \u00b7 YOU STILL WANT TO LIVE"
+        "big": "ONE SIGNATURE",
+        "sub": "THE MAN WHO SIGNS \u00b7 YOU NEVER SEE HIM"
       },
-      "template": "ranchCompound",
+      "template": "station",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 20399,
-      "durationInFrames": 890
+      "startFrame": 17951,
+      "durationInFrames": 881
     },
     {
       "id": "t25",
       "level": null,
-      "overlay": {
-        "big": "$150 BILLION",
-        "sub": "THE APPETITE UP NORTH \u00b7 YOU WERE ONLY THE DELIVERY"
-      },
-      "template": "courtroom",
+      "overlay": null,
+      "template": "jet",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 21289,
-      "durationInFrames": 897
+      "startFrame": 18832,
+      "durationInFrames": 756
     },
     {
       "id": "t26",
       "level": null,
       "overlay": {
-        "big": "$0",
-        "sub": "THE CELL OR THE GRAVE \u00b7 THOSE WERE ALWAYS THE EXITS"
+        "big": "YOU MAKE THE SHOT",
+        "sub": "THE HOSTAGE LIVES \u00b7 AND YOU TAKE THE ROUND"
       },
-      "template": "prisonCell",
+      "template": "frontline",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 22186,
-      "durationInFrames": 880
+      "startFrame": 19588,
+      "durationInFrames": 838
     },
     {
       "id": "t27",
       "level": null,
       "overlay": {
-        "big": "A NEW KID \u00b7 SAME CORNER",
-        "sub": "THE ROAD OUT WAS NEVER A WAY OUT"
+        "big": "NO MEDAL",
+        "sub": "IT NEVER ONCE LET YOU GO"
       },
-      "template": "lookoutCorner",
+      "template": "decoration",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 23066,
-      "durationInFrames": 833
+      "startFrame": 20426,
+      "durationInFrames": 568
     },
     {
       "id": "t28",
       "level": null,
       "overlay": {
-        "big": "THE HUNGER NEVER ENDS",
-        "sub": "THE MAN AT THE TOP DOESN'T KNOW YOU EXIST"
+        "big": "ROSTER 01",
+        "sub": "A NEW NAME TAPE \u00b7 THE CIRCLE BEGINS AGAIN"
       },
-      "template": "emptyChair",
+      "template": "bootcamp",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 23899,
-      "durationInFrames": 838
+      "startFrame": 20994,
+      "durationInFrames": 903
     }
   ]
 }
