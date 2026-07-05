@@ -2,7 +2,7 @@
   "topic": "special_forces",
   "title": "Your Life as Every Rank in Special Forces (Most Die at Selection)",
   "hook": "It's 0330. You're first through the door, the hostage is in the third room, and a shape rises in the corner with a rifle coming level. You have half a second to be right.",
-  "body": "A cinematic POV climb through every rank of special operations — you start as a nobody with a roster number and rise to the anonymous man who signs the targets, and learn you were ammunition the whole way. You live it in second person, present tense, level by level: the CANDIDATE at selection, a name-tape and nothing else, where most quit before day three → the OPERATOR who earns the tab and joins a 12-man ODA, an A-team, and tapes his dog tags silent before his first infil → the TEAM SERGEANT with twelve lives riding on a call made in the dark on half the facts → the tier-1 UNIT that doesn't officially exist, where you go sterile — no rank, no patch, no name, no tags, 'you don't exist' → the ASSAULT COMMANDER who stops kicking the door and starts choosing it, forty raids a night → the SQUADRON COMMANDER who signs the target instead of clearing the room → the JOINT TASK FORCE that runs the hunt across three continents, the machine that spends operators the way it once spent you → and the level above the uniform: the anonymous man from Langley who never trained, never bled, and signs the folder. Real, non-instructional mechanics, dramatized: selection attrition, the Q Course and the tab, the ODA and the 18-series, unconventional warfare and foreign internal defense, the find-fix-finish HVT cycle under JSOC, sterile kit, exfil and the bird, and the interagency chain above it all. The twist the whole video is built on: the tip of the spear is the part that snaps off in the wound — you climb from being spent to being the one who spends. Watch the whole series — every life, every level. Dramatization for educational and entertainment purposes; characters are fictional, the mechanics are real, no tradecraft is disclosed.",
+  "body": "A cinematic POV climb through every rank of special operations \u2014 you start as a nobody with a roster number and rise to the anonymous man who signs the targets, and learn you were ammunition the whole way. You live it in second person, present tense, level by level: the CANDIDATE at selection, a name-tape and nothing else, where most quit before day three \u2192 the OPERATOR who earns the tab and joins a 12-man ODA, an A-team, and tapes his dog tags silent before his first infil \u2192 the TEAM SERGEANT with twelve lives riding on a call made in the dark on half the facts \u2192 the tier-1 UNIT that doesn't officially exist, where you go sterile \u2014 no rank, no patch, no name, no tags, 'you don't exist' \u2192 the ASSAULT COMMANDER who stops kicking the door and starts choosing it, forty raids a night \u2192 the SQUADRON COMMANDER who signs the target instead of clearing the room \u2192 the JOINT TASK FORCE that runs the hunt across three continents, the machine that spends operators the way it once spent you \u2192 and the level above the uniform: the anonymous man from Langley who never trained, never bled, and signs the folder. Real, non-instructional mechanics, dramatized: selection attrition, the Q Course and the tab, the ODA and the 18-series, unconventional warfare and foreign internal defense, the find-fix-finish HVT cycle under JSOC, sterile kit, exfil and the bird, and the interagency chain above it all. The twist the whole video is built on: the tip of the spear is the part that snaps off in the wound \u2014 you climb from being spent to being the one who spends. Watch the whole series \u2014 every life, every level. Dramatization for educational and entertainment purposes; characters are fictional, the mechanics are real, no tradecraft is disclosed.",
   "tags": [
     "your life as special forces",
     "every rank in special forces",
@@ -27,7 +27,7 @@
   ],
   "hashtags": "#everylevel #specialforces #specops #military #pov",
   "playlist": "Every Level",
-  "pinned": "You climb from being spent to being the one who spends — at which level did you stop being the good guy?",
+  "pinned": "You climb from being spent to being the one who spends \u2014 at which level did you stop being the good guy?",
   "poll": "Where would YOU have washed out? Selection / First firefight / The Unit / The day you signed the target",
   "thumb": {
     "kicker": "EVERY RANK OF",
@@ -38,10 +38,11 @@
     "big": "1 OF 200",
     "before": "NOBODY",
     "after": "SPENT",
-    "expr": "hardened",
+    "expr": "worried",
     "povline": "YOU ARE",
     "keyword": "AMMO",
     "setting": "frontline",
-    "question": "WHO SIGNS THE TARGET?"
+    "question": "WHO SIGNS THE TARGET?",
+    "mood": "danger"
   }
 }

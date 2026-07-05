@@ -8,11 +8,12 @@
     "big": "1 OF 200",
     "before": "NOBODY",
     "after": "SPENT",
-    "expr": "hardened",
+    "expr": "worried",
     "povline": "YOU ARE",
     "keyword": "AMMO",
     "setting": "frontline",
-    "question": "WHO SIGNS THE TARGET?"
+    "question": "WHO SIGNS THE TARGET?",
+    "mood": "danger"
   },
   "topic": "special_forces"
 }

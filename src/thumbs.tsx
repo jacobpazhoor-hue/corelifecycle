@@ -7,311 +7,334 @@ import {TEMPLATES} from './scenes';
 import meta from './episode_meta.json';
 
 // ============================================================================
-// THUMBNAIL ARCHETYPES — 5 distinct layouts so every video does NOT look the same.
-// Research-backed (2026): <=4 words, expressive face, ONE bold color pop, 1-2 hero
-// elements, text upper area. The packager picks `thumb.archetype`; otherwise we
-// rotate deterministically by topic so consecutive uploads differ.
+// THUMBNAIL ENGINE v2 (2026 high-CTR redesign — see NEXT_LEVEL_PLAN research).
+// "Directed bright": a SATURATED radial burst that ends in a DARK vignette, a doodle hero
+// RIM-LIT + GLOWING so it pops off the color, <=3 energy layers (sunburst / spotlight / accent),
+// and HEAVY stroked ALL-CAPS text with ONE hot accent word. No more flat cream paper.
+// Thumbnails are STILLS (rendered once) so rich SVG filters (glow/blur) are fine here.
 // ============================================================================
-const SANS = "'Helvetica Neue', Helvetica, Arial, sans-serif";
-const INK = '#2a2620';
-const GOLD = '#e8b54b';
-// complementary color pops (one per archetype) for contrast/CTR
-const POP = {crimson: '#c0392b', teal: '#1f9e8f', indigo: '#3a539b', orange: '#e07a2f', gold: GOLD};
+const SANS = "'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif";
+const INK = '#0d0d0d';
+
+// mood palettes: core->mid->rim radial, two ray colors, hot accent (keyword), glow color
+type Mood = {core: string; mid: string; rim: string; ray: string; accent: string; glow: string};
+const MOODS: Record<string, Mood> = {
+  danger:   {core: '#FF3B0D', mid: '#C21807', rim: '#2A0A05', ray: '#FF6A00', accent: '#FFE500', glow: '#FFE500'},
+  tactical: {core: '#FFB800', mid: '#FF6A00', rim: '#1A0F00', ray: '#FFCE3A', accent: '#FF2D2D', glow: '#FFB800'},
+  electric: {core: '#00E5FF', mid: '#0057B8', rim: '#03060F', ray: '#38B6FF', accent: '#FFE500', glow: '#00E5FF'},
+  money:    {core: '#FFD54A', mid: '#1f7a4d', rim: '#06140b', ray: '#3fbf75', accent: '#FF2D2D', glow: '#FFD54A'},
+  royal:    {core: '#B06CFF', mid: '#5a2a9e', rim: '#0c0518', ray: '#8f5cf0', accent: '#FFE500', glow: '#B06CFF'},
+};
+// topic -> mood hints (crime/military/war -> danger; wealth -> money; spy/tech -> electric; royalty -> royal)
+const MOOD_HINTS: Array<[RegExp, string]> = [
+  [/\b(spy|cia|fbi|nsa|mi6)\b|intellig|undercover|hacker|cyber/i, 'electric'],
+  [/billion|wealth|money|heir|mogul|trillion|lottery|fortune|diamond/i, 'money'],
+  [/king|emperor|empire|royal|dynasty|throne|medieval|ottoman|monarch/i, 'royal'],
+  [/special.?forces|soldier|military|cartel|mafia|hitman|assassin|war|sniper|gladiator|samurai|pirate|survive|prison/i, 'danger'],
+];
+function moodFor(): Mood {
+  const m = (meta as any).thumb?.mood;
+  if (m && MOODS[m]) return MOODS[m];
+  const topic = ((meta as any).topic || '') + ' ' + ((meta as any).title || '');
+  for (const [re, name] of MOOD_HINTS) if (re.test(topic)) return MOODS[name];
+  return MOODS.danger;
+}
+const M = moodFor();
 
 const t = (meta as any).thumb || {};
-const KICKER: string = t.kicker || 'EVERY LEVEL OF A';
-const L1: string = t.line1 || '';
-const L2: string = t.line2 || '';
-const TAG: string = t.tag || '';
-// apex number = the part after the arrow in the tag ("$0 → $5T" -> "$5T")
-const BIG: string = t.big || (TAG.includes('→') ? TAG.split('→').pop()!.trim() : TAG);
-const QUESTION: string = t.question || 'WHO IS ABOVE THEM?';
+const KICKER: string = (t.kicker || 'EVERY LEVEL OF A').toUpperCase();
+const L1: string = (t.line1 || '').toUpperCase();
+const L2: string = (t.line2 || '').toUpperCase();
+const TAG: string = (t.tag || '').toUpperCase();
+const BIG: string = (t.big || (TAG.includes('→') ? TAG.split('→').pop()!.trim() : TAG)).toUpperCase();
+const QUESTION: string = (t.question || 'WHO IS ABOVE THEM?').toUpperCase();
 const SETTING: string = t.setting || '';
-const EXPR = (FACES as any)[t.expr || 'smug'] || FACES.smug;
-const RED = '#d62828';
-const POVLINE: string = (t.povline || 'YOU BECOME').toUpperCase();
+const POVLINE: string = (t.povline || 'YOU ARE').toUpperCase();
 const KEYWORD: string = (t.keyword || L1 || 'THE BOSS').toUpperCase();
-// before/after split fields (optional; sensible fallbacks so it works without prompt changes)
 const BEFORE: string = (t.before || 'NOBODY').toUpperCase();
-const AFTER: string = (t.after || KEYWORD || L1 || 'THE TOP').toUpperCase();
+const AFTER: string = (t.after || KEYWORD || 'THE TOP').toUpperCase();
 
+// ---------- shared defs: gradients, glow/rim, sunburst, tape ----------
 const Defs: React.FC = () => (
   <defs>
-    <filter id="troughT" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="2" seed="4" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="3" /></filter>
-    {/* metallic gold (reads as foil, not flat yellow) + a soft drop-shadow so the hero lifts off the paper */}
-    <linearGradient id="tgold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#f5d76e" /><stop offset="0.5" stopColor="#e8b54b" /><stop offset="1" stopColor="#b8860b" /></linearGradient>
-    <filter id="tdrop" x="-25%" y="-25%" width="150%" height="150%"><feDropShadow dx="0" dy="12" stdDeviation="11" floodColor="#1a1208" floodOpacity="0.30" /></filter>
+    <radialGradient id="bggrad" cx="50%" cy="44%" r="72%">
+      <stop offset="0%" stopColor={M.core} />
+      <stop offset="46%" stopColor={M.mid} />
+      <stop offset="100%" stopColor={M.rim} />
+    </radialGradient>
+    <radialGradient id="spot" cx="50%" cy="0%" r="80%">
+      <stop offset="0%" stopColor="#ffffff" stopOpacity="0.55" />
+      <stop offset="55%" stopColor="#ffffff" stopOpacity="0.06" />
+      <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+    </radialGradient>
+    <radialGradient id="vig" cx="50%" cy="50%" r="72%">
+      <stop offset="55%" stopColor="#000" stopOpacity="0" />
+      <stop offset="100%" stopColor="#000" stopOpacity="0.62" />
+    </radialGradient>
+    {/* HERO POP: white rim + colored outer glow so a black doodle floats off the bright bg */}
+    <filter id="heroPop" x="-45%" y="-45%" width="190%" height="190%">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="9" result="rimA" />
+      <feFlood floodColor="#ffffff" result="wht" />
+      <feComposite in="wht" in2="rimA" operator="in" result="rim" />
+      <feGaussianBlur in="rimA" stdDeviation="16" result="gb" />
+      <feFlood floodColor={M.glow} floodOpacity="0.95" result="gc" />
+      <feComposite in="gc" in2="gb" operator="in" result="glow" />
+      <feMerge><feMergeNode in="glow" /><feMergeNode in="rim" /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+    <filter id="txtsh" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" floodColor="#000" floodOpacity="0.85" />
+    </filter>
+    <filter id="rough" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="2" seed="4" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="3" /></filter>
   </defs>
 );
 
-// metallic-gold pill helper (premium foil look for the tag/apex)
-const GoldPill: React.FC<{x: number; y: number; w: number; h: number; label: string; fs: number}> = ({x, y, w, h, label, fs}) => (
-  <g>
-    <rect x={x} y={y} width={w} height={h} rx={7} fill="url(#tgold)" stroke={INK} strokeWidth={3} />
-    <text x={x + w / 2} y={y + h / 2 + fs * 0.36} textAnchor="middle" fontFamily={SANS} fontSize={fs} fontWeight={800} fill={INK}>{label}</text>
-  </g>
+// radiating sunburst wedges behind the subject (cheap, huge energy)
+const Sunburst: React.FC<{cx?: number; cy?: number; n?: number}> = ({cx = 850, cy = 300, n = 26}) => {
+  const R = 1500;
+  const wedges = Array.from({length: n}, (_, i) => {
+    const a0 = (i / n) * Math.PI * 2, a1 = ((i + 0.5) / n) * Math.PI * 2;
+    const p = (a: number) => `${cx + Math.cos(a) * R} ${cy + Math.sin(a) * R}`;
+    return <polygon key={i} points={`${cx},${cy} ${p(a0)} ${p(a1)}`} fill={M.ray} opacity={0.18} />;
+  });
+  return <g>{wedges}</g>;
+};
+
+// bright energy background: saturated radial + sunburst + spotlight + dark vignette
+const EnergyBG: React.FC<{burstX?: number; sun?: boolean}> = ({burstX = 850, sun = true}) => (
+  <>
+    <rect x={0} y={0} width={1280} height={720} fill="url(#bggrad)" />
+    {sun && <Sunburst cx={burstX} cy={310} />}
+    <rect x={0} y={0} width={1280} height={720} fill="url(#spot)" />
+    <rect x={0} y={0} width={1280} height={720} fill="url(#vig)" />
+  </>
 );
 
-const Bars: React.FC<{y: number}> = ({y}) => (
-  <g filter="url(#troughT)">{[60, 180, 300, 430, 560, 1060, 1180].map((x, i) => {const h = 90 + ((i * 67) % 150); return <rect key={i} x={x} y={y - h} width={64} height={h} fill={PAPER} stroke={INK} strokeWidth={3} />;})}</g>
+// heavy stroked ALL-CAPS text (outlined + shadow) — legible on any bright bg
+const Punch: React.FC<{x: number; y: number; fs: number; fill?: string; children: React.ReactNode; anchor?: string; angle?: number; sw?: number}> =
+({x, y, fs, fill = '#ffffff', children, anchor = 'start', angle = 0, sw}) => (
+  <text x={x} y={y} textAnchor={anchor} fontFamily={SANS} fontSize={fs} fontWeight={900}
+    fill={fill} stroke="#000" strokeWidth={sw ?? Math.max(6, fs * 0.09)} paintOrder="stroke"
+    strokeLinejoin="round" filter="url(#txtsh)" transform={angle ? `rotate(${angle} ${x} ${y})` : undefined}>{children}</text>
 );
 
-// big hand-drawn head with an expression (for THE FACE / THE QUESTION)
-const BigHead: React.FC<{cx: number; cy: number; r: number; mood?: string; sil?: boolean}> = ({cx, cy, r, mood = 'smug', sil = false}) => {
-  // "shock" = face-of-fear (the #1 CTR lever when you have no real faces): huge eyes, open mouth,
-  // raised brows, a sweat drop. Pushed past what a real face can do — that's the point.
-  const shock = mood === 'shock' || mood === 'fear' || mood === 'worried';
-  const em = shock ? 1.55 : 1;
-  const ew = r * 0.16 * em, eh = r * 0.2 * em, ex = r * 0.4, ey = r * 0.18;
-  const fill = sil ? INK : PAPER;
-  if (sil) return <g filter="url(#troughT)"><circle cx={cx} cy={cy} r={r} fill={INK} /></g>;
+// hot-accent keyword on a siren pill (breaking-news pop), slight angle
+const KeyPill: React.FC<{x: number; y: number; fs: number; label: string; anchor?: string; angle?: number; maxW?: number}> =
+({x, y, fs, label, anchor = 'start', angle = -5, maxW = 660}) => {
+  const ff = Math.min(fs, Math.floor((maxW - 56) / Math.max(label.length * 0.6, 1)));  // auto-fit long labels
+  const w = label.length * ff * 0.62 + 52, h = ff * 1.36;
+  const px = anchor === 'middle' ? x - w / 2 : x;
   return (
-    <g filter="url(#troughT)">
-      <circle cx={cx} cy={cy} r={r} fill={fill} stroke={INK} strokeWidth={r * 0.07} />
-      {/* brows (raised high for shock) */}
-      {shock ? (<>
-        <path d={`M ${cx - ex - ew} ${cy - ey - eh - 24} q ${ew} ${-14} ${ew * 2} ${-2}`} fill="none" stroke={INK} strokeWidth={r * 0.05} strokeLinecap="round" />
-        <path d={`M ${cx + ex - ew} ${cy - ey - eh - 24} q ${ew} ${-2} ${ew * 2} ${-14}`} fill="none" stroke={INK} strokeWidth={r * 0.05} strokeLinecap="round" />
-      </>) : (<>
-        <path d={`M ${cx - ex - ew} ${cy - ey - eh - 14} q ${ew} ${mood === 'cold' ? 6 : -10} ${ew * 2} ${mood === 'smug' ? 2 : -2}`} fill="none" stroke={INK} strokeWidth={r * 0.05} strokeLinecap="round" />
-        <path d={`M ${cx + ex - ew} ${cy - ey - eh - 14} q ${ew} ${mood === 'smug' ? 2 : -2} ${ew * 2} ${mood === 'cold' ? 6 : -10}`} fill="none" stroke={INK} strokeWidth={r * 0.05} strokeLinecap="round" />
-      </>)}
-      {/* eyes */}
-      <ellipse cx={cx - ex} cy={cy - ey} rx={ew} ry={eh} fill={PAPER} stroke={INK} strokeWidth={r * 0.04} />
-      <ellipse cx={cx + ex} cy={cy - ey} rx={ew} ry={eh} fill={PAPER} stroke={INK} strokeWidth={r * 0.04} />
-      <circle cx={cx - ex + 2} cy={cy - ey + 3} r={ew * 0.5} fill={INK} />
-      <circle cx={cx + ex + 2} cy={cy - ey + 3} r={ew * 0.5} fill={INK} />
-      {/* mouth: shock open O / smug smirk / cold flat / hardened down */}
-      {shock
-        ? <ellipse cx={cx} cy={cy + r * 0.46} rx={r * 0.18} ry={r * 0.24} fill={INK} />
-        : <path d={mood === 'cold' ? `M ${cx - r * 0.3} ${cy + r * 0.45} L ${cx + r * 0.3} ${cy + r * 0.45}`
-            : mood === 'hollow' ? `M ${cx - r * 0.3} ${cy + r * 0.5} q ${r * 0.3} ${-r * 0.2} ${r * 0.6} 0`
-            : `M ${cx - r * 0.3} ${cy + r * 0.42} q ${r * 0.32} ${r * 0.22} ${r * 0.62} ${-r * 0.04}`}
-            fill="none" stroke={INK} strokeWidth={r * 0.06} strokeLinecap="round" />}
-      {/* hair tuft */}
-      <path d={`M ${cx - r * 0.5} ${cy - r * 0.82} q ${r * 0.2} ${-r * 0.3} ${r * 0.45} ${-r * 0.05} q ${r * 0.2} ${-r * 0.25} ${r * 0.4} ${r * 0.02}`} fill="none" stroke={INK} strokeWidth={r * 0.06} strokeLinecap="round" />
-      {/* sweat drop (shock only) */}
-      {shock && <path d={`M ${cx + r * 0.74} ${cy - r * 0.2} q ${r * 0.12} ${r * 0.16} 0 ${r * 0.28} q ${-r * 0.12} ${-r * 0.12} 0 ${-r * 0.28}`} fill="#7fb8d8" stroke={INK} strokeWidth={r * 0.025} />}
+    <g transform={`rotate(${angle} ${x} ${y})`}>
+      <rect x={px} y={y - h * 0.8} width={w} height={h} rx={12} fill="#E00000" stroke="#000" strokeWidth={5} filter="url(#txtsh)" />
+      <text x={px + w / 2} y={y + ff * 0.06} textAnchor="middle" fontFamily={SANS} fontSize={ff} fontWeight={900}
+        fill={M.accent} stroke="#000" strokeWidth={Math.max(4, ff * 0.06)} paintOrder="stroke" strokeLinejoin="round">{label}</text>
     </g>
   );
 };
 
-const Wrap: React.FC<{bg?: string; children: React.ReactNode}> = ({bg = PAPER, children}) => (
-  <AbsoluteFill style={{backgroundColor: bg}}>
-    <svg viewBox="0 0 1280 720" width="100%" height="100%"><Defs />{children}</svg>
+// diagonal danger tape band with a keyword (on-brand for military/crime)
+const Tape: React.FC<{y: number; label: string}> = ({y, label}) => (
+  <g transform={`rotate(-6 640 ${y})`}>
+    <rect x={-40} y={y - 46} width={1360} height={92} fill={M.accent} stroke="#000" strokeWidth={5} />
+    <g clipPath="none">{Array.from({length: 40}, (_, i) => <rect key={i} x={-40 + i * 36} y={y - 46} width={16} height={92} fill="#000" opacity={0.16} transform={`skewX(-20)`} />)}</g>
+    <text x={640} y={y + 20} textAnchor="middle" fontFamily={SANS} fontSize={58} fontWeight={900} fill="#000">{label}</text>
+  </g>
+);
+
+const Hero: React.FC<{x: number; y: number; scale: number; facing?: number; expr?: any; pose?: any; pal?: any}> =
+({x, y, scale, facing = -1, expr, pose, pal = LIGHT}) => (
+  <g filter="url(#heroPop)"><StickFigure pose={pose ?? A.stand(0)} x={x} y={y} scale={scale} facing={facing} view="front" expr={expr} pal={pal} rough frame={0} /></g>
+);
+
+const Wrap: React.FC<{children: React.ReactNode; burstX?: number; sun?: boolean}> = ({children, burstX, sun}) => (
+  <AbsoluteFill style={{backgroundColor: M.rim}}>
+    <svg viewBox="0 0 1280 720" width="100%" height="100%"><Defs /><EnergyBG burstX={burstX} sun={sun} />{children}</svg>
   </AbsoluteFill>
 );
 
-// ---- 1. THE CLIMB — profession + $0→$X + ascending bars + figure (the original look) ----
-const ThumbClimb: React.FC = () => {
-  const big = Math.min(128, Math.floor(1150 / (Math.max(L1.length, L2.length, 1) * 0.62)));
+const face = (name: string, fb = 'cold') => (FACES as any)[t.expr || name] || (FACES as any)[fb] || FACES.cold;
+
+// big expressive head (shock = fear-of-God: huge eyes, O-mouth, sweat) for FACE/QUESTION
+const BigHead: React.FC<{cx: number; cy: number; r: number; mood?: string; sil?: boolean}> = ({cx, cy, r, mood = 'shock', sil = false}) => {
+  const shock = mood === 'shock' || mood === 'fear' || mood === 'worried';
+  const em = shock ? 1.6 : 1;
+  const ew = r * 0.17 * em, eh = r * 0.21 * em, ex = r * 0.4, ey = r * 0.16;
+  if (sil) return <g filter="url(#heroPop)"><circle cx={cx} cy={cy} r={r} fill={INK} /></g>;
   return (
-    <Wrap>
-      <Bars y={720} />
-      <line x1={0} y1={720} x2={1280} y2={720} stroke={INK} strokeWidth={4} />
-      <g filter="url(#tdrop)"><StickFigure pose={A.stand(0)} x={1040} y={700} scale={4.3} facing={1} view="front" expr={EXPR} pal={LIGHT} rough frame={0} /></g>
-      <text x={66} y={140} fontFamily={SANS} fontSize={54} fontWeight={800} letterSpacing={2} fill={INK}>{KICKER}</text>
-      <text x={64} y={272} fontFamily={SANS} fontSize={big} fontWeight={800} fill={INK}>{L1}</text>
-      {L2 ? <text x={64} y={272 + big} fontFamily={SANS} fontSize={big} fontWeight={800} fill={INK}>{L2}</text> : null}
-      <GoldPill x={66} y={(L2 ? 272 + big : 272) + 40} w={Math.max(360, TAG.length * 28)} h={68} label={TAG} fs={48} />
+    <g filter="url(#heroPop)">
+      <circle cx={cx} cy={cy} r={r} fill={PAPER} stroke={INK} strokeWidth={r * 0.07} />
+      {shock ? (<>
+        <path d={`M ${cx - ex - ew} ${cy - ey - eh - 26} q ${ew} ${-16} ${ew * 2} ${-2}`} fill="none" stroke={INK} strokeWidth={r * 0.055} strokeLinecap="round" />
+        <path d={`M ${cx + ex - ew} ${cy - ey - eh - 26} q ${ew} ${-2} ${ew * 2} ${-16}`} fill="none" stroke={INK} strokeWidth={r * 0.055} strokeLinecap="round" />
+      </>) : (<>
+        <path d={`M ${cx - ex - ew} ${cy - ey - eh - 14} q ${ew} ${mood === 'cold' ? 6 : -10} ${ew * 2} ${-2}`} fill="none" stroke={INK} strokeWidth={r * 0.05} strokeLinecap="round" />
+        <path d={`M ${cx + ex - ew} ${cy - ey - eh - 14} q ${ew} ${-2} ${ew * 2} ${mood === 'cold' ? 6 : -10}`} fill="none" stroke={INK} strokeWidth={r * 0.05} strokeLinecap="round" />
+      </>)}
+      <ellipse cx={cx - ex} cy={cy - ey} rx={ew} ry={eh} fill="#fff" stroke={INK} strokeWidth={r * 0.04} />
+      <ellipse cx={cx + ex} cy={cy - ey} rx={ew} ry={eh} fill="#fff" stroke={INK} strokeWidth={r * 0.04} />
+      <circle cx={cx - ex + 2} cy={cy - ey + 3} r={ew * (shock ? 0.32 : 0.5)} fill={INK} />
+      <circle cx={cx + ex + 2} cy={cy - ey + 3} r={ew * (shock ? 0.32 : 0.5)} fill={INK} />
+      {shock
+        ? <ellipse cx={cx} cy={cy + r * 0.48} rx={r * 0.19} ry={r * 0.26} fill={INK} />
+        : <path d={mood === 'cold' ? `M ${cx - r * 0.3} ${cy + r * 0.45} L ${cx + r * 0.3} ${cy + r * 0.45}` : `M ${cx - r * 0.3} ${cy + r * 0.42} q ${r * 0.32} ${r * 0.22} ${r * 0.62} ${-r * 0.04}`}
+            fill="none" stroke={INK} strokeWidth={r * 0.06} strokeLinecap="round" />}
+      <path d={`M ${cx - r * 0.5} ${cy - r * 0.82} q ${r * 0.2} ${-r * 0.3} ${r * 0.45} ${-r * 0.05} q ${r * 0.2} ${-r * 0.25} ${r * 0.4} ${r * 0.02}`} fill="none" stroke={INK} strokeWidth={r * 0.06} strokeLinecap="round" />
+      {shock && <>
+        <path d={`M ${cx + r * 0.78} ${cy - r * 0.16} q ${r * 0.12} ${r * 0.16} 0 ${r * 0.28} q ${-r * 0.12} ${-r * 0.12} 0 ${-r * 0.28}`} fill="#4FC3F7" stroke={INK} strokeWidth={r * 0.025} />
+        <path d={`M ${cx - r * 0.8} ${cy - r * 0.02} q ${r * 0.1} ${r * 0.14} 0 ${r * 0.24} q ${-r * 0.1} ${-r * 0.1} 0 ${-r * 0.24}`} fill="#4FC3F7" stroke={INK} strokeWidth={r * 0.022} />
+      </>}
+    </g>
+  );
+};
+
+// curved hand-drawn arrow (caption/eyeline -> subject)
+const Arrow: React.FC<{d: string; heads: string}> = ({d, heads}) => (
+  <g filter="url(#rough)" stroke={M.accent} strokeWidth={12} fill="none" strokeLinecap="round" paintOrder="stroke">
+    <path d={d} stroke="#000" strokeWidth={20} /><path d={d} />
+    <path d={heads} stroke="#000" strokeWidth={20} /><path d={heads} />
+  </g>
+);
+
+// ==================== ARCHETYPES ====================
+
+// POV (PRIMARY) — glowing hero + "YOU [VERB]" + KEYWORD pill + arrow, on the danger burst
+const ThumbPov: React.FC = () => {
+  const kw = Math.min(196, Math.floor(660 / Math.max(KEYWORD.length, 1)));
+  return (
+    <Wrap burstX={985}>
+      <Hero x={1030} y={724} scale={4.3} facing={-1} expr={face('worried', 'worried')} />
+      <Punch x={78} y={168} fs={86}>{POVLINE}</Punch>
+      <KeyPill x={100} y={168 + kw + 46} fs={kw} label={KEYWORD} angle={-5} maxW={640} />
+      <Arrow d="M 600 300 Q 780 210 905 305" heads="M 905 305 L 861 286 M 905 305 L 881 341" />
     </Wrap>
   );
 };
 
-// ---- 2. THE NUMBER — one giant apex number, tiny figure dwarfed, crimson pop ----
+// THE NUMBER — one colossal apex number, tiny dwarfed hero, siren underline
 const ThumbNumber: React.FC = () => {
-  const fs = Math.min(440, Math.floor(1240 / Math.max(BIG.length, 1) * 1.55));
-  const uw = Math.min(900, BIG.length * fs * 0.42); // underline ~ number width
+  const fs = Math.min(480, Math.floor(1300 / Math.max(BIG.length, 1) * 1.6));
   return (
-    <Wrap>
-      <text x={66} y={104} fontFamily={SANS} fontSize={44} fontWeight={800} letterSpacing={3} fill={INK}>{KICKER} {L1}{L2 ? ' ' + L2 : ''}</text>
-      <text x={600} y={460} textAnchor="middle" fontFamily={SANS} fontSize={fs} fontWeight={800} letterSpacing={-6} fill={INK}>{BIG}</text>
-      {/* crimson UNDERLINE under the number (emphasis, not a strike-through) */}
-      <rect x={600 - uw / 2} y={500} width={uw} height={30} rx={4} fill={POP.crimson} />
-      <text x={66} y={684} fontFamily={SANS} fontSize={50} fontWeight={800} fill={POP.crimson}>{TAG}</text>
-      <StickFigure pose={A.lookUp(0)} x={1170} y={712} scale={2.5} facing={-1} view="front" expr={(FACES as any)[t.expr || 'worried'] || FACES.worried} pal={LIGHT} rough frame={0} />
+    <Wrap burstX={600}>
+      <Punch x={640} y={170} fs={50} anchor="middle">{(KICKER + ' ' + L1).trim()}</Punch>
+      <Punch x={600} y={470} fs={fs} anchor="middle" sw={fs * 0.06}>{BIG}</Punch>
+      <rect x={600 - Math.min(820, BIG.length * fs * 0.4) / 2} y={505} width={Math.min(820, BIG.length * fs * 0.4)} height={34} rx={6} fill={M.accent} stroke="#000" strokeWidth={5} />
+      {TAG ? <KeyPill x={640} y={660} fs={58} label={TAG} anchor="middle" angle={-4} /> : null}
+      <Hero x={1180} y={716} scale={2.7} facing={-1} expr={face('worried')} pose={A.lookUp(0)} />
     </Wrap>
   );
 };
 
-// ---- 3. THE FACE — big expressive head + bold word, teal band ----
+// THE FACE — huge shock head + bold word
 const ThumbFace: React.FC = () => (
-  <Wrap>
-    <rect x={760} y={0} width={520} height={720} fill={POP.teal} opacity={0.16} />
-    <text x={60} y={150} fontFamily={SANS} fontSize={48} fontWeight={800} letterSpacing={2} fill={INK}>{KICKER}</text>
-    <text x={58} y={320} fontFamily={SANS} fontSize={132} fontWeight={800} fill={INK}>{L1}</text>
-    {L2 ? <text x={58} y={452} fontFamily={SANS} fontSize={132} fontWeight={800} fill={INK}>{L2}</text> : null}
-    <rect x={60} y={(L2 ? 452 : 320) + 36} width={Math.max(320, TAG.length * 26)} height={62} rx={6} fill={POP.teal} />
-    <text x={60 + Math.max(320, TAG.length * 26) / 2} y={(L2 ? 452 : 320) + 80} textAnchor="middle" fontFamily={SANS} fontSize={44} fontWeight={800} fill="#fff">{TAG}</text>
-    <BigHead cx={1010} cy={330} r={250} mood={t.expr || 'smug'} />
+  <Wrap burstX={1010}>
+    <Punch x={60} y={190} fs={64}>{L1 || KEYWORD}</Punch>
+    {L2 ? <Punch x={60} y={330} fs={120}>{L2}</Punch> : null}
+    {TAG ? <KeyPill x={70} y={L2 ? 470 : 320} fs={78} label={TAG} angle={-5} /> : null}
+    <BigHead cx={1000} cy={340} r={270} mood={t.expr || 'shock'} />
   </Wrap>
 );
 
-// ---- 4. THE SETTING — the topic's own scene behind a bold word ----
+// THE QUESTION — curiosity line + silhouette
+const ThumbQuestion: React.FC = () => {
+  const words = QUESTION.split(' '); const lines: string[] = []; let cur = '';
+  for (const w of words) { if ((cur + ' ' + w).trim().length > 12) { lines.push(cur.trim()); cur = w; } else cur = (cur + ' ' + w).trim(); }
+  if (cur) lines.push(cur);
+  return (
+    <Wrap burstX={1060}>
+      {lines.map((ln, i) => <Punch key={i} x={70} y={250 + i * 128} fs={116} fill={i === lines.length - 1 ? M.accent : '#fff'}>{ln}</Punch>)}
+      <BigHead cx={1080} cy={430} r={230} sil />
+    </Wrap>
+  );
+};
+
+// SCALE-TERROR — tiny hero dwarfed by a huge looming threat
+const ThumbScaleTerror: React.FC = () => {
+  const kw = Math.min(160, Math.floor(760 / Math.max(KEYWORD.length, 1) * 1.05));
+  return (
+    <Wrap burstX={940} sun={false}>
+      <Sunburst cx={940} cy={300} n={30} />
+      <g opacity={0.92} filter="url(#heroPop)"><circle cx={940} cy={300} r={260} fill={INK} /><path d="M 690 560 Q 940 470 1190 560 L 1260 1090 L 620 1090 Z" fill={INK} /></g>
+      <Hero x={300} y={700} scale={1.6} facing={1} expr={face('worried')} pose={A.lookUp(0)} />
+      <Punch x={70} y={150} fs={48}>{(KICKER + ' ' + L1).trim()}</Punch>
+      <KeyPill x={78} y={150 + kw} fs={kw} label={KEYWORD} angle={-5} />
+    </Wrap>
+  );
+};
+
+// REDACTED — withheld element (rough black box + red ?)
+const ThumbRedacted: React.FC = () => (
+  <Wrap burstX={1050}>
+    <Hero x={1055} y={724} scale={4.3} facing={-1} expr={face('cold')} />
+    <g filter="url(#rough)" transform="rotate(-3 340 430)">
+      <rect x={120} y={300} width={450} height={270} rx={12} fill={INK} stroke="#fff" strokeWidth={6} />
+      <text x={345} y={505} textAnchor="middle" fontFamily={SANS} fontSize={220} fontWeight={900} fill={M.accent} stroke="#000" strokeWidth={8} paintOrder="stroke">?</text>
+    </g>
+    <Punch x={120} y={650} fs={Math.min(120, Math.floor(900 / Math.max(KEYWORD.length, 1)))} fill={M.accent}>{KEYWORD}</Punch>
+  </Wrap>
+);
+
+// EYELINE — gaze + arrow at a partly-shown mystery
+const ThumbEyeline: React.FC = () => (
+  <Wrap burstX={360}>
+    <Hero x={345} y={724} scale={4.1} facing={1} expr={face('worried')} pose={A.lookUp(0)} />
+    <g filter="url(#rough)"><rect x={1090} y={300} width={280} height={440} rx={16} fill={INK} stroke="#fff" strokeWidth={7} /><text x={1190} y={585} textAnchor="middle" fontFamily={SANS} fontSize={240} fontWeight={900} fill={M.accent} stroke="#000" strokeWidth={9} paintOrder="stroke">?</text></g>
+    <Arrow d="M 560 360 Q 830 280 1075 430" heads="M 1075 430 L 1032 414 M 1075 430 L 1050 464" />
+    <Punch x={70} y={680} fs={Math.min(112, Math.floor(940 / Math.max(KEYWORD.length, 1)))} fill={M.accent}>{KEYWORD}</Punch>
+  </Wrap>
+);
+
+// LADDER — the "every level" promise: rising steps, tiny climber -> big apex hero
+const ThumbLadder: React.FC = () => {
+  const baseY = 694, sw = 150, sh = 80;
+  const steps = [0, 1, 2, 3].map((i) => ({x: 540 + i * sw, top: baseY - (i + 1) * sh}));
+  return (
+    <Wrap burstX={steps[3].x} sun={false}>
+      {steps.map((s, i) => <rect key={i} x={s.x} y={s.top} width={sw} height={baseY - s.top} fill="#fff" opacity={0.16} stroke="#fff" strokeWidth={4} />)}
+      <Hero x={470} y={baseY} scale={1.2} facing={1} expr={FACES.earnest} />
+      <Hero x={steps[3].x + sw / 2} y={steps[3].top} scale={1.8} facing={-1} expr={face('smug')} />
+      <Punch x={64} y={150} fs={54}>{KICKER}</Punch>
+      <Punch x={62} y={270} fs={Math.min(140, Math.floor(900 / Math.max(L1.length, 1)))}>{L1}</Punch>
+      {BIG ? <KeyPill x={72} y={360} fs={72} label={BIG} angle={-4} /> : null}
+    </Wrap>
+  );
+};
+
+// BEFORE/AFTER — dim "nobody" vs blazing apex
+const ThumbBefore: React.FC = () => (
+  <Wrap burstX={968} sun={false}>
+    <Sunburst cx={968} cy={310} />
+    <line x1={640} y1={150} x2={640} y2={720} stroke="#000" strokeWidth={8} opacity={0.5} />
+    <g opacity={0.5}><StickFigure pose={A.stand(0)} x={320} y={716} scale={2.8} facing={1} view="front" expr={FACES.earnest} pal={SIL} rough frame={0} /></g>
+    <Punch x={320} y={180} fs={Math.min(92, Math.floor(640 / Math.max(BEFORE.length, 1)))} anchor="middle" fill="#cfcfcf">{BEFORE}</Punch>
+    <Hero x={968} y={716} scale={3.0} facing={-1} expr={face('smug')} />
+    <Punch x={968} y={180} fs={Math.min(104, Math.floor(760 / Math.max(AFTER.length, 1)))} anchor="middle" fill={M.accent}>{AFTER}</Punch>
+    <Arrow d="M 470 250 Q 640 160 800 235" heads="M 800 235 L 758 218 M 800 235 L 776 272" />
+  </Wrap>
+);
+
+// SETTING — the topic's own scene, darkened, under a bold reversed title
 const ThumbSetting: React.FC = () => {
   const Art = TEMPLATES[SETTING] || TEMPLATES['desk'];
-  const big = Math.min(118, Math.floor(1120 / (Math.max(L1.length, L2.length, 1) * 0.62)));
-  const bandH = (L2 ? big * 2 + 60 : big + 60);
+  const big = Math.min(120, Math.floor(1120 / (Math.max(L1.length, L2.length, 1) * 0.62)));
   return (
-    <AbsoluteFill style={{backgroundColor: PAPER}}>
-      <AbsoluteFill>{Art ? <Art /> : null}</AbsoluteFill>
+    <AbsoluteFill style={{backgroundColor: M.rim}}>
+      <AbsoluteFill style={{filter: 'saturate(1.2) contrast(1.1) brightness(0.9)'}}>{Art ? <Art /> : null}</AbsoluteFill>
       <svg viewBox="0 0 1280 720" width="100%" height="100%"><Defs />
-        {/* solid ink band, top — high-contrast reversed-out title over the scene */}
-        <rect x={0} y={0} width={1280} height={bandH + 70} fill={INK} />
-        <text x={64} y={64} fontFamily={SANS} fontSize={42} fontWeight={800} letterSpacing={2} fill={GOLD}>{KICKER}</text>
-        <text x={60} y={64 + big} fontFamily={SANS} fontSize={big} fontWeight={800} fill="#f6f2e9">{L1}</text>
-        {L2 ? <text x={60} y={64 + big * 2} fontFamily={SANS} fontSize={big} fontWeight={800} fill="#f6f2e9">{L2}</text> : null}
-        {/* tag pill, bottom-left (clear of the timestamp) */}
-        <rect x={64} y={620} width={Math.max(340, TAG.length * 27)} height={68} rx={6} fill={POP.orange} />
-        <text x={64 + Math.max(340, TAG.length * 27) / 2} y={668} textAnchor="middle" fontFamily={SANS} fontSize={46} fontWeight={800} fill="#fff">{TAG}</text>
+        <rect x={0} y={0} width={1280} height={720} fill="url(#vig)" />
+        <Punch x={60} y={140} fs={big}>{L1}</Punch>
+        {L2 ? <Punch x={60} y={140 + big} fs={big}>{L2}</Punch> : null}
+        {TAG ? <KeyPill x={70} y={650} fs={66} label={TAG} angle={-5} /> : null}
       </svg>
     </AbsoluteFill>
   );
 };
 
-// ---- 5. THE QUESTION — curiosity-gap line + silhouette, indigo pop ----
-const ThumbQuestion: React.FC = () => {
-  const words = QUESTION.toUpperCase().split(' ');
-  const lines: string[] = [];
-  let cur = '';
-  for (const w of words) { if ((cur + ' ' + w).trim().length > 12) { lines.push(cur.trim()); cur = w; } else cur = (cur + ' ' + w).trim(); }
-  if (cur) lines.push(cur);
-  return (
-    <Wrap>
-      <text x={64} y={120} fontFamily={SANS} fontSize={44} fontWeight={800} letterSpacing={2} fill={INK}>{KICKER} {L1}{L2 ? ' ' + L2 : ''}</text>
-      <rect x={0} y={170} width={64} height={ lines.length * 132 + 30 } fill={POP.indigo} />
-      {lines.map((ln, i) => <text key={i} x={96} y={300 + i * 132} fontFamily={SANS} fontSize={120} fontWeight={800} fill={i === lines.length - 1 ? POP.indigo : INK}>{ln}</text>)}
-      <BigHead cx={1080} cy={420} r={210} sil />
-    </Wrap>
-  );
-};
-
-// ---- POV (MasterPOVs formula) — hero figure + "YOU [VERB] / KEYWORD"(red) + curved arrow ----
-const ThumbPov: React.FC = () => {
-  const mood = (FACES as any)[t.expr || 'cold'] || FACES.cold;
-  const kw = Math.min(170, Math.floor(1010 / Math.max(KEYWORD.length, 1) * 0.95));
-  return (
-    <Wrap>
-      {/* hero figure, right — lifted off the paper with a soft drop-shadow */}
-      <g filter="url(#tdrop)"><StickFigure pose={A.stand(0)} x={1045} y={706} scale={4.5} facing={-1} view="front" expr={mood} pal={LIGHT} rough frame={0} /></g>
-      {/* second-person caption, left: verb phrase (ink) + KEY WORD (red) */}
-      <text x={74} y={296} fontFamily={SANS} fontSize={74} fontWeight={800} letterSpacing={2} fill={INK}>{POVLINE}</text>
-      <text x={70} y={300 + kw} fontFamily={SANS} fontSize={kw} fontWeight={800} letterSpacing={-1} fill={RED}>{KEYWORD}</text>
-      {/* hand-drawn curved arrow: caption -> figure */}
-      <g filter="url(#troughT)" stroke={INK} strokeWidth={9} fill="none" strokeLinecap="round">
-        <path d="M 660 250 Q 800 150 905 235" />
-        <path d="M 905 235 L 866 216 M 905 235 L 882 272" />
-      </g>
-    </Wrap>
-  );
-};
-
-// ---- 6. THE LADDER — visualizes the "every level" promise: rising steps, tiny climber -> big apex ----
-const ThumbLadder: React.FC = () => {
-  const mood = (FACES as any)[t.expr || 'smug'] || FACES.smug;
-  const baseY = 692, sw = 150, sh = 78; // step width / rise per step (lower top step so the hero fits)
-  const steps = [0, 1, 2, 3].map((i) => ({x: 540 + i * sw, top: baseY - (i + 1) * sh}));
-  return (
-    <Wrap>
-      <line x1={0} y1={baseY} x2={1280} y2={baseY} stroke={INK} strokeWidth={4} />
-      {steps.map((s, i) => <rect key={i} x={s.x} y={s.top} width={sw} height={baseY - s.top} fill={PAPER} stroke={INK} strokeWidth={4} />)}
-      {/* tiny climber at the bottom, big hero on the top step */}
-      <StickFigure pose={A.stand(0)} x={470} y={baseY} scale={1.15} facing={1} view="front" expr={FACES.earnest} pal={LIGHT} rough frame={0} />
-      <g filter="url(#tdrop)"><StickFigure pose={A.stand(0)} x={steps[3].x + sw / 2} y={steps[3].top} scale={1.7} facing={-1} view="front" expr={mood} pal={LIGHT} rough frame={0} /></g>
-      <text x={64} y={120} fontFamily={SANS} fontSize={52} fontWeight={800} letterSpacing={2} fill={INK}>{KICKER}</text>
-      <text x={62} y={236} fontFamily={SANS} fontSize={Math.min(132, Math.floor(900 / Math.max(L1.length, 1)))} fontWeight={800} fill={INK}>{L1}</text>
-      <GoldPill x={62} y={288} w={Math.max(300, BIG.length * 48)} h={80} label={BIG} fs={56} />
-    </Wrap>
-  );
-};
-
-// ---- 7. THE BEFORE/AFTER — dim "nobody" vs bold apex, split down the middle (transformation hook) ----
-const ThumbBefore: React.FC = () => {
-  const mood = (FACES as any)[t.expr || 'smug'] || FACES.smug;
-  return (
-    <Wrap>
-      <line x1={640} y1={150} x2={640} y2={720} stroke={INK} strokeWidth={6} />
-      <text x={640} y={70} textAnchor="middle" fontFamily={SANS} fontSize={42} fontWeight={800} letterSpacing={2} fill={INK}>{KICKER} {L1}</text>
-      {/* BEFORE — left, dim, smaller + lower so the label clears the head */}
-      <StickFigure pose={A.stand(0)} x={320} y={714} scale={2.7} facing={1} view="front" expr={FACES.earnest} pal={SIL} rough frame={0} />
-      <text x={320} y={176} textAnchor="middle" fontFamily={SANS} fontSize={Math.min(86, Math.floor(620 / Math.max(BEFORE.length, 1)))} fontWeight={800} fill={INK} opacity={0.5}>{BEFORE}</text>
-      {/* AFTER — right, bold + red, lifted off the page */}
-      <g filter="url(#tdrop)"><StickFigure pose={A.stand(0)} x={968} y={714} scale={2.9} facing={-1} view="front" expr={mood} pal={LIGHT} rough frame={0} /></g>
-      <text x={968} y={176} textAnchor="middle" fontFamily={SANS} fontSize={Math.min(96, Math.floor(740 / Math.max(AFTER.length, 1)))} fontWeight={800} fill={RED}>{AFTER}</text>
-      {/* premium finish: hand-drawn curved arrow before -> after + metallic-gold apex pill on the divide */}
-      <g filter="url(#troughT)" stroke={INK} strokeWidth={9} fill="none" strokeLinecap="round">
-        <path d="M 470 250 Q 640 165 800 235" />
-        <path d="M 800 235 L 760 218 M 800 235 L 777 271" />
-      </g>
-      {BIG ? <GoldPill x={640 - Math.max(300, BIG.length * 48) / 2} y={610} w={Math.max(300, BIG.length * 48)} h={80} label={BIG} fs={56} /> : null}
-    </Wrap>
-  );
-};
-
-// ---- 8. SCALE-TERROR — tiny hero dwarfed by a huge looming threat ("how does he survive THAT?") ----
-const ThumbScaleTerror: React.FC = () => {
-  const mood = (FACES as any)[t.expr || 'worried'] || FACES.worried;
-  const kw = Math.min(150, Math.floor(900 / Math.max(KEYWORD.length, 1) * 0.95));
-  return (
-    <Wrap>
-      {/* colossal ominous silhouette looming over the frame */}
-      <g opacity={0.85} filter="url(#troughT)">
-        <circle cx={940} cy={300} r={250} fill={INK} />
-        <path d="M 700 560 Q 940 470 1180 560 L 1250 1080 L 630 1080 Z" fill={INK} />
-      </g>
-      {/* tiny hero, lower-left, craning up at it */}
-      <StickFigure pose={A.lookUp(0)} x={300} y={694} scale={1.5} facing={1} view="front" expr={mood} pal={LIGHT} rough frame={0} />
-      <text x={70} y={140} fontFamily={SANS} fontSize={44} fontWeight={800} letterSpacing={2} fill={INK}>{KICKER} {L1}</text>
-      <text x={66} y={140 + kw} fontFamily={SANS} fontSize={kw} fontWeight={800} letterSpacing={-1} fill={RED}>{KEYWORD}</text>
-    </Wrap>
-  );
-};
-
-// ---- 9. REDACTED — block the key element so the brain MUST resolve it (~+43% CTR from obscuring) ----
-const ThumbRedacted: React.FC = () => {
-  const mood = (FACES as any)[t.expr || 'cold'] || FACES.cold;
-  return (
-    <Wrap>
-      <g filter="url(#tdrop)"><StickFigure pose={A.stand(0)} x={1050} y={706} scale={4.3} facing={-1} view="front" expr={mood} pal={LIGHT} rough frame={0} /></g>
-      {/* the withheld element: a rough black redaction box with a red ? */}
-      <g filter="url(#troughT)" transform="rotate(-3 340 430)">
-        <rect x={120} y={300} width={440} height={260} rx={10} fill={INK} />
-        <text x={340} y={500} textAnchor="middle" fontFamily={SANS} fontSize={210} fontWeight={800} fill={RED}>?</text>
-      </g>
-      <text x={70} y={140} fontFamily={SANS} fontSize={44} fontWeight={800} letterSpacing={2} fill={INK}>{KICKER} {L1}</text>
-      <text x={120} y={650} fontFamily={SANS} fontSize={Math.min(116, Math.floor(900 / Math.max(KEYWORD.length, 1)))} fontWeight={800} fill={RED}>{KEYWORD}</text>
-    </Wrap>
-  );
-};
-
-// ---- 10. EYELINE — hero's gaze + arrow aimed at a PARTLY-shown mystery (fixes "arrow at nothing") ----
-const ThumbEyeline: React.FC = () => {
-  const mood = (FACES as any)[t.expr || 'worried'] || FACES.worried;
-  return (
-    <Wrap>
-      <g filter="url(#tdrop)"><StickFigure pose={A.lookUp(0)} x={330} y={706} scale={4.1} facing={1} view="front" expr={mood} pal={LIGHT} rough frame={0} /></g>
-      {/* partly-shown glowing mystery at the right edge (half off-frame = withheld) */}
-      <g filter="url(#troughT)">
-        <rect x={1095} y={300} width={260} height={430} rx={14} fill="url(#tgold)" stroke={INK} strokeWidth={6} opacity={0.94} />
-        <text x={1185} y={580} textAnchor="middle" fontFamily={SANS} fontSize={230} fontWeight={800} fill={INK}>?</text>
-      </g>
-      {/* curved arrow from the hero's eyeline -> the mystery */}
-      <g filter="url(#troughT)" stroke={INK} strokeWidth={9} fill="none" strokeLinecap="round">
-        <path d="M 540 360 Q 820 280 1075 430" />
-        <path d="M 1075 430 L 1034 414 M 1075 430 L 1050 462" />
-      </g>
-      <text x={70} y={140} fontFamily={SANS} fontSize={44} fontWeight={800} letterSpacing={2} fill={INK}>{KICKER} {L1}</text>
-      <text x={70} y={684} fontFamily={SANS} fontSize={Math.min(108, Math.floor(900 / Math.max(KEYWORD.length, 1)))} fontWeight={800} fill={RED}>{KEYWORD}</text>
-    </Wrap>
-  );
-};
+// CLIMB (legacy, rare) — reuse ladder look
+const ThumbClimb: React.FC = ThumbLadder;
 
 const ARCHES: Record<string, React.FC> = {pov: ThumbPov, scaleterror: ThumbScaleTerror, redacted: ThumbRedacted, eyeline: ThumbEyeline, ladder: ThumbLadder, beforeafter: ThumbBefore, number: ThumbNumber, face: ThumbFace, setting: ThumbSetting, question: ThumbQuestion, climb: ThumbClimb};
-// FAVOR the intrigue archetypes (each = ONE withheld question, the 2026 high-CTR pattern). The busy
-// old "climb" is rare; "setting" only when a topic's scene is visually strong.
-const ORDER = ['pov', 'scaleterror', 'number', 'redacted', 'ladder', 'eyeline', 'beforeafter', 'question', 'scaleterror', 'pov', 'redacted', 'face', 'eyeline', 'number', 'setting', 'climb'];
+const ORDER = ['pov', 'scaleterror', 'number', 'redacted', 'ladder', 'eyeline', 'beforeafter', 'question', 'scaleterror', 'pov', 'redacted', 'face', 'eyeline', 'number', 'setting', 'ladder'];
 
-// pick: explicit archetype, else deterministic rotation by topic so consecutive videos differ
 function pick(): React.FC {
   if (t.archetype && ARCHES[t.archetype]) return ARCHES[t.archetype];
   const topic = (meta as any).topic || L1 || 'x';
@@ -324,9 +347,8 @@ export const Thumbnail: React.FC = () => {
   return <C />;
 };
 
-// individual archetypes exposed for the contact-sheet / examples
 export const ThumbAll: React.FC = () => (
-  <AbsoluteFill style={{backgroundColor: '#ccc', display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gridAutoRows: '1fr', gap: 6}}>
-    {Object.keys(ARCHES).map((k) => <div key={k} style={{position: 'relative', border: '2px solid #333'}}>{React.createElement(ARCHES[k])}<div style={{position: 'absolute', top: 4, left: 6, background: 'rgba(255,255,255,0.8)', font: '700 20px monospace', padding: '2px 6px'}}>{k}</div></div>)}
+  <AbsoluteFill style={{backgroundColor: '#111', display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gridAutoRows: '1fr', gap: 6}}>
+    {Object.keys(ARCHES).map((k) => <div key={k} style={{position: 'relative', border: '2px solid #333'}}>{React.createElement(ARCHES[k])}<div style={{position: 'absolute', top: 4, left: 6, background: 'rgba(0,0,0,0.7)', color: '#fff', font: '700 20px monospace', padding: '2px 6px'}}>{k}</div></div>)}
   </AbsoluteFill>
 );
