@@ -6,6 +6,12 @@ POV. Not a documentary ABOUT a job; a STORY where YOU are the person, rising ran
 bottom to the anonymous people at the top. Money + power + moral erosion, but felt PERSONALLY.
 Topics are dramatic / exotic / high-stakes (crime, war, empire, espionage, wealth, power, danger),
 not just white-collar careers — that is where the curiosity + clicks live.
+**FORMATS (topic_queue `format` field, same retention skeleton, different LADDER):** `rank` (default,
+"…at Every Level"), `history` ("…Every Rank in [Empire]"), `scenario` ("POV: You're a [X]" — levels
+are escalating DAYS/DECISIONS/$ not job ranks), `survival` ("Could You Survive [X]?" — levels are a
+HOUR→DAY→WEEK threat ladder). The color grade escalates by each level-start's POSITION, so any label
+vocabulary works — keep the ladder monotonic. (Proven adjacents: "POV: You're a Trillionaire" 2.1M,
+"Black Market Surgeon" 5.3M, "Could You Survive…" 7.7M — see NEXT_LEVEL_PLAN Phase 4.)
 
 ## Voice & audio  (tuned for short attention spans — see docs/bibles/ENGAGEMENT_PLAN.md)
 - Engine: **edge-tts `en-US-AndrewMultilingualNeural`**. **RATE `+8%`** (~190 WPM — faster/energetic;

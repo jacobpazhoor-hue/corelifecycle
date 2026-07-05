@@ -181,20 +181,21 @@ const ShotFade: React.FC<{dur: number; children: React.ReactNode}> = ({dur, chil
   return <AbsoluteFill style={{opacity: op}}>{children}</AbsoluteFill>;
 };
 
-const lvlOf = (lab: string | null) => {const m = lab ? /LEVEL\s*0?(\d+)/i.exec(lab) : null; return m ? parseInt(m[1], 10) : null;};
-
 export const Video2: React.FC = () => {
   const scenes = timeline.scenes as SceneT[];
-  const maxLv = scenes.reduce((mx, s) => Math.max(mx, lvlOf(s.level) ?? 0), 1);
+  // levelProgress is driven by the ORDINAL POSITION of each level-start scene (not by parsing "LEVEL
+  // N"), so the color grade escalates correctly for EVERY format — "LEVEL 05", "DAY 3", "HOUR 9",
+  // "RANK IV", "WEEK 2" — and stays monotonic even when a survival ladder mixes time units.
+  const totalLevels = scenes.filter((s) => s.level).length || 1;
   // carry the previous figure into the next count-up ONLY when the unit suffix matches
   // ("$5M / YR" -> "$500M / YR" counts 5->500; "$200 / WK" -> "$250K / YR" restarts at 0
   // instead of counting across incompatible units)
   let last: {num: number; suffix: string} | null = null;
-  let cur = 0;
+  let lvlSeen = 0;
   const out: React.ReactNode[] = [];
   for (const s of scenes) {
-    const n = lvlOf(s.level); if (n) cur = n;
-    const prog = maxLv > 1 ? Math.min(1, Math.max(0, (cur - 1) / (maxLv - 1))) : 0;
+    if (s.level) lvlSeen++;
+    const prog = totalLevels > 1 ? Math.min(1, Math.max(0, (lvlSeen - 1) / (totalLevels - 1))) : 0;
     const money = splitMoney(s.overlay?.big);
     const from = money && last && last.suffix === money.suffix ? last.num : null;
     out.push(

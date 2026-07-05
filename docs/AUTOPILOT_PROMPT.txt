@@ -12,7 +12,19 @@ once there's real view data; ignore if views are still ~0).
 
 DO, in order:
 1. TOPIC — take the first topic in ops/topic_queue.json whose slug is NOT in produced_topics.json.
-   (If all are produced, invent a new hierarchical profession; avoid sensitive/illegal ones.)
+   (If all are produced, invent a new one in the same spirit; avoid sensitive/illegal ones.)
+   READ ITS `format` FIELD — it decides the title spine, the on-screen level-label vocabulary, and the
+   thumbnail archetype. The retention skeleton below is the SAME for all formats; only the LADDER
+   changes:
+     • rank (default): a job/power ladder. Level labels "LEVEL 01 · THE …" (or "RANK I · …").
+     • history: a historical rank ladder. Level labels by rank/era ("LEVEL 03 · CENTURION").
+     • scenario ("POV: You're a [X]"): NOT a career — a single escalating situation. Levels become
+       escalating DAYS / DECISIONS / MONEY ("DAY 3 · …", "$1,000,000 · …"), each a bigger stake.
+     • survival ("Could You Survive [X]?"): a countdown threat ladder. Levels become a TIME ladder
+       "HOUR 1 · …" → "DAY 3 · …" → "WEEK 2 · …" (each stage a worse threat; the $ overlay becomes a
+       survival stat like odds, days-alive, or resources). The engine grades the color escalation by
+       each level-start's POSITION, so any label vocabulary works — just keep the ladder MONOTONIC
+       (each level-start is one step further along, no matter the unit).
 2. RESEARCH — write docs/research/<slug>.md: the real career ladder, the comp range per level (the
    on-screen $ escalation spine), and real mechanics/jargon. Hybrid: use your knowledge; verify key
    numbers on the web if reachable; FLAG anything unverified. (investment_banker.md already exists —
@@ -115,8 +127,11 @@ DO, in order:
    on two adjacent scenes. Real numbers/mechanics serve the STORY (woven into POV, never listed).
 4. PACKAGE COPY — overwrite ops/episode_meta.json (DATA, never edit .py/.tsx for copy):
    TITLE — second-person POV, **40–65 chars** (mobile truncates ~60), the hook FRONT-LOADED in the
-   first ~40 chars. Spine = `Your Life as a [X] at Every Level` (or `…at Every Rank in [X]`) PLUS a
-   stakes PARENTHETICAL that raises curiosity — parentheses/brackets lift CTR ~15–20%. e.g.
+   first ~40 chars. SPINE BY FORMAT: rank/history → `Your Life as a [X] at Every Level` / `…at Every
+   Rank in [X]`; scenario → `POV: You're a [X]` or `What It's Like to Be a [X]`; survival →
+   `Could You Survive [X]?`. THEN add a stakes PARENTHETICAL that raises curiosity — parentheses/
+   brackets lift CTR ~15–20%. (Thumbnail archetype by format: rank/history → pov / number / ladder;
+   scenario → number / pov / beforeafter; survival → question / scaleterror.) e.g.
    "Your Life as a Spy at Every Level (Most Die at Level 4)" / "(You Won't Survive Level 7)" /
    "(The Last One Is Impossible)". NEVER the generic word "Architect."
    DESCRIPTION — hook in the first 150 chars (second-person) → keyword paragraph → a BINGE/next tease
