@@ -2,7 +2,7 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 21897,
+  "totalFrames": 21835,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
@@ -271,7 +271,7 @@
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
       "startFrame": 15838,
-      "durationInFrames": 734
+      "durationInFrames": 672
     },
     {
       "id": "t22",
@@ -280,7 +280,7 @@
       "template": "commandPost",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 16572,
+      "startFrame": 16510,
       "durationInFrames": 705
     },
     {
@@ -290,7 +290,7 @@
       "template": "emptyChair",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 17277,
+      "startFrame": 17215,
       "durationInFrames": 674
     },
     {
@@ -303,7 +303,7 @@
       "template": "station",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 17951,
+      "startFrame": 17889,
       "durationInFrames": 881
     },
     {
@@ -313,7 +313,7 @@
       "template": "jet",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 18832,
+      "startFrame": 18770,
       "durationInFrames": 756
     },
     {
@@ -326,7 +326,7 @@
       "template": "frontline",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 19588,
+      "startFrame": 19526,
       "durationInFrames": 838
     },
     {
@@ -339,7 +339,7 @@
       "template": "decoration",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 20426,
+      "startFrame": 20364,
       "durationInFrames": 568
     },
     {
@@ -352,7 +352,7 @@
       "template": "bootcamp",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 20994,
+      "startFrame": 20932,
       "durationInFrames": 903
     }
   ]
