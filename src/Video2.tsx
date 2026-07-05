@@ -2,6 +2,9 @@ import React from 'react';
 import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame, Easing} from 'remotion';
 import timeline from './timeline.json';
 import {FramedScene, FOCUS, CountUp, splitMoney} from './director';
+import {shake, noise1, hash} from './anim';
+
+const seedOf = (id: string) => id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
 
 // expo-out: fast in, slow settle — the entrance easing the count-up + camera already use, applied to text
 const EXPO = Easing.bezier(0.16, 1, 0.3, 1);
@@ -78,6 +81,18 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
   const beatOp = interpolate(f, [0, fade, D - fade, D], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const focus = FOCUS[scene.template] ?? [0.5, 0.55];
   const shots = planShots(scene);
+  const seed = seedOf(scene.id);
+  const isLevel = !!scene.level;
+  // LEVEL-CUT IMPACT (synced to the stamp+thud+riser duck_music places on level cuts): a quick
+  // whip-in + decaying screen shake + a brief flash. Transform/opacity only -> render-cheap.
+  const shk = isLevel ? shake(f, 8, 8, seed) : {x: 0, y: 0, rot: 0};
+  const whip = isLevel ? interpolate(f, [0, 7], [70, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO}) : 0;
+  const flashOp = isLevel ? interpolate(f, [0, 2, 8], [0.5, 0.3, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 0;
+  // FOREGROUND OCCLUDER (parallax depth): a soft dark shape drifting past a bottom corner, faster
+  // than the camera. Kept to the edge + low opacity so it never covers the subject/text.
+  const occSide = hash(seed) > 0.5 ? 1 : -1;
+  const occX = 50 + occSide * 42 + noise1(f * 0.02, seed) * 6;   // hugs a side, slow drift
+  const occY = 96 + noise1(f * 0.017, seed + 3) * 4;
   // per-level grade derived from levelProgress (CSS only)
   const tint = gradeTint(prog);
   const tintOp = interpolate(prog, [0, 1], [0.05, 0.16]);
@@ -101,8 +116,9 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
   let t = 0;
   return (
     <AbsoluteFill style={{opacity: beatOp, backgroundColor: PAPER}}>
-      {/* shots cut together underneath — the saturation/contrast/brightness grade lifts with the climb */}
-      <AbsoluteFill style={{filter: grade}}>
+      {/* shots cut together underneath — the saturation/contrast/brightness grade lifts with the climb.
+          On level cuts, a whip-in + decaying shake gives the transition a real 'hit' (synced to SFX). */}
+      <AbsoluteFill style={{filter: grade, transform: `translate(${shk.x + whip}px, ${shk.y}px) rotate(${shk.rot}deg)`}}>
         {shots.map((sh, i) => {
           const seq = (
             <Sequence key={i} from={t} durationInFrames={sh.dur}>
@@ -113,6 +129,12 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
           t += sh.dur;
           return seq;
         })}
+      </AbsoluteFill>
+
+      {/* FOREGROUND OCCLUDER: a soft out-of-focus shape drifting past a corner (parallax depth cue). */}
+      <AbsoluteFill style={{pointerEvents: 'none'}}>
+        <div style={{position: 'absolute', left: `${occX}%`, top: `${occY}%`, width: 620, height: 620, transform: 'translate(-50%,-50%)',
+          background: 'radial-gradient(closest-side, rgba(20,15,8,0.20), rgba(20,15,8,0) 72%)', filter: 'blur(2px)'}} />
       </AbsoluteFill>
 
       {/* PER-LEVEL MOOD GRADE (CSS only): tint warm->cool->ember->gold + darkening that deepens with
@@ -144,6 +166,9 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
             {scene.overlay.sub && <div style={{color: '#9a7322', fontSize: 27, fontWeight: 800, letterSpacing: 5, marginTop: 14, textTransform: 'uppercase'}}>{scene.overlay.sub}</div>}
           </div>
         ))}
+
+      {/* level-cut FLASH (1-2 frames) — the visual 'hit' that lands with the stamp SFX */}
+      {flashOp > 0 && <AbsoluteFill style={{backgroundColor: 'rgba(255,244,222,1)', opacity: flashOp, pointerEvents: 'none'}} />}
 
       <Sequence from={scene.audioStartFrame ?? 0}><Audio src={staticFile(scene.audio)} /></Sequence>
     </AbsoluteFill>
