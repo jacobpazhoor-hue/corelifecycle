@@ -3,11 +3,13 @@
 save mp3, and emit src/timeline.json. Duration derived from WordBoundary events
 (no ffmpeg needed). Swap VOICE to re-render with a different narrator.
 """
-import os, json, asyncio
+import os, json, asyncio, hashlib
 import numpy as np
 import edge_tts
 import soundfile as sf
 from content import SCENES, FPS
+
+CACHE_VERSION = "v3"   # bump to force a full VO rebuild when master()/breath/dialogue logic changes
 
 VOICE = "en-US-AndrewMultilingualNeural"  # most natural/human free voice; alts in voice_samples_v2/
 DIALOGUE_VOICE = "en-US-ChristopherNeural"  # 2nd voice for in-world dialogue (mentor/rival) — deeper, distinct from the narrator
@@ -22,24 +24,30 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 AUDIO = os.path.join(ROOT, "public", "audio")
 os.makedirs(AUDIO, exist_ok=True)
 
-async def synth_mp3(text, path, rate=RATE, tries=5):
-    """Synth one scene to mp3. edge-tts intermittently throws NoAudioReceived (transient
-    server/rate-limit hiccup) — retry with backoff so one blip doesn't kill the whole build.
-    `rate` may be overridden per scene (e.g. '-10%' for gravity, '+12%' for action)."""
+SYNTH_TIMEOUT = 45   # seconds per attempt — a stalled edge-tts socket has no timeout of its own and
+                     # would hang the whole build forever; wait_for turns a hang into a retry.
+
+async def synth_mp3(text, path, rate=RATE, tries=6):
+    """Synth one scene to mp3. edge-tts intermittently throws NoAudioReceived OR silently HANGS on a
+    stalled socket (no built-in timeout) — wrap each attempt in a hard timeout AND retry with backoff
+    so one blip/hang doesn't kill the build. `rate` may be overridden per scene."""
+    async def _fetch():
+        comm = edge_tts.Communicate(text, VOICE, rate=rate)
+        data = bytearray()
+        async for chunk in comm.stream():
+            if chunk["type"] == "audio":
+                data += chunk["data"]
+        if not data:
+            raise edge_tts.exceptions.NoAudioReceived("empty stream")
+        return data
     last = None
     for attempt in range(tries):
         try:
-            comm = edge_tts.Communicate(text, VOICE, rate=rate)
-            data = bytearray()
-            async for chunk in comm.stream():
-                if chunk["type"] == "audio":
-                    data += chunk["data"]
-            if not data:
-                raise edge_tts.exceptions.NoAudioReceived("empty stream")
+            data = await asyncio.wait_for(_fetch(), timeout=SYNTH_TIMEOUT)
             with open(path, "wb") as f:
                 f.write(data)
             return
-        except Exception as e:                                   # transient: back off and retry
+        except (Exception, asyncio.TimeoutError) as e:           # transient/hang: back off and retry
             last = e
             await asyncio.sleep(1.5 * (attempt + 1))
     raise last
@@ -129,35 +137,53 @@ async def main():
     cursor = 0
     nwords = 0
     speech_total = 0.0
+    # per-scene VO CACHE: skip re-synth when a scene's narration/rate/dialogue is unchanged. Makes
+    # iterative edits fast AND makes a hung/crashed build RESUMABLE (finished scenes stay cached).
+    cache_path = os.path.join(AUDIO, ".vo_cache.json")
+    try:
+        cache = json.load(open(cache_path))
+    except Exception:
+        cache = {}
+    reused = 0
     for i, sc in enumerate(SCENES):
-        mp3 = os.path.join(AUDIO, f"{sc['id']}.mp3")
         rate = sc.get("rate", RATE)                              # per-scene prosody override
-        await synth_mp3(sc["narration"], mp3, rate=rate)
-        y, sr = sf.read(mp3, dtype="float32")
-        y, sr = master(y, sr)
-        y = trim_silence(y, sr)                                   # cut TTS breaths/tails (dead air)
         nw = len(sc["narration"].split())
-        # prepend a soft real breath before longer lines (not the cold open) — human-izes the TTS
-        if i > 0 and (nw > 48 or sc.get("breath")):
-            br = breath(sr, seed=(hash(sc["id"]) & 0xffff))
-            y = np.concatenate([br, np.zeros(int(0.05 * sr), np.float32), y]).astype(np.float32)
-        # in-world DIALOGUE (2nd voice) — a mentor's warning / rival's taunt, appended after the
-        # narration as a pattern-interrupt. scene: dialogue=dict(text=..,[voice=..,rate=..]) or a list.
-        dlg = sc.get("dialogue")
-        if dlg:
-            for j, d in enumerate(dlg if isinstance(dlg, list) else [dlg]):
-                dtext = d["text"] if isinstance(d, dict) else str(d)
-                dvoice = (d.get("voice") if isinstance(d, dict) else None) or DIALOGUE_VOICE
-                drate = (d.get("rate") if isinstance(d, dict) else None) or "+0%"
-                dmp3 = os.path.join(AUDIO, f"{sc['id']}_d{j}.mp3")
-                await synth_mp3(dtext, dmp3, rate=drate)
-                dy, dsr = sf.read(dmp3, dtype="float32")
-                dy, dsr = master_dialogue(dy, dsr)
-                dy = trim_silence(dy, dsr)
-                y = np.concatenate([y, np.zeros(int(BEAT_GAP * sr), np.float32), dy]).astype(np.float32)
-            print(f"  {sc['id']}: +{len(dlg if isinstance(dlg,list) else [dlg])} in-world dialogue line(s)")
         wav = os.path.join(AUDIO, f"{sc['id']}.wav")
-        sf.write(wav, y, sr)
+        key = hashlib.md5(("|".join([CACHE_VERSION, sc["narration"], str(rate),
+            json.dumps(sc.get("dialogue"), sort_keys=True), str(nw > 48 or sc.get("breath")),
+            str(i > 0)])).encode()).hexdigest()
+        if os.path.exists(wav) and cache.get(sc["id"]) == key:   # reuse cached wav (skip network synth)
+            y, sr = sf.read(wav, dtype="float32")
+            if y.ndim > 1:
+                y = y.mean(axis=1)
+            reused += 1
+        else:
+            mp3 = os.path.join(AUDIO, f"{sc['id']}.mp3")
+            await synth_mp3(sc["narration"], mp3, rate=rate)
+            y, sr = sf.read(mp3, dtype="float32")
+            y, sr = master(y, sr)
+            y = trim_silence(y, sr)                              # cut TTS breaths/tails (dead air)
+            # prepend a soft real breath before longer lines (not the cold open) — human-izes the TTS
+            if i > 0 and (nw > 48 or sc.get("breath")):
+                br = breath(sr, seed=(hash(sc["id"]) & 0xffff))
+                y = np.concatenate([br, np.zeros(int(0.05 * sr), np.float32), y]).astype(np.float32)
+            # in-world DIALOGUE (2nd voice) — mentor's warning / rival's taunt, appended after narration.
+            dlg = sc.get("dialogue")
+            if dlg:
+                for j, d in enumerate(dlg if isinstance(dlg, list) else [dlg]):
+                    dtext = d["text"] if isinstance(d, dict) else str(d)
+                    dvoice = (d.get("voice") if isinstance(d, dict) else None) or DIALOGUE_VOICE
+                    drate = (d.get("rate") if isinstance(d, dict) else None) or "+0%"
+                    dmp3 = os.path.join(AUDIO, f"{sc['id']}_d{j}.mp3")
+                    await synth_mp3(dtext, dmp3, rate=drate)
+                    dy, dsr = sf.read(dmp3, dtype="float32")
+                    dy, dsr = master_dialogue(dy, dsr)
+                    dy = trim_silence(dy, dsr)
+                    y = np.concatenate([y, np.zeros(int(BEAT_GAP * sr), np.float32), dy]).astype(np.float32)
+                print(f"  {sc['id']}: +{len(dlg if isinstance(dlg,list) else [dlg])} in-world dialogue line(s)")
+            sf.write(wav, y, sr)
+            cache[sc["id"]] = key
+            json.dump(cache, open(cache_path, "w"))             # save INCREMENTALLY -> crash-resumable
         speech = len(y) / sr
         gap = float(sc.get("gap", GAP))                           # per-scene override for dramatic holds
         total = LEAD + speech + gap
@@ -178,6 +204,7 @@ async def main():
     out = os.path.join(ROOT, "src", "timeline.json")
     json.dump(timeline, open(out, "w"), indent=2)
     wpm = nwords / (speech_total / 60) if speech_total else 0
-    print(f"\nTOTAL: {cursor} frames = {cursor/FPS:.1f}s  ({nwords} words, ~{wpm:.0f} WPM, voice={VOICE} rate={RATE}) -> {out}")
+    print(f"\nTOTAL: {cursor} frames = {cursor/FPS:.1f}s  ({nwords} words, ~{wpm:.0f} WPM, "
+          f"{reused}/{len(SCENES)} scenes reused from cache, voice={VOICE} rate={RATE}) -> {out}")
 
 asyncio.run(main())
