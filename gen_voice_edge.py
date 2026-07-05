@@ -9,7 +9,7 @@ import edge_tts
 import soundfile as sf
 from content import SCENES, FPS
 
-CACHE_VERSION = "v3"   # bump to force a full VO rebuild when master()/breath/dialogue logic changes
+CACHE_VERSION = "v4"   # v4: clean master() chain (removed grainy harmonic exciter). Bump on DSP changes.
 
 VOICE = "en-US-AndrewMultilingualNeural"  # most natural/human free voice; alts in voice_samples_v2/
 DIALOGUE_VOICE = "en-US-ChristopherNeural"  # 2nd voice for in-world dialogue (mentor/rival) — deeper, distinct from the narrator
@@ -53,34 +53,38 @@ async def synth_mp3(text, path, rate=RATE, tries=6):
     raise last
 
 def master(y, sr):
-    """Voice mastering: upsample 48k, high-pass, de-mud, presence shelf, de-ess, gentle
-    harmonic exciter (real 'air'), soft compression, normalize. Keeps the edge voice but crisp.
-    Returns (audio, new_sr)."""
+    """Voice mastering — CLEAN chain (fixes grain/fizz). edge-tts is band-limited to ~12kHz, so the
+    old harmonic EXCITER (tanh drive) was fabricating fizzy high-end = the graininess. Instead:
+    proper band-limited resample to 48k, HP, de-mud, gentle nasal trim, clean PRESENCE + AIR shelves
+    (linear, no distortion), de-ess, roll OFF the empty >13.5k band (artifact/fizz), gentle soft-knee
+    compression, normalize with headroom. Crisp from real presence, not synthetic air. Returns (audio, sr)."""
     if y.ndim > 1:
         y = y.mean(axis=1)
     y = y.astype(np.float32)
     tgt = 48000
-    if sr != tgt:                                                  # upsample (no aliasing on up)
-        n2 = int(len(y) * tgt / sr)
-        y = np.interp(np.linspace(0, len(y) - 1, n2), np.arange(len(y)), y).astype(np.float32)
+    if sr != tgt:
+        try:                                                       # proper anti-imaging resample (clean)
+            from scipy.signal import resample_poly
+            from math import gcd
+            gg = gcd(tgt, int(sr))
+            y = resample_poly(y, tgt // gg, int(sr) // gg).astype(np.float32)
+        except Exception:                                          # fallback: linear interp
+            n2 = int(len(y) * tgt / sr)
+            y = np.interp(np.linspace(0, len(y) - 1, n2), np.arange(len(y)), y).astype(np.float32)
         sr = tgt
     n = len(y)
     X = np.fft.rfft(y); fr = np.fft.rfftfreq(n, 1 / sr)
     g = np.ones_like(fr)
-    g *= 1.0 / (1.0 + (85.0 / np.maximum(fr, 1.0)) ** 6)          # high-pass 85Hz
-    g *= 1.0 - 0.32 * np.exp(-((fr - 320.0) / 140.0) ** 2)        # de-mud dip @320Hz
-    g *= 1.0 - 0.25 * np.exp(-((fr - 2600.0) / 650.0) ** 2)       # nasal/boxy cut ~2.6k (-2.5dB, TTS tell)
-    g *= 1.0 + 0.85 * (1.0 / (1.0 + np.exp(-(fr - 3200.0) / 600.0)))  # presence shelf ~+5dB
-    g *= 1.0 - 0.5 * np.exp(-((fr - 7200.0) / 700.0) ** 2)        # de-ess notch @7.2k
-    y_eq = np.fft.irfft(X * g, n=n).astype(np.float32)
-    # subtle harmonic exciter -> perceived air (NOT noise: harmonics of existing presence band)
-    hp = np.fft.irfft(X * (fr > 3000), n=n).astype(np.float32)
-    harm = np.tanh(hp * 2.4).astype(np.float32)
-    H = np.fft.rfft(harm); band = ((fr > 5000) & (fr < 12500)).astype(np.float32)
-    air = np.fft.irfft(H * band, n=n).astype(np.float32)
-    out = y_eq + air * 0.14                                        # modest -> crisp, never fizzy
-    out = np.tanh(out * 1.45) / np.tanh(1.45)                      # gentle compression
-    out = out / (np.max(np.abs(out)) + 1e-9) * 0.97
+    g *= 1.0 / (1.0 + (85.0 / np.maximum(fr, 1.0)) ** 6)          # high-pass 85Hz (rumble)
+    g *= 1.0 - 0.28 * np.exp(-((fr - 300.0) / 130.0) ** 2)        # de-mud dip @300Hz
+    g *= 1.0 - 0.14 * np.exp(-((fr - 2600.0) / 700.0) ** 2)       # gentle nasal trim (-1.3dB, keep clarity)
+    g *= 1.0 + 0.45 * (1.0 / (1.0 + np.exp(-(fr - 3700.0) / 700.0)))  # CLEAN presence shelf ~+3.3dB (crisp consonants)
+    g *= 1.0 - 0.42 * np.exp(-((fr - 7000.0) / 850.0) ** 2)       # de-ess @7k
+    g *= 1.0 + 0.18 * (1.0 / (1.0 + np.exp(-(fr - 9500.0) / 900.0)))  # small CLEAN air shelf ~+1.4dB (sparkle)
+    g *= 1.0 / (1.0 + (fr / 13500.0) ** 6)                        # roll OFF the empty >13.5k fizz band
+    out = np.fft.irfft(X * g, n=n).astype(np.float32)
+    out = np.tanh(out * 1.25) / np.tanh(1.25)                     # gentle soft-knee compression (less drive)
+    out = out / (np.max(np.abs(out)) + 1e-9) * 0.95              # normalize with headroom
     return out.astype(np.float32), sr
 
 def master_dialogue(y, sr):
