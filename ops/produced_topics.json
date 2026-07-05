@@ -73,7 +73,9 @@
       "topic": "special_forces",
       "title": "Your Life as Every Rank in Special Forces (Most Die at Selection)",
       "url": "https://youtu.be/molUoFUlmso",
-      "date": "2026-07-05"
+      "date": "2026-07-05",
+      "superseded_by": "https://youtu.be/MiXTy6PUdDk",
+      "note": "AUTOPILOT auto-published this inferior version (old grainy voice + bland cream thumbnail). SUPERSEDED by the polished manual upload https://youtu.be/MiXTy6PUdDk (clean voice + bright thumbnail v2 + title 'You Don't Exist'). RECOMMEND: unlist/delete the autopilot's molUoFUlmso to avoid a duplicate."
     }
   ],
   "_note": "Showrunner must NOT repeat a produced topic. Auto-generate a new hierarchical profession each run."
