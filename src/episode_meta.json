@@ -1,18 +1,18 @@
 {
   "thumb": {
     "kicker": "EVERY RANK OF",
-    "line1": "SPECIAL FORCES",
+    "line1": "NARCO",
     "line2": "",
-    "tag": "MOST DIE AT SELECTION",
-    "archetype": "pov",
-    "big": "1 OF 200",
-    "before": "NOBODY",
-    "after": "SPENT",
+    "tag": "SILVER OR LEAD",
+    "archetype": "ladder",
+    "big": "EL PATRON",
+    "before": "HALCON",
+    "after": "PATRON",
     "expr": "hardened",
-    "povline": "YOU ARE",
-    "keyword": "AMMO",
-    "setting": "frontline",
-    "question": "WHO SIGNS THE TARGET?"
+    "povline": "YOU CAN'T",
+    "keyword": "QUIT",
+    "setting": "ranchCompound",
+    "question": "WHERE'S THE WAY OUT?"
   },
-  "topic": "special_forces"
+  "topic": "mexican_cartel"
 }

@@ -150,6 +150,17 @@ adjacent scenes. Registry lives in src/scenes.tsx `TEMPLATES`; composable packs 
 | shogunCourt | figure kneeling in the shogun's gilded Edo hall, long rows of vassals | kneeling before the shogun, a single mark among 30M koku |
 | merchantHouse | figure before a rice broker's counting house (bales, abacus, koban gold) | the merchant who owns your debt, Dōjima, the sword ban |
 
+## Cartel / narco pack (mexican_cartel — halcón / sicario / plaza boss / patrón)
+| template | depicts | good for |
+|---|---|---|
+| lookoutCorner | figure at the edge of town in the border desert (fence line, dirt road, cacti, mesa) | the halcón/lookout kid, the entry level, the cyclical loop close |
+| sierraRoute | figure walking a mountain track beside a narco pickup (pine sierra, tarp camp) | the mule/burrero moving product, moving up the corridor, the hunted run |
+| narcoShrineRite | figure before a roadside folk-saint shrine (arched niche, candles, robed figure, marigolds) | the vow / the medallion anchor / protection (cautionary, not an endorsement) |
+| plazaTown | figure in a small-town square (church + bell tower + dome, colonnade, kiosk) | la plaza — the piso/turf tax, territory, the town under your thumb |
+| ranchCompound | figure before a walled hacienda compound (adobe wall + iron gate, ranch house, palms, dish) | the jefe de plaza's finca AND the patrón's fortress — the cold open + the apex |
+
+(Reuses from the MAFIA pack, all topic-appropriate for cartel: backAlley, countRoom, courtroom, prisonCell, wiretap. New reusable prop `narcoTruck` = a side-profile pickup, usable for any convoy/vehicle beat.)
+
 ## Adding a new domain pack
 If a topic needs settings none of these cover (e.g. soldier→battlefield, athlete→stadium,
 founder→garage), add backdrop/prop entries + a small template set to src/stage.tsx following the

@@ -2,367 +2,364 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 20735,
+  "totalFrames": 24737,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t00",
       "level": null,
       "overlay": {
-        "big": "1,000,000 KOKU",
-        "sub": "AND IT ENDS ON THIS WHITE MAT"
+        "big": "THE MORNING IT ENDS",
+        "sub": "THE DOGS WENT QUIET \u00b7 THE PHONE STOPPED"
       },
-      "template": "seppukuRite",
+      "template": "ranchCompound",
       "audio": "audio/t00.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 742
+      "durationInFrames": 907
     },
     {
       "id": "t01",
-      "level": "LEVEL 01  \u00b7  ASHIGARU",
+      "level": "LEVEL 01  \u00b7  EL HALC\u00d3N  (THE LOOKOUT)",
       "overlay": {
-        "big": "0 KOKU",
-        "sub": "NO NAME \u00b7 TWO RICE BALLS A DAY"
+        "big": "~$600 / MONTH",
+        "sub": "A PHONE, A WHISTLE, AND A NAME NOBODY KNOWS YET"
       },
-      "template": "riceField",
+      "template": "lookoutCorner",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
-      "startFrame": 742,
-      "durationInFrames": 731
+      "startFrame": 907,
+      "durationInFrames": 888
     },
     {
       "id": "t02",
       "level": null,
-      "overlay": {
-        "big": "A BORROWED SPEAR",
-        "sub": "ASHIGARU \u00b7 THE FRONT RANK IS FOR THE POOR"
-      },
-      "template": "castleGate",
+      "overlay": null,
+      "template": "narcoShrineRite",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 1473,
-      "durationInFrames": 675
+      "startFrame": 1795,
+      "durationInFrames": 835
     },
     {
       "id": "t03",
       "level": null,
       "overlay": {
-        "big": "1 HEAD",
-        "sub": "THE PROOF OF VALOR \u00b7 AND THEY WRITE YOUR NAME"
+        "big": "FIRST BODY",
+        "sub": "THE TOWN LEARNS TO LOOK AT ITS SHOES"
       },
-      "template": "sengokuField",
+      "template": "backAlley",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 2148,
-      "durationInFrames": 742
+      "startFrame": 2630,
+      "durationInFrames": 892
     },
     {
       "id": "t04",
-      "level": "LEVEL 02  \u00b7  SAMURAI",
+      "level": "LEVEL 02  \u00b7  EL BURRERO  (THE MULE)",
       "overlay": {
-        "big": "~30 KOKU",
-        "sub": "THE TWO SWORDS \u00b7 AND A NAME OF YOUR OWN"
+        "big": "$5,000 / LOAD",
+        "sub": "THE FIRST THING YOU CARRY THAT CAN END YOU"
       },
-      "template": "daisho",
+      "template": "sierraRoute",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 2890,
-      "durationInFrames": 847
+      "startFrame": 3522,
+      "durationInFrames": 809
     },
     {
       "id": "t05",
       "level": null,
       "overlay": null,
-      "template": "dojo",
+      "template": "waterfront",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 3737,
-      "durationInFrames": 785
+      "startFrame": 4331,
+      "durationInFrames": 801
     },
     {
       "id": "t06",
       "level": null,
-      "overlay": null,
-      "template": "teaCeremony",
+      "overlay": {
+        "big": "PLATA O PLOMO",
+        "sub": "THE SILVER OR THE LEAD \u00b7 YOU DON'T GET A THIRD DOOR"
+      },
+      "template": "cardGame",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 4522,
-      "durationInFrames": 763
+      "startFrame": 5132,
+      "durationInFrames": 845
     },
     {
       "id": "t07",
-      "level": "LEVEL 03  \u00b7  MOUNTED RETAINER",
+      "level": "LEVEL 03  \u00b7  EL SICARIO  (THE GUNMAN)",
       "overlay": {
-        "big": "~500 KOKU",
-        "sub": "A HORSE \u00b7 AND MEN WHO DIE ON YOUR WORD"
+        "big": "$85 / BODY",
+        "sub": "THE CHEAPEST THING IN THE WHOLE MACHINE"
       },
-      "template": "lordAudience",
+      "template": "plazaTown",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 5285,
-      "durationInFrames": 800
+      "startFrame": 5977,
+      "durationInFrames": 878
     },
     {
       "id": "t08",
       "level": null,
-      "overlay": null,
-      "template": "sengokuField",
+      "overlay": {
+        "big": "3-YEAR LIFE",
+        "sub": "THE AVERAGE GUNMAN DOESN'T SEE A FOURTH"
+      },
+      "template": "narcoShrineRite",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 6085,
-      "durationInFrames": 751
+      "startFrame": 6855,
+      "durationInFrames": 799
     },
     {
       "id": "t09",
       "level": null,
       "overlay": {
-        "big": "1588",
-        "sub": "THE SWORD HUNT \u00b7 THE CLASS LINE, SEALED"
+        "big": "A DEAD MAN'S DESK",
+        "sub": "YOU HELD ON \u00b7 SO THEY HAND YOU THE TOWN"
       },
-      "template": "riceField",
+      "template": "donOffice",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 6836,
-      "durationInFrames": 793
+      "startFrame": 7654,
+      "durationInFrames": 767
     },
     {
       "id": "t10",
-      "level": "LEVEL 04  \u00b7  KAR\u014c",
+      "level": "LEVEL 04  \u00b7  JEFE DE PLAZA  (THE PLAZA BOSS)",
       "overlay": {
-        "big": "4,000 KOKU",
-        "sub": "KAR\u014c \u00b7 YOU RUN THE DOMAIN NOW"
+        "big": "THE FINCA",
+        "sub": "A WALLED CORRIDOR \u00b7 AND YOU CAN'T GO HOME"
       },
-      "template": "teaCeremony",
+      "template": "ranchCompound",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 7629,
-      "durationInFrames": 789
+      "startFrame": 8421,
+      "durationInFrames": 838
     },
     {
       "id": "t11",
       "level": null,
-      "overlay": null,
-      "template": "lordAudience",
+      "overlay": {
+        "big": "$40M / YEAR",
+        "sub": "EL PISO \u00b7 THE TAX ON THE GROUND ITSELF"
+      },
+      "template": "plazaTown",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 8418,
-      "durationInFrames": 719
+      "startFrame": 9259,
+      "durationInFrames": 932
     },
     {
       "id": "t12",
       "level": null,
-      "overlay": {
-        "big": "THE ORDER",
-        "sub": "SEPPUKU \u00b7 AND YOU ARE NAMED HIS SECOND"
-      },
-      "template": "dojo",
+      "overlay": null,
+      "template": "sierraRoute",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 9137,
-      "durationInFrames": 795
+      "startFrame": 10191,
+      "durationInFrames": 780
     },
     {
       "id": "t13",
       "level": null,
-      "overlay": {
-        "big": "ONE CUT",
-        "sub": "THE CODE \u00b7 IT TAKES YOUR TEACHER THROUGH YOUR HAND"
-      },
-      "template": "seppukuRite",
+      "overlay": null,
+      "template": "dinner",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 9932,
-      "durationInFrames": 177
+      "startFrame": 10971,
+      "durationInFrames": 907
     },
     {
       "id": "t14",
-      "level": "LEVEL 05  \u00b7  DAIMY\u014c",
+      "level": null,
       "overlay": {
-        "big": "10,000 KOKU",
-        "sub": "THE LINE \u00b7 YOU ARE A LORD NOW"
+        "big": "EL T\u00cdO",
+        "sub": "YOU WERE NEVER THE KNIFE \u00b7 YOU ARE WHAT IT'S FOR"
       },
-      "template": "keepTop",
+      "template": "backAlley",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 10109,
-      "durationInFrames": 859
+      "startFrame": 11878,
+      "durationInFrames": 869
     },
     {
       "id": "t15",
-      "level": null,
+      "level": "LEVEL 05  \u00b7  EL LUGARTENIENTE  (THE LIEUTENANT)",
       "overlay": {
-        "big": "EVERY OTHER YEAR",
-        "sub": "SANKIN-K\u014cTAI \u00b7 YOUR FAMILY STAYS AS HOSTAGES"
+        "big": "$300M",
+        "sub": "THE DEAD STOP BEING PEOPLE \u00b7 THEY BECOME A COLUMN"
       },
-      "template": "castleGate",
+      "template": "warRoom",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 10968,
-      "durationInFrames": 710
+      "startFrame": 12747,
+      "durationInFrames": 801
     },
     {
       "id": "t16",
       "level": null,
-      "overlay": null,
-      "template": "teaCeremony",
+      "overlay": {
+        "big": "A ROOM OF CASH",
+        "sub": "IT BUYS EVERYTHING BUT THE ONE DOOR YOU WANT"
+      },
+      "template": "countRoom",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 11678,
-      "durationInFrames": 714
+      "startFrame": 13548,
+      "durationInFrames": 845
     },
     {
       "id": "t17",
-      "level": "LEVEL 06  \u00b7  THE GREAT LORD",
+      "level": null,
       "overlay": {
-        "big": "1,000,000 KOKU",
-        "sub": "KAGA-SCALE \u00b7 THE GREATEST DOMAIN IN JAPAN"
+        "big": "ROSA",
+        "sub": "EVERYTHING YOU BUILT \u00b7 AND SHE DIED ALONE"
       },
-      "template": "keepTop",
+      "template": "narcoShrineRite",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 12392,
-      "durationInFrames": 788
+      "startFrame": 14393,
+      "durationInFrames": 825
     },
     {
       "id": "t18",
-      "level": null,
+      "level": "LEVEL 06  \u00b7  EL PATR\u00d3N  (THE KINGPIN)",
       "overlay": {
-        "big": "30,000,000 KOKU",
-        "sub": "ALL OF JAPAN \u00b7 AND ONE MAN MOVES IT ALL"
+        "big": "$1 BILLION",
+        "sub": "EL PATR\u00d3N \u00b7 A NAME ON A LIST ON TWO CONTINENTS"
       },
-      "template": "shogunCourt",
+      "template": "ranchCompound",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 13180,
-      "durationInFrames": 88
+      "startFrame": 15218,
+      "durationInFrames": 923
     },
     {
       "id": "t19",
       "level": null,
       "overlay": null,
-      "template": "keepTop",
+      "template": "jet",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 13268,
-      "durationInFrames": 759
+      "startFrame": 16141,
+      "durationInFrames": 863
     },
     {
       "id": "t20",
-      "level": "LEVEL 07  \u00b7  THE MERCHANT",
+      "level": null,
       "overlay": {
-        "big": "LAST OF FOUR",
-        "sub": "THE MERCHANT'S RANK \u00b7 AND HE OWNS YOUR SWORD"
+        "big": "THEY SING YOUR NAME",
+        "sub": "AND YOU CAN'T WALK DOWN A SINGLE STREET"
       },
-      "template": "merchantHouse",
+      "template": "window",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 14027,
-      "durationInFrames": 861
+      "startFrame": 17004,
+      "durationInFrames": 841
     },
     {
       "id": "t21",
-      "level": null,
+      "level": "LEVEL 07  \u00b7  LA RED  (THE NETWORK)",
       "overlay": {
-        "big": "D\u014cJIMA \u00b7 1730",
-        "sub": "THE FIRST FUTURES MARKET \u00b7 IT PRICES YOUR PAY"
+        "big": "LA RED",
+        "sub": "TAKE OUT THE KINGPIN \u00b7 THE PRICE DOESN'T MOVE"
       },
-      "template": "signing",
+      "template": "warRoom",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 14888,
-      "durationInFrames": 830
+      "startFrame": 17845,
+      "durationInFrames": 891
     },
     {
       "id": "t22",
-      "level": "LEVEL 08  \u00b7  THE END OF THE SWORD",
-      "overlay": {
-        "big": "1868",
-        "sub": "THE RESTORATION \u00b7 THE LORDS GIVE IT ALL BACK"
-      },
-      "template": "lordAudience",
+      "level": null,
+      "overlay": null,
+      "template": "wiretap",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 15718,
-      "durationInFrames": 843
+      "startFrame": 18736,
+      "durationInFrames": 798
     },
     {
       "id": "t23",
       "level": null,
-      "overlay": {
-        "big": "1871",
-        "sub": "THE DOMAINS ABOLISHED \u00b7 A CLERK HOLDS THE GATE"
-      },
-      "template": "castleGate",
+      "overlay": null,
+      "template": "dinner",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 16561,
-      "durationInFrames": 809
+      "startFrame": 19534,
+      "durationInFrames": 865
     },
     {
       "id": "t24",
-      "level": null,
+      "level": "LEVEL 08  \u00b7  LA DEMANDA  (THE DEMAND)",
       "overlay": {
-        "big": "1876",
-        "sub": "YOUR STIPEND \u2192 A PAPER BOND \u00b7 SIGN HERE"
+        "big": "THE ROAD CLIMBS",
+        "sub": "TEN STEPS TO THE TUNNEL \u00b7 YOU STILL WANT TO LIVE"
       },
-      "template": "signing",
+      "template": "ranchCompound",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 17370,
-      "durationInFrames": 142
+      "startFrame": 20399,
+      "durationInFrames": 890
     },
     {
       "id": "t25",
       "level": null,
       "overlay": {
-        "big": "0",
-        "sub": "HAIT\u014cREI \u00b7 THE SWORD IS WORTH NOTHING"
+        "big": "$150 BILLION",
+        "sub": "THE APPETITE UP NORTH \u00b7 YOU WERE ONLY THE DELIVERY"
       },
-      "template": "merchantHouse",
+      "template": "courtroom",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 17512,
-      "durationInFrames": 820
+      "startFrame": 21289,
+      "durationInFrames": 897
     },
     {
       "id": "t26",
       "level": null,
       "overlay": {
-        "big": "1877",
-        "sub": "THE LAST SAMURAI \u00b7 BEATEN BY PEASANTS WITH RIFLES"
+        "big": "$0",
+        "sub": "THE CELL OR THE GRAVE \u00b7 THOSE WERE ALWAYS THE EXITS"
       },
-      "template": "sengokuField",
+      "template": "prisonCell",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 18332,
-      "durationInFrames": 859
+      "startFrame": 22186,
+      "durationInFrames": 880
     },
     {
       "id": "t27",
       "level": null,
       "overlay": {
-        "big": "THE MAT",
-        "sub": "EVEN YOUR DEATH \u00b7 ABOLISHED"
+        "big": "A NEW KID \u00b7 SAME CORNER",
+        "sub": "THE ROAD OUT WAS NEVER A WAY OUT"
       },
-      "template": "seppukuRite",
+      "template": "lookoutCorner",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 19191,
-      "durationInFrames": 752
+      "startFrame": 23066,
+      "durationInFrames": 833
     },
     {
       "id": "t28",
       "level": null,
       "overlay": {
-        "big": "THE CIRCLE",
-        "sub": "A BORROWED SPEAR \u2192 NO SWORD AT ALL"
+        "big": "THE HUNGER NEVER ENDS",
+        "sub": "THE MAN AT THE TOP DOESN'T KNOW YOU EXIST"
       },
-      "template": "riceField",
+      "template": "emptyChair",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 19943,
-      "durationInFrames": 792
+      "startFrame": 23899,
+      "durationInFrames": 838
     }
   ]
 }

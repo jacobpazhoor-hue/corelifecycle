@@ -918,6 +918,101 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       {[0, 1, 2].map((k) => <ellipse key={k} cx={648} cy={790 - k * 14} rx={30} ry={12} fill={GOLD} stroke={INK} strokeWidth={2.5} opacity={0.85} />)}
     </g>
   ),
+  // --- cartel / narco (mexican_cartel) ---
+  // the border desert: heat sky, distant mesa, a tall receding border fence, a dirt road, cacti —
+  // the halcón lookout on the edge of town, the crossing, and the cyclical loop close
+  borderDesert: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={620} fill="#e9d9b6" opacity={0.5} />
+      {/* distant mesa / hills */}
+      <path d="M 0 560 L 260 470 L 520 540 L 560 470 L 760 560 Z" fill={PAPERC} stroke={INK} strokeWidth={3} opacity={0.55} />
+      <path d="M 1180 560 L 1400 460 L 1520 520 L 1700 450 L 1920 560 Z" fill={PAPERC} stroke={INK} strokeWidth={3} opacity={0.55} />
+      {/* the border fence receding to a vanishing point */}
+      {Array.from({length: 22}).map((_, i) => {const t = i / 21; const x = 940 + (i - 4) * (70 - t * 40); const h = 150 - t * 90; return <line key={i} x1={x} y1={620} x2={x} y2={620 - h} stroke={INK} strokeWidth={3} opacity={0.5 - t * 0.2} />;})}
+      <line x1={620} y1={556} x2={1920} y2={470} stroke={INK} strokeWidth={3} opacity={0.4} />
+      <line x1={620} y1={600} x2={1920} y2={520} stroke={INK} strokeWidth={3} opacity={0.4} />
+      <rect x={0} y={620} width={1920} height={460} fill={FLOOR} /><line x1={0} y1={620} x2={1920} y2={620} stroke={INK} strokeWidth={5} />
+      {/* dirt road */}
+      <path d="M 760 1080 L 900 620 L 1000 620 L 1160 1080 Z" fill="#e0d4bb" stroke={INK} strokeWidth={2} opacity={0.6} />
+      {/* saguaro cacti */}
+      {[220, 1600].map((x, i) => <g key={x}><line x1={x} y1={880} x2={x} y2={660} stroke={INK} strokeWidth={9} /><path d={`M ${x} 760 q -46 0 -46 -46 M ${x} 800 q 46 0 46 -50`} fill="none" stroke={INK} strokeWidth={9} /></g>)}
+      <ellipse cx={1500} cy={200} rx={70} ry={70} fill="url(#sglow)" opacity={0.8} />
+    </g>
+  ),
+  // la sierra: pine-covered mountains, a hillside track, tarp shelters of a clandestine camp / hideout
+  sierraCamp: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={640} fill="#d9cdae" opacity={0.4} />
+      {/* mountain ridgelines */}
+      <path d="M 0 500 L 340 300 L 620 470 L 900 250 L 1180 460 L 1500 300 L 1920 480 L 1920 640 L 0 640 Z" fill={PAPERC} stroke={INK} strokeWidth={3} opacity={0.5} />
+      {/* pines dotting the slope */}
+      {Array.from({length: 16}).map((_, i) => {const x = 80 + i * 118; const y = 470 + rnd(i) * 120; return <path key={i} d={`M ${x} ${y} l -22 44 l 44 0 Z M ${x} ${y + 20} l -30 50 l 60 0 Z`} fill={PAPERC} stroke={INK} strokeWidth={2.5} opacity={0.5} />;})}
+      <rect x={0} y={640} width={1920} height={440} fill={FLOOR} /><line x1={0} y1={640} x2={1920} y2={640} stroke={INK} strokeWidth={5} />
+      {/* tarp lean-to shelters */}
+      {[300, 1560].map((x, i) => <g key={x} opacity={0.9}><path d={`M ${x - 90} 720 L ${x} 640 L ${x + 90} 720 Z`} fill={PAPERC} stroke={INK} strokeWidth={4} /><line x1={x} y1={640} x2={x} y2={720} stroke={INK} strokeWidth={2} opacity={0.4} /></g>)}
+      {/* a low campfire glow */}
+      <ellipse cx={1560} cy={760} rx={70} ry={26} fill="url(#sglow)" opacity={0.7} />
+    </g>
+  ),
+  // the narco ranch: an adobe compound wall with an iron gate, a low ranch house, palms, an antenna —
+  // the jefe de plaza's finca and the patrón's fortress (the cold open + the apex)
+  narcoRanch: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={560} fill="#dfd2b0" opacity={0.4} />
+      {/* hills behind */}
+      <path d="M 0 500 Q 500 420 960 490 T 1920 470 L 1920 560 L 0 560 Z" fill={PAPERC} stroke={INK} strokeWidth={2} opacity={0.4} />
+      {/* the ranch house */}
+      <rect x={1120} y={360} width={560} height={200} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={1120} y={330} width={560} height={36} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      {[1180, 1320, 1460, 1600].map((x) => <rect key={x} x={x} y={410} width={70} height={80} fill="#c9b98f" stroke={INK} strokeWidth={3} />)}
+      {/* antenna / dish */}
+      <line x1={1640} y1={330} x2={1640} y2={250} stroke={INK} strokeWidth={3} /><path d="M 1622 258 a 22 22 0 0 1 36 0" fill="none" stroke={INK} strokeWidth={3} />
+      {/* palms */}
+      {[260, 900].map((x, i) => <g key={x}><line x1={x} y1={560} x2={x + 8} y2={330} stroke={INK} strokeWidth={7} />{[-1, 0, 1].map((k) => <path key={k} d={`M ${x + 8} 330 q ${k * 70} -30 ${k * 120} 20`} fill="none" stroke={INK} strokeWidth={4} />)}</g>)}
+      <rect x={0} y={560} width={1920} height={520} fill={FLOOR} /><line x1={0} y1={560} x2={1920} y2={560} stroke={INK} strokeWidth={5} />
+      {/* the compound wall + iron gate across the front */}
+      <rect x={0} y={560} width={1920} height={26} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      {Array.from({length: 26}).map((_, i) => <line key={i} x1={40 + i * 74} y1={586} x2={40 + i * 74} y2={640} stroke={INK} strokeWidth={2} opacity={0.35} />)}
+      <g><rect x={820} y={520} width={280} height={120} fill="none" stroke={INK} strokeWidth={5} />{Array.from({length: 9}).map((_, i) => <line key={i} x1={840 + i * 30} y1={520} x2={840 + i * 30} y2={640} stroke={INK} strokeWidth={3} />)}<line x1={960} y1={520} x2={960} y2={640} stroke={INK} strokeWidth={5} /></g>
+    </g>
+  ),
+  // the roadside narco shrine: an arched niche, candles, a robed hooded figure (folk-saint silhouette),
+  // marigolds — the vow, protection, the medallion anchor (cautionary, never an endorsement)
+  narcoShrine: ({frame}) => (
+    <g>
+      <rect x={0} y={780} width={1920} height={300} fill={FLOOR} /><line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={5} />
+      {/* the little chapel niche */}
+      <path d="M 1320 780 L 1320 380 Q 1320 250 1490 250 Q 1660 250 1660 380 L 1660 780 Z" fill="#efe6cf" stroke={INK} strokeWidth={5} />
+      <ellipse cx={1490} cy={430} rx={150} ry={200} fill="url(#sglow)" opacity={0.55} />
+      {/* the robed hooded folk-saint figure inside */}
+      <path d="M 1490 340 q -70 40 -70 140 q 0 130 70 220 q 70 -90 70 -220 q 0 -100 -70 -140 Z" fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <circle cx={1490} cy={392} r={40} fill="#e6dcc4" stroke={INK} strokeWidth={4} />
+      <path d="M 1490 470 l 0 130 M 1440 520 l 100 0" stroke={INK} strokeWidth={4} opacity={0.5} />
+      {/* candles */}
+      {[1360, 1410, 1570, 1620].map((x, i) => <g key={x}><rect x={x - 8} y={700} width={16} height={60} fill={PAPERC} stroke={INK} strokeWidth={2.5} /><path d={`M ${x} 700 q ${-4 + Math.sin(frame * 0.3 + i) * 4} -24 4 -40`} fill="none" stroke={GOLD} strokeWidth={4} /></g>)}
+      {/* marigolds */}
+      {[1300, 1690].map((x) => <circle key={x} cx={x} cy={760} r={14} fill={GOLD} stroke={INK} strokeWidth={2.5} opacity={0.8} />)}
+    </g>
+  ),
+  // la plaza: a small-town square — a church with a bell tower and dome, a low colonnade, a kiosk —
+  // territory, the piso (turf tax), the town living under your thumb
+  townPlaza: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={800} fill="#e4d8ba" opacity={0.35} />
+      {/* the church: facade, bell tower, dome */}
+      <rect x={1240} y={360} width={360} height={440} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={1300} y={220} width={110} height={160} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <path d="M 1290 220 L 1355 150 L 1420 220 Z" fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <path d="M 1470 360 q 80 -130 160 0 Z" fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <line x1={1550} y1={230} x2={1550} y2={190} stroke={INK} strokeWidth={4} /><line x1={1534} y1={206} x2={1566} y2={206} stroke={INK} strokeWidth={4} />
+      <rect x={1370} y={620} width={100} height={180} fill="#c9b98f" stroke={INK} strokeWidth={4} /><path d="M 1370 620 q 50 -50 100 0" fill="#c9b98f" stroke={INK} strokeWidth={4} />
+      {/* a low arcaded colonnade on the left */}
+      {[120, 300, 480, 660].map((x) => <g key={x}><rect x={x} y={520} width={140} height={280} fill={PAPERC} stroke={INK} strokeWidth={3} opacity={0.85} /><path d={`M ${x + 20} 560 q 50 -46 100 0`} fill="none" stroke={INK} strokeWidth={3} /></g>)}
+      <rect x={0} y={800} width={1920} height={280} fill={FLOOR} /><line x1={0} y1={800} x2={1920} y2={800} stroke={INK} strokeWidth={5} />
+      {/* the central kiosk / bandstand */}
+      <g><ellipse cx={960} cy={840} rx={130} ry={30} fill={PAPERC} stroke={INK} strokeWidth={3} />{[880, 960, 1040].map((x) => <line key={x} x1={x} y1={840} x2={x} y2={720} stroke={INK} strokeWidth={4} />)}<path d="M 850 720 q 110 -60 220 0 Z" fill={PAPERC} stroke={INK} strokeWidth={4} /></g>
+    </g>
+  ),
   plain: () => <g />,
 };
 // tiny helper so inline math reads cleanly above
@@ -925,6 +1020,22 @@ function y_(v: number) {return v;}
 
 // =================== PROPS (mid plane) ===================
 const PROP: Record<string, React.FC<{frame: number}>> = {
+  // a side-profile pickup — the narco convoy truck; sits in FRONT of the figure (figBehind) so the
+  // figure reads as standing beside / behind it. Reusable vehicle primitive (per improvements ledger).
+  narcoTruck: ({frame}) => (
+    <g>
+      {/* bed + cab body */}
+      <path d="M 560 900 L 560 800 L 980 800 L 1010 720 L 1180 720 L 1240 800 L 1360 800 L 1360 900 Z" fill={PAPERC} stroke={INK} strokeWidth={5} />
+      {/* cab window */}
+      <path d="M 1030 795 L 1055 740 L 1170 740 L 1215 795 Z" fill="#c9d3d8" stroke={INK} strokeWidth={4} />
+      {/* bed rail */}
+      <line x1={560} y1={800} x2={980} y2={800} stroke={INK} strokeWidth={4} />
+      <rect x={600} y={760} width={40} height={40} fill="none" stroke={INK} strokeWidth={3} opacity={0.6} />
+      {/* wheels */}
+      {[700, 1240].map((x) => <g key={x}><circle cx={x} cy={900} r={62} fill={PAPERC} stroke={INK} strokeWidth={6} /><circle cx={x} cy={900} r={22} fill="#c9b98f" stroke={INK} strokeWidth={4} /></g>)}
+      <line x1={1360} y1={840} x2={1400} y2={840} stroke={INK} strokeWidth={4} />
+    </g>
+  ),
   operatingTable: ({frame}) => (
     <g>
       <rect x={620} y={720} width={680} height={36} rx={10} fill={PAPERC} stroke={INK} strokeWidth={4} />
@@ -1626,4 +1737,34 @@ const SAMURAI = {
       fig={{pose: A.stand(f), x: 620, y: 900, scale: 1.35, view: 'front', expr: blendExpr(FACES.worried, FACES.hollow, t)}} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI};
+// Cartel / narco pack (halcón -> mule -> sicario -> plaza boss -> lieutenant -> patrón -> the market)
+const CARTEL = {
+  // the border desert: the halcón kid on the edge of town watching the road — L1 + the cyclical close
+  lookoutCorner: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="borderDesert" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 520, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.worried, t)}} />;},
+  // la sierra: the mule route / moving up / the hunted run — a convoy pickup, the mountain track
+  sierraRoute: () => {const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
+    const x = interpolate(f, [0, durationInFrames], [500, 1060]);
+    return <Stage backdrop="sierraCamp" prop="narcoTruck" bg="url(#spaper)" figBehind
+      fig={{pose: A.walk(f, fps), x, y: 900, scale: 1.15, view: 'profile', facing: 1, expr: FACES.focused}} />;},
+  // the roadside shrine: the vow, the medallion, protection — worried → hardened (cautionary)
+  narcoShrineRite: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="narcoShrine" bg="url(#spaper)"
+      fig={{pose: A.lookUp(f), x: 560, y: 884, scale: 1.4, view: 'front', expr: blendExpr(FACES.worried, FACES.hardened, t)}} />;},
+  // la plaza: the town square — the piso (turf tax), territory, the town under your thumb
+  plazaTown: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="townPlaza" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 620, y: 900, scale: 1.4, view: 'front', expr: blendExpr(FACES.focused, FACES.cold, t)}} />;},
+  // the narco ranch: the walled compound — the jefe de plaza's finca AND the patrón's fortress
+  // (the cold open + the apex). Figure offset LEFT off the centered gate (centered-landmark rule).
+  ranchCompound: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="narcoRanch" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 480, y: 900, scale: 1.4, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL};
