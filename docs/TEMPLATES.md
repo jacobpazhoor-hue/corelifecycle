@@ -135,6 +135,21 @@ adjacent scenes. Registry lives in src/scenes.tsx `TEMPLATES`; composable packs 
 | galaBallroom | figure under a chandelier among dim guests holding flutes | the foundation gala, society, access, reputation |
 | familyVault | figure before a great circular trust-vault door in a wall of deed boxes | the family office's paper heart, "own nothing, control everything", the $0 reveal |
 
+## Samurai / feudal Japan pack (samurai / ashigaru / daimyō / shogun-era)
+| template | depicts | good for |
+|---|---|---|
+| riceField | figure in a terraced rice paddy, a castle keep on the far hill | the peasant origin, the sword hunt in the fields, the cyclical loop close |
+| dojo | figure in a training hall (shoji wall, plank floor, a weapon rack) | training under the mentor, the code, the empty dojo of grief / the order |
+| daisho | figure behind a lacquered sword stand holding the two swords (figBehind) | getting the daishō — the want-object made real, becoming samurai |
+| sengokuField | figure among tall nobori war-banners, a burning castle, a hedge of spears | battle, a siege, the first head, the last stand (Satsuma) |
+| castleGate | figure before a sloped-stone castle gate + curved-roof gatehouse | the muster, arrival, riding out to Edo (sankin-kōtai), the domain seized |
+| teaCeremony | two figures at a low table by a tokonoma alcove (scroll + flower) | the sit-down, the warning, the politics, the polite debt |
+| lordAudience | figure before a clan-crest (mon) audience hall, kneeling retainers | being presented/promoted, ruling from the dais, the daimyō giving it back |
+| keepTop | figure on the top of the keep, upturned eaves, the domain spread below | the daimyō / great-lord apex surveying his koku |
+| seppukuRite | kneeling figure on a white mat + a standing second with a raised sword | the ordered death — the cold open, the midpoint, and its loop-close payoff |
+| shogunCourt | figure kneeling in the shogun's gilded Edo hall, long rows of vassals | kneeling before the shogun, a single mark among 30M koku |
+| merchantHouse | figure before a rice broker's counting house (bales, abacus, koban gold) | the merchant who owns your debt, Dōjima, the sword ban |
+
 ## Adding a new domain pack
 If a topic needs settings none of these cover (e.g. soldier→battlefield, athlete→stadium,
 founder→garage), add backdrop/prop entries + a small template set to src/stage.tsx following the

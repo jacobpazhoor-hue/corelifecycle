@@ -1,6 +1,12 @@
 {
   "backlog": [
     {
+      "id": "worn-swords-hip-prop",
+      "impact": "med",
+      "note": "samurai (07-04) made THE WEIGHT OF THE TWO SWORDS AT THE LEFT HIP the sensory anchor motif — it 'arrives' at t04 (daisho), is re-triggered at every level-up ('the swords are heavier today'), and is stripped bare at t25 (Haitōrei ban, 'your hip goes light'). But the daishō is only DRAWN once, on the sword stand at t04; the POV figure never visibly WEARS the swords across the climb, and the t25 payoff ('hip goes bare') is audio-only. Same failure family as [[want-object-visual-plant]] (mob_boss's undrawn Cadillac). Fix: a small 'sheathed daishō at the left hip' figure primitive in stage.tsx (a short + long line at the belt) that the SAMURAI templates toggle ON from L2 and OFF at the ban scene — so the anchor the narration keeps tightening is actually visible tightening, and the empty hip at the end reads at a glance. Generalizes to any worn want-object anchor (a ring, a badge, a holster).",
+      "scene": "samurai t04/t07/t14/t25"
+    },
+    {
       "id": "package-before-review",
       "impact": "high",
       "note": "mob_boss (07-01) got a 'revise' verdict whose ONLY blocker was pipeline order: daily_autopilot renders out/thumbnail.png + gen_packaging.py (upload_kit.json) at step 5 AFTER the review loop, so the reviewer sees the PREVIOUS episode's stale files on disk and correctly refuses to approve (a Roman 'YOU ARE MORTAL' thumb would have shipped on the Mafia video if not caught). Cheap fix: move `npx remotion still Thumbnail` + `python3 gen_packaging.py` to right after build (or into build.py step order) so the on-disk packaging always matches the episode under review; publish step can re-run them idempotently. Costs one 5s still per build; saves a whole render->review->fix cycle. MITIGATED MANUALLY on billionaire_heir (07-03): showrunner rendered the Thumbnail still + ran gen_packaging.py right after BUILD OK, so on-disk packaging matches the episode under review. The pipeline-order fix in daily_autopilot/build.py is still the real cure."
@@ -115,6 +121,12 @@
     }
   ],
   "done": [
+    {
+      "id": "samurai-pack",
+      "impact": "high",
+      "shipped": "2026-07-04",
+      "note": "Added SAMURAI / feudal-Japan pack to src/stage.tsx for samurai (built during a prior interrupted run; DOCUMENTED in docs/TEMPLATES.md and USED this run): backdrops riceField (terraced paddy + far castle keep), dojo (shoji wall + weapon rack), sengokuField (nobori war-banners + burning castle + spear hedge), castleGate (sloped-stone ishigaki + curved-roof gatehouse), teaRoom (tokonoma alcove + scroll + flower), lordHall (clan-crest mon + dais + kneeling retainers), keepTop (upturned eaves + domain below), seppukuGarden (raked gravel + pine + white mat + short blade), shogunHall (gilded screens + tiered dais + rows of vassals), merchantHouse (rice-broker counting house); props swordStand (the daishō on a lacquered stand) + teaTable; 11 templates (riceField/dojo/daisho/sengokuField/castleGate/teaCeremony/lordAudience/keepTop/seppukuRite/shogunCourt/merchantHouse) spread into PACK_TEMPLATES. Used across 29 scenes with universal signing, NO adjacent repeats; seppukuRite deliberately reused 3x as the master-loop anchor (t00 cold open / t13 midpoint / t27 loop close). Reusable for gladiator (sengokuField/lordAudience), king/medieval (castleGate/lordAudience/keepTop), ronin/shogun topics, any historical warrior-rank ladder. Pairs with [[roman-dual-spine-validated]] (koku = rice = the gold spine, same as the Roman denarii/reach dual spine)."
+    },
     {
       "id": "dynasty-pack",
       "impact": "high",

@@ -1,18 +1,18 @@
 {
   "thumb": {
-    "kicker": "THE GREAT",
-    "line1": "WEALTH TRANSFER",
+    "kicker": "EVERY LEVEL OF A",
+    "line1": "SAMURAI",
     "line2": "",
-    "tag": "90% GONE BY GEN 3",
-    "archetype": "number",
-    "big": "$124T",
-    "before": "GEN 1",
-    "after": "GEN 3",
-    "expr": "shock",
-    "povline": "WHO OWNS",
-    "keyword": "THE OWNERS?",
-    "setting": "familyVault",
-    "question": "WHO OWNS THE OWNERS?"
+    "tag": "YOU END WITH NOTHING",
+    "archetype": "pov",
+    "big": "0 KOKU",
+    "before": "PEASANT",
+    "after": "NO SWORD",
+    "expr": "hollow",
+    "povline": "YOU KNEEL",
+    "keyword": "SEPPUKU",
+    "setting": "keepTop",
+    "question": "WHO OWNS THE SWORD?"
   },
-  "topic": "billionaire_heir"
+  "topic": "samurai"
 }

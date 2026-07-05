@@ -2,396 +2,367 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 23336,
+  "totalFrames": 20735,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t00",
       "level": null,
       "overlay": {
-        "big": "$8,200,000,000",
-        "sub": "THE WILL \u00b7 AND THE PAGE SAYS: NOTHING"
+        "big": "1,000,000 KOKU",
+        "sub": "AND IT ENDS ON THIS WHITE MAT"
       },
-      "template": "boardroomNotes",
+      "template": "seppukuRite",
       "audio": "audio/t00.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 728
+      "durationInFrames": 742
     },
     {
       "id": "t01",
-      "level": "LEVEL 01  \u00b7  THE HEIR",
+      "level": "LEVEL 01  \u00b7  ASHIGARU",
       "overlay": {
-        "big": "41 ROOMS",
-        "sub": "AND YOUR FATHER IN NONE OF THEM"
+        "big": "0 KOKU",
+        "sub": "NO NAME \u00b7 TWO RICE BALLS A DAY"
       },
-      "template": "heirGates",
+      "template": "riceField",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
-      "startFrame": 728,
-      "durationInFrames": 582
+      "startFrame": 742,
+      "durationInFrames": 731
     },
     {
       "id": "t02",
       "level": null,
-      "overlay": null,
-      "template": "portraitHall",
+      "overlay": {
+        "big": "A BORROWED SPEAR",
+        "sub": "ASHIGARU \u00b7 THE FRONT RANK IS FOR THE POOR"
+      },
+      "template": "castleGate",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 1310,
-      "durationInFrames": 724
+      "startFrame": 1473,
+      "durationInFrames": 675
     },
     {
       "id": "t03",
       "level": null,
       "overlay": {
-        "big": "ONE TRUCK \u00b7 1954",
-        "sub": "WHAT THE WHOLE THING GREW FROM"
+        "big": "1 HEAD",
+        "sub": "THE PROOF OF VALOR \u00b7 AND THEY WRITE YOUR NAME"
       },
-      "template": "dinner",
+      "template": "sengokuField",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 2034,
-      "durationInFrames": 702
+      "startFrame": 2148,
+      "durationInFrames": 742
     },
     {
       "id": "t04",
-      "level": "LEVEL 02  \u00b7  THE STUDENT",
+      "level": "LEVEL 02  \u00b7  SAMURAI",
       "overlay": {
-        "big": "$130K / YR",
-        "sub": "THE TUITION \u00b7 THE MOST EXPENSIVE SCHOOL ON EARTH"
+        "big": "~30 KOKU",
+        "sub": "THE TWO SWORDS \u00b7 AND A NAME OF YOUR OWN"
       },
-      "template": "lectureHallScene",
+      "template": "daisho",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 2736,
-      "durationInFrames": 747
+      "startFrame": 2890,
+      "durationInFrames": 847
     },
     {
       "id": "t05",
       "level": null,
       "overlay": null,
-      "template": "window",
+      "template": "dojo",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 3483,
-      "durationInFrames": 715
+      "startFrame": 3737,
+      "durationInFrames": 785
     },
     {
       "id": "t06",
       "level": null,
-      "overlay": {
-        "big": "$70M",
-        "sub": "THE JET \u00b7 NOT YOURS. NOTHING IS."
-      },
-      "template": "jet",
+      "overlay": null,
+      "template": "teaCeremony",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 4198,
-      "durationInFrames": 792
+      "startFrame": 4522,
+      "durationInFrames": 763
     },
     {
       "id": "t07",
-      "level": "LEVEL 03  \u00b7  THE TRUST FUND",
+      "level": "LEVEL 03  \u00b7  MOUNTED RETAINER",
       "overlay": {
-        "big": "$2M AT 25",
-        "sub": "DOORS AT 25 \u00b7 30 \u00b7 35 \u2014 ON THEIR TERMS"
+        "big": "~500 KOKU",
+        "sub": "A HORSE \u00b7 AND MEN WHO DIE ON YOUR WORD"
       },
-      "template": "signing",
+      "template": "lordAudience",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 4990,
-      "durationInFrames": 810
+      "startFrame": 5285,
+      "durationInFrames": 800
     },
     {
       "id": "t08",
       "level": null,
-      "overlay": {
-        "big": "400 FRIENDS",
-        "sub": "AND AN NDA BEFORE THE THIRD DATE"
-      },
-      "template": "yachtDeck",
+      "overlay": null,
+      "template": "sengokuField",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 5800,
-      "durationInFrames": 749
+      "startFrame": 6085,
+      "durationInFrames": 751
     },
     {
       "id": "t09",
       "level": null,
-      "overlay": null,
-      "template": "desk",
+      "overlay": {
+        "big": "1588",
+        "sub": "THE SWORD HUNT \u00b7 THE CLASS LINE, SEALED"
+      },
+      "template": "riceField",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 6549,
-      "durationInFrames": 712
+      "startFrame": 6836,
+      "durationInFrames": 793
     },
     {
       "id": "t10",
-      "level": null,
+      "level": "LEVEL 04  \u00b7  KAR\u014c",
       "overlay": {
-        "big": "$40M EXIT",
-        "sub": "SOLD \u00b7 AND STILL NOT EARNED"
+        "big": "4,000 KOKU",
+        "sub": "KAR\u014c \u00b7 YOU RUN THE DOMAIN NOW"
       },
-      "template": "deskClose",
+      "template": "teaCeremony",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 7261,
-      "durationInFrames": 749
+      "startFrame": 7629,
+      "durationInFrames": 789
     },
     {
       "id": "t11",
-      "level": "LEVEL 04  \u00b7  THE FAMILY OFFICE",
-      "overlay": {
-        "big": "61 EMPLOYEES",
-        "sub": "ONE CLIENT: YOUR LAST NAME"
-      },
-      "template": "atrium",
+      "level": null,
+      "overlay": null,
+      "template": "lordAudience",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 8010,
-      "durationInFrames": 781
+      "startFrame": 8418,
+      "durationInFrames": 719
     },
     {
       "id": "t12",
       "level": null,
       "overlay": {
-        "big": "$0 TAX",
-        "sub": "BUY \u00b7 BORROW \u00b7 DIE \u2014 AND THE STEP-UP WIPES IT"
+        "big": "THE ORDER",
+        "sub": "SEPPUKU \u00b7 AND YOU ARE NAMED HIS SECOND"
       },
-      "template": "familyVault",
+      "template": "dojo",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 8791,
-      "durationInFrames": 826
+      "startFrame": 9137,
+      "durationInFrames": 795
     },
     {
       "id": "t13",
       "level": null,
       "overlay": {
-        "big": "$500B",
-        "sub": "PARKED IN SOUTH DAKOTA TRUSTS \u00b7 FOREVER"
+        "big": "ONE CUT",
+        "sub": "THE CODE \u00b7 IT TAKES YOUR TEACHER THROUGH YOUR HAND"
       },
-      "template": "fileWall",
+      "template": "seppukuRite",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 9617,
-      "durationInFrames": 795
+      "startFrame": 9932,
+      "durationInFrames": 177
     },
     {
       "id": "t14",
-      "level": null,
+      "level": "LEVEL 05  \u00b7  DAIMY\u014c",
       "overlay": {
-        "big": "70% \u2192 90%",
-        "sub": "FORTUNES DEAD BY GEN 2 \u00b7 GEN 3 \u2014 YOU'RE GEN 3"
+        "big": "10,000 KOKU",
+        "sub": "THE LINE \u00b7 YOU ARE A LORD NOW"
       },
-      "template": "dinner",
+      "template": "keepTop",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 10412,
-      "durationInFrames": 741
+      "startFrame": 10109,
+      "durationInFrames": 859
     },
     {
       "id": "t15",
       "level": null,
       "overlay": {
-        "big": "91 YEARS",
-        "sub": "ONE TRUCK TO $8.2B \u00b7 THE FOUNDER IS GONE"
+        "big": "EVERY OTHER YEAR",
+        "sub": "SANKIN-K\u014cTAI \u00b7 YOUR FAMILY STAYS AS HOSTAGES"
       },
-      "template": "portraitHall",
+      "template": "castleGate",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 11153,
-      "durationInFrames": 734
+      "startFrame": 10968,
+      "durationInFrames": 710
     },
     {
       "id": "t16",
       "level": null,
-      "overlay": {
-        "big": "YOU. NOT HIM.",
-        "sub": "THE SUCCESSION SKIPS A GENERATION"
-      },
-      "template": "boardroomNotes",
+      "overlay": null,
+      "template": "teaCeremony",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 11887,
-      "durationInFrames": 821
+      "startFrame": 11678,
+      "durationInFrames": 714
     },
     {
       "id": "t17",
-      "level": "LEVEL 05  \u00b7  THE SUCCESSION WAR",
+      "level": "LEVEL 06  \u00b7  THE GREAT LORD",
       "overlay": {
-        "big": "-$1.9B",
-        "sub": "YOUR FATHER'S HOLE \u00b7 THE CURSE, ON SCHEDULE"
+        "big": "1,000,000 KOKU",
+        "sub": "KAGA-SCALE \u00b7 THE GREATEST DOMAIN IN JAPAN"
       },
-      "template": "pnlWall",
+      "template": "keepTop",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 12708,
-      "durationInFrames": 782
+      "startFrame": 12392,
+      "durationInFrames": 788
     },
     {
       "id": "t18",
       "level": null,
       "overlay": {
-        "big": "2 YEARS",
-        "sub": "HALLORAN v. HALLORAN \u00b7 40 LAWYERS, HOURLY"
+        "big": "30,000,000 KOKU",
+        "sub": "ALL OF JAPAN \u00b7 AND ONE MAN MOVES IT ALL"
       },
-      "template": "courtroom",
+      "template": "shogunCourt",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 13490,
-      "durationInFrames": 858
+      "startFrame": 13180,
+      "durationInFrames": 88
     },
     {
       "id": "t19",
       "level": null,
       "overlay": null,
-      "template": "window",
+      "template": "keepTop",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 14348,
-      "durationInFrames": 718
+      "startFrame": 13268,
+      "durationInFrames": 759
     },
     {
       "id": "t20",
-      "level": null,
+      "level": "LEVEL 07  \u00b7  THE MERCHANT",
       "overlay": {
-        "big": "9 \u2013 6",
-        "sub": "THE VOTE \u00b7 IT COST HIM HIS FATHER'S CHAIR"
+        "big": "LAST OF FOUR",
+        "sub": "THE MERCHANT'S RANK \u00b7 AND HE OWNS YOUR SWORD"
       },
-      "template": "boardroomHead",
+      "template": "merchantHouse",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 15066,
-      "durationInFrames": 748
+      "startFrame": 14027,
+      "durationInFrames": 861
     },
     {
       "id": "t21",
-      "level": "LEVEL 06  \u00b7  THE STEWARD",
+      "level": null,
       "overlay": {
-        "big": "$200M / YR",
-        "sub": "GIVEN AWAY \u00b7 IT BUYS MORE THAN IT SPENDS"
+        "big": "D\u014cJIMA \u00b7 1730",
+        "sub": "THE FIRST FUTURES MARKET \u00b7 IT PRICES YOUR PAY"
       },
-      "template": "galaBallroom",
+      "template": "signing",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 15814,
-      "durationInFrames": 788
+      "startFrame": 14888,
+      "durationInFrames": 830
     },
     {
       "id": "t22",
-      "level": null,
+      "level": "LEVEL 08  \u00b7  THE END OF THE SWORD",
       "overlay": {
-        "big": "$6.8B",
-        "sub": "YOURS TO RUN \u00b7 NOT YOURS TO KEEP"
+        "big": "1868",
+        "sub": "THE RESTORATION \u00b7 THE LORDS GIVE IT ALL BACK"
       },
-      "template": "warRoom",
+      "template": "lordAudience",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 16602,
-      "durationInFrames": 690
+      "startFrame": 15718,
+      "durationInFrames": 843
     },
     {
       "id": "t23",
       "level": null,
       "overlay": {
-        "big": "11 MINUTES",
-        "sub": "YOUR SON, TODAY \u00b7 HE COUNTED"
+        "big": "1871",
+        "sub": "THE DOMAINS ABOLISHED \u00b7 A CLERK HOLDS THE GATE"
       },
-      "template": "heirGates",
+      "template": "castleGate",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 17292,
-      "durationInFrames": 640
+      "startFrame": 16561,
+      "durationInFrames": 809
     },
     {
       "id": "t24",
       "level": null,
-      "overlay": null,
-      "template": "revolvingDoor",
+      "overlay": {
+        "big": "1876",
+        "sub": "YOUR STIPEND \u2192 A PAPER BOND \u00b7 SIGN HERE"
+      },
+      "template": "signing",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 17932,
-      "durationInFrames": 681
+      "startFrame": 17370,
+      "durationInFrames": 142
     },
     {
       "id": "t25",
-      "level": "LEVEL 07  \u00b7  THE DYNASTY",
+      "level": null,
       "overlay": {
-        "big": "365 YEARS",
-        "sub": "THE TRUST OUTLIVES YOUR NAME"
+        "big": "0",
+        "sub": "HAIT\u014cREI \u00b7 THE SWORD IS WORTH NOTHING"
       },
-      "template": "signing",
+      "template": "merchantHouse",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 18613,
-      "durationInFrames": 864
+      "startFrame": 17512,
+      "durationInFrames": 820
     },
     {
       "id": "t26",
       "level": null,
       "overlay": {
-        "big": "$0",
-        "sub": "WHAT YOU OWN \u00b7 CONTROL IS THE INHERITANCE"
+        "big": "1877",
+        "sub": "THE LAST SAMURAI \u00b7 BEATEN BY PEASANTS WITH RIFLES"
       },
-      "template": "familyVault",
+      "template": "sengokuField",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 19477,
-      "durationInFrames": 862
+      "startFrame": 18332,
+      "durationInFrames": 859
     },
     {
       "id": "t27",
-      "level": "LEVEL 08  \u00b7  THE INVISIBLE FAMILIES",
+      "level": null,
       "overlay": {
-        "big": "21 BILLIONAIRES",
-        "sub": "ONE FAMILY \u00b7 A NAME YOU'VE NEVER SAID"
+        "big": "THE MAT",
+        "sub": "EVEN YOUR DEATH \u00b7 ABOLISHED"
       },
-      "template": "dinner",
+      "template": "seppukuRite",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 20339,
-      "durationInFrames": 731
+      "startFrame": 19191,
+      "durationInFrames": 752
     },
     {
       "id": "t28",
       "level": null,
       "overlay": {
-        "big": "$124T",
-        "sub": "THE GREAT TRANSFER \u00b7 INSIDE 2% OF FAMILIES"
+        "big": "THE CIRCLE",
+        "sub": "A BORROWED SPEAR \u2192 NO SWORD AT ALL"
       },
-      "template": "emptyChair",
+      "template": "riceField",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 21070,
-      "durationInFrames": 744
-    },
-    {
-      "id": "t29",
-      "level": null,
-      "overlay": {
-        "big": "90%",
-        "sub": "DIE BY GENERATION THREE \u00b7 YOU'RE THE EXCEPTION"
-      },
-      "template": "portraitHallFilled",
-      "audio": "audio/t29.wav",
-      "audioStartFrame": 3,
-      "startFrame": 21814,
-      "durationInFrames": 696
-    },
-    {
-      "id": "t30",
-      "level": null,
-      "overlay": {
-        "big": "GENERATION FIVE",
-        "sub": "THE GATES CLOSE \u00b7 THEY ALWAYS CLOSE"
-      },
-      "template": "heirGates",
-      "audio": "audio/t30.wav",
-      "audioStartFrame": 3,
-      "startFrame": 22510,
-      "durationInFrames": 826
+      "startFrame": 19943,
+      "durationInFrames": 792
     }
   ]
 }

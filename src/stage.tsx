@@ -775,6 +775,149 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       <rect x={1250} y={430} width={40} height={180} rx={8} fill={PAPERC} stroke={INK} strokeWidth={4} />
     </g>
   ),
+  // --- Samurai / feudal Japan ---
+  // the rice paddy where you start (and where the sword ends): terraced water, a distant castle keep
+  riceField: ({frame}) => (
+    <g>
+      <path d="M 0 470 Q 400 400 820 460 T 1920 440 L 1920 640 L 0 640 Z" fill="#d9cba8" stroke={INK} strokeWidth={3} opacity={0.4} />
+      {/* the lord's castle keep on the far hill (upturned-eave tenshu silhouette) */}
+      <g opacity={0.7} transform="translate(1480 250)">
+        <rect x={0} y={130} width={190} height={100} fill={PAPERC} stroke={INK} strokeWidth={3} />
+        <path d="M -18 130 Q 95 92 208 130 Z" fill={PAPERC} stroke={INK} strokeWidth={3} />
+        <rect x={40} y={64} width={110} height={66} fill={PAPERC} stroke={INK} strokeWidth={3} />
+        <path d="M 22 64 Q 95 34 168 64 Z" fill={PAPERC} stroke={INK} strokeWidth={3} />
+        <path d="M 40 40 Q 95 22 150 40 Z" fill={PAPERC} stroke={INK} strokeWidth={3} />
+      </g>
+      {/* flooded paddy + curved terrace lines + rice stalks */}
+      <rect x={0} y={640} width={1920} height={440} fill="#e5e9d6" />
+      <line x1={0} y1={640} x2={1920} y2={640} stroke={INK} strokeWidth={5} />
+      {[0, 1, 2, 3, 4].map((r) => <path key={r} d={`M 0 ${700 + r * 82} Q 960 ${678 + r * 82} 1920 ${700 + r * 82}`} fill="none" stroke={INK} strokeWidth={2} opacity={0.32} />)}
+      {Array.from({length: 40}).map((_, i) => <line key={i} x1={30 + i * 48} y1={700 + (i % 5) * 68} x2={30 + i * 48} y2={674 + (i % 5) * 68} stroke="#7a8a4a" strokeWidth={3} opacity={0.5} />)}
+    </g>
+  ),
+  // the dojo: a shoji back wall, a plank floor, a rack of practice weapons — training, the recruit
+  dojo: ({frame}) => (
+    <g>
+      <rect x={180} y={140} width={1560} height={520} fill="#f2ecdd" stroke={INK} strokeWidth={4} />
+      {Array.from({length: 8}).map((_, c) => <line key={'v' + c} x1={180 + (c + 1) * 173} y1={140} x2={180 + (c + 1) * 173} y2={660} stroke={INK} strokeWidth={2} opacity={0.5} />)}
+      {[0, 1, 2].map((r) => <line key={'h' + r} x1={180} y1={140 + (r + 1) * 130} x2={1740} y2={140 + (r + 1) * 130} stroke={INK} strokeWidth={2} opacity={0.5} />)}
+      <rect x={0} y={660} width={1920} height={420} fill="#e7d8b8" /><line x1={0} y1={660} x2={1920} y2={660} stroke={INK} strokeWidth={5} />
+      {Array.from({length: 9}).map((_, i) => <line key={i} x1={0} y1={720 + i * 40} x2={1920} y2={720 + i * 40} stroke={INK} strokeWidth={1.5} opacity={0.18} />)}
+      {/* weapon rack of bokken / spears */}
+      <g transform="translate(1560 300)">
+        <rect x={0} y={0} width={210} height={26} fill={PAPERC} stroke={INK} strokeWidth={3} />
+        <rect x={0} y={310} width={210} height={26} fill={PAPERC} stroke={INK} strokeWidth={3} />
+        {[26, 78, 130, 182].map((x) => <line key={x} x1={x} y1={0} x2={x} y2={336} stroke={INK} strokeWidth={4} />)}
+      </g>
+    </g>
+  ),
+  // the battle: tall nobori war-banners, a burning castle in the distance, a hedge of spear tips
+  sengokuField: ({frame}) => (
+    <g>
+      <ellipse cx={1560} cy={430} rx={260} ry={150} fill="url(#sglow)" opacity={0.5} />
+      {[1480, 1600].map((x, i) => <g key={x} opacity={0.16}>{[0, 1, 2].map((k) => <circle key={k} cx={x + Math.sin(frame * 0.02 + i) * 12} cy={430 - k * 46} r={34 + k * 20} fill={INK} />)}</g>)}
+      <path d="M 0 560 Q 480 490 960 540 T 1920 520 L 1920 720 L 0 720 Z" fill={PAPERC} stroke={INK} strokeWidth={3} opacity={0.45} />
+      {[170, 410, 1360, 1620].map((x, i) => <g key={x}>
+        <line x1={x} y1={760} x2={x} y2={200} stroke={INK} strokeWidth={5} />
+        <rect x={x} y={210} width={64} height={300} fill={i % 2 ? GOLD : '#b23b3b'} stroke={INK} strokeWidth={3} opacity={0.8} />
+        <circle cx={x + 32} cy={272} r={18} fill={PAPERC} stroke={INK} strokeWidth={3} /></g>)}
+      {Array.from({length: 18}).map((_, i) => <line key={i} x1={70 + i * 104} y1={860} x2={70 + i * 104} y2={582 - (i % 3) * 26} stroke={INK} strokeWidth={3} opacity={0.5} />)}
+      <rect x={0} y={720} width={1920} height={360} fill={FLOOR} /><line x1={0} y1={720} x2={1920} y2={720} stroke={INK} strokeWidth={5} />
+    </g>
+  ),
+  // the great castle gate: a sloped stone base (ishigaki), a curved-roof gatehouse, heavy doors
+  castleGate: ({frame}) => (
+    <g>
+      <rect x={0} y={840} width={1920} height={240} fill={FLOOR} /><line x1={0} y1={840} x2={1920} y2={840} stroke={INK} strokeWidth={5} />
+      <path d="M 360 840 L 460 430 L 1460 430 L 1560 840 Z" fill="#d8ccb0" stroke={INK} strokeWidth={4} />
+      {[500, 570, 640, 710, 780].map((y) => <line key={y} x1={480} y1={y} x2={1440} y2={y} stroke={INK} strokeWidth={2} opacity={0.28} />)}
+      <rect x={820} y={560} width={280} height={280} fill="#4a3d2a" stroke={INK} strokeWidth={4} />
+      <line x1={960} y1={560} x2={960} y2={840} stroke={INK} strokeWidth={3} opacity={0.6} />
+      {[880, 1040].map((x) => <circle key={x} cx={x} cy={700} r={7} fill={GOLD} opacity={0.6} />)}
+      <rect x={440} y={306} width={1040} height={124} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <path d="M 380 306 Q 500 214 700 230 L 1220 230 Q 1420 214 1540 306 Z" fill="#7a2d2d" stroke={INK} strokeWidth={4} opacity={0.55} />
+      <path d="M 380 306 Q 424 288 388 252 M 1540 306 Q 1496 288 1532 252" fill="none" stroke={INK} strokeWidth={5} />
+    </g>
+  ),
+  // the tea room: tatami, a tokonoma alcove with a hanging scroll + a single flower — politics, the order
+  teaRoom: ({frame}) => (
+    <g>
+      <rect x={0} y={120} width={1920} height={640} fill="#efe7d4" />
+      <rect x={230} y={200} width={300} height={520} fill="#e2d7bd" stroke={INK} strokeWidth={4} />
+      <rect x={330} y={250} width={100} height={300} fill={PAPERC} stroke={INK} strokeWidth={3} />
+      {[0, 1, 2].map((k) => <line key={k} x1={352} y1={292 + k * 74} x2={408} y2={292 + k * 74} stroke={INK} strokeWidth={2} opacity={0.4} />)}
+      <line x1={380} y1={632} x2={380} y2={560} stroke="#5a7a3a" strokeWidth={3} /><circle cx={380} cy={550} r={12} fill={GOLD} opacity={0.7} stroke={INK} strokeWidth={2} />
+      <rect x={0} y={760} width={1920} height={320} fill="#e7dcc0" /><line x1={0} y1={760} x2={1920} y2={760} stroke={INK} strokeWidth={5} />
+      {Array.from({length: 5}).map((_, c) => <line key={'v' + c} x1={(c + 1) * 384} y1={760} x2={(c + 1) * 384} y2={1080} stroke={INK} strokeWidth={2} opacity={0.28} />)}
+      {[864, 984].map((y) => <line key={y} x1={0} y1={y} x2={1920} y2={y} stroke={INK} strokeWidth={2} opacity={0.28} />)}
+    </g>
+  ),
+  // the lord's audience hall: a big clan crest (mon), a raised dais (jodan), rows of kneeling retainers
+  lordHall: ({frame}) => (
+    <g>
+      <rect x={0} y={120} width={1920} height={640} fill="#efe6d1" />
+      <circle cx={960} cy={324} r={112} fill="none" stroke={INK} strokeWidth={5} opacity={0.5} />
+      <circle cx={960} cy={324} r={70} fill={GOLD} stroke={INK} strokeWidth={4} opacity={0.32} />
+      <path d="M 960 262 L 992 324 L 960 386 L 928 324 Z" fill="none" stroke={INK} strokeWidth={4} opacity={0.6} />
+      <rect x={0} y={760} width={1920} height={320} fill="#e5dabc" /><line x1={0} y1={760} x2={1920} y2={760} stroke={INK} strokeWidth={5} />
+      {[0, 1].map((i) => <rect key={i} x={700 - i * 90} y={648 + i * 60} width={520 + i * 180} height={60} fill={PAPERC} stroke={INK} strokeWidth={3} />)}
+      {[0, 1, 2].map((r) => [0, 1, 2, 3].map((c) => <circle key={'L' + r + '_' + c} cx={180 + c * 118} cy={844 + r * 68} r={13} fill={PAPERC} stroke={INK} strokeWidth={2.5} opacity={0.5 - r * 0.1} />))}
+      {[0, 1, 2].map((r) => [0, 1, 2, 3].map((c) => <circle key={'R' + r + '_' + c} cx={1310 + c * 118} cy={844 + r * 68} r={13} fill={PAPERC} stroke={INK} strokeWidth={2.5} opacity={0.5 - r * 0.1} />))}
+    </g>
+  ),
+  // the top of the keep (donjon): upturned eaves overhead, a balcony rail, the domain spread below
+  keepTop: ({frame}) => (
+    <g>
+      {Array.from({length: 14}).map((_, i) => <path key={i} d={`M ${80 + i * 130} 620 l 46 -26 l 46 26 Z`} fill={PAPERC} stroke={INK} strokeWidth={2} opacity={0.4} />)}
+      <path d="M 0 660 Q 960 630 1920 660 L 1920 780 L 0 780 Z" fill="#d9cba8" stroke={INK} strokeWidth={2} opacity={0.4} />
+      <path d="M 120 224 Q 500 128 960 156 Q 1420 128 1800 224 L 1800 262 Q 960 214 120 262 Z" fill="#7a2d2d" stroke={INK} strokeWidth={4} opacity={0.55} />
+      <path d="M 120 224 Q 78 192 38 150 M 1800 224 Q 1842 192 1882 150" fill="none" stroke={INK} strokeWidth={5} />
+      <rect x={0} y={820} width={1920} height={260} fill={FLOOR} /><line x1={0} y1={820} x2={1920} y2={820} stroke={INK} strokeWidth={5} />
+      <line x1={0} y1={782} x2={1920} y2={782} stroke={INK} strokeWidth={4} />
+      {Array.from({length: 24}).map((_, i) => <line key={i} x1={40 + i * 80} y1={782} x2={40 + i * 80} y2={820} stroke={INK} strokeWidth={3} />)}
+    </g>
+  ),
+  // the seppuku garden: raked gravel, a single pine, a white mat — the ordered death (the midpoint)
+  seppukuGarden: ({frame}) => (
+    <g>
+      <rect x={0} y={120} width={1920} height={520} fill="#e9e0cc" /><line x1={0} y1={640} x2={1920} y2={640} stroke={INK} strokeWidth={4} opacity={0.6} />
+      <g transform="translate(1500 300)"><line x1={0} y1={340} x2={0} y2={150} stroke={INK} strokeWidth={8} />
+        {[0, 1, 2].map((k) => <g key={k}><path d={`M -8 ${190 + k * 58} q -70 -22 -122 4`} fill="none" stroke="#5a6a3a" strokeWidth={5} opacity={0.6} /><path d={`M 8 ${190 + k * 58} q 70 -22 122 4`} fill="none" stroke="#5a6a3a" strokeWidth={5} opacity={0.6} /></g>)}</g>
+      <rect x={0} y={640} width={1920} height={440} fill="#ece5d2" />
+      {Array.from({length: 9}).map((_, r) => <line key={r} x1={0} y1={700 + r * 44} x2={1920} y2={700 + r * 44} stroke={INK} strokeWidth={1.5} opacity={0.2} />)}
+      <rect x={740} y={846} width={440} height={150} fill="#f6f2e8" stroke={INK} strokeWidth={4} />
+      {/* the short blade on a small stand beside the mat */}
+      <rect x={1210} y={812} width={96} height={22} fill={PAPERC} stroke={INK} strokeWidth={3} />
+      <path d="M 1224 812 q 60 -8 118 -2" fill="none" stroke={INK} strokeWidth={4} />
+    </g>
+  ),
+  // the shogun's grand hall (Edo): gilded folding screens, a high tiered dais, long rows of vassals
+  shogunHall: ({frame}) => (
+    <g>
+      <rect x={0} y={120} width={1920} height={640} fill="#e9d8a6" opacity={0.6} />
+      {[0, 1, 2, 3, 4, 5].map((c) => <line key={c} x1={c * 320} y1={120} x2={c * 320} y2={760} stroke={INK} strokeWidth={3} opacity={0.4} />)}
+      {[300, 780, 1300, 1700].map((x, i) => <path key={x} d={`M ${x} ${268 + i * 18} q 60 -42 120 0 q 44 -30 92 6 q 22 40 -38 46 l -184 0 q -42 -30 8 -52 Z`} fill={GOLD} stroke={INK} strokeWidth={2} opacity={0.4} />)}
+      <rect x={0} y={760} width={1920} height={320} fill="#e2d6b6" /><line x1={0} y1={760} x2={1920} y2={760} stroke={INK} strokeWidth={5} />
+      {[0, 1, 2].map((i) => <rect key={i} x={640 - i * 130} y={600 + i * 54} width={640 + i * 260} height={54} fill={PAPERC} stroke={INK} strokeWidth={3} />)}
+      {[0, 1, 2, 3].map((r) => Array.from({length: 6}).map((_, c) => <circle key={r + '_' + c} cx={200 + c * 260 + (r % 2 ? 60 : 0)} cy={882 + r * 50} r={12} fill={PAPERC} stroke={INK} strokeWidth={2.5} opacity={0.5 - r * 0.08} />))}
+    </g>
+  ),
+  // the rice broker's counting house: a noren, a wall of rice bales, an abacus + stacked koban gold
+  merchantHouse: ({frame}) => (
+    <g>
+      <rect x={0} y={120} width={1920} height={70} fill="#5a6b7a" opacity={0.5} />
+      {[0, 1, 2, 3, 4].map((i) => <line key={i} x1={i * 400 + 200} y1={190} x2={i * 400 + 200} y2={120} stroke={INK} strokeWidth={2} opacity={0.4} />)}
+      {[0, 1, 2, 3].map((r) => Array.from({length: 4}).map((_, c) => <g key={r + '_' + c}>
+        <ellipse cx={1360 + c * 132} cy={782 - r * 90} rx={64} ry={44} fill="#e3d6ad" stroke={INK} strokeWidth={3} />
+        <line x1={1360 + c * 132 - 64} y1={782 - r * 90} x2={1360 + c * 132 + 64} y2={782 - r * 90} stroke={INK} strokeWidth={2} opacity={0.4} /></g>))}
+      <rect x={0} y={800} width={1920} height={280} fill={FLOOR} /><line x1={0} y1={800} x2={1920} y2={800} stroke={INK} strokeWidth={5} />
+      <rect x={360} y={720} width={360} height={90} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={390} y={740} width={180} height={54} fill="#e7d8b8" stroke={INK} strokeWidth={3} />
+      {[0, 1, 2, 3].map((r) => <line key={r} x1={390} y1={748 + r * 12} x2={570} y2={748 + r * 12} stroke={INK} strokeWidth={1.5} opacity={0.5} />)}
+      {[0, 1, 2, 3, 4].map((c) => <circle key={c} cx={410 + c * 36} cy={766} r={6} fill={INK} opacity={0.6} />)}
+      {[0, 1, 2].map((k) => <ellipse key={k} cx={648} cy={790 - k * 14} rx={30} ry={12} fill={GOLD} stroke={INK} strokeWidth={2.5} opacity={0.85} />)}
+    </g>
+  ),
   plain: () => <g />,
 };
 // tiny helper so inline math reads cleanly above
@@ -1034,6 +1177,30 @@ const PROP: Record<string, React.FC<{frame: number}>> = {
       <circle cx={960} cy={470} r={54} fill={PAPERC} stroke={INK} strokeWidth={5} />
       <circle cx={960} cy={470} r={54} fill="none" stroke={GOLD} strokeWidth={3} opacity={0.8} />
       <text x={960} y={492} textAnchor="middle" fontFamily="Georgia, serif" fontSize={60} fontWeight={700} fill={INK} opacity={0.85}>H</text>
+    </g>
+  ),
+  // the daishō on a stand: the paired long + short sword — the want-object (figBehind → in front)
+  swordStand: ({frame}) => (
+    <g transform="translate(1120 700)">
+      <rect x={0} y={126} width={230} height={16} rx={4} fill="#3a2f22" stroke={INK} strokeWidth={3} />
+      <rect x={22} y={64} width={12} height={66} fill="#3a2f22" stroke={INK} strokeWidth={2} />
+      <rect x={196} y={64} width={12} height={66} fill="#3a2f22" stroke={INK} strokeWidth={2} />
+      <path d="M -12 98 Q 112 76 242 98" fill="none" stroke={INK} strokeWidth={6} />
+      <rect x={-28} y={90} width={32} height={14} rx={3} fill="#7a2d2d" stroke={INK} strokeWidth={2} />
+      <path d="M 34 128 Q 128 114 220 128" fill="none" stroke={INK} strokeWidth={5} />
+      <rect x={18} y={120} width={26} height={12} rx={3} fill="#7a2d2d" stroke={INK} strokeWidth={2} />
+      <ellipse cx={115} cy={70} rx={140} ry={46} fill="url(#sglow)" opacity={0.55} />
+    </g>
+  ),
+  // a low tea table: a bowl with steam + an iron kettle — the tea ceremony / the quiet sit-down
+  teaTable: ({frame}) => (
+    <g>
+      <rect x={700} y={786} width={520} height={24} rx={6} fill="#6a4a2a" stroke={INK} strokeWidth={4} />
+      <rect x={740} y={810} width={16} height={78} fill="#6a4a2a" stroke={INK} strokeWidth={3} /><rect x={1164} y={810} width={16} height={78} fill="#6a4a2a" stroke={INK} strokeWidth={3} />
+      <path d="M 906 786 q 34 30 68 0 Z" fill={PAPERC} stroke={INK} strokeWidth={3} />
+      {[0, 1, 2].map((k) => <path key={k} d={`M ${928 + k * 14} 782 q ${-5 + Math.sin(frame * 0.3 + k) * 5} -24 4 -44`} fill="none" stroke="#b8b0a0" strokeWidth={2} opacity={0.5} />)}
+      <ellipse cx={1070} cy={778} rx={36} ry={26} fill={PAPERC} stroke={INK} strokeWidth={3} />
+      <path d="M 1040 760 q 30 -20 60 0" fill="none" stroke={INK} strokeWidth={3} />
     </g>
   ),
   none: () => <g />,
@@ -1401,4 +1568,62 @@ const DYNASTY = {
       fig={{pose: A.lookUp(f), x: 500, y: 888, scale: 1.4, view: 'front', expr: blendExpr(FACES.focused, FACES.hollow, t)}} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY};
+// Samurai pack (ashigaru -> retainer -> mounted man -> karō -> daimyō -> great lord -> the sword ends)
+const SAMURAI = {
+  // the rice paddy: the peasant origin AND the loop close — you own nothing, a borrowed spear
+  riceField: () => {const f = useCurrentFrame();
+    return <Stage backdrop="riceField" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 620, y: 900, scale: 1.4, view: 'front', expr: FACES.earnest}} />;},
+  // the dojo: training under the mentor, the code — later, the empty dojo of grief
+  dojo: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="dojo" bg="url(#spaper)"
+      fig={{pose: A.armsCrossed(f), x: 700, y: 900, scale: 1.4, view: 'front', expr: blendExpr(FACES.exhausted, FACES.focused, t)}} />;},
+  // the daishō on the stand: getting your two swords — the want made real (figBehind → swords in front)
+  daisho: () => {const f = useCurrentFrame();
+    return <Stage backdrop="teaRoom" prop="swordStand" bg="url(#swarm)" figBehind
+      fig={{pose: A.stand(f), x: 640, y: 900, scale: 1.35, view: 'front', expr: FACES.awe}} />;},
+  // the battle: nobori banners, a burning castle, a hedge of spears — the war
+  sengokuField: () => {const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
+    const x = interpolate(f, [0, durationInFrames], [560, 1180]);
+    return <Stage backdrop="sengokuField" bg="url(#spaper)" figBehind
+      fig={{pose: A.walk(f, fps), x, y: 900, scale: 1.0, view: 'profile', facing: 1, expr: FACES.hardened}} />;},
+  // the great castle gate: arrival, the sword hunt, the siege you hold, riding out to Edo
+  castleGate: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="castleGate" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 560, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.worried, FACES.cold, t)}} />;},
+  // the tea room: the sit-down, the warning, the politics — a low table by the tokonoma
+  teaCeremony: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="teaRoom" prop="teaTable" bg="url(#swarm)" figBehind
+      fig={{pose: A.sit(f), x: 680, y: 800, scale: 1.2, view: 'profile', facing: 1, expr: blendExpr(FACES.focused, FACES.conflicted, t)}}
+      extras={[{pose: A.sit(f + 40), x: 1240, y: 800, scale: 1.2, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+  // the lord's audience hall: presented, promoted, and later ruling from the dais yourself
+  lordAudience: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="lordHall" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.35, view: 'front', expr: blendExpr(FACES.focused, FACES.cold, t)}} />;},
+  // the top of the keep: the domain below — the daimyō apex / the great lord surveying his koku
+  keepTop: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="keepTop" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 1120, y: 900, scale: 1.42, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
+  // the seppuku garden: the ordered death — the cold open, the midpoint, and its payoff (a second behind)
+  seppukuRite: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="seppukuGarden" bg="url(#spaper)" figBehind
+      fig={{pose: A.sit(f), x: 940, y: 906, scale: 1.25, view: 'front', expr: blendExpr(FACES.hardened, FACES.hollow, t)}}
+      extras={[{pose: A.stand(f), x: 1300, y: 900, scale: 1.3, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+  // the shogun's grand hall in Edo: 30 million koku, and you a single mark in a long row
+  shogunCourt: () => {const f = useCurrentFrame();
+    return <Stage backdrop="shogunHall" bg="url(#swarm)"
+      fig={{pose: A.sit(f), x: 960, y: 890, scale: 1.15, view: 'front', expr: FACES.worried}} />;},
+  // the rice broker's counting house: the merchant with no sword who owns your debt and the edict
+  merchantHouse: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="merchantHouse" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 620, y: 900, scale: 1.35, view: 'front', expr: blendExpr(FACES.worried, FACES.hollow, t)}} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI};
