@@ -78,5 +78,3 @@ samurai ladder/number, billionaire_heir pov).
 - Sinaloa revenue $3B–$39B/yr; Forbes listed Chapo ~$1B. Wikipedia/Britannica/Forbes.
 - Sicario pay ~$85–200/hit or /month; "$30 a time" account (Baverstock 2015); kids recruited (VICE).
 - Mexico drug-war deaths since 2006: 28k→60k→120k–150k+, 100k+ missing (CNN/Wilson Center/PBS). CONTESTED.
-</content>
-</invoke>

@@ -1,285 +1,309 @@
 #!/usr/bin/env python3
-"""Your Life as Every Rank in Special Forces — POV doodle build, ~12 min, template-driven.
-Grounded in docs/research/special_forces.md (the special-operations ladder: selection candidate ->
-operator on an ODA -> team sergeant -> the tier-1 Unit -> assault/troop commander -> squadron ->
-the joint task force that spends operators -> the anonymous signature above it all). Second-person
-present-tense POV: the viewer IS a nobody who climbs from a selection roster number to the man who
-signs the targets, and learns he was ammunition the whole way. Dramatization layer over VERIFIED,
-NON-INSTRUCTIONAL mechanics: SELECTION attrition (most wash out), the Q Course and the tab, the ODA
-(12-man Operational Detachment Alpha, 18-series specialties), unconventional warfare / foreign internal
-defense / direct action, the tier-1 special mission unit under JSOC running STERILE (no rank, no name,
-"you don't exist"), the find-fix-finish HVT raid cycle, ISR/exfil/the bird, and the interagency /
-National Command Authority / a case officer above the whole enterprise. NO real tradecraft or methods
-are depicted — selection events and jargon are named only as career milestones (cautionary POV).
+"""Your Life in a Cartel at Every Rank — POV doodle build, ~12 min, template-driven.
+Grounded in docs/research/mexican_cartel.md (the narco ladder: halcón lookout -> burrero mule ->
+sicario -> jefe de plaza -> lugarteniente -> el patrón/kingpin -> la red/the network -> la demanda,
+the buyers up north). Second-person present-tense POV: the viewer IS a poor kid on a dust-town corner
+who climbs to the man in the walled compound and learns the only two exits were always a cell or a
+grave — and that above even the kingpin sits a market that spends him and never learns his name.
+CAUTIONARY, ANTI-GLAMOUR DRAMATIZATION over VERIFIED, NON-INSTRUCTIONAL facts: recruitment of minors
+as lookouts/hitmen (VICE), sicario pay a poverty wage (~$85-200 a hit/month; "$30 a time" account),
+"plata o plomo" (silver or lead), el piso (turf tax), a real kingpin listed ~$1B (Forbes/Chapo),
+Sinaloa revenue estimates $3B-$39B/yr, ~$150B/yr Americans spend on illicit drugs (RAND 2016), and
+Mexico's drug war since 2006 (100,000+ disappeared, well over 120,000 dead — figures contested). NO
+production, smuggling method, or weapon technique is depicted — jargon and settings are named only as
+milestones of a life, never as instruction.
 
-SPINE (a command + attrition STAT, not $ — special forces is a modest salary; the drama is who you
-spend): ROSTER 47 / most quit -> 1 OF 12 (the ODA + the tab) -> 12 MEN die on your call -> NO NAME
-(the Unit, sterile) -> 40 DOORS A NIGHT (assault commander) -> 100+ OPERATORS (squadron) -> 3
-CONTINENTS (the task force that spends you) -> ONE SIGNATURE (the man who signs, whom you never see).
-You climb from being SPENT (the tip of the spear is the part that breaks off in the wound) to being
-the one who SPENDS others — and above even you sits a civilian who never trained, never bled.
+SPINE (gold $ escalation, with red-cost beats — the money climbs while the exit closes): ~$600/MO
+(halcón) -> $5,000/LOAD (burrero) -> $85/BODY (sicario — the horror number) -> $40M/YEAR (the plaza's
+piso) -> $300M (the lieutenant, the war) -> $1 BILLION (the patrón) -> THE MARKET (la red) -> $150
+BILLION (la demanda, the buyers). You climb from being the cheapest thing in the machine to running
+it — and learn you were inventory the whole way, and inventory gets sold.
 
-STORY: mentor MASTER SERGEANT COLE (the cadre who runs your selection, then your team sergeant; gives
-you the code and the warning "quitting is a bullet"); rival VEGA (climbs beside you from selection,
-faster, crueler, makes the Unit with you, taunts as a rival troop leader at the midpoint). MIDPOINT:
-on an HVT raid the exfil bird is pulled to protect a source, and Cole is killed holding the stairwell —
-you carry his taped tags out and learn the truth: you are not the spear, you are what the spear is
-made of. Ammunition. And ammunition gets spent. Sensory anchor motif: YOUR DOG TAGS, TAPED SO THEY
-DON'T RATTLE (sound discipline) — loud at selection (t01), taped the night of the first infil (t05),
-checked on the team (t07), NONE at the sterile Unit (t10), a dead man's tags carried out (t14), a
-drawer of them (t17), and a new candidate's rattling on a ruck run at the loop-close (t28). Master
-open loop: the cold open (t00) — first man through a door, a hostage in the third room, a shape
-rising with a rifle — resolves at t26 (you make the shot, the hostage lives, you take the round);
-the final image bends back to a selection ruck run in the dark (t28).
+STORY: mentor EL TÍO (runs the corner, recruits you, gives the code + the warning "everyone on this
+road is already dead"); rival EL FLACO (rises beside you, crueler, faster, mocks the medallion); the
+recurring fixer THE LICENCIADO (the cartel's lawyer/launderer — the shared-universe character planted
+at the count room t16 and left UNRESOLVED at t23). MIDPOINT (t14): the patrón above you brands El Tío
+an informant and orders you to kill him to prove loyalty; you do it, and press his medallion into his
+dead hand — "you are not the knife; you are what the knife is for." Sensory anchor motif: a CHEAP
+PLASTIC SAINT'S MEDALLION on a bootlace at your throat — your mother Rosa ties it on (t01), you press
+it to your lips before every job (t02/t04), after the first body (t08), into El Tío's hand (t14), it
+is gold now and means nothing (t17), it's in your fist in the tunnel (t24), and at the end a soldier
+cuts it from your throat (t26) and it's tied onto a new lookout kid on the same corner (t27). Master
+open loop: the AFTERMATH cold open (t00) — dawn, the emptied compound, the phone that stopped ringing,
+cuffed at your own gate as the medallion is cut away — resolves at t24-t26 (the raid, the tunnel, the
+cell you choose over the grave). The final image (t28) bends up to the buyer who never sees you.
 
 PROMISE->PAYOFF LEDGER:
-  * t00 cold-open (the breach, hostage in the third room, a shape rising)  -> t26 (you make the shot; you take the round)
-  * t01 want: the tab / to belong + finish                                 -> t04 (you earn it)
-  * anchor: dog tags taped so they don't rattle                            -> t05, t07, t10 (none/sterile), t14, t17, t28
-  * t02 mentor Cole + his warning "quitting is a bullet"                    -> t13/t14 (Cole killed; you carry his tags out)
-  * t02 rival Vega                                                          -> t15 (his taunt); t23 (what you both became)
-  * t14 cost line "you are ammunition"                                     -> t23/t24 (you become the one who spends)
-  * UNRESOLVED universe thread (deliberate): the case officer who signs     -> the man from Langley whose name you're never
-    the folder ("Mr. Gray")                                                    cleared to know — left open for a future episode.
+  * t00 cold open (dawn, emptied compound, cuffed, medallion cut off)  -> t24/t26 (the raid; the cell)
+  * t01 want: out of nothing; Rosa's medicine + the medallion she ties  -> t11/t17 (you have millions and can't go home)
+  * anchor: the plastic saint's medallion at your throat                -> t02, t04, t08, t14, t17, t24, t26, t27
+  * t02 mentor El Tío + warning "everyone here is already dead"          -> t13/t14 (you are ordered to kill him; you do)
+  * t05 rival El Flaco                                                   -> t12 (his taunt); t23 (what he became)
+  * t06 "plata o plomo" — no third door                                 -> t23/t26 (the door was always a cell or a grave)
+  * t14 cost line "you are what the knife is for"                       -> t25 ("you were inventory")
+  * t16 the Licenciado (planted at the count room)                      -> t23 (his line; left UNRESOLVED, universe thread)
+  * UNRESOLVED universe thread (deliberate): THE LICENCIADO, the fixer   -> he already works for whoever's next; never caught (open)
 
-Templates: MILITARY pack (bootcamp/barracksLife/frontline/commandPost/decoration) + SPY pack
-(tradecraft/surveillance/safehouse/debrief/station) + universal (warRoom/emptyChair/signing/jet).
-No two adjacent scenes share a template. Structural variation vs last 2 (billionaire_heir will-reading /
-samurai flash-forward mat): cold open is an in-medias-res MID-ACTION breach; act-2 is a straight RISE
-that curdles at the midpoint (rise-into-rot); ending is CYCLICAL (back to a ruck run in the dark) with
-one universe door left open (the man who signs).
+Templates: CARTEL pack (lookoutCorner/sierraRoute/narcoShrineRite/plazaTown/ranchCompound + prop
+narcoTruck) + MAFIA reuse (backAlley/waterfront/cardGame/donOffice/countRoom/courtroom/prisonCell/
+wiretap) + universal (dinner/warRoom/jet/window/emptyChair). ranchCompound is REUSED 4x on purpose as
+the master-loop anchor (t00 aftermath / t10 the plaza finca / t18 the kingpin's fortress / t24 the
+raid) — the compound the whole life is built to reach and lose. No two adjacent scenes share a
+template. Structural variation vs last 2 (special_forces mid-action breach, rise-into-rot, cyclical;
+billionaire_heir will-reading, fall-then-rise): cold open is AFTERMATH (the morning it ends); act-2
+shape is a true RISE-THEN-FALL (you actually lose it all); ending is cyclical (medallion to a new kid)
+with one door left open (the demand up north / the Licenciado).
 """
 
 FPS = 30
 
 SCENES = [
-    # ---- COLD OPEN — the breach (the master loop, mid-action) ----
-    dict(id="t00", level=None, template="frontline", gap=0.7,
-         narration=("Zero three-thirty. You're first on the door, stacked tight, four men breathing on your "
-                    "spine. The charge blows. Flashbang. White. You go in low through the smoke, rifle up, and "
-                    "the hostage is exactly where the source swore — third room, zip-tied to a chair. But a "
-                    "shape rises in the corner with a long gun coming level, and you have half a second to be "
-                    "right. Your tags are taped silent against your chest. Your hands are steady. Hold there."),
-         overlay=dict(big="0330 · BREACH", sub="THE HOSTAGE IS IN THE THIRD ROOM")),
+    # ---- COLD OPEN — the aftermath (the master loop): the morning it ends ----
+    dict(id="t00", level=None, template="ranchCompound", gap=0.7,
+         narration=("Dawn. Your own gate, cold iron under your knees, wrists zip-tied behind you. The dogs "
+                    "aren't barking — that was the first sign, an hour ago, and you knew. Your phone stopped "
+                    "ringing at four. Two hundred gunmen on the payroll and not one answered. A soldier leans "
+                    "in and cuts the bootlace at your throat, and the little plastic saint you've worn for "
+                    "thirty years drops into his glove. The compound behind you is already empty. This is how "
+                    "it ends for everyone who reaches the top of this. You just didn't believe it would be you."),
+         overlay=dict(big="THE MORNING IT ENDS", sub="THE DOGS WENT QUIET · THE PHONE STOPPED")),
 
-    # ---- LEVEL 1 — THE CANDIDATE (selection) ----
-    dict(id="t01", level="LEVEL 01  ·  THE CANDIDATE", template="bootcamp",
-         narration=("Rewind. You're a nobody from a nothing town, a name-tape and a roster number — forty-"
-                    "seven — and nothing else. No team. No tab. Fresh dog tags rattle on your chest with "
-                    "every step of the ruck, loud as coins in a can. Two hundred men started this morning. "
-                    "The mountain doesn't care about any of you. Other guys want to be soldiers. You want in "
-                    "somewhere that would never let you quit."),
-         overlay=dict(big="ROSTER 47", sub="200 START · A NAME TAPE, NOTHING ELSE")),
-    dict(id="t02", level=None, template="tradecraft",
-         narration=("Selection is built to break you, and it's honest about it. Land nav alone in the black. "
-                    "A ruck that grinds your spine into your hips. Sleep measured in minutes. A cadre named "
-                    "Master Sergeant Cole runs the course, flat-eyed, never yelling. A recruit called Vega "
-                    "moves up front like the weight is nothing. At the truck a man drops his ruck and climbs "
-                    "aboard — done. Cole doesn't even look. He looks at you."),
+    # ---- LEVEL 1 — EL HALCÓN (the lookout) ----
+    dict(id="t01", level="LEVEL 01  ·  EL HALCÓN  (THE LOOKOUT)", template="lookoutCorner",
+         narration=("Rewind. You're thirteen, on the edge of a dust town where the road out is the only thing "
+                    "worth looking at. Your mother, Rosa, coughs through the wall at night, and the medicine "
+                    "costs forty pesos you don't have. She kneels and ties a cheap plastic saint on a "
+                    "bootlace around your neck. So death knows you're spoken for, she says. A man on the "
+                    "corner has watched you a week. He gives you a phone and a whistle. Watch the road. Call "
+                    "the trucks. Six hundred dollars a month — more than Rosa has ever held."),
+         overlay=dict(big="~$600 / MONTH", sub="A PHONE, A WHISTLE, AND A NAME NOBODY KNOWS YET")),
+    dict(id="t02", level=None, template="narcoShrineRite",
+         narration=("The man on the corner is El Tío — the Uncle — and the whole barrio steps off the "
+                    "sidewalk for him. He takes you to a little roadside shrine, candles guttering, and "
+                    "watches you press the plastic saint to your lips the way Rosa showed you. He nods, like "
+                    "you passed something. Then he tells you the only true thing anyone in this life will ever "
+                    "tell you, flat, without cruelty."),
          overlay=None,
-         dialogue=dict(text="You don't get to quit here. Quitting is a bullet — it only takes one.")),
-    dict(id="t03", level=None, template="barracksLife", gap=0.7,
-         narration=("By day three the barracks tells the whole story without a word. Two hundred bunks this "
-                    "morning. Count them now — most are stripped bare, mattresses rolled, the men who owned "
-                    "them gone in the night. Nobody was thrown out. They walked. That's the trick of it: no "
-                    "one makes you fail. You unmake yourself, quietly, at three a.m., and ring a bell. Your "
-                    "tags still rattle. Vega's bunk is still made. So is yours."),
-         overlay=dict(big="MOST QUIT", sub="SELECTION · NOBODY FAILS YOU — YOU FAIL YOURSELF")),
+         dialogue=dict(text="Everyone on this road is already dead, m'ijo. Some of us just don't know the day.")),
+    dict(id="t03", level=None, template="backAlley", gap=0.7,
+         narration=("You find out what the whistle is for on a Tuesday. A rival crew came through in the "
+                    "night, and now the alley behind the market has a man in it who used to run this corner, "
+                    "and a cardboard sign, and the smell of it reaches you before the shape does. The whole "
+                    "town walks past with their eyes on their shoes. Nobody screams. Nobody calls anyone. "
+                    "That silence is the loudest thing you've ever heard, and it teaches you the rule in one "
+                    "second: you are already in. There was never a form to sign, and there is no way back out."),
+         overlay=dict(big="FIRST BODY", sub="THE TOWN LEARNS TO LOOK AT ITS SHOES")),
 
-    # ---- LEVEL 2 — THE OPERATOR (the tab, the ODA) ----
-    dict(id="t04", level="LEVEL 02  ·  THE OPERATOR", template="decoration",
-         narration=("Selection only earns you the right to be trained. Months of the pipeline — the Q Course, "
-                    "weapons and demolitions and languages beaten into you — and then a plain morning under "
-                    "the flags, and they hand you the tab. You made it. You're an operator now, one of twelve "
-                    "on an Operational Detachment Alpha — an A-team, a whole small war in a dozen men. Cole is "
-                    "your team sergeant. The boy from the ruck run belongs to something at last."),
-         overlay=dict(big="1 OF 12", sub="THE TAB · YOU MADE THE TEAM")),
-    dict(id="t05", level=None, template="surveillance",
-         narration=("First infil. A dim street in a country the news won't name, midnight, the smell of diesel "
-                    "and wet concrete. Before you step off, you do the thing Cole taught you — you tape your "
-                    "dog tags flat so they can't rattle, can't catch light, can't give you away. Sound "
-                    "discipline. The tags go silent against your skin and stay that way for twenty years. "
-                    "Out here you don't announce yourself. Out here, quiet is alive."),
-         overlay=dict(big="TAPE THE TAGS", sub="SOUND DISCIPLINE · QUIET IS ALIVE")),
-    dict(id="t06", level=None, template="frontline",
-         narration=("Then a doorway lights up, and the training becomes true in one second. Muzzle flash. The "
-                    "copper taste floods your mouth before you understand you bit your cheek. Your hands move "
-                    "on their own — stack, breach, clear — the way Cole drilled it ten thousand times. When "
-                    "it's over a man is down who was standing, and you're still standing who could be down. "
-                    "That's the whole math. You did the job. It bought you the next one."),
-         overlay=dict(big="FIRST", sub="THE COPPER TASTE · AND YOU DID THE JOB")),
-
-    # ---- LEVEL 3 — THE TEAM SERGEANT ----
-    dict(id="t07", level="LEVEL 03  ·  THE TEAM SERGEANT", template="commandPost",
-         narration=("Therefore they give you the team. Cole moves up, and the ODA is yours — twelve men, "
-                    "twelve families, one plan, and your name on it. Before every bird you walk the line and "
-                    "check each man: kit, ammo, and the tags, taped flat, because a rattle is a funeral. "
-                    "Twelve lives now ride on a call you make in the dark on half the facts. The weight isn't "
-                    "the ruck anymore. The weight is that every one of them believes you."),
-         overlay=dict(big="12 MEN", sub="THE TEAM SERGEANT · THEY DIE ON YOUR CALL")),
-    dict(id="t08", level=None, template="safehouse",
-         narration=("The work is quieter than the movies. A corkboard of faces, a map stuck with red string, "
-                    "a village you're meant to turn into a partner and a weapon. Foreign internal defense — "
-                    "you train other men to fight so fewer of yours have to. But intel is a rumor wearing a "
-                    "suit, and one night the string points at the wrong house. A door you clear holds a "
-                    "family, not a target. You carry that home. It doesn't tape down quiet."),
+    # ---- LEVEL 2 — EL BURRERO (the mule) ----
+    dict(id="t04", level="LEVEL 02  ·  EL BURRERO  (THE MULE)", template="sierraRoute",
+         narration=("Sixteen now, and watching the road isn't enough — El Tío puts you on it. You ride the "
+                    "sierra in a pickup that smells of diesel and cut lime, moving packages you're told never "
+                    "to open. Before every run you kiss the little saint. Five thousand a load. The mountains "
+                    "are beautiful at dawn and full of shallow graves, and you tell yourself the second part "
+                    "doesn't apply to you. The weight in the truck bed is the first thing you've carried that "
+                    "can end you."),
+         overlay=dict(big="$5,000 / LOAD", sub="THE FIRST THING YOU CARRY THAT CAN END YOU")),
+    dict(id="t05", level=None, template="waterfront",
+         narration=("A handoff at a container port, midnight, salt and rust in your throat. This is where you "
+                    "meet El Flaco — the Skinny One — a mule your age who volunteers for the runs nobody else "
+                    "will take and grins the whole time. A load goes missing that night. The boy who was "
+                    "carrying it goes missing with it, and no one says his name again by morning. You keep "
+                    "your head down and your saint tucked inside your collar. El Flaco just shrugs. More road "
+                    "for us, he says."),
          overlay=None),
-    dict(id="t09", level=None, template="debrief",
-         narration=("But being good at this only buys a harder door. In a bare room under a single bulb, two "
-                    "men with no patches and no names slide a folder across the table. There is a place above "
-                    "Special Forces — a Unit that doesn't officially exist, its own selection, worse than the "
-                    "first. Vega already got the tap; he'll be in your class. You sign. Reaching the top means "
-                    "nothing if you can't survive being chosen for it first."),
-         overlay=dict(big="THE TAP", sub="A UNIT THAT DOESN'T EXIST · SELECTION, AGAIN")),
+    dict(id="t06", level=None, template="cardGame",
+         narration=("Therefore they test you. A back room, a low lamp, El Tío across a card table sliding a "
+                    "pistol to the center like a bet. This is the door every man in this life walks through, "
+                    "and it only opens one way. Plata o plomo — silver or lead. Take the money and the work "
+                    "that comes with it, or take the bullet for saying no. Your hands are steady on the felt. "
+                    "That steadiness is the thing that should frighten you, and it doesn't. You pick up the "
+                    "silver. There was never a third door."),
+         overlay=dict(big="PLATA O PLOMO", sub="THE SILVER OR THE LEAD · YOU DON'T GET A THIRD DOOR")),
 
-    # ---- LEVEL 4 — THE UNIT (tier-1, sterile) ----
-    dict(id="t10", level="LEVEL 04  ·  THE UNIT", template="tradecraft",
-         narration=("The Unit erases you to make you. No rank on your chest. No unit patch. No name tape. You "
-                    "grow your hair out, wear civilian clothes, and carry no ID at all — and here's the part "
-                    "that's actually real: you take off your dog tags. Sterile kit. If you die tonight, "
-                    "there's nothing on your body to say who you were. You spent your whole life earning a "
-                    "name. They just took it back. On paper, you don't exist."),
-         overlay=dict(big="NO NAME", sub="THE UNIT · STERILE · YOU DON'T EXIST")),
-    dict(id="t11", level=None, template="safehouse",
-         narration=("Now the board is a hunt. A high-value target's face, patterns of life, the F3EA cycle — "
-                    "find, fix, finish, exploit, analyze — a machine that turns a name into a raid into "
-                    "another name by dawn. Drones hold overwatch like patient birds. You are the finish. The "
-                    "sharp end. The tip of the spear — and nobody says the quiet part: the tip is the part "
-                    "that snaps off in the wound. You're too busy being the best in the world to hear it."),
-         overlay=None),
-    dict(id="t12", level=None, template="frontline",
-         narration=("So you finish. Raid after raid, the same brutal ballet — infil, breach, clear, exfil "
-                    "before the block wakes. Rotor wash, cordite, the copper taste that never fully leaves. "
-                    "Vega runs the next team over, counting kills against yours like a scoreboard. You're "
-                    "untouchable, the both of you. That feeling — that nothing can reach you up here — is "
-                    "exactly the lie the next night is built to teach you."),
-         overlay=dict(big="THE TIP OF THE SPEAR", sub="FIND · FIX · FINISH · BEFORE DAWN")),
+    # ---- LEVEL 3 — EL SICARIO (the gunman) ----
+    dict(id="t07", level="LEVEL 03  ·  EL SICARIO  (THE GUNMAN)", template="plazaTown", gap=0.7,
+         narration=("Your first job is in the town square, in daylight, on purpose — the cartel doesn't hide "
+                    "its work, it advertises it. A name, a face, a debt in someone else's ledger. It's over in "
+                    "the time it takes the church bell to finish ringing. The plaza empties around you like "
+                    "water around a stone. Here is the part the corridos never sing: they pay you eighty-five "
+                    "dollars for it. You are the cheapest thing in the entire machine, and the machine knows "
+                    "exactly how little you cost to replace."),
+         overlay=dict(big="$85 / BODY", sub="THE CHEAPEST THING IN THE WHOLE MACHINE")),
+    dict(id="t08", level=None, template="narcoShrineRite",
+         narration=("After, you go back to the shrine, because there's nowhere else the shaking stops. You "
+                    "press the plastic saint to your lips and it tastes like copper now. You start a count in "
+                    "your head that night — one — and swear it's the only one. It isn't. The men beside you "
+                    "are eighteen, nineteen, already flinching at engines. A sicario here gets maybe three "
+                    "years before the road collects him. Planning past that is for people with a way out."),
+         overlay=dict(big="3-YEAR LIFE", sub="THE AVERAGE GUNMAN DOESN'T SEE A FOURTH")),
+    dict(id="t09", level=None, template="donOffice",
+         narration=("But you're good at surviving, and surviving is a kind of promotion here. The plaza boss "
+                    "gets taken — extradited, or buried, you're never told which — and the corridor needs a "
+                    "man who does the work and keeps his mouth shut. El Tío puts your name forward. He sits "
+                    "you behind a desk that used to belong to a dead man and slides the keys to a whole town "
+                    "across it. Reaching the top of this means nothing, he says, if you can't hold a single "
+                    "plaza first."),
+         overlay=dict(big="A DEAD MAN'S DESK", sub="YOU HELD ON · SO THEY HAND YOU THE TOWN")),
 
-    # ---- MIDPOINT — the bird is pulled; Cole ----
-    dict(id="t13", level=None, template="surveillance", gap=1.4,
-         narration=("One target looks like all the others until it isn't. A compound, a stairwell, Cole on "
-                    "point because he never stopped going through doors. You're on the roof running the "
-                    "assault. The exfil bird is inbound, minutes out, blades already a rumor on the horizon. "
-                    "Cole's voice in your ear, calm, holding the stairwell so the team can pull the hostage. "
-                    "Then command comes up on the net. And the bird banks away."),
-         overlay=None),
-    dict(id="t14", level=None, template="frontline", gap=0.7,
-         narration=("A source somewhere is worth more than the man on the stairs. The exfil is diverted to "
-                    "protect an asset you'll never be briefed on. No QRF. Cole holds anyway, because that's "
-                    "the code he taught you, until he can't. You bring him out yourself, and his tags are "
-                    "taped flat, silent, the way he showed you at the truck. That's when it lands, cold and "
-                    "final: you are not the spear. You are what the spear is made of. Ammunition. And "
-                    "ammunition gets spent."),
-         overlay=dict(big="AMMUNITION", sub="THE BIRD BANKED AWAY · AND HE HELD ANYWAY")),
+    # ---- LEVEL 4 — JEFE DE PLAZA (the plaza boss) ----
+    dict(id="t10", level="LEVEL 04  ·  JEFE DE PLAZA  (THE PLAZA BOSS)", template="ranchCompound",
+         narration=("Now you have a finca — a walled compound at the edge of the sierra, an iron gate, dogs, "
+                    "a ring of gunmen who call you jefe. You own a corridor: every gram, every truck, every "
+                    "kilometer of a road the government pretends it patrols. The medallion at your throat "
+                    "isn't plastic anymore; you had it cast in gold, and it's heavier, and it means less. "
+                    "Rosa could have any medicine in the country now. But you can't go back to the dust town. "
+                    "Men like you don't get to go home."),
+         overlay=dict(big="THE FINCA", sub="A WALLED CORRIDOR · AND YOU CAN'T GO HOME")),
+    dict(id="t11", level=None, template="plazaTown",
+         narration=("You run the town not with fear alone, but with a floor. El piso — the tax on the ground "
+                    "itself. The taquero pays. The pharmacy pays. The migrant paying to cross your stretch of "
+                    "desert pays. Forty million a year moves through your hands, and almost none of it stays: "
+                    "you pay up, you pay the police, you pay the soldiers who wave your trucks through. The "
+                    "whole town works for you, and you work for the men above you."),
+         overlay=dict(big="$40M / YEAR", sub="EL PISO · THE TAX ON THE GROUND ITSELF")),
+    dict(id="t12", level=None, template="sierraRoute",
+         narration=("The convoys are yours to send now — you don't ride in the truck bed, you point the "
+                    "truck. El Flaco runs guns for the plaza beside yours and pulls up alongside your window "
+                    "in the sierra, sunglasses on at dusk, counting his kills against yours like a scoreboard. "
+                    "He's climbing as fast as you and enjoying it more. He nods at the gold saint on your "
+                    "chest and laughs."),
+         overlay=None,
+         dialogue=dict(text="You still kiss that plastic saint, primo? Up here we don't pray. We collect.")),
 
-    # ---- LEVEL 5 — TROOP / ASSAULT COMMANDER ----
-    dict(id="t15", level="LEVEL 05  ·  ASSAULT COMMANDER", template="commandPost",
-         narration=("You should quit. Instead grief burns down to something harder, and you take the troop. "
-                    "You stop kicking the door and start choosing it. Multiple objectives a night, the whole "
-                    "assault force moving on your word, HVTs crossed off a list before breakfast. Vega runs "
-                    "the troop beside yours, and he grins across the planning table with Cole barely buried."),
-         overlay=dict(big="40 DOORS A NIGHT", sub="YOU CHOOSE THE DOOR NOW"),
-         dialogue=dict(text="Still counting the dead, farmer? Up here you don't count them. You spend them.")),
-    dict(id="t16", level=None, template="surveillance",
-         narration=("And you're good at it — that's the horror. You move men across a city like pieces, and "
-                    "the ones who don't come back become a line in a report you sign before the coffee's "
-                    "cold. Money bought nothing here; the job pays a schoolteacher's wage. What it buys is "
-                    "this: the power to decide which of your own men walks into the room that's wrong. You "
-                    "make that call clean now. Your hands are steady. That's the part that should frighten you."),
+    # ---- MIDPOINT — the order to kill El Tío ----
+    dict(id="t13", level=None, template="dinner", gap=1.4,
+         narration=("A summons to a quiet dinner with the patrón above you — candlelight, good tequila, a man "
+                    "who smiles the whole time he decides who lives. He slides a folder across the cloth. "
+                    "Inside is a face you'd know in the dark: El Tío. The Uncle. The word is that he's been "
+                    "talking to the Americans. The patrón wants it done by someone the old man trusts. He "
+                    "wants it done by you. To prove there is nothing in you the cartel doesn't own. He lets "
+                    "the silence stretch. Then he says the one word that has no answer."),
          overlay=None),
-    dict(id="t17", level=None, template="barracksLife",
-         narration=("In your desk there's a drawer you don't open in daylight. Dog tags, taped flat, silent — "
-                    "one set for every man you spent. You could name each one, the town, the kid, the joke he "
-                    "always told. The rattle you silenced twenty years ago to stay alive is the sound you "
-                    "can't get back. You wanted in somewhere that would never let you quit. It never will. "
-                    "That was the trap, and you walked into it grinning."),
-         overlay=dict(big="A DRAWER OF TAGS", sub="ONE SET FOR EVERY MAN YOU SPENT")),
+    dict(id="t14", level=None, template="backAlley", gap=0.7,
+         narration=("You take El Tío to the same alley behind the market where he first showed you a body, "
+                    "years ago. He knows. He doesn't run — running is a bullet, and he taught you that. He "
+                    "presses his own saint into your hand and tells you to make the count and not to lie to "
+                    "yourself about the number. Then you do it. Afterward you fold his medallion into his "
+                    "dead fingers, and it lands, cold and final: you were never the knife. You are the thing "
+                    "the knife is for. And a thing gets used until it breaks."),
+         overlay=dict(big="EL TÍO", sub="YOU WERE NEVER THE KNIFE · YOU ARE WHAT IT'S FOR")),
 
-    # ---- LEVEL 6 — SQUADRON COMMANDER ----
-    dict(id="t18", level="LEVEL 06  ·  SQUADRON COMMANDER", template="station",
-         narration=("Still you climb, because stopping is the only door you can't make yourself open. They "
-                    "give you a squadron — a hundred-plus operators plus the enablers, intel and aviation and "
-                    "the drones that never blink, spread across theaters you used to only infil. You don't "
-                    "wear the kit now. You sign for the target and hand the mission to a younger version of "
-                    "yourself, tags already taped, already gone into the dark."),
-         overlay=dict(big="100+ OPERATORS", sub="YOU SIGN THE TARGET NOW")),
-    dict(id="t19", level=None, template="signing",
-         narration=("A name crosses your desk, a face, a pattern of life, a window of maybe two hours. You "
-                    "sign. Somewhere a stack forms on a door, a charge blows, a man goes in low through the "
-                    "smoke — and you are warm and dry a thousand miles away, moving him like you were once "
-                    "moved. You have become the calm voice on the net. The one who banks the bird away when "
-                    "the math says a source is worth more than the man on the stairs."),
-         overlay=None),
-    dict(id="t20", level=None, template="debrief",
-         narration=("But every command answers to a bigger one. Under a bulb in a bare room, a folder slides "
-                    "toward you again — the same ritual as the tap, older now. The joint task force. The "
-                    "level where special operations stops being a knife and becomes a machine that runs the "
-                    "whole hunt at once. You take it. Of course you take it. You never learned how to be a "
-                    "man who doesn't."),
-         overlay=dict(big="THE TASK FORCE", sub="THE KNIFE BECOMES A MACHINE")),
+    # ---- LEVEL 5 — EL LUGARTENIENTE (the lieutenant) ----
+    dict(id="t15", level="LEVEL 05  ·  EL LUGARTENIENTE  (THE LIEUTENANT)", template="warRoom",
+         narration=("You should have died of it. Instead the grief hardens into something colder, and the "
+                    "patrón moves you up for passing his test. You're a lieutenant now — you don't hold one "
+                    "plaza, you run the war across a dozen. Rival cartels, the army, a map stuck with pins "
+                    "that used to be people. Three hundred million moves under you. You stop reading the count "
+                    "as names. You read it as a column, and the column is the only thing you keep clean."),
+         overlay=dict(big="$300M", sub="THE DEAD STOP BEING PEOPLE · THEY BECOME A COLUMN")),
+    dict(id="t16", level=None, template="countRoom",
+         narration=("The money isn't a metaphor up here; it's a physical problem. A naked bulb, tables of "
+                    "banded cash the counters can't finish before more arrives, sour and papery in the heat. "
+                    "A soft man in a good suit walks that wall and never touches a bill: the Licenciado, the "
+                    "cartel's lawyer, who turns paper into ports and pharmacies and a football club. Money "
+                    "buys the police. Money buys the judge. Money buys the mothers who won't testify. Money "
+                    "buys everything in this country except the one thing you spend it all chasing: a door out."),
+         overlay=dict(big="A ROOM OF CASH", sub="IT BUYS EVERYTHING BUT THE ONE DOOR YOU WANT")),
+    dict(id="t17", level=None, template="narcoShrineRite",
+         narration=("Rosa dies while you're at war, in a good hospital you paid for, in a city you couldn't "
+                    "risk entering. You send flowers you can't deliver in person and mourn her at the same "
+                    "roadside shrine where El Tío warned you. The gold saint is warm from your skin and worth "
+                    "a year of a mule's pay and it protects you from nothing. You wanted out of nothing for "
+                    "her, and you got everything, and she died alone because of what the everything cost. That "
+                    "was the trade. Nobody read you the terms because you'd have taken it anyway."),
+         overlay=dict(big="ROSA", sub="EVERYTHING YOU BUILT · AND SHE DIED ALONE")),
 
-    # ---- LEVEL 7 — THE TASK FORCE (JSOC) ----
-    dict(id="t21", level="LEVEL 07  ·  THE JOINT COMMAND", template="warRoom",
-         narration=("A dark room the size of a hangar, a wall of live feeds, a globe pinned with every target "
-                    "worth a raid. Three continents run through your hands at once. The industrial version of "
-                    "the thing that made you: find, fix, finish, on a schedule, forever, a raid a night in "
-                    "cities most of the country couldn't place on a map. You are the command now. The command "
-                    "that spends operators. The command that once spent you."),
-         overlay=dict(big="3 CONTINENTS", sub="THE COMMAND THAT SPENDS OPERATORS")),
-    dict(id="t22", level=None, template="commandPost",
-         narration=("The wall calls it find-fix-finish. Everyone in the room says it flat, like weather. A "
-                    "green figure on a screen becomes a dot, becomes a decision, becomes nothing, and the "
-                    "next slide is already up. You approve targets by the dozen between sips of cold coffee. "
-                    "The boy on the ruck run couldn't have carried this. The man on the stairwell died so "
-                    "someone could. Turns out that someone is you."),
+    # ---- LEVEL 6 — EL PATRÓN (the kingpin) ----
+    dict(id="t18", level="LEVEL 06  ·  EL PATRÓN  (THE KINGPIN)", template="ranchCompound", gap=0.7,
+         narration=("The patrón above you is killed in his own bed, and there's no ceremony to what comes "
+                    "next — you're simply the one still standing, so the cartel is yours. El Patrón. The "
+                    "kingpin. A mountain fortress with a tunnel under the bedroom floor, an army, generals and "
+                    "governors on the payroll. Forbes could put a number on you now — a billion dollars — and "
+                    "print it beside your face. Every police force on two continents knows your name. You've "
+                    "become the man the whole climb was built to reach."),
+         overlay=dict(big="$1 BILLION", sub="EL PATRÓN · A NAME ON A LIST ON TWO CONTINENTS")),
+    dict(id="t19", level=None, template="jet",
+         narration=("Reach is the drug now, not money. A private strip carved into the sierra, planes that "
+                    "cross the water to Europe where a kilo is worth five times what it fetches at home. Your "
+                    "product moves through ports you've never seen, into the noses of people who will never "
+                    "once think of the dust town or the alley or the eighty-five dollars. You point a finger "
+                    "and cargo crosses an ocean. But you sleep in a different room every night, and the tunnel "
+                    "is always within ten steps."),
          overlay=None),
-    dict(id="t23", level=None, template="emptyChair",
-         narration=("Vega's chair is empty across the command floor — burned out, or buried, you're never told "
-                    "which, and you don't ask. You won the race the two of you ran from the mud. This is the "
-                    "prize: a room where you become the exact voice that banked the bird away from Cole. You "
-                    "swore you'd never be it. You are it. The only question left is who taps a man like you — "
-                    "and there's a folder for that too."),
-         overlay=None),
+    dict(id="t20", level=None, template="window",
+         narration=("They write ballads about you now. Corridos on the radio that make the alley sound like a "
+                    "coronation and leave out the smell. Boys in dust towns wear your saint and want your "
+                    "life, exactly the way you once wanted the man's on the corner. From your window you can "
+                    "see three states you control and not one street you can walk down. They sing your name "
+                    "and can't say it near a soldier. You own the corridor, and you live in a tunnel."),
+         overlay=dict(big="THEY SING YOUR NAME", sub="AND YOU CAN'T WALK DOWN A SINGLE STREET")),
 
-    # ---- LEVEL 8 — THE MAN WHO SIGNS ----
-    dict(id="t24", level="LEVEL 08  ·  THE MAN WHO SIGNS", template="station", gap=0.7,
-         narration=("Above the whole enterprise sits a chain you were never cleared to see. An interagency "
-                    "man from Langley — call him Mr. Gray, because you never get a real name — sets a folder "
-                    "on the table. Inside is a target, a country, and a signature line that is not yours. "
-                    "He never trained. He never bled. He never taped a tag. He decides, and you execute, and "
-                    "the war stays a secret because officially none of it happened at all."),
-         overlay=dict(big="ONE SIGNATURE", sub="THE MAN WHO SIGNS · YOU NEVER SEE HIM"),
-         dialogue=dict(text="There's no medal for this one. You were never here. Sign it.")),
-    dict(id="t25", level=None, template="jet",
-         narration=("You did point the spear once. You forget that, up here, warm and briefed and clean. So "
-                    "walk it back — all the way back — to the thing the whole climb was built to answer. That "
-                    "first breach. Zero three-thirty. The third room. The hostage in the chair, and the shape "
-                    "rising in the corner with a long gun coming level. You've spent twenty years becoming the "
-                    "man who could sign this. Once, you were the man who had to be right."),
+    # ---- LEVEL 7 — LA RED (the network) ----
+    dict(id="t21", level="LEVEL 07  ·  LA RED  (THE NETWORK)", template="warRoom",
+         narration=("But you are not the top, and the proof is that the machine doesn't need you. La red — the "
+                    "network — is bigger than any patrón: chemists, bankers, port bosses, whole governments "
+                    "renting out their coasts. Take one kingpin off the board and the price of a kilo doesn't "
+                    "twitch for a single day. You spent your life believing you climbed toward the center. "
+                    "There is no center. There is a market, and it wears men like you the way you wore that "
+                    "plastic saint — until they crack, then it picks up another."),
+         overlay=dict(big="LA RED", sub="TAKE OUT THE KINGPIN · THE PRICE DOESN'T MOVE")),
+    dict(id="t22", level=None, template="wiretap",
+         narration=("Somewhere in a cool northern office, men you'll never meet are listening. A reel turns. A "
+                    "wall of photographs has your face in the center now, red string running out to every man "
+                    "you ever trusted. The Americans don't need to beat you. They need to buy one person close "
+                    "enough — and in a life built entirely on plata o plomo, everyone already learned that "
+                    "everyone can be bought. Including the men who guard your bedroom door."),
          overlay=None),
+    dict(id="t23", level=None, template="dinner",
+         narration=("The Licenciado comes to see you one last time — the lawyer who launders the cash through "
+                    "the port and the pharmacy and the football club, who has served three patrones and "
+                    "buried none of them. He never carries a gun. He carries a pen, which is worse. He lays "
+                    "out your accounts and your options, and there are fewer of the second than the first, "
+                    "and he tells you the thing you already knew the morning the dogs went quiet."),
+         overlay=None,
+         dialogue=dict(text="You were never the top, patrón. You were the product. I already work for whoever's next.")),
 
-    # ---- LOOP CLOSE — resolve the breach, then the ruck run ----
-    dict(id="t26", level=None, template="frontline", gap=0.7,
-         narration=("Half a second. Your tags are taped silent, your hands are steady, and you make the shot "
-                    "because Cole drilled it into your spine ten thousand times. The shape drops. The hostage "
-                    "lives. But the corner had a second gun, and a round punches through your shoulder like a "
-                    "hot wire, and you go down grinning in the smoke, alive, having done the job. That's the "
-                    "whole math. It bought you every level after. And every level cost you the boy who taped "
-                    "his tags that first night."),
-         overlay=dict(big="YOU MAKE THE SHOT", sub="THE HOSTAGE LIVES · AND YOU TAKE THE ROUND")),
-    dict(id="t27", level=None, template="decoration",
-         narration=("There is no medal for most of it, and the ones they give you, you can't wear where "
-                    "anyone would understand. You have a drawer of silent tags and a folder signed by a man "
-                    "with no name and a shoulder that aches before rain. You wanted in somewhere that would "
-                    "never let you quit. You got it. It kept its promise all the way down. It never once let "
-                    "you go."),
-         overlay=dict(big="NO MEDAL", sub="IT NEVER ONCE LET YOU GO")),
-    dict(id="t28", level=None, template="bootcamp",
-         narration=("Before dawn, a mountain, a line of nobodies under rucks in the black. You're the cadre "
-                    "now, flat-eyed, standing where Cole stood. Two hundred started. A kid near the back, "
-                    "roster number rattling, fresh tags loud as coins in a can — same as you, all those "
-                    "years ago. He's about to unmake himself, or not. You step in close and tell him the only "
-                    "true thing anyone ever told you. Tape your tags, son. Quiet is alive. The circle closes "
-                    "in the dark where it opened."),
-         overlay=dict(big="ROSTER 01", sub="A NEW NAME TAPE · THE CIRCLE BEGINS AGAIN")),
+    # ---- LEVEL 8 — LA DEMANDA (the demand) + LOOP CLOSE ----
+    dict(id="t24", level="LEVEL 08  ·  LA DEMANDA  (THE DEMAND)", template="ranchCompound", gap=0.7,
+         narration=("So walk it all the way back to that dawn. The dogs go quiet — that's the tell, the only "
+                    "warning you get. Headlights climb the mountain road, too many, in a line, and your two "
+                    "hundred gunmen are already gone because someone paid them more to leave. Ten steps to the "
+                    "tunnel. Your gold saint is in your fist. You could go down fighting and be a corrido by "
+                    "morning, or you could go into the ground under the bedroom and run one last time. You "
+                    "choose the tunnel. Because after everything, you still want to live. That was always the "
+                    "whole problem."),
+         overlay=dict(big="THE ROAD CLIMBS", sub="TEN STEPS TO THE TUNNEL · YOU STILL WANT TO LIVE")),
+    dict(id="t25", level=None, template="courtroom",
+         narration=("The tunnel comes up inside a cordon. Of course it does — they had the map before you ran. "
+                    "Now you're in a foreign courtroom under a fluorescent hum, a translator at your ear, a "
+                    "flag that isn't yours behind the judge. And here is the number that ends the story: the "
+                    "buyers up north spend a hundred and fifty billion dollars a year on what you sold. A "
+                    "hundred and fifty billion. You and every patrón before you were a delivery service for "
+                    "an appetite that never once learned your name. You weren't the kingpin. You were "
+                    "inventory. And inventory gets restocked."),
+         overlay=dict(big="$150 BILLION", sub="THE APPETITE UP NORTH · YOU WERE ONLY THE DELIVERY")),
+    dict(id="t26", level=None, template="prisonCell", gap=0.7,
+         narration=("A cell in a country you can't pronounce, a light that never fully goes out. This is one "
+                    "of the two doors El Tío promised you on the corner when you were thirteen — the cell or "
+                    "the grave, and you chose the cell the moment you chose the tunnel. Count what you own "
+                    "now. A billion dollars you can't touch. A gold saint in an evidence bag. A count in your "
+                    "head you finally stopped keeping because there wasn't paper enough. Zero. You own zero. "
+                    "You always did. The cartel just let you hold the gold for a while."),
+         overlay=dict(big="$0", sub="THE CELL OR THE GRAVE · THOSE WERE ALWAYS THE EXITS")),
+    dict(id="t27", level=None, template="lookoutCorner",
+         narration=("Back in the dust town the road out still runs to the horizon, and a boy of thirteen "
+                    "stands on the corner where you stood. A man hands him a phone and a whistle. His mother "
+                    "coughs through a thin wall. Someone kneels and ties a cheap plastic saint on a bootlace "
+                    "at his throat — maybe the same one they cut from you, cleaned off and passed down. Watch "
+                    "the road, they tell him. Call the trucks. Six hundred a month. To him it sounds like the "
+                    "whole world. The circle closes exactly where it opened."),
+         overlay=dict(big="A NEW KID · SAME CORNER", sub="THE ROAD OUT WAS NEVER A WAY OUT")),
+    dict(id="t28", level=None, template="emptyChair",
+         narration=("And a thousand miles north, in a bright clean city, a man you will never meet lays a bill "
+                    "on a bar and gets a small paper packet in return, and never thinks about the sierra or "
+                    "the shrine or the boy on the corner, because he doesn't have to. He is the top of the "
+                    "ladder you spent your life climbing, and he doesn't know the ladder exists. The dogs went "
+                    "quiet for you. They'll go quiet for whoever's next. The market is hungry in the morning, "
+                    "same as always. It never once learned a single one of your names."),
+         overlay=dict(big="THE HUNGER NEVER ENDS", sub="THE MAN AT THE TOP DOESN'T KNOW YOU EXIST")),
 ]

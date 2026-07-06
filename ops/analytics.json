@@ -1,8 +1,8 @@
 {
-  "updated": "2026-07-05T04:41:35.971388+00:00",
+  "updated": "2026-07-06T08:00:23.900382+00:00",
   "channel": {
-    "videos": 20,
-    "views": 619,
+    "videos": 23,
+    "views": 671,
     "subscribers": 4
   },
   "videos": [
@@ -31,17 +31,27 @@
       "topic": "hedge_fund_manager",
       "title": "Every Level of a Hedge Fund Manager \u2014 From Analyst to Billionaire",
       "published": "2026-06-24T20:32:02Z",
-      "views": 36,
-      "likes": 0,
+      "views": 37,
+      "likes": 1,
       "comments": 0,
       "duration": "PT13M3S"
+    },
+    {
+      "id": "VPDaEqsIu6g",
+      "topic": "mob_boss",
+      "title": "Your Life in the Mafia at Every Rank (Only 2 Ways Out)",
+      "published": "2026-07-03T02:16:42Z",
+      "views": 35,
+      "likes": 3,
+      "comments": 0,
+      "duration": "PT12M12S"
     },
     {
       "id": "4Qu5gDLhBzA",
       "topic": "spy",
       "title": "Your Life as a Spy at Every Level \u2014 Recruit to Spymaster",
       "published": "2026-06-28T18:47:28Z",
-      "views": 29,
+      "views": 32,
       "likes": 1,
       "comments": 0,
       "duration": "PT12M56S"
@@ -67,21 +77,11 @@
       "duration": "PT10M49S"
     },
     {
-      "id": "VPDaEqsIu6g",
-      "topic": "mob_boss",
-      "title": "Your Life in the Mafia at Every Rank (Only 2 Ways Out)",
-      "published": "2026-07-03T02:16:42Z",
-      "views": 13,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT12M12S"
-    },
-    {
       "id": "jTfmhC3peEM",
       "topic": "real_estate_mogul",
       "title": "Every Level of a Real Estate Mogul \u2014 From Agent to Global Landlord",
       "published": "2026-06-28T04:12:48Z",
-      "views": 12,
+      "views": 16,
       "likes": 0,
       "comments": 0,
       "duration": "PT12M26S"
@@ -91,10 +91,20 @@
       "topic": "roman_empire",
       "title": "Your Life as Every Rank in the Roman Empire (You Die at the Top)",
       "published": "2026-06-30T19:35:29Z",
-      "views": 9,
+      "views": 11,
       "likes": 0,
       "comments": 0,
       "duration": "PT13M5S"
+    },
+    {
+      "id": "TZSLFLOwj4M",
+      "topic": "billionaire_heir",
+      "title": "Your Life as a Billionaire Heir at Every Level (You Inherit $0)",
+      "published": "2026-07-03T18:06:43Z",
+      "views": 8,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M51S"
     },
     {
       "id": "AWmf0DwSC-g",
@@ -127,16 +137,6 @@
       "duration": "PT53S"
     },
     {
-      "id": "TZSLFLOwj4M",
-      "topic": "billionaire_heir",
-      "title": "Your Life as a Billionaire Heir at Every Level (You Inherit $0)",
-      "published": "2026-07-03T18:06:43Z",
-      "views": 3,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT12M51S"
-    },
-    {
       "id": "ilBfri70z-U",
       "topic": null,
       "title": "Every Level of a Spy Master \ud83d\udcb0 #shorts",
@@ -157,6 +157,26 @@
       "duration": "PT10M8S"
     },
     {
+      "id": "uRCF7Sn22Ns",
+      "topic": null,
+      "title": "Every Level of a Special Forces \ud83d\udcb0 #shorts",
+      "published": "2026-07-05T15:36:21Z",
+      "views": 1,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT59S"
+    },
+    {
+      "id": "molUoFUlmso",
+      "topic": "special_forces",
+      "title": "Your Life as Every Rank in Special Forces (Most Die at Selection)",
+      "published": "2026-07-05T15:19:13Z",
+      "views": 1,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M8S"
+    },
+    {
       "id": "pg08o0QpUqI",
       "topic": null,
       "title": "Every Level of a Hedge Fund \ud83d\udcb0 #shorts",
@@ -175,6 +195,16 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT5M22S"
+    },
+    {
+      "id": "MiXTy6PUdDk",
+      "topic": null,
+      "title": "Your Life as Every Rank in Special Forces (You Don't Exist)",
+      "published": "2026-07-05T20:01:33Z",
+      "views": 0,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M10S"
     },
     {
       "id": "JgawiJbzTcA",

@@ -1,19 +1,19 @@
 {
   "thumb": {
-    "kicker": "EVERY RANK OF",
-    "line1": "SPECIAL FORCES",
+    "kicker": "EVERY RANK OF A",
+    "line1": "CARTEL",
     "line2": "",
-    "tag": "MOST DIE AT SELECTION",
-    "archetype": "pov",
-    "big": "1 OF 200",
+    "tag": "NO THIRD DOOR",
+    "archetype": "beforeafter",
+    "big": "$85",
     "before": "NOBODY",
-    "after": "SPENT",
-    "expr": "worried",
-    "povline": "YOU ARE",
-    "keyword": "AMMO",
-    "setting": "frontline",
-    "question": "WHO SIGNS THE TARGET?",
+    "after": "HUNTED",
+    "expr": "hollow",
+    "povline": "YOU KILL FOR",
+    "keyword": "$85",
+    "setting": "townPlaza",
+    "question": "WHAT'S A LIFE WORTH?",
     "mood": "danger"
   },
-  "topic": "special_forces"
+  "topic": "mexican_cartel"
 }

@@ -20,7 +20,7 @@
     {
       "id": "package-before-review",
       "impact": "high",
-      "note": "mob_boss (07-01) got a 'revise' verdict whose ONLY blocker was pipeline order: daily_autopilot renders out/thumbnail.png + gen_packaging.py (upload_kit.json) at step 5 AFTER the review loop, so the reviewer sees the PREVIOUS episode's stale files on disk and correctly refuses to approve (a Roman 'YOU ARE MORTAL' thumb would have shipped on the Mafia video if not caught). Cheap fix: move `npx remotion still Thumbnail` + `python3 gen_packaging.py` to right after build (or into build.py step order) so the on-disk packaging always matches the episode under review; publish step can re-run them idempotently. Costs one 5s still per build; saves a whole render->review->fix cycle. MITIGATED MANUALLY on billionaire_heir (07-03): showrunner rendered the Thumbnail still + ran gen_packaging.py right after BUILD OK, so on-disk packaging matches the episode under review. The pipeline-order fix in daily_autopilot/build.py is still the real cure."
+      "note": "mob_boss (07-01) got a 'revise' verdict whose ONLY blocker was pipeline order: daily_autopilot renders out/thumbnail.png + gen_packaging.py (upload_kit.json) at step 5 AFTER the review loop, so the reviewer sees the PREVIOUS episode's stale files on disk and correctly refuses to approve (a Roman 'YOU ARE MORTAL' thumb would have shipped on the Mafia video if not caught). Cheap fix: move `npx remotion still Thumbnail` + `python3 gen_packaging.py` to right after build (or into build.py step order) so the on-disk packaging always matches the episode under review; publish step can re-run them idempotently. Costs one 5s still per build; saves a whole render->review->fix cycle. MITIGATED MANUALLY on billionaire_heir (07-03) AND mexican_cartel (07-06): showrunner rendered the Thumbnail still (out/thumbnail.png) + ran gen_packaging.py (out/upload_kit.json) right after BUILD OK, so on-disk packaging matches the episode under review. On mexican_cartel this also CAUGHT the number-thumb collision [[number-thumb-collision-short-values]] before review — rendering the thumb post-build is doubling as a thumbnail QA gate, another reason to make it a permanent pipeline step. The pipeline-order fix in daily_autopilot/build.py is still the real cure."
     },
     {
       "id": "fix-agent-artifact-hygiene",
@@ -129,6 +129,26 @@
       "id": "want-object-visual-plant",
       "impact": "low",
       "note": "mob_boss: the black Cadillac (the named want-object opening and closing the loop) was never drawn \u2014 the cyclical echo was audio-only. Rule of thumb: if the script names a physical want-object in scene 1 and the loop close, stage.tsx should actually draw it in both (a small prop primitive is enough); the visual rhyme is what makes the ending feel circular."
+    },
+    {
+      "id": "number-thumb-collision-short-values",
+      "impact": "med",
+      "note": "mexican_cartel (07-06): the NUMBER archetype (thumbs.tsx ThumbNumber) collides for SHORT $ values. BIG font = min(480, 1300/len*1.6), so a 3-char value like '$85' maxes at 480px and the giant number sits over the top kicker/line1 caption \u2014 'A HIT PAYS' was almost entirely hidden behind the '$85', only '..YS' peeked out (looked broken). Had to abandon the strongest hook (a life costs $85 = DISPOSABLE) and switch the thumb to beforeafter (NOBODY -> HUNTED). Cheap fix: when BIG.length is small, cap fs lower (e.g. min(360,...)) AND/OR move the kicker+line1 caption OUT of the number's box (top-left small, or below the accent bar) so a short shock-number thumb is usable. The low-horror-number thumb ($85/$30-a-hit) is a high-CTR angle worth unlocking. Pairs with [[negative-overlay-recurring]] (both are thumbnail/overlay number-treatment gaps)."
+    },
+    {
+      "id": "beforeafter-hero-expr-hardcoded",
+      "impact": "low",
+      "note": "mexican_cartel (07-06): ThumbBefore (beforeafter archetype) hardcodes the AFTER hero's face to expr='smug' (`expr={face('smug')}`) and ignores meta thumb.expr, so a 'HUNTED'/fear pairing renders a calm neutral stare instead of the worried/shock face that is the #1 CTR lever with no real faces. ThumbPov already reads t.expr correctly. One-line fix: make ThumbBefore's Hero use expr={face(t.expr || 'smug')} so the after-figure's emotion can match the after-word (shock/worried for a HUNTED/BURNED/TRAPPED apex). Rendered fine this run (cold narco reads OK), flagged as a cheap CTR upgrade."
+    },
+    {
+      "id": "runtime-insensitive-to-word-cuts",
+      "impact": "low",
+      "note": "mexican_cartel (07-06): cut ~85 words (2725->2643) and runtime only moved 13.8->13.5 min, because per-scene GAP padding (0.25 default + LEAD) plus the deliberate gap=0.7/1.4 dramatic holds dominate a 29-scene episode, not the narration length. LESSON for over-length episodes: the effective runtime levers are (a) drop a whole scene (~27s each) or (b) reduce/relocate a dramatic gap \u2014 shaving words gives diminishing returns (~0.2s per word). Note: 13.5 min still shipped (founder 14.1 min is the top performer, roman 13.1 min shipped), so the ~13 ceiling is soft with cloud render; but if a HALT ever needs real trimming, cut scenes, not words. Could add a build.py readout of 'padding vs speech' seconds so the writer sees where the runtime actually goes."
+    },
+    {
+      "id": "cartel-pack-validated",
+      "impact": "low",
+      "note": "mexican_cartel (07-06) validated the CARTEL/narco pack already in src/stage.tsx (lookoutCorner/sierraRoute/narcoShrineRite/plazaTown/ranchCompound + backdrops borderDesert/sierraCamp/narcoShrine/townPlaza/narcoRanch + prop narcoTruck) composed with MAFIA reuse (backAlley/waterfront/cardGame/donOffice/countRoom/courtroom/prisonCell/wiretap) + universal (dinner/warRoom/jet/window/emptyChair). Covered the full halc\u00f3n->burrero->sicario->plaza->lieutenant->patr\u00f3n->la red->la demanda ladder across 29 scenes with NO adjacent repeats; ranchCompound deliberately reused 4x as the master-loop anchor (t00 aftermath / t10 finca / t18 fortress / t24 raid). Reusable for bratva/yakuza (backAlley/countRoom/prisonCell/wiretap), any smuggling/turf-tax crime ladder. Pairs with [[mafia-pack]] + [[spy-pack-validated]]. NOTE: content.py + research + the pack were pre-written in an interrupted 07-04 run (git e00721b) and superseded by special_forces; this run refined that content (planted the Licenciado at t16 per [[named-character-plant-gate]]) and shipped it."
     }
   ],
   "done": [

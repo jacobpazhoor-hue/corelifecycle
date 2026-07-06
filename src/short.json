@@ -2,40 +2,40 @@
   "fps": 30,
   "width": 1080,
   "height": 1920,
-  "totalFrames": 1514,
-  "topic": "billionaire_heir",
+  "totalFrames": 1764,
+  "topic": "special_forces",
   "brand": {
-    "kicker": "THE GREAT",
-    "line1": "WEALTH TRANSFER",
+    "kicker": "EVERY RANK OF",
+    "line1": "SPECIAL FORCES",
     "line2": "",
-    "tag": "90% GONE BY GEN 3"
+    "tag": "MOST DIE AT SELECTION"
   },
   "scenes": [
     {
       "id": "t00",
-      "template": "boardroomNotes",
+      "template": "frontline",
       "level": null,
       "overlay": {
-        "big": "$8,200,000,000",
-        "sub": "THE WILL \u00b7 AND THE PAGE SAYS: NOTHING"
+        "big": "0330 \u00b7 BREACH",
+        "sub": "THE HOSTAGE IS IN THE THIRD ROOM"
       },
       "audio": "audio/t00.wav",
       "audioStartFrame": 3,
-      "durationInFrames": 728,
+      "durationInFrames": 861,
       "startFrame": 0
     },
     {
-      "id": "t13",
-      "template": "fileWall",
+      "id": "t28",
+      "template": "bootcamp",
       "level": null,
       "overlay": {
-        "big": "$500B",
-        "sub": "PARKED IN SOUTH DAKOTA TRUSTS \u00b7 FOREVER"
+        "big": "ROSTER 01",
+        "sub": "A NEW NAME TAPE \u00b7 THE CIRCLE BEGINS AGAIN"
       },
-      "audio": "audio/t13.wav",
+      "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "durationInFrames": 786,
-      "startFrame": 728
+      "durationInFrames": 903,
+      "startFrame": 861
     }
   ]
 }
