@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-06T08:00:23.900382+00:00",
+  "updated": "2026-07-06T15:17:28.508709+00:00",
   "channel": {
     "videos": 23,
     "views": 671,
@@ -27,6 +27,16 @@
       "duration": "PT12M23S"
     },
     {
+      "id": "VPDaEqsIu6g",
+      "topic": "mob_boss",
+      "title": "Your Life in the Mafia at Every Rank (Only 2 Ways Out)",
+      "published": "2026-07-03T02:16:42Z",
+      "views": 41,
+      "likes": 3,
+      "comments": 0,
+      "duration": "PT12M12S"
+    },
+    {
       "id": "PqRq-2Rmbbo",
       "topic": "hedge_fund_manager",
       "title": "Every Level of a Hedge Fund Manager \u2014 From Analyst to Billionaire",
@@ -35,16 +45,6 @@
       "likes": 1,
       "comments": 0,
       "duration": "PT13M3S"
-    },
-    {
-      "id": "VPDaEqsIu6g",
-      "topic": "mob_boss",
-      "title": "Your Life in the Mafia at Every Rank (Only 2 Ways Out)",
-      "published": "2026-07-03T02:16:42Z",
-      "views": 35,
-      "likes": 3,
-      "comments": 0,
-      "duration": "PT12M12S"
     },
     {
       "id": "4Qu5gDLhBzA",
@@ -157,6 +157,16 @@
       "duration": "PT10M8S"
     },
     {
+      "id": "MiXTy6PUdDk",
+      "topic": null,
+      "title": "Your Life as Every Rank in Special Forces (You Don't Exist)",
+      "published": "2026-07-05T20:01:33Z",
+      "views": 1,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M10S"
+    },
+    {
       "id": "uRCF7Sn22Ns",
       "topic": null,
       "title": "Every Level of a Special Forces \ud83d\udcb0 #shorts",
@@ -195,16 +205,6 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT5M22S"
-    },
-    {
-      "id": "MiXTy6PUdDk",
-      "topic": null,
-      "title": "Your Life as Every Rank in Special Forces (You Don't Exist)",
-      "published": "2026-07-05T20:01:33Z",
-      "views": 0,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT12M10S"
     },
     {
       "id": "JgawiJbzTcA",
