@@ -1,8 +1,8 @@
 {
-  "updated": "2026-07-06T15:17:28.508709+00:00",
+  "updated": "2026-07-07T08:01:50.853137+00:00",
   "channel": {
-    "videos": 23,
-    "views": 671,
+    "videos": 25,
+    "views": 714,
     "subscribers": 4
   },
   "videos": [
@@ -11,10 +11,20 @@
       "topic": "founder",
       "title": "Every Level of a Founder \u2014 From First Idea to IPO",
       "published": "2026-06-23T16:56:30Z",
-      "views": 407,
+      "views": 408,
       "likes": 12,
       "comments": 1,
       "duration": "PT14M5S"
+    },
+    {
+      "id": "VPDaEqsIu6g",
+      "topic": "mob_boss",
+      "title": "Your Life in the Mafia at Every Rank (Only 2 Ways Out)",
+      "published": "2026-07-03T02:16:42Z",
+      "views": 66,
+      "likes": 4,
+      "comments": 0,
+      "duration": "PT12M12S"
     },
     {
       "id": "YqDfplJCd9I",
@@ -25,16 +35,6 @@
       "likes": 1,
       "comments": 0,
       "duration": "PT12M23S"
-    },
-    {
-      "id": "VPDaEqsIu6g",
-      "topic": "mob_boss",
-      "title": "Your Life in the Mafia at Every Rank (Only 2 Ways Out)",
-      "published": "2026-07-03T02:16:42Z",
-      "views": 41,
-      "likes": 3,
-      "comments": 0,
-      "duration": "PT12M12S"
     },
     {
       "id": "PqRq-2Rmbbo",
@@ -51,7 +51,7 @@
       "topic": "spy",
       "title": "Your Life as a Spy at Every Level \u2014 Recruit to Spymaster",
       "published": "2026-06-28T18:47:28Z",
-      "views": 32,
+      "views": 34,
       "likes": 1,
       "comments": 0,
       "duration": "PT12M56S"
@@ -91,7 +91,7 @@
       "topic": "roman_empire",
       "title": "Your Life as Every Rank in the Roman Empire (You Die at the Top)",
       "published": "2026-06-30T19:35:29Z",
-      "views": 11,
+      "views": 14,
       "likes": 0,
       "comments": 0,
       "duration": "PT13M5S"
@@ -101,7 +101,7 @@
       "topic": "billionaire_heir",
       "title": "Your Life as a Billionaire Heir at Every Level (You Inherit $0)",
       "published": "2026-07-03T18:06:43Z",
-      "views": 8,
+      "views": 9,
       "likes": 0,
       "comments": 0,
       "duration": "PT12M51S"
@@ -115,6 +115,26 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT53S"
+    },
+    {
+      "id": "MiXTy6PUdDk",
+      "topic": null,
+      "title": "Your Life as Every Rank in Special Forces (You Don't Exist)",
+      "published": "2026-07-05T20:01:33Z",
+      "views": 5,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M10S"
+    },
+    {
+      "id": "uRCF7Sn22Ns",
+      "topic": null,
+      "title": "Every Level of a Special Forces \ud83d\udcb0 #shorts",
+      "published": "2026-07-05T15:36:21Z",
+      "views": 4,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT59S"
     },
     {
       "id": "q2wg7eeg1eE",
@@ -147,6 +167,16 @@
       "duration": "PT56S"
     },
     {
+      "id": "molUoFUlmso",
+      "topic": "special_forces",
+      "title": "Your Life as Every Rank in Special Forces (Most Die at Selection)",
+      "published": "2026-07-05T15:19:13Z",
+      "views": 2,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M8S"
+    },
+    {
       "id": "ZQpAzns70b4",
       "topic": "lawyer",
       "title": "Every Level of a Lawyer \u2014 From Associate to Managing Partner",
@@ -155,36 +185,6 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT10M8S"
-    },
-    {
-      "id": "MiXTy6PUdDk",
-      "topic": null,
-      "title": "Your Life as Every Rank in Special Forces (You Don't Exist)",
-      "published": "2026-07-05T20:01:33Z",
-      "views": 1,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT12M10S"
-    },
-    {
-      "id": "uRCF7Sn22Ns",
-      "topic": null,
-      "title": "Every Level of a Special Forces \ud83d\udcb0 #shorts",
-      "published": "2026-07-05T15:36:21Z",
-      "views": 1,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT59S"
-    },
-    {
-      "id": "molUoFUlmso",
-      "topic": "special_forces",
-      "title": "Your Life as Every Rank in Special Forces (Most Die at Selection)",
-      "published": "2026-07-05T15:19:13Z",
-      "views": 1,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT12M8S"
     },
     {
       "id": "pg08o0QpUqI",
@@ -205,6 +205,26 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT5M22S"
+    },
+    {
+      "id": "Si2VnD9tM-s",
+      "topic": null,
+      "title": "Every Level of a Cartel \ud83d\udcb0 #shorts",
+      "published": "2026-07-06T20:07:21Z",
+      "views": 0,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT1M1S"
+    },
+    {
+      "id": "VwPd_5wWjGM",
+      "topic": "mexican_cartel",
+      "title": "Your Life in a Cartel at Every Rank (No Way Out)",
+      "published": "2026-07-06T19:57:12Z",
+      "views": 0,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT13M28S"
     },
     {
       "id": "JgawiJbzTcA",
@@ -248,7 +268,7 @@
     }
   ],
   "insights": [
-    "Best so far: 'Every Level of a Founder \u2014 From First Idea to IPO' (407 views).",
+    "Best so far: 'Every Level of a Founder \u2014 From First Idea to IPO' (408 views).",
     "Lean into the patterns of the top performers (topic + title shape)."
   ],
   "note": "CTR/retention need the Analytics API (re-auth); these are Data-API stats."

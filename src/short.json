@@ -2,40 +2,40 @@
   "fps": 30,
   "width": 1080,
   "height": 1920,
-  "totalFrames": 1764,
-  "topic": "special_forces",
+  "totalFrames": 1804,
+  "topic": "mexican_cartel",
   "brand": {
-    "kicker": "EVERY RANK OF",
-    "line1": "SPECIAL FORCES",
+    "kicker": "EVERY RANK OF A",
+    "line1": "CARTEL",
     "line2": "",
-    "tag": "MOST DIE AT SELECTION"
+    "tag": "NO THIRD DOOR"
   },
   "scenes": [
     {
       "id": "t00",
-      "template": "frontline",
+      "template": "ranchCompound",
       "level": null,
       "overlay": {
-        "big": "0330 \u00b7 BREACH",
-        "sub": "THE HOSTAGE IS IN THE THIRD ROOM"
+        "big": "THE MORNING IT ENDS",
+        "sub": "THE DOGS WENT QUIET \u00b7 THE PHONE STOPPED"
       },
       "audio": "audio/t00.wav",
       "audioStartFrame": 3,
-      "durationInFrames": 861,
+      "durationInFrames": 907,
       "startFrame": 0
     },
     {
-      "id": "t28",
-      "template": "bootcamp",
+      "id": "t25",
+      "template": "courtroom",
       "level": null,
       "overlay": {
-        "big": "ROSTER 01",
-        "sub": "A NEW NAME TAPE \u00b7 THE CIRCLE BEGINS AGAIN"
+        "big": "$150 BILLION",
+        "sub": "THE APPETITE UP NORTH \u00b7 YOU WERE ONLY THE DELIVERY"
       },
-      "audio": "audio/t28.wav",
+      "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "durationInFrames": 903,
-      "startFrame": 861
+      "durationInFrames": 897,
+      "startFrame": 907
     }
   ]
 }

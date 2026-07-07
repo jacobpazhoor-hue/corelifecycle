@@ -1,309 +1,304 @@
 #!/usr/bin/env python3
-"""Your Life in a Cartel at Every Rank — POV doodle build, ~12 min, template-driven.
-Grounded in docs/research/mexican_cartel.md (the narco ladder: halcón lookout -> burrero mule ->
-sicario -> jefe de plaza -> lugarteniente -> el patrón/kingpin -> la red/the network -> la demanda,
-the buyers up north). Second-person present-tense POV: the viewer IS a poor kid on a dust-town corner
-who climbs to the man in the walled compound and learns the only two exits were always a cell or a
-grave — and that above even the kingpin sits a market that spends him and never learns his name.
-CAUTIONARY, ANTI-GLAMOUR DRAMATIZATION over VERIFIED, NON-INSTRUCTIONAL facts: recruitment of minors
-as lookouts/hitmen (VICE), sicario pay a poverty wage (~$85-200 a hit/month; "$30 a time" account),
-"plata o plomo" (silver or lead), el piso (turf tax), a real kingpin listed ~$1B (Forbes/Chapo),
-Sinaloa revenue estimates $3B-$39B/yr, ~$150B/yr Americans spend on illicit drugs (RAND 2016), and
-Mexico's drug war since 2006 (100,000+ disappeared, well over 120,000 dead — figures contested). NO
-production, smuggling method, or weapon technique is depicted — jargon and settings are named only as
-milestones of a life, never as instruction.
+"""POV: You're the World's First Trillionaire — POV doodle build, ~12 min, template-driven.
+Grounded in docs/research/trillionaire.md. SCENARIO format: the levels are escalating MONEY
+milestones, not job ranks ($0 -> $1M -> $100M -> $1B -> $100B -> $1T -> you can't sell it -> the
+appetite above money). Second-person present-tense POV: the viewer IS a broke kid whose card
+declines for a $4.50 coffee and who climbs, milestone by milestone, to become the world's first
+trillionaire — and learns that a trillion-dollar fortune is not money you can spend but a stock
+position that only exists while you never touch it; that above even the richest human sits an
+appetite that prices you and never learns your name; and that the one call worth answering is the
+one the number can't buy back.
 
-SPINE (gold $ escalation, with red-cost beats — the money climbs while the exit closes): ~$600/MO
-(halcón) -> $5,000/LOAD (burrero) -> $85/BODY (sicario — the horror number) -> $40M/YEAR (the plaza's
-piso) -> $300M (the lieutenant, the war) -> $1 BILLION (the patrón) -> THE MARKET (la red) -> $150
-BILLION (la demanda, the buyers). You climb from being the cheapest thing in the machine to running
-it — and learn you were inventory the whole way, and inventory gets sold.
+NEAR-FUTURE / PROJECTED: no trillionaire exists yet (2026); Oxfam projects the first in the ~2030s.
+The wealth mechanics and the two big share-numbers are REAL and VERIFIED (see research doc):
+  * a million seconds = 12 days; a billion = 31.7 years; a TRILLION seconds = ~31,700 years.
+  * spend $1,000,000 a DAY since the birth of Christ and today you'd have spent ~$740B — still not $1T.
+  * mega-fortunes are unrealized STOCK, not cash; selling a large stake collapses the price ("buy,
+    borrow, die" — you borrow against shares, realize no taxable income); Musk's wealth grew >$1M/min
+    (Oxfam 2025); five richest men $405B -> $869B, 2020-2024, while ~5B people got poorer.
 
-STORY: mentor EL TÍO (runs the corner, recruits you, gives the code + the warning "everyone on this
-road is already dead"); rival EL FLACO (rises beside you, crueler, faster, mocks the medallion); the
-recurring fixer THE LICENCIADO (the cartel's lawyer/launderer — the shared-universe character planted
-at the count room t16 and left UNRESOLVED at t23). MIDPOINT (t14): the patrón above you brands El Tío
-an informant and orders you to kill him to prove loyalty; you do it, and press his medallion into his
-dead hand — "you are not the knife; you are what the knife is for." Sensory anchor motif: a CHEAP
-PLASTIC SAINT'S MEDALLION on a bootlace at your throat — your mother Rosa ties it on (t01), you press
-it to your lips before every job (t02/t04), after the first body (t08), into El Tío's hand (t14), it
-is gold now and means nothing (t17), it's in your fist in the tunnel (t24), and at the end a soldier
-cuts it from your throat (t26) and it's tied onto a new lookout kid on the same corner (t27). Master
-open loop: the AFTERMATH cold open (t00) — dawn, the emptied compound, the phone that stopped ringing,
-cuffed at your own gate as the medallion is cut away — resolves at t24-t26 (the raid, the tunnel, the
-cell you choose over the grave). The final image (t28) bends up to the buyer who never sees you.
+SPINE (gold $ escalation — the money climbs while what you can actually SPEND falls to nothing):
+$0 (card declined) -> $1M (on paper) -> $100M (IPO) -> $1B (the cost) -> $100B (you move markets) ->
+$1T (the world's first) -> YOU CAN'T SELL IT (the number owns you) -> THE APPETITE (demand, above money).
+
+STORY: mentor HALVORSEN (first investor; the warning "the number grows faster than you can stay
+yourself"; the one who hands you the billion-dollar deal that costs you Sam); co-founder + best friend
+SAM (built it with you; the MIDPOINT betrayal at t13 — you gut her half + close the town's plant to
+cross into billionaire; "I'm sad you're not even sorry"); rival billionaire ROURKE (the taunt "a
+billion buys people; you'll trade up"); the recurring fixer KEELE, a family-office banker (shared-
+universe character planted t15, dialogue t22, left UNRESOLVED — "I already manage whoever holds it
+next"). Sensory anchor motif: DANI'S 19-SECOND VOICEMAIL — your little sister's laugh, "eat
+something, call me back" — the one recording you never delete: saved t02, replayed t16, she calls
+LIVE at the trillion moment and you let it ring t18, replayed one last time at the loop-close t25.
+Secondary texture: burnt $4.50 gas-station coffee (t01/t04/t12/t25) — the one thing the money never
+upgrades about you. Master open loop: the FLASH-FORWARD cold open (t00 — the glass room, the trillion
+crossing, Dani calling live, the hand that turns you away) pays off at t18; the through-line "you want
+the number; you don't know it wants you back" pays off t20-t27.
 
 PROMISE->PAYOFF LEDGER:
-  * t00 cold open (dawn, emptied compound, cuffed, medallion cut off)  -> t24/t26 (the raid; the cell)
-  * t01 want: out of nothing; Rosa's medicine + the medallion she ties  -> t11/t17 (you have millions and can't go home)
-  * anchor: the plastic saint's medallion at your throat                -> t02, t04, t08, t14, t17, t24, t26, t27
-  * t02 mentor El Tío + warning "everyone here is already dead"          -> t13/t14 (you are ordered to kill him; you do)
-  * t05 rival El Flaco                                                   -> t12 (his taunt); t23 (what he became)
-  * t06 "plata o plomo" — no third door                                 -> t23/t26 (the door was always a cell or a grave)
-  * t14 cost line "you are what the knife is for"                       -> t25 ("you were inventory")
-  * t16 the Licenciado (planted at the count room)                      -> t23 (his line; left UNRESOLVED, universe thread)
-  * UNRESOLVED universe thread (deliberate): THE LICENCIADO, the fixer   -> he already works for whoever's next; never caught (open)
+  * t00 cold open (glass room, trillion crosses, Dani calls LIVE, you let it ring)  -> t18 (the same morning, from inside)
+  * t01 want: "get us both out" + the $4.50 declined coffee                          -> t20/t24 (you can't sell it / can't buy that Tuesday back); t26 (a new kid, same want)
+  * anchor: Dani's 19-second voicemail                                               -> t02 saved, t16 replayed, t18 she calls live, t25 replayed last
+  * t02 mentor Halvorsen's warning "faster than you can stay yourself"               -> t13 (you lose the race — Sam)
+  * t02/t05 co-founder Sam                                                            -> t13 (the midpoint betrayal)
+  * t09 rival Rourke's taunt "a billion buys people; you'll trade up"                -> t10-t13 (you do exactly that)
+  * t10 the paper mechanic (net worth isn't cash)                                     -> t15/t20/t21 (buy-borrow-die; you can't sell it; it's a claim not a vault)
+  * t15 the fixer Keele                                                               -> t22 (his line); left UNRESOLVED (he already manages whoever's next) = universe thread
+  * UNRESOLVED universe thread (deliberate): KEELE, the family-office fixer           -> already works for the next holder; never leaves the money (open)
 
-Templates: CARTEL pack (lookoutCorner/sierraRoute/narcoShrineRite/plazaTown/ranchCompound + prop
-narcoTruck) + MAFIA reuse (backAlley/waterfront/cardGame/donOffice/countRoom/courtroom/prisonCell/
-wiretap) + universal (dinner/warRoom/jet/window/emptyChair). ranchCompound is REUSED 4x on purpose as
-the master-loop anchor (t00 aftermath / t10 the plaza finca / t18 the kingpin's fortress / t24 the
-raid) — the compound the whole life is built to reach and lose. No two adjacent scenes share a
-template. Structural variation vs last 2 (special_forces mid-action breach, rise-into-rot, cyclical;
-billionaire_heir will-reading, fall-then-rise): cold open is AFTERMATH (the morning it ends); act-2
-shape is a true RISE-THEN-FALL (you actually lose it all); ending is cyclical (medallion to a new kid)
-with one door left open (the demand up north / the Licenciado).
+Templates: STARTUP pack (garageStart/startupGrow/serverScale/ipoBell) + FINANCE (tradingFloor/pnlWall)
++ DYNASTY (galaBallroom/yachtDeck/familyVault) + generic (podiumScene) + universal (warRoom/deskSilhouette/
+desk/window/dinner/boardroomHead/signing/layoffs/emptyChair/atrium/jet/lobby). NO new pack needed
+(keeps the local render safe). warRoom is reused twice on purpose as the master-loop anchor (t00 cold
+open / t17 the trillion) — the glass room the whole life is built to reach. No two adjacent scenes
+share a template. STRUCTURAL VARIATION vs last 2 (special_forces = mid-action breach, rise-into-rot,
+cyclical; mexican_cartel = AFTERMATH cold open, rise-then-fall, cyclical): this cold open is a
+FLASH-FORWARD (the future moment, then rewind); act-2 shape is RISE-THEN-FALL (you get the number and
+it turns out to be a cage); ending is cyclical (a new kid, same declined card) with one door left open
+(Keele / the appetite that never sleeps).
 """
 
 FPS = 30
 
 SCENES = [
-    # ---- COLD OPEN — the aftermath (the master loop): the morning it ends ----
-    dict(id="t00", level=None, template="ranchCompound", gap=0.7,
-         narration=("Dawn. Your own gate, cold iron under your knees, wrists zip-tied behind you. The dogs "
-                    "aren't barking — that was the first sign, an hour ago, and you knew. Your phone stopped "
-                    "ringing at four. Two hundred gunmen on the payroll and not one answered. A soldier leans "
-                    "in and cuts the bootlace at your throat, and the little plastic saint you've worn for "
-                    "thirty years drops into his glove. The compound behind you is already empty. This is how "
-                    "it ends for everyone who reaches the top of this. You just didn't believe it would be you."),
-         overlay=dict(big="THE MORNING IT ENDS", sub="THE DOGS WENT QUIET · THE PHONE STOPPED")),
+    # ---- COLD OPEN — flash-forward (the master loop): the trillion, and the call you let ring ----
+    dict(id="t00", level=None, template="warRoom", gap=0.7,
+         narration=("A glass room at the top of the world, every screen on the wall running the same number "
+                    "upward. Finance ministers wait on your nod. The number crosses one trillion dollars, and "
+                    "the room stands and applauds a thing it believes is you. Your phone burns in your pocket. "
+                    "DANI. Your little sister, calling for the first time in three years — now, this second. A "
+                    "hand settles on your shoulder and turns you toward the podium. Let it ring, the hand "
+                    "means. So you let it ring. You will spend what's left of your life wishing you hadn't."),
+         overlay=dict(big="$1 TRILLION", sub="THE WORLD'S FIRST · AND YOU LET IT RING")),
 
-    # ---- LEVEL 1 — EL HALCÓN (the lookout) ----
-    dict(id="t01", level="LEVEL 01  ·  EL HALCÓN  (THE LOOKOUT)", template="lookoutCorner",
-         narration=("Rewind. You're thirteen, on the edge of a dust town where the road out is the only thing "
-                    "worth looking at. Your mother, Rosa, coughs through the wall at night, and the medicine "
-                    "costs forty pesos you don't have. She kneels and ties a cheap plastic saint on a "
-                    "bootlace around your neck. So death knows you're spoken for, she says. A man on the "
-                    "corner has watched you a week. He gives you a phone and a whistle. Watch the road. Call "
-                    "the trucks. Six hundred dollars a month — more than Rosa has ever held."),
-         overlay=dict(big="~$600 / MONTH", sub="A PHONE, A WHISTLE, AND A NAME NOBODY KNOWS YET")),
-    dict(id="t02", level=None, template="narcoShrineRite",
-         narration=("The man on the corner is El Tío — the Uncle — and the whole barrio steps off the "
-                    "sidewalk for him. He takes you to a little roadside shrine, candles guttering, and "
-                    "watches you press the plastic saint to your lips the way Rosa showed you. He nods, like "
-                    "you passed something. Then he tells you the only true thing anyone in this life will ever "
-                    "tell you, flat, without cruelty."),
+    # ---- LEVEL 1 — $0 (the card declines) ----
+    dict(id="t01", level="LEVEL 01  ·  $0  (NOTHING)", template="deskSilhouette",
+         narration=("Rewind eleven years. A gas station at one in the morning, and your card declines for a "
+                    "four-dollar-fifty coffee. The clerk doesn't look up. You put the cup back on the warmer. "
+                    "Out in the car your sister Dani sleeps against the window — nineteen, broke because you're "
+                    "broke, and on Tuesday she gave you her last forty dollars and swore she didn't need it. On "
+                    "the seat sits a cracked laptop with an idea on it and eleven dollars to your name. Your "
+                    "whole prayer is four words wide: get us both out."),
+         overlay=dict(big="$0", sub="CARD DECLINED · ONE IDEA ON A CRACKED LAPTOP")),
+    dict(id="t02", level=None, template="garageStart",
+         narration=("You build it in a rented garage that smells of cut grass and hot solder, shoulder to "
+                    "shoulder with Sam — your best friend since ninth grade, who writes in one night what takes "
+                    "you a week. No money in it yet, only instant coffee and a space heater and the two of you. "
+                    "The day the thing goes live, Dani leaves a voicemail: nineteen seconds of her laughing, "
+                    "telling you she saw it, telling you to eat something, telling you to call her back. You "
+                    "save it. You will never delete it. Remember that number. Nineteen seconds."),
+         overlay=None),
+    dict(id="t03", level=None, template="desk",
+         narration=("Six weeks in, it catches — not slowly, like a match dropped in dry grass. A man named "
+                    "Halvorsen, who has funded nine companies and buried three, drives out to the garage in a "
+                    "car worth more than the building. On its hood he writes you a check for two hundred fifty "
+                    "thousand dollars — the first real money your family has touched in three generations. Your "
+                    "hands don't shake taking it. That should worry you more than it does. Then he tells you "
+                    "the one thing that turns out to be true."),
          overlay=None,
-         dialogue=dict(text="Everyone on this road is already dead, m'ijo. Some of us just don't know the day.")),
-    dict(id="t03", level=None, template="backAlley", gap=0.7,
-         narration=("You find out what the whistle is for on a Tuesday. A rival crew came through in the "
-                    "night, and now the alley behind the market has a man in it who used to run this corner, "
-                    "and a cardboard sign, and the smell of it reaches you before the shape does. The whole "
-                    "town walks past with their eyes on their shoes. Nobody screams. Nobody calls anyone. "
-                    "That silence is the loudest thing you've ever heard, and it teaches you the rule in one "
-                    "second: you are already in. There was never a form to sign, and there is no way back out."),
-         overlay=dict(big="FIRST BODY", sub="THE TOWN LEARNS TO LOOK AT ITS SHOES")),
+         dialogue=dict(text="The number will grow faster than you can stay yourself. Most men lose that race.")),
 
-    # ---- LEVEL 2 — EL BURRERO (the mule) ----
-    dict(id="t04", level="LEVEL 02  ·  EL BURRERO  (THE MULE)", template="sierraRoute",
-         narration=("Sixteen now, and watching the road isn't enough — El Tío puts you on it. You ride the "
-                    "sierra in a pickup that smells of diesel and cut lime, moving packages you're told never "
-                    "to open. Before every run you kiss the little saint. Five thousand a load. The mountains "
-                    "are beautiful at dawn and full of shallow graves, and you tell yourself the second part "
-                    "doesn't apply to you. The weight in the truck bed is the first thing you've carried that "
-                    "can end you."),
-         overlay=dict(big="$5,000 / LOAD", sub="THE FIRST THING YOU CARRY THAT CAN END YOU")),
-    dict(id="t05", level=None, template="waterfront",
-         narration=("A handoff at a container port, midnight, salt and rust in your throat. This is where you "
-                    "meet El Flaco — the Skinny One — a mule your age who volunteers for the runs nobody else "
-                    "will take and grins the whole time. A load goes missing that night. The boy who was "
-                    "carrying it goes missing with it, and no one says his name again by morning. You keep "
-                    "your head down and your saint tucked inside your collar. El Flaco just shrugs. More road "
-                    "for us, he says."),
+    # ---- LEVEL 2 — $1 MILLION (on paper) ----
+    dict(id="t04", level="LEVEL 02  ·  $1 MILLION", template="startupGrow",
+         narration=("A year on, the office has walls and a door and eleven people who say your first name like "
+                    "it's worth something. On paper you're a millionaire. But you've never held a million "
+                    "dollars — it isn't cash in a bank, it's a line on a cap table, a promise strangers made "
+                    "about your future. Still, a million is a million. You buy Dani a used car so her card "
+                    "never declines the way yours did. And you keep drinking the same burnt gas-station coffee, "
+                    "because some animal part of you is afraid of what you'll become the day you stop."),
+         overlay=dict(big="$1 MILLION", sub="NOT CASH · A PROMISE, ON PAPER, ABOUT YOUR FUTURE")),
+    dict(id="t05", level=None, template="serverScale",
+         narration=("Therefore it goes vertical. Rented servers become owned servers become buildings full of "
+                    "them, humming like a held breath. Users double, double again, then stop being a number you "
+                    "can picture. A competitor named Rourke — older, three exits behind him — offers forty "
+                    "million to swallow you whole, and you say no, and Sam stares at you like you've cracked. "
+                    "But Halvorsen's gravity has you now. The number pulls, and you lean into the pull, and you "
+                    "tell yourself the whole time that you're the one steering."),
          overlay=None),
-    dict(id="t06", level=None, template="cardGame",
-         narration=("Therefore they test you. A back room, a low lamp, El Tío across a card table sliding a "
-                    "pistol to the center like a bet. This is the door every man in this life walks through, "
-                    "and it only opens one way. Plata o plomo — silver or lead. Take the money and the work "
-                    "that comes with it, or take the bullet for saying no. Your hands are steady on the felt. "
-                    "That steadiness is the thing that should frighten you, and it doesn't. You pick up the "
-                    "silver. There was never a third door."),
-         overlay=dict(big="PLATA O PLOMO", sub="THE SILVER OR THE LEAD · YOU DON'T GET A THIRD DOOR")),
+    dict(id="t06", level=None, template="tradingFloor",
+         narration=("The money stops behaving like money and starts behaving like weather. On the best week of "
+                    "the run your net worth climbs faster than you could spend in a lifetime — the richest men "
+                    "alive have grown by more than a million dollars a minute, and now you understand how, "
+                    "because it isn't work, it's a number other people keep voting up. Sam still packs a lunch. "
+                    "You still taste that burnt coffee. Neither of those small facts survives what's coming."),
+         overlay=dict(big="$1M / MINUTE", sub="AT THE TOP, WEALTH GROWS FASTER THAN YOU CAN SPEND IT")),
 
-    # ---- LEVEL 3 — EL SICARIO (the gunman) ----
-    dict(id="t07", level="LEVEL 03  ·  EL SICARIO  (THE GUNMAN)", template="plazaTown", gap=0.7,
-         narration=("Your first job is in the town square, in daylight, on purpose — the cartel doesn't hide "
-                    "its work, it advertises it. A name, a face, a debt in someone else's ledger. It's over in "
-                    "the time it takes the church bell to finish ringing. The plaza empties around you like "
-                    "water around a stone. Here is the part the corridos never sing: they pay you eighty-five "
-                    "dollars for it. You are the cheapest thing in the entire machine, and the machine knows "
-                    "exactly how little you cost to replace."),
-         overlay=dict(big="$85 / BODY", sub="THE CHEAPEST THING IN THE WHOLE MACHINE")),
-    dict(id="t08", level=None, template="narcoShrineRite",
-         narration=("After, you go back to the shrine, because there's nowhere else the shaking stops. You "
-                    "press the plastic saint to your lips and it tastes like copper now. You start a count in "
-                    "your head that night — one — and swear it's the only one. It isn't. The men beside you "
-                    "are eighteen, nineteen, already flinching at engines. A sicario here gets maybe three "
-                    "years before the road collects him. Planning past that is for people with a way out."),
-         overlay=dict(big="3-YEAR LIFE", sub="THE AVERAGE GUNMAN DOESN'T SEE A FOURTH")),
-    dict(id="t09", level=None, template="donOffice",
-         narration=("But you're good at surviving, and surviving is a kind of promotion here. The plaza boss "
-                    "gets taken — extradited, or buried, you're never told which — and the corridor needs a "
-                    "man who does the work and keeps his mouth shut. El Tío puts your name forward. He sits "
-                    "you behind a desk that used to belong to a dead man and slides the keys to a whole town "
-                    "across it. Reaching the top of this means nothing, he says, if you can't hold a single "
-                    "plaza first."),
-         overlay=dict(big="A DEAD MAN'S DESK", sub="YOU HELD ON · SO THEY HAND YOU THE TOWN")),
-
-    # ---- LEVEL 4 — JEFE DE PLAZA (the plaza boss) ----
-    dict(id="t10", level="LEVEL 04  ·  JEFE DE PLAZA  (THE PLAZA BOSS)", template="ranchCompound",
-         narration=("Now you have a finca — a walled compound at the edge of the sierra, an iron gate, dogs, "
-                    "a ring of gunmen who call you jefe. You own a corridor: every gram, every truck, every "
-                    "kilometer of a road the government pretends it patrols. The medallion at your throat "
-                    "isn't plastic anymore; you had it cast in gold, and it's heavier, and it means less. "
-                    "Rosa could have any medicine in the country now. But you can't go back to the dust town. "
-                    "Men like you don't get to go home."),
-         overlay=dict(big="THE FINCA", sub="A WALLED CORRIDOR · AND YOU CAN'T GO HOME")),
-    dict(id="t11", level=None, template="plazaTown",
-         narration=("You run the town not with fear alone, but with a floor. El piso — the tax on the ground "
-                    "itself. The taquero pays. The pharmacy pays. The migrant paying to cross your stretch of "
-                    "desert pays. Forty million a year moves through your hands, and almost none of it stays: "
-                    "you pay up, you pay the police, you pay the soldiers who wave your trucks through. The "
-                    "whole town works for you, and you work for the men above you."),
-         overlay=dict(big="$40M / YEAR", sub="EL PISO · THE TAX ON THE GROUND ITSELF")),
-    dict(id="t12", level=None, template="sierraRoute",
-         narration=("The convoys are yours to send now — you don't ride in the truck bed, you point the "
-                    "truck. El Flaco runs guns for the plaza beside yours and pulls up alongside your window "
-                    "in the sierra, sunglasses on at dusk, counting his kills against yours like a scoreboard. "
-                    "He's climbing as fast as you and enjoying it more. He nods at the gold saint on your "
-                    "chest and laughs."),
+    # ---- LEVEL 3 — $100 MILLION (the IPO) ----
+    dict(id="t07", level="LEVEL 03  ·  $100 MILLION", template="ipoBell", gap=0.7,
+         narration=("You take it public on a cold Tuesday, ring a bell on a balcony above a trading floor, and "
+                    "before the bell stops ringing the market says you're worth a hundred million dollars. A "
+                    "hundred million. The kid who put the coffee back on the warmer. But here is the part no one "
+                    "warns you about: from this morning on, your worth is set every second by strangers who "
+                    "will never meet you. You don't own the number. You are exposed to it, the way a coastline "
+                    "is exposed to weather."),
+         overlay=dict(big="$100 MILLION", sub="STRANGERS SET YOUR WORTH NOW · EVERY SECOND, ALL DAY")),
+    dict(id="t08", level=None, template="window",
+         narration=("A hundred million rewrites every room you enter. People laugh a half-second early at your "
+                    "jokes. Old friends call with an ask folded inside the hello. Money buys the good table. "
+                    "Money buys the yes. Money buys a version of you that everyone suddenly likes — and buries "
+                    "the version Dani knew. She calls less. When you talk, she asks how you are and you answer "
+                    "with a number, and the line goes quiet, because a number was never an answer, and you've "
+                    "forgotten there was a difference."),
+         overlay=None),
+    dict(id="t09", level=None, template="galaBallroom",
+         narration=("They put you on a stage at a gala under a chandelier the size of your first apartment, and "
+                    "every hand in the room wants five minutes. Rourke finds you by the bar, warm as a knife, "
+                    "three exits and one divorce ahead of you on this road. He lifts his glass to your hundred "
+                    "million like it's pocket change — because to him it is — and tells you the thing that "
+                    "keeps you up for a week."),
          overlay=None,
-         dialogue=dict(text="You still kiss that plastic saint, primo? Up here we don't pray. We collect.")),
+         dialogue=dict(text="A hundred million buys a nice life, kid. A billion buys people. You'll trade up. They always do.")),
 
-    # ---- MIDPOINT — the order to kill El Tío ----
-    dict(id="t13", level=None, template="dinner", gap=1.4,
-         narration=("A summons to a quiet dinner with the patrón above you — candlelight, good tequila, a man "
-                    "who smiles the whole time he decides who lives. He slides a folder across the cloth. "
-                    "Inside is a face you'd know in the dark: El Tío. The Uncle. The word is that he's been "
-                    "talking to the Americans. The patrón wants it done by someone the old man trusts. He "
-                    "wants it done by you. To prove there is nothing in you the cartel doesn't own. He lets "
-                    "the silence stretch. Then he says the one word that has no answer."),
+    # ---- LEVEL 4 — $1 BILLION (the cost) + MIDPOINT betrayal ----
+    dict(id="t10", level="LEVEL 04  ·  $1 BILLION", template="dinner",
+         narration=("Halvorsen takes you to a room with no menu and no prices, and lays out the deal that turns "
+                    "a hundred million into a billion: a merger, a restructuring, a clean and beautiful "
+                    "machine. There is one cost, and he names it the way rich men name the expensive part — "
+                    "lightly. You gut Sam's half of the company. You close the plant in the town that raised "
+                    "you and put four hundred people, who know your mother's name, out of work. He lets it sit. "
+                    "Then he tells you what a billion dollars actually is."),
+         overlay=dict(big="$1 BILLION", sub="THE PRICE ISN'T MONEY · THE PRICE IS WHO YOU CLOSE"),
+         dialogue=dict(text="The billion isn't your reward for building it. It's your reward for being willing to.")),
+    dict(id="t11", level=None, template="boardroomHead",
+         narration=("You sit at the head of a table and the machine explains itself to you in graphs. Every "
+                    "arrow says the same thing: sign, and you become the youngest billionaire on the continent; "
+                    "refuse, and Rourke buys the whole thing at a discount and closes the same plant anyway, and "
+                    "you get nothing and Sam still loses. That's the trap they build for you. Not a temptation — "
+                    "a math problem with one clean answer, and every clean answer in this life costs a person."),
          overlay=None),
-    dict(id="t14", level=None, template="backAlley", gap=0.7,
-         narration=("You take El Tío to the same alley behind the market where he first showed you a body, "
-                    "years ago. He knows. He doesn't run — running is a bullet, and he taught you that. He "
-                    "presses his own saint into your hand and tells you to make the count and not to lie to "
-                    "yourself about the number. Then you do it. Afterward you fold his medallion into his "
-                    "dead fingers, and it lands, cold and final: you were never the knife. You are the thing "
-                    "the knife is for. And a thing gets used until it breaks."),
-         overlay=dict(big="EL TÍO", sub="YOU WERE NEVER THE KNIFE · YOU ARE WHAT IT'S FOR")),
-
-    # ---- LEVEL 5 — EL LUGARTENIENTE (the lieutenant) ----
-    dict(id="t15", level="LEVEL 05  ·  EL LUGARTENIENTE  (THE LIEUTENANT)", template="warRoom",
-         narration=("You should have died of it. Instead the grief hardens into something colder, and the "
-                    "patrón moves you up for passing his test. You're a lieutenant now — you don't hold one "
-                    "plaza, you run the war across a dozen. Rival cartels, the army, a map stuck with pins "
-                    "that used to be people. Three hundred million moves under you. You stop reading the count "
-                    "as names. You read it as a column, and the column is the only thing you keep clean."),
-         overlay=dict(big="$300M", sub="THE DEAD STOP BEING PEOPLE · THEY BECOME A COLUMN")),
-    dict(id="t16", level=None, template="countRoom",
-         narration=("The money isn't a metaphor up here; it's a physical problem. A naked bulb, tables of "
-                    "banded cash the counters can't finish before more arrives, sour and papery in the heat. "
-                    "A soft man in a good suit walks that wall and never touches a bill: the Licenciado, the "
-                    "cartel's lawyer, who turns paper into ports and pharmacies and a football club. Money "
-                    "buys the police. Money buys the judge. Money buys the mothers who won't testify. Money "
-                    "buys everything in this country except the one thing you spend it all chasing: a door out."),
-         overlay=dict(big="A ROOM OF CASH", sub="IT BUYS EVERYTHING BUT THE ONE DOOR YOU WANT")),
-    dict(id="t17", level=None, template="narcoShrineRite",
-         narration=("Rosa dies while you're at war, in a good hospital you paid for, in a city you couldn't "
-                    "risk entering. You send flowers you can't deliver in person and mourn her at the same "
-                    "roadside shrine where El Tío warned you. The gold saint is warm from your skin and worth "
-                    "a year of a mule's pay and it protects you from nothing. You wanted out of nothing for "
-                    "her, and you got everything, and she died alone because of what the everything cost. That "
-                    "was the trade. Nobody read you the terms because you'd have taken it anyway."),
-         overlay=dict(big="ROSA", sub="EVERYTHING YOU BUILT · AND SHE DIED ALONE")),
-
-    # ---- LEVEL 6 — EL PATRÓN (the kingpin) ----
-    dict(id="t18", level="LEVEL 06  ·  EL PATRÓN  (THE KINGPIN)", template="ranchCompound", gap=0.7,
-         narration=("The patrón above you is killed in his own bed, and there's no ceremony to what comes "
-                    "next — you're simply the one still standing, so the cartel is yours. El Patrón. The "
-                    "kingpin. A mountain fortress with a tunnel under the bedroom floor, an army, generals and "
-                    "governors on the payroll. Forbes could put a number on you now — a billion dollars — and "
-                    "print it beside your face. Every police force on two continents knows your name. You've "
-                    "become the man the whole climb was built to reach."),
-         overlay=dict(big="$1 BILLION", sub="EL PATRÓN · A NAME ON A LIST ON TWO CONTINENTS")),
-    dict(id="t19", level=None, template="jet",
-         narration=("Reach is the drug now, not money. A private strip carved into the sierra, planes that "
-                    "cross the water to Europe where a kilo is worth five times what it fetches at home. Your "
-                    "product moves through ports you've never seen, into the noses of people who will never "
-                    "once think of the dust town or the alley or the eighty-five dollars. You point a finger "
-                    "and cargo crosses an ocean. But you sleep in a different room every night, and the tunnel "
-                    "is always within ten steps."),
+    dict(id="t12", level=None, template="signing", gap=1.4,
+         narration=("So it comes down to a single page and a pen at two in the morning, alone, the office "
+                    "empty, the burnt coffee gone cold at your elbow. Sam doesn't know yet. Dani doesn't know "
+                    "yet. Your own hand is steady over the line — steadier than it was at the gas station, "
+                    "steadier than at the check on the car hood. For eleven years you told yourself you'd never "
+                    "become the man who could do this. You sign anyway."),
          overlay=None),
-    dict(id="t20", level=None, template="window",
-         narration=("They write ballads about you now. Corridos on the radio that make the alley sound like a "
-                    "coronation and leave out the smell. Boys in dust towns wear your saint and want your "
-                    "life, exactly the way you once wanted the man's on the corner. From your window you can "
-                    "see three states you control and not one street you can walk down. They sing your name "
-                    "and can't say it near a soldier. You own the corridor, and you live in a tunnel."),
-         overlay=dict(big="THEY SING YOUR NAME", sub="AND YOU CAN'T WALK DOWN A SINGLE STREET")),
+    dict(id="t13", level=None, template="layoffs", gap=0.7,
+         narration=("Sam finds out from a press release. She clears her desk into one cardboard box, and at the "
+                    "door she doesn't shout — she just holds you in a long, level look, the way you'd hold a "
+                    "stranger standing too close. Four hundred people lose their jobs by Friday. And the thing "
+                    "lands, cold and total: you didn't buy your way out of becoming the man you feared. You "
+                    "paid a billion dollars for the privilege of being him."),
+         overlay=dict(big="THE COST", sub="YOU DIDN'T ESCAPE HIM · YOU PAID TO BECOME HIM"),
+         dialogue=dict(text="I'm not sad you did it. I'm sad you're not even sorry.")),
 
-    # ---- LEVEL 7 — LA RED (the network) ----
-    dict(id="t21", level="LEVEL 07  ·  LA RED  (THE NETWORK)", template="warRoom",
-         narration=("But you are not the top, and the proof is that the machine doesn't need you. La red — the "
-                    "network — is bigger than any patrón: chemists, bankers, port bosses, whole governments "
-                    "renting out their coasts. Take one kingpin off the board and the price of a kilo doesn't "
-                    "twitch for a single day. You spent your life believing you climbed toward the center. "
-                    "There is no center. There is a market, and it wears men like you the way you wore that "
-                    "plastic saint — until they crack, then it picks up another."),
-         overlay=dict(big="LA RED", sub="TAKE OUT THE KINGPIN · THE PRICE DOESN'T MOVE")),
-    dict(id="t22", level=None, template="wiretap",
-         narration=("Somewhere in a cool northern office, men you'll never meet are listening. A reel turns. A "
-                    "wall of photographs has your face in the center now, red string running out to every man "
-                    "you ever trusted. The Americans don't need to beat you. They need to buy one person close "
-                    "enough — and in a life built entirely on plata o plomo, everyone already learned that "
-                    "everyone can be bought. Including the men who guard your bedroom door."),
+    # ---- LEVEL 5 — $100 BILLION (you move markets) ----
+    dict(id="t14", level="LEVEL 05  ·  $100 BILLION", template="pnlWall",
+         narration=("After that the climb is easy, because nothing's holding you back anymore — not a person, "
+                    "not a rule, not the animal that used to flinch. A hundred billion dollars. You don't run a "
+                    "company now; you run a weather system. A sentence from you moves a currency. A rumor that "
+                    "you're unhappy erases the savings of people you'll never meet. You wanted the number so it "
+                    "would stop being able to hurt you. It can hurt everyone but you now — and it still isn't "
+                    "enough."),
+         overlay=dict(big="$100 BILLION", sub="ONE SENTENCE FROM YOU MOVES A CURRENCY")),
+    dict(id="t15", level=None, template="familyVault",
+         narration=("You never sell a share, because selling is admitting the number could end. A soft man "
+                    "named Keele runs your family office — a vault of deed boxes and holding companies, a mind "
+                    "like a cold clean ledger. He shows you the trick the very rich all know: you don't spend "
+                    "your money, you borrow against it. The bank hands you billions in cash, you never earn a "
+                    "taxable dollar, and you never touch the stock. You are worth a hundred billion and you "
+                    "have, in the way that word used to mean, nothing you can spend. Only a number you must "
+                    "never move."),
+         overlay=dict(big="YOU NEVER SELL", sub="YOU BORROW AGAINST IT · THE STOCK CAN NEVER MOVE")),
+    dict(id="t16", level=None, template="yachtDeck",
+         narration=("On a deck the length of a city block, in the middle of an ocean, ringed by people paid to "
+                    "be delighted, you take out your phone and play the only recording you never delete. "
+                    "Nineteen seconds. Dani laughing. Telling you to eat something. Telling you to call her "
+                    "back. You didn't call her back — not that week, not the next year, not once the number got "
+                    "big enough to answer for you. The sea is enormous and quiet. You are the richest passenger "
+                    "on it, and the loneliest, and those turn out to be the same fact."),
          overlay=None),
-    dict(id="t23", level=None, template="dinner",
-         narration=("The Licenciado comes to see you one last time — the lawyer who launders the cash through "
-                    "the port and the pharmacy and the football club, who has served three patrones and "
-                    "buried none of them. He never carries a gun. He carries a pen, which is worse. He lays "
-                    "out your accounts and your options, and there are fewer of the second than the first, "
-                    "and he tells you the thing you already knew the morning the dogs went quiet."),
+
+    # ---- LEVEL 6 — $1 TRILLION (the world's first) + cold-open payoff ----
+    dict(id="t17", level="LEVEL 06  ·  $1 TRILLION", template="warRoom", gap=0.7,
+         narration=("Then one ordinary morning the number crosses a line no human being has ever crossed. One "
+                    "trillion dollars. Here is what the word hides: spend a million dollars a day, every single "
+                    "day, since the birth of Christ, and today you would still not have spent your first "
+                    "trillion. You are worth more than most nations on the map. You are the world's first "
+                    "trillionaire — and the phrase means nothing in your mouth, because the number stopped "
+                    "being about you somewhere back around the plant you closed."),
+         overlay=dict(big="$1 TRILLION", sub="A MILLION A DAY SINCE CHRIST · STILL NOT A TRILLION")),
+    dict(id="t18", level=None, template="podiumScene", gap=0.7,
+         narration=("The world puts you behind a podium and applauds a thing it believes is you — and this is "
+                    "the morning from the very start, the glass room, the climbing screens. Your phone lights "
+                    "in your pocket. DANI. Live. The first time in three years, right now. A hand lands on your "
+                    "shoulder and turns you to the microphones. Let it ring, the hand means. So you let it "
+                    "ring. An hour later there's no voicemail this time. She didn't leave one. She was calling "
+                    "to say something out loud, and you were being applauded, and now you'll never know what."),
+         overlay=dict(big="SHE CALLED", sub="FIRST TIME IN 3 YEARS · YOU LET IT RING")),
+    dict(id="t19", level=None, template="emptyChair",
+         narration=("Count it out, because scale is the whole trick they never let you hold. A million seconds "
+                    "is twelve days. A billion seconds is thirty-two years. A trillion seconds is thirty-one "
+                    "thousand years — before farming, before writing, before the wheel. That is the distance "
+                    "you crossed. And somewhere in it you stopped being a person and became a position: a chair "
+                    "the market keeps warm, a name on the org chart of the whole world that anyone could fill "
+                    "and no one would miss for a single day."),
+         overlay=dict(big="31,700 YEARS", sub="A TRILLION SECONDS · YOU BECAME A POSITION, NOT A PERSON")),
+
+    # ---- LEVEL 7 — YOU CAN'T SELL IT (the number owns you) ----
+    dict(id="t20", level="LEVEL 07  ·  YOU CAN'T SELL IT", template="window",
+         narration=("So test it. Try to be free of it. Try to sell — cash it in, walk away, buy a small house "
+                    "near Dani and a decent cup of coffee. You can't. Sell a tenth of your stock and the price "
+                    "buckles under its own weight; the trillion evaporates faster than you can sign the order, "
+                    "and you take the whole market down on your way out the door. The money was never a door "
+                    "you could walk through. It's a wall you built so high you can't climb back over it."),
+         overlay=dict(big="YOU CAN'T SELL IT", sub="CASH OUT AND THE NUMBER DIES IN YOUR HAND")),
+    dict(id="t21", level=None, template="pnlWall",
+         narration=("Because the trillion was never in a vault. It's a claim — a bet millions of strangers make "
+                    "every second the market breathes, that tomorrow you'll be worth even more. The instant "
+                    "they stop believing, the number dies, and you with it. Five men doubled their fortunes in "
+                    "four years while five billion people got poorer, and not one of them can spend the score "
+                    "at face value. You don't own the wealth. You are the collateral the wealth is borrowed "
+                    "against. You are the thing that must never, ever flinch."),
+         overlay=dict(big="A CLAIM, NOT A VAULT", sub="YOU'RE THE COLLATERAL · YOU MUST NEVER FLINCH")),
+    dict(id="t22", level=None, template="familyVault",
+         narration=("Keele comes to see you the way he came to see the two men before you — the ones whose "
+                    "portraits he now manages for their heirs. He never raises his voice. He lays your holdings "
+                    "out like a hand of cards and tells you the true shape of the thing, and then he says the "
+                    "sentence that has been true since the gas station, since the garage, since the nineteen "
+                    "seconds you never answered."),
          overlay=None,
-         dialogue=dict(text="You were never the top, patrón. You were the product. I already work for whoever's next.")),
+         dialogue=dict(text="You were never the owner, sir. You're the custodian. And I already manage whoever holds it next.")),
 
-    # ---- LEVEL 8 — LA DEMANDA (the demand) + LOOP CLOSE ----
-    dict(id="t24", level="LEVEL 08  ·  LA DEMANDA  (THE DEMAND)", template="ranchCompound", gap=0.7,
-         narration=("So walk it all the way back to that dawn. The dogs go quiet — that's the tell, the only "
-                    "warning you get. Headlights climb the mountain road, too many, in a line, and your two "
-                    "hundred gunmen are already gone because someone paid them more to leave. Ten steps to the "
-                    "tunnel. Your gold saint is in your fist. You could go down fighting and be a corrido by "
-                    "morning, or you could go into the ground under the bedroom and run one last time. You "
-                    "choose the tunnel. Because after everything, you still want to live. That was always the "
-                    "whole problem."),
-         overlay=dict(big="THE ROAD CLIMBS", sub="TEN STEPS TO THE TUNNEL · YOU STILL WANT TO LIVE")),
-    dict(id="t25", level=None, template="courtroom",
-         narration=("The tunnel comes up inside a cordon. Of course it does — they had the map before you ran. "
-                    "Now you're in a foreign courtroom under a fluorescent hum, a translator at your ear, a "
-                    "flag that isn't yours behind the judge. And here is the number that ends the story: the "
-                    "buyers up north spend a hundred and fifty billion dollars a year on what you sold. A "
-                    "hundred and fifty billion. You and every patrón before you were a delivery service for "
-                    "an appetite that never once learned your name. You weren't the kingpin. You were "
-                    "inventory. And inventory gets restocked."),
-         overlay=dict(big="$150 BILLION", sub="THE APPETITE UP NORTH · YOU WERE ONLY THE DELIVERY")),
-    dict(id="t26", level=None, template="prisonCell", gap=0.7,
-         narration=("A cell in a country you can't pronounce, a light that never fully goes out. This is one "
-                    "of the two doors El Tío promised you on the corner when you were thirteen — the cell or "
-                    "the grave, and you chose the cell the moment you chose the tunnel. Count what you own "
-                    "now. A billion dollars you can't touch. A gold saint in an evidence bag. A count in your "
-                    "head you finally stopped keeping because there wasn't paper enough. Zero. You own zero. "
-                    "You always did. The cartel just let you hold the gold for a while."),
-         overlay=dict(big="$0", sub="THE CELL OR THE GRAVE · THOSE WERE ALWAYS THE EXITS")),
-    dict(id="t27", level=None, template="lookoutCorner",
-         narration=("Back in the dust town the road out still runs to the horizon, and a boy of thirteen "
-                    "stands on the corner where you stood. A man hands him a phone and a whistle. His mother "
-                    "coughs through a thin wall. Someone kneels and ties a cheap plastic saint on a bootlace "
-                    "at his throat — maybe the same one they cut from you, cleaned off and passed down. Watch "
-                    "the road, they tell him. Call the trucks. Six hundred a month. To him it sounds like the "
-                    "whole world. The circle closes exactly where it opened."),
-         overlay=dict(big="A NEW KID · SAME CORNER", sub="THE ROAD OUT WAS NEVER A WAY OUT")),
-    dict(id="t28", level=None, template="emptyChair",
-         narration=("And a thousand miles north, in a bright clean city, a man you will never meet lays a bill "
-                    "on a bar and gets a small paper packet in return, and never thinks about the sierra or "
-                    "the shrine or the boy on the corner, because he doesn't have to. He is the top of the "
-                    "ladder you spent your life climbing, and he doesn't know the ladder exists. The dogs went "
-                    "quiet for you. They'll go quiet for whoever's next. The market is hungry in the morning, "
-                    "same as always. It never once learned a single one of your names."),
-         overlay=dict(big="THE HUNGER NEVER ENDS", sub="THE MAN AT THE TOP DOESN'T KNOW YOU EXIST")),
+    # ---- LEVEL 8 — THE APPETITE (above money) + LOOP CLOSE ----
+    dict(id="t23", level="LEVEL 08  ·  THE APPETITE", template="atrium", gap=0.7,
+         narration=("So who is above the trillionaire? Climb one more floor and there's no man there — only the "
+                    "appetite. A billion small wants in a billion ordinary people: the next thing, the newer "
+                    "thing, the yes at the checkout. That hunger built you, priced you, and it will price "
+                    "whoever comes after, and it does not know your name and never once needed it. You spent "
+                    "your life climbing toward the center of the world. There is no center. There is only "
+                    "demand, breathing in the dark, hungry again by morning."),
+         overlay=dict(big="THE APPETITE", sub="NO ONE'S ABOVE YOU · ONLY THE HUNGER THAT MADE YOU")),
+    dict(id="t24", level=None, template="jet",
+         narration=("You have the plane that goes anywhere and nowhere to go. You have a house on every coast "
+                    "and you sleep in a different one each week for reasons your security won't explain. You "
+                    "can buy an island, an election, a man's silence, a company before lunch. You can buy "
+                    "anything on earth except the one Tuesday when Dani gave you forty dollars and meant it, and "
+                    "the one call you let ring, and a single hour of being a person that a number couldn't "
+                    "answer for."),
+         overlay=None),
+    dict(id="t25", level=None, template="deskSilhouette",
+         narration=("So here you are. One in the morning, alone at a desk above a city you own most of, a cup "
+                    "of gas-station coffee gone cold because you sent the good stuff back. You take out the "
+                    "phone that can move a currency and play the only thing on it that ever mattered. Nineteen "
+                    "seconds. Dani, laughing, telling you to eat something, telling you to call her back. Play "
+                    "it again. That clip is the whole trillion. It's the only part you actually got to keep — "
+                    "and you can't spend it, and you'd give the rest away to have answered it in time."),
+         overlay=dict(big="19 SECONDS", sub="THE ONLY PART OF THE TRILLION YOU GOT TO KEEP")),
+    dict(id="t26", level=None, template="lobby",
+         narration=("A thousand miles away, in a town like the one you closed, a kid of nineteen sits in a car "
+                    "outside a gas station because a card just declined for a four-dollar coffee. There's a "
+                    "cracked laptop on the seat and an idea on it and a sister asleep against the window. The "
+                    "kid's whole prayer is four words wide: get us both out. Somewhere a man like Halvorsen is "
+                    "already driving out to find them. The road out runs straight to the horizon. It always "
+                    "did. It was never a way out."),
+         overlay=dict(big="A NEW KID · SAME CAR", sub="THE ROAD OUT WAS NEVER A WAY OUT")),
+    dict(id="t27", level=None, template="emptyChair",
+         narration=("And the number keeps climbing without you, the way it always would. Somewhere a market "
+                    "opens and prices a chair you used to fill. Somewhere a phone rings and no one answers in "
+                    "time. The hunger that made you is hungry again this morning, the same as every morning, "
+                    "and it will make someone new and spend them and never learn their name — and it will "
+                    "never, not once, learn yours. You wanted the number. You got it. It just never wanted you "
+                    "back."),
+         overlay=dict(big="IT NEVER WANTED YOU BACK", sub="THE HUNGER IS AWAKE AGAIN · SAME AS EVERY MORNING")),
 ]

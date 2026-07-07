@@ -76,6 +76,12 @@
       "date": "2026-07-05",
       "superseded_by": "https://youtu.be/MiXTy6PUdDk",
       "note": "AUTOPILOT auto-published this inferior version (old grainy voice + bland cream thumbnail). SUPERSEDED by the polished manual upload https://youtu.be/MiXTy6PUdDk (clean voice + bright thumbnail v2 + title 'You Don't Exist'). RECOMMEND: unlist/delete the autopilot's molUoFUlmso to avoid a duplicate."
+    },
+    {
+      "topic": "mexican_cartel",
+      "title": "Your Life in a Cartel at Every Rank (No Way Out)",
+      "url": "https://youtu.be/VwPd_5wWjGM",
+      "date": "2026-07-06"
     }
   ],
   "_note": "Showrunner must NOT repeat a produced topic. Auto-generate a new hierarchical profession each run."
