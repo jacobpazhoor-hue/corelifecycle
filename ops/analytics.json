@@ -1,8 +1,8 @@
 {
-  "updated": "2026-07-07T08:01:50.853137+00:00",
+  "updated": "2026-07-08T00:47:13.374374+00:00",
   "channel": {
     "videos": 25,
-    "views": 714,
+    "views": 733,
     "subscribers": 4
   },
   "videos": [
@@ -21,7 +21,7 @@
       "topic": "mob_boss",
       "title": "Your Life in the Mafia at Every Rank (Only 2 Ways Out)",
       "published": "2026-07-03T02:16:42Z",
-      "views": 66,
+      "views": 73,
       "likes": 4,
       "comments": 0,
       "duration": "PT12M12S"
@@ -77,6 +77,16 @@
       "duration": "PT10M49S"
     },
     {
+      "id": "MiXTy6PUdDk",
+      "topic": null,
+      "title": "Your Life as Every Rank in Special Forces (You Don't Exist)",
+      "published": "2026-07-05T20:01:33Z",
+      "views": 22,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M10S"
+    },
+    {
       "id": "jTfmhC3peEM",
       "topic": "real_estate_mogul",
       "title": "Every Level of a Real Estate Mogul \u2014 From Agent to Global Landlord",
@@ -107,6 +117,16 @@
       "duration": "PT12M51S"
     },
     {
+      "id": "molUoFUlmso",
+      "topic": "special_forces",
+      "title": "Your Life as Every Rank in Special Forces (Most Die at Selection)",
+      "published": "2026-07-05T15:19:13Z",
+      "views": 8,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M8S"
+    },
+    {
       "id": "AWmf0DwSC-g",
       "topic": null,
       "title": "Every Level of a Surgeon \ud83d\udcb0 #shorts",
@@ -117,21 +137,11 @@
       "duration": "PT53S"
     },
     {
-      "id": "MiXTy6PUdDk",
-      "topic": null,
-      "title": "Your Life as Every Rank in Special Forces (You Don't Exist)",
-      "published": "2026-07-05T20:01:33Z",
-      "views": 5,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT12M10S"
-    },
-    {
       "id": "uRCF7Sn22Ns",
       "topic": null,
       "title": "Every Level of a Special Forces \ud83d\udcb0 #shorts",
       "published": "2026-07-05T15:36:21Z",
-      "views": 4,
+      "views": 6,
       "likes": 0,
       "comments": 0,
       "duration": "PT59S"
@@ -167,14 +177,14 @@
       "duration": "PT56S"
     },
     {
-      "id": "molUoFUlmso",
-      "topic": "special_forces",
-      "title": "Your Life as Every Rank in Special Forces (Most Die at Selection)",
-      "published": "2026-07-05T15:19:13Z",
+      "id": "pg08o0QpUqI",
+      "topic": null,
+      "title": "Every Level of a Hedge Fund \ud83d\udcb0 #shorts",
+      "published": "2026-06-24T20:34:03Z",
       "views": 2,
       "likes": 0,
       "comments": 0,
-      "duration": "PT12M8S"
+      "duration": "PT1M2S"
     },
     {
       "id": "ZQpAzns70b4",
@@ -185,16 +195,6 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT10M8S"
-    },
-    {
-      "id": "pg08o0QpUqI",
-      "topic": null,
-      "title": "Every Level of a Hedge Fund \ud83d\udcb0 #shorts",
-      "published": "2026-06-24T20:34:03Z",
-      "views": 1,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT1M2S"
     },
     {
       "id": "SP3fs8c0BD0",
