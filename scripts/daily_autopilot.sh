@@ -60,8 +60,29 @@ notify() {  # $1 = short status, $2 = detail. Records + best-effort desktop ping
   echo "$(date '+%Y-%m-%d %H:%M') $1 — $2" >> runs/autopilot/status.log
   osascript -e "display notification \"$2\" with title \"CoreLifecycle: $1\"" 2>/dev/null
 }
-finish() {  # always runs (trap): release lock + record outcome
+finish() {  # always runs (trap): release lock + record outcome + health/alert
   echo "FINAL: $STATUS — $STATUS_MSG"
+  # --- CHANNEL HEALTH + SAME-DAY ALERT ---------------------------------------------------------
+  # The 5-day silent outage happened because the ONLY failure signal was a 2am desktop notification
+  # nobody saw. Track days-dark and ESCALATE (sound + ALERTS.log + glanceable status file) whenever
+  # a run ends without publishing while the channel is already >=1 day dark. The every-2h catchup
+  # job means this fires during waking hours, so an outage surfaces same-day instead of days later.
+  local LASTPOST DARK
+  LASTPOST=$(cat runs/last_post.txt 2>/dev/null || echo never)
+  DARK=$(python3 -c "import datetime,sys
+try: print((datetime.date.today()-datetime.date.fromisoformat(sys.argv[1])).days)
+except Exception: print(999)" "$LASTPOST" 2>/dev/null || echo 999)
+  {
+    echo "CoreLifecycle channel health — updated $(date '+%Y-%m-%d %H:%M')"
+    echo "last publish : $LASTPOST  (${DARK} day(s) ago)"
+    echo "last run     : $STATUS — $STATUS_MSG"
+    echo "last log     : $LOG"
+  } > runs/CHANNEL_STATUS.txt 2>/dev/null
+  if [ "$STATUS" != "PUBLISHED" ] && [ "${DARK:-999}" -ge 1 ] 2>/dev/null; then
+    local MSG="CoreLifecycle DARK ${DARK}d — last run $STATUS: $STATUS_MSG"
+    echo "$(date '+%Y-%m-%d %H:%M') ALERT $MSG (see $LOG)" >> runs/autopilot/ALERTS.log
+    osascript -e "display notification \"$MSG\" with title \"⚠️ CoreLifecycle needs attention\" sound name \"Basso\"" 2>/dev/null
+  fi
   rm -rf "$LOCK" 2>/dev/null  # rm -rf, not rmdir: the lock dir holds a 'started' file (rmdir leaks it)
   [ -n "${GOT_SHARED:-}" ] && rm -rf "$SHARED_LOCK" 2>/dev/null  # release shared lock only if WE hold it
   echo "=== autopilot end $(date) ==="
