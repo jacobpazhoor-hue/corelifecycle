@@ -1,8 +1,8 @@
 {
-  "updated": "2026-07-11T03:11:15.757045+00:00",
+  "updated": "2026-07-11T12:59:39.192311+00:00",
   "channel": {
     "videos": 25,
-    "views": 861,
+    "views": 871,
     "subscribers": 4
   },
   "videos": [
@@ -21,7 +21,7 @@
       "topic": "mob_boss",
       "title": "Your Life in the Mafia at Every Rank (Only 2 Ways Out)",
       "published": "2026-07-03T02:16:42Z",
-      "views": 139,
+      "views": 141,
       "likes": 4,
       "comments": 0,
       "duration": "PT12M12S"
@@ -51,7 +51,7 @@
       "topic": "spy",
       "title": "Your Life as a Spy at Every Level \u2014 Recruit to Spymaster",
       "published": "2026-06-28T18:47:28Z",
-      "views": 34,
+      "views": 35,
       "likes": 1,
       "comments": 0,
       "duration": "PT12M56S"
@@ -61,10 +61,20 @@
       "topic": null,
       "title": "Your Life as Every Rank in Special Forces (You Don't Exist)",
       "published": "2026-07-05T20:01:33Z",
-      "views": 32,
+      "views": 33,
       "likes": 0,
       "comments": 0,
       "duration": "PT12M10S"
+    },
+    {
+      "id": "molUoFUlmso",
+      "topic": "special_forces",
+      "title": "Your Life as Every Rank in Special Forces (Most Die at Selection)",
+      "published": "2026-07-05T15:19:13Z",
+      "views": 28,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M8S"
     },
     {
       "id": "TkA8BAwwjCQ",
@@ -75,16 +85,6 @@
       "likes": 1,
       "comments": 0,
       "duration": "PT10M41S"
-    },
-    {
-      "id": "molUoFUlmso",
-      "topic": "special_forces",
-      "title": "Your Life as Every Rank in Special Forces (Most Die at Selection)",
-      "published": "2026-07-05T15:19:13Z",
-      "views": 25,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT12M8S"
     },
     {
       "id": "iCRh1imgBgo",
