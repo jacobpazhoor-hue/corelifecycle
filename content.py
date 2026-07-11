@@ -156,7 +156,7 @@ SCENES = [
                     "the mirror, and you burn one of your two flares into the daylight where it barely shows. It "
                     "climbs, arcs, dies. The ship never changes course. Six hundred meters — and no one on a "
                     "bridge that size ever watches the water behind them."),
-         overlay=dict(big="600 M", sub="A MILE OFF · AND NO ONE WATCHES THE WATER ASTERN")),
+         overlay=dict(big="600 M", sub="CLOSE ENOUGH TO COUNT CONTAINERS · NO ONE WATCHES ASTERN")),
     dict(id="t12", level=None, template="raftDay",
          narration=("After a ship passes you, the ocean is louder. Raf punches the tube and swears and then goes "
                     "silent, and the silence is worse than the swearing. In it you hear your father: don't chase "
@@ -229,7 +229,7 @@ SCENES = [
     # ---- LEVEL 8 — WEEK 4 · THE STORM ----
     dict(id="t21", level="WEEK 4  ·  THE STORM", template="oceanCapsize", gap=0.7, rate="+8%",
          narration=("The second storm finds you on the thirty-first day, and it means it. A wave folds the raft "
-                    "and a shark-bumped seam lets go with a hiss you feel in your teeth. The sea pours in. You "
+                    "and a shark-bumped seam lets go with a hiss that goes straight through your teeth. The sea pours in. You"
                     "bail with a shoe, with your cupped hands, with your mouth, screaming at a sky that answers "
                     "only in more water. You cram the patch from the raft's little kit into the tear and it "
                     "half-holds — and the hiss never fully stops. Now the leak is a clock, and it is running."),
