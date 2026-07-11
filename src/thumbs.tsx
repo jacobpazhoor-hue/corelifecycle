@@ -251,14 +251,16 @@ const ThumbQuestion: React.FC = () => {
 
 // SCALE-TERROR — tiny hero dwarfed by a huge looming threat
 const ThumbScaleTerror: React.FC = () => {
-  const kw = Math.min(160, Math.floor(760 / Math.max(KEYWORD.length, 1) * 1.05));
+  const kw = Math.min(150, Math.floor(560 / Math.max(KEYWORD.length, 1)));  // fit pill in the left column (clear of silhouette)
+  const cap = (KICKER + ' ' + L1).trim();
+  const capFs = Math.min(56, Math.floor(1120 / Math.max(cap.length, 1)));   // caption fits above the pill on one line
   return (
     <Wrap burstX={940} sun={false}>
       <Sunburst cx={940} cy={300} n={30} />
       <g opacity={0.92} filter="url(#heroPop)"><circle cx={940} cy={300} r={260} fill={INK} /><path d="M 690 560 Q 940 470 1190 560 L 1260 1090 L 620 1090 Z" fill={INK} /></g>
-      <Hero x={300} y={700} scale={1.6} facing={1} expr={face('worried')} pose={A.lookUp(0)} />
-      <Punch x={70} y={150} fs={48}>{(KICKER + ' ' + L1).trim()}</Punch>
-      <KeyPill x={78} y={150 + kw} fs={kw} label={KEYWORD} angle={-5} />
+      <Hero x={300} y={706} scale={1.7} facing={1} expr={face('hollow')} pose={A.lookUp(0)} />
+      <Punch x={70} y={120} fs={capFs}>{cap}</Punch>
+      <KeyPill x={78} y={130 + capFs + kw} fs={kw} label={KEYWORD} angle={-4} maxW={600} />
     </Wrap>
   );
 };

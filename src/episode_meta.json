@@ -1,19 +1,19 @@
 {
   "thumb": {
-    "kicker": "1,200 MILES",
-    "line1": "FROM LAND",
+    "kicker": "RICHER THAN",
+    "line1": "NATIONS",
     "line2": "",
-    "tag": "DAY 54",
-    "archetype": "eyeline",
-    "big": "DAY 54",
-    "before": "DAY 1",
-    "after": "ALONE",
-    "expr": "worried",
-    "povline": "YOU CAN'T",
-    "keyword": "NO RESCUE",
-    "setting": "shipNight",
-    "question": "COULD YOU LAST 54 DAYS?",
-    "mood": "survival"
+    "tag": "$1T",
+    "archetype": "scaleterror",
+    "big": "$1T",
+    "before": "NOBODY",
+    "after": "NAMELESS",
+    "expr": "hollow",
+    "povline": "YOU OWN IT ALL",
+    "keyword": "NAMELESS",
+    "setting": "rooftopEmpire",
+    "question": "WHAT DOES A TRILLION COST?",
+    "mood": "money"
   },
-  "topic": "could_you_survive_ocean"
+  "topic": "trillionaire"
 }

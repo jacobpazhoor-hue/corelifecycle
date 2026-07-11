@@ -2,34 +2,34 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 21990,
+  "totalFrames": 22565,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t00",
       "level": null,
       "overlay": {
-        "big": "DAY 54",
-        "sub": "ONE FLARE LEFT \u00b7 AND THE SHIP HASN'T TURNED"
+        "big": "$1T",
+        "sub": "THE WORLD'S FIRST \u00b7 AND SHE'S CALLING, AND YOU LET IT RING"
       },
-      "template": "shipNight",
+      "template": "galaBallroom",
       "audio": "audio/t00.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 854
+      "durationInFrames": 850
     },
     {
       "id": "t01",
-      "level": "HOUR 0  \u00b7  THE CROSSING",
+      "level": "LEVEL 01  \u00b7  $0",
       "overlay": {
-        "big": "1,200 MI",
-        "sub": "TO THE NEAREST LAND \u00b7 NO ONE EXPECTS YOU FOR WEEKS"
+        "big": "$0",
+        "sub": "EVERYTHING YOU OWN \u00b7 AND A SISTER YOU CAN'T AFFORD TO SAVE"
       },
-      "template": "boatDeck",
+      "template": "desk",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
-      "startFrame": 854,
-      "durationInFrames": 759
+      "startFrame": 850,
+      "durationInFrames": 825
     },
     {
       "id": "t02",
@@ -38,296 +38,281 @@
       "template": "dinner",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 1613,
-      "durationInFrames": 873
+      "startFrame": 1675,
+      "durationInFrames": 962
     },
     {
       "id": "t03",
-      "level": "HOUR 1  \u00b7  COLD SHOCK",
-      "overlay": {
-        "big": "45 SEC",
-        "sub": "TO GET OFF A BOAT THAT'S ALREADY GONE"
-      },
-      "template": "oceanCapsize",
+      "level": null,
+      "overlay": null,
+      "template": "garageStart",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 2486,
-      "durationInFrames": 742
+      "startFrame": 2637,
+      "durationInFrames": 802
     },
     {
       "id": "t04",
-      "level": null,
+      "level": "LEVEL 02  \u00b7  $1 MILLION",
       "overlay": {
-        "big": "10 MIN",
-        "sub": "1-10-1 \u00b7 BEFORE YOUR HANDS STOP OBEYING YOU"
+        "big": "$1M",
+        "sub": "THE DEBT THAT RULED YOUR LIFE \u00b7 GONE IN ONE CLICK"
       },
-      "template": "openSwell",
+      "template": "startupGrow",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 3228,
-      "durationInFrames": 694
+      "startFrame": 3439,
+      "durationInFrames": 824
     },
     {
       "id": "t05",
       "level": null,
-      "overlay": {
-        "big": "1 BEACON",
-        "sub": "PRESSED \u00b7 NO WAY TO KNOW IF ANYONE HEARD IT"
-      },
-      "template": "raftDay",
+      "overlay": null,
+      "template": "serverScale",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 3922,
-      "durationInFrames": 695
+      "startFrame": 4263,
+      "durationInFrames": 794
     },
     {
       "id": "t06",
-      "level": "HOUR 6  \u00b7  THE FIRST NIGHT",
+      "level": null,
       "overlay": {
-        "big": "95\u00b0F",
-        "sub": "CORE TEMP FALLING \u00b7 WHEN THE SHIVERING STOPS, WORRY"
+        "big": "$0 CASH",
+        "sub": "RICH ON PAPER \u00b7 YOU BORROW AGAINST IT AND SELL NOTHING"
       },
-      "template": "raftNight",
+      "template": "boardroomNotes",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 4617,
-      "durationInFrames": 741
+      "startFrame": 5057,
+      "durationInFrames": 778
     },
     {
       "id": "t07",
-      "level": null,
-      "overlay": null,
-      "template": "raftDay",
+      "level": "LEVEL 03  \u00b7  $100 MILLION",
+      "overlay": {
+        "big": "$100M",
+        "sub": "YOU STOP BEING A PERSON \u00b7 YOU BECOME AN INSTITUTION"
+      },
+      "template": "tower",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 5358,
-      "durationInFrames": 761
+      "startFrame": 5835,
+      "durationInFrames": 729
     },
     {
       "id": "t08",
-      "level": "DAY 2  \u00b7  THIRST",
-      "overlay": {
-        "big": "3 DAYS",
-        "sub": "WHAT YOU HAVE WITHOUT WATER \u00b7 THE RULE OF THREES"
-      },
-      "template": "glassCalm",
+      "level": null,
+      "overlay": null,
+      "template": "atrium",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 6119,
-      "durationInFrames": 783
+      "startFrame": 6564,
+      "durationInFrames": 720
     },
     {
       "id": "t09",
       "level": null,
-      "overlay": {
-        "big": "0 DROPS",
-        "sub": "DRINK THE SEA AND YOU DIE FASTER \u00b7 YES, REALLY"
-      },
-      "template": "raftNight",
+      "overlay": null,
+      "template": "boardroomHead",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 6902,
-      "durationInFrames": 808
+      "startFrame": 7284,
+      "durationInFrames": 729
     },
     {
       "id": "t10",
-      "level": null,
-      "overlay": null,
-      "template": "raftDay",
+      "level": "LEVEL 04  \u00b7  $1 BILLION",
+      "overlay": {
+        "big": "$1B",
+        "sub": "KEEP THE TOWN, STAY RICH \u00b7 CUT IT, GO VERTICAL"
+      },
+      "template": "pnlWall",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 7710,
-      "durationInFrames": 734
+      "startFrame": 8013,
+      "durationInFrames": 749
     },
     {
       "id": "t11",
-      "level": "DAY 4  \u00b7  THE SHIP",
-      "overlay": {
-        "big": "600 M",
-        "sub": "A MILE OFF \u00b7 AND NO ONE WATCHES THE WATER ASTERN"
-      },
-      "template": "horizonShip",
+      "level": null,
+      "overlay": null,
+      "template": "layoffs",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 8444,
-      "durationInFrames": 731
+      "startFrame": 8762,
+      "durationInFrames": 700
     },
     {
       "id": "t12",
       "level": null,
       "overlay": null,
-      "template": "raftDay",
+      "template": "supervisor",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 9175,
-      "durationInFrames": 777
+      "startFrame": 9462,
+      "durationInFrames": 854
     },
     {
       "id": "t13",
       "level": null,
       "overlay": {
-        "big": "+2 DAYS",
-        "sub": "THE SQUALL GIVES \u00b7 THE SUN COMES BACK TO COLLECT"
+        "big": "$1B",
+        "sub": "YOU CROSSED \u00b7 AND LEFT SAM ON THE OTHER SIDE"
       },
-      "template": "rainSquall",
+      "template": "signing",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 9952,
-      "durationInFrames": 791
+      "startFrame": 10316,
+      "durationInFrames": 803
     },
     {
       "id": "t14",
-      "level": "DAY 9  \u00b7  WHAT'S BELOW",
+      "level": "LEVEL 05  \u00b7  $100 BILLION",
       "overlay": {
-        "big": "DAY 9",
-        "sub": "THE SHADE FEEDS YOU \u00b7 AND DRAWS WHAT EATS YOU"
+        "big": "$100B",
+        "sub": "SAY ONE WORD \u00b7 THREE MARKETS FLINCH"
       },
-      "template": "finWater",
+      "template": "yachtDeck",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 10743,
-      "durationInFrames": 744
+      "startFrame": 11119,
+      "durationInFrames": 907
     },
     {
       "id": "t15",
       "level": null,
       "overlay": {
-        "big": "6 GAL",
-        "sub": "A DEAD BOAT'S WATER \u00b7 AND A CHILD'S SANDAL, NO CHILD"
+        "big": "$1M / MIN",
+        "sub": "IT GROWS WHILE YOU SLEEP \u00b7 UNEARNED, UNTAXED, UNTOUCHED"
       },
-      "template": "driftPanga",
+      "template": "tradingFloor",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 11487,
-      "durationInFrames": 815
+      "startFrame": 12026,
+      "durationInFrames": 814
     },
     {
       "id": "t16",
       "level": null,
       "overlay": null,
-      "template": "finWater",
+      "template": "window",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 12302,
-      "durationInFrames": 729
-    },
-    {
-      "id": "t17",
-      "level": null,
-      "overlay": null,
-      "template": "raftDay",
-      "audio": "audio/t17.wav",
-      "audioStartFrame": 3,
-      "startFrame": 13031,
+      "startFrame": 12840,
       "durationInFrames": 698
     },
     {
-      "id": "t18",
-      "level": "WEEK 2  \u00b7  ALONE",
+      "id": "t17",
+      "level": "LEVEL 06  \u00b7  $1 TRILLION",
       "overlay": {
-        "big": "DAY 14",
-        "sub": "THE RAFT HOLDS ONE NOW"
+        "big": "$740B",
+        "sub": "A MILLION A DAY SINCE CHRIST \u00b7 STILL NOT A TRILLION"
       },
-      "template": "raftNight",
+      "template": "rooftopEmpire",
+      "audio": "audio/t17.wav",
+      "audioStartFrame": 3,
+      "startFrame": 13538,
+      "durationInFrames": 830
+    },
+    {
+      "id": "t18",
+      "level": null,
+      "overlay": {
+        "big": "$1T",
+        "sub": "WORTH MORE THAN NATIONS \u00b7 AND SHE IS CALLING RIGHT NOW"
+      },
+      "template": "galaBallroom",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 13729,
-      "durationInFrames": 811
+      "startFrame": 14368,
+      "durationInFrames": 866
     },
     {
       "id": "t19",
       "level": null,
-      "overlay": {
-        "big": "438 DAYS",
-        "sub": "A MAN ONCE DID THIS ALONE, AND LIVED \u00b7 REAL"
-      },
-      "template": "openSwell",
+      "overlay": null,
+      "template": "throne",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 14540,
-      "durationInFrames": 842
+      "startFrame": 15234,
+      "durationInFrames": 795
     },
     {
       "id": "t20",
       "level": null,
       "overlay": null,
-      "template": "raftDay",
+      "template": "deskClose",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 15382,
-      "durationInFrames": 751
+      "startFrame": 16029,
+      "durationInFrames": 741
     },
     {
       "id": "t21",
-      "level": "WEEK 4  \u00b7  THE STORM",
+      "level": "LEVEL 07  \u00b7  YOU CAN'T SELL IT",
       "overlay": {
-        "big": "DAY 31",
-        "sub": "THE TUBE TEARS \u00b7 YOU BAIL WITH A SHOE"
+        "big": "$1T ON PAPER",
+        "sub": "TOUCH IT AND IT SHRINKS \u00b7 YOU CANNOT CASH OUT"
       },
-      "template": "oceanCapsize",
+      "template": "pnlWall",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 16133,
-      "durationInFrames": 833
+      "startFrame": 16770,
+      "durationInFrames": 760
     },
     {
       "id": "t22",
       "level": null,
-      "overlay": {
-        "big": "1 BIRD",
-        "sub": "BIRDS MEAN LAND \u00b7 SOMEWHERE, LAND"
-      },
-      "template": "glassCalm",
+      "overlay": null,
+      "template": "familyVault",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 16966,
-      "durationInFrames": 815
+      "startFrame": 17530,
+      "durationInFrames": 767
     },
     {
       "id": "t23",
       "level": null,
       "overlay": null,
-      "template": "openSwell",
+      "template": "portraitHall",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 17781,
-      "durationInFrames": 758
+      "startFrame": 18297,
+      "durationInFrames": 781
     },
     {
       "id": "t24",
-      "level": "DAY 54  \u00b7  THE LIGHT",
+      "level": "LEVEL 08  \u00b7  THE APPETITE",
       "overlay": {
-        "big": "1 FLARE",
-        "sub": "THE LAST ONE \u00b7 AND THE LIGHT HASN'T TURNED"
+        "big": "THE APPETITE",
+        "sub": "THE MARKET NEVER SLEEPS \u00b7 IT WAS NEVER YOURS"
       },
-      "template": "shipNight",
+      "template": "serverScale",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 18539,
-      "durationInFrames": 886
+      "startFrame": 19078,
+      "durationInFrames": 742
     },
     {
       "id": "t25",
       "level": null,
       "overlay": null,
-      "template": "raftNight",
+      "template": "emptyChair",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 19425,
-      "durationInFrames": 863
+      "startFrame": 19820,
+      "durationInFrames": 820
     },
     {
       "id": "t26",
       "level": null,
-      "overlay": {
-        "big": "DAY 54",
-        "sub": "THEY STOPPED LOOKING DAY 9 \u00b7 AND FOUND YOU ANYWAY"
-      },
-      "template": "makeLandfall",
+      "overlay": null,
+      "template": "lobby",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 20288,
-      "durationInFrames": 806
+      "startFrame": 20640,
+      "durationInFrames": 914
     },
     {
       "id": "t27",
@@ -336,8 +321,8 @@
       "template": "window",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 21094,
-      "durationInFrames": 896
+      "startFrame": 21554,
+      "durationInFrames": 1011
     }
   ]
 }
