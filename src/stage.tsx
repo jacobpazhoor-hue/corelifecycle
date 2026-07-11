@@ -70,6 +70,56 @@ const PortraitWallArt: React.FC<{frame: number; filled?: boolean}> = ({frame, fi
   </g>
 );
 
+// A rolling/jagged ridgeline path from x=0..W, deterministic per seed. `roll` in [0..1]:
+// 0 = sharp mountain peaks, 1 = smooth rounded hills. `amp` = crest height variation.
+const ridgePath = (crestY: number, amp: number, seed: number, roll = 0.7, W = 1920, H = 1120) => {
+  const seg = 150 + Math.round(rnd(seed) * 90);           // peak spacing varies per layer
+  const pk: Array<[number, number]> = [];
+  for (let x = 0; x <= W + seg; x += seg) pk.push([x, crestY - rnd(seed + x * 1.7) * amp]);  // peak tops
+  let d = `M 0 ${pk[0][1].toFixed(1)}`;
+  for (let i = 1; i < pk.length; i++) {
+    const [x, y] = pk[i], [px, py] = pk[i - 1], mx = (px + x) / 2;
+    if (roll < 0.5) {                                      // SHARP peaks: notch down to a valley, straight climb up
+      const vy = Math.max(py, y) + amp * 0.4 * (1 - roll * 2);
+      d += ` L ${mx.toFixed(1)} ${vy.toFixed(1)} L ${x.toFixed(1)} ${y.toFixed(1)}`;
+    } else {                                               // ROUNDED hills: quadratic crest between peaks
+      const cy = Math.min(py, y) - amp * (roll - 0.35);
+      d += ` Q ${mx.toFixed(1)} ${cy.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}`;
+    }
+  }
+  return d + ` L ${W} ${H} L 0 ${H} Z`;
+};
+
+// Layered ridgelines with atmospheric depth (far = higher + paler, near = lower + darker),
+// contour shading on the front ridge, and scattered doodle trees. Keeps the hand-drawn ink look.
+const Ridges: React.FC<{baseY: number; layers?: number; seed?: number; roll?: number; amp?: number;
+  tint?: string; trees?: number; treeKind?: 'pine' | 'round'}> =
+({baseY, layers = 3, seed = 1, roll = 0.7, amp = 90, tint = PAPERC, trees = 0, treeKind = 'round'}) => {
+  const rows = Array.from({length: layers}, (_, i) => {
+    const depth = i / Math.max(layers - 1, 1);            // 0 = farthest, 1 = nearest
+    const crestY = baseY - (layers - 1 - i) * amp * 0.9;  // farther ridges sit higher
+    const op = 0.32 + depth * 0.5;                        // nearer = more opaque
+    return {i, depth, crestY, op, d: ridgePath(crestY, amp * (0.7 + depth * 0.6), seed + i * 53, roll)};
+  });
+  return (
+    <g>
+      {rows.map(({i, crestY, op, d}) => (
+        <path key={i} d={d} fill={tint} stroke={INK} strokeWidth={2 + i} opacity={op} strokeLinejoin="round" />
+      ))}
+      {/* scattered doodle trees along the front slope */}
+      {trees > 0 && Array.from({length: trees}).map((_, k) => {
+        const x = 40 + (k + rnd(seed + k) * 0.6) * (1840 / trees);
+        const y = baseY - 8 + rnd(seed + k * 3.3) * 46;
+        const s = 0.7 + rnd(seed + k * 2.1) * 0.7;
+        return treeKind === 'pine'
+          ? <path key={k} d={`M ${x} ${y - 60 * s} l ${-20 * s} ${44 * s} l ${40 * s} 0 Z M ${x} ${y - 36 * s} l ${-26 * s} ${50 * s} l ${52 * s} 0 Z`}
+              fill={tint} stroke={INK} strokeWidth={2.2} opacity={0.55} strokeLinejoin="round" />
+          : <g key={k} opacity={0.5}><ellipse cx={x} cy={y - 30 * s} rx={26 * s} ry={22 * s} fill={tint} stroke={INK} strokeWidth={2.2} /><line x1={x} y1={y - 12 * s} x2={x} y2={y + 6 * s} stroke={INK} strokeWidth={3} /></g>;
+      })}
+    </g>
+  );
+};
+
 // =================== BACKDROPS (far plane) ===================
 const BG: Record<string, React.FC<{frame: number}>> = {
   // tiered lecture hall — med school / training / any "learning" beat
@@ -943,10 +993,9 @@ const BG: Record<string, React.FC<{frame: number}>> = {
   sierraCamp: ({frame}) => (
     <g>
       <rect x={0} y={0} width={1920} height={640} fill="#d9cdae" opacity={0.4} />
-      {/* mountain ridgelines */}
-      <path d="M 0 500 L 340 300 L 620 470 L 900 250 L 1180 460 L 1500 300 L 1920 480 L 1920 640 L 0 640 Z" fill={PAPERC} stroke={INK} strokeWidth={3} opacity={0.5} />
-      {/* pines dotting the slope */}
-      {Array.from({length: 16}).map((_, i) => {const x = 80 + i * 118; const y = 470 + rnd(i) * 120; return <path key={i} d={`M ${x} ${y} l -22 44 l 44 0 Z M ${x} ${y + 20} l -30 50 l 60 0 Z`} fill={PAPERC} stroke={INK} strokeWidth={2.5} opacity={0.5} />;})}
+      {/* layered mountain ridgelines — depth-cued, pine-dotted, contour-shaded */}
+      <Ridges baseY={520} layers={4} seed={7} roll={0.22} amp={112} trees={11} treeKind="pine" />
+      <rect x={0} y={520} width={1920} height={120} fill="url(#svig)" opacity={0.3} />
       <rect x={0} y={640} width={1920} height={440} fill={FLOOR} /><line x1={0} y1={640} x2={1920} y2={640} stroke={INK} strokeWidth={5} />
       {/* tarp lean-to shelters */}
       {[300, 1560].map((x, i) => <g key={x} opacity={0.9}><path d={`M ${x - 90} 720 L ${x} 640 L ${x + 90} 720 Z`} fill={PAPERC} stroke={INK} strokeWidth={4} /><line x1={x} y1={640} x2={x} y2={720} stroke={INK} strokeWidth={2} opacity={0.4} /></g>)}
@@ -959,8 +1008,8 @@ const BG: Record<string, React.FC<{frame: number}>> = {
   narcoRanch: ({frame}) => (
     <g>
       <rect x={0} y={0} width={1920} height={560} fill="#dfd2b0" opacity={0.4} />
-      {/* hills behind */}
-      <path d="M 0 500 Q 500 420 960 490 T 1920 470 L 1920 560 L 0 560 Z" fill={PAPERC} stroke={INK} strokeWidth={2} opacity={0.4} />
+      {/* layered rolling hills behind — depth-cued with scattered brush */}
+      <Ridges baseY={512} layers={3} seed={4} roll={0.9} amp={70} trees={7} treeKind="round" />
       {/* the ranch house */}
       <rect x={1120} y={360} width={560} height={200} fill={PAPERC} stroke={INK} strokeWidth={4} />
       <rect x={1120} y={330} width={560} height={36} fill={PAPERC} stroke={INK} strokeWidth={4} />
