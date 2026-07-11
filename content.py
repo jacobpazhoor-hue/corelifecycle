@@ -1,304 +1,283 @@
 #!/usr/bin/env python3
-"""POV: You're the World's First Trillionaire — POV doodle build, ~12 min, template-driven.
-Grounded in docs/research/trillionaire.md. SCENARIO format: the levels are escalating MONEY
-milestones, not job ranks ($0 -> $1M -> $100M -> $1B -> $100B -> $1T -> you can't sell it -> the
-appetite above money). Second-person present-tense POV: the viewer IS a broke kid whose card
-declines for a $4.50 coffee and who climbs, milestone by milestone, to become the world's first
-trillionaire — and learns that a trillion-dollar fortune is not money you can spend but a stock
-position that only exists while you never touch it; that above even the richest human sits an
-appetite that prices you and never learns your name; and that the one call worth answering is the
-one the number can't buy back.
+"""Could You Survive Alone in the Middle of the Ocean? — POV doodle build, ~13 min, template-driven.
+Grounded in docs/research/could_you_survive_ocean.md. SURVIVAL format: the levels are a MONOTONIC
+TIME/THREAT ladder (HOUR 0 -> HOUR 1 -> HOUR 6 -> DAY 2 -> DAY 4 -> DAY 9 -> WEEK 2 -> WEEK 4 ->
+DAY 54); the gold "$" overlay becomes a SURVIVAL STAT at each stage (a countdown time, a body temp,
+a distance, a day count) while the sub-caption tracks the collapsing resource / rising threat. The
+color grade escalates by each level-start's POSITION, so the mixed units are fine — the ladder just
+keeps moving forward. Second-person present-tense POV: you are delivering a 40-foot sailboat across
+the open Pacific with one friend (RAF); a late storm dismasts and holes the boat 1,200 miles from
+land; the ocean spends fifty-four days taking everything — heat, then water, then hope, then Raf —
+before it decides whether to set you down. DRAMATIZED cautionary survival POV, not a how-to.
 
-NEAR-FUTURE / PROJECTED: no trillionaire exists yet (2026); Oxfam projects the first in the ~2030s.
-The wealth mechanics and the two big share-numbers are REAL and VERIFIED (see research doc):
-  * a million seconds = 12 days; a billion = 31.7 years; a TRILLION seconds = ~31,700 years.
-  * spend $1,000,000 a DAY since the birth of Christ and today you'd have spent ~$740B — still not $1T.
-  * mega-fortunes are unrealized STOCK, not cash; selling a large stake collapses the price ("buy,
-    borrow, die" — you borrow against shares, realize no taxable income); Musk's wealth grew >$1M/min
-    (Oxfam 2025); five richest men $405B -> $869B, 2020-2024, while ~5B people got poorer.
+REAL/VERIFIED mechanics woven in (see research doc; FLAGS there): the 1-10-1 cold-water rule (~1 min
+cold-shock gasp reflex, ~10 min before your hands quit, ~1 hr to unconsciousness); hypothermia below
+95F, and the tell that the SHIVERING STOPS; the rule of threes (~3 days without water, FLAGGED as a
+heuristic); DRINKING SEAWATER KILLS YOU FASTER (hypernatremia — the counter-intuitive share beat);
+solar still + rain catch for fresh water; a raft is a fish-aggregating shade that feeds you (mahi) AND
+draws sharks; a low orange raft is nearly invisible from a ship's bridge (no one watches astern);
+hallucination + the "third man" felt-presence at the end of endurance. Share beat #2: Jose Salvador
+Alvarenga drifted the Pacific ~438 days and lived (the documented record).
 
-SPINE (gold $ escalation — the money climbs while what you can actually SPEND falls to nothing):
-$0 (card declined) -> $1M (on paper) -> $100M (IPO) -> $1B (the cost) -> $100B (you move markets) ->
-$1T (the world's first) -> YOU CAN'T SELL IT (the number owns you) -> THE APPETITE (demand, above money).
+SPINE (survival stat overlay — the number is what the sea is charging you at each stage):
+1,200 MI -> 45 SEC -> 10 MIN -> 95F -> 3 DAYS -> 0 DROPS -> 600 M -> DAY 9 -> 6 GAL -> DAY 14 ->
+438 DAYS -> DAY 31 -> 1 FLARE -> DAY 54.
 
-STORY: mentor HALVORSEN (first investor; the warning "the number grows faster than you can stay
-yourself"; the one who hands you the billion-dollar deal that costs you Sam); co-founder + best friend
-SAM (built it with you; the MIDPOINT betrayal at t13 — you gut her half + close the town's plant to
-cross into billionaire; "I'm sad you're not even sorry"); rival billionaire ROURKE (the taunt "a
-billion buys people; you'll trade up"); the recurring fixer KEELE, a family-office banker (shared-
-universe character planted t15, dialogue t22, left UNRESOLVED — "I already manage whoever holds it
-next"). Sensory anchor motif: DANI'S 19-SECOND VOICEMAIL — your little sister's laugh, "eat
-something, call me back" — the one recording you never delete: saved t02, replayed t16, she calls
-LIVE at the trillion moment and you let it ring t18, replayed one last time at the loop-close t25.
-Secondary texture: burnt $4.50 gas-station coffee (t01/t04/t12/t25) — the one thing the money never
-upgrades about you. Master open loop: the FLASH-FORWARD cold open (t00 — the glass room, the trillion
-crossing, Dani calling live, the hand that turns you away) pays off at t18; the through-line "you want
-the number; you don't know it wants you back" pays off t20-t27.
+STORY: RAF (Rafael) — your friend + delivery crewmate, the one other body in the raft; the MIDPOINT
+DEATH at t18 ("you don't get to stop just because I did"). ISLA — your 7-year-old daughter on land,
+the reason-to-live anchor ("Dad, don't be late"). YOUR FATHER — a dead commercial fisherman whose
+RULE ("the sea gives nothing back — don't chase it; wait, and it sets you down") is the mentor
+dialogue (t02), the thing that keeps you rationing and still (t12), and the rule you break exactly
+once (t24). Sensory anchor motif (body-based, per the trillionaire lesson — no undrawn prop): THIRST
++ the taste of salt in your cracked, splitting lips, re-triggered at every stage; secondary the
+raft's slow HISS (a leak = a clock, t21) and the father's brass knife notching the days into the tube
+(t20). Master open loop: the MID-ACTION cold open (t00 — night, day 54, the container ship's lit hull
+sliding past, your last flare) pays off at t24-t25. Universe thread (deliberate, left OPEN): the
+SANTA ELENA (t15) — a half-swamped panga with a cooler of water and a child's sandal and no bodies;
+you take the water and never learn what happened to them.
 
 PROMISE->PAYOFF LEDGER:
-  * t00 cold open (glass room, trillion crosses, Dani calls LIVE, you let it ring)  -> t18 (the same morning, from inside)
-  * t01 want: "get us both out" + the $4.50 declined coffee                          -> t20/t24 (you can't sell it / can't buy that Tuesday back); t26 (a new kid, same want)
-  * anchor: Dani's 19-second voicemail                                               -> t02 saved, t16 replayed, t18 she calls live, t25 replayed last
-  * t02 mentor Halvorsen's warning "faster than you can stay yourself"               -> t13 (you lose the race — Sam)
-  * t02/t05 co-founder Sam                                                            -> t13 (the midpoint betrayal)
-  * t09 rival Rourke's taunt "a billion buys people; you'll trade up"                -> t10-t13 (you do exactly that)
-  * t10 the paper mechanic (net worth isn't cash)                                     -> t15/t20/t21 (buy-borrow-die; you can't sell it; it's a claim not a vault)
-  * t15 the fixer Keele                                                               -> t22 (his line); left UNRESOLVED (he already manages whoever's next) = universe thread
-  * UNRESOLVED universe thread (deliberate): KEELE, the family-office fixer           -> already works for the next holder; never leaves the money (open)
+  * t00 cold open (night ship, last flare, does the light turn?)          -> t24/t25 (the same night, from the start)
+  * t01 want: $8,000 to save your dead father's boat + Isla's promise     -> t27 (you keep the boat; Isla is home; the money means nothing)
+  * anchor: thirst + salt in split lips (re-triggered)                    -> t03/t08/t16/t19/t27 (salt "in a split that healed months ago")
+  * t02 father's rule: "don't chase it — wait, it sets you down"          -> t12 (you obey and live), t24 (you break it exactly once)
+  * t01/t02 RAF planted                                                    -> t18 (the midpoint death; his charge)
+  * t02 Isla's promise "Dad, don't be late"                               -> t19 (you talk to her for days), t27 (home)
+  * t05 the beacon (does anyone hear it?)                                  -> t26 (the search was called off day 9 — a passing ship found you, not the search)
+  * t09 seawater kills faster (the "wait, that's real?" share beat)        -> paid immediately (a delivered fact)
+  * SANTA ELENA (t15) — the universe thread                               -> left UNRESOLVED on purpose (you never learn who they were)
 
-Templates: STARTUP pack (garageStart/startupGrow/serverScale/ipoBell) + FINANCE (tradingFloor/pnlWall)
-+ DYNASTY (galaBallroom/yachtDeck/familyVault) + generic (podiumScene) + universal (warRoom/deskSilhouette/
-desk/window/dinner/boardroomHead/signing/layoffs/emptyChair/atrium/jet/lobby). NO new pack needed
-(keeps the local render safe). warRoom is reused twice on purpose as the master-loop anchor (t00 cold
-open / t17 the trillion) — the glass room the whole life is built to reach. No two adjacent scenes
-share a template. STRUCTURAL VARIATION vs last 2 (special_forces = mid-action breach, rise-into-rot,
-cyclical; mexican_cartel = AFTERMATH cold open, rise-then-fall, cyclical): this cold open is a
-FLASH-FORWARD (the future moment, then rewind); act-2 shape is RISE-THEN-FALL (you get the number and
-it turns out to be a cage); ending is cyclical (a new kid, same declined card) with one door left open
-(Keele / the appetite that never sleeps).
+Templates: NEW OCEAN/SURVIVAL pack in src/stage.tsx (oceanCapsize/raftDay/raftNight/glassCalm/
+horizonShip/finWater/driftPanga/openSwell/shipNight/makeLandfall) + reuse of DYNASTY seaDeck (the boat
+still whole) + universal dinner (a land-memory) + window (the haunted-survivor loop close on land).
+shipNight is the reused master-loop anchor (t00 cold open / t24 payoff); raftDay/raftNight/finWater/
+openSwell each reused as the drift's base, NEVER on adjacent scenes. STRUCTURAL VARIATION vs last 2
+(mexican_cartel = aftermath cold open, rise-then-fall, cyclical; trillionaire = flash-forward,
+rise-then-fall, cyclical): this cold open is MID-ACTION (dropped into the night-ship peak, present),
+the act-2 shape is FALL-THEN-RISE (a continuous decline, then the rescue rises), and the ending is
+ONE-DOOR-OPEN / haunted-survivor (the sea "keeps a part"; the Santa Elena stays open) — not cyclical.
 """
 
 FPS = 30
 
 SCENES = [
-    # ---- COLD OPEN — flash-forward (the master loop): the trillion, and the call you let ring ----
-    dict(id="t00", level=None, template="warRoom", gap=0.7,
-         narration=("A glass room at the top of the world, every screen on the wall running the same number "
-                    "upward. Finance ministers wait on your nod. The number crosses one trillion dollars, and "
-                    "the room stands and applauds a thing it believes is you. Your phone burns in your pocket. "
-                    "DANI. Your little sister, calling for the first time in three years — now, this second. A "
-                    "hand settles on your shoulder and turns you toward the podium. Let it ring, the hand "
-                    "means. So you let it ring. You will spend what's left of your life wishing you hadn't."),
-         overlay=dict(big="$1 TRILLION", sub="THE WORLD'S FIRST · AND YOU LET IT RING")),
+    # ---- COLD OPEN — mid-action at the peak (the master loop): the night ship, the last flare ----
+    dict(id="t00", level=None, template="shipNight", gap=0.7,
+         narration=("Black water, the middle of the night, the middle of nowhere. A wall of steel slides past "
+                    "close enough to smell the diesel — a container ship, lit like a city, ten thousand people's "
+                    "cargo aboard and not one of them awake. Your last flare is a wet stick in your fist. Strike "
+                    "it, and the light up on that bridge either turns or it doesn't. Fifty-four days of ocean have "
+                    "taken everything else you had. Your hands are steady. That's the only thing left to spend."),
+         overlay=dict(big="DAY 54", sub="ONE FLARE LEFT · AND THE SHIP HASN'T TURNED")),
 
-    # ---- LEVEL 1 — $0 (the card declines) ----
-    dict(id="t01", level="LEVEL 01  ·  $0  (NOTHING)", template="deskSilhouette",
-         narration=("Rewind eleven years. A gas station at one in the morning, and your card declines for a "
-                    "four-dollar-fifty coffee. The clerk doesn't look up. You put the cup back on the warmer. "
-                    "Out in the car your sister Dani sleeps against the window — nineteen, broke because you're "
-                    "broke, and on Tuesday she gave you her last forty dollars and swore she didn't need it. On "
-                    "the seat sits a cracked laptop with an idea on it and eleven dollars to your name. Your "
-                    "whole prayer is four words wide: get us both out."),
-         overlay=dict(big="$0", sub="CARD DECLINED · ONE IDEA ON A CRACKED LAPTOP")),
-    dict(id="t02", level=None, template="garageStart",
-         narration=("You build it in a rented garage that smells of cut grass and hot solder, shoulder to "
-                    "shoulder with Sam — your best friend since ninth grade, who writes in one night what takes "
-                    "you a week. No money in it yet, only instant coffee and a space heater and the two of you. "
-                    "The day the thing goes live, Dani leaves a voicemail: nineteen seconds of her laughing, "
-                    "telling you she saw it, telling you to eat something, telling you to call her back. You "
-                    "save it. You will never delete it. Remember that number. Nineteen seconds."),
-         overlay=None),
-    dict(id="t03", level=None, template="desk",
-         narration=("Six weeks in, it catches — not slowly, like a match dropped in dry grass. A man named "
-                    "Halvorsen, who has funded nine companies and buried three, drives out to the garage in a "
-                    "car worth more than the building. On its hood he writes you a check for two hundred fifty "
-                    "thousand dollars — the first real money your family has touched in three generations. Your "
-                    "hands don't shake taking it. That should worry you more than it does. Then he tells you "
-                    "the one thing that turns out to be true."),
+    # ---- LEVEL 1 — HOUR 0 · THE CROSSING (comfort + want) ----
+    dict(id="t01", level="HOUR 0  ·  THE CROSSING", template="boatDeck",
+         narration=("Six weeks earlier the boat is whole and the sea is kind. You and Raf are running a rich "
+                    "man's forty-foot sloop across the Pacific — eight thousand dollars to deliver it, enough to "
+                    "keep your dead father's fishing boat off the auction block one more year. On land your "
+                    "daughter Isla is seven and made you promise, hard, hands on your face. Twelve hundred miles "
+                    "of open water to the nearest anything. Nobody expects you for weeks."),
+         overlay=dict(big="1,200 MI", sub="TO THE NEAREST LAND · NO ONE EXPECTS YOU FOR WEEKS")),
+    dict(id="t02", level=None, template="dinner",
+         narration=("That night Raf grills the day's catch in the cockpit and you split the last cold beer two "
+                    "ways. He's the best sailor you know, laughing at something Isla sent before you lost signal — "
+                    "Dad, don't be late. You tell him your father's one rule, the rule of every fisherman who died "
+                    "in bed instead of in the water. Raf just grins and taps the rail like the sea's an old dog. "
+                    "The rule stays with you. Remember it."),
          overlay=None,
-         dialogue=dict(text="The number will grow faster than you can stay yourself. Most men lose that race.")),
+         dialogue=dict(text="The sea gives nothing back. Don't chase it. Wait — and it sets you down.")),
 
-    # ---- LEVEL 2 — $1 MILLION (on paper) ----
-    dict(id="t04", level="LEVEL 02  ·  $1 MILLION", template="startupGrow",
-         narration=("A year on, the office has walls and a door and eleven people who say your first name like "
-                    "it's worth something. On paper you're a millionaire. But you've never held a million "
-                    "dollars — it isn't cash in a bank, it's a line on a cap table, a promise strangers made "
-                    "about your future. Still, a million is a million. You buy Dani a used car so her card "
-                    "never declines the way yours did. And you keep drinking the same burnt gas-station coffee, "
-                    "because some animal part of you is afraid of what you'll become the day you stop."),
-         overlay=dict(big="$1 MILLION", sub="NOT CASH · A PROMISE, ON PAPER, ABOUT YOUR FUTURE")),
-    dict(id="t05", level=None, template="serverScale",
-         narration=("Therefore it goes vertical. Rented servers become owned servers become buildings full of "
-                    "them, humming like a held breath. Users double, double again, then stop being a number you "
-                    "can picture. A competitor named Rourke — older, three exits behind him — offers forty "
-                    "million to swallow you whole, and you say no, and Sam stares at you like you've cracked. "
-                    "But Halvorsen's gravity has you now. The number pulls, and you lean into the pull, and you "
-                    "tell yourself the whole time that you're the one steering."),
-         overlay=None),
-    dict(id="t06", level=None, template="tradingFloor",
-         narration=("The money stops behaving like money and starts behaving like weather. On the best week of "
-                    "the run your net worth climbs faster than you could spend in a lifetime — the richest men "
-                    "alive have grown by more than a million dollars a minute, and now you understand how, "
-                    "because it isn't work, it's a number other people keep voting up. Sam still packs a lunch. "
-                    "You still taste that burnt coffee. Neither of those small facts survives what's coming."),
-         overlay=dict(big="$1M / MINUTE", sub="AT THE TOP, WEALTH GROWS FASTER THAN YOU CAN SPEND IT")),
+    # ---- LEVEL 2 — HOUR 1 · COLD SHOCK ----
+    dict(id="t03", level="HOUR 1  ·  COLD SHOCK", template="oceanCapsize", gap=0.7, rate="+10%",
+         narration=("The storm isn't forecast. It just arrives — a black wall at three in the morning, the mast "
+                    "screaming, and then a wave the size of a house lays the sloop flat and won't let it up. The "
+                    "cold comes through the hull like a fist. Salt floods your mouth, your nose, your whole skull. "
+                    "Grab the ditch bag. Cut the raft free. Forty-five seconds — and the sea is already inside the "
+                    "boat, taking it down by the bow."),
+         overlay=dict(big="45 SEC", sub="TO GET OFF A BOAT THAT'S ALREADY GONE")),
+    dict(id="t04", level=None, template="openSwell",
+         narration=("The first breath in cold water is a scream your body takes without asking — the gasp reflex, "
+                    "and if your head is under when it fires, you drown right there. One minute of that. Then maybe "
+                    "ten before your arms turn to wood and stop answering. Raf is a dark dot twenty feet off, going "
+                    "quiet. You swim for the orange scrap of raft dragging a friend who has already stopped obeying "
+                    "his own hands."),
+         overlay=dict(big="10 MIN", sub="1-10-1 · BEFORE YOUR HANDS STOP OBEYING YOU")),
+    dict(id="t05", level=None, template="raftDay",
+         narration=("You haul Raf over the tube and fall in after him, both of you shaking so hard the raft hums. "
+                    "The boat is gone — a slick of fuel and one floating cushion where a hundred grand of yacht "
+                    "used to be. You claw the emergency beacon out of the ditch bag, press it, and watch the little "
+                    "light blink into a sky that doesn't blink back. Somewhere, maybe, a screen lights up. Maybe no "
+                    "one is looking at it."),
+         overlay=dict(big="1 BEACON", sub="PRESSED · NO WAY TO KNOW IF ANYONE HEARD IT")),
 
-    # ---- LEVEL 3 — $100 MILLION (the IPO) ----
-    dict(id="t07", level="LEVEL 03  ·  $100 MILLION", template="ipoBell", gap=0.7,
-         narration=("You take it public on a cold Tuesday, ring a bell on a balcony above a trading floor, and "
-                    "before the bell stops ringing the market says you're worth a hundred million dollars. A "
-                    "hundred million. The kid who put the coffee back on the warmer. But here is the part no one "
-                    "warns you about: from this morning on, your worth is set every second by strangers who "
-                    "will never meet you. You don't own the number. You are exposed to it, the way a coastline "
-                    "is exposed to weather."),
-         overlay=dict(big="$100 MILLION", sub="STRANGERS SET YOUR WORTH NOW · EVERY SECOND, ALL DAY")),
-    dict(id="t08", level=None, template="window",
-         narration=("A hundred million rewrites every room you enter. People laugh a half-second early at your "
-                    "jokes. Old friends call with an ask folded inside the hello. Money buys the good table. "
-                    "Money buys the yes. Money buys a version of you that everyone suddenly likes — and buries "
-                    "the version Dani knew. She calls less. When you talk, she asks how you are and you answer "
-                    "with a number, and the line goes quiet, because a number was never an answer, and you've "
-                    "forgotten there was a difference."),
-         overlay=None),
-    dict(id="t09", level=None, template="galaBallroom",
-         narration=("They put you on a stage at a gala under a chandelier the size of your first apartment, and "
-                    "every hand in the room wants five minutes. Rourke finds you by the bar, warm as a knife, "
-                    "three exits and one divorce ahead of you on this road. He lifts his glass to your hundred "
-                    "million like it's pocket change — because to him it is — and tells you the thing that "
-                    "keeps you up for a week."),
-         overlay=None,
-         dialogue=dict(text="A hundred million buys a nice life, kid. A billion buys people. You'll trade up. They always do.")),
-
-    # ---- LEVEL 4 — $1 BILLION (the cost) + MIDPOINT betrayal ----
-    dict(id="t10", level="LEVEL 04  ·  $1 BILLION", template="dinner",
-         narration=("Halvorsen takes you to a room with no menu and no prices, and lays out the deal that turns "
-                    "a hundred million into a billion: a merger, a restructuring, a clean and beautiful "
-                    "machine. There is one cost, and he names it the way rich men name the expensive part — "
-                    "lightly. You gut Sam's half of the company. You close the plant in the town that raised "
-                    "you and put four hundred people, who know your mother's name, out of work. He lets it sit. "
-                    "Then he tells you what a billion dollars actually is."),
-         overlay=dict(big="$1 BILLION", sub="THE PRICE ISN'T MONEY · THE PRICE IS WHO YOU CLOSE"),
-         dialogue=dict(text="The billion isn't your reward for building it. It's your reward for being willing to.")),
-    dict(id="t11", level=None, template="boardroomHead",
-         narration=("You sit at the head of a table and the machine explains itself to you in graphs. Every "
-                    "arrow says the same thing: sign, and you become the youngest billionaire on the continent; "
-                    "refuse, and Rourke buys the whole thing at a discount and closes the same plant anyway, and "
-                    "you get nothing and Sam still loses. That's the trap they build for you. Not a temptation — "
-                    "a math problem with one clean answer, and every clean answer in this life costs a person."),
-         overlay=None),
-    dict(id="t12", level=None, template="signing", gap=1.4,
-         narration=("So it comes down to a single page and a pen at two in the morning, alone, the office "
-                    "empty, the burnt coffee gone cold at your elbow. Sam doesn't know yet. Dani doesn't know "
-                    "yet. Your own hand is steady over the line — steadier than it was at the gas station, "
-                    "steadier than at the check on the car hood. For eleven years you told yourself you'd never "
-                    "become the man who could do this. You sign anyway."),
-         overlay=None),
-    dict(id="t13", level=None, template="layoffs", gap=0.7,
-         narration=("Sam finds out from a press release. She clears her desk into one cardboard box, and at the "
-                    "door she doesn't shout — she just holds you in a long, level look, the way you'd hold a "
-                    "stranger standing too close. Four hundred people lose their jobs by Friday. And the thing "
-                    "lands, cold and total: you didn't buy your way out of becoming the man you feared. You "
-                    "paid a billion dollars for the privilege of being him."),
-         overlay=dict(big="THE COST", sub="YOU DIDN'T ESCAPE HIM · YOU PAID TO BECOME HIM"),
-         dialogue=dict(text="I'm not sad you did it. I'm sad you're not even sorry.")),
-
-    # ---- LEVEL 5 — $100 BILLION (you move markets) ----
-    dict(id="t14", level="LEVEL 05  ·  $100 BILLION", template="pnlWall",
-         narration=("After that the climb is easy, because nothing's holding you back anymore — not a person, "
-                    "not a rule, not the animal that used to flinch. A hundred billion dollars. You don't run a "
-                    "company now; you run a weather system. A sentence from you moves a currency. A rumor that "
-                    "you're unhappy erases the savings of people you'll never meet. You wanted the number so it "
-                    "would stop being able to hurt you. It can hurt everyone but you now — and it still isn't "
-                    "enough."),
-         overlay=dict(big="$100 BILLION", sub="ONE SENTENCE FROM YOU MOVES A CURRENCY")),
-    dict(id="t15", level=None, template="familyVault",
-         narration=("You never sell a share, because selling is admitting the number could end. A soft man "
-                    "named Keele runs your family office — a vault of deed boxes and holding companies, a mind "
-                    "like a cold clean ledger. He shows you the trick the very rich all know: you don't spend "
-                    "your money, you borrow against it. The bank hands you billions in cash, you never earn a "
-                    "taxable dollar, and you never touch the stock. You are worth a hundred billion and you "
-                    "have, in the way that word used to mean, nothing you can spend. Only a number you must "
-                    "never move."),
-         overlay=dict(big="YOU NEVER SELL", sub="YOU BORROW AGAINST IT · THE STOCK CAN NEVER MOVE")),
-    dict(id="t16", level=None, template="yachtDeck",
-         narration=("On a deck the length of a city block, in the middle of an ocean, ringed by people paid to "
-                    "be delighted, you take out your phone and play the only recording you never delete. "
-                    "Nineteen seconds. Dani laughing. Telling you to eat something. Telling you to call her "
-                    "back. You didn't call her back — not that week, not the next year, not once the number got "
-                    "big enough to answer for you. The sea is enormous and quiet. You are the richest passenger "
-                    "on it, and the loneliest, and those turn out to be the same fact."),
+    # ---- LEVEL 3 — HOUR 6 · THE FIRST NIGHT ----
+    dict(id="t06", level="HOUR 6  ·  THE FIRST NIGHT", template="raftNight",
+         narration=("The dark comes down like a lid. You're soaked, the wind is up, and the raft is a cold puddle "
+                    "you share with a man whose lips are going grey. Shivering is good. Shivering is your body "
+                    "still fighting to hold ninety-five degrees. It's when the shaking stops that you should be "
+                    "afraid. So you hold Raf against your chest and count his breaths, and yours, and the stars — "
+                    "which are beautiful, and do not care."),
+         overlay=dict(big="95°F", sub="CORE TEMP FALLING · WHEN THE SHIVERING STOPS, WORRY")),
+    dict(id="t07", level=None, template="raftDay",
+         narration=("Dawn is a grey line, then a gold one, and no ship on it. Raf's color creeps back with the "
+                    "sun. You empty the ditch bag onto your knees and count what stands between you and the whole "
+                    "Pacific: three pints of water, a hand line, a signal mirror, two flares, a solar still sealed "
+                    "in its wrapper. You do the math. The math is bad. But you are both alive, and the sea is "
+                    "flat, and that is a mercy that will not last."),
          overlay=None),
 
-    # ---- LEVEL 6 — $1 TRILLION (the world's first) + cold-open payoff ----
-    dict(id="t17", level="LEVEL 06  ·  $1 TRILLION", template="warRoom", gap=0.7,
-         narration=("Then one ordinary morning the number crosses a line no human being has ever crossed. One "
-                    "trillion dollars. Here is what the word hides: spend a million dollars a day, every single "
-                    "day, since the birth of Christ, and today you would still not have spent your first "
-                    "trillion. You are worth more than most nations on the map. You are the world's first "
-                    "trillionaire — and the phrase means nothing in your mouth, because the number stopped "
-                    "being about you somewhere back around the plant you closed."),
-         overlay=dict(big="$1 TRILLION", sub="A MILLION A DAY SINCE CHRIST · STILL NOT A TRILLION")),
-    dict(id="t18", level=None, template="podiumScene", gap=0.7,
-         narration=("The world puts you behind a podium and applauds a thing it believes is you — and this is "
-                    "the morning from the very start, the glass room, the climbing screens. Your phone lights "
-                    "in your pocket. DANI. Live. The first time in three years, right now. A hand lands on your "
-                    "shoulder and turns you to the microphones. Let it ring, the hand means. So you let it "
-                    "ring. An hour later there's no voicemail this time. She didn't leave one. She was calling "
-                    "to say something out loud, and you were being applauded, and now you'll never know what."),
-         overlay=dict(big="SHE CALLED", sub="FIRST TIME IN 3 YEARS · YOU LET IT RING")),
-    dict(id="t19", level=None, template="emptyChair",
-         narration=("Count it out, because scale is the whole trick they never let you hold. A million seconds "
-                    "is twelve days. A billion seconds is thirty-two years. A trillion seconds is thirty-one "
-                    "thousand years — before farming, before writing, before the wheel. That is the distance "
-                    "you crossed. And somewhere in it you stopped being a person and became a position: a chair "
-                    "the market keeps warm, a name on the org chart of the whole world that anyone could fill "
-                    "and no one would miss for a single day."),
-         overlay=dict(big="31,700 YEARS", sub="A TRILLION SECONDS · YOU BECAME A POSITION, NOT A PERSON")),
-
-    # ---- LEVEL 7 — YOU CAN'T SELL IT (the number owns you) ----
-    dict(id="t20", level="LEVEL 07  ·  YOU CAN'T SELL IT", template="window",
-         narration=("So test it. Try to be free of it. Try to sell — cash it in, walk away, buy a small house "
-                    "near Dani and a decent cup of coffee. You can't. Sell a tenth of your stock and the price "
-                    "buckles under its own weight; the trillion evaporates faster than you can sign the order, "
-                    "and you take the whole market down on your way out the door. The money was never a door "
-                    "you could walk through. It's a wall you built so high you can't climb back over it."),
-         overlay=dict(big="YOU CAN'T SELL IT", sub="CASH OUT AND THE NUMBER DIES IN YOUR HAND")),
-    dict(id="t21", level=None, template="pnlWall",
-         narration=("Because the trillion was never in a vault. It's a claim — a bet millions of strangers make "
-                    "every second the market breathes, that tomorrow you'll be worth even more. The instant "
-                    "they stop believing, the number dies, and you with it. Five men doubled their fortunes in "
-                    "four years while five billion people got poorer, and not one of them can spend the score "
-                    "at face value. You don't own the wealth. You are the collateral the wealth is borrowed "
-                    "against. You are the thing that must never, ever flinch."),
-         overlay=dict(big="A CLAIM, NOT A VAULT", sub="YOU'RE THE COLLATERAL · YOU MUST NEVER FLINCH")),
-    dict(id="t22", level=None, template="familyVault",
-         narration=("Keele comes to see you the way he came to see the two men before you — the ones whose "
-                    "portraits he now manages for their heirs. He never raises his voice. He lays your holdings "
-                    "out like a hand of cards and tells you the true shape of the thing, and then he says the "
-                    "sentence that has been true since the gas station, since the garage, since the nineteen "
-                    "seconds you never answered."),
-         overlay=None,
-         dialogue=dict(text="You were never the owner, sir. You're the custodian. And I already manage whoever holds it next.")),
-
-    # ---- LEVEL 8 — THE APPETITE (above money) + LOOP CLOSE ----
-    dict(id="t23", level="LEVEL 08  ·  THE APPETITE", template="atrium", gap=0.7,
-         narration=("So who is above the trillionaire? Climb one more floor and there's no man there — only the "
-                    "appetite. A billion small wants in a billion ordinary people: the next thing, the newer "
-                    "thing, the yes at the checkout. That hunger built you, priced you, and it will price "
-                    "whoever comes after, and it does not know your name and never once needed it. You spent "
-                    "your life climbing toward the center of the world. There is no center. There is only "
-                    "demand, breathing in the dark, hungry again by morning."),
-         overlay=dict(big="THE APPETITE", sub="NO ONE'S ABOVE YOU · ONLY THE HUNGER THAT MADE YOU")),
-    dict(id="t24", level=None, template="jet",
-         narration=("You have the plane that goes anywhere and nowhere to go. You have a house on every coast "
-                    "and you sleep in a different one each week for reasons your security won't explain. You "
-                    "can buy an island, an election, a man's silence, a company before lunch. You can buy "
-                    "anything on earth except the one Tuesday when Dani gave you forty dollars and meant it, and "
-                    "the one call you let ring, and a single hour of being a person that a number couldn't "
-                    "answer for."),
+    # ---- LEVEL 4 — DAY 2 · THIRST ----
+    dict(id="t08", level="DAY 2  ·  THIRST", template="glassCalm",
+         narration=("By the second day the sun stops being warmth and becomes a weight that leans on you. Your "
+                    "tongue is a dry stone. Your lips split, and the salt gets down into the splits and stays "
+                    "there, burning. You ration water by the capful — one at dawn, one at dark — against a number "
+                    "you cannot argue with: three days, maybe four, before the body starts closing doors. The sea "
+                    "is everywhere. Not one drop of it will help you."),
+         overlay=dict(big="3 DAYS", sub="WHAT YOU HAVE WITHOUT WATER · THE RULE OF THREES")),
+    dict(id="t09", level=None, template="raftNight", gap=0.7,
+         narration=("The thirst talks to you at night. Drink me, says the whole ocean, all around you, warm and "
+                    "close. Here is the cruelty nobody tells you: drink the seawater and you die faster than if "
+                    "you drank nothing at all. It is saltier than your blood — your kidneys burn fresh water you "
+                    "don't have just to flush it, and the thirst comes back doubled, then the madness. Men have "
+                    "drunk the sea and been dead by morning. So you don't. You listen to it, and you don't."),
+         overlay=dict(big="0 DROPS", sub="DRINK THE SEA AND YOU DIE FASTER · YES, REALLY")),
+    dict(id="t10", level=None, template="raftDay",
+         narration=("Therefore you build water instead of stealing it. You rig the solar still and it sweats a "
+                    "thimble of fresh into the cup, an hour at a time, and you learn to call a thimble a victory. "
+                    "Hunger arrives behind the thirst, quieter, patient. You drop the hand line over the side into "
+                    "two miles of nothing and wait, because your father taught you that waiting is a skill, and "
+                    "out here it is the only one that keeps you alive."),
          overlay=None),
-    dict(id="t25", level=None, template="deskSilhouette",
-         narration=("So here you are. One in the morning, alone at a desk above a city you own most of, a cup "
-                    "of gas-station coffee gone cold because you sent the good stuff back. You take out the "
-                    "phone that can move a currency and play the only thing on it that ever mattered. Nineteen "
-                    "seconds. Dani, laughing, telling you to eat something, telling you to call her back. Play "
-                    "it again. That clip is the whole trillion. It's the only part you actually got to keep — "
-                    "and you can't spend it, and you'd give the rest away to have answered it in time."),
-         overlay=dict(big="19 SECONDS", sub="THE ONLY PART OF THE TRILLION YOU GOT TO KEEP")),
-    dict(id="t26", level=None, template="lobby",
-         narration=("A thousand miles away, in a town like the one you closed, a kid of nineteen sits in a car "
-                    "outside a gas station because a card just declined for a four-dollar coffee. There's a "
-                    "cracked laptop on the seat and an idea on it and a sister asleep against the window. The "
-                    "kid's whole prayer is four words wide: get us both out. Somewhere a man like Halvorsen is "
-                    "already driving out to find them. The road out runs straight to the horizon. It always "
-                    "did. It was never a way out."),
-         overlay=dict(big="A NEW KID · SAME CAR", sub="THE ROAD OUT WAS NEVER A WAY OUT")),
-    dict(id="t27", level=None, template="emptyChair",
-         narration=("And the number keeps climbing without you, the way it always would. Somewhere a market "
-                    "opens and prices a chair you used to fill. Somewhere a phone rings and no one answers in "
-                    "time. The hunger that made you is hungry again this morning, the same as every morning, "
-                    "and it will make someone new and spend them and never learn their name — and it will "
-                    "never, not once, learn yours. You wanted the number. You got it. It just never wanted you "
-                    "back."),
-         overlay=dict(big="IT NEVER WANTED YOU BACK", sub="THE HUNGER IS AWAKE AGAIN · SAME AS EVERY MORNING")),
+
+    # ---- LEVEL 5 — DAY 4 · THE SHIP ----
+    dict(id="t11", level="DAY 4  ·  THE SHIP", template="horizonShip",
+         narration=("Day four, Raf sees it first — a ship, low and grey and close, close enough to count the "
+                    "containers stacked on her back. You are both on your knees in the raft screaming, flashing "
+                    "the mirror, and you burn one of your two flares into the daylight where it barely shows. It "
+                    "climbs, arcs, dies. The ship never changes course. Six hundred meters — and no one on a "
+                    "bridge that size ever watches the water behind them."),
+         overlay=dict(big="600 M", sub="A MILE OFF · AND NO ONE WATCHES THE WATER ASTERN")),
+    dict(id="t12", level=None, template="raftDay",
+         narration=("After a ship passes you, the ocean is louder. Raf punches the tube and swears and then goes "
+                    "silent, and the silence is worse than the swearing. In it you hear your father: don't chase "
+                    "it. A raft with a scrap of sea-anchor holds the current that carries you toward land; a "
+                    "swimmer chasing a hull dies exhausted a mile from where the sea would have set him down. So "
+                    "you sit on your hands. You wait. Waiting is the hardest work there is."),
+         overlay=None),
+    dict(id="t13", level=None, template="rainSquall",
+         narration=("On the sixth day the sky darkens and for once you are glad of it. A squall rolls over, warm "
+                    "and grey, and you rip the canopy flat and turn your face up and open your mouth like a child. "
+                    "Rain. Real rain, and you catch what you can in the folds and the cup and your own two hands, "
+                    "gulping until your stomach cramps. Ten minutes of weather buys you two more days of life. "
+                    "Then the sky closes its hand, and the sun comes back for what it's owed."),
+         overlay=dict(big="+2 DAYS", sub="THE SQUALL GIVES · THE SUN COMES BACK TO COLLECT")),
+
+    # ---- LEVEL 6 — DAY 9 · WHAT'S BELOW ----
+    dict(id="t14", level="DAY 9  ·  WHAT'S BELOW", template="finWater",
+         narration=("By the ninth day the raft has grown a world beneath it. Fish gather in its one shadow — "
+                    "mahi, gold and electric, the only shade for a thousand miles. You spear one with the gaff and "
+                    "eat it raw and weep at how good it is. But the same shade calls the other thing. A fin, "
+                    "unhurried, taller than your spread hand, begins to circle, and bumps the floor beneath you "
+                    "once — testing whether you're soft."),
+         overlay=dict(big="DAY 9", sub="THE SHADE FEEDS YOU · AND DRAWS WHAT EATS YOU")),
+    dict(id="t15", level=None, template="driftPanga", gap=0.7,
+         narration=("On the tenth night you drift down onto a wreck. A little fishing panga, half under, tilting "
+                    "in the swell, a name flaking off the bow: Santa Elena. Inside her, a sealed cooler — six "
+                    "gallons of fresh water — and a child's pink sandal, and no one. No bodies. No note. You take "
+                    "the water, because Isla is why your heart still bothers and these strangers are past caring. "
+                    "You never learn what took them. You still don't."),
+         overlay=dict(big="6 GAL", sub="A DEAD BOAT'S WATER · AND A CHILD'S SANDAL, NO CHILD")),
+    dict(id="t16", level=None, template="finWater",
+         narration=("The fin comes back with company. Two of them work the raft the way you'd shake a tree — a "
+                    "shove, a wait, a harder shove — and a tooth catches the fabric and lets a slow line of "
+                    "bubbles up along your spine. You jab the gaff at a hide like wet stone and it does nothing. "
+                    "The salt is in your lips, in the tear, in everything. You bail, and jab, and hold Raf's arm, "
+                    "and the sea keeps its long, patient count."),
+         overlay=None),
+    dict(id="t17", level=None, template="raftDay", gap=1.4,
+         narration=("The stolen water buys days it cannot buy Raf. His salt sores go deep, his fever climbs, and "
+                    "somewhere past the second week he stops being able to sit up on his own. You tip water into "
+                    "his mouth and it runs out the side. He knows before you do. On the fourteenth night he comes "
+                    "clear for a minute — the way the sea goes flat and glassy right before the worst of it — and "
+                    "he spends the whole minute on you."),
+         overlay=None),
+
+    # ---- LEVEL 7 — WEEK 2 · ALONE  (the midpoint reversal) ----
+    dict(id="t18", level="WEEK 2  ·  ALONE", template="raftNight", gap=0.7,
+         narration=("He tells you to get the eight thousand to his wife if you make it. He tells you to tell Isla "
+                    "he's sorry he ate her dad's coffee. Then he tells you the thing you carry the rest of your "
+                    "life, and makes you say it back. By first light he's gone. You hold him until the cold makes "
+                    "it unbearable, and then you do the only thing the sea allows — you let him over the side — "
+                    "and the raft rides higher without his weight, and you hate it for that."),
+         overlay=dict(big="DAY 14", sub="THE RAFT HOLDS ONE NOW"),
+         dialogue=dict(text="You keep going. You don't get to stop just because I did.")),
+    dict(id="t19", level=None, template="openSwell",
+         narration=("Alone is a different ocean. No one to split the watch, no one to say a ship's name out loud "
+                    "so it stays real. So you talk to Isla — out loud, hour on hour, until your split lips bleed "
+                    "into the salt. And you hold one fact like a plank in a flood: a fisherman named Alvarenga "
+                    "drifted this same Pacific four hundred and thirty-eight days and walked out the far side of "
+                    "it alive. If he could, you can. You say it until you believe it. Then you say it more."),
+         overlay=dict(big="438 DAYS", sub="A MAN ONCE DID THIS ALONE, AND LIVED · REAL")),
+    dict(id="t20", level=None, template="raftDay",
+         narration=("You keep the raft's nose to the current the way your father kept his boat's nose to the "
+                    "swell. Every dawn you cut one more notch into the tube with his brass knife — a whole life "
+                    "measured in scars on rubber. You catch fish. You drink the sweat of the still. You bail. You "
+                    "are down to a body and a reason, and the reason is a seven-year-old's voice telling you not "
+                    "to be late. So you refuse, one more dawn, to be late."),
+         overlay=None),
+
+    # ---- LEVEL 8 — WEEK 4 · THE STORM ----
+    dict(id="t21", level="WEEK 4  ·  THE STORM", template="oceanCapsize", gap=0.7, rate="+8%",
+         narration=("The second storm finds you on the thirty-first day, and it means it. A wave folds the raft "
+                    "and a shark-bumped seam lets go with a hiss you feel in your teeth. The sea pours in. You "
+                    "bail with a shoe, with your cupped hands, with your mouth, screaming at a sky that answers "
+                    "only in more water. You cram the patch from the raft's little kit into the tear and it "
+                    "half-holds — and the hiss never fully stops. Now the leak is a clock, and it is running."),
+         overlay=dict(big="DAY 31", sub="THE TUBE TEARS · YOU BAIL WITH A SHOE")),
+    dict(id="t22", level=None, template="glassCalm",
+         narration=("The storm passes and leaves you flatter than before, in every way. Then a bird — a small, "
+                    "brown, ordinary bird — drops out of nowhere and lands on the sagging tube and folds its wings "
+                    "and just looks at you. Birds mean land. Somewhere out there, land. It sits an hour, closer "
+                    "than a wild thing should ever come, as if it too is only tired. Then it lifts and goes, and "
+                    "you turn the raft, with the very last of you, to follow where it went."),
+         overlay=dict(big="1 BIRD", sub="BIRDS MEAN LAND · SOMEWHERE, LAND")),
+    dict(id="t23", level=None, template="openSwell",
+         narration=("Somewhere in the fifth week the mind lets go of its edges. Your father sits on the far tube "
+                    "mending a net that isn't there. Isla's laugh comes clean off the flat water. A city you could "
+                    "walk to shimmers up on the horizon and dissolves the moment you paddle for it. Survivors have "
+                    "a name for the company that arrives at the end of yourself — the third man. You let him stay. "
+                    "You are too tired to be alone and too stubborn to be dead."),
+         overlay=None),
+
+    # ---- LEVEL 9 — DAY 54 · THE LIGHT  (cold-open payoff, rescue at cost, loop close) ----
+    dict(id="t24", level="DAY 54  ·  THE LIGHT", template="shipNight", gap=0.7,
+         narration=("Fifty-four days in, at night, the wall of steel comes back — a container ship, lit like a "
+                    "city, close enough again to smell the diesel. Here is where the cold open began. Your last "
+                    "flare, one wet stick, one strike, one prayer, and no voice left to spend on screaming. And "
+                    "you think of your father's one rule — don't chase it — and for the first and only time, you "
+                    "break it. This once, you chase. You tear the cap and grind the striker and beg the wet powder "
+                    "to catch."),
+         overlay=dict(big="1 FLARE", sub="THE LAST ONE · AND THE LIGHT HASN'T TURNED")),
+    dict(id="t25", level=None, template="raftNight",
+         narration=("It catches. Red light, blood-bright, roaring off the black water — the first real color in a "
+                    "colorless world. You hold it up until it scorches your fingers and you do not let go. For "
+                    "three long seconds the ship is only a wall of indifference sliding by. Then, far up on the "
+                    "dark bridge, a light swings toward you. The hull begins, impossibly, slowly, to turn. The "
+                    "ocean that gives nothing back is about to be made, this once, to give back you."),
+         overlay=None),
+    dict(id="t26", level=None, template="makeLandfall",
+         narration=("They haul you up the hull in a cargo net like a catch. A sailor wraps you in foil and stares "
+                    "the way you'd stare at a ghost — because to the world you are one. The search was called off "
+                    "on day nine; your beacon died in the storm; no one was still looking. Land comes three days "
+                    "later, green and impossible, smelling of dirt and diesel and every living thing at once. Your "
+                    "legs have forgotten it. You crawl the last of the way."),
+         overlay=dict(big="DAY 54", sub="THEY STOPPED LOOKING DAY 9 · AND FOUND YOU ANYWAY"),
+         dialogue=dict(text="You're the one they stopped looking for.")),
+    dict(id="t27", level=None, template="window", gap=0.7, rate="-8%",
+         narration=("Isla hits you at the knees so hard it nearly puts you down, and you stay down, on the ground, "
+                    "holding on. You keep your father's boat; the eight thousand means nothing against her weight "
+                    "on your chest. But you sleep with the window cracked to hear water. Some nights your tongue "
+                    "finds the ghost of salt in a split that healed months ago, and your hand closes on a brass "
+                    "knife that isn't there. The sea gave you back. It kept a part. It always keeps a part."),
+         overlay=None),
 ]

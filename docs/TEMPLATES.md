@@ -161,6 +161,26 @@ adjacent scenes. Registry lives in src/scenes.tsx `TEMPLATES`; composable packs 
 
 (Reuses from the MAFIA pack, all topic-appropriate for cartel: backAlley, countRoom, courtroom, prisonCell, wiretap. New reusable prop `narcoTruck` = a side-profile pickup, usable for any convoy/vehicle beat.)
 
+## Ocean / survival pack (could_you_survive_ocean — the adrift life-raft threat ladder)
+| template | depicts | good for |
+|---|---|---|
+| boatDeck | a working sailor content on the delivery boat's deck at sea (reuses the seaDeck backdrop) | the crossing / comfort + want (HOUR 0), the boat still whole |
+| oceanCapsize | figure in dark storm water (broken mast, cresting wave, driving rain) — waveCrest in front | the capsize / cold shock (HOUR 1), going over the side |
+| raftDay | figure hunched in the life-raft tube on open swell (raftHull, figBehind) | the reused master-loop base — the drift, rationing, the days |
+| raftNight | figure in the raft under stars + a moon path + a faint red flare-glow | the first night (HOUR 6), the long dark, hypothermia |
+| glassCalm | figure slumped in the raft on a flat mirror sea under a huge low sun, heat shimmer | thirst (DAY 2), the sun, the solar still, "don't drink the sea" |
+| horizonShip | figure up reaching in the raft, a cargo ship drifting across the day horizon | the ship that passes and never sees you (DAY 4), crushing hope |
+| rainSquall | figure in the raft under a warm grey squall (stormSea backdrop, raftHull), face up catching rain | the squall/rain-catch mercy beat — fresh water bought from the sky |
+| finWater | figure in the raft, a dorsal fin cutting the swell + fish shadows below | what's below (DAY 9) — the catch (mahi) and the sharks |
+| driftPanga | figure in the raft beside a half-swamped fishing panga adrift, a nameplate on the bow | the boat that didn't make it — the unresolved universe thread; taking its water |
+| openSwell | figure alone in the bare open swell, no raft in frame (waveCrest) | truly alone after the raft fails, the hallucination, scale-terror |
+| shipNight | figure reaching in the raft as a container ship's lit hull slides past close at night | the cold open + its payoff — the last flare, whether the light turns |
+| makeLandfall | figure in the raft as land + an approaching fishing boat come at last | the rescue, at cost (DAY 54) |
+
+(Reuses the existing DYNASTY `seaDeck` for the delivery boat while it is still whole; universal `dinner`
+for a land-memory flashback and `window` for the haunted-survivor loop close on land. New reusable
+foreground props: `raftHull` (the near raft tube, figBehind) and `waveCrest` (in-water foreground swell).)
+
 ## Adding a new domain pack
 If a topic needs settings none of these cover (e.g. soldier→battlefield, athlete→stadium,
 founder→garage), add backdrop/prop entries + a small template set to src/stage.tsx following the

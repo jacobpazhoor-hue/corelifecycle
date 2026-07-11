@@ -1013,6 +1013,130 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       <g><ellipse cx={960} cy={840} rx={130} ry={30} fill={PAPERC} stroke={INK} strokeWidth={3} />{[880, 960, 1040].map((x) => <line key={x} x1={x} y1={840} x2={x} y2={720} stroke={INK} strokeWidth={4} />)}<path d="M 850 720 q 110 -60 220 0 Z" fill={PAPERC} stroke={INK} strokeWidth={4} /></g>
     </g>
   ),
+  // --- Ocean / survival (could_you_survive_ocean) ---
+  // open swell: no land, a low horizon, rolling whitecaps, a drifting sun-glint — the void
+  oceanSwell: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={430} fill="#cfdbe0" opacity={0.7} />
+      <rect x={0} y={430} width={1920} height={650} fill="#9fb2bb" opacity={0.85} />
+      <line x1={0} y1={430} x2={1920} y2={430} stroke={INK} strokeWidth={2.5} opacity={0.45} />
+      {Array.from({length: 9}).map((_, i) => {const yy = 480 + i * 62; const ph = frame * (0.006 + i * 0.001); return <path key={i} d={`M 0 ${yy} q 240 ${16 + Math.sin(ph) * 8} 480 0 t 480 0 t 480 0 t 480 0`} fill="none" stroke={INK} strokeWidth={2} opacity={0.12 + i * 0.02} />;})}
+      {Array.from({length: 10}).map((_, i) => {const x = (rnd(i * 3.1) * 1920 + frame * (0.3 + rnd(i) * 0.4)) % 1920; const y = 540 + rnd(i * 1.9) * 400; return <path key={'w' + i} d={`M ${x} ${y} q 22 -12 44 0`} fill="none" stroke={PAPERC} strokeWidth={3} opacity={0.5} />;})}
+      <circle cx={1560} cy={250} r={62} fill={GOLD} opacity={0.26} />
+    </g>
+  ),
+  // the storm: dark, driving rain, a big cresting wave, the broken mast of the boat going down
+  stormSea: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#6f8088" opacity={0.55} />
+      <rect x={0} y={0} width={1920} height={1080} fill="#2a313a" opacity={0.26} />
+      <path d="M 1180 1080 Q 1240 520 1520 460 Q 1360 560 1420 720 Q 1560 640 1720 700 Q 1500 780 1520 1080 Z" fill="#7d919a" stroke={INK} strokeWidth={5} opacity={0.85} />
+      <line x1={620} y1={980} x2={430} y2={420} stroke={INK} strokeWidth={7} opacity={0.8} />
+      <line x1={520} y1={700} x2={340} y2={636} stroke={INK} strokeWidth={4} opacity={0.55} />
+      {Array.from({length: 60}).map((_, i) => {const x = (rnd(i * 5.1) * 1920 + frame * 6) % 1920; const y = (rnd(i * 2.7) * 1080 + frame * 22) % 1080; return <line key={i} x1={x} y1={y} x2={x - 14} y2={y + 42} stroke={PAPERC} strokeWidth={1.5} opacity={0.32} />;})}
+      <rect x={0} y={900} width={1920} height={180} fill="#5a6b73" opacity={0.7} />
+    </g>
+  ),
+  // dead calm: a flat mirror sea, a huge low sun, its reflection column, heat shimmer — the thirst
+  glassCalm: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={470} fill="#f2e9d4" opacity={0.8} />
+      <rect x={0} y={470} width={1920} height={610} fill="#c8d3d2" opacity={0.9} />
+      <line x1={0} y1={470} x2={1920} y2={470} stroke={INK} strokeWidth={2} opacity={0.4} />
+      <circle cx={960} cy={430} r={150} fill={GOLD} opacity={0.4} />
+      <circle cx={960} cy={430} r={150} fill="none" stroke={GOLD} strokeWidth={3} opacity={0.5} />
+      <path d="M 900 480 L 1020 480 L 1130 1080 L 790 1080 Z" fill={GOLD} opacity={0.16} />
+      {Array.from({length: 6}).map((_, i) => <line key={i} x1={0} y1={560 + i * 84} x2={1920} y2={560 + i * 84} stroke={PAPERC} strokeWidth={2} opacity={0.28} />)}
+      {Array.from({length: 8}).map((_, i) => {const x = (rnd(i * 4.3) * 1920 + frame * 0.6) % 1920; return <line key={'s' + i} x1={x} y1={500 + rnd(i) * 90} x2={x + 40} y2={500 + rnd(i) * 90} stroke={GOLD} strokeWidth={2} opacity={0.38} />;})}
+    </g>
+  ),
+  // the night sea: stars, a moon and its path, a faint red flare-glow low — the long dark
+  nightSea: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#20262e" />
+      <rect x={0} y={470} width={1920} height={610} fill="#171c22" />
+      <line x1={0} y1={470} x2={1920} y2={470} stroke="#3a4650" strokeWidth={2} />
+      {Array.from({length: 70}).map((_, i) => {const x = rnd(i * 3.7) * 1920; const y = rnd(i * 1.3) * 440; const tw = 0.35 + 0.4 * Math.sin(frame * 0.05 + i); return <circle key={i} cx={x} cy={y} r={1.6} fill={PAPERC} opacity={tw} />;})}
+      <circle cx={1420} cy={210} r={54} fill={PAPERC} opacity={0.85} />
+      <path d="M 1360 480 L 1480 480 L 1600 1080 L 1240 1080 Z" fill={PAPERC} opacity={0.08} />
+      <ellipse cx={360} cy={780} rx={300} ry={210} fill="#c0392b" opacity={0.15} />
+    </g>
+  ),
+  // a cargo ship on the day horizon, drifting slowly across, oblivious — the ship that never sees you
+  horizonShip: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={430} fill="#cfdbe0" opacity={0.7} />
+      <rect x={0} y={430} width={1920} height={650} fill="#9fb2bb" opacity={0.85} />
+      <line x1={0} y1={430} x2={1920} y2={430} stroke={INK} strokeWidth={2.5} opacity={0.45} />
+      {(() => {const sx = 220 + (frame * 0.22) % 1480; return (<g opacity={0.72} transform={`translate(${sx} 0)`}>
+        <rect x={0} y={372} width={300} height={42} fill="#2a313a" stroke={INK} strokeWidth={2} />
+        <rect x={210} y={332} width={52} height={42} fill="#2a313a" stroke={INK} strokeWidth={2} />
+        {Array.from({length: 8}).map((_, i) => <rect key={i} x={22 + i * 30} y={352} width={16} height={20} fill={GOLD} opacity={0.5} />)}
+      </g>);})()}
+      {Array.from({length: 7}).map((_, i) => <path key={i} d={`M 0 ${500 + i * 72} q 240 16 480 0 t 480 0 t 480 0 t 480 0`} fill="none" stroke={INK} strokeWidth={2} opacity={0.13} />)}
+      <circle cx={300} cy={220} r={58} fill={GOLD} opacity={0.22} />
+    </g>
+  ),
+  // a dorsal fin cutting the swell + slow fish shadows below the raft — what the shade draws
+  finWater: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={430} fill="#cfdbe0" opacity={0.7} />
+      <rect x={0} y={430} width={1920} height={650} fill="#93a7b0" opacity={0.9} />
+      <line x1={0} y1={430} x2={1920} y2={430} stroke={INK} strokeWidth={2.5} opacity={0.45} />
+      {Array.from({length: 7}).map((_, i) => <path key={i} d={`M 0 ${500 + i * 72} q 240 14 480 0 t 480 0 t 480 0 t 480 0`} fill="none" stroke={INK} strokeWidth={2} opacity={0.13} />)}
+      {(() => {const fx = 300 + (frame * 1.1) % 1300; return (<g transform={`translate(${fx} 0)`}><path d="M 0 700 Q 34 610 80 700 Q 46 686 0 700 Z" fill="#3a4650" stroke={INK} strokeWidth={4} /><path d={`M -40 712 q 60 10 130 0`} fill="none" stroke={PAPERC} strokeWidth={2} opacity={0.5} /></g>);})()}
+      {[{x: 1380, y: 840}, {x: 1520, y: 900}, {x: 1250, y: 920}].map((s, i) => <ellipse key={i} cx={s.x + Math.sin(frame * 0.02 + i) * 20} cy={s.y} rx={70} ry={20} fill="#3a4650" opacity={0.25} />)}
+    </g>
+  ),
+  // a half-swamped fishing panga adrift, tilted, a nameplate on the bow — the boat that didn't make it
+  driftPanga: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={450} fill="#cfdbe0" opacity={0.7} />
+      <rect x={0} y={450} width={1920} height={630} fill="#9fb2bb" opacity={0.85} />
+      <line x1={0} y1={450} x2={1920} y2={450} stroke={INK} strokeWidth={2.5} opacity={0.4} />
+      {(() => {const bob = Math.sin(frame * 0.03) * 8; return (<g transform={`translate(0 ${bob}) rotate(-8 960 720)`}>
+        <path d="M 620 700 Q 960 620 1320 700 L 1240 822 L 700 822 Z" fill={PAPERC} stroke={INK} strokeWidth={5} opacity={0.92} />
+        <rect x={880} y={636} width={140} height={70} fill={PAPERC} stroke={INK} strokeWidth={4} />
+        <line x1={700} y1={760} x2={1240} y2={760} stroke={INK} strokeWidth={2} opacity={0.35} />
+        <rect x={940} y={742} width={150} height={30} fill="#2a313a" stroke={INK} strokeWidth={2} opacity={0.7} />
+        {Array.from({length: 5}).map((_, i) => <line key={i} x1={958 + i * 26} y1={750} x2={972 + i * 26} y2={764} stroke={PAPERC} strokeWidth={2} opacity={0.7} />)}
+      </g>);})()}
+      <path d="M 620 820 Q 960 800 1320 820 L 1320 900 L 620 900 Z" fill="#8aa3ad" stroke="none" opacity={0.5} />
+    </g>
+  ),
+  // land on the horizon + an approaching fishing boat, coming toward you at last — the rescue
+  landfall: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={440} fill="#dfe7de" opacity={0.75} />
+      <rect x={0} y={440} width={1920} height={640} fill="#a7bab0" opacity={0.85} />
+      <line x1={0} y1={440} x2={1920} y2={440} stroke={INK} strokeWidth={2.5} opacity={0.4} />
+      <path d="M 1200 440 Q 1500 400 1920 428 L 1920 470 L 1200 470 Z" fill="#7a8f74" stroke={INK} strokeWidth={3} opacity={0.7} />
+      {[1360, 1500, 1660].map((x) => <g key={x}><line x1={x} y1={440} x2={x} y2={358} stroke={INK} strokeWidth={4} opacity={0.6} />{[-1, 1].map((s) => <path key={s} d={`M ${x} 360 q ${s * 40} -20 ${s * 70} 6`} fill="none" stroke={INK} strokeWidth={3} opacity={0.6} />)}</g>)}
+      {(() => {const sx = 760 - frame * 0.18; return (<g opacity={0.88} transform={`translate(${sx} 0)`}>
+        <path d="M 0 560 Q 90 520 180 560 L 150 622 L 30 622 Z" fill={PAPERC} stroke={INK} strokeWidth={4} />
+        <line x1={90} y1={520} x2={90} y2={438} stroke={INK} strokeWidth={4} />
+        <path d="M 90 446 L 152 470 L 90 500 Z" fill={PAPERC} stroke={INK} strokeWidth={3} />
+      </g>);})()}
+      <circle cx={560} cy={240} r={72} fill={GOLD} opacity={0.32} />
+      {Array.from({length: 6}).map((_, i) => <path key={i} d={`M 0 ${520 + i * 82} q 240 14 480 0 t 480 0 t 480 0 t 480 0`} fill="none" stroke={INK} strokeWidth={2} opacity={0.12} />)}
+    </g>
+  ),
+  // a container ship's lit hull sliding past, close, at night — the cold open + its payoff
+  shipNight: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#1c222a" />
+      <rect x={0} y={520} width={1920} height={560} fill="#141a20" />
+      {Array.from({length: 40}).map((_, i) => <circle key={i} cx={rnd(i * 3.7) * 1920} cy={rnd(i * 1.3) * 380} r={1.4} fill={PAPERC} opacity={0.45 + 0.3 * Math.sin(frame * 0.05 + i)} />)}
+      {(() => {const sx = -220 + frame * 0.55; return (<g transform={`translate(${sx} 0)`}>
+        <rect x={0} y={232} width={1500} height={300} fill="#2a313a" stroke={INK} strokeWidth={3} opacity={0.95} />
+        <rect x={1140} y={118} width={230} height={120} fill="#2a313a" stroke={INK} strokeWidth={3} />
+        {Array.from({length: 22}).map((_, i) => <circle key={i} cx={60 + i * 66} cy={272} r={7} fill={GOLD} opacity={0.85} />)}
+        {Array.from({length: 5}).map((_, i) => <rect key={'w' + i} x={1160 + i * 40} y={148} width={22} height={30} fill={GOLD} opacity={0.7} />)}
+        {Array.from({length: 10}).map((_, i) => <rect key={'c' + i} x={40 + i * 140} y={332} width={120} height={128} fill="none" stroke={INK} strokeWidth={2} opacity={0.4} />)}
+      </g>);})()}
+      <path d="M 0 540 L 1920 540 L 1920 720 L 0 640 Z" fill={GOLD} opacity={0.06} />
+    </g>
+  ),
   plain: () => <g />,
 };
 // tiny helper so inline math reads cleanly above
@@ -1314,6 +1438,26 @@ const PROP: Record<string, React.FC<{frame: number}>> = {
       <path d="M 1040 760 q 30 -20 60 0" fill="none" stroke={INK} strokeWidth={3} />
     </g>
   ),
+  // the near tube of a life raft (foreground, figBehind → figure sits INSIDE it), with grab-ropes
+  // and a bit of canopy edge; bobs gently. The home base of the whole ocean pack.
+  raftHull: ({frame}) => {const bob = Math.sin(frame * 0.04) * 6;
+    return (
+      <g transform={`translate(0 ${bob})`}>
+        <path d="M 380 500 Q 620 330 960 330 Q 1300 330 1540 500" fill="none" stroke={INK} strokeWidth={4} opacity={0.35} />
+        <path d="M 340 1080 Q 340 838 620 810 L 1300 810 Q 1580 838 1580 1080 Z" fill="#d69a63" stroke={INK} strokeWidth={5} opacity={0.96} />
+        {Array.from({length: 9}).map((_, i) => <line key={i} x1={520 + i * 100} y1={816} x2={520 + i * 100} y2={1010} stroke={INK} strokeWidth={2} opacity={0.28} />)}
+        <path d="M 460 902 Q 960 862 1460 902" fill="none" stroke={INK} strokeWidth={3} opacity={0.5} />
+        {Array.from({length: 12}).map((_, i) => <path key={'r' + i} d={`M ${430 + i * 92} 826 q 10 15 20 0`} fill="none" stroke={INK} strokeWidth={2} opacity={0.4} />)}
+      </g>
+    );},
+  // a foreground swell crest across the bottom (figBehind → figure reads as IN the water) — capsize/adrift
+  waveCrest: ({frame}) => {const a = Math.sin(frame * 0.05) * 10; const b = Math.cos(frame * 0.05) * 10;
+    return (
+      <g>
+        <path d={`M 0 1080 L 0 ${936 + a} Q 480 ${900 - b} 960 ${934 + b} T 1920 ${938 + a} L 1920 1080 Z`} fill="#8aa3ad" stroke={INK} strokeWidth={5} opacity={0.92} />
+        {Array.from({length: 8}).map((_, i) => {const x = (rnd(i * 2.3) * 1920 + frame * 0.5) % 1920; return <path key={i} d={`M ${x} ${928 + a} q 20 -12 40 0`} fill="none" stroke={PAPERC} strokeWidth={3} opacity={0.55} />;})}
+      </g>
+    );},
   none: () => <g />,
 };
 const SANS = "'Helvetica Neue', Helvetica, Arial, sans-serif";
@@ -1767,4 +1911,64 @@ const CARTEL = {
       fig={{pose: A.stand(f), x: 480, y: 900, scale: 1.4, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL};
+// Ocean / survival pack (the crossing -> cold shock -> thirst -> the ship -> sharks -> alone -> the storm -> the light)
+// The life raft (raftHull, figBehind) is the reused master-loop base; waveCrest puts the figure IN the water.
+const OCEAN = {
+  // the delivery boat still whole, the sea kind — a working sailor on deck (comfort + want, L1).
+  // reuses the DYNASTY seaDeck backdrop but stages the figure content, not the heir's smug.
+  boatDeck: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="seaDeck" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 760, y: 892, scale: 1.35, view: 'front', expr: blendExpr(FACES.earnest, FACES.neutral, t)}} />;},
+  // the capsize: the storm rolls the boat, the mast breaks — you go over the side into the dark water
+  oceanCapsize: () => {const f = useCurrentFrame();
+    return <Stage backdrop="stormSea" prop="waveCrest" bg="url(#sclean)" figBehind
+      fig={{pose: A.lookUp(f), x: 820, y: 980, scale: 1.4, view: 'front', expr: FACES.shock}} />;},
+  // the life raft by day: the home base — hunched in the tube on the swell (reused across the drift)
+  raftDay: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="oceanSwell" prop="raftHull" bg="url(#sclean)" figBehind
+      fig={{pose: A.sit(f), x: 960, y: 880, scale: 1.25, view: 'front', expr: blendExpr(FACES.worried, FACES.exhausted, t)}} />;},
+  // the raft at night: stars, the moon path, the red flare-glow — the long dark, the first night
+  raftNight: () => {const f = useCurrentFrame();
+    return <Stage backdrop="nightSea" prop="raftHull" bg="url(#sclean)" figBehind
+      fig={{pose: A.armsCrossed(f), x: 960, y: 880, scale: 1.25, view: 'front', expr: FACES.worried}} />;},
+  // dead calm, the huge sun, the mirror sea — thirst; slumped, cracked, rationing
+  glassCalm: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="glassCalm" prop="raftHull" bg="url(#swarm)" figBehind
+      fig={{pose: A.sit(f), x: 960, y: 884, scale: 1.22, view: 'front', expr: blendExpr(FACES.exhausted, FACES.hollow, t)}} />;},
+  // a warm squall — driving rain over the raft; face up, mouth open, catching fresh water (a mercy)
+  rainSquall: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="stormSea" prop="raftHull" bg="url(#sclean)" figBehind
+      fig={{pose: A.lookUp(f), x: 960, y: 884, scale: 1.24, view: 'front', expr: blendExpr(FACES.exhausted, FACES.earnest, t)}} />;},
+  // a ship on the horizon by day — up on your knees, reaching, screaming at a bridge that never looks
+  horizonShip: () => {const f = useCurrentFrame();
+    return <Stage backdrop="horizonShip" prop="raftHull" bg="url(#sclean)" figBehind
+      fig={{pose: A.lookUp(f), x: 700, y: 880, scale: 1.25, view: 'front', expr: FACES.earnest}} />;},
+  // a fin cutting the swell, fish shadows below — what the raft's shade draws; the catch and the threat
+  finWater: () => {const f = useCurrentFrame();
+    return <Stage backdrop="finWater" prop="raftHull" bg="url(#sclean)" figBehind
+      fig={{pose: A.lookUp(f), x: 1180, y: 880, scale: 1.22, view: 'front', expr: FACES.hardened}} />;},
+  // the half-swamped panga adrift — the boat that didn't make it; you take its water, learn nothing
+  driftPanga: () => {const f = useCurrentFrame();
+    return <Stage backdrop="driftPanga" prop="raftHull" bg="url(#sclean)" figBehind
+      fig={{pose: A.stand(f), x: 480, y: 880, scale: 1.22, view: 'front', expr: FACES.conflicted}} />;},
+  // the bare open swell, no raft in frame, the void at scale — truly alone, the hallucination
+  openSwell: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="oceanSwell" prop="waveCrest" bg="url(#sclean)" figBehind
+      fig={{pose: A.stand(f), x: 960, y: 970, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.exhausted, t)}} />;},
+  // the ship's lit hull sliding past close at night — the cold open + its payoff, the last flare
+  shipNight: () => {const f = useCurrentFrame();
+    return <Stage backdrop="shipNight" prop="raftHull" bg="url(#sclean)" figBehind
+      fig={{pose: A.lookUp(f), x: 640, y: 880, scale: 1.26, view: 'front', expr: FACES.shock}} />;},
+  // land and a boat coming toward you at last — the rescue, at cost
+  makeLandfall: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="landfall" prop="raftHull" bg="url(#swarm)" figBehind
+      fig={{pose: A.lookUp(f), x: 720, y: 880, scale: 1.24, view: 'front', expr: blendExpr(FACES.hollow, FACES.awe, t)}} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN};

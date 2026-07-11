@@ -1,8 +1,8 @@
 {
-  "updated": "2026-07-08T00:47:13.374374+00:00",
+  "updated": "2026-07-11T03:11:15.757045+00:00",
   "channel": {
     "videos": 25,
-    "views": 733,
+    "views": 861,
     "subscribers": 4
   },
   "videos": [
@@ -21,7 +21,7 @@
       "topic": "mob_boss",
       "title": "Your Life in the Mafia at Every Rank (Only 2 Ways Out)",
       "published": "2026-07-03T02:16:42Z",
-      "views": 73,
+      "views": 139,
       "likes": 4,
       "comments": 0,
       "duration": "PT12M12S"
@@ -57,6 +57,16 @@
       "duration": "PT12M56S"
     },
     {
+      "id": "MiXTy6PUdDk",
+      "topic": null,
+      "title": "Your Life as Every Rank in Special Forces (You Don't Exist)",
+      "published": "2026-07-05T20:01:33Z",
+      "views": 32,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M10S"
+    },
+    {
       "id": "TkA8BAwwjCQ",
       "topic": "soldier",
       "title": "Every Level of a Soldier \u2014 From Recruit to Four-Star General",
@@ -65,6 +75,16 @@
       "likes": 1,
       "comments": 0,
       "duration": "PT10M41S"
+    },
+    {
+      "id": "molUoFUlmso",
+      "topic": "special_forces",
+      "title": "Your Life as Every Rank in Special Forces (Most Die at Selection)",
+      "published": "2026-07-05T15:19:13Z",
+      "views": 25,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M8S"
     },
     {
       "id": "iCRh1imgBgo",
@@ -77,14 +97,14 @@
       "duration": "PT10M49S"
     },
     {
-      "id": "MiXTy6PUdDk",
-      "topic": null,
-      "title": "Your Life as Every Rank in Special Forces (You Don't Exist)",
-      "published": "2026-07-05T20:01:33Z",
-      "views": 22,
+      "id": "TZSLFLOwj4M",
+      "topic": "billionaire_heir",
+      "title": "Your Life as a Billionaire Heir at Every Level (You Inherit $0)",
+      "published": "2026-07-03T18:06:43Z",
+      "views": 16,
       "likes": 0,
       "comments": 0,
-      "duration": "PT12M10S"
+      "duration": "PT12M51S"
     },
     {
       "id": "jTfmhC3peEM",
@@ -101,30 +121,20 @@
       "topic": "roman_empire",
       "title": "Your Life as Every Rank in the Roman Empire (You Die at the Top)",
       "published": "2026-06-30T19:35:29Z",
-      "views": 14,
+      "views": 15,
       "likes": 0,
       "comments": 0,
       "duration": "PT13M5S"
     },
     {
-      "id": "TZSLFLOwj4M",
-      "topic": "billionaire_heir",
-      "title": "Your Life as a Billionaire Heir at Every Level (You Inherit $0)",
-      "published": "2026-07-03T18:06:43Z",
+      "id": "VwPd_5wWjGM",
+      "topic": "mexican_cartel",
+      "title": "Your Life in a Cartel at Every Rank (No Way Out)",
+      "published": "2026-07-06T19:57:12Z",
       "views": 9,
       "likes": 0,
       "comments": 0,
-      "duration": "PT12M51S"
-    },
-    {
-      "id": "molUoFUlmso",
-      "topic": "special_forces",
-      "title": "Your Life as Every Rank in Special Forces (Most Die at Selection)",
-      "published": "2026-07-05T15:19:13Z",
-      "views": 8,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT12M8S"
+      "duration": "PT13M28S"
     },
     {
       "id": "AWmf0DwSC-g",
@@ -177,14 +187,14 @@
       "duration": "PT56S"
     },
     {
-      "id": "pg08o0QpUqI",
+      "id": "JgawiJbzTcA",
       "topic": null,
-      "title": "Every Level of a Hedge Fund \ud83d\udcb0 #shorts",
-      "published": "2026-06-24T20:34:03Z",
+      "title": "Every Level of a Wealth Transfer \ud83d\udcb0 #shorts",
+      "published": "2026-07-03T18:27:02Z",
       "views": 2,
       "likes": 0,
       "comments": 0,
-      "duration": "PT1M2S"
+      "duration": "PT51S"
     },
     {
       "id": "ZQpAzns70b4",
@@ -197,6 +207,26 @@
       "duration": "PT10M8S"
     },
     {
+      "id": "Si2VnD9tM-s",
+      "topic": null,
+      "title": "Every Level of a Cartel \ud83d\udcb0 #shorts",
+      "published": "2026-07-06T20:07:21Z",
+      "views": 1,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT1M1S"
+    },
+    {
+      "id": "pg08o0QpUqI",
+      "topic": null,
+      "title": "Every Level of a Hedge Fund \ud83d\udcb0 #shorts",
+      "published": "2026-06-24T20:34:03Z",
+      "views": 1,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT1M2S"
+    },
+    {
       "id": "SP3fs8c0BD0",
       "topic": null,
       "title": "Every Level of a Lawyer \u2014 From Associate to Architect",
@@ -205,36 +235,6 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT5M22S"
-    },
-    {
-      "id": "Si2VnD9tM-s",
-      "topic": null,
-      "title": "Every Level of a Cartel \ud83d\udcb0 #shorts",
-      "published": "2026-07-06T20:07:21Z",
-      "views": 0,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT1M1S"
-    },
-    {
-      "id": "VwPd_5wWjGM",
-      "topic": "mexican_cartel",
-      "title": "Your Life in a Cartel at Every Rank (No Way Out)",
-      "published": "2026-07-06T19:57:12Z",
-      "views": 0,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT13M28S"
-    },
-    {
-      "id": "JgawiJbzTcA",
-      "topic": null,
-      "title": "Every Level of a Wealth Transfer \ud83d\udcb0 #shorts",
-      "published": "2026-07-03T18:27:02Z",
-      "views": 0,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT51S"
     },
     {
       "id": "RQVayfTmrpU",

@@ -1,19 +1,19 @@
 {
   "thumb": {
-    "kicker": "POV \u2014 YOU'RE THE FIRST",
-    "line1": "RICHEST MAN ALIVE",
+    "kicker": "1,200 MILES",
+    "line1": "FROM LAND",
     "line2": "",
-    "tag": "YOU CAN'T SPEND IT",
-    "archetype": "pov",
-    "big": "$1 TRILLION",
-    "before": "$0",
-    "after": "TRAPPED",
-    "expr": "hollow",
+    "tag": "DAY 54",
+    "archetype": "eyeline",
+    "big": "DAY 54",
+    "before": "DAY 1",
+    "after": "ALONE",
+    "expr": "worried",
     "povline": "YOU CAN'T",
-    "keyword": "SPEND IT",
-    "setting": "warRoom",
-    "question": "WHO IS ABOVE MONEY?",
-    "mood": "wealth"
+    "keyword": "NO RESCUE",
+    "setting": "shipNight",
+    "question": "COULD YOU LAST 54 DAYS?",
+    "mood": "survival"
   },
-  "topic": "trillionaire"
+  "topic": "could_you_survive_ocean"
 }
