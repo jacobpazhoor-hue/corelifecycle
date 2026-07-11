@@ -134,7 +134,29 @@ def main():
         or next(iter(arts.get("artifacts", [])), None)
     if not art:
         sys.exit("cloud_render: no artifact found on the completed run")
-    blob, _ = api(cfg, "GET", art["archive_download_url"], raw=True)
+    # Download the zip. Primary path is urllib (add_unredirected_header keeps the token off the
+    # Azure redirect). Belt-and-suspenders: if urllib fails OR yields a non-zip blob, fall back to
+    # `curl -sL` (drops auth on cross-host redirects by default). A download hiccup here must NOT be
+    # allowed to fail the whole step — that is what silently dropped a GOOD render to a doomed local
+    # render for 5 days. Retry a couple of times before giving up.
+    dl_url = art["archive_download_url"]
+    blob = None
+    for attempt in range(3):
+        try:
+            blob, _ = api(cfg, "GET", dl_url, raw=True)
+            zipfile.ZipFile(io.BytesIO(blob))  # validate it's really a zip
+            break
+        except Exception as e:
+            print(f"cloud_render: urllib download attempt {attempt+1} failed ({e}); trying curl")
+            cur = subprocess.run(["curl", "-sL", "-H", f"Authorization: Bearer {cfg['GH_TOKEN']}", dl_url],
+                                 capture_output=True)
+            try:
+                zipfile.ZipFile(io.BytesIO(cur.stdout)); blob = cur.stdout; break
+            except Exception as e2:
+                print(f"cloud_render: curl download attempt {attempt+1} failed ({e2})")
+                blob = None
+    if blob is None:
+        sys.exit("cloud_render: could not download a valid artifact zip after retries")
     # the artifact zip preserves repo-relative paths (out/episode.mp4, src/timeline.json, ...),
     # so extract at the repo ROOT — NOT into out/ (that would nest as out/out/episode.mp4)
     os.makedirs(os.path.join(ROOT, "out"), exist_ok=True)
