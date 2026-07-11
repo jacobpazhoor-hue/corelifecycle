@@ -112,7 +112,10 @@ def main():
     deadline = time.time() + MAX_WAIT
     while time.time() < deadline:
         time.sleep(POLL_SECS)
-        runs, _ = api(cfg, "GET", f"{base}/actions/workflows/{WORKFLOW}/runs?event=workflow_dispatch&per_page=10")
+        try:                                    # a transient SSL/DNS blip during a poll must NOT kill the
+            runs, _ = api(cfg, "GET", f"{base}/actions/workflows/{WORKFLOW}/runs?event=workflow_dispatch&per_page=10")
+        except Exception as e:                  # whole wait — the render is running fine on GitHub. Just retry.
+            print(f"cloud_render: poll blip ({e}); retrying"); continue
         for r in runs.get("workflow_runs", []):
             if r.get("head_sha") == sha:
                 run_id = r["id"]; status = r["status"]; concl = r.get("conclusion")
