@@ -24,13 +24,15 @@ const MOODS: Record<string, Mood> = {
   electric: {core: '#00E5FF', mid: '#0057B8', rim: '#03060F', ray: '#38B6FF', accent: '#FFE500', glow: '#00E5FF'},
   money:    {core: '#FFD54A', mid: '#1f7a4d', rim: '#06140b', ray: '#3fbf75', accent: '#FF2D2D', glow: '#FFD54A'},
   royal:    {core: '#B06CFF', mid: '#5a2a9e', rim: '#0c0518', ray: '#8f5cf0', accent: '#FFE500', glow: '#B06CFF'},
+  survival: {core: '#12C2C9', mid: '#0a4a6e', rim: '#020a12', ray: '#3fd9de', accent: '#FF7A00', glow: '#12C2C9'},
 };
 // topic -> mood hints (crime/military/war -> danger; wealth -> money; spy/tech -> electric; royalty -> royal)
 const MOOD_HINTS: Array<[RegExp, string]> = [
   [/\b(spy|cia|fbi|nsa|mi6)\b|intellig|undercover|hacker|cyber/i, 'electric'],
   [/billion|wealth|money|heir|mogul|trillion|lottery|fortune|diamond/i, 'money'],
   [/king|emperor|empire|royal|dynasty|throne|medieval|ottoman|monarch/i, 'royal'],
-  [/special.?forces|soldier|military|cartel|mafia|hitman|assassin|war|sniper|gladiator|samurai|pirate|survive|prison/i, 'danger'],
+  [/survive|stranded|lost at sea|castaway|marooned|shipwreck|ocean|desert|jungle|wilderness|avalanche|blizzard|arctic|mountain|storm/i, 'survival'],
+  [/special.?forces|soldier|military|cartel|mafia|hitman|assassin|war|sniper|gladiator|samurai|pirate|prison/i, 'danger'],
 ];
 function moodFor(): Mood {
   const m = (meta as any).thumb?.mood;
