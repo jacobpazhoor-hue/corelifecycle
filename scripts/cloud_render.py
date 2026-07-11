@@ -60,7 +60,11 @@ def api(cfg, method, path, body=None, raw=False):
     url = path if path.startswith("http") else f"{API}{path}"
     data = json.dumps(body).encode() if body is not None else None
     req = urllib.request.Request(url, data=data, method=method)
-    req.add_header("Authorization", f"Bearer {cfg['GH_TOKEN']}")
+    # add_UNREDIRECTED_header: the artifact-zip endpoint 302-redirects to a *presigned* Azure blob
+    # URL that needs NO auth and REJECTS a stray Bearer token (HTTP 401). A normal add_header is
+    # re-sent on redirects by urllib -> that 401 was the artifact-download failure that made the
+    # autopilot fall back to the (failing) local render. Unredirected = sent to GitHub only.
+    req.add_unredirected_header("Authorization", f"Bearer {cfg['GH_TOKEN']}")
     req.add_header("Accept", "application/vnd.github+json")
     req.add_header("X-GitHub-Api-Version", "2022-11-28")
     req.add_header("User-Agent", "corelifecycle-autopilot")
