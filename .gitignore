@@ -22,3 +22,9 @@ experiments/
 
 # workflow file lives on GitHub only (repo-scope token cannot push it); dispatched via API
 .github/workflows/
+
+# Ralph improvement loop runtime (keep prd.json tracked, ignore the rest)
+ralph/runs/
+ralph/progress.txt
+ralph/STOP
+runs/improve/
