@@ -1,19 +1,19 @@
 {
   "thumb": {
-    "kicker": "RICHER THAN",
-    "line1": "NATIONS",
+    "kicker": "EVERY LEVEL OF A",
+    "line1": "HITMAN",
     "line2": "",
-    "tag": "$1T",
-    "archetype": "scaleterror",
-    "big": "$1T",
-    "before": "NOBODY",
-    "after": "NAMELESS",
-    "expr": "hollow",
-    "povline": "YOU OWN IT ALL",
-    "keyword": "NAMELESS",
-    "setting": "rooftopEmpire",
-    "question": "WHAT DOES A TRILLION COST?",
-    "mood": "money"
+    "tag": "$2M",
+    "archetype": "pov",
+    "big": "$2M",
+    "before": "BROKE",
+    "after": "MARKED",
+    "expr": "shock",
+    "povline": "YOU CAN'T",
+    "keyword": "LEAVE",
+    "setting": "backAlley",
+    "question": "WHO HOLDS YOUR CONTRACT?",
+    "mood": "danger"
   },
-  "topic": "trillionaire"
+  "topic": "hitman"
 }

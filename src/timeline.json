@@ -2,327 +2,358 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 22565,
+  "totalFrames": 20897,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t00",
       "level": null,
-      "overlay": {
-        "big": "$1T",
-        "sub": "THE WORLD'S FIRST \u00b7 AND SHE'S CALLING, AND YOU LET IT RING"
-      },
-      "template": "galaBallroom",
+      "overlay": null,
+      "template": "backAlley",
       "audio": "audio/t00.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 850
+      "durationInFrames": 589
     },
     {
       "id": "t01",
-      "level": "LEVEL 01  \u00b7  $0",
-      "overlay": {
-        "big": "$0",
-        "sub": "EVERYTHING YOU OWN \u00b7 AND A SISTER YOU CAN'T AFFORD TO SAVE"
-      },
-      "template": "desk",
+      "level": null,
+      "overlay": null,
+      "template": "deskSilhouette",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
-      "startFrame": 850,
-      "durationInFrames": 825
+      "startFrame": 589,
+      "durationInFrames": 388
     },
     {
       "id": "t02",
-      "level": null,
-      "overlay": null,
-      "template": "dinner",
+      "level": "LEVEL 01  \u00b7  THE DEBT",
+      "overlay": {
+        "big": "$0",
+        "sub": "YOU OWE $18,000 \u00b7 TO MEN WHO DON'T FORGET"
+      },
+      "template": "streetCorner",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 1675,
-      "durationInFrames": 962
+      "startFrame": 977,
+      "durationInFrames": 593
     },
     {
       "id": "t03",
       "level": null,
       "overlay": null,
-      "template": "garageStart",
+      "template": "backAlley",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 2637,
-      "durationInFrames": 802
+      "startFrame": 1570,
+      "durationInFrames": 588
     },
     {
       "id": "t04",
-      "level": "LEVEL 02  \u00b7  $1 MILLION",
-      "overlay": {
-        "big": "$1M",
-        "sub": "THE DEBT THAT RULED YOUR LIFE \u00b7 GONE IN ONE CLICK"
-      },
-      "template": "startupGrow",
+      "level": null,
+      "overlay": null,
+      "template": "tradecraft",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 3439,
-      "durationInFrames": 824
+      "startFrame": 2158,
+      "durationInFrames": 728
     },
     {
       "id": "t05",
-      "level": null,
-      "overlay": null,
-      "template": "serverScale",
+      "level": "LEVEL 02  \u00b7  THE FIRST NAME",
+      "overlay": {
+        "big": "$5,000",
+        "sub": "THE FIRST ONE NEVER LEAVES YOU"
+      },
+      "template": "safehouse",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 4263,
-      "durationInFrames": 794
+      "startFrame": 2886,
+      "durationInFrames": 643
     },
     {
       "id": "t06",
       "level": null,
-      "overlay": {
-        "big": "$0 CASH",
-        "sub": "RICH ON PAPER \u00b7 YOU BORROW AGAINST IT AND SELL NOTHING"
-      },
-      "template": "boardroomNotes",
+      "overlay": null,
+      "template": "waterfront",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 5057,
-      "durationInFrames": 778
+      "startFrame": 3529,
+      "durationInFrames": 634
     },
     {
       "id": "t07",
-      "level": "LEVEL 03  \u00b7  $100 MILLION",
-      "overlay": {
-        "big": "$100M",
-        "sub": "YOU STOP BEING A PERSON \u00b7 YOU BECOME AN INSTITUTION"
-      },
-      "template": "tower",
+      "level": null,
+      "overlay": null,
+      "template": "countRoom",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 5835,
-      "durationInFrames": 729
+      "startFrame": 4163,
+      "durationInFrames": 646
     },
     {
       "id": "t08",
-      "level": null,
-      "overlay": null,
-      "template": "atrium",
+      "level": "LEVEL 03  \u00b7  THE JOURNEYMAN",
+      "overlay": {
+        "big": "$25,000",
+        "sub": "THE GOING RATE \u00b7 ABOUT THE PRICE OF A USED CAR"
+      },
+      "template": "surveillance",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 6564,
-      "durationInFrames": 720
+      "startFrame": 4809,
+      "durationInFrames": 581
+    },
+    {
+      "id": "t08b",
+      "level": null,
+      "overlay": null,
+      "template": "socialClub",
+      "audio": "audio/t08b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 5390,
+      "durationInFrames": 693
     },
     {
       "id": "t09",
       "level": null,
       "overlay": null,
-      "template": "boardroomHead",
+      "template": "redSauce",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 7284,
-      "durationInFrames": 729
+      "startFrame": 6083,
+      "durationInFrames": 597
     },
     {
       "id": "t10",
-      "level": "LEVEL 04  \u00b7  $1 BILLION",
-      "overlay": {
-        "big": "$1B",
-        "sub": "KEEP THE TOWN, STAY RICH \u00b7 CUT IT, GO VERTICAL"
-      },
-      "template": "pnlWall",
+      "level": null,
+      "overlay": null,
+      "template": "wiretap",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 8013,
-      "durationInFrames": 749
+      "startFrame": 6680,
+      "durationInFrames": 625
     },
     {
       "id": "t11",
       "level": null,
       "overlay": null,
-      "template": "layoffs",
+      "template": "debrief",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 8762,
-      "durationInFrames": 700
+      "startFrame": 7305,
+      "durationInFrames": 651
     },
     {
       "id": "t12",
-      "level": null,
-      "overlay": null,
-      "template": "supervisor",
+      "level": "LEVEL 04  \u00b7  THE CLEANER",
+      "overlay": {
+        "big": "$60,000",
+        "sub": "NO WITNESSES \u00b7 NO TRACES \u00b7 NO QUESTIONS"
+      },
+      "template": "deadDrop",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 9462,
-      "durationInFrames": 854
+      "startFrame": 7956,
+      "durationInFrames": 607
     },
     {
       "id": "t13",
       "level": null,
-      "overlay": {
-        "big": "$1B",
-        "sub": "YOU CROSSED \u00b7 AND LEFT SAM ON THE OTHER SIDE"
-      },
-      "template": "signing",
+      "overlay": null,
+      "template": "fileWall",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 10316,
-      "durationInFrames": 803
+      "startFrame": 8563,
+      "durationInFrames": 629
     },
     {
       "id": "t14",
-      "level": "LEVEL 05  \u00b7  $100 BILLION",
+      "level": "LEVEL 05  \u00b7  THE SPECIALIST",
       "overlay": {
-        "big": "$100B",
-        "sub": "SAY ONE WORD \u00b7 THREE MARKETS FLINCH"
+        "big": "$250,000",
+        "sub": "THE FEE FOR A NAME YOU DON'T KNOW YET"
       },
-      "template": "yachtDeck",
+      "template": "window",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 11119,
-      "durationInFrames": 907
+      "startFrame": 9192,
+      "durationInFrames": 635
     },
     {
       "id": "t15",
       "level": null,
-      "overlay": {
-        "big": "$1M / MIN",
-        "sub": "IT GROWS WHILE YOU SLEEP \u00b7 UNEARNED, UNTAXED, UNTOUCHED"
-      },
-      "template": "tradingFloor",
+      "overlay": null,
+      "template": "deskClose",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 12026,
-      "durationInFrames": 814
+      "startFrame": 9827,
+      "durationInFrames": 638
     },
     {
       "id": "t16",
       "level": null,
       "overlay": null,
-      "template": "window",
+      "template": "tradecraft",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 12840,
-      "durationInFrames": 698
+      "startFrame": 10465,
+      "durationInFrames": 855
     },
     {
       "id": "t17",
-      "level": "LEVEL 06  \u00b7  $1 TRILLION",
+      "level": null,
       "overlay": {
-        "big": "$740B",
-        "sub": "A MILLION A DAY SINCE CHRIST \u00b7 STILL NOT A TRILLION"
+        "big": "$250,000",
+        "sub": "PAID IN FULL \u00b7 THE ONE DEBT THAT DOESN'T CLEAR"
       },
-      "template": "rooftopEmpire",
+      "template": "emptyChair",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 13538,
-      "durationInFrames": 830
+      "startFrame": 11320,
+      "durationInFrames": 670
     },
     {
       "id": "t18",
-      "level": null,
+      "level": "LEVEL 06  \u00b7  THE GHOST",
       "overlay": {
-        "big": "$1T",
-        "sub": "WORTH MORE THAN NATIONS \u00b7 AND SHE IS CALLING RIGHT NOW"
+        "big": "$1,000,000",
+        "sub": "ONE NAME \u00b7 A PASSPORT YOU DIDN'T HAVE LAST YEAR"
       },
-      "template": "galaBallroom",
+      "template": "jet",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 14368,
-      "durationInFrames": 866
+      "startFrame": 11990,
+      "durationInFrames": 739
     },
     {
       "id": "t19",
       "level": null,
       "overlay": null,
-      "template": "throne",
+      "template": "donOffice",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 15234,
-      "durationInFrames": 795
+      "startFrame": 12729,
+      "durationInFrames": 715
     },
     {
       "id": "t20",
       "level": null,
       "overlay": null,
-      "template": "deskClose",
+      "template": "tower",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 16029,
-      "durationInFrames": 741
+      "startFrame": 13444,
+      "durationInFrames": 660
+    },
+    {
+      "id": "t20b",
+      "level": null,
+      "overlay": null,
+      "template": "prisonCell",
+      "audio": "audio/t20b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 14104,
+      "durationInFrames": 684
     },
     {
       "id": "t21",
-      "level": "LEVEL 07  \u00b7  YOU CAN'T SELL IT",
+      "level": "LEVEL 07  \u00b7  THE HANDLER",
       "overlay": {
-        "big": "$1T ON PAPER",
-        "sub": "TOUCH IT AND IT SHRINKS \u00b7 YOU CANNOT CASH OUT"
+        "big": "12%",
+        "sub": "YOUR CUT OF EVERY NAME YOU HAND OUT NOW"
       },
-      "template": "pnlWall",
+      "template": "commission",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 16770,
-      "durationInFrames": 760
+      "startFrame": 14788,
+      "durationInFrames": 613
     },
     {
       "id": "t22",
       "level": null,
       "overlay": null,
-      "template": "familyVault",
+      "template": "cardGame",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 17530,
-      "durationInFrames": 767
+      "startFrame": 15401,
+      "durationInFrames": 654
     },
     {
       "id": "t23",
       "level": null,
       "overlay": null,
-      "template": "portraitHall",
+      "template": "signing",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 18297,
-      "durationInFrames": 781
+      "startFrame": 16055,
+      "durationInFrames": 607
     },
     {
       "id": "t24",
-      "level": "LEVEL 08  \u00b7  THE APPETITE",
+      "level": "LEVEL 08  \u00b7  THE OPEN CONTRACT",
       "overlay": {
-        "big": "THE APPETITE",
-        "sub": "THE MARKET NEVER SLEEPS \u00b7 IT WAS NEVER YOURS"
+        "big": "THE BOOK",
+        "sub": "EVERY NAME EVER RUN THROUGH THIS LIFE"
       },
-      "template": "serverScale",
+      "template": "mobTable",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 19078,
-      "durationInFrames": 742
+      "startFrame": 16662,
+      "durationInFrames": 765
     },
     {
       "id": "t25",
       "level": null,
       "overlay": null,
-      "template": "emptyChair",
+      "template": "backAlley",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 19820,
-      "durationInFrames": 820
+      "startFrame": 17427,
+      "durationInFrames": 691
     },
     {
       "id": "t26",
       "level": null,
-      "overlay": null,
-      "template": "lobby",
+      "overlay": {
+        "big": "$2,000,000",
+        "sub": "THE PRICE ON YOUR OWN NAME"
+      },
+      "template": "warRoom",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 20640,
-      "durationInFrames": 914
+      "startFrame": 18118,
+      "durationInFrames": 617
     },
     {
       "id": "t27",
       "level": null,
       "overlay": null,
-      "template": "window",
+      "template": "redSauceAlone",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 21554,
-      "durationInFrames": 1011
+      "startFrame": 18735,
+      "durationInFrames": 696
+    },
+    {
+      "id": "t28",
+      "level": null,
+      "overlay": null,
+      "template": "lobby",
+      "audio": "audio/t28.wav",
+      "audioStartFrame": 3,
+      "startFrame": 19431,
+      "durationInFrames": 696
+    },
+    {
+      "id": "t29",
+      "level": null,
+      "overlay": null,
+      "template": "streetCorner",
+      "audio": "audio/t29.wav",
+      "audioStartFrame": 3,
+      "startFrame": 20127,
+      "durationInFrames": 770
     }
   ]
 }

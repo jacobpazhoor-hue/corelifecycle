@@ -1,8 +1,8 @@
 {
-  "updated": "2026-07-11T12:59:39.192311+00:00",
+  "updated": "2026-07-12T08:01:29.709209+00:00",
   "channel": {
-    "videos": 25,
-    "views": 871,
+    "videos": 26,
+    "views": 879,
     "subscribers": 4
   },
   "videos": [
@@ -37,6 +37,16 @@
       "duration": "PT12M23S"
     },
     {
+      "id": "molUoFUlmso",
+      "topic": "special_forces",
+      "title": "Your Life as Every Rank in Special Forces (Most Die at Selection)",
+      "published": "2026-07-05T15:19:13Z",
+      "views": 38,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M8S"
+    },
+    {
       "id": "PqRq-2Rmbbo",
       "topic": "hedge_fund_manager",
       "title": "Every Level of a Hedge Fund Manager \u2014 From Analyst to Billionaire",
@@ -47,6 +57,16 @@
       "duration": "PT13M3S"
     },
     {
+      "id": "MiXTy6PUdDk",
+      "topic": null,
+      "title": "Your Life as Every Rank in Special Forces (You Don't Exist)",
+      "published": "2026-07-05T20:01:33Z",
+      "views": 36,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M10S"
+    },
+    {
       "id": "4Qu5gDLhBzA",
       "topic": "spy",
       "title": "Your Life as a Spy at Every Level \u2014 Recruit to Spymaster",
@@ -55,26 +75,6 @@
       "likes": 1,
       "comments": 0,
       "duration": "PT12M56S"
-    },
-    {
-      "id": "MiXTy6PUdDk",
-      "topic": null,
-      "title": "Your Life as Every Rank in Special Forces (You Don't Exist)",
-      "published": "2026-07-05T20:01:33Z",
-      "views": 33,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT12M10S"
-    },
-    {
-      "id": "molUoFUlmso",
-      "topic": "special_forces",
-      "title": "Your Life as Every Rank in Special Forces (Most Die at Selection)",
-      "published": "2026-07-05T15:19:13Z",
-      "views": 28,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT12M8S"
     },
     {
       "id": "TkA8BAwwjCQ",
@@ -131,7 +131,7 @@
       "topic": "mexican_cartel",
       "title": "Your Life in a Cartel at Every Rank (No Way Out)",
       "published": "2026-07-06T19:57:12Z",
-      "views": 9,
+      "views": 14,
       "likes": 0,
       "comments": 0,
       "duration": "PT13M28S"
@@ -187,16 +187,6 @@
       "duration": "PT56S"
     },
     {
-      "id": "JgawiJbzTcA",
-      "topic": null,
-      "title": "Every Level of a Wealth Transfer \ud83d\udcb0 #shorts",
-      "published": "2026-07-03T18:27:02Z",
-      "views": 2,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT51S"
-    },
-    {
       "id": "ZQpAzns70b4",
       "topic": "lawyer",
       "title": "Every Level of a Lawyer \u2014 From Associate to Managing Partner",
@@ -205,6 +195,16 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT10M8S"
+    },
+    {
+      "id": "2xY-_B5XiNo",
+      "topic": "could_you_survive_ocean",
+      "title": "Could You Survive 54 Days Lost at Sea? (Alone, One Flare)",
+      "published": "2026-07-11T17:49:40Z",
+      "views": 1,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M12S"
     },
     {
       "id": "Si2VnD9tM-s",
@@ -235,6 +235,26 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT5M22S"
+    },
+    {
+      "id": "lUdEmaYYk_I",
+      "topic": "trillionaire",
+      "title": "POV: You're the World's First Trillionaire (It Owns You)",
+      "published": "2026-07-11T19:28:14Z",
+      "views": 0,
+      "likes": 0,
+      "comments": 0,
+      "duration": "P0D"
+    },
+    {
+      "id": "JgawiJbzTcA",
+      "topic": null,
+      "title": "Every Level of a Wealth Transfer \ud83d\udcb0 #shorts",
+      "published": "2026-07-03T18:27:02Z",
+      "views": 0,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT51S"
     },
     {
       "id": "RQVayfTmrpU",
