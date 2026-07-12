@@ -6,7 +6,7 @@ cd /Users/jacobpazhoor/CoreLifecycle || exit 1
 setopt NO_NOMATCH 2>/dev/null
 # launchd runs with a minimal PATH — pin the full toolchain (python3 with our packages, node/npx, jq)
 export PATH="/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/opt/homebrew/bin:/Users/jacobpazhoor/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-mkdir -p runs/improve
+mkdir -p runs/improve runs/autopilot
 LOG="runs/improve/$(date +%Y%m%d_%H%M).log"
 exec >> "$LOG" 2>&1
 echo "=== improve start $(date) ==="
@@ -41,3 +41,4 @@ if [ "$RC" -ne 0 ]; then
   echo "$(date '+%F %H:%M') IMPROVE FAIL rc=$RC (see $LOG)" >> runs/autopilot/ALERTS.log
   osascript -e "display notification \"improve loop failed rc=$RC\" with title \"CoreLifecycle improve\" sound name \"Basso\"" 2>/dev/null
 fi
+exit $RC

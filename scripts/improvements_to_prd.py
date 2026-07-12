@@ -20,7 +20,10 @@ RULES = (
     "`git diff --name-only` and confirm it touches nothing under secrets/ and no publish path. "
     "(6) If build.py fails OR the diff is out of bounds: run `git checkout -- .` to DISCARD the code "
     "change, write the blocker into the story's notes and progress.txt, do NOT set passes:true, do NOT "
-    "commit the code change, and stop. (7) Keep progress.txt notes TERSE (caveman-brief), facts only."
+    "commit the code change, and stop. (7) Keep progress.txt notes TERSE (caveman-brief), facts only. "
+    "(8) `build.py` rewrites src/episode_meta.json, src/timeline.json, and out/ as a side effect — before "
+    "committing your passing story, run `git checkout -- src/episode_meta.json src/timeline.json` so your "
+    "commit contains ONLY your improvement, not stale last-render churn."
 )
 
 def build_prd():
@@ -31,7 +34,7 @@ def build_prd():
     if os.path.exists(PRD):
         try:
             done_ids |= {s["id"] for s in json.load(open(PRD)).get("userStories", []) if s.get("passes")}
-        except Exception:
+        except (json.JSONDecodeError, OSError, KeyError):
             pass
     stories = []
     for i, item in enumerate(backlog):
