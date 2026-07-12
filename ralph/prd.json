@@ -1,0 +1,402 @@
+{
+  "branchName": "main",
+  "rules": "You are improving the CoreLifecycle video pipeline. HARD RULES (never violate, even though permissions are off): (1) NEVER publish, unlist, upload, or touch any live video or the YouTube API. (2) NEVER read, write, move, or commit anything under secrets/. (3) NEVER edit scripts/yt_upload.py or any publish path, and NEVER write runs/last_post.txt or ops/produced_topics.json. (4) One story per iteration. (5) VERIFY GATE before marking a story passed: run `python3 build.py` and it MUST exit 0 (quality gate + 1-frame smoke render); also run `git diff --name-only` and confirm it touches nothing under secrets/ and no publish path. (6) If build.py fails OR the diff is out of bounds: run `git checkout -- .` to DISCARD the code change, write the blocker into the story's notes and progress.txt, do NOT set passes:true, do NOT commit the code change, and stop. (7) Keep progress.txt notes TERSE (caveman-brief), facts only.",
+  "userStories": [
+    {
+      "id": "package-before-review",
+      "title": "package before review",
+      "priority": 1007,
+      "passes": false,
+      "notes": "mob_boss (07-01) got a 'revise' verdict whose ONLY blocker was pipeline order: daily_autopilot renders out/thumbnail.png + gen_packaging.py (upload_kit.json) at step 5 AFTER the review loop, so the reviewer sees the PREVIOUS episode's stale files on disk and correctly refuses to approve (a Roman 'YOU ARE MORTAL' thumb would have shipped on the Mafia video if not caught). Cheap fix: move `npx remotion still Thumbnail` + `python3 gen_packaging.py` to right after build (or into build.py step order) so the on-disk packaging always matches the episode under review; publish step can re-run them idempotently. Costs one 5s still per build; saves a whole render->review->fix cycle. MITIGATED MANUALLY on billionaire_heir (07-03) AND mexican_cartel (07-06): showrunner rendered the Thumbnail still (out/thumbnail.png) + ran gen_packaging.py (out/upload_kit.json) right after BUILD OK, so on-disk packaging matches the episode under review. On mexican_cartel this also CAUGHT the number-thumb collision [[number-thumb-collision-short-values]] before review \u2014 rendering the thumb post-build is doubling as a thumbnail QA gate, another reason to make it a permanent pipeline step. The pipeline-order fix in daily_autopilot/build.py is still the real cure.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: mob_boss (07-01) got a 'revise' verdict whose ONLY blocker was pipeline order: daily_autopilot renders out/thumbnail.png + gen_packaging.py (upload_kit.json) at step 5 AFTER the review loop, so the reviewer sees the PREVIOUS episode's stale files on disk and correctly refuses to approve (a Roman 'YOU ARE MORTAL' thumb would have shipped on the Mafia video if not caught). Cheap fix: move `npx remot",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "negative-overlay-recurring",
+      "title": "negative overlay recurring",
+      "priority": 1014,
+      "passes": false,
+      "notes": "NOW 6th+ episode with a COST/loss overlay rendered in the SAME gold as income: surgeon -$235K debt, hedge -$22M drawdown, soldier -1 KIA, real_estate 'FIRST EVICTION' + '100 UNITS CLEARED', spy 'BURNED', and roman_empire 'THE FARM IS SOLD' + 'ONE IN TEN' (decimation) + 'MURDERED'. The pattern is now load-bearing on the moral-erosion beats of EVERY topic. Bumped to HIGH: a red/amber treatment for negative/cost overlays (and a distinct glyph for ratio/stat overlays per [[ratio-overlay-treatment]]) vs gold for gain is the single highest-value visual upgrade left. Pairs with the still-open [[negative-number-color]].",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: NOW 6th+ episode with a COST/loss overlay rendered in the SAME gold as income: surgeon -$235K debt, hedge -$22M drawdown, soldier -1 KIA, real_estate 'FIRST EVICTION' + '100 UNITS CLEARED', spy 'BURNED', and roman_empire 'THE FARM IS SOLD' + 'ONE IN TEN' (decimation) + 'MURDERED'. The pattern is now load-bearing on the moral-erosion beats of EVERY topic. Bumped to HIGH: a red/amber treatment for n",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "quality-max-plan",
+      "title": "quality max plan",
+      "priority": 1022,
+      "passes": false,
+      "notes": "docs/bibles/QUALITY_MAX_PLAN.md. Phases 1-5 SHIPPED 06-28 (Story+Packaging, Audio, Animation, Color, Thumbnails). Remaining: 6 Polish(transitions/boil/static-grain/sectioned score) \u2014 the deferred heavier/riskier set.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: docs/bibles/QUALITY_MAX_PLAN.md. Phases 1-5 SHIPPED 06-28 (Story+Packaging, Audio, Animation, Color, Thumbnails). Remaining: 6 Polish(transitions/boil/static-grain/sectioned score) \u2014 the deferred heavier/riskier set.",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "meta-topic-mismatch-guard",
+      "title": "meta topic mismatch guard",
+      "priority": 1026,
+      "passes": false,
+      "notes": "billionaire_heir (07-03) run started from an INTERRUPTED prior run: content.py + research + dynasty pack were already written for billionaire_heir, but ops/episode_meta.json still held mob_boss. If build+render had run in that state, the heir video would have shipped with the Mafia title/description/thumbnail. Cheap guard: build.py already parses both files \u2014 add an assert that meta['topic'] (or its slug) appears in content.py's docstring/first 40 lines, HALT on mismatch. Catches every stale-meta / partial-run state for free. Same failure family as [[package-before-review]] (on-disk artifacts lagging the episode).",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: billionaire_heir (07-03) run started from an INTERRUPTED prior run: content.py + research + dynasty pack were already written for billionaire_heir, but ops/episode_meta.json still held mob_boss. If build+render had run in that state, the heir video would have shipped with the Mafia title/description/thumbnail. Cheap guard: build.py already parses both files \u2014 add an assert that meta['topic'] (or i",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "template-must-be-registry-key-not-backdrop",
+      "title": "template must be registry key not backdrop",
+      "priority": 2000,
+      "passes": false,
+      "notes": "could_you_survive_ocean (07-10) was resumed from an INTERRUPTED run whose content.py referenced TWO scene backdrops as if they were templates: t01 template='seaDeck' (seaDeck is a DYNASTY *backdrop*; the template that renders it is yachtDeck) and t13 template='stormSea' (stormSea is a *backdrop* used by oceanCapsize, not a template). The gate correctly HALTed ('template X not in registry') but only AFTER voice+music+bundle ran (~minutes). This is a recurring interrupted-run hazard because a backdrop and a template often share a concept name (seaDeck/yachtDeck, stormSea/oceanCapsize). Fixes shipped this run: added two proper OCEAN templates \u2014 boatDeck (working-sailor comfort beat on the seaDeck backdrop, distinct from DYNASTY yachtDeck's smug heir) and rainSquall (the squall/rain-catch mercy beat on the stormSea backdrop). CHEAP GUARD IDEA: build.py already imports content + can import PACK_TEMPLATES keys via a tiny node/grep \u2014 assert every scene['template'] is a PACK_TEMPLATES key BEFORE the expensive voice step (move the registry check that gate.py already does to the top, next to the syntax gate), so a bad template name fails in seconds, not minutes. Pairs with [[meta-topic-mismatch-guard]] (both catch interrupted/partial-run state cheaply).",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: could_you_survive_ocean (07-10) was resumed from an INTERRUPTED run whose content.py referenced TWO scene backdrops as if they were templates: t01 template='seaDeck' (seaDeck is a DYNASTY *backdrop*; the template that renders it is yachtDeck) and t13 template='stormSea' (stormSea is a *backdrop* used by oceanCapsize, not a template). The gate correctly HALTed ('template X not in registry') but onl",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "scaleterror-caption-pill-collision",
+      "title": "scaleterror caption pill collision",
+      "priority": 2001,
+      "passes": false,
+      "notes": "could_you_survive_ocean (07-10): the SCALETERROR archetype (thumbs.tsx ThumbScaleTerror) renders the KICKER+L1 caption as a Punch at (70,150) fs48 and the red KeyPill at (78, 150+kw) where kw~=88 for a 9-char keyword \u2014 the pill's rotated box top reaches up into the caption's baseline, so 'NO RESCUE' sat ON TOP of '1,200 MILES FROM LAND' and hid all but the trailing 'AND' (looked broken). Also for an OCEAN topic the giant INK humanoid 'threat' shape reads as a looming PERSON, not the sea \u2014 a confusing metaphor for a water-survival video. Rendering the thumbnail post-build (the [[package-before-review]] habit) caught both before review; switched to the eyeline archetype (big worried face + arrow + withheld '?' + NO RESCUE) which rendered clean and on-emotion. CHEAP FIXES for scaleterror: (a) push the KICKER+L1 caption ABOVE the pill (y small, e.g. y=60) or move the pill down so its box never overlaps the caption; (b) for scale-terror on NON-humanoid threats (ocean, avalanche, fire) let a meta field pick the looming shape (wave/wall vs figure). Pairs with [[number-thumb-collision-short-values]] + [[beforeafter-hero-expr-hardcoded]] \u2014 same family of thumbnail layout gaps.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: could_you_survive_ocean (07-10): the SCALETERROR archetype (thumbs.tsx ThumbScaleTerror) renders the KICKER+L1 caption as a Punch at (70,150) fs48 and the red KeyPill at (78, 150+kw) where kw~=88 for a 9-char keyword \u2014 the pill's rotated box top reaches up into the caption's baseline, so 'NO RESCUE' sat ON TOP of '1,200 MILES FROM LAND' and hid all but the trailing 'AND' (looked broken). Also for ",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "scenario-money-spine-validated",
+      "title": "scenario money spine validated",
+      "priority": 2002,
+      "passes": false,
+      "notes": "trillionaire (07-07) validated the SCENARIO format (first non-rank/non-history/non-survival episode) AND a fourth spine flavor: a PURE MONEY ladder where the on-screen gold number CLIMBS ($0 -> $1M -> $100M -> $1B -> $100B -> $1T) while the SUB-caption tracks what you can actually SPEND FALLING to nothing ('NOT CASH \u00b7 A PROMISE ON PAPER' -> 'YOU NEVER SELL' -> 'YOU CAN'T SELL IT \u00b7 CASH OUT AND THE NUMBER DIES'). The drama is the GAP between the exploding paper number and the collapsing spendable amount \u2014 the apex twist is that a trillionaire owns, spendably, $0. Distinct from [[valuation-vs-personal-spine]] (built vs kept), [[inverted-spine-validated]] (power vs frozen pay), [[control-vs-own-spine-validated]] (control vs own): here it's PAPER vs SPENDABLE. Composed entirely from STARTUP (garageStart/startupGrow/serverScale/ipoBell) + FINANCE (tradingFloor/pnlWall) + DYNASTY (galaBallroom/yachtDeck/familyVault) + generic (podiumScene) + universal \u2014 NO bespoke TSX, 28 scenes, 13.0 min, gate PASS 0 warnings. Reusable for lottery_winner, and any scenario where escalating MILLIONS/DECISIONS are the level labels. The two share-beats (trillion seconds = ~31,700 yrs; $1M/day since Christ ~= $740B, still not $1T) are arithmetically verified and landed as the 'wait, that's real?' plants (research doc trillionaire.md).",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: trillionaire (07-07) validated the SCENARIO format (first non-rank/non-history/non-survival episode) AND a fourth spine flavor: a PURE MONEY ladder where the on-screen gold number CLIMBS ($0 -> $1M -> $100M -> $1B -> $100B -> $1T) while the SUB-caption tracks what you can actually SPEND FALLING to nothing ('NOT CASH \u00b7 A PROMISE ON PAPER' -> 'YOU NEVER SELL' -> 'YOU CAN'T SELL IT \u00b7 CASH OUT AND THE",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "sf-composed-from-military-spy-packs",
+      "title": "sf composed from military spy packs",
+      "priority": 2004,
+      "passes": false,
+      "notes": "special_forces (07-04) shipped with NO new template pack \u2014 it composed the whole 8-level ladder (candidate/selection -> operator/ODA -> team sergeant -> the tier-1 Unit -> assault commander -> squadron -> joint task force -> the man who signs) entirely from the existing MILITARY pack (bootcamp=selection ruck+the loop, barracksLife=empty bunks/drawer of tags, frontline=the breach/combat/raid, commandPost=team & troop command, decoration=the tab/no-medal) + the SPY pack (tradecraft=selection ground/kill house, surveillance=night infil, safehouse=the HVT target wall, debrief=the tasking/mentor warning, station=the joint command) + universal (warRoom=JSOC apex, emptyChair=the rival's empty chair, signing=the order, jet=deployment). No adjacent repeats across 30 scenes. Confirms the SPY+MILITARY packs cover the whole special-operations / covert-military space \u2014 reusable for fbi_undercover, secret_service, PMC/mercenary, hostage-rescue topics with zero bespoke TSX. Pairs with [[spy-pack-validated]] + [[more-domain-packs]].",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: special_forces (07-04) shipped with NO new template pack \u2014 it composed the whole 8-level ladder (candidate/selection -> operator/ODA -> team sergeant -> the tier-1 Unit -> assault commander -> squadron -> joint task force -> the man who signs) entirely from the existing MILITARY pack (bootcamp=selection ruck+the loop, barracksLife=empty bunks/drawer of tags, frontline=the breach/combat/raid, comma",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "worn-swords-hip-prop",
+      "title": "worn swords hip prop",
+      "priority": 2006,
+      "passes": false,
+      "notes": "samurai (07-04) made THE WEIGHT OF THE TWO SWORDS AT THE LEFT HIP the sensory anchor motif \u2014 it 'arrives' at t04 (daisho), is re-triggered at every level-up ('the swords are heavier today'), and is stripped bare at t25 (Hait\u014drei ban, 'your hip goes light'). But the daish\u014d is only DRAWN once, on the sword stand at t04; the POV figure never visibly WEARS the swords across the climb, and the t25 payoff ('hip goes bare') is audio-only. Same failure family as [[want-object-visual-plant]] (mob_boss's undrawn Cadillac). Fix: a small 'sheathed daish\u014d at the left hip' figure primitive in stage.tsx (a short + long line at the belt) that the SAMURAI templates toggle ON from L2 and OFF at the ban scene \u2014 so the anchor the narration keeps tightening is actually visible tightening, and the empty hip at the end reads at a glance. Generalizes to any worn want-object anchor (a ring, a badge, a holster).",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: samurai (07-04) made THE WEIGHT OF THE TWO SWORDS AT THE LEFT HIP the sensory anchor motif \u2014 it 'arrives' at t04 (daisho), is re-triggered at every level-up ('the swords are heavier today'), and is stripped bare at t25 (Hait\u014drei ban, 'your hip goes light'). But the daish\u014d is only DRAWN once, on the sword stand at t04; the POV figure never visibly WEARS the swords across the climb, and the t25 payo",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "negative-number-color",
+      "title": "negative number color",
+      "priority": 2009,
+      "passes": false,
+      "notes": "surgeon ep introduced COST/negative overlays (-$235K debt, -$4.1M closed unit) rendered in the same gold as income. A red/amber treatment for negative numbers vs gold for income would sharpen the money-vs-cost contrast and underline the moral-erosion beats. Thumbnail tag too (the '$0 ->' state).",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: surgeon ep introduced COST/negative overlays (-$235K debt, -$4.1M closed unit) rendered in the same gold as income. A red/amber treatment for negative numbers vs gold for income would sharpen the money-vs-cost contrast and underline the moral-erosion beats. Thumbnail tag too (the '$0 ->' state).",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "valuation-vs-personal-spine",
+      "title": "valuation vs personal spine",
+      "priority": 2011,
+      "passes": false,
+      "notes": "founder ep used COMPANY VALUATION as the on-screen big-number spine ($0->$6M->...->$1B->$6B->$209B) with the founder's lagging personal money (salary, paper stake, % owned) in the SUB-caption. Sharpens the gap between what you BUILT and what you KEEP \u2014 reusable for any equity/ownership ladder (real_estate_mogul, hedge_fund, software_engineer FAANG->founder->VC). The dilution beat '100% -> 36%' as a non-dollar ratio overlay landed well.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: founder ep used COMPANY VALUATION as the on-screen big-number spine ($0->$6M->...->$1B->$6B->$209B) with the founder's lagging personal money (salary, paper stake, % owned) in the SUB-caption. Sharpens the gap between what you BUILT and what you KEEP \u2014 reusable for any equity/ownership ladder (real_estate_mogul, hedge_fund, software_engineer FAANG->founder->VC). The dilution beat '100% -> 36%' as ",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "control-vs-own-spine-validated",
+      "title": "control vs own spine validated",
+      "priority": 2015,
+      "passes": false,
+      "notes": "real_estate_mogul ep validated a LEVERAGE spine: the on-screen big number is ASSETS YOU CONTROL ($0 -> 300K -> 4M -> 40M -> 250M -> 2B -> 600B -> $393T) driven by debt + other people's money, while the personal cut / down payment / equity lags in the gold SUB-caption ('~$60K DOWN', 'NONE OF IT YOURS'). It's the third spine flavor after [[valuation-vs-personal-spine]] (what you BUILT vs KEEP) and [[inverted-spine-validated]] (power vs frozen pay): here it's what you CONTROL vs what you OWN. Reusable for any leverage/OPM ladder (private equity, leveraged trading, franchising). Apex flips to the asset class itself + the capital that prices it.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: real_estate_mogul ep validated a LEVERAGE spine: the on-screen big number is ASSETS YOU CONTROL ($0 -> 300K -> 4M -> 40M -> 250M -> 2B -> 600B -> $393T) driven by debt + other people's money, while the personal cut / down payment / equity lags in the gold SUB-caption ('~$60K DOWN', 'NONE OF IT YOURS'). It's the third spine flavor after [[valuation-vs-personal-spine]] (what you BUILT vs KEEP) and [",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "smoke-covers-only-endpoints",
+      "title": "smoke covers only endpoints",
+      "priority": 2019,
+      "passes": false,
+      "notes": "build.py smoke render only checks frame 0 (which is the fade-in -> BLANK) + the last frame, so a bespoke prop/backdrop used only mid-scene is NEVER smoke-tested and a render-time error or an ugly composition (the roman 'chariot' first read as ambiguous blobs) ships unseen. For roman I had to hand-render ~12 mid-scene stills to catch it. Cheap fix: when content.py introduces NEW template keys not in the previous episode, build.py should auto-render one mid-scene still per new template (pick frame = scene.startFrame + dur/2 from timeline.json) into out/_smoke_packs/ and HALT/warn on render error. Closes the QA gap between the 1-frame smoke and the post-render reviewer.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: build.py smoke render only checks frame 0 (which is the fade-in -> BLANK) + the last frame, so a bespoke prop/backdrop used only mid-scene is NEVER smoke-tested and a render-time error or an ugly composition (the roman 'chariot' first read as ambiguous blobs) ships unseen. For roman I had to hand-render ~12 mid-scene stills to catch it. Cheap fix: when content.py introduces NEW template keys not i",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "voice-gen-cache-and-parallel",
+      "title": "voice gen cache and parallel",
+      "priority": 2023,
+      "passes": false,
+      "notes": "Follow-up to [[edge-tts-retry-resilience]]. gen_voice_edge.py still re-synthesizes ALL 28 scenes from the network on every build run, even when only content changed for a few (or a prior run already produced 27 good wavs). Two cheap wins: (1) per-scene CACHE keyed by a hash of (narration text + VOICE + RATE) -> skip synth+master when the cached wav matches, so a HALT-and-rerun reuses good scenes and only the failed/edited one re-hits the network (turns a ~2-3min voice step into seconds on reruns); (2) optionally a small bounded asyncio.gather pool (2-3 concurrent) to shorten cold builds. Caution: cache must invalidate on any narration edit (hash the text, not just the scene id) or it ships stale audio. Lives in gen_voice_edge.py.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: Follow-up to [[edge-tts-retry-resilience]]. gen_voice_edge.py still re-synthesizes ALL 28 scenes from the network on every build run, even when only content changed for a few (or a prior run already produced 27 good wavs). Two cheap wins: (1) per-scene CACHE keyed by a hash of (narration text + VOICE + RATE) -> skip synth+master when the cached wav matches, so a HALT-and-rerun reuses good scenes a",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "named-character-plant-gate",
+      "title": "named character plant gate",
+      "priority": 2024,
+      "passes": false,
+      "notes": "mob_boss revise: Nicky (the entire Level-8 payoff) was first named at ~85% of runtime. Add a cheap gate check: any proper name appearing in the last third of content.py must also appear in the first two-thirds (plant before payoff). Catches unplanted-payoff bugs at build time instead of review.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: mob_boss revise: Nicky (the entire Level-8 payoff) was first named at ~85% of runtime. Add a cheap gate check: any proper name appearing in the last third of content.py must also appear in the first two-thirds (plant before payoff). Catches unplanted-payoff bugs at build time instead of review.",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "template-room-distinctness",
+      "title": "template room distinctness",
+      "priority": 2025,
+      "passes": false,
+      "notes": "mob_boss reviewer: cardGame/socialClub/redSauce/mobTable all read as the same beige bar-counter room (same bottle shelf/pictures/candle), so Sal's murder, the made-man payday and the rat reveal play in what looks like one location and pattern interrupts don't register. Give each template in a pack a distinct dominant palette + one unmistakable signature prop (card table felt, espresso bar, checkered tablecloth, long dark table) so cuts read as NEW rooms at 120px.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: mob_boss reviewer: cardGame/socialClub/redSauce/mobTable all read as the same beige bar-counter room (same bottle shelf/pictures/candle), so Sal's murder, the made-man payday and the rat reveal play in what looks like one location and pattern interrupts don't register. Give each template in a pack a distinct dominant palette + one unmistakable signature prop (card table felt, espresso bar, checker",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "number-thumb-collision-short-values",
+      "title": "number thumb collision short values",
+      "priority": 2029,
+      "passes": false,
+      "notes": "mexican_cartel (07-06): the NUMBER archetype (thumbs.tsx ThumbNumber) collides for SHORT $ values. BIG font = min(480, 1300/len*1.6), so a 3-char value like '$85' maxes at 480px and the giant number sits over the top kicker/line1 caption \u2014 'A HIT PAYS' was almost entirely hidden behind the '$85', only '..YS' peeked out (looked broken). Had to abandon the strongest hook (a life costs $85 = DISPOSABLE) and switch the thumb to beforeafter (NOBODY -> HUNTED). Cheap fix: when BIG.length is small, cap fs lower (e.g. min(360,...)) AND/OR move the kicker+line1 caption OUT of the number's box (top-left small, or below the accent bar) so a short shock-number thumb is usable. The low-horror-number thumb ($85/$30-a-hit) is a high-CTR angle worth unlocking. Pairs with [[negative-overlay-recurring]] (both are thumbnail/overlay number-treatment gaps).",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: mexican_cartel (07-06): the NUMBER archetype (thumbs.tsx ThumbNumber) collides for SHORT $ values. BIG font = min(480, 1300/len*1.6), so a 3-char value like '$85' maxes at 480px and the giant number sits over the top kicker/line1 caption \u2014 'A HIT PAYS' was almost entirely hidden behind the '$85', only '..YS' peeked out (looked broken). Had to abandon the strongest hook (a life costs $85 = DISPOSAB",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "sound-anchor-sidesteps-undrawn-prop",
+      "title": "sound anchor sidesteps undrawn prop",
+      "priority": 3003,
+      "passes": false,
+      "notes": "trillionaire used a SOUND/EMOTIONAL anchor \u2014 Dani's 19-SECOND VOICEMAIL (her laugh, 'eat something, call me back'): saved t02, replayed t16, she calls LIVE at the trillion and you let it ring t18 (cold-open payoff), replayed one last time at loop-close t25. Because the anchor is inherently a SOUND, not a worn/carried object, it sidesteps the recurring 'audio-only anchor never drawn on the figure' defect family ([[worn-swords-hip-prop]], [[dog-tags-anchor-visual-plant]], [[want-object-visual-plant]]) \u2014 there is nothing to draw, so nothing is missing visually; the '19 SECONDS' overlay at t25 carries the payoff on-screen. LESSON: when a topic has no natural WORN object, a recurring sound/recording/number anchor tied to a named person is a clean choice that avoids the undrawn-prop trap entirely and still gives the overlay a concrete callback ('19 SECONDS'). Secondary sensory texture (burnt $4.50 gas-station coffee) rode alongside as the 'money never upgrades this about you' motif.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: trillionaire used a SOUND/EMOTIONAL anchor \u2014 Dani's 19-SECOND VOICEMAIL (her laugh, 'eat something, call me back'): saved t02, replayed t16, she calls LIVE at the trillion and you let it ring t18 (cold-open payoff), replayed one last time at loop-close t25. Because the anchor is inherently a SOUND, not a worn/carried object, it sidesteps the recurring 'audio-only anchor never drawn on the figure' ",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "dog-tags-anchor-visual-plant",
+      "title": "dog tags anchor visual plant",
+      "priority": 3005,
+      "passes": false,
+      "notes": "special_forces made 'dog tags, TAPED so they don't rattle' (sound discipline) the sensory anchor \u2014 loud at selection (t01), taped before the first infil (t05), checked on the team (t07), NONE/sterile at the Unit (t10), a dead man's tags carried out at the midpoint (t14), a drawer of them (t17), a new candidate's rattling at the loop-close (t28). Strong callback engine, but like samurai's daish\u014d [[worn-swords-hip-prop]] and the mob Cadillac [[want-object-visual-plant]] it is AUDIO-ONLY \u2014 the taped tags are never drawn on the POV figure, so the 'sterile/empty' and 'drawer of the dead' payoffs don't read visually. Same fix family: a tiny 'tags at the chest' figure primitive that MILITARY/SPY templates toggle ON (loose) at L1, TAPED from L2, OFF (sterile) at L4, so the anchor the narration keeps tightening tightens on screen. Generalizes to any small worn/carried anchor object (ring, badge, tags, coin).",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: special_forces made 'dog tags, TAPED so they don't rattle' (sound discipline) the sensory anchor \u2014 loud at selection (t01), taped before the first infil (t05), checked on the team (t07), NONE/sterile at the Unit (t10), a dead man's tags carried out at the midpoint (t14), a drawer of them (t17), a new candidate's rattling at the loop-close (t28). Strong callback engine, but like samurai's daish\u014d [[",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "fix-agent-artifact-hygiene",
+      "title": "fix agent artifact hygiene",
+      "priority": 3008,
+      "passes": false,
+      "notes": "docs/research/mob_boss.md ended with stray literal '</content>\\n</invoke>' lines \u2014 a prior agent's tool-call syntax leaked into the written file. Harmless here (research doc), but if it happened inside content.py or episode_meta.json the syntax gate would HALT a build. Idea: build.py (or gate.py) grep the creative-owned text files for tool-call markers (</invoke>, </content>, <function_results) and warn, so a corrupted write is caught at build time, not at review.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: docs/research/mob_boss.md ended with stray literal '</content>\\n</invoke>' lines \u2014 a prior agent's tool-call syntax leaked into the written file. Harmless here (research doc), but if it happened inside content.py or episode_meta.json the syntax gate would HALT a build. Idea: build.py (or gate.py) grep the creative-owned text files for tool-call markers (</invoke>, </content>, <function_results) an",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "non-finance-spine-validated",
+      "title": "non finance spine validated",
+      "priority": 3010,
+      "passes": false,
+      "notes": "surgeon proved the escalation spine works for a NON-money ladder where the bottom is DEBT and the apex is a SYSTEM ($5.3T), not a personal salary. Reusable pattern for soldier/doctor/politician: open on the system's total scale, end on 'they decide what X is worth.' Medical pack + lectureHall/podium covered every beat with no bespoke scenes.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: surgeon proved the escalation spine works for a NON-money ladder where the bottom is DEBT and the apex is a SYSTEM ($5.3T), not a personal salary. Reusable pattern for soldier/doctor/politician: open on the system's total scale, end on 'they decide what X is worth.' Medical pack + lectureHall/podium covered every beat with no bespoke scenes.",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "ratio-overlay-treatment",
+      "title": "ratio overlay treatment",
+      "priority": 3012,
+      "passes": false,
+      "notes": "founder ep introduced non-dollar overlays for dramatic beats: a dilution ratio ('100% -> 36%') and a stat-as-power line ('9 IN 10 FAIL'). These read fine in the gold number style but a distinct visual treatment (e.g. arrow/percentage glyph, or the red/amber from negative-number-color) would let ratios/odds register as a different KIND of number than the $ spine. Pairs with the still-open negative-number-color item.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: founder ep introduced non-dollar overlays for dramatic beats: a dilution ratio ('100% -> 36%') and a stat-as-power line ('9 IN 10 FAIL'). These read fine in the gold number style but a distinct visual treatment (e.g. arrow/percentage glyph, or the red/amber from negative-number-color) would let ratios/odds register as a different KIND of number than the $ spine. Pairs with the still-open negative-",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "inverted-spine-validated",
+      "title": "inverted spine validated",
+      "priority": 3013,
+      "passes": false,
+      "notes": "soldier ep proved an INVERTED spine: the on-screen big number is NON-MONEY power (TROOPS UNDER YOUR COMMAND: 0 -> 9 -> 150 -> 700 -> 4,500 -> 20,000 -> 200,000) while PERSONAL PAY stays small, flat, and CAPS in the sub-caption (~$25K -> ~$221K). The drama is the GAP between exploding power and frozen pay \u2014 the opposite of the finance ladders where money is the spine. Apex flips to the system that POINTS the force ($895B budget / $2.7T global spend) and the civilians who never bleed. Reusable for politician (constituents/votes commanded vs a fixed salary), and any rank/authority ladder where power, not pay, is the escalation. RE-VALIDATED by spy: REACH (ASSETS 0 -> 4 -> ~20 -> ONE STATION -> A REGION -> EVERY COVERT OP -> 21,000 OFFICERS -> THE PEOPLE ABOVE) explodes in the overlay while GS pay stays capped in the sub ($66K -> ~$200K, 'you never get rich'); the only $ count-up is the apex $106B secret budget at cold-open + close. Pairs with [[non-finance-spine-validated]].",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: soldier ep proved an INVERTED spine: the on-screen big number is NON-MONEY power (TROOPS UNDER YOUR COMMAND: 0 -> 9 -> 150 -> 700 -> 4,500 -> 20,000 -> 200,000) while PERSONAL PAY stays small, flat, and CAPS in the sub-caption (~$25K -> ~$221K). The drama is the GAP between exploding power and frozen pay \u2014 the opposite of the finance ladders where money is the spine. Apex flips to the system that ",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "restage-reused-template-by-level",
+      "title": "restage reused template by level",
+      "priority": 3016,
+      "passes": false,
+      "notes": "spy reviewer (approve, score 8) flagged that the 'station' template at LEVEL 04 (chief of station, t11) is visually near-identical to LEVEL 02 (case officer, t04) \u2014 both correct & non-adjacent, so no BIBLE rule broken, but the jump in REACH reads only from the overlay text, not the staging. When the same topic-appropriate template is the right fit at two different LEVELS, the director engine could scale the staging by level depth (wider frame / more background figures / bigger desk count at the higher rung) so a reused template still reads as escalation, not repetition. Generalizes beyond spy (any ladder where one setting is the natural home for two ranks: tradingFloor analyst->PM, operatingRoom resident->attending). Cheap win in src/stage.tsx or director.tsx; pairs with the multi-shot director. RECONFIRMED by mob_boss (07-01): reviewer flagged the 'two figures at a bar' look recurring ~6x across redSauce+socialClub (associate rules -> made-man earn -> capo sit-down -> Sal's murder -> the rat) with no visual escalation between ranks; one swap (t18->backAlley) reduced it but the by-level staging scaler remains the real fix.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: spy reviewer (approve, score 8) flagged that the 'station' template at LEVEL 04 (chief of station, t11) is visually near-identical to LEVEL 02 (case officer, t04) \u2014 both correct & non-adjacent, so no BIBLE rule broken, but the jump in REACH reads only from the overlay text, not the staging. When the same topic-appropriate template is the right fit at two different LEVELS, the director engine could",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "faceless-secondary-figures",
+      "title": "faceless secondary figures",
+      "priority": 3017,
+      "passes": false,
+      "notes": "spy reviewer noted secondary characters (Yusuf at dinner, junior officers in debriefs, boardroom figures) render as grey faceless silhouettes against the always-faced black POV figure. In spy it read as a deliberate 'they stopped being faces' motif and was consistent, so harmless here \u2014 but confirm it's intentional per-topic: for warmer relationship beats (a mentor, a spouse, a co-founder) a faced secondary figure could land more empathy. Low priority; flag only because it could read as a defect on a topic where the other person is meant to be sympathetic.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: spy reviewer noted secondary characters (Yusuf at dinner, junior officers in debriefs, boardroom figures) render as grey faceless silhouettes against the always-faced black POV figure. In spy it read as a deliberate 'they stopped being faces' motif and was consistent, so harmless here \u2014 but confirm it's intentional per-topic: for warmer relationship beats (a mentor, a spouse, a co-founder) a faced",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "spy-pack-validated",
+      "title": "spy pack validated",
+      "priority": 3018,
+      "passes": false,
+      "notes": "spy ep validated the SPY/espionage pack already in src/stage.tsx (tradecraft/surveillance/deadDrop/safehouse/station/debrief) + universal beats (deskClose/dinner/boardroomNotes/boardroomHead/atrium/window/revolvingDoor/warRoom/emptyChair). Covered the full Farm->DCIA->people-above ladder with zero bespoke scenes and no adjacent repeats across 28 scenes. Reusable for secret_service, FBI/undercover, cartel-counterintel beats. Confirms the pack-compose approach scales to crime/espionage topics.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: spy ep validated the SPY/espionage pack already in src/stage.tsx (tradecraft/surveillance/deadDrop/safehouse/station/debrief) + universal beats (deskClose/dinner/boardroomNotes/boardroomHead/atrium/window/revolvingDoor/warRoom/emptyChair). Covered the full Farm->DCIA->people-above ladder with zero bespoke scenes and no adjacent repeats across 28 scenes. Reusable for secret_service, FBI/undercover,",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "reusable-vehicle-mount-primitives",
+      "title": "reusable vehicle mount primitives",
+      "priority": 3020,
+      "passes": false,
+      "notes": "The roman chariot (quadriga: gold car + spoked wheel + a 2-horse profile team) was bespoke and took a restage to read clearly. A small reusable library of side-profile ANIMAL/VEHICLE primitives (horse, cart, mounted rider, boat) in stage.tsx would speed up upcoming queue topics that need them: samurai (mounted), gladiator (chariot), pirate (ship/deck), king (horse/cavalry), astronaut (capsule). Keep the clean doodle profile shape from roman's chariot horses as the template.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: The roman chariot (quadriga: gold car + spoked wheel + a 2-horse profile team) was bespoke and took a restage to read clearly. A small reusable library of side-profile ANIMAL/VEHICLE primitives (horse, cart, mounted rider, boat) in stage.tsx would speed up upcoming queue topics that need them: samurai (mounted), gladiator (chariot), pirate (ship/deck), king (horse/cavalry), astronaut (capsule). Ke",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "roman-dual-spine-validated",
+      "title": "roman dual spine validated",
+      "priority": 3021,
+      "passes": false,
+      "notes": "roman_empire validated a DUAL spine that combines the money ladder and the reach ladder in ONE overlay: gold $ census steps (0 DENARII -> 225/yr -> ~450 -> ~3,375 -> 400,000 SESTERCES -> 1,000,000 -> ALL OF ROME) interleaved with non-$ reach/cost beats (ONE IN TEN decimation, THE FARM IS SOLD, 15,000/GUARD donativum, 9,000 GUARDS, MURDERED, 25,000 SESTERCES/MAN auction). The apex twist 'even the throne has a per-man price (the 193 AD auction)' is a strong share beat. Reusable for any historical rank ladder where real coin AND real power both escalate (samurai/daimyo, medieval king, mongol). Pairs with [[non-finance-spine-validated]] and [[negative-overlay-recurring]].",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: roman_empire validated a DUAL spine that combines the money ladder and the reach ladder in ONE overlay: gold $ census steps (0 DENARII -> 225/yr -> ~450 -> ~3,375 -> 400,000 SESTERCES -> 1,000,000 -> ALL OF ROME) interleaved with non-$ reach/cost beats (ONE IN TEN decimation, THE FARM IS SOLD, 15,000/GUARD donativum, 9,000 GUARDS, MURDERED, 25,000 SESTERCES/MAN auction). The apex twist 'even the t",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "centered-landmark-figure-collision",
+      "title": "centered landmark figure collision",
+      "priority": 3027,
+      "passes": false,
+      "notes": "heirGates first render placed the POV figure at x=960 \u2014 dead center on the estateGrounds fountain (also centered) \u2014 so the basin+jet read as a thought bubble sitting on the figure's head. Fixed by offsetting the figure to x=700 (still behind the bars, clear of fountain + crest). Rule of thumb for new templates: when a backdrop has a centered landmark (fountain, crest, vault door, podium), stage the figure off-center; the mid-scene pack still (per [[smoke-covers-only-endpoints]]) is what caught it.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: heirGates first render placed the POV figure at x=960 \u2014 dead center on the estateGrounds fountain (also centered) \u2014 so the basin+jet read as a thought bubble sitting on the figure's head. Fixed by offsetting the figure to x=700 (still behind the bars, clear of fountain + crest). Rule of thumb for new templates: when a backdrop has a centered landmark (fountain, crest, vault door, podium), stage th",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "want-object-visual-plant",
+      "title": "want object visual plant",
+      "priority": 3028,
+      "passes": false,
+      "notes": "mob_boss: the black Cadillac (the named want-object opening and closing the loop) was never drawn \u2014 the cyclical echo was audio-only. Rule of thumb: if the script names a physical want-object in scene 1 and the loop close, stage.tsx should actually draw it in both (a small prop primitive is enough); the visual rhyme is what makes the ending feel circular.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: mob_boss: the black Cadillac (the named want-object opening and closing the loop) was never drawn \u2014 the cyclical echo was audio-only. Rule of thumb: if the script names a physical want-object in scene 1 and the loop close, stage.tsx should actually draw it in both (a small prop primitive is enough); the visual rhyme is what makes the ending feel circular.",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "beforeafter-hero-expr-hardcoded",
+      "title": "beforeafter hero expr hardcoded",
+      "priority": 3030,
+      "passes": false,
+      "notes": "mexican_cartel (07-06): ThumbBefore (beforeafter archetype) hardcodes the AFTER hero's face to expr='smug' (`expr={face('smug')}`) and ignores meta thumb.expr, so a 'HUNTED'/fear pairing renders a calm neutral stare instead of the worried/shock face that is the #1 CTR lever with no real faces. ThumbPov already reads t.expr correctly. One-line fix: make ThumbBefore's Hero use expr={face(t.expr || 'smug')} so the after-figure's emotion can match the after-word (shock/worried for a HUNTED/BURNED/TRAPPED apex). Rendered fine this run (cold narco reads OK), flagged as a cheap CTR upgrade.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: mexican_cartel (07-06): ThumbBefore (beforeafter archetype) hardcodes the AFTER hero's face to expr='smug' (`expr={face('smug')}`) and ignores meta thumb.expr, so a 'HUNTED'/fear pairing renders a calm neutral stare instead of the worried/shock face that is the #1 CTR lever with no real faces. ThumbPov already reads t.expr correctly. One-line fix: make ThumbBefore's Hero use expr={face(t.expr || '",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "runtime-insensitive-to-word-cuts",
+      "title": "runtime insensitive to word cuts",
+      "priority": 3031,
+      "passes": false,
+      "notes": "mexican_cartel (07-06): cut ~85 words (2725->2643) and runtime only moved 13.8->13.5 min, because per-scene GAP padding (0.25 default + LEAD) plus the deliberate gap=0.7/1.4 dramatic holds dominate a 29-scene episode, not the narration length. LESSON for over-length episodes: the effective runtime levers are (a) drop a whole scene (~27s each) or (b) reduce/relocate a dramatic gap \u2014 shaving words gives diminishing returns (~0.2s per word). Note: 13.5 min still shipped (founder 14.1 min is the top performer, roman 13.1 min shipped), so the ~13 ceiling is soft with cloud render; but if a HALT ever needs real trimming, cut scenes, not words. Could add a build.py readout of 'padding vs speech' seconds so the writer sees where the runtime actually goes.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: mexican_cartel (07-06): cut ~85 words (2725->2643) and runtime only moved 13.8->13.5 min, because per-scene GAP padding (0.25 default + LEAD) plus the deliberate gap=0.7/1.4 dramatic holds dominate a 29-scene episode, not the narration length. LESSON for over-length episodes: the effective runtime levers are (a) drop a whole scene (~27s each) or (b) reduce/relocate a dramatic gap \u2014 shaving words g",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    },
+    {
+      "id": "cartel-pack-validated",
+      "title": "cartel pack validated",
+      "priority": 3032,
+      "passes": false,
+      "notes": "mexican_cartel (07-06) validated the CARTEL/narco pack already in src/stage.tsx (lookoutCorner/sierraRoute/narcoShrineRite/plazaTown/ranchCompound + backdrops borderDesert/sierraCamp/narcoShrine/townPlaza/narcoRanch + prop narcoTruck) composed with MAFIA reuse (backAlley/waterfront/cardGame/donOffice/countRoom/courtroom/prisonCell/wiretap) + universal (dinner/warRoom/jet/window/emptyChair). Covered the full halc\u00f3n->burrero->sicario->plaza->lieutenant->patr\u00f3n->la red->la demanda ladder across 29 scenes with NO adjacent repeats; ranchCompound deliberately reused 4x as the master-loop anchor (t00 aftermath / t10 finca / t18 fortress / t24 raid). Reusable for bratva/yakuza (backAlley/countRoom/prisonCell/wiretap), any smuggling/turf-tax crime ladder. Pairs with [[mafia-pack]] + [[spy-pack-validated]]. NOTE: content.py + research + the pack were pre-written in an interrupted 07-04 run (git e00721b) and superseded by special_forces; this run refined that content (planted the Licenciado at t16 per [[named-character-plant-gate]]) and shipped it.",
+      "acceptanceCriteria": [
+        "The improvement described in notes is implemented: mexican_cartel (07-06) validated the CARTEL/narco pack already in src/stage.tsx (lookoutCorner/sierraRoute/narcoShrineRite/plazaTown/ranchCompound + backdrops borderDesert/sierraCamp/narcoShrine/townPlaza/narcoRanch + prop narcoTruck) composed with MAFIA reuse (backAlley/waterfront/cardGame/donOffice/countRoom/courtroom/prisonCell/wiretap) + universal (dinner/warRoom/jet/window/emptyChair). Covere",
+        "`python3 build.py` exits 0 (quality gate + 1-frame smoke render still pass).",
+        "`git diff --name-only` touches nothing under secrets/ and no publish path (scripts/yt_upload.py, ops/produced_topics.json, runs/last_post.txt)."
+      ]
+    }
+  ]
+}

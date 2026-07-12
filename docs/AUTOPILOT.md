@@ -36,3 +36,21 @@ next build (improvements.json: "scene-template-registry").
 
 ## Off switch
 launchctl unload …  OR set ops/routine.json enabled:false (every run then stops at approval).
+
+## Daytime improvement loop (Ralph)
+
+A midday loop works through `ops/improvements.json` autonomously, improving the pipeline
+between nightly video runs. Pieces:
+- `scripts/improvements_to_prd.py` — regenerates `ralph/prd.json` from the backlog (idempotent).
+- `scripts/improve_loop.sh` — holds the shared video lock, then runs a bounded `RALPH_YOLO=1`
+  pass (cap 4) via `~/ralph/ralph.sh`. Each story must pass `python3 build.py` before commit;
+  hard fences forbid publishing/secrets (see the prd `rules`).
+- `ops/com.corelifecycle.improve.plist` — fires it at 12:30 PM.
+
+**Enable it (one-time, user runs this):**
+```
+cp ops/com.corelifecycle.improve.plist ~/Library/LaunchAgents/
+launchctl load ~/Library/LaunchAgents/com.corelifecycle.improve.plist
+```
+**Run once by hand:** `scripts/improve_loop.sh`
+**Pause a pass:** `touch ralph/STOP` (remove it to resume).
