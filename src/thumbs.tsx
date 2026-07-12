@@ -87,6 +87,8 @@ const Defs: React.FC = () => (
       <feDropShadow dx="0" dy="5" stdDeviation="4" floodColor="#000" floodOpacity="0.85" />
     </filter>
     <filter id="rough" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="2" seed="4" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="3" /></filter>
+    {/* soft bloom for the cinematic backlight glow behind the hero */}
+    <filter id="softblur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="70" /></filter>
   </defs>
 );
 
@@ -101,12 +103,16 @@ const Sunburst: React.FC<{cx?: number; cy?: number; n?: number}> = ({cx = 850, c
   return <g>{wedges}</g>;
 };
 
-// bright energy background: saturated radial + sunburst + spotlight + dark vignette
-const EnergyBG: React.FC<{burstX?: number; sun?: boolean}> = ({burstX = 850, sun = true}) => (
+// CINEMATIC background: a dark mood-tinted field with a soft backlight bloom behind the hero
+// (no saturated color burst, no sunbeams). The hero (rim-lit via heroPop) + text carry the color;
+// the background stays premium/dark. `sun` kept for signature compat but ignored.
+const EnergyBG: React.FC<{burstX?: number; sun?: boolean}> = ({burstX = 850}) => (
   <>
-    <rect x={0} y={0} width={1280} height={720} fill="url(#bggrad)" />
-    {sun && <Sunburst cx={burstX} cy={310} />}
-    <rect x={0} y={0} width={1280} height={720} fill="url(#spot)" />
+    <rect x={0} y={0} width={1280} height={720} fill={M.rim} />
+    <rect x={0} y={0} width={1280} height={720} fill="#000" opacity={0.38} />
+    {/* soft backlight bloom behind the subject — the only place mood color lives in the bg */}
+    <ellipse cx={burstX} cy={360} rx={560} ry={470} fill={M.core} opacity={0.20} filter="url(#softblur)" />
+    <ellipse cx={burstX} cy={330} rx={310} ry={270} fill={M.core} opacity={0.16} filter="url(#softblur)" />
     <rect x={0} y={0} width={1280} height={720} fill="url(#vig)" />
   </>
 );
@@ -256,7 +262,6 @@ const ThumbScaleTerror: React.FC = () => {
   const capFs = Math.min(56, Math.floor(1120 / Math.max(cap.length, 1)));   // caption fits above the pill on one line
   return (
     <Wrap burstX={940} sun={false}>
-      <Sunburst cx={940} cy={300} n={30} />
       <g opacity={0.92} filter="url(#heroPop)"><circle cx={940} cy={300} r={260} fill={INK} /><path d="M 690 560 Q 940 470 1190 560 L 1260 1090 L 620 1090 Z" fill={INK} /></g>
       <Hero x={300} y={706} scale={1.7} facing={1} expr={face('hollow')} pose={A.lookUp(0)} />
       <Punch x={70} y={120} fs={capFs}>{cap}</Punch>
@@ -306,8 +311,7 @@ const ThumbLadder: React.FC = () => {
 // BEFORE/AFTER — dim "nobody" vs blazing apex
 const ThumbBefore: React.FC = () => (
   <Wrap burstX={968} sun={false}>
-    <Sunburst cx={968} cy={310} />
-    <line x1={640} y1={150} x2={640} y2={720} stroke="#000" strokeWidth={8} opacity={0.5} />
+    <line x1={640} y1={150} x2={640} y2={720} stroke="#fff" strokeWidth={6} opacity={0.25} />
     <g opacity={0.5}><StickFigure pose={A.stand(0)} x={320} y={716} scale={2.8} facing={1} view="front" expr={FACES.earnest} pal={SIL} rough frame={0} /></g>
     <Punch x={320} y={180} fs={Math.min(92, Math.floor(640 / Math.max(BEFORE.length, 1)))} anchor="middle" fill="#cfcfcf">{BEFORE}</Punch>
     <Hero x={968} y={716} scale={3.0} facing={-1} expr={face('smug')} />
