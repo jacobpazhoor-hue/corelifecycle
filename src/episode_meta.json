@@ -1,19 +1,19 @@
 {
   "thumb": {
-    "kicker": "EVERY LEVEL OF A",
-    "line1": "HITMAN",
+    "kicker": "EVERY RANK OF A",
+    "line1": "BUSHI",
     "line2": "",
-    "tag": "$2M",
-    "archetype": "pov",
-    "big": "$2M",
-    "before": "BROKE",
-    "after": "MARKED",
-    "expr": "shock",
-    "povline": "YOU CAN'T",
-    "keyword": "LEAVE",
-    "setting": "backAlley",
-    "question": "WHO HOLDS YOUR CONTRACT?",
-    "mood": "danger"
+    "tag": "1,000,000 KOKU",
+    "archetype": "redacted",
+    "big": "1,000,000",
+    "before": "PEASANT",
+    "after": "OUTLAWED",
+    "expr": "hollow",
+    "povline": "YOU OBEY OR",
+    "keyword": "SEPPUKU",
+    "setting": "seppukuRite",
+    "question": "WHO OWNS THE SWORD?",
+    "mood": "history"
   },
-  "topic": "hitman"
+  "topic": "samurai"
 }

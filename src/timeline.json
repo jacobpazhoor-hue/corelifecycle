@@ -2,358 +2,331 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 20897,
+  "totalFrames": 22831,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t00",
       "level": null,
       "overlay": null,
-      "template": "backAlley",
+      "template": "sengokuField",
       "audio": "audio/t00.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 589
+      "durationInFrames": 681
     },
     {
       "id": "t01",
-      "level": null,
-      "overlay": null,
-      "template": "deskSilhouette",
+      "level": "LEVEL 01  \u00b7  THE ASHIGARU",
+      "overlay": {
+        "big": "0 KOKU",
+        "sub": "A BORROWED SPEAR \u00b7 TWO RICE BALLS A DAY"
+      },
+      "template": "riceField",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
-      "startFrame": 589,
-      "durationInFrames": 388
+      "startFrame": 681,
+      "durationInFrames": 682
     },
     {
       "id": "t02",
-      "level": "LEVEL 01  \u00b7  THE DEBT",
-      "overlay": {
-        "big": "$0",
-        "sub": "YOU OWE $18,000 \u00b7 TO MEN WHO DON'T FORGET"
-      },
-      "template": "streetCorner",
+      "level": null,
+      "overlay": null,
+      "template": "castleGate",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 977,
-      "durationInFrames": 593
+      "startFrame": 1363,
+      "durationInFrames": 708
     },
     {
       "id": "t03",
       "level": null,
       "overlay": null,
-      "template": "backAlley",
+      "template": "sengokuField",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 1570,
-      "durationInFrames": 588
+      "startFrame": 2071,
+      "durationInFrames": 782
     },
     {
       "id": "t04",
-      "level": null,
-      "overlay": null,
-      "template": "tradecraft",
+      "level": "LEVEL 02  \u00b7  THE SAMURAI",
+      "overlay": {
+        "big": "30 KOKU",
+        "sub": "THE TWO SWORDS \u00b7 THE LINE YOU WERE BORN BELOW"
+      },
+      "template": "daisho",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 2158,
-      "durationInFrames": 728
+      "startFrame": 2853,
+      "durationInFrames": 714
     },
     {
       "id": "t05",
-      "level": "LEVEL 02  \u00b7  THE FIRST NAME",
-      "overlay": {
-        "big": "$5,000",
-        "sub": "THE FIRST ONE NEVER LEAVES YOU"
-      },
-      "template": "safehouse",
+      "level": null,
+      "overlay": null,
+      "template": "dojo",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 2886,
-      "durationInFrames": 643
+      "startFrame": 3567,
+      "durationInFrames": 673
     },
     {
       "id": "t06",
       "level": null,
       "overlay": null,
-      "template": "waterfront",
+      "template": "teaCeremony",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 3529,
-      "durationInFrames": 634
+      "startFrame": 4240,
+      "durationInFrames": 676
     },
     {
       "id": "t07",
-      "level": null,
-      "overlay": null,
-      "template": "countRoom",
+      "level": "LEVEL 03  \u00b7  THE MOUNTED RETAINER",
+      "overlay": {
+        "big": "500 KOKU",
+        "sub": "A HORSE \u00b7 MEN WHO DIE WHEN YOU POINT"
+      },
+      "template": "lordAudience",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 4163,
-      "durationInFrames": 646
+      "startFrame": 4916,
+      "durationInFrames": 685
     },
     {
       "id": "t08",
-      "level": "LEVEL 03  \u00b7  THE JOURNEYMAN",
-      "overlay": {
-        "big": "$25,000",
-        "sub": "THE GOING RATE \u00b7 ABOUT THE PRICE OF A USED CAR"
-      },
-      "template": "surveillance",
-      "audio": "audio/t08.wav",
-      "audioStartFrame": 3,
-      "startFrame": 4809,
-      "durationInFrames": 581
-    },
-    {
-      "id": "t08b",
       "level": null,
       "overlay": null,
-      "template": "socialClub",
-      "audio": "audio/t08b.wav",
+      "template": "sengokuField",
+      "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 5390,
-      "durationInFrames": 693
+      "startFrame": 5601,
+      "durationInFrames": 762
     },
     {
       "id": "t09",
       "level": null,
       "overlay": null,
-      "template": "redSauce",
+      "template": "warCouncil",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 6083,
-      "durationInFrames": 597
+      "startFrame": 6363,
+      "durationInFrames": 728
     },
     {
       "id": "t10",
       "level": null,
       "overlay": null,
-      "template": "wiretap",
+      "template": "castleGate",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 6680,
-      "durationInFrames": 625
+      "startFrame": 7091,
+      "durationInFrames": 699
     },
     {
       "id": "t11",
-      "level": null,
-      "overlay": null,
-      "template": "debrief",
+      "level": "LEVEL 04  \u00b7  THE KARO",
+      "overlay": {
+        "big": "3,000 KOKU",
+        "sub": "A CASTLE TO RUN \u00b7 THE LORD'S RIGHT HAND"
+      },
+      "template": "keepTop",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 7305,
-      "durationInFrames": 651
+      "startFrame": 7790,
+      "durationInFrames": 689
     },
     {
       "id": "t12",
-      "level": "LEVEL 04  \u00b7  THE CLEANER",
-      "overlay": {
-        "big": "$60,000",
-        "sub": "NO WITNESSES \u00b7 NO TRACES \u00b7 NO QUESTIONS"
-      },
-      "template": "deadDrop",
+      "level": null,
+      "overlay": null,
+      "template": "teaCeremony",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 7956,
-      "durationInFrames": 607
+      "startFrame": 8479,
+      "durationInFrames": 730
     },
     {
       "id": "t13",
       "level": null,
       "overlay": null,
-      "template": "fileWall",
+      "template": "dojo",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 8563,
-      "durationInFrames": 629
+      "startFrame": 9209,
+      "durationInFrames": 901
     },
     {
       "id": "t14",
-      "level": "LEVEL 05  \u00b7  THE SPECIALIST",
+      "level": null,
       "overlay": {
-        "big": "$250,000",
-        "sub": "THE FEE FOR A NAME YOU DON'T KNOW YET"
+        "big": "ONE HEAD",
+        "sub": "HIS \u00b7 BY YOUR HAND \u00b7 ON ORDER"
       },
-      "template": "window",
+      "template": "seppukuRite",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 9192,
-      "durationInFrames": 635
+      "startFrame": 10110,
+      "durationInFrames": 959
     },
     {
       "id": "t15",
       "level": null,
       "overlay": null,
-      "template": "deskClose",
+      "template": "lordAudience",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 9827,
-      "durationInFrames": 638
+      "startFrame": 11069,
+      "durationInFrames": 739
     },
     {
       "id": "t16",
-      "level": null,
-      "overlay": null,
-      "template": "tradecraft",
+      "level": "LEVEL 05  \u00b7  THE DAIMYO",
+      "overlay": {
+        "big": "10,000 KOKU",
+        "sub": "THE LINE CROSSED \u00b7 YOU ARE A LORD NOW"
+      },
+      "template": "castleGate",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 10465,
-      "durationInFrames": 855
+      "startFrame": 11808,
+      "durationInFrames": 743
     },
     {
       "id": "t17",
       "level": null,
-      "overlay": {
-        "big": "$250,000",
-        "sub": "PAID IN FULL \u00b7 THE ONE DEBT THAT DOESN'T CLEAR"
-      },
-      "template": "emptyChair",
+      "overlay": null,
+      "template": "keepTop",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 11320,
-      "durationInFrames": 670
+      "startFrame": 12551,
+      "durationInFrames": 829
     },
     {
       "id": "t18",
-      "level": "LEVEL 06  \u00b7  THE GHOST",
-      "overlay": {
-        "big": "$1,000,000",
-        "sub": "ONE NAME \u00b7 A PASSPORT YOU DIDN'T HAVE LAST YEAR"
-      },
-      "template": "jet",
+      "level": null,
+      "overlay": null,
+      "template": "shogunCourt",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 11990,
-      "durationInFrames": 739
+      "startFrame": 13380,
+      "durationInFrames": 748
     },
     {
       "id": "t19",
-      "level": null,
-      "overlay": null,
-      "template": "donOffice",
+      "level": "LEVEL 06  \u00b7  THE GREAT LORD",
+      "overlay": {
+        "big": "1,000,000 KOKU",
+        "sub": "KAGA-SCALE \u00b7 5 IN 100 RULE THE REST"
+      },
+      "template": "keepTop",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 12729,
-      "durationInFrames": 715
+      "startFrame": 14128,
+      "durationInFrames": 815
     },
     {
       "id": "t20",
       "level": null,
       "overlay": null,
-      "template": "tower",
+      "template": "lordAudience",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 13444,
-      "durationInFrames": 660
-    },
-    {
-      "id": "t20b",
-      "level": null,
-      "overlay": null,
-      "template": "prisonCell",
-      "audio": "audio/t20b.wav",
-      "audioStartFrame": 3,
-      "startFrame": 14104,
-      "durationInFrames": 684
+      "startFrame": 14943,
+      "durationInFrames": 716
     },
     {
       "id": "t21",
-      "level": "LEVEL 07  \u00b7  THE HANDLER",
-      "overlay": {
-        "big": "12%",
-        "sub": "YOUR CUT OF EVERY NAME YOU HAND OUT NOW"
-      },
-      "template": "commission",
+      "level": null,
+      "overlay": null,
+      "template": "castleGate",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 14788,
-      "durationInFrames": 613
+      "startFrame": 15659,
+      "durationInFrames": 824
     },
     {
       "id": "t22",
       "level": null,
       "overlay": null,
-      "template": "cardGame",
+      "template": "merchantHouse",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 15401,
-      "durationInFrames": 654
+      "startFrame": 16483,
+      "durationInFrames": 674
     },
     {
       "id": "t23",
-      "level": null,
-      "overlay": null,
-      "template": "signing",
+      "level": "LEVEL 07  \u00b7  THE SHOGUN'S JAPAN",
+      "overlay": {
+        "big": "30,000,000 KOKU",
+        "sub": "ALL OF JAPAN'S RICE \u00b7 MOVED ON ONE WORD"
+      },
+      "template": "shogunCourt",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 16055,
-      "durationInFrames": 607
+      "startFrame": 17157,
+      "durationInFrames": 826
     },
     {
       "id": "t24",
-      "level": "LEVEL 08  \u00b7  THE OPEN CONTRACT",
+      "level": null,
       "overlay": {
-        "big": "THE BOOK",
-        "sub": "EVERY NAME EVER RUN THROUGH THIS LIFE"
+        "big": "THE RICE PRICE",
+        "sub": "SET IN OSAKA \u00b7 BY MEN WITH NO SWORDS"
       },
-      "template": "mobTable",
+      "template": "merchantHouse",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 16662,
-      "durationInFrames": 765
+      "startFrame": 17983,
+      "durationInFrames": 1051
     },
     {
       "id": "t25",
-      "level": null,
-      "overlay": null,
-      "template": "backAlley",
+      "level": "LEVEL 08  \u00b7  THE END OF THE SWORD",
+      "overlay": {
+        "big": "BONDS",
+        "sub": "THREE CENTURIES \u00b7 COMMUTED TO PAPER"
+      },
+      "template": "signing",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 17427,
-      "durationInFrames": 691
+      "startFrame": 19034,
+      "durationInFrames": 893
     },
     {
       "id": "t26",
       "level": null,
       "overlay": {
-        "big": "$2,000,000",
-        "sub": "THE PRICE ON YOUR OWN NAME"
+        "big": "0 KOKU",
+        "sub": "BY LAW \u00b7 THE SWORD IS WORTH NOTHING"
       },
-      "template": "warRoom",
+      "template": "merchantHouse",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 18118,
-      "durationInFrames": 617
+      "startFrame": 19927,
+      "durationInFrames": 1095
     },
     {
       "id": "t27",
       "level": null,
       "overlay": null,
-      "template": "redSauceAlone",
+      "template": "sengokuField",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 18735,
-      "durationInFrames": 696
+      "startFrame": 21022,
+      "durationInFrames": 887
     },
     {
       "id": "t28",
       "level": null,
       "overlay": null,
-      "template": "lobby",
+      "template": "riceField",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 19431,
-      "durationInFrames": 696
-    },
-    {
-      "id": "t29",
-      "level": null,
-      "overlay": null,
-      "template": "streetCorner",
-      "audio": "audio/t29.wav",
-      "audioStartFrame": 3,
-      "startFrame": 20127,
-      "durationInFrames": 770
+      "startFrame": 21909,
+      "durationInFrames": 922
     }
   ]
 }

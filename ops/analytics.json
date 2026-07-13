@@ -1,8 +1,8 @@
 {
-  "updated": "2026-07-12T08:01:29.709209+00:00",
+  "updated": "2026-07-13T08:00:10.990963+00:00",
   "channel": {
-    "videos": 26,
-    "views": 879,
+    "videos": 29,
+    "views": 912,
     "subscribers": 4
   },
   "videos": [
@@ -41,30 +41,30 @@
       "topic": "special_forces",
       "title": "Your Life as Every Rank in Special Forces (Most Die at Selection)",
       "published": "2026-07-05T15:19:13Z",
-      "views": 38,
+      "views": 43,
       "likes": 0,
       "comments": 0,
       "duration": "PT12M8S"
-    },
-    {
-      "id": "PqRq-2Rmbbo",
-      "topic": "hedge_fund_manager",
-      "title": "Every Level of a Hedge Fund Manager \u2014 From Analyst to Billionaire",
-      "published": "2026-06-24T20:32:02Z",
-      "views": 37,
-      "likes": 1,
-      "comments": 0,
-      "duration": "PT13M3S"
     },
     {
       "id": "MiXTy6PUdDk",
       "topic": null,
       "title": "Your Life as Every Rank in Special Forces (You Don't Exist)",
       "published": "2026-07-05T20:01:33Z",
-      "views": 36,
+      "views": 39,
       "likes": 0,
       "comments": 0,
       "duration": "PT12M10S"
+    },
+    {
+      "id": "PqRq-2Rmbbo",
+      "topic": "hedge_fund_manager",
+      "title": "Every Level of a Hedge Fund Manager \u2014 From Analyst to Billionaire",
+      "published": "2026-06-24T20:32:02Z",
+      "views": 38,
+      "likes": 1,
+      "comments": 0,
+      "duration": "PT13M3S"
     },
     {
       "id": "4Qu5gDLhBzA",
@@ -117,6 +117,16 @@
       "duration": "PT12M26S"
     },
     {
+      "id": "VwPd_5wWjGM",
+      "topic": "mexican_cartel",
+      "title": "Your Life in a Cartel at Every Rank (No Way Out)",
+      "published": "2026-07-06T19:57:12Z",
+      "views": 15,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT13M28S"
+    },
+    {
       "id": "zCsRuMNJn0g",
       "topic": "roman_empire",
       "title": "Your Life as Every Rank in the Roman Empire (You Die at the Top)",
@@ -127,16 +137,6 @@
       "duration": "PT13M5S"
     },
     {
-      "id": "VwPd_5wWjGM",
-      "topic": "mexican_cartel",
-      "title": "Your Life in a Cartel at Every Rank (No Way Out)",
-      "published": "2026-07-06T19:57:12Z",
-      "views": 14,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT13M28S"
-    },
-    {
       "id": "AWmf0DwSC-g",
       "topic": null,
       "title": "Every Level of a Surgeon \ud83d\udcb0 #shorts",
@@ -145,6 +145,26 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT53S"
+    },
+    {
+      "id": "0-Nj-ql3FwQ",
+      "topic": null,
+      "title": "POV: You're the World's First Trillionaire \ud83d\udcb0 #shorts",
+      "published": "2026-07-12T15:45:41Z",
+      "views": 6,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT57S"
+    },
+    {
+      "id": "I9R57ipHorc",
+      "topic": null,
+      "title": "Every Level of a Hitman \ud83d\udcb0 #shorts",
+      "published": "2026-07-12T09:56:47Z",
+      "views": 6,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT41S"
     },
     {
       "id": "uRCF7Sn22Ns",
@@ -177,6 +197,16 @@
       "duration": "PT53S"
     },
     {
+      "id": "ATr0UYrijBY",
+      "topic": null,
+      "title": "Could You Survive 54 Days Lost at Sea? \ud83c\udf0a #shorts",
+      "published": "2026-07-12T15:42:17Z",
+      "views": 3,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT59S"
+    },
+    {
       "id": "ilBfri70z-U",
       "topic": null,
       "title": "Every Level of a Spy Master \ud83d\udcb0 #shorts",
@@ -195,6 +225,16 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT10M8S"
+    },
+    {
+      "id": "WB_Bl9gHCJE",
+      "topic": "hitman",
+      "title": "Your Life as a Hitman at Every Level (You Don't Retire)",
+      "published": "2026-07-12T09:51:41Z",
+      "views": 1,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT11M37S"
     },
     {
       "id": "2xY-_B5XiNo",

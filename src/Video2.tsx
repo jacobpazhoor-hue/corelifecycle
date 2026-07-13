@@ -1,7 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame, Easing} from 'remotion';
 import timeline from './timeline.json';
-import {FramedScene, FOCUS, CountUp, splitMoney} from './director';
+import {FramedScene, FOCUS, CountUp, splitMoney, isNegativeOverlay} from './director';
 import {shake, noise1, hash} from './anim';
 
 const seedOf = (id: string) => id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
@@ -39,6 +39,8 @@ const FONT = "'Helvetica Neue', Helvetica, Arial, sans-serif";
 const INK = '#2a2620';
 const PAPER = '#f6f2e9';
 const GOLD = '#e8b54b';
+const NEG = '#c0392b';
+const NEG_SUB = '#a33a26';
 
 type Overlay = {big: string; sub: string | null} | null;
 type SceneT = {id: string; level: string | null; overlay: Overlay; template: string;
@@ -105,6 +107,7 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
   // splitMoney keeps the unit suffix ("K / YR", "/ WK") so the count-up shows the
   // FULL label, never a truncated "$250".
   const money = splitMoney(scene.overlay?.big);
+  const negOverlay = scene.overlay ? isNegativeOverlay(scene.overlay.big, scene.overlay.sub) : false;
   const lvlX = interpolate(f, [20, 42], [-36, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
   const lvlOp = interpolate(f, [20, 36, D - 18, D], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
@@ -155,15 +158,17 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
         </div>
       )}
 
-      {/* money: animated count-up if numeric, else static styled text */}
+      {/* money: animated count-up if numeric, else static styled text. COST/loss beats (debt, KIA,
+          burned, sold, murdered...) get a red/amber accent instead of gain-gold so the moral-erosion
+          beats read as losses, not more income. */}
       {scene.overlay && (money !== null
-        ? <CountUp from={from ?? 0} to={money.num} suffix={money.suffix} sub={scene.overlay.sub} dur={D} />
+        ? <CountUp from={from ?? 0} to={money.num} suffix={money.suffix} sub={scene.overlay.sub} dur={D} negative={negOverlay} />
         : (
           <div style={{position: 'absolute', bottom: 96, left: 72, opacity: staticOp, fontFamily: FONT, transform: `translateY(${staticRise}px)`,
             background: 'rgba(246,242,233,0.80)', padding: '18px 24px 20px', borderRadius: 16, boxShadow: '0 6px 30px rgba(20,15,8,0.18)'}}>
             <div style={{display: 'inline-block', color: INK, fontSize: big.length > 12 ? 78 : 112, fontWeight: 800, letterSpacing: -2, lineHeight: 1.05,
-              background: 'linear-gradient(transparent 58%, rgba(232,181,75,0.55) 58%)', padding: '0 8px'}}>{big}</div>
-            {scene.overlay.sub && <div style={{color: '#9a7322', fontSize: 27, fontWeight: 800, letterSpacing: 5, marginTop: 14, textTransform: 'uppercase'}}>{scene.overlay.sub}</div>}
+              background: `linear-gradient(transparent 58%, ${negOverlay ? 'rgba(192,57,43,0.42)' : 'rgba(232,181,75,0.55)'} 58%)`, padding: '0 8px'}}>{big}</div>
+            {scene.overlay.sub && <div style={{color: negOverlay ? NEG_SUB : '#9a7322', fontSize: 27, fontWeight: 800, letterSpacing: 5, marginTop: 14, textTransform: 'uppercase'}}>{scene.overlay.sub}</div>}
           </div>
         ))}
 

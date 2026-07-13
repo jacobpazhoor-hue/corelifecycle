@@ -15,6 +15,22 @@ const FONT = "'Helvetica Neue', Helvetica, Arial, sans-serif";
 const INK = '#2a2620';
 const PAPER = '#f6f2e9';
 const GOLD = '#e8b54b';
+const NEG = '#c0392b';       // red/amber accent for COST/loss overlays (debt, drawdown, KIA, burned, murdered...)
+const NEG_SUB = '#a33a26';
+
+// A recurring pipeline defect (6+ episodes): cost/loss overlays ("-$235K debt", "-1 KIA", "BURNED",
+// "THE FARM IS SOLD", "MURDERED") rendered in the same GOLD as income/gain beats, flattening the
+// moral-erosion contrast the story is built on. Detect a loss/cost beat from its own text so the
+// renderer can switch to a red/amber accent without touching per-episode content.py.
+const NEGATIVE_WORDS = /\b(DEBT|OWE|DRAWDOWN|KIA|BURNED?|MURDERED|KILLED|EVICTIONS?|CLEARED|SOLD|LOSS|LOST|FIRED|LAYOFFS?|BANKRUPT|DEAD|ARRESTED|INDICTED|SEIZED|FROZEN|DEFAULT(?:ED)?|CRASH(?:ED)?|DECIMATION)\b/i;
+export const isNegativeOverlay = (big?: string | null, sub?: string | null): boolean => {
+  const b = (big ?? '').trim();
+  if (!b) return false;
+  if (b.startsWith('-')) return true; // "-$235K", "-1 KIA"
+  const money = splitMoney(b);
+  if (money !== null && money.num < 0) return true; // "$-235,000" form
+  return NEGATIVE_WORDS.test(`${b} ${sub ?? ''}`);
+};
 
 // Per-template FACE focus points (nx,ny in 0-1) for auto close-ups. Only templates with a clearly
 // front-facing, locatable face are listed; others fall back to 'medium' (always safe).
@@ -80,8 +96,8 @@ export const FramedScene: React.FC<{template: string; type: string; focus: [numb
 };
 
 // ---- positioned count-up overlay (sits on the scene shots, lower-left, while framing cuts) ----
-export const CountUp: React.FC<{from: number; to: number; suffix?: string; sub?: string | null; dur: number}> =
-({from, to, suffix = '', sub, dur}) => {
+export const CountUp: React.FC<{from: number; to: number; suffix?: string; sub?: string | null; dur: number; negative?: boolean}> =
+({from, to, suffix = '', sub, dur, negative = false}) => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
   const p = interpolate(f, [16, Math.min(dur - 12, 84)], [0, 1], {
@@ -96,13 +112,15 @@ export const CountUp: React.FC<{from: number; to: number; suffix?: string; sub?:
   // size to the SETTLED full label ("$500M / YR"), so long suffixes never overflow
   const settled = fmt(to, dp) + suffix;
   const fs = settled.length > 12 ? 84 : 128;
+  const accent = negative ? NEG : GOLD;
+  const highlight = negative ? 'rgba(192,57,43,0.42)' : 'rgba(232,181,75,0.55)';
   return (
     <div style={{position: 'absolute', bottom: 96, left: 72, opacity: op, transformOrigin: 'left bottom', transform: `scale(${pop})`, fontFamily: FONT,
       background: 'rgba(246,242,233,0.80)', padding: '20px 26px 22px', borderRadius: 16, boxShadow: '0 6px 30px rgba(20,15,8,0.18)'}}>
-      <div style={{width: barW, height: 7, background: GOLD, marginBottom: 14, borderRadius: 4}} />
+      <div style={{width: barW, height: 7, background: accent, marginBottom: 14, borderRadius: 4}} />
       <div style={{display: 'inline-block', color: INK, fontSize: fs, fontWeight: 800, letterSpacing: -2, lineHeight: 1.05,
-        background: 'linear-gradient(transparent 58%, rgba(232,181,75,0.55) 58%)', padding: '0 8px'}}>{fmt(val, dp)}{suffix}</div>
-      {sub && <div style={{color: '#9a7322', fontSize: 27, fontWeight: 800, letterSpacing: 5, marginTop: 14, textTransform: 'uppercase'}}>{sub}</div>}
+        background: `linear-gradient(transparent 58%, ${highlight} 58%)`, padding: '0 8px'}}>{fmt(val, dp)}{suffix}</div>
+      {sub && <div style={{color: negative ? NEG_SUB : '#9a7322', fontSize: 27, fontWeight: 800, letterSpacing: 5, marginTop: 14, textTransform: 'uppercase'}}>{sub}</div>}
     </div>
   );
 };
