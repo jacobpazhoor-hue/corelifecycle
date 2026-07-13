@@ -120,6 +120,11 @@ render() {  # FREE CLOUD (GitHub Actions) -> Modal -> local. VERIFY by file size
   # Final loudness master to -14 LUFS — SKIP if the cloud already did it (avoids a double AAC encode).
   [ "$CLOUD_OK" = 1 ] || python3 audio_master.py out/episode.mp4 || echo "audio_master failed (non-fatal)"
 }
+package() {  # thumbnail still + upload_kit.json — MUST run before every review so the reviewer judges
+             # the packaging that matches the CURRENT episode on disk, not a stale one from the last run.
+  npx remotion still Thumbnail out/thumbnail.png --timeout=60000
+  python3 gen_packaging.py
+}
 review() { python3 qa_watch.py out/episode.mp4 || python3 qa_sample.py; python3 qa_audio.py || echo "qa_audio failed (non-fatal)"; "$CLAUDE" --print "$(cat docs/REVIEW_PROMPT.txt)"; }
 decision() { python3 -c "import json;print(json.load(open('out/review/verdict.json')).get('decision','reject'))" 2>/dev/null || echo reject; }
 
@@ -150,8 +155,10 @@ if ! python3 build.py; then notify "HALT" "build/gate/smoke failed — not rende
 echo "--- render ---"
 render || { notify "FAIL" "render failed/unverified. See $LOG"; exit 1; }
 
-# 4) REVIEWER (acts as a human creative director) + fix-loop (max 2 revisions)
-echo "--- reviewer ---"
+# 4) PACKAGE (thumbnail still + upload_kit.json) so the reviewer judges packaging that matches
+#    THIS episode, then REVIEWER (acts as a human creative director) + fix-loop (max 2 revisions)
+echo "--- package + reviewer ---"
+package
 review
 DEC=$(decision)
 echo "reviewer decision: $DEC"
@@ -161,6 +168,7 @@ while [ "$DEC" = "revise" ] && [ $tries -lt 2 ]; do
   "$CLAUDE" --print "You are the production team. Read out/review/verdict.json (the reviewer's notes) and apply its 'fixes' PRECISELY. You MAY edit any of: content.py, ops/episode_meta.json, src/scenes.tsx, src/stage.tsx (scene packs / figure positions), src/director.tsx + src/Video2.tsx (shot framing + overlay layout), src/thumbs.tsx (thumbnail). Keep the same topic + doodle style. Apply EVERY actionable fix in the verdict (do not skip a fix because of file scope — the whole src/ is in scope). Then STOP; the runner will rebuild, re-render, and re-review."
   if ! python3 build.py; then notify "HALT" "build failed after revision. See $LOG"; exit 0; fi
   render || { notify "FAIL" "render failed after revision. See $LOG"; exit 1; }
+  package
   review
   DEC=$(decision)
   echo "reviewer decision (pass $((tries + 1))): $DEC"
@@ -173,9 +181,7 @@ if [ "$DEC" != "approve" ]; then
 fi
 echo "reviewer APPROVED ✅"
 
-# 5) PACKAGE + final file gate
-npx remotion still Thumbnail out/thumbnail.png --timeout=60000
-python3 gen_packaging.py
+# 5) FINAL FILE GATE — packaging (thumbnail + upload_kit.json) already matches the approved episode
 python3 gate.py out/episode.mp4 || { notify "HALT" "final gate failed — not publishing. See $LOG"; exit 0; }
 
 # 6) PUBLISH
