@@ -181,6 +181,19 @@ adjacent scenes. Registry lives in src/scenes.tsx `TEMPLATES`; composable packs 
 for a land-memory flashback and `window` for the haunted-survivor loop close on land. New reusable
 foreground props: `raftHull` (the near raft tube, figBehind) and `waveCrest` (in-water foreground swell).)
 
+## Underground medicine pack (black_market_surgeon — off-book cosmetic work / gunshot patch-ups / organ brokering)
+| template | depicts | good for |
+|---|---|---|
+| hotelRoom | figure in a dim shuttered private room, a client seated behind | the pumping party / off-book cosmetic job |
+| basementOR | the operating room re-lit dim/warm instead of clean | the hidden basement OR, off-book gunshot surgery |
+| coldCase | figure over the naked-bulb count room's cash piles, a courier behind | the organ-broker cash handoff |
+| syndicateClinic | the clean operating room again, but a guard now stands in it | the syndicate's owned private clinic, the apex + cold-open loop |
+
+(Composed ENTIRELY from existing MED `operatingRoom`/`operatingTable`, MAFIA `countRoomBg`/`cashPiles`,
+and MAFIA `donStudy` re-lit/re-staged — no new backdrop/prop SVG art. Reuses from MED: `scrubIn`,
+`hospitalRounds`, `scanReview`, `erTrauma`, `consult`. Reuses from MAFIA: `backAlley`, `courtroom`,
+`wiretap`, `donOffice`. Reuses from SPY: `safehouse`.)
+
 ## Adding a new domain pack
 If a topic needs settings none of these cover (e.g. soldier→battlefield, athlete→stadium,
 founder→garage), add backdrop/prop entries + a small template set to src/stage.tsx following the

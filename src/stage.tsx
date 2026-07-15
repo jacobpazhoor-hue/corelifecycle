@@ -2020,4 +2020,31 @@ const OCEAN = {
       fig={{pose: A.lookUp(f), x: 720, y: 880, scale: 1.24, view: 'front', expr: blendExpr(FACES.hollow, FACES.awe, t)}} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN};
+// Underground medicine pack (black_market_surgeon) — composed ENTIRELY from existing backdrops/props
+// re-lit/re-staged (no new SVG art): the legit MED operatingRoom re-lit dim = the hidden basement OR;
+// the MAFIA count room's cash pile = the organ-broker handoff; a private room re-lit = the pumping
+// party; the clean operatingRoom with a guard extra = the syndicate's owned clinic.
+const BLACKMARKET = {
+  // a dim rented room, re-staged as the off-book cosmetic job — reuses donStudy (private, shuttered)
+  hotelRoom: () => {const f = useCurrentFrame();
+    return <Stage backdrop="donStudy" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 760, y: 892, scale: 1.3, view: 'front', expr: FACES.focused}}
+      extras={[{pose: A.sit(f), x: 1280, y: 900, scale: 1.05, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+  // the same operating room, re-lit warm/dim instead of clean — the hidden basement OR, off the books
+  basementOR: () => {const f = useCurrentFrame(); const {fps} = useVideoConfig();
+    return <Stage backdrop="operatingRoom" prop="operatingTable" bg="url(#swarm)" figBehind
+      fig={{pose: A.type_(f, fps), x: 860, y: 888, scale: 1.25, view: 'profile', facing: 1, expr: FACES.hardened}} />;},
+  // the cash-and-cooler handoff — reuses the count room's naked bulb + cash piles, a courier waiting
+  coldCase: () => {const f = useCurrentFrame();
+    return <Stage backdrop="countRoomBg" prop="cashPiles" bg="url(#spaper)" figBehind
+      fig={{pose: A.stand(f), x: 545, y: 892, scale: 1.25, view: 'front', expr: FACES.hollow}}
+      extras={[{pose: A.stand(f + 20), x: 1300, y: 892, scale: 1.15, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+  // the syndicate's clean private clinic — the legit-looking OR again, but a guard stands in it now
+  syndicateClinic: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="operatingRoom" prop="operatingTable" bg="url(#sclean)" figBehind
+      fig={{pose: A.stand(f), x: 860, y: 888, scale: 1.25, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}}
+      extras={[{pose: A.stand(f), x: 1300, y: 860, scale: 1.3, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET};

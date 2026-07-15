@@ -1,19 +1,19 @@
 {
   "thumb": {
-    "kicker": "EVERY RANK OF A",
-    "line1": "BUSHI",
-    "line2": "",
-    "tag": "1,000,000 KOKU",
-    "archetype": "redacted",
-    "big": "1,000,000",
-    "before": "PEASANT",
-    "after": "OUTLAWED",
-    "expr": "hollow",
-    "povline": "YOU OBEY OR",
-    "keyword": "SEPPUKU",
-    "setting": "seppukuRite",
-    "question": "WHO OWNS THE SWORD?",
-    "mood": "history"
+    "kicker": "POV: YOU'RE A",
+    "line1": "BLACK MARKET",
+    "line2": "SURGEON",
+    "tag": "$250,000 A KIDNEY",
+    "archetype": "beforeafter",
+    "big": "$1,000,000",
+    "before": "HEALER",
+    "after": "STOLEN",
+    "expr": "shock",
+    "povline": "YOU SAVE LIVES OR",
+    "keyword": "STOLEN",
+    "setting": "basementOR",
+    "question": "WHO DID YOU SAVE TONIGHT?",
+    "mood": "crime"
   },
-  "topic": "samurai"
+  "topic": "black_market_surgeon"
 }

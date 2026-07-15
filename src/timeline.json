@@ -2,331 +2,372 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 22831,
+  "totalFrames": 22084,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t00",
       "level": null,
       "overlay": null,
-      "template": "sengokuField",
+      "template": "syndicateClinic",
       "audio": "audio/t00.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 681
+      "durationInFrames": 562
     },
     {
       "id": "t01",
-      "level": "LEVEL 01  \u00b7  THE ASHIGARU",
+      "level": "LEVEL 01  \u00b7  $180,000",
       "overlay": {
-        "big": "0 KOKU",
-        "sub": "A BORROWED SPEAR \u00b7 TWO RICE BALLS A DAY"
+        "big": "$180,000",
+        "sub": "A REAL LICENSE \u00b7 A DAUGHTER'S $11,000 SURGERY"
       },
-      "template": "riceField",
+      "template": "operatingRoom",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
-      "startFrame": 681,
-      "durationInFrames": 682
+      "startFrame": 562,
+      "durationInFrames": 755
     },
     {
       "id": "t02",
       "level": null,
       "overlay": null,
-      "template": "castleGate",
+      "template": "podiumScene",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 1363,
-      "durationInFrames": 708
+      "startFrame": 1317,
+      "durationInFrames": 662
     },
     {
       "id": "t03",
       "level": null,
       "overlay": null,
-      "template": "sengokuField",
+      "template": "scrubIn",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 2071,
-      "durationInFrames": 782
+      "startFrame": 1979,
+      "durationInFrames": 681
     },
     {
       "id": "t04",
-      "level": "LEVEL 02  \u00b7  THE SAMURAI",
-      "overlay": {
-        "big": "30 KOKU",
-        "sub": "THE TWO SWORDS \u00b7 THE LINE YOU WERE BORN BELOW"
-      },
-      "template": "daisho",
+      "level": null,
+      "overlay": null,
+      "template": "hospitalRounds",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 2853,
-      "durationInFrames": 714
+      "startFrame": 2660,
+      "durationInFrames": 589
     },
     {
       "id": "t05",
-      "level": null,
-      "overlay": null,
-      "template": "dojo",
+      "level": "LEVEL 02  \u00b7  $0",
+      "overlay": {
+        "big": "$0",
+        "sub": "THE LICENSE, REVOKED \u2014 PERMANENT"
+      },
+      "template": "courtroom",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 3567,
-      "durationInFrames": 673
+      "startFrame": 3249,
+      "durationInFrames": 683
     },
     {
       "id": "t06",
       "level": null,
       "overlay": null,
-      "template": "teaCeremony",
+      "template": "deskSilhouette",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 4240,
-      "durationInFrames": 676
+      "startFrame": 3932,
+      "durationInFrames": 652
     },
     {
       "id": "t07",
-      "level": "LEVEL 03  \u00b7  THE MOUNTED RETAINER",
-      "overlay": {
-        "big": "500 KOKU",
-        "sub": "A HORSE \u00b7 MEN WHO DIE WHEN YOU POINT"
-      },
-      "template": "lordAudience",
+      "level": null,
+      "overlay": null,
+      "template": "fileWall",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 4916,
-      "durationInFrames": 685
+      "startFrame": 4584,
+      "durationInFrames": 640
     },
     {
       "id": "t08",
       "level": null,
       "overlay": null,
-      "template": "sengokuField",
+      "template": "layoffs",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 5601,
-      "durationInFrames": 762
+      "startFrame": 5224,
+      "durationInFrames": 678
     },
     {
       "id": "t09",
-      "level": null,
-      "overlay": null,
-      "template": "warCouncil",
+      "level": "LEVEL 03  \u00b7  $400 A NIGHT",
+      "overlay": {
+        "big": "$400 / NIGHT",
+        "sub": "CASH \u00b7 NO CHART \u00b7 NO NAME"
+      },
+      "template": "backAlley",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 6363,
-      "durationInFrames": 728
+      "startFrame": 5902,
+      "durationInFrames": 844
     },
     {
       "id": "t10",
       "level": null,
       "overlay": null,
-      "template": "castleGate",
+      "template": "basementOR",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 7091,
-      "durationInFrames": 699
+      "startFrame": 6746,
+      "durationInFrames": 650
     },
     {
       "id": "t11",
-      "level": "LEVEL 04  \u00b7  THE KARO",
-      "overlay": {
-        "big": "3,000 KOKU",
-        "sub": "A CASTLE TO RUN \u00b7 THE LORD'S RIGHT HAND"
-      },
-      "template": "keepTop",
+      "level": null,
+      "overlay": null,
+      "template": "consult",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 7790,
-      "durationInFrames": 689
+      "startFrame": 7396,
+      "durationInFrames": 672
     },
     {
       "id": "t12",
-      "level": null,
-      "overlay": null,
-      "template": "teaCeremony",
+      "level": "LEVEL 04  \u00b7  $1,500 A NIGHT",
+      "overlay": {
+        "big": "$1,500 / NIGHT",
+        "sub": "THE REGULARS"
+      },
+      "template": "hotelRoom",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 8479,
-      "durationInFrames": 730
+      "startFrame": 8068,
+      "durationInFrames": 701
     },
     {
       "id": "t13",
       "level": null,
       "overlay": null,
-      "template": "dojo",
+      "template": "countRoom",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 9209,
-      "durationInFrames": 901
+      "startFrame": 8769,
+      "durationInFrames": 579
     },
     {
       "id": "t14",
       "level": null,
-      "overlay": {
-        "big": "ONE HEAD",
-        "sub": "HIS \u00b7 BY YOUR HAND \u00b7 ON ORDER"
-      },
-      "template": "seppukuRite",
+      "overlay": null,
+      "template": "safehouse",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 10110,
-      "durationInFrames": 959
+      "startFrame": 9348,
+      "durationInFrames": 612
     },
     {
       "id": "t15",
       "level": null,
       "overlay": null,
-      "template": "lordAudience",
+      "template": "hospitalRounds",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 11069,
-      "durationInFrames": 739
+      "startFrame": 9960,
+      "durationInFrames": 622
     },
     {
       "id": "t16",
-      "level": "LEVEL 05  \u00b7  THE DAIMYO",
+      "level": "LEVEL 05  \u00b7  $5,000 A MONTH",
       "overlay": {
-        "big": "10,000 KOKU",
-        "sub": "THE LINE CROSSED \u00b7 YOU ARE A LORD NOW"
+        "big": "$5,000 / MONTH",
+        "sub": "ON CALL FOR ONE CREW"
       },
-      "template": "castleGate",
+      "template": "donOffice",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 11808,
-      "durationInFrames": 743
+      "startFrame": 10582,
+      "durationInFrames": 737
     },
     {
       "id": "t17",
       "level": null,
       "overlay": null,
-      "template": "keepTop",
+      "template": "wiretap",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 12551,
-      "durationInFrames": 829
+      "startFrame": 11319,
+      "durationInFrames": 588
     },
     {
       "id": "t18",
-      "level": null,
-      "overlay": null,
-      "template": "shogunCourt",
+      "level": "LEVEL 06  \u00b7  $250,000",
+      "overlay": {
+        "big": "$250,000",
+        "sub": "THE ORGAN BROKER'S OFFER"
+      },
+      "template": "coldCase",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 13380,
-      "durationInFrames": 748
+      "startFrame": 11907,
+      "durationInFrames": 666
     },
     {
       "id": "t19",
-      "level": "LEVEL 06  \u00b7  THE GREAT LORD",
-      "overlay": {
-        "big": "1,000,000 KOKU",
-        "sub": "KAGA-SCALE \u00b7 5 IN 100 RULE THE REST"
-      },
-      "template": "keepTop",
+      "level": null,
+      "overlay": null,
+      "template": "basementOR",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 14128,
-      "durationInFrames": 815
+      "startFrame": 12573,
+      "durationInFrames": 646
     },
     {
       "id": "t20",
       "level": null,
       "overlay": null,
-      "template": "lordAudience",
+      "template": "consult",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 14943,
-      "durationInFrames": 716
+      "startFrame": 13219,
+      "durationInFrames": 524
     },
     {
       "id": "t21",
       "level": null,
       "overlay": null,
-      "template": "castleGate",
+      "template": "backAlley",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 15659,
-      "durationInFrames": 824
+      "startFrame": 13743,
+      "durationInFrames": 665
     },
     {
       "id": "t22",
-      "level": null,
-      "overlay": null,
-      "template": "merchantHouse",
+      "level": "LEVEL 07  \u00b7  $1,000,000 A YEAR",
+      "overlay": {
+        "big": "$1,000,000 / YR",
+        "sub": "THE SYNDICATE'S OWN DOCTOR"
+      },
+      "template": "donOffice",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 16483,
-      "durationInFrames": 674
+      "startFrame": 14408,
+      "durationInFrames": 654
     },
     {
       "id": "t23",
-      "level": "LEVEL 07  \u00b7  THE SHOGUN'S JAPAN",
-      "overlay": {
-        "big": "30,000,000 KOKU",
-        "sub": "ALL OF JAPAN'S RICE \u00b7 MOVED ON ONE WORD"
-      },
-      "template": "shogunCourt",
+      "level": null,
+      "overlay": null,
+      "template": "syndicateClinic",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 17157,
-      "durationInFrames": 826
+      "startFrame": 15062,
+      "durationInFrames": 651
     },
     {
       "id": "t24",
       "level": null,
-      "overlay": {
-        "big": "THE RICE PRICE",
-        "sub": "SET IN OSAKA \u00b7 BY MEN WITH NO SWORDS"
-      },
-      "template": "merchantHouse",
+      "overlay": null,
+      "template": "consult",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 17983,
-      "durationInFrames": 1051
+      "startFrame": 15713,
+      "durationInFrames": 593
     },
     {
       "id": "t25",
-      "level": "LEVEL 08  \u00b7  THE END OF THE SWORD",
-      "overlay": {
-        "big": "BONDS",
-        "sub": "THREE CENTURIES \u00b7 COMMUTED TO PAPER"
-      },
-      "template": "signing",
+      "level": null,
+      "overlay": null,
+      "template": "window",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 19034,
-      "durationInFrames": 893
+      "startFrame": 16306,
+      "durationInFrames": 553
     },
     {
       "id": "t26",
-      "level": null,
+      "level": "LEVEL 08  \u00b7  YOU DON'T GET TO STOP",
       "overlay": {
-        "big": "0 KOKU",
-        "sub": "BY LAW \u00b7 THE SWORD IS WORTH NOTHING"
+        "big": "NO EXIT",
+        "sub": "PROTECTED FROM EVERYTHING EXCEPT THIS"
       },
-      "template": "merchantHouse",
+      "template": "wiretap",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 19927,
-      "durationInFrames": 1095
+      "startFrame": 16859,
+      "durationInFrames": 655
     },
     {
       "id": "t27",
       "level": null,
       "overlay": null,
-      "template": "sengokuField",
+      "template": "coldCase",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 21022,
-      "durationInFrames": 887
+      "startFrame": 17514,
+      "durationInFrames": 630
     },
     {
       "id": "t28",
       "level": null,
       "overlay": null,
-      "template": "riceField",
+      "template": "syndicateClinic",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 21909,
-      "durationInFrames": 922
+      "startFrame": 18144,
+      "durationInFrames": 643
+    },
+    {
+      "id": "t29",
+      "level": null,
+      "overlay": null,
+      "template": "window",
+      "audio": "audio/t29.wav",
+      "audioStartFrame": 3,
+      "startFrame": 18787,
+      "durationInFrames": 530
+    },
+    {
+      "id": "t30",
+      "level": null,
+      "overlay": null,
+      "template": "scrubIn",
+      "audio": "audio/t30.wav",
+      "audioStartFrame": 3,
+      "startFrame": 19317,
+      "durationInFrames": 648
+    },
+    {
+      "id": "t31",
+      "level": null,
+      "overlay": null,
+      "template": "backAlley",
+      "audio": "audio/t31.wav",
+      "audioStartFrame": 3,
+      "startFrame": 19965,
+      "durationInFrames": 690
+    },
+    {
+      "id": "t32",
+      "level": null,
+      "overlay": null,
+      "template": "lobby",
+      "audio": "audio/t32.wav",
+      "audioStartFrame": 3,
+      "startFrame": 20655,
+      "durationInFrames": 641
+    },
+    {
+      "id": "t33",
+      "level": null,
+      "overlay": null,
+      "template": "syndicateClinic",
+      "audio": "audio/t33.wav",
+      "audioStartFrame": 3,
+      "startFrame": 21296,
+      "durationInFrames": 788
     }
   ]
 }
