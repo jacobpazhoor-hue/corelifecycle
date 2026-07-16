@@ -22,6 +22,15 @@ if grep -q '"enabled": *false' ops/routine.json; then echo "disabled — exit"; 
 TODAY=$(date +%F)
 if [ "$(cat runs/last_post.txt 2>/dev/null)" = "$TODAY" ]; then echo "already posted today ($TODAY) — exit"; exit 0; fi
 
+# --- daily build-attempt budget (2026-07-15, token budget): a failed night + 2h catchups can burn
+#     several FULL creative+review attempts in one day. Cap them; FORCE_RUN=1 overrides. ---
+ATT_FILE="runs/autopilot_attempts.json"
+ATT_COUNT="$(python3 -c "import json,os; d=json.load(open('$ATT_FILE')) if os.path.exists('$ATT_FILE') else {}; print(d.get('count',0) if d.get('date')=='$TODAY' else 0)" 2>/dev/null)"
+if [ "${ATT_COUNT:-0}" -ge "${MAX_BUILDS_PER_DAY:-2}" ] && [ "${FORCE_RUN:-0}" != "1" ]; then
+  echo "$ATT_COUNT full attempts already today — budget cap (MAX_BUILDS_PER_DAY=${MAX_BUILDS_PER_DAY:-2}). FORCE_RUN=1 to override."
+  exit 0
+fi
+
 # --- KEEP THE MAC AWAKE for the ENTIRE run (lock wait + creative + render + publish). The
 #     2026-06-23 local render was SIGKILLed at 71% because the Mac SLEPT (no caffeinate) — Sammi
 #     survives on this same battery Mac precisely because it caffeinates. -w $$ ties it to this run. ---
@@ -134,6 +143,8 @@ python3 scripts/yt_analytics.py || echo "analytics refresh failed (non-fatal)"
 
 # 1) CREATIVE — pick topic, research, write content.py + ops/episode_meta.json (per AUTOPILOT_PROMPT)
 echo "--- creative agent ---"
+# Count this as a full build attempt (see budget guard above)
+python3 -c "import json,os; f='runs/autopilot_attempts.json'; d=json.load(open(f)) if os.path.exists(f) else {}; c=d.get('count',0) if d.get('date')=='$TODAY' else 0; json.dump({'date':'$TODAY','count':c+1}, open(f,'w'))" 2>/dev/null || true
 "$CLAUDE" --print "$(cat docs/AUTOPILOT_PROMPT.txt)"
 
 # 1b) GUARD — the creative agent MUST have advanced to a NEW (unproduced) topic. If it failed (e.g.

@@ -1,19 +1,19 @@
 {
   "thumb": {
-    "kicker": "POV: YOU'RE A",
-    "line1": "BLACK MARKET",
-    "line2": "SURGEON",
-    "tag": "$250,000 A KIDNEY",
-    "archetype": "beforeafter",
-    "big": "$1,000,000",
-    "before": "HEALER",
-    "after": "STOLEN",
-    "expr": "shock",
-    "povline": "YOU SAVE LIVES OR",
-    "keyword": "STOLEN",
-    "setting": "basementOR",
-    "question": "WHO DID YOU SAVE TONIGHT?",
-    "mood": "crime"
+    "kicker": "EVERY RANK IN THE",
+    "line1": "REGIME",
+    "line2": "",
+    "tag": "$500M-$1B A YEAR",
+    "archetype": "ladder",
+    "big": "$1,000,000,000",
+    "before": "FARM BOY",
+    "after": "OWNED",
+    "expr": "worried",
+    "povline": "YOU CLIMB THE",
+    "keyword": "NO EXIT",
+    "setting": "borderWire",
+    "question": "WHO WATCHES THE WATCHERS?",
+    "mood": "danger"
   },
-  "topic": "black_market_surgeon"
+  "topic": "north_korea"
 }

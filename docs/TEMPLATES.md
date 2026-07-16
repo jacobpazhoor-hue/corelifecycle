@@ -194,6 +194,22 @@ and MAFIA `donStudy` re-lit/re-staged — no new backdrop/prop SVG art. Reuses f
 `hospitalRounds`, `scanReview`, `erTrauma`, `consult`. Reuses from MAFIA: `backAlley`, `courtroom`,
 `wiretap`, `donOffice`. Reuses from SPY: `safehouse`.)
 
+## North Korea pack (north_korea — citizen through the ranks of the Party to the Family's money)
+| template | depicts | good for |
+|---|---|---|
+| borderWire | figure at a night river checkpoint — a watchtower, a sweeping searchlight, barbed wire in the foreground, the far bank's dim lights just out of reach | the cold open + its loop-close payoff — the one place every rank still can't cross |
+
+(The rest of the ladder composes ENTIRELY from existing packs — no other new SVG art: `riceField`
+(SAMURAI, the collective farm), `lectureHallScene` (GEN, the self-criticism session / party congress
+hall), `station` (SPY, the party recruitment office desk + flag/seal), `fileWall`/`boardroomNotes`/
+`boardroomHead`/`atrium`/`revolvingDoor`/`dinner`/`window`/`signing`/`warRoom`/`emptyChair`/`deskSilhouette`
+(universal), `rentalUnits` (REALESTATE, the Pyongyang apartment block), `commandPost` (MILITARY, party/
+songun command), `prisonCell`/`courtroom`/`wiretap`/`countRoom`/`waterfront` (MAFIA, the camp /
+denunciation hearing / state surveillance / hard-currency counting / Office 39's shipping), `praetorians`
+(ROMAN, the camp's guarded perimeter wall), `shogunCourt` (SAMURAI, the Leader's kneeling audience
+hall), `galaBallroom` (DYNASTY, the inner court's privileged banquets). New reusable foreground prop
+`wireFence` (barbed wire, figBehind).)
+
 ## Adding a new domain pack
 If a topic needs settings none of these cover (e.g. soldier→battlefield, athlete→stadium,
 founder→garage), add backdrop/prop entries + a small template set to src/stage.tsx following the

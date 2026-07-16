@@ -1186,6 +1186,32 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       <path d="M 0 540 L 1920 540 L 1920 720 L 0 640 Z" fill={GOLD} opacity={0.06} />
     </g>
   ),
+  // --- North Korea: the river border at night, a watchtower + a sweeping searchlight, the far
+  // bank's dim lights just out of reach — the cold-open + loop-close master anchor ---
+  riverBorder: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#171b20" />
+      <rect x={0} y={560} width={1920} height={520} fill="#0f1317" />
+      <line x1={0} y1={560} x2={1920} y2={560} stroke="#3a4650" strokeWidth={2} opacity={0.6} />
+      {Array.from({length: 50}).map((_, i) => {const x = rnd(i * 3.7) * 1920; const y = rnd(i * 1.9) * 480; const tw = 0.3 + 0.4 * Math.sin(frame * 0.05 + i); return <circle key={i} cx={x} cy={y} r={1.4} fill={PAPERC} opacity={tw} />;})}
+      {/* the far bank — dim rooftops + lit windows, another country, unreachable */}
+      <rect x={0} y={500} width={1920} height={60} fill="#20262e" opacity={0.7} />
+      {[260, 520, 900, 1300, 1620].map((x, i) => <rect key={i} x={x} y={470 + (i % 2) * 10} width={26} height={40} fill="#3a4650" opacity={0.55} />)}
+      {[300, 560, 940, 1340, 1660].map((x, i) => <circle key={i} cx={x} cy={490} r={4} fill={GOLD} opacity={0.35} />)}
+      {/* the watchtower, near bank, screen-right */}
+      <g transform="translate(1620 0)">
+        <line x1={0} y1={860} x2={0} y2={400} stroke="#0d1013" strokeWidth={10} />
+        <rect x={-70} y={330} width={140} height={90} fill="#0d1013" stroke="#0a0c0e" strokeWidth={3} />
+        <rect x={-40} y={350} width={80} height={40} fill="#3a4650" opacity={0.6} />
+        <path d="M -80 330 L 0 288 L 80 330 Z" fill="#0d1013" />
+      </g>
+      {/* the searchlight, slowly sweeping the river */}
+      {(() => {const ang = -2.4 + Math.sin(frame * 0.012) * 0.5; const len = 1400;
+        const x2 = 1620 + Math.cos(ang) * len; const y2 = 340 + Math.sin(ang) * len;
+        return <polygon points={`1620,340 ${x2 - 70},${y2} ${x2 + 70},${y2}`} fill={GOLD} opacity={0.09} />;})()}
+      <rect x={0} y={840} width={1920} height={240} fill="#232a24" /><line x1={0} y1={840} x2={1920} y2={840} stroke="#0d1013" strokeWidth={5} />
+    </g>
+  ),
   plain: () => <g />,
 };
 // tiny helper so inline math reads cleanly above
@@ -1507,6 +1533,21 @@ const PROP: Record<string, React.FC<{frame: number}>> = {
         {Array.from({length: 8}).map((_, i) => {const x = (rnd(i * 2.3) * 1920 + frame * 0.5) % 1920; return <path key={i} d={`M ${x} ${928 + a} q 20 -12 40 0`} fill="none" stroke={PAPERC} strokeWidth={3} opacity={0.55} />;})}
       </g>
     );},
+  // a barbed-wire fence across the foreground (figBehind → the wire reads IN FRONT of the figure) —
+  // the river border checkpoint, North Korea pack
+  wireFence: ({frame}) => (
+    <g opacity={0.95}>
+      <line x1={0} y1={760} x2={1920} y2={760} stroke="#0d1013" strokeWidth={6} />
+      <line x1={0} y1={820} x2={1920} y2={820} stroke="#0d1013" strokeWidth={6} />
+      {Array.from({length: 9}).map((_, i) => <line key={'p' + i} x1={i * 240} y1={730} x2={i * 240} y2={860} stroke="#0d1013" strokeWidth={10} />)}
+      {Array.from({length: 40}).map((_, i) => {const x = i * 48; return <g key={i}>
+        <line x1={x} y1={745} x2={x + 14} y2={775} stroke="#0d1013" strokeWidth={3} />
+        <line x1={x + 14} y1={745} x2={x} y2={775} stroke="#0d1013" strokeWidth={3} />
+        <line x1={x} y1={805} x2={x + 14} y2={835} stroke="#0d1013" strokeWidth={3} />
+        <line x1={x + 14} y1={805} x2={x} y2={835} stroke="#0d1013" strokeWidth={3} />
+      </g>;})}
+    </g>
+  ),
   none: () => <g />,
 };
 const SANS = "'Helvetica Neue', Helvetica, Arial, sans-serif";
@@ -2047,4 +2088,13 @@ const BLACKMARKET = {
       extras={[{pose: A.stand(f), x: 1300, y: 860, scale: 1.3, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET};
+// North Korea pack (citizen -> party candidate -> cadre -> Pyongyang -> Central Committee ->
+// Politburo -> the court -> the Family's money) — ONE new bespoke template (the river-border
+// checkpoint, the cold-open/loop-close master anchor); everything else composes from existing packs.
+const NORTHKOREA = {
+  borderWire: () => {const f = useCurrentFrame();
+    return <Stage backdrop="riverBorder" prop="wireFence" bg="url(#swarm)" figBehind
+      fig={{pose: A.stand(f), x: 760, y: 900, scale: 1.3, view: 'front', expr: FACES.worried}} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA};

@@ -2,84 +2,84 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 22084,
+  "totalFrames": 22959,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t00",
       "level": null,
       "overlay": null,
-      "template": "syndicateClinic",
+      "template": "borderWire",
       "audio": "audio/t00.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 562
+      "durationInFrames": 798
     },
     {
       "id": "t01",
-      "level": "LEVEL 01  \u00b7  $180,000",
+      "level": "LEVEL 01  \u00b7  THE FARM",
       "overlay": {
-        "big": "$180,000",
-        "sub": "A REAL LICENSE \u00b7 A DAUGHTER'S $11,000 SURGERY"
+        "big": "700G/DAY",
+        "sub": "THE RATION TARGET \u00b7 SOME MONTHS, NONE AT ALL"
       },
-      "template": "operatingRoom",
+      "template": "riceField",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
-      "startFrame": 562,
-      "durationInFrames": 755
+      "startFrame": 798,
+      "durationInFrames": 934
     },
     {
       "id": "t02",
       "level": null,
       "overlay": null,
-      "template": "podiumScene",
+      "template": "deskSilhouette",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 1317,
-      "durationInFrames": 662
+      "startFrame": 1732,
+      "durationInFrames": 741
     },
     {
       "id": "t03",
       "level": null,
       "overlay": null,
-      "template": "scrubIn",
+      "template": "layoffs",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 1979,
-      "durationInFrames": 681
+      "startFrame": 2473,
+      "durationInFrames": 717
     },
     {
       "id": "t04",
       "level": null,
       "overlay": null,
-      "template": "hospitalRounds",
+      "template": "lectureHallScene",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 2660,
-      "durationInFrames": 589
+      "startFrame": 3190,
+      "durationInFrames": 795
     },
     {
       "id": "t05",
-      "level": "LEVEL 02  \u00b7  $0",
+      "level": "LEVEL 02  \u00b7  THE CANDIDATE",
       "overlay": {
-        "big": "$0",
-        "sub": "THE LICENSE, REVOKED \u2014 PERMANENT"
+        "big": "3,000,000",
+        "sub": "PARTY CANDIDATES OF 25,000,000 \u2014 YOU WANT IN"
       },
-      "template": "courtroom",
+      "template": "station",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 3249,
-      "durationInFrames": 683
+      "startFrame": 3985,
+      "durationInFrames": 716
     },
     {
       "id": "t06",
       "level": null,
       "overlay": null,
-      "template": "deskSilhouette",
+      "template": "boardroomNotes",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 3932,
-      "durationInFrames": 652
+      "startFrame": 4701,
+      "durationInFrames": 799
     },
     {
       "id": "t07",
@@ -88,286 +88,272 @@
       "template": "fileWall",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 4584,
-      "durationInFrames": 640
+      "startFrame": 5500,
+      "durationInFrames": 506
     },
     {
       "id": "t08",
       "level": null,
       "overlay": null,
-      "template": "layoffs",
+      "template": "prisonCell",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 5224,
-      "durationInFrames": 678
+      "startFrame": 6006,
+      "durationInFrames": 776
     },
     {
       "id": "t09",
-      "level": "LEVEL 03  \u00b7  $400 A NIGHT",
+      "level": "LEVEL 03  \u00b7  THE CADRE",
       "overlay": {
-        "big": "$400 / NIGHT",
-        "sub": "CASH \u00b7 NO CHART \u00b7 NO NAME"
+        "big": "~$30/MONTH",
+        "sub": "THE OFFICIAL WAGE \u00b7 THE MARKET PAYS THE REST"
       },
-      "template": "backAlley",
+      "template": "boardroomHead",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 5902,
-      "durationInFrames": 844
+      "startFrame": 6782,
+      "durationInFrames": 605
     },
     {
       "id": "t10",
       "level": null,
       "overlay": null,
-      "template": "basementOR",
+      "template": "atrium",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 6746,
-      "durationInFrames": 650
+      "startFrame": 7387,
+      "durationInFrames": 666
     },
     {
       "id": "t11",
       "level": null,
       "overlay": null,
-      "template": "consult",
+      "template": "revolvingDoor",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 7396,
-      "durationInFrames": 672
+      "startFrame": 8053,
+      "durationInFrames": 657
     },
     {
       "id": "t12",
-      "level": "LEVEL 04  \u00b7  $1,500 A NIGHT",
-      "overlay": {
-        "big": "$1,500 / NIGHT",
-        "sub": "THE REGULARS"
-      },
-      "template": "hotelRoom",
+      "level": null,
+      "overlay": null,
+      "template": "dinner",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 8068,
-      "durationInFrames": 701
+      "startFrame": 8710,
+      "durationInFrames": 594
     },
     {
       "id": "t13",
-      "level": null,
-      "overlay": null,
-      "template": "countRoom",
+      "level": "LEVEL 04  \u00b7  PYONGYANG",
+      "overlay": {
+        "big": "TOP 10%",
+        "sub": "ONLY THE LOYAL MAY LIVE HERE"
+      },
+      "template": "rentalUnits",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 8769,
-      "durationInFrames": 579
+      "startFrame": 9304,
+      "durationInFrames": 684
     },
     {
       "id": "t14",
       "level": null,
       "overlay": null,
-      "template": "safehouse",
+      "template": "window",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 9348,
-      "durationInFrames": 612
+      "startFrame": 9988,
+      "durationInFrames": 521
     },
     {
       "id": "t15",
       "level": null,
       "overlay": null,
-      "template": "hospitalRounds",
+      "template": "signing",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 9960,
-      "durationInFrames": 622
+      "startFrame": 10509,
+      "durationInFrames": 651
     },
     {
       "id": "t16",
-      "level": "LEVEL 05  \u00b7  $5,000 A MONTH",
-      "overlay": {
-        "big": "$5,000 / MONTH",
-        "sub": "ON CALL FOR ONE CREW"
-      },
-      "template": "donOffice",
+      "level": null,
+      "overlay": null,
+      "template": "commandPost",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 10582,
-      "durationInFrames": 737
+      "startFrame": 11160,
+      "durationInFrames": 749
     },
     {
       "id": "t17",
-      "level": null,
-      "overlay": null,
-      "template": "wiretap",
+      "level": "LEVEL 05  \u00b7  THE CENTRAL COMMITTEE",
+      "overlay": {
+        "big": "235 SEATS",
+        "sub": "THE CENTRAL COMMITTEE \u2014 ONE OF THEM IS YOURS"
+      },
+      "template": "lectureHallScene",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 11319,
-      "durationInFrames": 588
+      "startFrame": 11909,
+      "durationInFrames": 712
     },
     {
       "id": "t18",
-      "level": "LEVEL 06  \u00b7  $250,000",
-      "overlay": {
-        "big": "$250,000",
-        "sub": "THE ORGAN BROKER'S OFFER"
-      },
-      "template": "coldCase",
+      "level": null,
+      "overlay": null,
+      "template": "fileWall",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 11907,
-      "durationInFrames": 666
+      "startFrame": 12621,
+      "durationInFrames": 733
     },
     {
       "id": "t19",
       "level": null,
       "overlay": null,
-      "template": "basementOR",
+      "template": "dinner",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 12573,
-      "durationInFrames": 646
+      "startFrame": 13354,
+      "durationInFrames": 657
     },
     {
       "id": "t20",
       "level": null,
-      "overlay": null,
-      "template": "consult",
+      "overlay": {
+        "big": "3 GENERATIONS",
+        "sub": "ONE MAN'S FILE. HIS WHOLE FAMILY'S SENTENCE"
+      },
+      "template": "prisonCell",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 13219,
-      "durationInFrames": 524
+      "startFrame": 14011,
+      "durationInFrames": 810
     },
     {
       "id": "t21",
-      "level": null,
-      "overlay": null,
-      "template": "backAlley",
+      "level": "LEVEL 06  \u00b7  THE POLITBURO",
+      "overlay": {
+        "big": "19 + 11",
+        "sub": "FULL MEMBERS \u00b7 ALTERNATES \u2014 THE ROOM YOU'RE IN NOW"
+      },
+      "template": "warRoom",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 13743,
-      "durationInFrames": 665
+      "startFrame": 14821,
+      "durationInFrames": 615
     },
     {
       "id": "t22",
-      "level": "LEVEL 07  \u00b7  $1,000,000 A YEAR",
+      "level": null,
       "overlay": {
-        "big": "$1,000,000 / YR",
-        "sub": "THE SYNDICATE'S OWN DOCTOR"
+        "big": "80,000-120,000",
+        "sub": "HELD IN CAMPS LIKE THIS ONE"
       },
-      "template": "donOffice",
+      "template": "praetorians",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 14408,
-      "durationInFrames": 654
+      "startFrame": 15436,
+      "durationInFrames": 591
     },
     {
       "id": "t23",
       "level": null,
       "overlay": null,
-      "template": "syndicateClinic",
+      "template": "courtroom",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 15062,
-      "durationInFrames": 651
+      "startFrame": 16027,
+      "durationInFrames": 724
     },
     {
       "id": "t24",
       "level": null,
       "overlay": null,
-      "template": "consult",
+      "template": "wiretap",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 15713,
-      "durationInFrames": 593
+      "startFrame": 16751,
+      "durationInFrames": 748
     },
     {
       "id": "t25",
-      "level": null,
-      "overlay": null,
-      "template": "window",
+      "level": "LEVEL 07  \u00b7  THE COURT",
+      "overlay": {
+        "big": "A FEW HUNDRED",
+        "sub": "EVER TRUSTED WITH THIS BADGE, ALIVE, AT ONCE"
+      },
+      "template": "shogunCourt",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 16306,
-      "durationInFrames": 553
+      "startFrame": 17499,
+      "durationInFrames": 633
     },
     {
       "id": "t26",
-      "level": "LEVEL 08  \u00b7  YOU DON'T GET TO STOP",
-      "overlay": {
-        "big": "NO EXIT",
-        "sub": "PROTECTED FROM EVERYTHING EXCEPT THIS"
-      },
-      "template": "wiretap",
+      "level": null,
+      "overlay": null,
+      "template": "galaBallroom",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 16859,
-      "durationInFrames": 655
+      "startFrame": 18132,
+      "durationInFrames": 713
     },
     {
       "id": "t27",
       "level": null,
       "overlay": null,
-      "template": "coldCase",
+      "template": "emptyChair",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 17514,
-      "durationInFrames": 630
+      "startFrame": 18845,
+      "durationInFrames": 791
     },
     {
       "id": "t28",
-      "level": null,
-      "overlay": null,
-      "template": "syndicateClinic",
+      "level": "LEVEL 08  \u00b7  YOU CAN'T LEAVE",
+      "overlay": {
+        "big": "$500M-$1B/YR",
+        "sub": "OFFICE 39'S HARD CURRENCY \u2014 NEVER YOURS"
+      },
+      "template": "countRoom",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 18144,
-      "durationInFrames": 643
+      "startFrame": 19636,
+      "durationInFrames": 661
     },
     {
       "id": "t29",
       "level": null,
       "overlay": null,
-      "template": "window",
+      "template": "waterfront",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 18787,
-      "durationInFrames": 530
+      "startFrame": 20297,
+      "durationInFrames": 745
     },
     {
       "id": "t30",
       "level": null,
       "overlay": null,
-      "template": "scrubIn",
+      "template": "deskSilhouette",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 19317,
-      "durationInFrames": 648
+      "startFrame": 21042,
+      "durationInFrames": 723
     },
     {
       "id": "t31",
       "level": null,
       "overlay": null,
-      "template": "backAlley",
+      "template": "borderWire",
       "audio": "audio/t31.wav",
       "audioStartFrame": 3,
-      "startFrame": 19965,
-      "durationInFrames": 690
-    },
-    {
-      "id": "t32",
-      "level": null,
-      "overlay": null,
-      "template": "lobby",
-      "audio": "audio/t32.wav",
-      "audioStartFrame": 3,
-      "startFrame": 20655,
-      "durationInFrames": 641
-    },
-    {
-      "id": "t33",
-      "level": null,
-      "overlay": null,
-      "template": "syndicateClinic",
-      "audio": "audio/t33.wav",
-      "audioStartFrame": 3,
-      "startFrame": 21296,
-      "durationInFrames": 788
+      "startFrame": 21765,
+      "durationInFrames": 1194
     }
   ]
 }
