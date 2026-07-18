@@ -2,7 +2,7 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 22959,
+  "totalFrames": 22936,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
@@ -142,7 +142,7 @@
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
       "startFrame": 8710,
-      "durationInFrames": 594
+      "durationInFrames": 581
     },
     {
       "id": "t13",
@@ -154,7 +154,7 @@
       "template": "rentalUnits",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 9304,
+      "startFrame": 9291,
       "durationInFrames": 684
     },
     {
@@ -164,7 +164,7 @@
       "template": "window",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 9988,
+      "startFrame": 9975,
       "durationInFrames": 521
     },
     {
@@ -174,7 +174,7 @@
       "template": "signing",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 10509,
+      "startFrame": 10496,
       "durationInFrames": 651
     },
     {
@@ -184,7 +184,7 @@
       "template": "commandPost",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 11160,
+      "startFrame": 11147,
       "durationInFrames": 749
     },
     {
@@ -197,7 +197,7 @@
       "template": "lectureHallScene",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 11909,
+      "startFrame": 11896,
       "durationInFrames": 712
     },
     {
@@ -207,7 +207,7 @@
       "template": "fileWall",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 12621,
+      "startFrame": 12608,
       "durationInFrames": 733
     },
     {
@@ -217,7 +217,7 @@
       "template": "dinner",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 13354,
+      "startFrame": 13341,
       "durationInFrames": 657
     },
     {
@@ -230,7 +230,7 @@
       "template": "prisonCell",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 14011,
+      "startFrame": 13998,
       "durationInFrames": 810
     },
     {
@@ -243,7 +243,7 @@
       "template": "warRoom",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 14821,
+      "startFrame": 14808,
       "durationInFrames": 615
     },
     {
@@ -256,7 +256,7 @@
       "template": "praetorians",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 15436,
+      "startFrame": 15423,
       "durationInFrames": 591
     },
     {
@@ -266,7 +266,7 @@
       "template": "courtroom",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 16027,
+      "startFrame": 16014,
       "durationInFrames": 724
     },
     {
@@ -276,7 +276,7 @@
       "template": "wiretap",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 16751,
+      "startFrame": 16738,
       "durationInFrames": 748
     },
     {
@@ -289,7 +289,7 @@
       "template": "shogunCourt",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 17499,
+      "startFrame": 17486,
       "durationInFrames": 633
     },
     {
@@ -299,7 +299,7 @@
       "template": "galaBallroom",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 18132,
+      "startFrame": 18119,
       "durationInFrames": 713
     },
     {
@@ -309,8 +309,8 @@
       "template": "emptyChair",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 18845,
-      "durationInFrames": 791
+      "startFrame": 18832,
+      "durationInFrames": 781
     },
     {
       "id": "t28",
@@ -322,7 +322,7 @@
       "template": "countRoom",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 19636,
+      "startFrame": 19613,
       "durationInFrames": 661
     },
     {
@@ -332,7 +332,7 @@
       "template": "waterfront",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 20297,
+      "startFrame": 20274,
       "durationInFrames": 745
     },
     {
@@ -342,7 +342,7 @@
       "template": "deskSilhouette",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 21042,
+      "startFrame": 21019,
       "durationInFrames": 723
     },
     {
@@ -352,7 +352,7 @@
       "template": "borderWire",
       "audio": "audio/t31.wav",
       "audioStartFrame": 3,
-      "startFrame": 21765,
+      "startFrame": 21742,
       "durationInFrames": 1194
     }
   ]
