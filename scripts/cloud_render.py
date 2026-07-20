@@ -91,7 +91,17 @@ def main():
     base = f"/repos/{owner}/{repo}"
 
     # 1) commit + push the creative output (source only; .gitignore keeps audio/video/secrets out)
-    git("add", "-A")
+    # Stage ONLY what the cloud render actually consumes. This used to be `git add -A`, which swept
+    # the whole working tree into a commit labelled "<topic> content" and pushed it — so unrelated
+    # in-progress edits (scripts/, prompts, tests) were published under a misleading message, and a
+    # half-finished change sitting on disk at 2AM shipped straight to the render. 2026-07-20.
+    RENDER_INPUTS = ["content.py", "src", "ops/episode_meta.json", "docs/research"]
+    staged = [p for p in RENDER_INPUTS if os.path.exists(os.path.join(ROOT, p))]
+    for p in staged:
+        git("add", "--", p)
+    missing = [p for p in RENDER_INPUTS if p not in staged]
+    if missing:
+        print("cloud_render: WARNING — render inputs missing from disk:", ", ".join(missing))
     git("commit", "-m", f"autopilot: {topic} content for cloud render")  # may be empty -> ignored
     push = git("push", "origin", "HEAD:main")
     if push.returncode != 0 and "Everything up-to-date" not in (push.stderr + push.stdout):
