@@ -13,7 +13,7 @@ import slice from './slice.json';
 // ============================================================================
 const FONT = "'Helvetica Neue', Helvetica, Arial, sans-serif";
 const INK = '#2a2620';
-const PAPER = '#f6f2e9';
+const PAPER = '#ffffff';  // bright base (2026-07-20) — see Video2.tsx
 const GOLD = '#e8b54b';
 const NEG = '#c0392b';       // red/amber accent for COST/loss overlays (debt, drawdown, KIA, burned, murdered...)
 const NEG_SUB = '#a33a26';

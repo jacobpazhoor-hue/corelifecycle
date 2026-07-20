@@ -7,9 +7,11 @@ import {PACK_TEMPLATES} from './stage';
 
 // DOODLE / whiteboard palette — black ink on light paper.
 const INK = '#2a2620';
-const COL = {city: PAPER, cityLit: '#efe2c2', mullc: '#c7bfae', floor: '#ece5d6', warm: '#e8a23a', box: PAPER, boxLine: INK, gold: '#e8b54b', ink: INK, line: '#cfc7b6'};
+// 2026-07-20 BRIGHT PASS: cream/tan -> white + cool neutrals, with the warm accents kept
+// SATURATED (lit windows, gold) so colour reads as deliberate accent against white.
+const COL = {city: '#ffffff', cityLit: '#ffd98a', mullc: '#b9c3cd', floor: '#eef2f6', warm: '#f5a623', box: '#ffffff', boxLine: INK, gold: '#f2b134', ink: INK, line: '#c2ccd6'};
 const rnd = (i: number) => {const x = Math.sin(i * 127.1 + 31.7) * 43758.5453; return x - Math.floor(x);};
-const WIN_COLORS = ['#efe2c2', '#f3ecd8', '#e7dcc0', '#efe2c2']; // soft lit-window fills
+const WIN_COLORS = ['#ffd98a', '#ffe7b4', '#ffcf72', '#ffdf9c']; // soft lit-window fills
 
 const Defs: React.FC = () => (
   <defs>
@@ -17,13 +19,13 @@ const Defs: React.FC = () => (
     <filter id="rough" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="2" seed="4" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="3" /></filter>
     <filter id="paper"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" result="t" /><feColorMatrix in="t" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0" /></filter>
     {/* every "mood" id => a subtle paper tint (stays light, slight warm/cool variation) */}
-    <linearGradient id="night" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#f8f4ea" /><stop offset="1" stopColor="#ece4d3" /></linearGradient>
-    <linearGradient id="teal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#f1f5f1" /><stop offset="1" stopColor="#e2ebe4" /></linearGradient>
-    <linearGradient id="amber" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fbf3e2" /><stop offset="1" stopColor="#f0e4cc" /></linearGradient>
-    <linearGradient id="crimson" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fbf0ec" /><stop offset="1" stopColor="#f1e1da" /></linearGradient>
-    <linearGradient id="indigo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#f4f2f8" /><stop offset="1" stopColor="#e6e2ee" /></linearGradient>
-    <linearGradient id="dusk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fbf2e0" /><stop offset="1" stopColor="#efe1cb" /></linearGradient>
-    <linearGradient id="dayg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#f9f6ed" /><stop offset="1" stopColor="#ece5d6" /></linearGradient>
+    <linearGradient id="night" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#bfe4f7" /><stop offset="1" stopColor="#f2fbff" /></linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#e8fbf4" /><stop offset="1" stopColor="#cdeee2" /></linearGradient>
+    <linearGradient id="amber" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fff7e2" /><stop offset="1" stopColor="#ffeac0" /></linearGradient>
+    <linearGradient id="crimson" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fff0ec" /><stop offset="1" stopColor="#ffdcd2" /></linearGradient>
+    <linearGradient id="indigo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#eeeaff" /><stop offset="1" stopColor="#d9d2f7" /></linearGradient>
+    <linearGradient id="dusk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ffeed2" /><stop offset="1" stopColor="#ffd9e2" /></linearGradient>
+    <linearGradient id="dayg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#cbeaf9" /><stop offset="1" stopColor="#ffffff" /></linearGradient>
     {/* glows => faint warm light spots on paper */}
     <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stopColor="#fff3d6" stopOpacity="0.55" /><stop offset="1" stopColor="#fff3d6" stopOpacity="0" /></radialGradient>
     <radialGradient id="glowGold" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stopColor="#ffe6ab" stopOpacity="0.6" /><stop offset="1" stopColor="#ffe6ab" stopOpacity="0" /></radialGradient>

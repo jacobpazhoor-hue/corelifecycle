@@ -13,19 +13,19 @@ import * as A from './actions';
 // ============================================================================
 const INK = '#2a2620';
 const PAPERC = PAPER;
-const FLOOR = '#ece5d6';
-const LINE = '#cfc7b6';
+const FLOOR = '#eef2f6';   // bright pass 2026-07-20 (was tan #ece5d6)
+const LINE = '#c2ccd6';
 const GOLD = '#e8b54b';
 const rnd = (i: number) => {const x = Math.sin(i * 127.1 + 31.7) * 43758.5453; return x - Math.floor(x);};
 
 const Defs: React.FC = () => (
   <defs>
     <filter id="srough" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="2" seed="4" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="3" /></filter>
-    <linearGradient id="spaper" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#f8f4ea" /><stop offset="1" stopColor="#ece4d3" /></linearGradient>
-    <linearGradient id="sclean" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#f4f7f4" /><stop offset="1" stopColor="#e6efe7" /></linearGradient>
-    <linearGradient id="swarm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fbf3e2" /><stop offset="1" stopColor="#f0e4cc" /></linearGradient>
+    <linearGradient id="spaper" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#bfe4f7" /><stop offset="1" stopColor="#f4fbff" /></linearGradient>
+    <linearGradient id="sclean" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#f2fbff" /><stop offset="1" stopColor="#d8eefb" /></linearGradient>
+    <linearGradient id="swarm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fff7e2" /><stop offset="1" stopColor="#ffeac0" /></linearGradient>
     <radialGradient id="sglow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stopColor="#fff3d6" stopOpacity="0.5" /><stop offset="1" stopColor="#fff3d6" stopOpacity="0" /></radialGradient>
-    <radialGradient id="svig" cx="0.5" cy="0.5" r="0.75"><stop offset="0.6" stopColor="#6b5f48" stopOpacity="0" /><stop offset="1" stopColor="#6b5f48" stopOpacity="0.12" /></radialGradient>
+    <radialGradient id="svig" cx="0.5" cy="0.5" r="0.75"><stop offset="0.6" stopColor="#5b6875" stopOpacity="0" /><stop offset="1" stopColor="#5b6875" stopOpacity="0.05" /></radialGradient>
   </defs>
 );
 

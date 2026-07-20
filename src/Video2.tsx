@@ -37,7 +37,9 @@ function gradeTint(p: number): string {
 // ============================================================================
 const FONT = "'Helvetica Neue', Helvetica, Arial, sans-serif";
 const INK = '#2a2620';
-const PAPER = '#f6f2e9';
+// 2026-07-20: cream -> white. Owner direction is the bright reference look; the cream base plus
+// the heavy grade below is what read as dull/sepia. Figure fills keep their own cream (figure.tsx).
+const PAPER = '#ffffff';
 const GOLD = '#e8b54b';
 const NEG = '#c0392b';
 const NEG_SUB = '#a33a26';
@@ -97,8 +99,8 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
   const occY = 96 + noise1(f * 0.017, seed + 3) * 4;
   // per-level grade derived from levelProgress (CSS only)
   const tint = gradeTint(prog);
-  const tintOp = interpolate(prog, [0, 1], [0.05, 0.16]);
-  const darkOp = interpolate(prog, [0, 1], [0.0, 0.20]);
+  const tintOp = interpolate(prog, [0, 1], [0.03, 0.09]);
+  const darkOp = interpolate(prog, [0, 1], [0.0, 0.05]);
   const grade = `saturate(${(1 + 0.18 * prog).toFixed(3)}) contrast(${(1 + 0.06 * prog).toFixed(3)}) brightness(${(1 - 0.045 * prog).toFixed(3)})`;
   // Only animate a money count-up when the overlay is genuinely a dollar figure
   // (string starts with '$'). Otherwise — command counts ("~150 UNDER YOUR
@@ -137,7 +139,7 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
       {/* FOREGROUND OCCLUDER: a soft out-of-focus shape drifting past a corner (parallax depth cue). */}
       <AbsoluteFill style={{pointerEvents: 'none'}}>
         <div style={{position: 'absolute', left: `${occX}%`, top: `${occY}%`, width: 620, height: 620, transform: 'translate(-50%,-50%)',
-          background: 'radial-gradient(closest-side, rgba(20,15,8,0.20), rgba(20,15,8,0) 72%)', filter: 'blur(2px)'}} />
+          background: 'radial-gradient(closest-side, rgba(20,15,8,0.08), rgba(20,15,8,0) 72%)', filter: 'blur(2px)'}} />
       </AbsoluteFill>
 
       {/* PER-LEVEL MOOD GRADE (CSS only): tint warm->cool->ember->gold + darkening that deepens with
@@ -146,9 +148,9 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
       <AbsoluteFill style={{backgroundColor: 'rgb(20,14,7)', opacity: darkOp, mixBlendMode: 'multiply', pointerEvents: 'none'}} />
       <AbsoluteFill style={{background: 'radial-gradient(58% 48% at 50% 42%, rgba(255,226,170,0.10), rgba(255,226,170,0) 70%)', mixBlendMode: 'screen', pointerEvents: 'none'}} />
 
-      {/* MOODY CINEMATIC vignette over the scene (MasterPOVs is muted + atmospheric, not flat-bright).
-          Sits ABOVE the shots but BELOW the text, so labels/numbers stay crisp. */}
-      <AbsoluteFill style={{boxShadow: 'inset 0 0 320px 24px rgba(22,16,9,0.42)', pointerEvents: 'none'}} />
+      {/* Vignette, now LIGHT. It used to be inset 320px 24px @0.42 for a muted/atmospheric look; that
+          fought the bright direction and greyed every edge. Kept only enough to frame the shot. */}
+      <AbsoluteFill style={{boxShadow: 'inset 0 0 220px 10px rgba(22,16,9,0.13)', pointerEvents: 'none'}} />
       <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(20,15,8,0.16) 0%, rgba(20,15,8,0) 22%, rgba(20,15,8,0) 74%, rgba(20,15,8,0.20) 100%)', pointerEvents: 'none'}} />
 
       {/* level label (persists across the cuts) */}
