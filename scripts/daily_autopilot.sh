@@ -213,7 +213,13 @@ python3 gate.py out/episode.mp4 || { notify "HALT" "final gate failed — not pu
 # 6) PUBLISH
 if grep -q '"autoUpload": *true' ops/routine.json; then
   echo "--- upload ---"
-  if python3 scripts/yt_upload.py --privacy public --force; then
+  # NO --force (2026-07-20): --force bypasses yt_upload's title_live duplicate guard, and that is
+  # how this channel keeps getting twins. A large upload can finish server-side and STILL raise a
+  # client-side TimeoutError while awaiting the response — YouTube has the video, we think we
+  # failed, and the next attempt uploads it again. That produced the duplicate special_forces
+  # (molUoFUlmso / MiXTy6PUdDk) and again the startup_unicorn pair on 2026-07-20.
+  # Without --force the guard sees the existing title and exits 0 instead of publishing a twin.
+  if python3 scripts/yt_upload.py --privacy public; then
     notify "PUBLISHED" "$(python3 -c "import json;print(json.load(open('ops/episode_meta.json'))['title'])" 2>/dev/null)"
     # mark the topic produced ONLY now (on a real publish) so a failed render never orphans it
     python3 -c "
