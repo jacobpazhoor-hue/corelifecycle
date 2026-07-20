@@ -7,23 +7,139 @@
     "survival": "Could You Survive [X]?  — level labels are a countdown ladder: HOUR 1 · DAY 3 · WEEK 2 (question-title CTR machine)."
   },
   "queue": [
-    {"slug": "special_forces", "format": "rank", "title_hint": "Your Life as Every Rank in Special Forces (Most Die at Selection)", "proof": "MasterPOVs #1 video — 674K, 14.7x outlier", "why": "recruit -> operator -> team leader -> the command that spends you; elite + lethal"},
-    {"slug": "mexican_cartel", "format": "rank", "title_hint": "Your Life in a Cartel at Every Rank (No Way Out)", "proof": "The Life Outline 6.1M; Life By Rank + MasterPOVs both ran it", "why": "lookout -> sicario -> plaza boss -> kingpin; cautionary POV, highest views/video in niche"},
-    {"slug": "trillionaire", "format": "scenario", "title_hint": "POV: You're the World's First Trillionaire", "proof": "Hypothetically 2.1M", "why": "escalating wealth fantasy by MILLIONS/BILLIONS, not job ranks; widens topic space"},
-    {"slug": "could_you_survive_ocean", "format": "survival", "title_hint": "Could You Survive Alone in the Middle of the Ocean?", "proof": "Nick Kratka 7.7M; Survive History 334-419K/video", "why": "HOUR 1 -> DAY 3 -> WEEK 2 threat ladder; question-title CTR machine"},
-    {"slug": "hitman", "format": "rank", "title_hint": "Your Life as a Hitman at Every Level (You Don't Retire)", "proof": "MasterPOVs 'Every Level of a Hitman' 73K + proven format", "why": "first contract -> cleaner -> the handler who owns you; cautionary"},
-    {"slug": "samurai", "format": "history", "title_hint": "Your Life as a Samurai at Every Rank (Honor Kills You)", "proof": "Life By Rank 'Every Samurai Rank'", "why": "ashigaru -> samurai -> daimyo -> shogun; history + honor + violence"},
-    {"slug": "black_market_surgeon", "format": "scenario", "title_hint": "What It's Like to Be a Black Market Surgeon", "proof": "Hypothetically 5.3M (their #1)", "why": "escalating cases/nights, moral rot; one-off scenario, not a rank ladder"},
-    {"slug": "north_korea", "format": "rank", "title_hint": "Your Life at Every Rank in North Korea (You Can't Leave)", "proof": "MasterPOVs 'North Korea' 211K", "why": "citizen -> party -> inner circle -> the family above; dread + curiosity"},
-    {"slug": "zombie_apocalypse", "format": "survival", "title_hint": "Could You Survive Day 1 of a Zombie Apocalypse?", "proof": "Hypothetically 'Day 1 of the Zombie Apocalypse' 770K", "why": "HOUR 0 -> DAY 1 -> WEEK 1 -> MONTH 1 threat ladder"},
-    {"slug": "yakuza", "format": "rank", "title_hint": "Your Life in the Yakuza at Every Rank (You Owe a Finger)", "proof": "MasterPOVs catalog; crime-ladder demand", "why": "kobun -> lieutenant -> oyabun -> the syndicate; ritual + cost"},
-    {"slug": "mongol_empire", "format": "history", "title_hint": "Your Life as Every Rank in the Mongol Empire", "proof": "MasterPOVs history outliers (Aztec 53K vs ~10K baseline); Sleepless Historian 702K", "why": "herder -> warrior -> noyan -> khan; the largest land empire, huge scale"},
-    {"slug": "fbi_undercover", "format": "rank", "title_hint": "Your Life as an Undercover Agent at Every Level (You Forget Who You Are)", "proof": "MasterPOVs 'Undercover Agent' 42K + agency-ladder demand", "why": "recruit -> deep cover -> handler -> the bureau that burns you"},
-    {"slug": "lottery_winner", "format": "scenario", "title_hint": "POV: You Win the Lottery (Every Level of the Money)", "proof": "Master POV lottery/wealth top-video cluster", "why": "escalating windfall/decisions; wealth fantasy one-off"},
-    {"slug": "gladiator", "format": "history", "title_hint": "Your Life as a Gladiator at Every Level (Survive to Level 7)", "proof": "Rome + survival-stakes demand (Roman POV outliers)", "why": "novice -> champion -> free man -> the lanista above; survival stakes"},
-    {"slug": "bratva", "format": "rank", "title_hint": "Your Life in the Russian Bratva at Every Rank", "proof": "The Life Outline Russian Bratva 621K", "why": "prospect -> soldier -> avtoritet -> pakhan; prison-code crime ladder"},
-    {"slug": "astronaut", "format": "rank", "title_hint": "Your Life as an Astronaut at Every Level (You Leave Earth)", "proof": "MasterPOVs 'You Leave Earth' astronaut", "why": "candidate -> specialist -> commander -> the agency above; aspirational + danger"},
-    {"slug": "ottoman_empire", "format": "history", "title_hint": "Your Life as Every Rank in the Ottoman Empire", "proof": "MasterPOVs runs Ottoman/empires; history-POV demand", "why": "janissary -> pasha -> vizier -> sultan; harem + power intrigue"},
-    {"slug": "pirate", "format": "rank", "title_hint": "Your Life as a Pirate at Every Rank (The Golden Age Ends Badly)", "proof": "Somali-pirate + golden-age pirate POV demand", "why": "deckhand -> first mate -> captain -> pirate lord; adventure + danger"}
-  ]
+    {
+      "slug": "special_forces",
+      "format": "rank",
+      "title_hint": "Your Life as Every Rank in Special Forces (Most Die at Selection)",
+      "proof": "MasterPOVs #1 video — 674K, 14.7x outlier",
+      "why": "recruit -> operator -> team leader -> the command that spends you; elite + lethal"
+    },
+    {
+      "slug": "mexican_cartel",
+      "format": "rank",
+      "title_hint": "Your Life in a Cartel at Every Rank (No Way Out)",
+      "proof": "The Life Outline 6.1M; Life By Rank + MasterPOVs both ran it",
+      "why": "lookout -> sicario -> plaza boss -> kingpin; cautionary POV, highest views/video in niche"
+    },
+    {
+      "slug": "trillionaire",
+      "format": "scenario",
+      "title_hint": "POV: You're the World's First Trillionaire",
+      "proof": "Hypothetically 2.1M",
+      "why": "escalating wealth fantasy by MILLIONS/BILLIONS, not job ranks; widens topic space"
+    },
+    {
+      "slug": "could_you_survive_ocean",
+      "format": "survival",
+      "title_hint": "Could You Survive Alone in the Middle of the Ocean?",
+      "proof": "Nick Kratka 7.7M; Survive History 334-419K/video",
+      "why": "HOUR 1 -> DAY 3 -> WEEK 2 threat ladder; question-title CTR machine"
+    },
+    {
+      "slug": "hitman",
+      "format": "rank",
+      "title_hint": "Your Life as a Hitman at Every Level (You Don't Retire)",
+      "proof": "MasterPOVs 'Every Level of a Hitman' 73K + proven format",
+      "why": "first contract -> cleaner -> the handler who owns you; cautionary"
+    },
+    {
+      "slug": "samurai",
+      "format": "history",
+      "title_hint": "Your Life as a Samurai at Every Rank (Honor Kills You)",
+      "proof": "Life By Rank 'Every Samurai Rank'",
+      "why": "ashigaru -> samurai -> daimyo -> shogun; history + honor + violence"
+    },
+    {
+      "slug": "black_market_surgeon",
+      "format": "scenario",
+      "title_hint": "What It's Like to Be a Black Market Surgeon",
+      "proof": "Hypothetically 5.3M (their #1)",
+      "why": "escalating cases/nights, moral rot; one-off scenario, not a rank ladder"
+    },
+    {
+      "slug": "north_korea",
+      "format": "rank",
+      "title_hint": "Your Life at Every Rank in North Korea (You Can't Leave)",
+      "proof": "MasterPOVs 'North Korea' 211K",
+      "why": "citizen -> party -> inner circle -> the family above; dread + curiosity"
+    },
+    {
+      "slug": "startup_unicorn",
+      "format": "rank",
+      "title_hint": "Every Level of a Startup — From Garage to $1B Unicorn",
+      "proof": "OUR OWN #1 video: 'Every Level of a Founder — From First Idea to IPO' = 410 views = 41% of ALL channel views (next best: mafia 141). Internal data outranks niche proof.",
+      "why": "garage -> seed -> Series A -> Series C -> unicorn -> IPO. This is the COMPANY's ladder, not the person's, so it does not repeat the produced 'founder' topic. Aspirational + concrete money rungs + a known destination = the exact shape that made founder outperform."
+    },
+    {
+      "slug": "zombie_apocalypse",
+      "format": "survival",
+      "title_hint": "Could You Survive Day 1 of a Zombie Apocalypse?",
+      "proof": "Hypothetically 'Day 1 of the Zombie Apocalypse' 770K",
+      "why": "HOUR 0 -> DAY 1 -> WEEK 1 -> MONTH 1 threat ladder"
+    },
+    {
+      "slug": "yakuza",
+      "format": "rank",
+      "title_hint": "Your Life in the Yakuza at Every Rank (You Owe a Finger)",
+      "proof": "MasterPOVs catalog; crime-ladder demand",
+      "why": "kobun -> lieutenant -> oyabun -> the syndicate; ritual + cost"
+    },
+    {
+      "slug": "mongol_empire",
+      "format": "history",
+      "title_hint": "Your Life as Every Rank in the Mongol Empire",
+      "proof": "MasterPOVs history outliers (Aztec 53K vs ~10K baseline); Sleepless Historian 702K",
+      "why": "herder -> warrior -> noyan -> khan; the largest land empire, huge scale"
+    },
+    {
+      "slug": "fbi_undercover",
+      "format": "rank",
+      "title_hint": "Your Life as an Undercover Agent at Every Level (You Forget Who You Are)",
+      "proof": "MasterPOVs 'Undercover Agent' 42K + agency-ladder demand",
+      "why": "recruit -> deep cover -> handler -> the bureau that burns you"
+    },
+    {
+      "slug": "lottery_winner",
+      "format": "scenario",
+      "title_hint": "POV: You Win the Lottery (Every Level of the Money)",
+      "proof": "Master POV lottery/wealth top-video cluster",
+      "why": "escalating windfall/decisions; wealth fantasy one-off"
+    },
+    {
+      "slug": "gladiator",
+      "format": "history",
+      "title_hint": "Your Life as a Gladiator at Every Level (Survive to Level 7)",
+      "proof": "Rome + survival-stakes demand (Roman POV outliers)",
+      "why": "novice -> champion -> free man -> the lanista above; survival stakes"
+    },
+    {
+      "slug": "bratva",
+      "format": "rank",
+      "title_hint": "Your Life in the Russian Bratva at Every Rank",
+      "proof": "The Life Outline Russian Bratva 621K",
+      "why": "prospect -> soldier -> avtoritet -> pakhan; prison-code crime ladder"
+    },
+    {
+      "slug": "astronaut",
+      "format": "rank",
+      "title_hint": "Your Life as an Astronaut at Every Level (You Leave Earth)",
+      "proof": "MasterPOVs 'You Leave Earth' astronaut",
+      "why": "candidate -> specialist -> commander -> the agency above; aspirational + danger"
+    },
+    {
+      "slug": "ottoman_empire",
+      "format": "history",
+      "title_hint": "Your Life as Every Rank in the Ottoman Empire",
+      "proof": "MasterPOVs runs Ottoman/empires; history-POV demand",
+      "why": "janissary -> pasha -> vizier -> sultan; harem + power intrigue"
+    },
+    {
+      "slug": "pirate",
+      "format": "rank",
+      "title_hint": "Your Life as a Pirate at Every Rank (The Golden Age Ends Badly)",
+      "proof": "Somali-pirate + golden-age pirate POV demand",
+      "why": "deckhand -> first mate -> captain -> pirate lord; adventure + danger"
+    }
+  ],
+  "_learned": "PERFORMANCE DATA 2026-07-19 (ops/analytics.json, 33 videos): the winning axis is BUILDER ASPIRATION, not wealth. founder=410 views (41% of channel). But every PASSIVE/ELITE money topic flopped: trillionaire=0, real_estate_mogul=16, billionaire_heir=19, investment_banker=24, hedge_fund_manager=40. Crime is the #2 lane (mob_boss=141, black_market_surgeon=86). PREFER topics the viewer can imagine BECOMING, with concrete money rungs and a known destination. AVOID inherited/passive wealth and elite-finance job ladders — five tested, all flopped."
 }

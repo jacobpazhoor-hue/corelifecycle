@@ -39,10 +39,25 @@ caffeinate -dimsu -w $$ &
 # --- run lock: never let two runs (nightly + manual) collide on out/episode.mp4 ---
 LOCK="runs/.lock"
 if ! mkdir "$LOCK" 2>/dev/null; then
-  echo "HALT: another autopilot run holds $LOCK (started $(cat $LOCK/started 2>/dev/null)). Exiting."
-  exit 0
+  # --- STALE-STEAL (2026-07-19): this lock used to record only a timestamp, so a run killed
+  #     mid-flight left it wedged FOREVER and every later run exited 0 in silence. That is exactly
+  #     what happened 2026-07-17 20:04 (the run finished the render, died at upload) — the channel
+  #     sat dark 4 days and no alert fired. We now record the holder pid and steal only when the
+  #     holder is provably DEAD, or when it is a legacy pid-less lock older than 3h. A live run is
+  #     never stolen from, no matter how long it has been going. ---
+  _lh="$(cat "$LOCK/holder" 2>/dev/null)"
+  _lage=$(( $(date +%s) - $(stat -f %m "$LOCK" 2>/dev/null || echo 0) ))
+  if { [ -n "$_lh" ] && ! kill -0 "$_lh" 2>/dev/null; } || { [ -z "$_lh" ] && [ "$_lage" -gt 10800 ]; }; then
+    echo "stealing stale $LOCK (holder=${_lh:-none}, age=${_lage}s)"
+    echo "$(date '+%F %H:%M') STALE LOCK stolen (holder=${_lh:-none} age=${_lage}s)" >> runs/autopilot/ALERTS.log
+    rm -rf "$LOCK"; mkdir "$LOCK" 2>/dev/null || { echo "HALT: lost the race for $LOCK. Exiting."; exit 0; }
+  else
+    echo "HALT: another autopilot run holds $LOCK (started $(cat $LOCK/started 2>/dev/null), pid ${_lh:-?}). Exiting."
+    echo "$(date '+%F %H:%M') HALT $LOCK held by LIVE pid ${_lh:-?} (age ${_lage}s)" >> runs/autopilot/ALERTS.log
+    exit 0
+  fi
 fi
-date > "$LOCK/started"
+date > "$LOCK/started"; echo $$ > "$LOCK/holder"
 
 # --- SHARED machine-wide lock (cross-project) ---
 # This 8GB Mac also runs the Sammi the Sloth video autopilot at 2am. Two heavy TTS+render pipelines
@@ -134,7 +149,7 @@ package() {  # thumbnail still + upload_kit.json — MUST run before every revie
   npx remotion still Thumbnail out/thumbnail.png --timeout=60000
   python3 gen_packaging.py
 }
-review() { python3 qa_watch.py out/episode.mp4 || python3 qa_sample.py; python3 qa_audio.py || echo "qa_audio failed (non-fatal)"; "$CLAUDE" --print "$(cat docs/REVIEW_PROMPT.txt)"; }
+review() { python3 qa_watch.py out/episode.mp4 || python3 qa_sample.py; python3 qa_audio.py || echo "qa_audio failed (non-fatal)"; "$CLAUDE" --print --model sonnet "$(cat docs/REVIEW_PROMPT.txt)"; }
 decision() { python3 -c "import json;print(json.load(open('out/review/verdict.json')).get('decision','reject'))" 2>/dev/null || echo reject; }
 
 # 0) ANALYTICS — refresh performance data so the showrunner can learn from what landed
@@ -145,7 +160,7 @@ python3 scripts/yt_analytics.py || echo "analytics refresh failed (non-fatal)"
 echo "--- creative agent ---"
 # Count this as a full build attempt (see budget guard above)
 python3 -c "import json,os; f='runs/autopilot_attempts.json'; d=json.load(open(f)) if os.path.exists(f) else {}; c=d.get('count',0) if d.get('date')=='$TODAY' else 0; json.dump({'date':'$TODAY','count':c+1}, open(f,'w'))" 2>/dev/null || true
-"$CLAUDE" --print "$(cat docs/AUTOPILOT_PROMPT.txt)"
+"$CLAUDE" --print --model sonnet "$(cat docs/AUTOPILOT_PROMPT.txt)"
 
 # 1b) GUARD — the creative agent MUST have advanced to a NEW (unproduced) topic. If it failed (e.g.
 #     the transient claude 401 on 2026-06-24), episode_meta is left on the PREVIOUS topic and we would
@@ -176,7 +191,7 @@ echo "reviewer decision: $DEC"
 tries=0
 while [ "$DEC" = "revise" ] && [ $tries -lt 2 ]; do
   echo "--- reviewer requested revisions (pass $((tries + 1))) ---"
-  "$CLAUDE" --print "You are the production team. Read out/review/verdict.json (the reviewer's notes) and apply its 'fixes' PRECISELY. You MAY edit any of: content.py, ops/episode_meta.json, src/scenes.tsx, src/stage.tsx (scene packs / figure positions), src/director.tsx + src/Video2.tsx (shot framing + overlay layout), src/thumbs.tsx (thumbnail). Keep the same topic + doodle style. Apply EVERY actionable fix in the verdict (do not skip a fix because of file scope — the whole src/ is in scope). Then STOP; the runner will rebuild, re-render, and re-review."
+  "$CLAUDE" --print --model sonnet "You are the production team. Read out/review/verdict.json (the reviewer's notes) and apply its 'fixes' PRECISELY. You MAY edit any of: content.py, ops/episode_meta.json, src/scenes.tsx, src/stage.tsx (scene packs / figure positions), src/director.tsx + src/Video2.tsx (shot framing + overlay layout), src/thumbs.tsx (thumbnail). Keep the same topic + doodle style. Apply EVERY actionable fix in the verdict (do not skip a fix because of file scope — the whole src/ is in scope). Then STOP; the runner will rebuild, re-render, and re-review."
   if ! python3 build.py; then notify "HALT" "build failed after revision. See $LOG"; exit 0; fi
   render || { notify "FAIL" "render failed after revision. See $LOG"; exit 1; }
   package
@@ -212,13 +227,18 @@ if t and t not in [x.get('topic') for x in p['produced']]:
 " || echo "produced_topics update failed (non-fatal)"
     date +%F > runs/last_post.txt
     # 7) SHORT — auto-cut a vertical Short, WATCH + gate + review it, then publish (growth; non-fatal)
+    # Gated on routine.json autoShorts (default OFF since 2026-07-19 — see _autoShorts_note there).
+    # Skipping saves a FULL extra Remotion render + a reviewer agent call on every episode.
+    if ! grep -q '"autoShorts": *true' ops/routine.json; then
+      echo "--- short: SKIPPED (autoShorts off in ops/routine.json) ---"
+    else
     echo "--- short ---"
     # reuse the cloud-rendered Short if we have it; else cut + render it locally
     if { [ "$CLOUD_OK" = 1 ] && [ -f out/short.mp4 ]; } || { python3 shorts_cut.py && npx remotion render Short out/short.mp4 --timeout=120000; }; then
       [ "$CLOUD_OK" = 1 ] || python3 audio_master.py out/short.mp4 || echo "short audio_master failed (non-fatal)"
       python3 qa_watch.py out/short.mp4 out/review/short_watch || echo "short qa_watch failed (non-fatal)"
       if python3 short_gate.py out/short.mp4; then
-        "$CLAUDE" --print "$(cat docs/SHORT_REVIEW_PROMPT.txt)"
+        "$CLAUDE" --print --model sonnet "$(cat docs/SHORT_REVIEW_PROMPT.txt)"
         SDEC=$(python3 -c "import json;print(json.load(open('out/review/short_verdict.json')).get('decision','reject'))" 2>/dev/null || echo reject)
         echo "short reviewer: $SDEC"
         if [ "$SDEC" = approve ] && python3 gen_short_packaging.py && python3 scripts/yt_upload.py --kit out/short_kit.json --force; then
@@ -232,6 +252,7 @@ if t and t not in [x.get('topic') for x in p['produced']]:
     else
       echo "short render failed (non-fatal) — full video already published"
     fi
+    fi  # end autoShorts gate
   else
     notify "FAIL" "upload step failed. Video built + approved but not published. See $LOG"
   fi

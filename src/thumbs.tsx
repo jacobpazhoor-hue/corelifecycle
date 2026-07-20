@@ -17,22 +17,31 @@ const SANS = "'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif";
 const INK = '#0d0d0d';
 
 // mood palettes: core->mid->rim radial, two ray colors, hot accent (keyword), glow color
-type Mood = {core: string; mid: string; rim: string; ray: string; accent: string; glow: string};
+type Mood = {core: string; mid: string; rim: string; ray: string; accent: string; glow: string; pill: string};
 const MOODS: Record<string, Mood> = {
-  danger:   {core: '#FF3B0D', mid: '#C21807', rim: '#2A0A05', ray: '#FF6A00', accent: '#FFE500', glow: '#FFE500'},
-  tactical: {core: '#FFB800', mid: '#FF6A00', rim: '#1A0F00', ray: '#FFCE3A', accent: '#FF2D2D', glow: '#FFB800'},
-  electric: {core: '#00E5FF', mid: '#0057B8', rim: '#03060F', ray: '#38B6FF', accent: '#FFE500', glow: '#00E5FF'},
-  money:    {core: '#FFD54A', mid: '#1f7a4d', rim: '#06140b', ray: '#3fbf75', accent: '#FF2D2D', glow: '#FFD54A'},
-  royal:    {core: '#B06CFF', mid: '#5a2a9e', rim: '#0c0518', ray: '#8f5cf0', accent: '#FFE500', glow: '#B06CFF'},
-  survival: {core: '#12C2C9', mid: '#0a4a6e', rim: '#020a12', ray: '#3fd9de', accent: '#FF7A00', glow: '#12C2C9'},
+  danger:   {core: '#3E6FA3', mid: '#22364a', rim: '#0a0f16', ray: '#5a86b5', accent: '#FFC21A', glow: '#6ea6de', pill: '#C81E1E'},
+  crime:    {core: '#8E2F6B', mid: '#2e0f28', rim: '#0d040b', ray: '#c04f9a', accent: '#FFC21A', glow: '#d15fa8', pill: '#C81E1E'},
+  epic:     {core: '#C8873A', mid: '#4f3218', rim: '#140b04', ray: '#e0a84f', accent: '#FFE08A', glow: '#e8a84f', pill: '#8C3E12'},
+  tactical: {core: '#FFB800', mid: '#FF6A00', rim: '#1A0F00', ray: '#FFCE3A', accent: '#FFE500', glow: '#FFB800', pill: '#C81E1E'},
+  electric: {core: '#00E5FF', mid: '#0057B8', rim: '#03060F', ray: '#38B6FF', accent: '#FFE500', glow: '#00E5FF', pill: '#0B4FA8'},
+  money:    {core: '#FFD54A', mid: '#1f7a4d', rim: '#06140b', ray: '#3fbf75', accent: '#FFE07A', glow: '#FFD54A', pill: '#0F7A3D'},
+  royal:    {core: '#B06CFF', mid: '#5a2a9e', rim: '#0c0518', ray: '#8f5cf0', accent: '#FFE500', glow: '#B06CFF', pill: '#5A2A9E'},
+  survival: {core: '#12C2C9', mid: '#0a4a6e', rim: '#020a12', ray: '#3fd9de', accent: '#FF7A00', glow: '#12C2C9', pill: '#0A4A6E'},
 };
 // topic -> mood hints (crime/military/war -> danger; wealth -> money; spy/tech -> electric; royalty -> royal)
 const MOOD_HINTS: Array<[RegExp, string]> = [
+  // BUILDER/STARTUP lane first (2026-07-19): our #1 video is 'founder' (41% of all channel views)
+  // and the queue now leads with startup_unicorn. Without this, 'Every Level of a Startup — From
+  // Garage to $1B Unicorn' matched NOTHING and fell through to the steel-blue `danger` default.
+  // Routes to `money` (gold/green) — the right read for a build-wealth ladder.
+  [/startup|founder|unicorn|venture|entrepreneur|\bipo\b|\bceo\b|garage|silicon.?valley|self.?made/i, 'money'],
   [/\b(spy|cia|fbi|nsa|mi6)\b|intellig|undercover|hacker|cyber/i, 'electric'],
   [/billion|wealth|money|heir|mogul|trillion|lottery|fortune|diamond/i, 'money'],
-  [/king|emperor|empire|royal|dynasty|throne|medieval|ottoman|monarch/i, 'royal'],
+  [/cartel|mafia|\bmob\b|mobster|hitman|assassin|kingpin|bratva|yakuza|triad|\bgang|narco|smuggl|heist|cocaine|prison|inmate|convict/i, 'crime'],
+  [/samurai|gladiator|pirate|viking|warlord|shogun|ronin|spartan|colosseum|conquistador|crusad|\bknight/i, 'epic'],
+  [/king|emperor|empire|royal|dynasty|throne|medieval|ottoman|monarch|pharaoh|roman|\brome\b/i, 'royal'],
   [/survive|stranded|lost at sea|castaway|marooned|shipwreck|ocean|desert|jungle|wilderness|avalanche|blizzard|arctic|mountain|storm/i, 'survival'],
-  [/special.?forces|soldier|military|cartel|mafia|hitman|assassin|war|sniper|gladiator|samurai|pirate|prison/i, 'danger'],
+  [/special.?forces|soldier|military|\bwar\b|sniper|marine|commando|\barmy|\bnavy|spec.?ops|regime|dictator|north.?korea/i, 'danger'],
 ];
 function moodFor(): Mood {
   const m = (meta as any).thumb?.mood;
@@ -69,9 +78,11 @@ const Defs: React.FC = () => (
       <stop offset="55%" stopColor="#ffffff" stopOpacity="0.06" />
       <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
     </radialGradient>
-    <radialGradient id="vig" cx="50%" cy="50%" r="72%">
-      <stop offset="55%" stopColor="#000" stopOpacity="0" />
-      <stop offset="100%" stopColor="#000" stopOpacity="0.62" />
+    {/* LIGHT vignette: on a white base a heavy black edge turns the frame muddy/grey — the exact
+        "dull" look we're fixing. Just enough edge weight to contain the frame in the YT grid. */}
+    <radialGradient id="vig" cx="50%" cy="50%" r="74%">
+      <stop offset="62%" stopColor="#000" stopOpacity="0" />
+      <stop offset="100%" stopColor="#000" stopOpacity="0.14" />
     </radialGradient>
     {/* HERO POP: white rim + colored outer glow so a black doodle floats off the bright bg */}
     <filter id="heroPop" x="-45%" y="-45%" width="190%" height="190%">
@@ -103,25 +114,32 @@ const Sunburst: React.FC<{cx?: number; cy?: number; n?: number}> = ({cx = 850, c
   return <g>{wedges}</g>;
 };
 
-// CINEMATIC background: a dark mood-tinted field with a soft backlight bloom behind the hero
-// (no saturated color burst, no sunbeams). The hero (rim-lit via heroPop) + text carry the color;
-// the background stays premium/dark. `sun` kept for signature compat but ignored.
+// BRIGHT background (2026-07-19): a mainly-WHITE field with a soft mood-colored bloom behind the
+// hero. Owner's call — the dark cinematic look read as too dark. White is also the highest-contrast
+// backdrop for a BLACK doodle hero, which is the channel's whole visual identity.
+// Guard against the old failure mode: the ORIGINAL bland version was flat CREAM (#f6f2e9) with grey
+// text. This is pure #fff + saturated color + heavy black ink, which is bright, NOT washed out.
+// `sun` kept for signature compat but ignored.
 const EnergyBG: React.FC<{burstX?: number; sun?: boolean}> = ({burstX = 850}) => (
   <>
-    <rect x={0} y={0} width={1280} height={720} fill={M.rim} />
-    <rect x={0} y={0} width={1280} height={720} fill="#000" opacity={0.38} />
-    {/* soft backlight bloom behind the subject — the only place mood color lives in the bg */}
-    <ellipse cx={burstX} cy={360} rx={560} ry={470} fill={M.core} opacity={0.20} filter="url(#softblur)" />
-    <ellipse cx={burstX} cy={330} rx={310} ry={270} fill={M.core} opacity={0.16} filter="url(#softblur)" />
+    <rect x={0} y={0} width={1280} height={720} fill="#ffffff" />
+    {/* mood color lives ONLY here — a soft saturated bloom behind the subject, plus a floor wash,
+        so the frame reads bright-white overall but never empty */}
+    <ellipse cx={burstX} cy={330} rx={340} ry={300} fill={M.core} opacity={0.20} filter="url(#softblur)" />
+    <ellipse cx={burstX} cy={315} rx={190} ry={170} fill={M.core} opacity={0.16} filter="url(#softblur)" />
+    <ellipse cx={640} cy={815} rx={820} ry={150} fill={M.mid} opacity={0.10} filter="url(#softblur)" />
     <rect x={0} y={0} width={1280} height={720} fill="url(#vig)" />
   </>
 );
 
 // heavy stroked ALL-CAPS text (outlined + shadow) — legible on any bright bg
-const Punch: React.FC<{x: number; y: number; fs: number; fill?: string; children: React.ReactNode; anchor?: string; angle?: number; sw?: number}> =
-({x, y, fs, fill = '#ffffff', children, anchor = 'start', angle = 0, sw}) => (
+// On the BRIGHT base the default flipped (2026-07-19): BLACK ink with a WHITE halo — max contrast
+// on white, and the halo keeps it legible where it crosses the hero or a color bloom. Hot accent
+// words pass st="#111" so they keep a dark outline and still punch.
+const Punch: React.FC<{x: number; y: number; fs: number; fill?: string; children: React.ReactNode; anchor?: string; angle?: number; sw?: number; st?: string}> =
+({x, y, fs, fill = INK, children, anchor = 'start', angle = 0, sw, st = '#ffffff'}) => (
   <text x={x} y={y} textAnchor={anchor} fontFamily={SANS} fontSize={fs} fontWeight={900}
-    fill={fill} stroke="#000" strokeWidth={sw ?? Math.max(6, fs * 0.09)} paintOrder="stroke"
+    fill={fill} stroke={st} strokeWidth={sw ?? Math.max(6, fs * 0.09)} paintOrder="stroke"
     strokeLinejoin="round" filter="url(#txtsh)" transform={angle ? `rotate(${angle} ${x} ${y})` : undefined}>{children}</text>
 );
 
@@ -133,7 +151,7 @@ const KeyPill: React.FC<{x: number; y: number; fs: number; label: string; anchor
   const px = anchor === 'middle' ? x - w / 2 : x;
   return (
     <g transform={`rotate(${angle} ${x} ${y})`}>
-      <rect x={px} y={y - h * 0.8} width={w} height={h} rx={12} fill="#E00000" stroke="#000" strokeWidth={5} filter="url(#txtsh)" />
+      <rect x={px} y={y - h * 0.8} width={w} height={h} rx={12} fill={M.pill} stroke="#000" strokeWidth={5} filter="url(#txtsh)" />
       <text x={px + w / 2} y={y + ff * 0.06} textAnchor="middle" fontFamily={SANS} fontSize={ff} fontWeight={900}
         fill={M.accent} stroke="#000" strokeWidth={Math.max(4, ff * 0.06)} paintOrder="stroke" strokeLinejoin="round">{label}</text>
     </g>
@@ -249,7 +267,7 @@ const ThumbQuestion: React.FC = () => {
   if (cur) lines.push(cur);
   return (
     <Wrap burstX={1060}>
-      {lines.map((ln, i) => <Punch key={i} x={70} y={250 + i * 128} fs={116} fill={i === lines.length - 1 ? M.accent : '#fff'}>{ln}</Punch>)}
+      {lines.map((ln, i) => <Punch key={i} x={70} y={250 + i * 128} fs={116} fill={i === lines.length - 1 ? M.accent : INK} st={i === lines.length - 1 ? '#111' : '#ffffff'}>{ln}</Punch>)}
       <BigHead cx={1080} cy={430} r={230} sil />
     </Wrap>
   );
@@ -278,7 +296,7 @@ const ThumbRedacted: React.FC = () => (
       <rect x={120} y={300} width={450} height={270} rx={12} fill={INK} stroke="#fff" strokeWidth={6} />
       <text x={345} y={505} textAnchor="middle" fontFamily={SANS} fontSize={220} fontWeight={900} fill={M.accent} stroke="#000" strokeWidth={8} paintOrder="stroke">?</text>
     </g>
-    <Punch x={120} y={650} fs={Math.min(120, Math.floor(900 / Math.max(KEYWORD.length, 1)))} fill={M.accent}>{KEYWORD}</Punch>
+    <Punch x={120} y={650} fs={Math.min(120, Math.floor(900 / Math.max(KEYWORD.length, 1)))} fill={M.accent} st="#111">{KEYWORD}</Punch>
   </Wrap>
 );
 
@@ -288,7 +306,7 @@ const ThumbEyeline: React.FC = () => (
     <Hero x={345} y={724} scale={4.1} facing={1} expr={face('worried')} pose={A.lookUp(0)} />
     <g filter="url(#rough)"><rect x={1090} y={300} width={280} height={440} rx={16} fill={INK} stroke="#fff" strokeWidth={7} /><text x={1190} y={585} textAnchor="middle" fontFamily={SANS} fontSize={240} fontWeight={900} fill={M.accent} stroke="#000" strokeWidth={9} paintOrder="stroke">?</text></g>
     <Arrow d="M 560 360 Q 830 280 1075 430" heads="M 1075 430 L 1032 414 M 1075 430 L 1050 464" />
-    <Punch x={70} y={680} fs={Math.min(112, Math.floor(940 / Math.max(KEYWORD.length, 1)))} fill={M.accent}>{KEYWORD}</Punch>
+    <Punch x={70} y={680} fs={Math.min(112, Math.floor(940 / Math.max(KEYWORD.length, 1)))} fill={M.accent} st="#111">{KEYWORD}</Punch>
   </Wrap>
 );
 
@@ -296,14 +314,20 @@ const ThumbEyeline: React.FC = () => (
 const ThumbLadder: React.FC = () => {
   const baseY = 694, sw = 150, sh = 80;
   const steps = [0, 1, 2, 3].map((i) => ({x: 540 + i * sw, top: baseY - (i + 1) * sh}));
+  // L1 is auto-sized (short words hit the 140 cap), so a FIXED pill y collides with tall text —
+  // "REGIME" (6 chars -> fs 140) had the pill clipping the letters. Derive the pill's y from the
+  // actual L1 size: text baseline + its outline stroke + a gap + the pill's own box above its y.
+  const fs1 = Math.min(140, Math.floor(900 / Math.max(L1.length, 1)));
+  const pillFs = 72;
+  const pillY = 270 + fs1 * 0.09 + 26 + pillFs * 1.36 * 0.8;
   return (
     <Wrap burstX={steps[3].x} sun={false}>
-      {steps.map((s, i) => <rect key={i} x={s.x} y={s.top} width={sw} height={baseY - s.top} fill="#fff" opacity={0.16} stroke="#fff" strokeWidth={4} />)}
+      {steps.map((s, i) => <rect key={i} x={s.x} y={s.top} width={sw} height={baseY - s.top} fill={INK} opacity={0.17} stroke={INK} strokeWidth={5} />)}
       <Hero x={470} y={baseY} scale={1.2} facing={1} expr={FACES.earnest} />
       <Hero x={steps[3].x + sw / 2} y={steps[3].top} scale={1.8} facing={-1} expr={face('smug')} />
       <Punch x={64} y={150} fs={54}>{KICKER}</Punch>
-      <Punch x={62} y={270} fs={Math.min(140, Math.floor(900 / Math.max(L1.length, 1)))}>{L1}</Punch>
-      {BIG ? <KeyPill x={72} y={360} fs={72} label={BIG} angle={-4} /> : null}
+      <Punch x={62} y={270} fs={fs1}>{L1}</Punch>
+      {BIG ? <KeyPill x={72} y={pillY} fs={pillFs} label={BIG} angle={-4} /> : null}
     </Wrap>
   );
 };
@@ -311,11 +335,11 @@ const ThumbLadder: React.FC = () => {
 // BEFORE/AFTER — dim "nobody" vs blazing apex
 const ThumbBefore: React.FC = () => (
   <Wrap burstX={968} sun={false}>
-    <line x1={640} y1={150} x2={640} y2={720} stroke="#fff" strokeWidth={6} opacity={0.25} />
+    <line x1={640} y1={150} x2={640} y2={720} stroke={INK} strokeWidth={6} opacity={0.22} />
     <g opacity={0.5}><StickFigure pose={A.stand(0)} x={320} y={716} scale={2.8} facing={1} view="front" expr={FACES.earnest} pal={SIL} rough frame={0} /></g>
-    <Punch x={320} y={180} fs={Math.min(92, Math.floor(640 / Math.max(BEFORE.length, 1)))} anchor="middle" fill="#cfcfcf">{BEFORE}</Punch>
+    <Punch x={320} y={180} fs={Math.min(92, Math.floor(640 / Math.max(BEFORE.length, 1)))} anchor="middle" fill="#6f6f6f">{BEFORE}</Punch>
     <Hero x={968} y={716} scale={3.0} facing={-1} expr={face('smug')} />
-    <Punch x={968} y={180} fs={Math.min(104, Math.floor(760 / Math.max(AFTER.length, 1)))} anchor="middle" fill={M.accent}>{AFTER}</Punch>
+    <Punch x={968} y={180} fs={Math.min(104, Math.floor(760 / Math.max(AFTER.length, 1)))} anchor="middle" fill={M.accent} st="#111">{AFTER}</Punch>
     <Arrow d="M 470 250 Q 640 160 800 235" heads="M 800 235 L 758 218 M 800 235 L 776 272" />
   </Wrap>
 );

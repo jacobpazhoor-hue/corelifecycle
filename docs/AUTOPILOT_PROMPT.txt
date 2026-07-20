@@ -144,6 +144,15 @@ DO, in order:
    different reasons to stop. EMOTION is your #1 CTR lever and you have no real faces — so push the
    doodle hero's expression HARD (huge eyes, open-mouth shock, sweat, recoil); pick `expr` for max
    drama. Keep caption ≤3 words, mobile-readable at 120px.
+   MOOD (thumb.mood — sets the thumbnail's color world; PICK the one that fits the topic so the channel
+   feed stays VARIED, never a wall of one color — do NOT default everything to danger):
+     danger=military / spec-ops / war / regime / dictator (gunmetal steel-blue);
+     crime=cartel / mafia / hitman / mob / prison / narco (plum-noir);
+     epic=samurai / gladiator / pirate / viking / ancient warrior (bronze);
+     royal=king / emperor / empire / dynasty (violet);
+     electric=spy / intel / tech / hacker (cyan);  money=wealth / billionaire / heir / trillionaire (green-gold);
+     survival=survive / lost / stranded / castaway (teal). Match the crime/military/history topics across
+     danger|crime|epic|royal so consecutive uploads look different.
    Fields: archetype (ROTATE every video, NOT used in the last ~3 produced_topics; FAVOR pov / number
    / ladder / question — one bold focal point; face for raw emotion; beforeafter for transformation;
    setting for visually strong topics), and:

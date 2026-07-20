@@ -9,6 +9,8 @@
   "playlist": "Every Level",
   "enabled": true,
   "useModal": false,
+  "autoShorts": false,
+  "_autoShorts_note": "DISABLED 2026-07-19 on the data: 12 Shorts posted, ~4 views MEDIAN (best 11, several 0), and gen_short_packaging.py mints broken titles from non-profession topics ('Every Level of an Everything', 'Every Level of a Wealth Transfer'). Each one cost a full extra Remotion render + a reviewer agent call per episode. Set true to re-enable — fix gen_short_packaging.py's title spine first.",
   "_cadence": "Currently DAILY (cron 0 2 * * *). Data (AIR 18k-channel study) favors 3-4 longs/week + 2-3 Shorts/week over daily; recommendation pending user decision — see docs/WEEKLY_OPS.md. To switch: edit ops/com.corelifecycle.daily.plist StartCalendarInterval to Mon/Wed/Fri/Sun and reload.",
   "kpi_targets": {"retention_30s": 0.70, "avg_pct_viewed": 0.48, "browse_ctr": 0.07, "endscreen_ctr": 0.055},
   "growth_ops_doc": "docs/WEEKLY_OPS.md",

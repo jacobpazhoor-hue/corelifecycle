@@ -1,19 +1,19 @@
 {
   "thumb": {
-    "kicker": "EVERY RANK IN THE",
-    "line1": "REGIME",
+    "kicker": "EVERY LEVEL OF A",
+    "line1": "FIRST HIRE",
     "line2": "",
-    "tag": "$500M-$1B A YEAR",
-    "archetype": "ladder",
-    "big": "$1,000,000,000",
-    "before": "FARM BOY",
-    "after": "OWNED",
+    "tag": "DILUTED",
+    "archetype": "number",
+    "big": "$8,000,000,000",
+    "before": "HIRE #1",
+    "after": "LOCKED",
     "expr": "worried",
-    "povline": "YOU CLIMB THE",
-    "keyword": "NO EXIT",
-    "setting": "borderWire",
-    "question": "WHO WATCHES THE WATCHERS?",
-    "mood": "danger"
+    "povline": "YOU JOIN AT",
+    "keyword": "CLIFF",
+    "setting": "ipoBell",
+    "question": "WHO ACTUALLY OWNS THE COMPANY YOU BUILT?",
+    "mood": "money"
   },
-  "topic": "north_korea"
+  "topic": "startup_unicorn"
 }

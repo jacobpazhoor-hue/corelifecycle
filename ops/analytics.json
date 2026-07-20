@@ -1,9 +1,9 @@
 {
-  "updated": "2026-07-18T01:04:32.896280+00:00",
+  "updated": "2026-07-20T08:16:40.502061+00:00",
   "channel": {
-    "videos": 33,
-    "views": 988,
-    "subscribers": 5
+    "videos": 34,
+    "views": 1116,
+    "subscribers": 6
   },
   "videos": [
     {
@@ -11,10 +11,20 @@
       "topic": "founder",
       "title": "Every Level of a Founder \u2014 From First Idea to IPO",
       "published": "2026-06-23T16:56:30Z",
-      "views": 410,
+      "views": 412,
       "likes": 12,
       "comments": 1,
       "duration": "PT14M5S"
+    },
+    {
+      "id": "8qcR8s7iqBM",
+      "topic": "black_market_surgeon",
+      "title": "POV: You're a Black Market Surgeon (You Never Get to Stop)",
+      "published": "2026-07-15T09:42:28Z",
+      "views": 179,
+      "likes": 2,
+      "comments": 0,
+      "duration": "PT12M17S"
     },
     {
       "id": "VPDaEqsIu6g",
@@ -25,16 +35,6 @@
       "likes": 4,
       "comments": 0,
       "duration": "PT12M12S"
-    },
-    {
-      "id": "8qcR8s7iqBM",
-      "topic": "black_market_surgeon",
-      "title": "POV: You're a Black Market Surgeon (You Never Get to Stop)",
-      "published": "2026-07-15T09:42:28Z",
-      "views": 86,
-      "likes": 2,
-      "comments": 0,
-      "duration": "PT12M17S"
     },
     {
       "id": "YqDfplJCd9I",
@@ -91,8 +91,8 @@
       "topic": "soldier",
       "title": "Every Level of a Soldier \u2014 From Recruit to Four-Star General",
       "published": "2026-06-26T15:08:40Z",
-      "views": 28,
-      "likes": 1,
+      "views": 29,
+      "likes": 2,
       "comments": 0,
       "duration": "PT10M41S"
     },
@@ -137,6 +137,16 @@
       "duration": "PT13M28S"
     },
     {
+      "id": "zCsRuMNJn0g",
+      "topic": "roman_empire",
+      "title": "Your Life as Every Rank in the Roman Empire (You Die at the Top)",
+      "published": "2026-06-30T19:35:29Z",
+      "views": 16,
+      "likes": 1,
+      "comments": 0,
+      "duration": "PT13M5S"
+    },
+    {
       "id": "jTfmhC3peEM",
       "topic": "real_estate_mogul",
       "title": "Every Level of a Real Estate Mogul \u2014 From Agent to Global Landlord",
@@ -147,14 +157,14 @@
       "duration": "PT12M26S"
     },
     {
-      "id": "zCsRuMNJn0g",
-      "topic": "roman_empire",
-      "title": "Your Life as Every Rank in the Roman Empire (You Die at the Top)",
-      "published": "2026-06-30T19:35:29Z",
-      "views": 15,
+      "id": "0-Nj-ql3FwQ",
+      "topic": null,
+      "title": "POV: You're the World's First Trillionaire \ud83d\udcb0 #shorts",
+      "published": "2026-07-12T15:45:41Z",
+      "views": 11,
       "likes": 0,
       "comments": 0,
-      "duration": "PT13M5S"
+      "duration": "PT57S"
     },
     {
       "id": "I9R57ipHorc",
@@ -167,21 +177,11 @@
       "duration": "PT41S"
     },
     {
-      "id": "0-Nj-ql3FwQ",
-      "topic": null,
-      "title": "POV: You're the World's First Trillionaire \ud83d\udcb0 #shorts",
-      "published": "2026-07-12T15:45:41Z",
-      "views": 10,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT57S"
-    },
-    {
       "id": "TLg0RWBjLwA",
       "topic": "samurai",
       "title": "Your Life as a Samurai at Every Rank (Honor Kills You)",
       "published": "2026-07-13T09:52:09Z",
-      "views": 8,
+      "views": 10,
       "likes": 0,
       "comments": 0,
       "duration": "PT12M42S"
@@ -207,6 +207,16 @@
       "duration": "PT53S"
     },
     {
+      "id": "bMya7ugln5Q",
+      "topic": null,
+      "title": "Every Level of a Bushi \ud83d\udcb0 #shorts",
+      "published": "2026-07-13T09:54:56Z",
+      "views": 6,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT54S"
+    },
+    {
       "id": "uRCF7Sn22Ns",
       "topic": null,
       "title": "Every Level of a Special Forces \ud83d\udcb0 #shorts",
@@ -215,16 +225,6 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT59S"
-    },
-    {
-      "id": "bMya7ugln5Q",
-      "topic": null,
-      "title": "Every Level of a Bushi \ud83d\udcb0 #shorts",
-      "published": "2026-07-13T09:54:56Z",
-      "views": 5,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT54S"
     },
     {
       "id": "q2wg7eeg1eE",
@@ -247,6 +247,26 @@
       "duration": "PT53S"
     },
     {
+      "id": "ZQpAzns70b4",
+      "topic": "lawyer",
+      "title": "Every Level of a Lawyer \u2014 From Associate to Managing Partner",
+      "published": "2026-06-21T01:34:05Z",
+      "views": 4,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT10M8S"
+    },
+    {
+      "id": "27K2uE6Um-E",
+      "topic": "north_korea",
+      "title": "Your Life at Every Rank in North Korea (You Can't Leave)",
+      "published": "2026-07-19T15:15:07Z",
+      "views": 3,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M48S"
+    },
+    {
       "id": "ilBfri70z-U",
       "topic": null,
       "title": "Every Level of a Spy Master \ud83d\udcb0 #shorts",
@@ -257,16 +277,6 @@
       "duration": "PT56S"
     },
     {
-      "id": "ZQpAzns70b4",
-      "topic": "lawyer",
-      "title": "Every Level of a Lawyer \u2014 From Associate to Managing Partner",
-      "published": "2026-06-21T01:34:05Z",
-      "views": 3,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT10M8S"
-    },
-    {
       "id": "2xY-_B5XiNo",
       "topic": "could_you_survive_ocean",
       "title": "Could You Survive 54 Days Lost at Sea? (Alone, One Flare)",
@@ -275,16 +285,6 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT12M12S"
-    },
-    {
-      "id": "Si2VnD9tM-s",
-      "topic": null,
-      "title": "Every Level of a Cartel \ud83d\udcb0 #shorts",
-      "published": "2026-07-06T20:07:21Z",
-      "views": 2,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT1M1S"
     },
     {
       "id": "pg08o0QpUqI",
@@ -305,6 +305,16 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT41S"
+    },
+    {
+      "id": "Si2VnD9tM-s",
+      "topic": null,
+      "title": "Every Level of a Cartel \ud83d\udcb0 #shorts",
+      "published": "2026-07-06T20:07:21Z",
+      "views": 1,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT1M1S"
     },
     {
       "id": "SP3fs8c0BD0",
@@ -368,7 +378,7 @@
     }
   ],
   "insights": [
-    "Best so far: 'Every Level of a Founder \u2014 From First Idea to IPO' (410 views).",
+    "Best so far: 'Every Level of a Founder \u2014 From First Idea to IPO' (412 views).",
     "Lean into the patterns of the top performers (topic + title shape)."
   ],
   "note": "CTR/retention need the Analytics API (re-auth); these are Data-API stats."

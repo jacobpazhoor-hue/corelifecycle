@@ -2,31 +2,31 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 22936,
+  "totalFrames": 22324,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t00",
       "level": null,
       "overlay": null,
-      "template": "borderWire",
+      "template": "layoffs",
       "audio": "audio/t00.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 798
+      "durationInFrames": 759
     },
     {
       "id": "t01",
-      "level": "LEVEL 01  \u00b7  THE FARM",
+      "level": "LEVEL 01  \u00b7  THE GARAGE HIRE",
       "overlay": {
-        "big": "700G/DAY",
-        "sub": "THE RATION TARGET \u00b7 SOME MONTHS, NONE AT ALL"
+        "big": "$6,000,000",
+        "sub": "THE COMPANY'S WORTH \u2014 YOUR SLICE: 1.5%"
       },
-      "template": "riceField",
+      "template": "garageStart",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
-      "startFrame": 798,
-      "durationInFrames": 934
+      "startFrame": 759,
+      "durationInFrames": 685
     },
     {
       "id": "t02",
@@ -35,104 +35,107 @@
       "template": "deskSilhouette",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 1732,
-      "durationInFrames": 741
+      "startFrame": 1444,
+      "durationInFrames": 642
     },
     {
       "id": "t03",
       "level": null,
       "overlay": null,
-      "template": "layoffs",
+      "template": "desk",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 2473,
-      "durationInFrames": 717
+      "startFrame": 2086,
+      "durationInFrames": 707
     },
     {
       "id": "t04",
       "level": null,
       "overlay": null,
-      "template": "lectureHallScene",
+      "template": "signing",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 3190,
-      "durationInFrames": 795
+      "startFrame": 2793,
+      "durationInFrames": 827
     },
     {
       "id": "t05",
-      "level": "LEVEL 02  \u00b7  THE CANDIDATE",
+      "level": "LEVEL 02  \u00b7  THE SEED CREW",
       "overlay": {
-        "big": "3,000,000",
-        "sub": "PARTY CANDIDATES OF 25,000,000 \u2014 YOU WANT IN"
+        "big": "$15,000,000",
+        "sub": "THE SEED ROUND \u2014 YOUR SLICE DILUTES TO ~1.2%"
       },
-      "template": "station",
+      "template": "startupGrow",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 3985,
-      "durationInFrames": 716
+      "startFrame": 3620,
+      "durationInFrames": 724
     },
     {
       "id": "t06",
       "level": null,
       "overlay": null,
-      "template": "boardroomNotes",
+      "template": "fileWall",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 4701,
-      "durationInFrames": 799
+      "startFrame": 4344,
+      "durationInFrames": 661
     },
     {
       "id": "t07",
       "level": null,
-      "overlay": null,
-      "template": "fileWall",
+      "overlay": {
+        "big": "3.2%",
+        "sub": "THE ODDS A SEED-STAGE STARTUP EVER EXITS FOR $100M+"
+      },
+      "template": "podiumScene",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 5500,
-      "durationInFrames": 506
+      "startFrame": 5005,
+      "durationInFrames": 687
     },
     {
       "id": "t08",
       "level": null,
       "overlay": null,
-      "template": "prisonCell",
+      "template": "deskClose",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 6006,
-      "durationInFrames": 776
+      "startFrame": 5692,
+      "durationInFrames": 648
     },
     {
       "id": "t09",
-      "level": "LEVEL 03  \u00b7  THE CADRE",
+      "level": "LEVEL 03  \u00b7  THE PAPER MILLION",
       "overlay": {
-        "big": "~$30/MONTH",
-        "sub": "THE OFFICIAL WAGE \u00b7 THE MARKET PAYS THE REST"
+        "big": "$78,000,000",
+        "sub": "SERIES A \u2014 YOUR SLICE: ~1% \u2248 $770,000 (ON PAPER)"
       },
-      "template": "boardroomHead",
+      "template": "tower",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 6782,
-      "durationInFrames": 605
+      "startFrame": 6340,
+      "durationInFrames": 674
     },
     {
       "id": "t10",
       "level": null,
       "overlay": null,
-      "template": "atrium",
+      "template": "serverScale",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 7387,
-      "durationInFrames": 666
+      "startFrame": 7014,
+      "durationInFrames": 687
     },
     {
       "id": "t11",
       "level": null,
       "overlay": null,
-      "template": "revolvingDoor",
+      "template": "boardroomNotes",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 8053,
-      "durationInFrames": 657
+      "startFrame": 7701,
+      "durationInFrames": 566
     },
     {
       "id": "t12",
@@ -141,219 +144,225 @@
       "template": "dinner",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 8710,
-      "durationInFrames": 581
+      "startFrame": 8267,
+      "durationInFrames": 660
     },
     {
       "id": "t13",
-      "level": "LEVEL 04  \u00b7  PYONGYANG",
+      "level": "LEVEL 04  \u00b7  THE SCALE-UP",
       "overlay": {
-        "big": "TOP 10%",
-        "sub": "ONLY THE LOYAL MAY LIVE HERE"
+        "big": "$400,000,000",
+        "sub": "SERIES B/C \u2014 YOUR SLICE: ~0.77% \u2248 $3,000,000 (STILL PAPER)"
       },
-      "template": "rentalUnits",
+      "template": "boardroomHead",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 9291,
-      "durationInFrames": 684
+      "startFrame": 8927,
+      "durationInFrames": 711
     },
     {
       "id": "t14",
       "level": null,
       "overlay": null,
-      "template": "window",
+      "template": "revolvingDoor",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 9975,
-      "durationInFrames": 521
+      "startFrame": 9638,
+      "durationInFrames": 600
     },
     {
       "id": "t15",
       "level": null,
       "overlay": null,
-      "template": "signing",
+      "template": "layoffs",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 10496,
-      "durationInFrames": 651
+      "startFrame": 10238,
+      "durationInFrames": 674
     },
     {
       "id": "t16",
       "level": null,
       "overlay": null,
-      "template": "commandPost",
+      "template": "emptyChair",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 11147,
-      "durationInFrames": 749
+      "startFrame": 10912,
+      "durationInFrames": 609
     },
     {
       "id": "t17",
-      "level": "LEVEL 05  \u00b7  THE CENTRAL COMMITTEE",
+      "level": "LEVEL 05  \u00b7  THE DOWN ROUND",
       "overlay": {
-        "big": "235 SEATS",
-        "sub": "THE CENTRAL COMMITTEE \u2014 ONE OF THEM IS YOURS"
+        "big": "RUMORED $1,000,000,000",
+        "sub": "THE TERM SHEET EVERYONE'S ALREADY SPENDING"
       },
-      "template": "lectureHallScene",
+      "template": "tradingFloor",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 11896,
-      "durationInFrames": 712
+      "startFrame": 11521,
+      "durationInFrames": 658
     },
     {
       "id": "t18",
       "level": null,
       "overlay": null,
-      "template": "fileWall",
+      "template": "pnlWall",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 12608,
-      "durationInFrames": 733
+      "startFrame": 12179,
+      "durationInFrames": 662
     },
     {
       "id": "t19",
       "level": null,
-      "overlay": null,
-      "template": "dinner",
+      "overlay": {
+        "big": "$420,000,000",
+        "sub": "THE DOWN ROUND \u2014 YOUR $3,000,000 STAKE, ON PAPER, IS NOW $0"
+      },
+      "template": "signing",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 13341,
-      "durationInFrames": 657
+      "startFrame": 12841,
+      "durationInFrames": 1055
     },
     {
       "id": "t20",
-      "level": null,
-      "overlay": {
-        "big": "3 GENERATIONS",
-        "sub": "ONE MAN'S FILE. HIS WHOLE FAMILY'S SENTENCE"
-      },
-      "template": "prisonCell",
+      "level": "LEVEL 06  \u00b7  THE REBUILD",
+      "overlay": null,
+      "template": "window",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 13998,
-      "durationInFrames": 810
+      "startFrame": 13896,
+      "durationInFrames": 619
     },
     {
       "id": "t21",
-      "level": "LEVEL 06  \u00b7  THE POLITBURO",
-      "overlay": {
-        "big": "19 + 11",
-        "sub": "FULL MEMBERS \u00b7 ALTERNATES \u2014 THE ROOM YOU'RE IN NOW"
-      },
-      "template": "warRoom",
+      "level": null,
+      "overlay": null,
+      "template": "atrium",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 14808,
-      "durationInFrames": 615
+      "startFrame": 14515,
+      "durationInFrames": 735
     },
     {
       "id": "t22",
       "level": null,
       "overlay": {
-        "big": "80,000-120,000",
-        "sub": "HELD IN CAMPS LIKE THIS ONE"
+        "big": "$1,100,000,000",
+        "sub": "UNICORN \u2014 YOUR SLICE: ~0.6% \u2248 $6,000,000 (STILL PAPER)"
       },
-      "template": "praetorians",
+      "template": "warRoom",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 15423,
-      "durationInFrames": 591
+      "startFrame": 15250,
+      "durationInFrames": 733
     },
     {
       "id": "t23",
-      "level": null,
-      "overlay": null,
-      "template": "courtroom",
+      "level": "LEVEL 07  \u00b7  THE TENDER",
+      "overlay": {
+        "big": "10%",
+        "sub": "OF VESTED SHARES \u2014 THE FIRST CHANCE TO SELL FOR CASH"
+      },
+      "template": "lectureHallScene",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 16014,
-      "durationInFrames": 724
+      "startFrame": 15983,
+      "durationInFrames": 628
     },
     {
       "id": "t24",
       "level": null,
-      "overlay": null,
-      "template": "wiretap",
+      "overlay": {
+        "big": "$628,000",
+        "sub": "REAL. WIRED. NOT PAPER."
+      },
+      "template": "jet",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 16738,
-      "durationInFrames": 748
+      "startFrame": 16611,
+      "durationInFrames": 690
     },
     {
       "id": "t25",
-      "level": "LEVEL 07  \u00b7  THE COURT",
-      "overlay": {
-        "big": "A FEW HUNDRED",
-        "sub": "EVER TRUSTED WITH THIS BADGE, ALIVE, AT ONCE"
-      },
-      "template": "shogunCourt",
+      "level": null,
+      "overlay": null,
+      "template": "deskClose",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 17486,
-      "durationInFrames": 633
+      "startFrame": 17301,
+      "durationInFrames": 555
     },
     {
       "id": "t26",
-      "level": null,
-      "overlay": null,
-      "template": "galaBallroom",
+      "level": "LEVEL 08  \u00b7  THE LOCK-UP",
+      "overlay": {
+        "big": "$8,000,000,000",
+        "sub": "MARKET CAP \u2014 YOUR SLICE: ~$40,000,000 (STILL LOCKED)"
+      },
+      "template": "ipoBell",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 18119,
-      "durationInFrames": 713
+      "startFrame": 17856,
+      "durationInFrames": 639
     },
     {
       "id": "t27",
       "level": null,
-      "overlay": null,
-      "template": "emptyChair",
+      "overlay": {
+        "big": "180 DAYS",
+        "sub": "THE LOCK-UP \u2014 YOU CAN'T SELL A SINGLE SHARE"
+      },
+      "template": "fileWall",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 18832,
-      "durationInFrames": 781
+      "startFrame": 18495,
+      "durationInFrames": 655
     },
     {
       "id": "t28",
-      "level": "LEVEL 08  \u00b7  YOU CAN'T LEAVE",
-      "overlay": {
-        "big": "$500M-$1B/YR",
-        "sub": "OFFICE 39'S HARD CURRENCY \u2014 NEVER YOURS"
-      },
-      "template": "countRoom",
+      "level": null,
+      "overlay": null,
+      "template": "layoffs",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 19613,
-      "durationInFrames": 661
+      "startFrame": 19150,
+      "durationInFrames": 914
     },
     {
       "id": "t29",
       "level": null,
-      "overlay": null,
-      "template": "waterfront",
+      "overlay": {
+        "big": "$19,000,000",
+        "sub": "AFTER THE LOCK-UP, AFTER THE TAXES \u2014 THE REAL NUMBER"
+      },
+      "template": "window",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 20274,
-      "durationInFrames": 745
+      "startFrame": 20064,
+      "durationInFrames": 584
     },
     {
       "id": "t30",
       "level": null,
       "overlay": null,
-      "template": "deskSilhouette",
+      "template": "lobby",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 21019,
-      "durationInFrames": 723
+      "startFrame": 20648,
+      "durationInFrames": 831
     },
     {
       "id": "t31",
       "level": null,
       "overlay": null,
-      "template": "borderWire",
+      "template": "garageStart",
       "audio": "audio/t31.wav",
       "audioStartFrame": 3,
-      "startFrame": 21742,
-      "durationInFrames": 1194
+      "startFrame": 21479,
+      "durationInFrames": 845
     }
   ]
 }
