@@ -1,4 +1,5 @@
 import React from 'react';
+import meta from './episode_meta.json';
 import {blink as idleBlink, gaze as idleGaze, boil} from './anim';
 
 // Hand-drawn DOODLE / whiteboard stick figure: black ink on light paper, expressive face,
@@ -72,14 +73,48 @@ const Face: React.FC<{cx: number; cy: number; R: number; expr: Expr; lid: number
   </g>);
 };
 
+// ---------------------------------------------------------------------------
+// COSTUMES (2026-07-19). The bare stick figure reads as "generic doodle"; a filled
+// torso + hair is what makes a character look like SOMEBODY at thumbnail size. Limbs stay
+// thin sticks — the silhouette is unchanged, so every existing pose still works.
+// `none` is the default, so nothing renders differently unless a caller opts in.
+export type Costume = 'none' | 'suit' | 'uniform' | 'scrubs' | 'royal' | 'street' | 'field';
+// The VIDEO has ~28 StickFigure call sites and no central wrapper, so the episode's costume is
+// resolved HERE and used as the default. One topic -> one wardrobe, thumbnail and video alike.
+// A call site can still override per-figure (crowds/silhouettes) by passing `costume` explicitly.
+const COSTUME_HINTS: Array<[RegExp, Costume]> = [
+  [/surgeon|doctor|medic|hospital|nurse|\bmd\b/i, 'scrubs'],
+  [/king|emperor|empire|royal|dynasty|throne|monarch|pharaoh|sultan|ottoman|\brome\b|roman/i, 'royal'],
+  [/special.?forces|soldier|military|\bwar\b|sniper|marine|commando|\barmy|\bnavy|spec.?ops|regime|dictator|north.?korea|guard/i, 'uniform'],
+  [/cartel|mafia|\bmob\b|mobster|hitman|assassin|kingpin|bratva|yakuza|gang|narco|smuggl|prison|inmate|convict|street/i, 'street'],
+  [/survive|stranded|castaway|shipwreck|jungle|desert|wilderness|arctic|mountain|pirate|explorer|miner|farm/i, 'field'],
+  [/startup|founder|unicorn|venture|entrepreneur|\bipo\b|\bceo\b|banker|lawyer|trader|hedge|billion|trillion|mogul|heir|executive|corporate|spy|agent/i, 'suit'],
+];
+export function episodeCostume(): Costume {
+  const m = meta as any;
+  if (m?.thumb?.costume) return m.thumb.costume as Costume;
+  const topic = (m?.topic || '') + ' ' + (m?.title || '');
+  for (const [re, name] of COSTUME_HINTS) if (re.test(topic)) return name;
+  return 'suit';
+}
+type CostumeSkin = {body: string; accent: string; collar: string; hair: string; hairStyle: 'crop' | 'mop' | 'tuft'};
+export const COSTUMES: Record<Exclude<Costume, 'none'>, CostumeSkin> = {
+  suit:    {body: '#1d2430', accent: '#c9243f', collar: '#ffffff', hair: '#2b1b12', hairStyle: 'mop'},   // founder/finance/mob
+  uniform: {body: '#3c4a33', accent: '#d4af37', collar: '#cdd3bd', hair: '#171717', hairStyle: 'crop'},  // military/regime
+  scrubs:  {body: '#1f7a86', accent: '#ffffff', collar: '#d8f0f3', hair: '#241a12', hairStyle: 'crop'},  // medical
+  royal:   {body: '#5a2a9e', accent: '#f2c230', collar: '#f6e7bd', hair: '#1d1208', hairStyle: 'mop'},   // empire/monarch
+  street:  {body: '#33383f', accent: '#b8342b', collar: '#9aa0a8', hair: '#15100c', hairStyle: 'mop'},   // cartel/survival
+  field:   {body: '#6b5433', accent: '#2f4a2a', collar: '#cbbb95', hair: '#2a1c10', hairStyle: 'tuft'},  // explorer/worker
+};
+
 export const StickFigure: React.FC<{
   pose: Pose; x: number; y: number; scale?: number; facing?: number;
   pal?: Palette; view?: 'front' | 'profile' | 'back'; expr?: Expr; frame?: number;
-  showFace?: boolean; briefcase?: boolean; lineW?: number; rough?: boolean;
+  showFace?: boolean; briefcase?: boolean; lineW?: number; rough?: boolean; costume?: Costume;
 }> = ({
   pose, x, y, scale = 1, facing = 1, pal = INKPAL, view = 'profile',
   expr = {brow: 0, browRaise: 0, lid: 0, mouth: 'neutral', look: 0}, frame = 0,
-  showFace = true, briefcase = false, lineW = 8, rough = true,
+  showFace = true, briefcase = false, lineW = 8, rough = true, costume = episodeCostume(),
 }) => {
   const front = view === 'front';
   const ink = pal.limb;
@@ -114,6 +149,49 @@ export const StickFigure: React.FC<{
   // Amplitude shrinks with scale so big close-ups don't jitter. Only when the sketchy look is on.
   const bl = rough ? boil(frame, seed, 30, 1 / Math.max(1, scale * 0.7)) : {x: 0, y: 0, rot: 0};
 
+  // --- costume geometry: a filled jacket wrapped around the EXISTING spine line, so the pose
+  //     rig is untouched. Built from the spine vector so it leans/bobs with the body. ---
+  const skin = costume !== 'none' ? COSTUMES[costume] : null;
+  const jacket = (() => {
+    if (!skin) return null;
+    const vx = shoulder.x - hip.x, vy = shoulder.y - hip.y;
+    const len = Math.hypot(vx, vy) || 1;
+    const ux = vx / len, uy = vy / len;          // along spine, hip -> shoulder
+    const px = -uy, py = ux;                     // perpendicular
+    const sh = R * 0.88, hh = R * 0.60;          // half-widths at shoulder / hip
+    // extend slightly past the shoulder so the collar meets the neck, and past the hip for a hem
+    const sx = shoulder.x + ux * R * 0.10, sy = shoulder.y + uy * R * 0.10;
+    const hx = hip.x - ux * R * 0.06, hy = hip.y - uy * R * 0.06;
+    const P1 = [sx + px * sh, sy + py * sh], P2 = [hx + px * hh, hy + py * hh];
+    const P3 = [hx - px * hh, hy - py * hh], P4 = [sx - px * sh, sy - py * sh];
+    const d = `M ${P1[0]} ${P1[1]} L ${P2[0]} ${P2[1]} Q ${hx} ${hy + R * 0.10} ${P3[0]} ${P3[1]} L ${P4[0]} ${P4[1]} Z`;
+    // collar V + accent (tie / sash) hanging down the centre of the chest
+    const cx0 = sx - ux * R * 0.02, cy0 = sy - uy * R * 0.02;
+    const chestX = cx0 - ux * R * 0.62, chestY = cy0 - uy * R * 0.62;
+    return (
+      <g key="costume">
+        <path d={d} fill={skin.body} stroke={ink} strokeWidth={lineW * 0.8} strokeLinejoin="round" />
+        <path d={`M ${cx0 + px * sh * 0.42} ${cy0 + py * sh * 0.42} L ${chestX} ${chestY} L ${cx0 - px * sh * 0.42} ${cy0 - py * sh * 0.42}`}
+          fill={skin.collar} stroke={ink} strokeWidth={lineW * 0.5} strokeLinejoin="round" />
+        <path d={`M ${chestX} ${chestY} L ${chestX + px * R * 0.13} ${chestY + py * R * 0.13} L ${chestX - ux * R * 0.5} ${chestY - uy * R * 0.5} L ${chestX - px * R * 0.13} ${chestY - py * R * 0.13} Z`}
+          fill={skin.accent} stroke={ink} strokeWidth={lineW * 0.35} strokeLinejoin="round" />
+      </g>
+    );
+  })();
+
+  // hair: a filled cap that sits on the skull instead of the 3 bare tufts
+  const hair = (() => {
+    if (!skin) return null;
+    const hx = headC.x, hy = headC.y;
+    if (skin.hairStyle === 'crop')
+      return <path d={`M ${hx - R * 0.95} ${hy - R * 0.22} q ${R * 0.10} ${-R * 1.05} ${R * 0.95} ${-R * 1.02} q ${R * 0.86} ${-R * 0.03} ${R * 0.95} ${R * 1.02} q ${-R * 0.55} ${-R * 0.42} ${-R * 1.90} 0 Z`}
+        fill={skin.hair} stroke={ink} strokeWidth={lineW * 0.55} strokeLinejoin="round" />;
+    if (skin.hairStyle === 'mop')
+      return <path d={`M ${hx - R * 1.02} ${hy - R * 0.10} q ${-R * 0.06} ${-R * 0.95} ${R * 0.62} ${-R * 1.10} q ${R * 0.40} ${-R * 0.22} ${R * 0.90} ${-R * 0.02} q ${R * 0.62} ${R * 0.22} ${R * 0.54} ${R * 1.12} q ${-R * 0.20} ${-R * 0.38} ${-R * 0.62} ${-R * 0.30} q ${-R * 0.30} ${R * 0.30} ${-R * 0.86} ${R * 0.06} q ${-R * 0.42} ${-R * 0.10} ${-R * 0.58} ${R * 0.24} Z`}
+        fill={skin.hair} stroke={ink} strokeWidth={lineW * 0.55} strokeLinejoin="round" />;
+    return null;  // 'tuft' keeps the original bare tufts
+  })();
+
   return (
     <g transform={`translate(${x + bl.x} ${y + bl.y}) scale(${scale}) rotate(${bl.rot})`}>
       {rough && (<defs><filter id={rid} x="-15%" y="-15%" width="130%" height="130%">
@@ -126,11 +204,12 @@ export const StickFigure: React.FC<{
         {/* far limbs */}
         {bone(hip, kneeF, lineW, far, 'fl1')}{bone(kneeF, footF, lineW, far, 'fl2')}{foot(kneeF, footF, 'ff')}
         {bone(shoulder, elbowF, lineW * 0.95, far, 'fa1')}{bone(elbowF, handF, lineW * 0.95, far, 'fa2')}{hand(handF, 'fh')}
-        {/* spine + neck */}
+        {/* spine + neck — the jacket is painted OVER the spine so the torso reads solid */}
         {bone(hip, shoulder, lineW, ink, 'sp')}{bone(shoulder, headC, lineW, ink, 'nk')}
-        {/* head (white fill, ink outline) + hair tuft */}
+        {jacket}
+        {/* head (white fill, ink outline) + hair (costume cap, else the original tufts) */}
         <ellipse cx={headC.x} cy={headC.y} rx={R * 0.92} ry={R} fill={PAPER} stroke={ink} strokeWidth={lineW} />
-        {[-0.4, -0.1, 0.2].map((o, i) => <path key={i} d={`M ${headC.x + o * R} ${headC.y - R * 0.9} q ${R * 0.08} ${-R * 0.3} ${R * 0.22} ${-R * 0.28}`} fill="none" stroke={ink} strokeWidth={lineW * 0.7} strokeLinecap="round" />)}
+        {hair ?? [-0.4, -0.1, 0.2].map((o, i) => <path key={i} d={`M ${headC.x + o * R} ${headC.y - R * 0.9} q ${R * 0.08} ${-R * 0.3} ${R * 0.22} ${-R * 0.28}`} fill="none" stroke={ink} strokeWidth={lineW * 0.7} strokeLinecap="round" />)}
         {showFace && view !== 'back' && <Face cx={headC.x} cy={headC.y} R={R} lid={lid} profile={false} facing={facing} ink={ink}
           lookY={idleGaze(frame, seed + 5) * 0.3 + pose.headTilt * 0.02}
           expr={{...expr, look: expr.look + idleGaze(frame, seed) * 0.6}} />}

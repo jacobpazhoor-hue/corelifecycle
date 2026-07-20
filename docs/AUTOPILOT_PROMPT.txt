@@ -153,9 +153,21 @@ DO, in order:
      electric=spy / intel / tech / hacker (cyan);  money=wealth / billionaire / heir / trillionaire (green-gold);
      survival=survive / lost / stranded / castaway (teal). Match the crime/military/history topics across
      danger|crime|epic|royal so consecutive uploads look different.
-   Fields: archetype (ROTATE every video, NOT used in the last ~3 produced_topics; FAVOR pov / number
-   / ladder / question — one bold focal point; face for raw emotion; beforeafter for transformation;
-   setting for visually strong topics), and:
+   Fields: archetype — DEFAULT TO "poster" (2026-07-20 owner direction: it is the house style, do
+   NOT rotate away from it without a reason). The other archetypes below stay available as a fallback
+   when a topic genuinely has no fitting prop.
+     • poster (HOUSE STYLE — a big illustrated PROP fills the frame, ONE red word, a red arrow onto a
+       costumed hero standing in the scene). Fields:
+         word    — the ONE word of copy, default "YOU". Keep it to ONE short word; the prop does the
+                   explaining, the text does not. Never a sentence.
+         prop    — rocket | tower | vault. rocket=startup/launch/founder, vault=money/wealth/heist,
+                   tower=corporate/empire/institution. Omit to let the topic pick it automatically.
+         costume — suit | uniform | scrubs | royal | street | field. Omit to auto-route from the topic
+                   (military→uniform, medical→scrubs, crime→street, empire→royal, careers→suit).
+         expr    — the hero's face: smug|cold|hardened|hollow|worried|shock.
+       The word + arrow are ALWAYS red in code — do not ask for another colour, it is the CTR device.
+   Legacy archetypes (fallback only; ROTATE among them if you must leave poster, NOT used in the last
+   ~3 produced_topics):
      • pov  (PRIMARY — MasterPOVs style): povline (verb phrase, e.g. "YOU ARE A", "YOU CAN'T",
        "YOU INHERIT", "YOU MUST"), keyword (the RED word, ≤9 chars, NOT a title word: "BURNED",
        "TRAITOR","BILLIONS","LEVEL 9"), expr (figure mood: smug|cold|hardened|hollow|worried|shock).

@@ -4,7 +4,7 @@
     "line1": "FIRST HIRE",
     "line2": "",
     "tag": "DILUTED",
-    "archetype": "number",
+    "archetype": "poster",
     "big": "$8,000,000,000",
     "before": "HIRE #1",
     "after": "LOCKED",
@@ -13,7 +13,8 @@
     "keyword": "CLIFF",
     "setting": "ipoBell",
     "question": "WHO ACTUALLY OWNS THE COMPANY YOU BUILT?",
-    "mood": "money"
+    "mood": "money",
+    "word": "YOU"
   },
   "topic": "startup_unicorn"
 }

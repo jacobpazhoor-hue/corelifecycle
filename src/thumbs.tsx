@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill} from 'remotion';
-import {StickFigure, LIGHT, SIL, PAPER} from './figure';
+import {StickFigure, LIGHT, SIL, PAPER, Costume} from './figure';
 import {FACES} from './faces';
 import * as A from './actions';
 import {TEMPLATES} from './scenes';
@@ -43,6 +43,25 @@ const MOOD_HINTS: Array<[RegExp, string]> = [
   [/survive|stranded|lost at sea|castaway|marooned|shipwreck|ocean|desert|jungle|wilderness|avalanche|blizzard|arctic|mountain|storm/i, 'survival'],
   [/special.?forces|soldier|military|\bwar\b|sniper|marine|commando|\barmy|\bnavy|spec.?ops|regime|dictator|north.?korea/i, 'danger'],
 ];
+// topic -> COSTUME (2026-07-19). A bare stick figure reads as generic; the reference channel's
+// character is instantly legible because it WEARS the job. Same first-match-wins rule as the moods.
+const COSTUME_HINTS: Array<[RegExp, Costume]> = [
+  [/surgeon|doctor|medic|hospital|nurse|\bmd\b/i, 'scrubs'],
+  [/king|emperor|empire|royal|dynasty|throne|monarch|pharaoh|sultan|ottoman|\brome\b|roman/i, 'royal'],
+  [/special.?forces|soldier|military|\bwar\b|sniper|marine|commando|\barmy|\bnavy|spec.?ops|regime|dictator|north.?korea|guard/i, 'uniform'],
+  [/cartel|mafia|\bmob\b|mobster|hitman|assassin|kingpin|bratva|yakuza|gang|narco|smuggl|prison|inmate|convict|street/i, 'street'],
+  [/survive|stranded|castaway|shipwreck|jungle|desert|wilderness|arctic|mountain|pirate|explorer|miner|farm/i, 'field'],
+  [/startup|founder|unicorn|venture|entrepreneur|\bipo\b|\bceo\b|banker|lawyer|trader|hedge|billion|trillion|mogul|heir|executive|corporate|spy|agent/i, 'suit'],
+];
+function costumeFor(): Costume {
+  const c = (meta as any).thumb?.costume;
+  if (c) return c as Costume;
+  const topic = ((meta as any).topic || '') + ' ' + ((meta as any).title || '');
+  for (const [re, name] of COSTUME_HINTS) if (re.test(topic)) return name;
+  return 'suit';  // the channel's centre of gravity is career ladders
+}
+const COSTUME: Costume = costumeFor();
+
 function moodFor(): Mood {
   const m = (meta as any).thumb?.mood;
   if (m && MOODS[m]) return MOODS[m];
@@ -167,14 +186,15 @@ const Tape: React.FC<{y: number; label: string}> = ({y, label}) => (
   </g>
 );
 
-const Hero: React.FC<{x: number; y: number; scale: number; facing?: number; expr?: any; pose?: any; pal?: any}> =
-({x, y, scale, facing = -1, expr, pose, pal = LIGHT}) => (
-  <g filter="url(#heroPop)"><StickFigure pose={pose ?? A.stand(0)} x={x} y={y} scale={scale} facing={facing} view="front" expr={expr} pal={pal} rough frame={0} /></g>
+const Hero: React.FC<{x: number; y: number; scale: number; facing?: number; expr?: any; pose?: any; pal?: any; costume?: Costume}> =
+({x, y, scale, facing = -1, expr, pose, pal = LIGHT, costume = COSTUME}) => (
+  <g filter="url(#heroPop)"><StickFigure pose={pose ?? A.stand(0)} x={x} y={y} scale={scale} facing={facing} view="front" expr={expr} pal={pal} rough frame={0} costume={costume} /></g>
 );
 
-const Wrap: React.FC<{children: React.ReactNode; burstX?: number; sun?: boolean}> = ({children, burstX, sun}) => (
-  <AbsoluteFill style={{backgroundColor: M.rim}}>
-    <svg viewBox="0 0 1280 720" width="100%" height="100%"><Defs /><EnergyBG burstX={burstX} sun={sun} />{children}</svg>
+// `plain` skips EnergyBG so an archetype can paint its own full-bleed scene (see ThumbPoster).
+const Wrap: React.FC<{children: React.ReactNode; burstX?: number; sun?: boolean; plain?: boolean}> = ({children, burstX, sun, plain}) => (
+  <AbsoluteFill style={{backgroundColor: plain ? '#ffffff' : M.rim}}>
+    <svg viewBox="0 0 1280 720" width="100%" height="100%"><Defs />{plain ? null : <EnergyBG burstX={burstX} sun={sun} />}{children}</svg>
   </AbsoluteFill>
 );
 
@@ -364,7 +384,113 @@ const ThumbSetting: React.FC = () => {
 // CLIMB (legacy, rare) — reuse ladder look
 const ThumbClimb: React.FC = ThumbLadder;
 
-const ARCHES: Record<string, React.FC> = {pov: ThumbPov, scaleterror: ThumbScaleTerror, redacted: ThumbRedacted, eyeline: ThumbEyeline, ladder: ThumbLadder, beforeafter: ThumbBefore, number: ThumbNumber, face: ThumbFace, setting: ThumbSetting, question: ThumbQuestion, climb: ThumbClimb};
+// ===========================================================================================
+// POSTER (2026-07-19) — the composition the owner asked us to match. Rules, in priority order:
+//   1. a big illustrated PROP fills the frame and sells the fantasy before any text is read
+//   2. exactly ONE word of copy (default "YOU")
+//   3. a red arrow pointing at the hero, so the eye lands on the character
+//   4. the hero is IN the scene, costumed, small-ish — the prop is the star, not the text
+// Deliberately our own artwork + character: the conventions are worth copying, the drawings
+// are not (and a look-alike of another channel is a bad long-term brand anyway).
+// ===========================================================================================
+const Sky: React.FC<{a: string; b: string}> = ({a, b}) => (
+  <>
+    <defs><linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={a} /><stop offset="100%" stopColor={b} /></linearGradient></defs>
+    <rect x={0} y={0} width={1280} height={720} fill="url(#skyg)" />
+  </>
+);
+// hand-drawn cloud puffs (the reference's backdrop is plain sky + soft clouds)
+const Clouds: React.FC = () => (
+  <g opacity={0.75} fill="#ffffff">
+    {[[150, 120, 1], [1080, 96, 0.8], [640, 74, 0.55]].map(([cx, cy, s], i) => (
+      <g key={i} transform={`translate(${cx} ${cy}) scale(${s})`}>
+        <ellipse cx={0} cy={0} rx={110} ry={38} /><ellipse cx={-52} cy={10} rx={62} ry={28} /><ellipse cx={48} cy={12} rx={70} ry={30} />
+      </g>
+    ))}
+  </g>
+);
+const Prop: Record<string, React.FC> = {
+  // ROCKET — startup / launch / founder
+  rocket: () => (
+    <g>
+      <g transform="translate(690 30) rotate(9) scale(0.70)">
+        <path d="M 210 0 q 120 150 120 330 l 0 300 q -120 60 -240 0 l 0 -300 q 0 -180 120 -330 Z" fill="#f2f4f7" stroke={INK} strokeWidth={9} strokeLinejoin="round" />
+        <path d="M 210 0 q 76 96 102 216 q -102 -46 -204 0 q 26 -120 102 -216 Z" fill={M.pill} stroke={INK} strokeWidth={9} strokeLinejoin="round" />
+        <circle cx={210} cy={330} r={62} fill="#bfe6f5" stroke={INK} strokeWidth={9} />
+        <circle cx={192} cy={312} r={20} fill="#ffffff" opacity={0.85} />
+        <path d="M 90 400 q -96 96 -74 230 q 52 -44 74 -78 Z" fill={M.pill} stroke={INK} strokeWidth={9} strokeLinejoin="round" />
+        <path d="M 330 400 q 96 96 74 230 q -52 -44 -74 -78 Z" fill={M.pill} stroke={INK} strokeWidth={9} strokeLinejoin="round" />
+        <path d="M 108 630 q 102 44 204 0 l -18 66 q -84 30 -168 0 Z" fill="#cfd6de" stroke={INK} strokeWidth={9} strokeLinejoin="round" />
+        <g opacity={0.95}>
+          <path d="M 130 700 q 80 150 80 250 q 0 -100 80 -250 q -80 40 -160 0 Z" fill="#FF8A00" stroke={INK} strokeWidth={8} strokeLinejoin="round" />
+          <path d="M 160 706 q 50 110 50 180 q 0 -70 50 -180 q -50 26 -100 0 Z" fill="#FFD54A" />
+        </g>
+      </g>
+    </g>
+  ),
+  // SKYSCRAPER — corporate / empire / mogul
+  tower: () => (
+    <g transform="translate(560 40)">
+      <path d="M 120 660 L 120 150 q 0 -40 40 -40 l 260 0 q 40 0 40 40 l 0 510 Z" fill="#e9edf2" stroke={INK} strokeWidth={9} strokeLinejoin="round" />
+      <path d="M 460 660 L 460 260 q 0 -32 34 -32 l 170 0 q 34 0 34 32 l 0 400 Z" fill="#dbe2ea" stroke={INK} strokeWidth={9} strokeLinejoin="round" />
+      {Array.from({length: 6}, (_, r) => Array.from({length: 4}, (_, c) => (
+        <rect key={`${r}-${c}`} x={158 + c * 70} y={190 + r * 74} width={44} height={50} rx={5} fill={M.core} opacity={0.75} stroke={INK} strokeWidth={5} />
+      )))}
+      {Array.from({length: 5}, (_, r) => Array.from({length: 2}, (_, c) => (
+        <rect key={`t${r}-${c}`} x={506 + c * 78} y={300 + r * 70} width={48} height={46} rx={5} fill={M.core} opacity={0.6} stroke={INK} strokeWidth={5} />
+      )))}
+    </g>
+  ),
+  // VAULT of cash — money / wealth
+  vault: () => (
+    <g transform="translate(600 120)">
+      <rect x={40} y={40} width={600} height={470} rx={26} fill="#d7dee6" stroke={INK} strokeWidth={10} />
+      <rect x={92} y={92} width={496} height={366} rx={16} fill="#eef2f6" stroke={INK} strokeWidth={8} />
+      <circle cx={340} cy={275} r={112} fill={M.pill} stroke={INK} strokeWidth={10} />
+      <circle cx={340} cy={275} r={54} fill="#eef2f6" stroke={INK} strokeWidth={8} />
+      {[0, 45, 90, 135].map((a) => (
+        <rect key={a} x={330} y={135} width={20} height={280} rx={8} fill="#eef2f6" stroke={INK} strokeWidth={7} transform={`rotate(${a} 340 275)`} />
+      ))}
+      <text x={340} y={300} textAnchor="middle" fontFamily={SANS} fontSize={92} fontWeight={900} fill={M.accent} stroke={INK} strokeWidth={8} paintOrder="stroke">$</text>
+    </g>
+  ),
+};
+function propFor(): React.FC {
+  const explicit = (meta as any).thumb?.prop;
+  if (explicit && Prop[explicit]) return Prop[explicit];
+  const s = ((meta as any).topic || '') + ' ' + ((meta as any).title || '');
+  if (/startup|founder|unicorn|venture|launch|entrepreneur|\bipo\b/i.test(s)) return Prop.rocket;
+  if (/billion|trillion|wealth|money|heir|lottery|fortune|bank|hedge|vault/i.test(s)) return Prop.vault;
+  return Prop.tower;
+}
+// The word + arrow are ALWAYS red — that pairing is the whole CTR device and must not drift with
+// the mood palette (in `money` mood it came out green, which killed the signal).
+const HOT = '#E8202A';
+const ThumbPoster: React.FC = () => {
+  const Art = propFor();
+  const WORD = ((meta as any).thumb?.word || 'YOU').toUpperCase();
+  const ws = Math.min(176, Math.floor(560 / Math.max(WORD.length, 1)));
+  const HS = 1.85;                      // hero scale
+  const GY = 648;                       // ground line — hero stands ON it, nothing gets cropped
+  return (
+    <Wrap plain>
+      <Sky a="#bfe4f7" b="#eef8ff" />
+      <Clouds />
+      <rect x={0} y={GY} width={1280} height={720 - GY} fill="#cfd8c9" />
+      <path d={`M 0 ${GY} L 1280 ${GY}`} stroke={INK} strokeWidth={7} />
+      <Art />
+      {/* StickFigure's y is the HIP, not the feet — thigh+shin (110) must be subtracted or the
+          legs render off the bottom of the frame. */}
+      <Hero x={252} y={GY - 110 * HS} scale={HS} facing={1} expr={face('smug')} />
+      <Punch x={556} y={150} fs={ws} anchor="middle" fill={HOT} st="#111" sw={Math.max(11, ws * 0.15)}>{WORD}</Punch>
+      {/* arrow swings OUT and back so it lands on the hero from the side — never across the face */}
+      <path d="M 556 212 Q 452 268 352 214" stroke={HOT} strokeWidth={23} fill="none" strokeLinecap="round" />
+      <path d="M 306 196 l 58 -12 l -14 54 Z" fill={HOT} stroke={INK} strokeWidth={6} strokeLinejoin="round" />
+    </Wrap>
+  );
+};
+
+const ARCHES: Record<string, React.FC> = {poster: ThumbPoster, pov: ThumbPov, scaleterror: ThumbScaleTerror, redacted: ThumbRedacted, eyeline: ThumbEyeline, ladder: ThumbLadder, beforeafter: ThumbBefore, number: ThumbNumber, face: ThumbFace, setting: ThumbSetting, question: ThumbQuestion, climb: ThumbClimb};
 const ORDER = ['pov', 'scaleterror', 'number', 'redacted', 'ladder', 'eyeline', 'beforeafter', 'question', 'scaleterror', 'pov', 'redacted', 'face', 'eyeline', 'number', 'setting', 'ladder'];
 
 function pick(): React.FC {
