@@ -102,11 +102,41 @@ def main():
         "status": {"privacyStatus": a.privacy, "selfDeclaredMadeForKids": False},
     }
     print(f"uploading: {title}  [{a.privacy}]")
-    media = MediaFileUpload(a.video, chunksize=-1, resumable=True, mimetype="video/mp4")
+    # 2026-07-20: chunksize=-1 sent the whole ~370MB in ONE request, so `resumable=True` bought us
+    # nothing — a single network blip lost the entire upload. That is exactly how the 07-20 03:16
+    # and 07:16 runs died (TimeoutError: the write operation timed out) with a built, REVIEW-APPROVED
+    # episode already on disk. Chunk it for real, and retry transient failures with backoff so one
+    # bad packet no longer costs a whole day of the channel.
+    import time as _time, socket as _socket, ssl as _ssl, random as _random
+    from googleapiclient.errors import HttpError as _HttpError
+    CHUNK = 16 * 1024 * 1024          # must be a multiple of 256KB
+    MAX_TRIES = 6
+    media = MediaFileUpload(a.video, chunksize=CHUNK, resumable=True, mimetype="video/mp4")
     req = yt.videos().insert(part="snippet,status", body=body, media_body=media)
     resp = None
+    tries = 0
     while resp is None:
-        _, resp = req.next_chunk()
+        try:
+            status, resp = req.next_chunk()
+            if status:
+                print(f"  upload {int(status.progress() * 100)}%", flush=True)
+            tries = 0                  # a chunk landed — reset the failure budget
+        except _HttpError as e:
+            if e.resp.status not in (500, 502, 503, 504, 429):
+                raise                  # a real API error (quota/auth/bad request) — do NOT mask it
+            tries += 1
+            if tries >= MAX_TRIES:
+                raise
+            back = min(60, 2 ** tries) + _random.random()
+            print(f"  transient HTTP {e.resp.status} — retry {tries}/{MAX_TRIES} in {back:.1f}s", flush=True)
+            _time.sleep(back)
+        except (TimeoutError, _socket.timeout, _ssl.SSLError, ConnectionError, OSError) as e:
+            tries += 1
+            if tries >= MAX_TRIES:
+                raise                  # give up loudly rather than pretend it published
+            back = min(60, 2 ** tries) + _random.random()
+            print(f"  transient network error ({type(e).__name__}: {e}) — retry {tries}/{MAX_TRIES} in {back:.1f}s", flush=True)
+            _time.sleep(back)
     vid = resp["id"]
     url = f"https://youtu.be/{vid}"
     print("  uploaded:", url)
