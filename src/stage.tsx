@@ -1766,7 +1766,7 @@ const MED = {
     const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="lab" bg="url(#spaper)"
       fig={{pose: A.stand(f), x: 720, y: 892, scale: 1.4, view: 'front', expr: blendExpr(FACES.neutral, FACES.conflicted, t)}}
-      extras={[{pose: A.sit(f), x: 1200, y: 900, scale: 1.2, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+      extras={[{pose: A.sit(f), x: 1200, y: 900, scale: 1.2, view: 'profile', facing: -1, pal: DIM, expr: FACES.cold}]} />;},
 };
 
 // Startup pack (founder / tech)

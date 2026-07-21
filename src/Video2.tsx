@@ -115,8 +115,11 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
 
   // static (non-numeric) overlay fallback, matches the count-up styling
   const big = scene.overlay?.big ?? '';
-  const staticOp = interpolate(f, [20, 36, D - 18, D], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const staticRise = interpolate(f, [20, 44], [18, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
+  // was [20, 36, ...]: a 16-frame ramp left the card at low opacity/contrast for a long,
+  // clearly-visible beat (e.g. the "2011" fileWall share-beat) before settling. Matches
+  // CountUp's snappier onset so text reads at full contrast almost as soon as it appears.
+  const staticOp = interpolate(f, [10, 20, D - 18, D], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const staticRise = interpolate(f, [10, 28], [18, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
 
   let t = 0;
   return (

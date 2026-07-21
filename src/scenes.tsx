@@ -286,9 +286,16 @@ const S06: React.FC = () => {
   </Frame>);
 };
 const S07: React.FC = () => {
+  // window: ONE big picture window (sill + single cross-mullion), not the full curtain-wall grid
+  // every other office template shares — so this reads as "standing at the glass", not a repeat
+  // of the generic skyline-behind-a-desk shot.
   const f = useCurrentFrame();
-  return (<Frame>
-    <Skyline frame={f} baseY={780} tint="#13202e" /><Rain frame={f} o={0.24} /><Mullions o={0.5} />
+  return (<Frame bg="url(#teal)">
+    <Skyline frame={f} baseY={780} tint="#13202e" /><Rain frame={f} o={0.3} />
+    <rect x={520} y={90} width={880} height={700} fill="none" stroke={INK} strokeWidth={9} />
+    <line x1={960} y1={90} x2={960} y2={790} stroke={INK} strokeWidth={6} /><line x1={520} y1={440} x2={1400} y2={440} stroke={INK} strokeWidth={6} />
+    <rect x={0} y={790} width={1920} height={290} fill={COL.floor} /><rect x={0} y={790} width={1920} height={8} fill={INK} />
+    <rect x={460} y={780} width={1000} height={22} fill={PAPER} stroke={INK} strokeWidth={4} />
     <StickFigure pose={A.stand(f)} x={960} y={770} scale={1.6} facing={1} view="profile" expr={FACES.hollow} pal={LIGHT} frame={f} />
   </Frame>);
 };
@@ -318,7 +325,7 @@ const Dinner: React.FC<{f: number; mainExpr: any}> = ({f, mainExpr}) => (
     <ellipse cx={970} cy={700} rx={300} ry={170} fill="#f2c14e" opacity={0.1} />
     <ellipse cx={970} cy={700} rx={150} ry={90} fill="#f2c14e" opacity={0.1} />
     <StickFigure pose={A.sit(f)} x={700} y={762} scale={1.2} facing={1} view="profile" expr={mainExpr} pal={LIGHT} frame={f} />
-    <StickFigure pose={A.sit(f + 50)} x={1240} y={762} scale={1.2} facing={-1} view="profile" pal={DIM} showFace={false} frame={f} />
+    <StickFigure pose={A.sit(f + 50)} x={1240} y={762} scale={1.2} facing={-1} view="profile" pal={DIM} expr={FACES.earnest} frame={f} />
     <rect x={0} y={722} width={1920} height={358} fill={COL.floor} /><rect x={0} y={722} width={1920} height={8} fill={INK} />
     {/* the dinner table between them — top + two legs, so it reads as a MEAL, not a street */}
     <rect x={800} y={694} width={340} height={16} rx={6} fill={PAPER} stroke={INK} strokeWidth={4} />
@@ -435,12 +442,20 @@ const S17: React.FC = () => {  // the trust — no title; empty chair, others si
 };
 
 const S18: React.FC = () => {  // the loop closes — a new young associate walks in
+  // lobby: a bright daytime atrium with its OWN furniture (reception desk, tiled floor, a potted
+  // plant) instead of the same night skyline-behind-glass every other office template reuses.
   const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
   const x = interpolate(f, [0, durationInFrames], [520, 1040]);
-  return (<Frame>
-    <Skyline frame={f} baseY={760} tint="#13202e" o={0.85} /><Mullions o={0.5} />
-    <ellipse cx={1500} cy={300} rx={300} ry={420} fill="url(#lightTop)" opacity={0.25} />
-    <rect x={0} y={905} width={1920} height={175} fill={COL.floor} /><rect x={0} y={905} width={1920} height={8} fill={INK} />
+  const tiles = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => <line key={i} x1={i * 192} y1={905} x2={i * 192} y2={1080} stroke={COL.line} strokeWidth={3} opacity={0.5} />);
+  return (<Frame bg="url(#dayg)" haze="glowTeal">
+    <Skyline frame={f} baseY={760} tint="#13202e" o={0.5} />
+    <ellipse cx={1500} cy={300} rx={300} ry={420} fill="url(#lightTop)" opacity={0.35} />
+    <rect x={0} y={905} width={1920} height={175} fill={COL.floor} />{tiles}<rect x={0} y={905} width={1920} height={8} fill={INK} />
+    {/* reception desk, set back left */}
+    <rect x={90} y={780} width={340} height={130} fill={PAPER} stroke={INK} strokeWidth={5} /><rect x={90} y={780} width={340} height={16} fill={INK} opacity={0.15} />
+    {/* potted plant, right foreground */}
+    <rect x={1720} y={940} width={70} height={40} rx={6} fill={PAPER} stroke={INK} strokeWidth={4} />
+    <path d="M 1755 940 Q 1700 880 1730 830 M 1755 940 Q 1810 890 1780 820 M 1755 940 Q 1755 860 1755 810" fill="none" stroke="#2f7a4a" strokeWidth={6} strokeLinecap="round" />
     <StickFigure pose={A.walk(f, fps)} x={x} y={897} scale={0.9} facing={1} view="profile" expr={FACES.earnest} pal={LIGHT} frame={f} />
   </Frame>);
 };
