@@ -2,347 +2,348 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 22324,
+  "totalFrames": 19913,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t00",
       "level": null,
-      "overlay": null,
-      "template": "layoffs",
+      "overlay": {
+        "big": "YEAR 1",
+        "sub": "THE WALL HAS NEVER BROKEN. UNTIL TONIGHT."
+      },
+      "template": "campWall",
       "audio": "audio/t00.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 759
+      "durationInFrames": 698
     },
     {
       "id": "t01",
-      "level": "LEVEL 01  \u00b7  THE GARAGE HIRE",
-      "overlay": {
-        "big": "$6,000,000",
-        "sub": "THE COMPANY'S WORTH \u2014 YOUR SLICE: 1.5%"
-      },
-      "template": "garageStart",
+      "level": null,
+      "overlay": null,
+      "template": "window",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
-      "startFrame": 759,
-      "durationInFrames": 685
+      "startFrame": 698,
+      "durationInFrames": 543
     },
     {
       "id": "t02",
-      "level": null,
-      "overlay": null,
-      "template": "deskSilhouette",
+      "level": "LEVEL 01  \u00b7  HOUR 1  \u00b7  THE DOOR CODE",
+      "overlay": {
+        "big": "1 BITE",
+        "sub": "THAT'S ALL IT TAKES"
+      },
+      "template": "suburbSiege",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 1444,
-      "durationInFrames": 642
+      "startFrame": 1241,
+      "durationInFrames": 638
     },
     {
       "id": "t03",
       "level": null,
       "overlay": null,
-      "template": "desk",
+      "template": "dinner",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 2086,
-      "durationInFrames": 707
+      "startFrame": 1879,
+      "durationInFrames": 539
     },
     {
       "id": "t04",
       "level": null,
       "overlay": null,
-      "template": "signing",
+      "template": "deskSilhouette",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 2793,
-      "durationInFrames": 827
+      "startFrame": 2418,
+      "durationInFrames": 585
     },
     {
       "id": "t05",
-      "level": "LEVEL 02  \u00b7  THE SEED CREW",
-      "overlay": {
-        "big": "$15,000,000",
-        "sub": "THE SEED ROUND \u2014 YOUR SLICE DILUTES TO ~1.2%"
-      },
-      "template": "startupGrow",
+      "level": null,
+      "overlay": null,
+      "template": "window",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 3620,
-      "durationInFrames": 724
+      "startFrame": 3003,
+      "durationInFrames": 549
     },
     {
       "id": "t06",
-      "level": null,
-      "overlay": null,
-      "template": "fileWall",
+      "level": "LEVEL 02  \u00b7  DAY 1  \u00b7  THE ROAD OUT",
+      "overlay": {
+        "big": "1 BITE",
+        "sub": "THAT'S ALL IT TAKES"
+      },
+      "template": "hordeStreet",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 4344,
-      "durationInFrames": 661
+      "startFrame": 3552,
+      "durationInFrames": 606
     },
     {
       "id": "t07",
       "level": null,
-      "overlay": {
-        "big": "3.2%",
-        "sub": "THE ODDS A SEED-STAGE STARTUP EVER EXITS FOR $100M+"
-      },
-      "template": "podiumScene",
+      "overlay": null,
+      "template": "highwayJam",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 5005,
-      "durationInFrames": 687
+      "startFrame": 4158,
+      "durationInFrames": 592
     },
     {
       "id": "t08",
       "level": null,
-      "overlay": null,
-      "template": "deskClose",
+      "overlay": {
+        "big": "2011",
+        "sub": "THE REAL CDC DRILL NOBODY RAN"
+      },
+      "template": "fileWall",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 5692,
-      "durationInFrames": 648
+      "startFrame": 4750,
+      "durationInFrames": 758
     },
     {
       "id": "t09",
-      "level": "LEVEL 03  \u00b7  THE PAPER MILLION",
+      "level": "LEVEL 03  \u00b7  DAY 3  \u00b7  THE LAST AISLE",
       "overlay": {
-        "big": "$78,000,000",
-        "sub": "SERIES A \u2014 YOUR SLICE: ~1% \u2248 $770,000 (ON PAPER)"
+        "big": "3 DAYS",
+        "sub": "IS ALL A GROCERY STORE EVER HAD"
       },
-      "template": "tower",
+      "template": "storeRaid",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 6340,
-      "durationInFrames": 674
+      "startFrame": 5508,
+      "durationInFrames": 617
     },
     {
       "id": "t10",
       "level": null,
       "overlay": null,
-      "template": "serverScale",
+      "template": "erTrauma",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 7014,
-      "durationInFrames": 687
+      "startFrame": 6125,
+      "durationInFrames": 524
     },
     {
       "id": "t11",
       "level": null,
       "overlay": null,
-      "template": "boardroomNotes",
+      "template": "frontline",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 7701,
-      "durationInFrames": 566
+      "startFrame": 6649,
+      "durationInFrames": 569
+    },
+    {
+      "id": "t11b",
+      "level": null,
+      "overlay": null,
+      "template": "highwayJam",
+      "audio": "audio/t11b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 7218,
+      "durationInFrames": 651
     },
     {
       "id": "t12",
-      "level": null,
-      "overlay": null,
-      "template": "dinner",
+      "level": "LEVEL 04  \u00b7  WEEK 1  \u00b7  THE BARRICADE",
+      "overlay": {
+        "big": "1 GAL",
+        "sub": "PER PERSON. PER DAY. YOU DON'T HAVE IT."
+      },
+      "template": "bunkerSiege",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 8267,
-      "durationInFrames": 660
+      "startFrame": 7869,
+      "durationInFrames": 559
     },
     {
       "id": "t13",
-      "level": "LEVEL 04  \u00b7  THE SCALE-UP",
-      "overlay": {
-        "big": "$400,000,000",
-        "sub": "SERIES B/C \u2014 YOUR SLICE: ~0.77% \u2248 $3,000,000 (STILL PAPER)"
-      },
-      "template": "boardroomHead",
+      "level": null,
+      "overlay": null,
+      "template": "deskSilhouette",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 8927,
-      "durationInFrames": 711
+      "startFrame": 8428,
+      "durationInFrames": 542
     },
     {
       "id": "t14",
       "level": null,
       "overlay": null,
-      "template": "revolvingDoor",
+      "template": "lobby",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 9638,
-      "durationInFrames": 600
+      "startFrame": 8970,
+      "durationInFrames": 558
     },
     {
       "id": "t15",
       "level": null,
       "overlay": null,
-      "template": "layoffs",
+      "template": "window",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 10238,
-      "durationInFrames": 674
+      "startFrame": 9528,
+      "durationInFrames": 645
     },
     {
       "id": "t16",
       "level": null,
       "overlay": null,
-      "template": "emptyChair",
+      "template": "barracksLife",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 10912,
-      "durationInFrames": 609
+      "startFrame": 10173,
+      "durationInFrames": 611
     },
     {
       "id": "t17",
-      "level": "LEVEL 05  \u00b7  THE DOWN ROUND",
+      "level": "LEVEL 05  \u00b7  WEEK 3  \u00b7  WHAT'S INSIDE",
       "overlay": {
-        "big": "RUMORED $1,000,000,000",
-        "sub": "THE TERM SHEET EVERYONE'S ALREADY SPENDING"
+        "big": "12 HRS",
+        "sub": "TO SYMPTOMS. THEN NOTHING."
       },
-      "template": "tradingFloor",
+      "template": "bunkerSiege",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 11521,
-      "durationInFrames": 658
+      "startFrame": 10784,
+      "durationInFrames": 669
     },
     {
       "id": "t18",
       "level": null,
       "overlay": null,
-      "template": "pnlWall",
+      "template": "consult",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 12179,
-      "durationInFrames": 662
+      "startFrame": 11453,
+      "durationInFrames": 884
     },
     {
       "id": "t19",
       "level": null,
-      "overlay": {
-        "big": "$420,000,000",
-        "sub": "THE DOWN ROUND \u2014 YOUR $3,000,000 STAKE, ON PAPER, IS NOW $0"
-      },
-      "template": "signing",
+      "overlay": null,
+      "template": "prisonCell",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 12841,
-      "durationInFrames": 1055
+      "startFrame": 12337,
+      "durationInFrames": 576
     },
     {
       "id": "t20",
-      "level": "LEVEL 06  \u00b7  THE REBUILD",
-      "overlay": null,
-      "template": "window",
+      "level": "LEVEL 06  \u00b7  MONTH 2  \u00b7  THE CHECKPOINT",
+      "overlay": {
+        "big": "1 IN 4",
+        "sub": "DOESN'T MAKE IT THROUGH THE FENCE"
+      },
+      "template": "checkpointTriage",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 13896,
-      "durationInFrames": 619
+      "startFrame": 12913,
+      "durationInFrames": 648
     },
     {
       "id": "t21",
       "level": null,
       "overlay": null,
-      "template": "atrium",
+      "template": "commandPost",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 14515,
-      "durationInFrames": 735
+      "startFrame": 13561,
+      "durationInFrames": 755
     },
     {
       "id": "t22",
       "level": null,
-      "overlay": {
-        "big": "$1,100,000,000",
-        "sub": "UNICORN \u2014 YOUR SLICE: ~0.6% \u2248 $6,000,000 (STILL PAPER)"
-      },
-      "template": "warRoom",
+      "overlay": null,
+      "template": "hordeStreet",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 15250,
-      "durationInFrames": 733
+      "startFrame": 14316,
+      "durationInFrames": 612
     },
     {
       "id": "t23",
-      "level": "LEVEL 07  \u00b7  THE TENDER",
-      "overlay": {
-        "big": "10%",
-        "sub": "OF VESTED SHARES \u2014 THE FIRST CHANCE TO SELL FOR CASH"
-      },
-      "template": "lectureHallScene",
+      "level": null,
+      "overlay": null,
+      "template": "emptyChair",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 15983,
-      "durationInFrames": 628
+      "startFrame": 14928,
+      "durationInFrames": 551
     },
     {
       "id": "t24",
-      "level": null,
+      "level": "LEVEL 07  \u00b7  YEAR 1  \u00b7  THE WALL",
       "overlay": {
-        "big": "$628,000",
-        "sub": "REAL. WIRED. NOT PAPER."
+        "big": "40 ACRES",
+        "sub": "IS ALL YOU GET TO KEEP"
       },
-      "template": "jet",
+      "template": "campWall",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 16611,
-      "durationInFrames": 690
+      "startFrame": 15479,
+      "durationInFrames": 585
     },
     {
       "id": "t25",
       "level": null,
       "overlay": null,
-      "template": "deskClose",
+      "template": "commandPost",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 17301,
-      "durationInFrames": 555
+      "startFrame": 16064,
+      "durationInFrames": 686
     },
     {
       "id": "t26",
-      "level": "LEVEL 08  \u00b7  THE LOCK-UP",
-      "overlay": {
-        "big": "$8,000,000,000",
-        "sub": "MARKET CAP \u2014 YOUR SLICE: ~$40,000,000 (STILL LOCKED)"
-      },
-      "template": "ipoBell",
+      "level": null,
+      "overlay": null,
+      "template": "riceField",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 17856,
-      "durationInFrames": 639
+      "startFrame": 16750,
+      "durationInFrames": 573
     },
     {
       "id": "t27",
       "level": null,
-      "overlay": {
-        "big": "180 DAYS",
-        "sub": "THE LOCK-UP \u2014 YOU CAN'T SELL A SINGLE SHARE"
-      },
-      "template": "fileWall",
+      "overlay": null,
+      "template": "dinner",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 18495,
-      "durationInFrames": 655
+      "startFrame": 17323,
+      "durationInFrames": 594
     },
     {
       "id": "t28",
       "level": null,
       "overlay": null,
-      "template": "layoffs",
+      "template": "campWall",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 19150,
-      "durationInFrames": 914
+      "startFrame": 17917,
+      "durationInFrames": 693
     },
     {
       "id": "t29",
       "level": null,
       "overlay": {
-        "big": "$19,000,000",
-        "sub": "AFTER THE LOCK-UP, AFTER THE TAXES \u2014 THE REAL NUMBER"
+        "big": "2009",
+        "sub": "THE REAL MATH PAPER THAT SAID YOU'D LOSE"
       },
       "template": "window",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 20064,
-      "durationInFrames": 584
+      "startFrame": 18610,
+      "durationInFrames": 694
     },
     {
       "id": "t30",
@@ -351,18 +352,8 @@
       "template": "lobby",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 20648,
-      "durationInFrames": 831
-    },
-    {
-      "id": "t31",
-      "level": null,
-      "overlay": null,
-      "template": "garageStart",
-      "audio": "audio/t31.wav",
-      "audioStartFrame": 3,
-      "startFrame": 21479,
-      "durationInFrames": 845
+      "startFrame": 19304,
+      "durationInFrames": 609
     }
   ]
 }

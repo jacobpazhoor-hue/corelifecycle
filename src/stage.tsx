@@ -1213,6 +1213,127 @@ const BG: Record<string, React.FC<{frame: number}>> = {
     </g>
   ),
   plain: () => <g />,
+  // --- Zombie apocalypse pack: new bespoke backdrops (the rest of the ladder composes from
+  // MILITARY/MED/MAFIA/SAMURAI/universal packs — see docs/TEMPLATES.md) ---
+  // a dark suburban street, one flickering lamp, dead cars askew — the cold-open + loop-close street
+  hordeAvenue: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={620} fill="#232a2f" />
+      <rect x={0} y={620} width={1920} height={460} fill="#171b1d" />
+      <line x1={0} y1={620} x2={1920} y2={620} stroke={INK} strokeWidth={3} opacity={0.5} />
+      {[80, 460, 840, 1220, 1600].map((x, i) => (
+        <g key={i} opacity={0.75}>
+          <rect x={x} y={440 + (i % 2) * 12} width={220} height={190} fill="#2c333a" stroke={INK} strokeWidth={2.5} />
+          <rect x={x + 30} y={480 + (i % 2) * 12} width={50} height={60} fill={i === 2 ? GOLD : '#171b1d'} opacity={i === 2 ? 0.55 : 1} />
+          <rect x={x + 130} y={480 + (i % 2) * 12} width={50} height={60} fill="#171b1d" />
+        </g>
+      ))}
+      <line x1={1020} y1={620} x2={1020} y2={330} stroke="#0d1013" strokeWidth={8} />
+      <ellipse cx={1020} cy={320} rx={60} ry={40} fill={GOLD} opacity={0.12 + 0.08 * Math.sin(frame * 0.4)} />
+      {Array.from({length: 4}).map((_, i) => (
+        <ellipse key={i} cx={((rnd(i * 3) * 1920) + frame * 0.3) % 1920} cy={640 + i * 30} rx={260} ry={60} fill="#3a4650" opacity={0.14} />
+      ))}
+      {[{x: 260, r: -8}, {x: 1500, r: 6}].map((c, i) => (
+        <g key={i} transform={`translate(${c.x} 780) rotate(${c.r})`} opacity={0.7}>
+          <path d="M -140 60 L -140 10 L -90 -30 L 90 -30 L 140 10 L 140 60 Z" fill="#2c333a" stroke={INK} strokeWidth={3} />
+          <circle cx={-90} cy={64} r={26} fill="#171b1d" stroke={INK} strokeWidth={3} /><circle cx={90} cy={64} r={26} fill="#171b1d" stroke={INK} strokeWidth={3} />
+        </g>
+      ))}
+      <rect x={0} y={900} width={1920} height={180} fill="#171b1d" />
+    </g>
+  ),
+  // gridlocked evacuation highway — packed cars at angles, city smoke, a helicopter that won't stop
+  highwayGridlock: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={520} fill="#cdbfa0" />
+      <rect x={0} y={520} width={1920} height={560} fill="#8f8877" />
+      {[680, 900, 1120].map((y) => <line key={y} x1={0} y1={y} x2={1920} y2={y} stroke="#f4ead0" strokeWidth={4} strokeDasharray="40 30" opacity={0.5} />)}
+      {[120, 260, 420, 560].map((x, i) => <rect key={i} x={x} y={340 - i * 10} width={70} height={120 + i * 14} fill="#a89a7c" opacity={0.6} />)}
+      {[180, 480].map((x, i) => <path key={i} d={`M ${x} 340 q ${20 + i * 10} -120 -10 -220 q 40 40 10 260`} fill="#5b6875" opacity={0.35} />)}
+      {Array.from({length: 10}).map((_, i) => {
+        const col = i % 5; const row = Math.floor(i / 5);
+        const x = 260 + col * 300 + rnd(i) * 40; const y = 640 + row * 220 + rnd(i * 2) * 20; const rot = -6 + rnd(i * 3) * 12;
+        return (
+          <g key={i} transform={`translate(${x} ${y}) rotate(${rot})`}>
+            <path d="M -110 40 L -110 0 L -70 -26 L 70 -26 L 110 0 L 110 40 Z" fill={PAPERC} stroke={INK} strokeWidth={3.5} />
+            <circle cx={-70} cy={44} r={22} fill="#3a3630" /><circle cx={70} cy={44} r={22} fill="#3a3630" />
+          </g>
+        );
+      })}
+      <g transform={`translate(${1500 + Math.sin(frame * 0.02) * 30} 160)`} opacity={0.7}>
+        <ellipse cx={0} cy={0} rx={22} ry={8} fill={INK} /><line x1={0} y1={0} x2={-14} y2={-16} stroke={INK} strokeWidth={2} />
+        <polygon points="0,4 -70,220 70,220" fill={GOLD} opacity={0.1} />
+      </g>
+    </g>
+  ),
+  // the looted grocery aisle — toppled shelves, spilled cans, a flickering strip light
+  storeAisle: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={700} fill="#e7e2d4" />
+      <rect x={0} y={700} width={1920} height={380} fill="#c9c2ac" />
+      {[{x: 60, tip: 0}, {x: 420, tip: 1}, {x: 700, tip: 1}, {x: 1120, tip: 0}, {x: 1420, tip: 0}, {x: 1740, tip: 1}].map((s, i) => (
+        <g key={i} transform={`translate(${s.x} 500) ${s.tip ? 'rotate(24)' : ''}`}>
+          <rect x={0} y={0} width={180} height={220} fill="#d9d2bd" stroke={INK} strokeWidth={3} opacity={0.55} />
+          {[0, 1, 2, 3].map((r) => <line key={r} x1={0} y1={r * 55} x2={180} y2={r * 55} stroke={INK} strokeWidth={2} opacity={0.4} />)}
+        </g>
+      ))}
+      {Array.from({length: 14}).map((_, i) => {const x = rnd(i * 3.1) * 1800 + 60; const y = 760 + rnd(i * 1.4) * 220;
+        return <ellipse key={i} cx={x} cy={y} rx={20} ry={12} fill={PAPERC} stroke={INK} strokeWidth={2} opacity={0.7} />;})}
+      <rect x={760} y={40} width={400} height={16} fill={GOLD} opacity={0.35 + 0.25 * Math.sin(frame * 0.5)} />
+      <path d="M 1600 0 L 1920 0 L 1920 480 L 1600 480 Z" fill="#b9d4de" opacity={0.4} />
+      <path d="M 1650 40 L 1700 200 L 1620 260 L 1720 380 L 1780 120 Z" fill="none" stroke={INK} strokeWidth={2} opacity={0.5} />
+    </g>
+  ),
+  // the boarded-up room — cross-nailed planks over the window, furniture stacked against the door
+  bunkerRoom: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={780} fill="#3a352c" />
+      <rect x={0} y={780} width={1920} height={300} fill="#2a261f" />
+      <rect x={640} y={140} width={640} height={480} fill="#171410" />
+      {Array.from({length: 6}).map((_, i) => <rect key={i} x={640} y={160 + i * 78} width={640} height={16} fill={PAPERC} stroke={INK} strokeWidth={3} transform={`rotate(${i % 2 ? 2 : -2} 960 ${168 + i * 78})`} />)}
+      <line x1={700} y1={620} x2={1560} y2={140} stroke={PAPERC} strokeWidth={1} opacity={0.15} />
+      <rect x={80} y={520} width={260} height={260} fill="#241f18" stroke={INK} strokeWidth={3} opacity={0.85} />
+      <rect x={110} y={470} width={200} height={70} fill="#241f18" stroke={INK} strokeWidth={3} opacity={0.85} />
+      {/* the kerosene lantern, so the glow reads as coming from something */}
+      <ellipse cx={1720} cy={640} rx={70} ry={44} fill={GOLD} opacity={0.2 + 0.09 * Math.sin(frame * 0.3)} />
+      <line x1={1720} y1={780} x2={1720} y2={700} stroke={INK} strokeWidth={4} />
+      <rect x={1696} y={664} width={48} height={40} rx={4} fill="#241f18" stroke={INK} strokeWidth={3} />
+      <path d="M 1712 664 Q 1720 636 1728 664 Z" fill={GOLD} stroke={INK} strokeWidth={2.5} opacity={0.9} />
+    </g>
+  ),
+  // the checkpoint — jersey barriers, a razor-wire coil, a floodlight tower — martial-law triage
+  checkpointBarrier: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={600} fill="#20262b" />
+      <rect x={0} y={600} width={1920} height={480} fill="#171b1e" />
+      {Array.from({length: 8}).map((_, i) => <path key={i} d={`M ${40 + i * 240} 700 L ${100 + i * 240} 620 L ${180 + i * 240} 620 L ${220 + i * 240} 700 Z`} fill="#8f9499" stroke={INK} strokeWidth={2.5} opacity={0.7} />)}
+      {Array.from({length: 24}).map((_, i) => <circle key={i} cx={i * 84} cy={560} r={30} fill="none" stroke="#c2ccd6" strokeWidth={2} opacity={0.5} />)}
+      <g transform="translate(1650 0)">
+        <line x1={0} y1={860} x2={0} y2={360} stroke="#0d1013" strokeWidth={10} />
+        <rect x={-80} y={280} width={160} height={100} fill="#0d1013" stroke="#0a0c0e" strokeWidth={3} />
+        {(() => {const ang = -2.1 + Math.sin(frame * 0.02) * 0.35; const len = 1500; const x2 = Math.cos(ang) * len; const y2 = 320 + Math.sin(ang) * len;
+          return <polygon points={`0,320 ${x2 - 80},${y2} ${x2 + 80},${y2}`} fill={GOLD} opacity={0.1} />;})()}
+      </g>
+      <rect x={0} y={840} width={1920} height={240} fill="#232a24" /><line x1={0} y1={840} x2={1920} y2={840} stroke="#0d1013" strokeWidth={5} />
+    </g>
+  ),
+  // the walled camp — a perimeter of stacked shipping containers, string lights, a watchtower
+  campPerimeter: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={620} fill="#2c3038" />
+      <rect x={0} y={620} width={1920} height={460} fill="#20242a" />
+      {Array.from({length: 8}).map((_, i) => (
+        <rect key={i} x={i * 240} y={380} width={230} height={220} fill={i % 2 ? '#6b7a52' : '#7a5b3c'} stroke={INK} strokeWidth={3} opacity={0.85} />
+      ))}
+      {Array.from({length: 8}).map((_, i) => <rect key={'d' + i} x={i * 240} y={200} width={230} height={190} fill={i % 2 ? '#7a5b3c' : '#6b7a52'} stroke={INK} strokeWidth={3} opacity={0.75} />)}
+      {Array.from({length: 16}).map((_, i) => <circle key={i} cx={i * 120 + 40} cy={370} r={4} fill={GOLD} opacity={0.4 + 0.3 * Math.sin(frame * 0.2 + i)} />)}
+      <g transform="translate(1680 0)">
+        <line x1={0} y1={620} x2={0} y2={160} stroke="#171b1d" strokeWidth={10} />
+        <rect x={-70} y={90} width={140} height={80} fill="#171b1d" stroke={INK} strokeWidth={3} />
+      </g>
+      <rect x={0} y={840} width={1920} height={240} fill="#3a4536" /><line x1={0} y1={840} x2={1920} y2={840} stroke={INK} strokeWidth={5} opacity={0.4} />
+    </g>
+  ),
 };
 // tiny helper so inline math reads cleanly above
 function y_(v: number) {return v;}
@@ -1546,6 +1667,26 @@ const PROP: Record<string, React.FC<{frame: number}>> = {
         <line x1={x} y1={805} x2={x + 14} y2={835} stroke="#0d1013" strokeWidth={3} />
         <line x1={x + 14} y1={805} x2={x} y2={835} stroke="#0d1013" strokeWidth={3} />
       </g>;})}
+    </g>
+  ),
+  // a crowd of dim, off-kilter shambling silhouettes filling the mid/background — the horde
+  hordeCrowd: ({frame}) => (
+    <g opacity={0.92}>
+      {Array.from({length: 16}).map((_, i) => {
+        const row = i % 2; const x = (rnd(i * 4.3) * 2100) - 90 + Math.sin(frame * 0.01 + i) * 6;
+        const y = 840 + row * 90 + rnd(i * 1.7) * 30; const s = 0.9 + row * 0.35 + rnd(i * 2.1) * 0.25;
+        const lean = -14 + rnd(i * 3.3) * 28;
+        return (
+          <g key={i} transform={`translate(${x} ${y}) scale(${s}) rotate(${lean})`} opacity={0.55 + row * 0.3}>
+            <ellipse cx={0} cy={-150} rx={20} ry={24} fill="#10151b" />
+            <line x1={0} y1={-128} x2={0} y2={-10} stroke="#10151b" strokeWidth={14} strokeLinecap="round" />
+            <line x1={0} y1={-100} x2={-38} y2={-60} stroke="#10151b" strokeWidth={10} strokeLinecap="round" />
+            <line x1={0} y1={-100} x2={34} y2={-140} stroke="#10151b" strokeWidth={10} strokeLinecap="round" />
+            <line x1={0} y1={-10} x2={-16} y2={60} stroke="#10151b" strokeWidth={11} strokeLinecap="round" />
+            <line x1={0} y1={-10} x2={18} y2={58} stroke="#10151b" strokeWidth={11} strokeLinecap="round" />
+          </g>
+        );
+      })}
     </g>
   ),
   none: () => <g />,
@@ -2097,4 +2238,46 @@ const NORTHKOREA = {
       fig={{pose: A.stand(f), x: 760, y: 900, scale: 1.3, view: 'front', expr: FACES.worried}} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA};
+// Zombie apocalypse pack (survival format — HOUR 0 outbreak -> the walled camp). Only 7 new bespoke
+// backdrops (the horde street, the highway, the looted store, the boarded room, the checkpoint, the
+// camp wall); the rest of the ladder composes from MILITARY/MED/MAFIA/SAMURAI/universal packs.
+const ZOMBIE = {
+  // the horde filling a dark street — the cold open + its loop-close payoff. The crowd prop draws
+  // BEHIND the figure (no figBehind) so the running hero stays the clear, legible foreground focal point.
+  hordeStreet: () => {const f = useCurrentFrame(); const {fps, durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [0, d], [0, 1]);
+    const x = interpolate(f, [0, d], [420, 1220]);
+    return <Stage backdrop="hordeAvenue" prop="hordeCrowd" bg="url(#swarm)"
+      fig={{pose: A.walk(f, fps, 2.6), x, y: 916, scale: 1.15, view: 'profile', facing: 1, expr: blendExpr(FACES.shock, FACES.hardened, t)}} />;},
+  // the ordinary house going dark — boarding the windows, the last normal hour (reuses suburbHouse)
+  suburbSiege: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="suburbHouse" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 1250, y: 884, scale: 1.4, view: 'front', expr: blendExpr(FACES.earnest, FACES.worried, t)}} />;},
+  // the highway parking lot — gridlocked cars, smoke on the skyline, a helicopter that won't stop
+  highwayJam: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="highwayGridlock" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.35, view: 'front', expr: blendExpr(FACES.worried, FACES.exhausted, t)}} />;},
+  // the looted grocery aisle — toppled shelves, spilled cans, what's left to take
+  storeRaid: () => {const f = useCurrentFrame();
+    return <Stage backdrop="storeAisle" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 900, y: 940, scale: 1.35, view: 'front', expr: FACES.focused}} />;},
+  // the boarded room — cross-nailed planks, furniture against the door, the siege
+  bunkerSiege: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="bunkerRoom" bg="url(#swarm)"
+      fig={{pose: A.armsCrossed(f), x: 620, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.hardened, FACES.exhausted, t)}} />;},
+  // the checkpoint — barriers, razor wire, the floodlight tower, martial-law triage
+  checkpointTriage: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="checkpointBarrier" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 760, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}} />;},
+  // the walled camp — shipping containers, string lights, a watchtower — the new world, at cost
+  campWall: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="campPerimeter" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.4, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE};

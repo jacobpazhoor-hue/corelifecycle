@@ -1,20 +1,21 @@
 {
   "thumb": {
-    "kicker": "EVERY LEVEL OF A",
-    "line1": "FIRST HIRE",
+    "kicker": "COULD YOU SURVIVE",
+    "line1": "ZOMBIES",
     "line2": "",
-    "tag": "DILUTED",
+    "tag": "1 IN 4",
     "archetype": "poster",
-    "big": "$8,000,000,000",
-    "before": "HIRE #1",
-    "after": "LOCKED",
-    "expr": "worried",
-    "povline": "YOU JOIN AT",
-    "keyword": "CLIFF",
-    "setting": "ipoBell",
-    "question": "WHO ACTUALLY OWNS THE COMPANY YOU BUILT?",
-    "mood": "money",
-    "word": "YOU"
+    "big": "40 ACRES",
+    "before": "DAY 1",
+    "after": "YEAR 1",
+    "expr": "shock",
+    "povline": "YOU CAN'T",
+    "keyword": "OUTRUN",
+    "setting": "hordeStreet",
+    "question": "WHO MAKES IT TO YEAR ONE?",
+    "mood": "survival",
+    "costume": "street",
+    "word": "RUN"
   },
-  "topic": "startup_unicorn"
+  "topic": "zombie_apocalypse"
 }
