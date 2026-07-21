@@ -151,6 +151,14 @@ const EnergyBG: React.FC<{burstX?: number; sun?: boolean}> = ({burstX = 850}) =>
   </>
 );
 
+// Arial Black's average advance is ~0.62em. Every overflow bug in this file came from sizing text
+// without measuring it against the box it has to live in, so do the arithmetic in one place.
+const CHARW = 0.70;   // measured against rendered output; 0.62 under-estimated Arial Black caps
+                      // and let fitted lines run ~12% past their box (question text hit the silhouette)
+const fitFs = (text: string, maxW: number, cap: number) =>
+  Math.max(24, Math.min(cap, Math.floor(maxW / Math.max(text.length * CHARW, 1))));
+const textW = (text: string, fs: number) => text.length * fs * CHARW;
+
 // heavy stroked ALL-CAPS text (outlined + shadow) — legible on any bright bg
 // On the BRIGHT base the default flipped (2026-07-19): BLACK ink with a WHITE halo — max contrast
 // on white, and the halo keeps it legible where it crosses the hero or a color bloom. Hot accent
@@ -258,14 +266,20 @@ const ThumbPov: React.FC = () => {
 
 // THE NUMBER — one colossal apex number, tiny dwarfed hero, siren underline
 const ThumbNumber: React.FC = () => {
-  const fs = Math.min(480, Math.floor(1300 / Math.max(BIG.length, 1) * 1.6));
+  // was 1300/len*1.6 anchored at x=600: "$8,000,000,000" rendered ~1285px wide and ran off BOTH
+  // edges (the leading $ and the final 0 were clipped). Fit it to the box and centre it properly.
+  const fs = fitFs(BIG, 1160, 300);
+  const bw = Math.min(1160, textW(BIG, fs));
   return (
     <Wrap burstX={600}>
-      <Punch x={640} y={170} fs={50} anchor="middle">{(KICKER + ' ' + L1).trim()}</Punch>
-      <Punch x={600} y={470} fs={fs} anchor="middle" sw={fs * 0.06}>{BIG}</Punch>
-      <rect x={600 - Math.min(820, BIG.length * fs * 0.4) / 2} y={505} width={Math.min(820, BIG.length * fs * 0.4)} height={34} rx={6} fill={M.accent} stroke="#000" strokeWidth={5} />
-      {TAG ? <KeyPill x={640} y={660} fs={58} label={TAG} anchor="middle" angle={-4} /> : null}
+      {/* hero FIRST so the number layers on top of it — this archetype is about the figure, and
+          shrinking the number to dodge the hero made the headline element the smallest thing in
+          frame. Punch's white halo keeps it legible where the two cross. */}
       <Hero x={1180} y={716} scale={2.7} facing={-1} expr={face('worried')} pose={A.lookUp(0)} />
+      <Punch x={640} y={170} fs={50} anchor="middle">{(KICKER + ' ' + L1).trim()}</Punch>
+      <Punch x={640} y={470} fs={fs} anchor="middle" sw={fs * 0.06}>{BIG}</Punch>
+      <rect x={640 - bw / 2} y={505} width={bw} height={34} rx={6} fill={M.accent} stroke="#000" strokeWidth={5} />
+      {TAG ? <KeyPill x={640} y={660} fs={58} label={TAG} anchor="middle" angle={-4} /> : null}
     </Wrap>
   );
 };
@@ -285,9 +299,15 @@ const ThumbQuestion: React.FC = () => {
   const words = QUESTION.split(' '); const lines: string[] = []; let cur = '';
   for (const w of words) { if ((cur + ' ' + w).trim().length > 12) { lines.push(cur.trim()); cur = w; } else cur = (cur + ' ' + w).trim(); }
   if (cur) lines.push(cur);
+  // The silhouette starts at x=850 (cx 1080 - r 230). Text was fixed at fs=116 from x=70, so a
+  // 12-char line ran to ~933 and disappeared UNDER the head. Fit every line to the free column.
+  const longest = lines.reduce((a, b) => (a.length >= b.length ? a : b), '');
+  const qfs = fitFs(longest, 760, 116);
+  const lh = Math.round(qfs * 1.10);
+  const top = Math.max(190, 360 - ((lines.length - 1) * lh) / 2);
   return (
     <Wrap burstX={1060}>
-      {lines.map((ln, i) => <Punch key={i} x={70} y={250 + i * 128} fs={116} fill={i === lines.length - 1 ? M.accent : INK} st={i === lines.length - 1 ? '#111' : '#ffffff'}>{ln}</Punch>)}
+      {lines.map((ln, i) => <Punch key={i} x={70} y={top + i * lh} fs={qfs} fill={i === lines.length - 1 ? M.accent : INK} st={i === lines.length - 1 ? '#111' : '#ffffff'}>{ln}</Punch>)}
       <BigHead cx={1080} cy={430} r={230} sil />
     </Wrap>
   );
