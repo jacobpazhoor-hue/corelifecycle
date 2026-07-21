@@ -11,6 +11,12 @@ const INK = '#2a2620';
 // SATURATED (lit windows, gold) so colour reads as deliberate accent against white.
 const COL = {city: '#ffffff', cityLit: '#ffd98a', mullc: '#b9c3cd', floor: '#eef2f6', warm: '#f5a623', box: '#ffffff', boxLine: INK, gold: '#f2b134', ink: INK, line: '#c2ccd6'};
 const rnd = (i: number) => {const x = Math.sin(i * 127.1 + 31.7) * 43758.5453; return x - Math.floor(x);};
+// The money caption card is pinned bottom-left (director.tsx CountUp: left 72, ~620 wide, ~330 tall),
+// so any figure standing near the floor at x < CAPTION_SAFE_X renders BEHIND it. That silently ate
+// the hero in the jet and tower scenes — measured 2026-07-20 across a per-scene sweep. New
+// floor-level scenes should keep their subject right of this line (or raise it well above the card).
+const CAPTION_SAFE_X = 760;
+
 const WIN_COLORS = ['#ffd98a', '#ffe7b4', '#ffcf72', '#ffdf9c']; // soft lit-window fills
 
 const Defs: React.FC = () => (
@@ -212,7 +218,7 @@ const S02: React.FC = () => {
 };
 const S03: React.FC = () => {
   const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
-  const x = interpolate(f, [0, durationInFrames], [560, 1320]);
+  const x = interpolate(f, [0, durationInFrames], [CAPTION_SAFE_X, 1400]);  // was 560 -> started behind the caption card
   return (<Frame>
     <polygon points="120,1080 380,120 520,120 520,1080" fill={PAPER} stroke={INK} strokeWidth={3} /><polygon points="1800,1080 1540,160 1400,160 1400,1080" fill={PAPER} stroke={INK} strokeWidth={3} /><polygon points="560,1080 720,80 980,80 1040,1080" fill={PAPER} stroke={INK} strokeWidth={3} />
     <rect x={812} y={150} width={120} height={90} fill={COL.warm} opacity={0.9} /><rect x={812} y={150} width={120} height={90} fill="none" stroke={INK} strokeWidth={6} />
@@ -298,7 +304,7 @@ const S08: React.FC = () => {
 };
 const S09: React.FC = () => {
   const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
-  const x = interpolate(f, [0, durationInFrames], [480, 1180]);
+  const x = interpolate(f, [0, durationInFrames], [CAPTION_SAFE_X, 1320]);  // was 480 -> walked in behind the caption card
   return (<Frame bg="url(#dusk)">
     <g fill="#111b27" opacity={0.95}><ellipse cx={1500} cy={780} rx={360} ry={48} /><polygon points="1500,760 1360,690 1330,700 1470,775" /><polygon points="1760,760 1840,690 1855,705 1800,775" /><polygon points="1230,782 1180,782 1210,756 1245,762" /></g>
     <line x1={0} y1={900} x2={1920} y2={900} stroke="#1a2230" strokeWidth={10} /><rect x={0} y={900} width={1920} height={180} fill="#1b2430" opacity={0.6} />

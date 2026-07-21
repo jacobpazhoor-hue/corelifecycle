@@ -124,7 +124,12 @@ DO, in order:
    If the topic needs settings no template covers (e.g. soldier→battlefield, athlete→stadium), ADD a
    small pack to src/stage.tsx (copy the medical pack pattern: backdrops+props+templates, spread into
    TEMPLATES), document it in docs/TEMPLATES.md, then use it. VARIETY RULE: never the same template
-   on two adjacent scenes. Real numbers/mechanics serve the STORY (woven into POV, never listed).
+   on two adjacent scenes.
+   CAPTION SAFE ZONE (2026-07-20): the money caption card is pinned BOTTOM-LEFT and is ~700px wide by
+   ~330px tall in the 1920x1080 stage. Any figure standing near the floor at x < 760 renders BEHIND
+   it — that silently buried the hero in the jet and tower scenes. Keep floor-level subjects (and the
+   START of any walk interpolation, not just its end) right of CAPTION_SAFE_X = 760, or place them
+   high enough to clear the card. Real numbers/mechanics serve the STORY (woven into POV, never listed).
 4. PACKAGE COPY — overwrite ops/episode_meta.json (DATA, never edit .py/.tsx for copy):
    TITLE — second-person POV, **40–65 chars** (mobile truncates ~60), the hook FRONT-LOADED in the
    first ~40 chars. SPINE BY FORMAT: rank/history → `Your Life as a [X] at Every Level` / `…at Every
