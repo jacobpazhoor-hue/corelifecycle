@@ -384,18 +384,33 @@ const ThumbBefore: React.FC = () => (
   </Wrap>
 );
 
-// SETTING — the topic's own scene, darkened, under a bold reversed title
+// SETTING — the topic's own scene, darkened, under a bold reversed title. Extended (2026-07-22)
+// to also surface the KICKER line, the BIG stat, and a KEYWORD accent line — the 'setting'
+// archetype is otherwise the only one that shows the episode's actual scene art (e.g. a zombie
+// horde street), so it needs to carry the full thumb spec instead of just L1/L2/TAG.
 const ThumbSetting: React.FC = () => {
   const Art = TEMPLATES[SETTING] || TEMPLATES['desk'];
-  const big = Math.min(120, Math.floor(1120 / (Math.max(L1.length, L2.length, 1) * 0.62)));
+  const headFs = Math.min(112, Math.floor(1120 / (Math.max(L1.length, L2.length, 1) * 0.62)));
+  const kickerFs = Math.min(50, Math.floor(1000 / Math.max(KICKER.length, 1)));
+  const headY = 96 + kickerFs + headFs * 0.85;
   return (
     <AbsoluteFill style={{backgroundColor: M.rim}}>
-      <AbsoluteFill style={{filter: 'saturate(1.2) contrast(1.1) brightness(0.9)'}}>{Art ? <Art /> : null}</AbsoluteFill>
-      <svg viewBox="0 0 1280 720" width="100%" height="100%"><Defs />
+      <svg viewBox="0 0 1280 720" width="100%" height="100%">
+        <Defs />
+        {Art ? (
+          <svg viewBox="0 0 1920 1080" width="1280" height="720" style={{filter: 'saturate(1.2) contrast(1.1) brightness(0.9)'}}>
+            <Art />
+          </svg>
+        ) : null}
         <rect x={0} y={0} width={1280} height={720} fill="url(#vig)" />
-        <Punch x={60} y={140} fs={big}>{L1}</Punch>
-        {L2 ? <Punch x={60} y={140 + big} fs={big}>{L2}</Punch> : null}
-        {TAG ? <KeyPill x={70} y={650} fs={66} label={TAG} angle={-5} /> : null}
+        {KICKER ? <Punch x={60} y={92} fs={kickerFs}>{KICKER}</Punch> : null}
+        <Punch x={60} y={headY} fs={headFs}>{L1}</Punch>
+        {L2
+          ? <Punch x={60} y={headY + headFs} fs={headFs}>{L2}</Punch>
+          : (KEYWORD ? <Punch x={60} y={headY + headFs} fs={Math.min(headFs, 90)} fill={M.accent} st="#111">{KEYWORD}</Punch> : null)}
+        {/* right side, clear of the hero (who runs across the LEFT half of hordeStreet-style arts) */}
+        {BIG ? <KeyPill x={720} y={555} fs={62} label={BIG} angle={-4} maxW={520} /> : null}
+        {TAG ? <KeyPill x={720} y={650} fs={64} label={TAG} angle={-5} maxW={520} /> : null}
       </svg>
     </AbsoluteFill>
   );

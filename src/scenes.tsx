@@ -320,12 +320,14 @@ const S07: React.FC = () => {
   // window: ONE big picture window (sill + single cross-mullion), not the full curtain-wall grid
   // every other office template shares — so this reads as "standing at the glass", not a repeat
   // of the generic skyline-behind-a-desk shot.
+  // The mullion cross is offset well clear of the figure's own x/head-height (both used to sit at
+  // the window's exact center, so the bars drew straight across the face and torso in every frame).
   const f = useCurrentFrame();
   return (<Frame bg="url(#teal)">
     {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={780} /> : <Skyline frame={f} baseY={780} tint="#13202e" />}
     <Rain frame={f} o={0.3} />
     <rect x={520} y={90} width={880} height={700} fill="none" stroke={INK} strokeWidth={9} />
-    <line x1={960} y1={90} x2={960} y2={790} stroke={INK} strokeWidth={6} /><line x1={520} y1={440} x2={1400} y2={440} stroke={INK} strokeWidth={6} />
+    <line x1={720} y1={90} x2={720} y2={790} stroke={INK} strokeWidth={6} /><line x1={520} y1={230} x2={1400} y2={230} stroke={INK} strokeWidth={6} />
     <rect x={0} y={790} width={1920} height={290} fill={COL.floor} /><rect x={0} y={790} width={1920} height={8} fill={INK} />
     <rect x={460} y={780} width={1000} height={22} fill={PAPER} stroke={INK} strokeWidth={4} />
     <StickFigure pose={A.stand(f)} x={960} y={770} scale={1.6} facing={1} view="profile" expr={FACES.hollow} pal={LIGHT} frame={f} />
