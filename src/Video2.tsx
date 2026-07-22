@@ -81,8 +81,13 @@ function planShots(s: SceneT): Shot[] {
 const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({scene, from, prog}) => {
   const f = useCurrentFrame();
   const D = scene.durationInFrames;
-  const fade = 16;
-  const beatOp = interpolate(f, [0, fade, D - fade, D], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  // Scene-cut fade: previously ramped all the way to 0 opacity over 16 frames (~0.53s) on EACH side
+  // of a cut, so any frame sampled inside that ~1s combined window at a scene boundary reads as a
+  // near-blank white flash (mistaken for a compositing bug in QA — commandPost's t21/t25 samples
+  // landed exactly there). Floor keeps SOME content visible through the cut; shorter window means
+  // less of the runtime is ever in the dim zone at all.
+  const fade = 8;
+  const beatOp = interpolate(f, [0, fade, D - fade, D], [0.4, 1, 1, 0.4], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const focus = FOCUS[scene.template] ?? [0.5, 0.55];
   const shots = planShots(scene);
   const seed = seedOf(scene.id);
