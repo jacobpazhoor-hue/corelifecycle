@@ -471,6 +471,31 @@ const S16: React.FC = () => {  // the Architect — war room / sovereign
 
 const S17: React.FC = () => {  // the trust — no title; empty chair, others sign
   const f = useCurrentFrame();
+  if (SURVIVAL_TOPIC) {
+    // the communal table — Mara's folding chair sits empty, untouched plate; Dec eats alone and fast.
+    // Deliberately ONE figure + a conspicuously empty seat (vs. Dinner's two-figures-facing pattern
+    // used elsewhere in this episode) so the grief beat reads as an absence, not just another meal.
+    return (<Frame bg="url(#indigo)" haze="glowTeal">
+      <SuburbRow frame={f} baseY={520} o={0.3} />
+      <rect x={0} y={722} width={1920} height={358} fill={COL.floor} /><rect x={0} y={722} width={1920} height={8} fill={INK} />
+      {/* the communal table */}
+      <rect x={790} y={694} width={360} height={16} rx={6} fill={PAPER} stroke={INK} strokeWidth={4} />
+      <line x1={838} y1={710} x2={826} y2={860} stroke={INK} strokeWidth={5} strokeLinecap="round" />
+      <line x1={1102} y1={710} x2={1114} y2={860} stroke={INK} strokeWidth={5} strokeLinecap="round" />
+      {/* Dec's plate, near seat — half-eaten */}
+      <ellipse cx={870} cy={686} rx={34} ry={10} fill="#eef2f6" stroke={INK} strokeWidth={3} />
+      {/* Mara's plate, far seat — untouched, pushed away */}
+      <ellipse cx={1050} cy={678} rx={32} ry={9} fill="#eef2f6" stroke={INK} strokeWidth={3} opacity={0.55} />
+      {/* the empty folding chair, pulled out slightly — drawn with no figure in it */}
+      <g stroke={INK} strokeWidth={4} fill="none" opacity={0.85} transform="rotate(-4 1150 830)">
+        <rect x={1100} y={772} width={100} height={14} rx={4} fill={PAPER} />
+        <line x1={1108} y1={786} x2={1100} y2={866} /><line x1={1192} y1={786} x2={1200} y2={866} />
+        <line x1={1108} y1={772} x2={1104} y2={702} /><line x1={1192} y1={772} x2={1196} y2={702} />
+        <line x1={1105} y1={702} x2={1197} y2={702} />
+      </g>
+      <StickFigure pose={A.sit(f)} x={870} y={762} scale={0.82} facing={1} view="profile" costume="none" expr={FACES.hollow} pal={LIGHT} frame={f} />
+    </Frame>);
+  }
   return (<Frame>
     <Skyline frame={f} baseY={820} tint="#13202e" /><Mullions o={0.45} />
     {/* empty high-back executive chair, back to viewer */}
