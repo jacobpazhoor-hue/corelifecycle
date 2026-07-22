@@ -210,6 +210,25 @@ denunciation hearing / state surveillance / hard-currency counting / Office 39's
 hall), `galaBallroom` (DYNASTY, the inner court's privileged banquets). New reusable foreground prop
 `wireFence` (barbed wire, figBehind).)
 
+## Zombie / outbreak survival pack (zombie_apocalypse — HOUR 0 outbreak through the walled camp)
+| template | depicts | good for |
+|---|---|---|
+| hordeStreet | figure running down a dark suburban street, a shambling horde filling the frame behind them | the cold open + its loop-close payoff — the outbreak's first hour, being chased |
+| suburbSiege | figure boarding up the ordinary house (reuses REALESTATE's `suburbHouse`) | the last normal hour, the want, comfort before it breaks |
+| highwayJam | figure amid a gridlocked evacuation highway, smoke on the skyline, a helicopter that won't stop | the mass-evacuation chaos, the grid still up but failing |
+| storeRaid | figure in a looted grocery aisle — toppled shelves, spilled cans, a flickering strip light | the supply run, what's left to take, first real scarcity |
+| bunkerSiege | figure in a boarded room — cross-nailed planks over the window, furniture stacked at the door | the barricaded house, the siege, the long wait |
+| checkpointTriage | figure at a military checkpoint — jersey barriers, razor wire, a floodlight tower | martial law, triage, being sorted bitten vs. clean |
+| campWall | figure before a walled camp — stacked shipping containers, string lights, a watchtower | the fortified refugee camp, the new world, the apex at cost |
+
+(Reuses heavily by design: MILITARY's `frontline`/`commandPost`/`decoration`/`barracksLife`; MED's
+`hospitalRounds`/`consult`/`erTrauma` for the quarantine ward and triage; MAFIA's `prisonCell` for
+holding the bitten; SAMURAI's `riceField` re-purposed as the epilogue's replanted field; universal
+`fileWall`/`window`/`dinner`/`lobby`/`emptyChair`/`deskSilhouette`/`warRoom`/`signing`. New reusable
+foreground prop `hordeCrowd` — a crowd of dim off-kilter shambling silhouettes, drawn BEHIND the figure
+by default so the hero stays legible; only flip `figBehind` on if a shot needs the horde swarming in
+front.)
+
 ## Adding a new domain pack
 If a topic needs settings none of these cover (e.g. soldier→battlefield, athlete→stadium,
 founder→garage), add backdrop/prop entries + a small template set to src/stage.tsx following the

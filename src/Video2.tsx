@@ -192,7 +192,14 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
 
 const ShotFade: React.FC<{dur: number; children: React.ReactNode}> = ({dur, children}) => {
   const f = useCurrentFrame();
-  const op = interpolate(f, [0, 5, dur - 5, dur], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  // FLOOR the shot fade (was [0,1,1,0]). Shots inside a scene are laid out in NON-overlapping
+  // Sequences, so a fade-to-0 never crossfades with the next shot — it just dips the only mounted
+  // shot to ~0 opacity over the white PAPER background (Beat, line 131) for a frame or two, which
+  // reads as a near-blank white FLASH at every internal shot cut (reviewer f_030 / frame ~12655,
+  // min-luma 148 mid-scene). This is the same bug class the scene-level `beatOp` already fixed by
+  // flooring at 0.4; intra-scene cuts should be subtler, so floor high (0.85) — a barely-perceptible
+  // softening that can never reveal enough white to blank the frame. 2026-07-22.
+  const op = interpolate(f, [0, 4, dur - 4, dur], [0.85, 1, 1, 0.85], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return <AbsoluteFill style={{opacity: op}}>{children}</AbsoluteFill>;
 };
 

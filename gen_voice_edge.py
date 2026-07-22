@@ -199,6 +199,8 @@ async def main():
             "template": sc.get("template", sc["id"]),
             "audio": f"audio/{sc['id']}.wav", "audioStartFrame": round(LEAD * FPS),
             "startFrame": cursor, "durationInFrames": dur_f,
+            "gap": gap,   # carry the writer's per-scene gap through to timeline.json so
+                          # duck_music.py's silence-beat placement can honor it (not just LEAD/GAP math)
         })
         print(f"{sc['id']}: speech {speech:5.2f}s -> scene {total:5.2f}s ({dur_f}f)")
         cursor += dur_f

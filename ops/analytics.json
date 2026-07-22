@@ -1,8 +1,8 @@
 {
-  "updated": "2026-07-20T08:16:40.502061+00:00",
+  "updated": "2026-07-22T14:53:52.477242+00:00",
   "channel": {
     "videos": 34,
-    "views": 1116,
+    "views": 1174,
     "subscribers": 6
   },
   "videos": [
@@ -21,7 +21,7 @@
       "topic": "black_market_surgeon",
       "title": "POV: You're a Black Market Surgeon (You Never Get to Stop)",
       "published": "2026-07-15T09:42:28Z",
-      "views": 179,
+      "views": 217,
       "likes": 2,
       "comments": 0,
       "duration": "PT12M17S"
@@ -191,10 +191,20 @@
       "topic": null,
       "title": "Could You Survive 54 Days Lost at Sea? \ud83c\udf0a #shorts",
       "published": "2026-07-12T15:42:17Z",
-      "views": 8,
+      "views": 10,
       "likes": 0,
       "comments": 0,
       "duration": "PT59S"
+    },
+    {
+      "id": "27K2uE6Um-E",
+      "topic": "north_korea",
+      "title": "Your Life at Every Rank in North Korea (You Can't Leave)",
+      "published": "2026-07-19T15:15:07Z",
+      "views": 9,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M48S"
     },
     {
       "id": "AWmf0DwSC-g",
@@ -257,16 +267,6 @@
       "duration": "PT10M8S"
     },
     {
-      "id": "27K2uE6Um-E",
-      "topic": "north_korea",
-      "title": "Your Life at Every Rank in North Korea (You Can't Leave)",
-      "published": "2026-07-19T15:15:07Z",
-      "views": 3,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT12M48S"
-    },
-    {
       "id": "ilBfri70z-U",
       "topic": null,
       "title": "Every Level of a Spy Master \ud83d\udcb0 #shorts",
@@ -325,6 +325,26 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT5M22S"
+    },
+    {
+      "id": "Oqf6w7jL8BM",
+      "topic": null,
+      "title": "Your Life as Startup Employee #1 at Every Level (Unicorn or $0)",
+      "published": "2026-07-20T16:16:07Z",
+      "views": 0,
+      "likes": 0,
+      "comments": 0,
+      "duration": "P0D"
+    },
+    {
+      "id": "iE8W9y84be0",
+      "topic": "startup_unicorn",
+      "title": "Your Life as Startup Employee #1 at Every Level (Unicorn or $0)",
+      "published": "2026-07-20T10:05:09Z",
+      "views": 0,
+      "likes": 0,
+      "comments": 0,
+      "duration": "P0D"
     },
     {
       "id": "lUdEmaYYk_I",

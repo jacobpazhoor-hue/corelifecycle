@@ -746,11 +746,15 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       <rect x={1380} y={240} width={200} height={160} fill="#2a313a" stroke={INK} strokeWidth={4} />{[0, 1, 2].map((i) => <line key={i} x1={1430 + i * 50} y1={240} x2={1430 + i * 50} y2={400} stroke={INK} strokeWidth={3} />)}<ellipse cx={1480} cy={320} rx={150} ry={190} fill="url(#sglow)" opacity={0.3} />
       <rect x={200} y={640} width={360} height={40} fill={PAPERC} stroke={INK} strokeWidth={4} /><rect x={200} y={680} width={24} height={140} fill={PAPERC} stroke={INK} strokeWidth={3} /><rect x={536} y={680} width={24} height={140} fill={PAPERC} stroke={INK} strokeWidth={3} />
       {/* the cell door: a load-bearing element at scene-center so a mid-frame camera crop is never
-          near-blank paper — heavy plank door, hinges, a small barred slot, and the deadbolt */}
-      <rect x={820} y={260} width={280} height={560} fill={PAPERC} stroke={INK} strokeWidth={5} />
-      {[0, 1, 2, 3].map((i) => <line key={i} x1={820 + i * 70} y1={260} x2={820 + i * 70} y2={820} stroke={INK} strokeWidth={2} opacity={0.4} />)}
-      <rect x={870} y={340} width={180} height={70} fill="none" stroke={INK} strokeWidth={3} />{[0, 1, 2, 3].map((i) => <line key={i} x1={890 + i * 40} y1={340} x2={890 + i * 40} y2={410} stroke={INK} strokeWidth={2.5} />)}
-      <rect x={1050} y={540} width={44} height={22} rx={3} fill="#2a313a" stroke={INK} strokeWidth={3} /><circle cx={1030} cy={551} r={7} fill="#2a313a" stroke={INK} strokeWidth={2.5} />
+          near-blank paper — heavy plank door, hinges, a small barred slot, and the deadbolt.
+          Fill is a dark weathered-wood tone (NOT PAPERC): after the 2026-07 bright-palette pass the
+          old paper-white door left a tight insert crop on it reading as a blank near-white frame
+          (reviewer f_030). Dark mass here keeps every crop/fade of this scene from washing out.
+          Plank grooves, the barred slot, and the steel deadbolt are lightened so they read on wood. */}
+      <rect x={820} y={260} width={280} height={560} fill="#544636" stroke={INK} strokeWidth={5} />
+      {[0, 1, 2, 3].map((i) => <line key={i} x1={820 + i * 70} y1={260} x2={820 + i * 70} y2={820} stroke="#7d6e58" strokeWidth={2} opacity={0.6} />)}
+      <rect x={870} y={340} width={180} height={70} fill="none" stroke="#9a8a72" strokeWidth={3} />{[0, 1, 2, 3].map((i) => <line key={i} x1={890 + i * 40} y1={340} x2={890 + i * 40} y2={410} stroke="#9a8a72" strokeWidth={2.5} />)}
+      <rect x={1050} y={540} width={44} height={22} rx={3} fill="#8a93a0" stroke={INK} strokeWidth={3} /><circle cx={1030} cy={551} r={7} fill="#8a93a0" stroke={INK} strokeWidth={2.5} />
       <rect x={806} y={244} width={14} height={590} fill={INK} opacity={0.5} /><rect x={806} y={280} width={14} height={30} fill={INK} opacity={0.7} /><rect x={806} y={760} width={14} height={30} fill={INK} opacity={0.7} />
     </g>
   ),

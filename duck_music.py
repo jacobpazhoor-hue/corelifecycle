@@ -72,9 +72,18 @@ def main():
         start_s = (s["startFrame"] + s.get("audioStartFrame", 0)) / fps
         return start_s, vlen
 
-    # midpoint reversal scene = the scene whose VO starts nearest 50% of the runtime
-    mid_target = 0.5 * total_f / fps
-    mid_i = min(range(len(scenes)), key=lambda i: abs(vo_window(scenes[i])[0] - mid_target)) if scenes else -1
+    # midpoint reversal scene: the writer's explicit gap= is authoritative (a big gap on a scene
+    # means "put the silence beat right after this one," per Phase 3 staging) — only fall back to
+    # "VO start nearest 50% of runtime" when no scene sets a gap that large. Without this, a wide
+    # gap the writer placed anywhere but exactly at the runtime midpoint got silently ignored by
+    # the 50%-nearest heuristic (confirmed recurring — see ops/improvements.json).
+    SILENCE_GAP_THRESHOLD = 1.4
+    gap_i = next((i for i, s in enumerate(scenes) if s.get("gap", 0) >= SILENCE_GAP_THRESHOLD), None)
+    if gap_i is not None and gap_i + 1 < len(scenes):
+        mid_i = gap_i + 1
+    else:
+        mid_target = 0.5 * total_f / fps
+        mid_i = min(range(len(scenes)), key=lambda i: abs(vo_window(scenes[i])[0] - mid_target)) if scenes else -1
     # climax = last level scene (else last scene)
     level_idx = [i for i, s in enumerate(scenes) if s.get("level")]
     climax_i = level_idx[-1] if level_idx else (len(scenes) - 1)
