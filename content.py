@@ -141,7 +141,7 @@ SCENES = [
                     "way your body understands half a second before your mind does. Grab Dec. Grab "
                     "Mara. Don't grab anything else. The car keys are already in your hand; you don't "
                     "remember picking them up."),
-         overlay=dict(big="1 BITE", sub="THAT'S ALL IT TAKES")),
+         overlay=dict(big="3 DAYS", sub="IS ALL THE SUPPLY CHAIN EVER HAD")),
     dict(id="t07", level=None, template="highwayJam",
          narration=("The highway is a parking lot by six, three lanes of brake lights pointed at a "
                     "horizon nobody reaches. A hundred thousand people had this exact idea at the exact "
@@ -164,7 +164,7 @@ SCENES = [
                     "green beans nobody wanted Monday. Take it anyway. The store doesn't restock because "
                     "the people who restock it aren't coming. Nobody built this system to survive itself "
                     "for even a week."),
-         overlay=dict(big="3 DAYS", sub="IS ALL A GROCERY STORE EVER HAD")),
+         overlay=dict(big="72 HRS", sub="IS HOW LONG BEFORE THE FIGHTING STARTS")),
     dict(id="t10", level=None, template="erTrauma",
          narration=("A man twice your size wants the can more than you do, and for four seconds in a "
                     "parking lot you learn exactly how far 'more than you do' goes. He walks away with "

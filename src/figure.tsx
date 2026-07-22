@@ -128,9 +128,15 @@ export const StickFigure: React.FC<{
   const handN = down(elbowN, pose.armNearShoulder + pose.armNearElbow, SEG.foreArm, facing);
   const elbowF = down(shoulder, pose.armFarShoulder, SEG.upperArm, ffar);
   const handF = down(elbowF, pose.armFarShoulder + pose.armFarElbow, SEG.foreArm, ffar);
-  const kneeN = down(hip, pose.legNearHip, SEG.thigh, facing);
+  // hips sit a little apart (real stance width) instead of one point — otherwise a near/far leg
+  // pair with matching hip+knee angles (the common standing pose, seen in profile) draws as one
+  // exact overlapping line instead of two legs.
+  const HIP_W = 11;
+  const hipN: P = {x: hip.x + HIP_W * facing, y: hip.y};
+  const hipF: P = {x: hip.x - HIP_W * facing, y: hip.y};
+  const kneeN = down(hipN, pose.legNearHip, SEG.thigh, facing);
   const footN = down(kneeN, pose.legNearHip + pose.legNearKnee, SEG.shin, facing);
-  const kneeF = down(hip, pose.legFarHip, SEG.thigh, ffar);
+  const kneeF = down(hipF, pose.legFarHip, SEG.thigh, ffar);
   const footF = down(kneeF, pose.legFarHip + pose.legFarKnee, SEG.shin, ffar);
 
   const bone = (a: P, b: P, w: number, c: string, key: string) =>
@@ -202,7 +208,7 @@ export const StickFigure: React.FC<{
         {/* ground shadow */}
         <ellipse cx={(footN.x + footF.x) / 2} cy={Math.max(footN.y, footF.y) + lineW * 1.4} rx={lineW * 4.5} ry={lineW * 1.1} fill="none" stroke="#cfc7b8" strokeWidth={lineW * 0.5} opacity={0.8} />
         {/* far limbs */}
-        {bone(hip, kneeF, lineW, far, 'fl1')}{bone(kneeF, footF, lineW, far, 'fl2')}{foot(kneeF, footF, 'ff')}
+        {bone(hipF, kneeF, lineW, far, 'fl1')}{bone(kneeF, footF, lineW, far, 'fl2')}{foot(kneeF, footF, 'ff')}
         {bone(shoulder, elbowF, lineW * 0.95, far, 'fa1')}{bone(elbowF, handF, lineW * 0.95, far, 'fa2')}{hand(handF, 'fh')}
         {/* spine + neck — the jacket is painted OVER the spine so the torso reads solid */}
         {bone(hip, shoulder, lineW, ink, 'sp')}{bone(shoulder, headC, lineW, ink, 'nk')}
@@ -214,7 +220,7 @@ export const StickFigure: React.FC<{
           lookY={idleGaze(frame, seed + 5) * 0.3 + pose.headTilt * 0.02}
           expr={{...expr, look: expr.look + idleGaze(frame, seed) * 0.6}} />}
         {/* near limbs */}
-        {bone(hip, kneeN, lineW, ink, 'nl1')}{bone(kneeN, footN, lineW, ink, 'nl2')}{foot(kneeN, footN, 'nf')}
+        {bone(hipN, kneeN, lineW, ink, 'nl1')}{bone(kneeN, footN, lineW, ink, 'nl2')}{foot(kneeN, footN, 'nf')}
         {bone(shoulder, elbowN, lineW, ink, 'na1')}{bone(elbowN, handN, lineW, ink, 'na2')}{hand(handN, 'nh')}
         {briefcase && <rect x={handN.x - 26} y={handN.y + 4} width={52} height={38} rx={3} fill={PAPER} stroke={ink} strokeWidth={lineW * 0.7} />}
       </g>

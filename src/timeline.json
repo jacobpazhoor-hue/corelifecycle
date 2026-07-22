@@ -75,8 +75,8 @@
       "id": "t06",
       "level": "LEVEL 02  \u00b7  DAY 1  \u00b7  THE ROAD OUT",
       "overlay": {
-        "big": "1 BITE",
-        "sub": "THAT'S ALL IT TAKES"
+        "big": "3 DAYS",
+        "sub": "IS ALL THE SUPPLY CHAIN EVER HAD"
       },
       "template": "hordeStreet",
       "audio": "audio/t06.wav",
@@ -111,8 +111,8 @@
       "id": "t09",
       "level": "LEVEL 03  \u00b7  DAY 3  \u00b7  THE LAST AISLE",
       "overlay": {
-        "big": "3 DAYS",
-        "sub": "IS ALL A GROCERY STORE EVER HAD"
+        "big": "72 HRS",
+        "sub": "IS HOW LONG BEFORE THE FIGHTING STARTS"
       },
       "template": "storeRaid",
       "audio": "audio/t09.wav",

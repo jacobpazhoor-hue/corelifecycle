@@ -4,6 +4,15 @@ import {StickFigure, LIGHT, SIL, DIM, PAPER} from './figure';
 import {FACES, blendExpr} from './faces';
 import * as A from './actions';
 import {PACK_TEMPLATES} from './stage';
+import meta from './episode_meta.json';
+
+// Some "universal" templates (window/dinner/deskSilhouette/lobby) default to a generic corporate
+// skyline + office setting. For a survival/disaster topic that reads as an unrelated career episode
+// (a candlelit dinner for two suits instead of a family kitchen table). Gate a suburban-family art
+// variant on the episode topic so every other topic keeps the original corporate look untouched.
+const SURVIVAL_TOPIC = /zombie|apocalypse|outbreak|survive/i.test(
+  ((meta as any)?.topic || '') + ' ' + ((meta as any)?.title || '')
+);
 
 // DOODLE / whiteboard palette — black ink on light paper.
 const INK = '#2a2620';
@@ -59,6 +68,27 @@ const Skyline: React.FC<{frame: number; baseY: number; tint?: string; o?: number
           fill={lit ? WIN_COLORS[Math.floor(rnd(id * 3) * WIN_COLORS.length)] : 'none'} stroke={INK} strokeWidth={1.6} opacity={lit ? tw : 0.55} />);
       }
       return <g key={idx}><rect x={bb.x} y={top} width={bb.w} height={bb.h} fill={PAPER} stroke={INK} strokeWidth={3} />{wins}</g>;
+    })}
+  </g>);
+};
+
+// a row of suburban houses (pitched roof, lit window, dark door) instead of a corporate skyline —
+// the SURVIVAL_TOPIC variant behind the window/dinner/deskSilhouette/lobby universal templates.
+const SuburbRow: React.FC<{frame: number; baseY: number; o?: number}> = ({frame, baseY, o = 1}) => {
+  const xs = [140, 420, 700, 980, 1260, 1540, 1820];
+  return (<g opacity={o}>
+    {xs.map((x, i) => {
+      const w = 240, h = 150 + (i % 2) * 26, top = baseY - h, roofH = 64;
+      const lit = rnd(i * 3.3) > 0.4;
+      return (
+        <g key={i}>
+          <polygon points={`${x} ${top} ${x + w / 2} ${top - roofH} ${x + w} ${top}`} fill={PAPER} stroke={INK} strokeWidth={3} />
+          <rect x={x + 6} y={top} width={w - 12} height={h} fill={PAPER} stroke={INK} strokeWidth={3} />
+          <rect x={x + w * 0.20} y={top + h * 0.30} width={w * 0.20} height={h * 0.24} rx={1}
+            fill={lit ? WIN_COLORS[Math.floor(rnd(i * 5) * WIN_COLORS.length)] : 'none'} stroke={INK} strokeWidth={2} />
+          <rect x={x + w * 0.58} y={top + h * 0.5} width={w * 0.16} height={h * 0.5} fill={INK} opacity={0.4} />
+        </g>
+      );
     })}
   </g>);
 };
@@ -192,7 +222,8 @@ const Desk: React.FC<{y: number}> = ({y}) => (
 const S00: React.FC = () => {
   const f = useCurrentFrame();
   return (<Frame>
-    <Skyline frame={f} baseY={760} /><Rain frame={f} o={0.26} /><Mullions o={0.55} />
+    {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={760} /> : <Skyline frame={f} baseY={760} />}
+    <Rain frame={f} o={0.26} /><Mullions o={0.55} />
     <StickFigure pose={A.sit(f)} x={1180} y={886} scale={1.2} facing={-1} view="profile" expr={FACES.tired} pal={LIGHT} frame={f} />
     <Desk y={830} />
     <Laptop cx={1095} deskY={830} frame={f} w={124} h={80} />
@@ -291,7 +322,8 @@ const S07: React.FC = () => {
   // of the generic skyline-behind-a-desk shot.
   const f = useCurrentFrame();
   return (<Frame bg="url(#teal)">
-    <Skyline frame={f} baseY={780} tint="#13202e" /><Rain frame={f} o={0.3} />
+    {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={780} /> : <Skyline frame={f} baseY={780} tint="#13202e" />}
+    <Rain frame={f} o={0.3} />
     <rect x={520} y={90} width={880} height={700} fill="none" stroke={INK} strokeWidth={9} />
     <line x1={960} y1={90} x2={960} y2={790} stroke={INK} strokeWidth={6} /><line x1={520} y1={440} x2={1400} y2={440} stroke={INK} strokeWidth={6} />
     <rect x={0} y={790} width={1920} height={290} fill={COL.floor} /><rect x={0} y={790} width={1920} height={8} fill={INK} />
@@ -318,22 +350,35 @@ const S09: React.FC = () => {
     <StickFigure pose={A.walk(f, fps)} x={x} y={840} scale={1.0} facing={1} view="profile" expr={FACES.cold} pal={LIGHT} briefcase frame={f} />
   </Frame>);
 };
-// shared private-dinner backdrop (two figures, candle) — used by L5 & L7
+// shared private-dinner backdrop — used by L5 & L7 (corporate: two suits, candle + wine) and,
+// under SURVIVAL_TOPIC, an ordinary family table (a kid-scaled second figure, plates, no candle).
 const Dinner: React.FC<{f: number; mainExpr: any}> = ({f, mainExpr}) => (
   <>
-    <Skyline frame={f} baseY={520} tint="#10202e" o={0.4} /><Mullions o={0.22} />
-    <ellipse cx={970} cy={700} rx={300} ry={170} fill="#f2c14e" opacity={0.1} />
-    <ellipse cx={970} cy={700} rx={150} ry={90} fill="#f2c14e" opacity={0.1} />
+    {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={520} o={0.6} /> : <><Skyline frame={f} baseY={520} tint="#10202e" o={0.4} /><Mullions o={0.22} /></>}
+    {!SURVIVAL_TOPIC && <><ellipse cx={970} cy={700} rx={300} ry={170} fill="#f2c14e" opacity={0.1} />
+    <ellipse cx={970} cy={700} rx={150} ry={90} fill="#f2c14e" opacity={0.1} /></>}
     <StickFigure pose={A.sit(f)} x={700} y={762} scale={1.2} facing={1} view="profile" expr={mainExpr} pal={LIGHT} frame={f} />
-    <StickFigure pose={A.sit(f + 50)} x={1240} y={762} scale={1.2} facing={-1} view="profile" pal={DIM} expr={FACES.earnest} frame={f} />
+    <StickFigure pose={A.sit(f + 50)} x={1240} y={762} scale={SURVIVAL_TOPIC ? 0.8 : 1.2} facing={-1} view="profile"
+      pal={LIGHT} costume={SURVIVAL_TOPIC ? 'none' : undefined} expr={FACES.earnest} frame={f} />
     <rect x={0} y={722} width={1920} height={358} fill={COL.floor} /><rect x={0} y={722} width={1920} height={8} fill={INK} />
     {/* the dinner table between them — top + two legs, so it reads as a MEAL, not a street */}
     <rect x={800} y={694} width={340} height={16} rx={6} fill={PAPER} stroke={INK} strokeWidth={4} />
     <line x1={846} y1={710} x2={834} y2={806} stroke={INK} strokeWidth={5} strokeLinecap="round" />
     <line x1={1094} y1={710} x2={1106} y2={806} stroke={INK} strokeWidth={5} strokeLinecap="round" />
-    {/* candle + glasses ON the tabletop */}
-    <rect x={964} y={666} width={10} height={28} fill="#e9eef4" /><ellipse cx={969} cy={660} rx={6} ry={11} fill="#ffd9a0" />
-    <rect x={860} y={672} width={8} height={22} rx={2} fill="#9fb6cf" opacity={0.6} /><rect x={1080} y={672} width={8} height={22} rx={2} fill="#9fb6cf" opacity={0.6} />
+    {SURVIVAL_TOPIC ? (
+      /* two plain plates instead of a candle + wine glasses — an ordinary family meal, not a formal dinner */
+      <>
+        <ellipse cx={880} cy={686} rx={34} ry={10} fill="#eef2f6" stroke={INK} strokeWidth={3} />
+        <ellipse cx={1060} cy={686} rx={34} ry={10} fill="#eef2f6" stroke={INK} strokeWidth={3} />
+        <rect x={958} y={670} width={22} height={30} rx={3} fill="#dfe7ee" stroke={INK} strokeWidth={2.5} />
+      </>
+    ) : (
+      /* candle + glasses ON the tabletop */
+      <>
+        <rect x={964} y={666} width={10} height={28} fill="#e9eef4" /><ellipse cx={969} cy={660} rx={6} ry={11} fill="#ffd9a0" />
+        <rect x={860} y={672} width={8} height={22} rx={2} fill="#9fb6cf" opacity={0.6} /><rect x={1080} y={672} width={8} height={22} rx={2} fill="#9fb6cf" opacity={0.6} />
+      </>
+    )}
   </>
 );
 
@@ -448,14 +493,26 @@ const S18: React.FC = () => {  // the loop closes — a new young associate walk
   const x = interpolate(f, [0, durationInFrames], [520, 1040]);
   const tiles = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => <line key={i} x1={i * 192} y1={905} x2={i * 192} y2={1080} stroke={COL.line} strokeWidth={3} opacity={0.5} />);
   return (<Frame bg="url(#dayg)" haze="glowTeal">
-    <Skyline frame={f} baseY={760} tint="#13202e" o={0.5} />
+    {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={760} /> : <Skyline frame={f} baseY={760} tint="#13202e" o={0.5} />}
     <ellipse cx={1500} cy={300} rx={300} ry={420} fill="url(#lightTop)" opacity={0.35} />
     <rect x={0} y={905} width={1920} height={175} fill={COL.floor} />{tiles}<rect x={0} y={905} width={1920} height={8} fill={INK} />
-    {/* reception desk, set back left */}
-    <rect x={90} y={780} width={340} height={130} fill={PAPER} stroke={INK} strokeWidth={5} /><rect x={90} y={780} width={340} height={16} fill={INK} opacity={0.15} />
-    {/* potted plant, right foreground */}
-    <rect x={1720} y={940} width={70} height={40} rx={6} fill={PAPER} stroke={INK} strokeWidth={4} />
-    <path d="M 1755 940 Q 1700 880 1730 830 M 1755 940 Q 1810 890 1780 820 M 1755 940 Q 1755 860 1755 810" fill="none" stroke="#2f7a4a" strokeWidth={6} strokeLinecap="round" />
+    {SURVIVAL_TOPIC ? (
+      /* a boarded front door + the kid already waiting at the gate — the door-knock ritual's
+         receiving end (t14 Cole's knock, t30 the new boy) — instead of the reception desk */
+      <>
+        <rect x={140} y={660} width={260} height={250} fill={PAPER} stroke={INK} strokeWidth={5} />
+        {[0, 1, 2, 3].map((i) => <line key={i} x1={150} y1={700 + i * 55} x2={390} y2={692 + i * 55} stroke={INK} strokeWidth={8} opacity={0.7} />)}
+        <StickFigure pose={A.stand(f)} x={270} y={870} scale={0.85} facing={1} view="front" costume="none" expr={FACES.earnest} pal={LIGHT} frame={f} />
+      </>
+    ) : (
+      <>
+        {/* reception desk, set back left */}
+        <rect x={90} y={780} width={340} height={130} fill={PAPER} stroke={INK} strokeWidth={5} /><rect x={90} y={780} width={340} height={16} fill={INK} opacity={0.15} />
+        {/* potted plant, right foreground */}
+        <rect x={1720} y={940} width={70} height={40} rx={6} fill={PAPER} stroke={INK} strokeWidth={4} />
+        <path d="M 1755 940 Q 1700 880 1730 830 M 1755 940 Q 1810 890 1780 820 M 1755 940 Q 1755 860 1755 810" fill="none" stroke="#2f7a4a" strokeWidth={6} strokeLinecap="round" />
+      </>
+    )}
     <StickFigure pose={A.walk(f, fps)} x={x} y={897} scale={0.9} facing={1} view="profile" expr={FACES.earnest} pal={LIGHT} frame={f} />
   </Frame>);
 };
