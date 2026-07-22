@@ -3,6 +3,7 @@ import {useCurrentFrame, useVideoConfig, interpolate} from 'remotion';
 import {StickFigure, LIGHT, SIL, DIM, PAPER} from './figure';
 import {FACES, blendExpr} from './faces';
 import * as A from './actions';
+import meta from './episode_meta.json';
 
 // ============================================================================
 // COMPOSABLE DOODLE STAGE — topic-specific scene packs.
@@ -11,6 +12,12 @@ import * as A from './actions';
 // Self-contained (own Defs/Frame) so it never disturbs the original scenes.tsx.
 // New templates are exported as packs and merged into TEMPLATES in scenes.tsx.
 // ============================================================================
+// Mirrors scenes.tsx's SURVIVAL_TOPIC gate: reused "universal" templates (like MILITARY's
+// commandPost) default to a corporate/generic backdrop that reads wrong for a disaster/outbreak
+// episode — gate a rustic variant on topic so every other topic's look stays untouched.
+const SURVIVAL_TOPIC = /zombie|apocalypse|outbreak|survive/i.test(
+  ((meta as any)?.topic || '') + ' ' + ((meta as any)?.title || '')
+);
 const INK = '#2a2620';
 const PAPERC = PAPER;
 const FLOOR = '#eef2f6';   // bright pass 2026-07-20 (was tan #ece5d6)
@@ -221,6 +228,27 @@ const BG: Record<string, React.FC<{frame: number}>> = {
         <g key={x}><rect x={x} y={220} width={180} height={620} fill={PAPERC} stroke={INK} strokeWidth={4} />
           {Array.from({length: 9}).map((_, r) => <g key={r}><line x1={x} y1={260 + r * 64} x2={x + 180} y2={260 + r * 64} stroke={INK} strokeWidth={2} opacity={0.5} />
             <circle cx={x + 150} cy={244 + r * 64} r={5} fill={(i + r) % 3 ? GOLD : '#5bbf7a'} opacity={0.7 + 0.3 * Math.sin(frame * 0.2 + i + r)} /></g>)}</g>))}
+    </g>
+  ),
+  // the survival-topic command post: a canvas A-frame tent + a staked state flag out front, with
+  // rustic crate seating — reused for both the checkpoint tent (early) and the year-later camp
+  // council, so it reads as a command post without ever looking like a corporate server room.
+  commandTent: ({frame}) => (
+    <g>
+      <rect x={0} y={820} width={1920} height={260} fill={FLOOR} /><line x1={0} y1={820} x2={1920} y2={820} stroke={INK} strokeWidth={5} />
+      {/* A-frame canvas tent, center-right */}
+      <polygon points="660,820 960,260 1260,820" fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <polygon points="900,820 960,320 1020,820" fill="#e6dcc4" stroke={INK} strokeWidth={3} />
+      <line x1={960} y1={320} x2={960} y2={820} stroke={INK} strokeWidth={2} opacity={0.5} />
+      {/* guy-lines + stakes */}
+      <line x1={660} y1={820} x2={560} y2={880} stroke={INK} strokeWidth={2.5} /><line x1={1260} y1={820} x2={1360} y2={880} stroke={INK} strokeWidth={2.5} />
+      {/* staked state flag, out front */}
+      <line x1={1560} y1={860} x2={1560} y2={260} stroke={INK} strokeWidth={5} />
+      <path d={`M 1560 260 L 1740 ${300 + Math.sin(frame * 0.08) * 10} L 1560 ${340 + Math.sin(frame * 0.08) * 6} Z`} fill="#c0392b" stroke={INK} strokeWidth={3} />
+      <circle cx={1650} cy={296 + Math.sin(frame * 0.08) * 8} r={22} fill={GOLD} stroke={INK} strokeWidth={2} opacity={0.85} />
+      {/* rustic crates, camp-council seating */}
+      <rect x={300} y={700} width={140} height={120} fill={PAPERC} stroke={INK} strokeWidth={3.5} /><line x1={300} y1={760} x2={440} y2={760} stroke={INK} strokeWidth={2} opacity={0.5} />
+      <rect x={460} y={740} width={110} height={80} fill={PAPERC} stroke={INK} strokeWidth={3} />
     </g>
   ),
   ipoFloor: ({frame}) => (
@@ -714,9 +742,16 @@ const BG: Record<string, React.FC<{frame: number}>> = {
   cellBlock: ({frame}) => (
     <g>
       <rect x={0} y={820} width={1920} height={260} fill={FLOOR} /><line x1={0} y1={820} x2={1920} y2={820} stroke={INK} strokeWidth={5} />
-      {Array.from({length: 6}).map((_, r) => Array.from({length: 12}).map((_, c) => <rect key={r + '_' + c} x={c * 170 + (r % 2 ? 85 : 0)} y={200 + r * 104} width={150} height={90} fill="none" stroke={LINE} strokeWidth={2} opacity={0.32} />))}
+      {Array.from({length: 6}).map((_, r) => Array.from({length: 12}).map((_, c) => <rect key={r + '_' + c} x={c * 170 + (r % 2 ? 85 : 0)} y={200 + r * 104} width={150} height={90} fill="none" stroke={LINE} strokeWidth={2} opacity={0.55} />))}
       <rect x={1380} y={240} width={200} height={160} fill="#2a313a" stroke={INK} strokeWidth={4} />{[0, 1, 2].map((i) => <line key={i} x1={1430 + i * 50} y1={240} x2={1430 + i * 50} y2={400} stroke={INK} strokeWidth={3} />)}<ellipse cx={1480} cy={320} rx={150} ry={190} fill="url(#sglow)" opacity={0.3} />
       <rect x={200} y={640} width={360} height={40} fill={PAPERC} stroke={INK} strokeWidth={4} /><rect x={200} y={680} width={24} height={140} fill={PAPERC} stroke={INK} strokeWidth={3} /><rect x={536} y={680} width={24} height={140} fill={PAPERC} stroke={INK} strokeWidth={3} />
+      {/* the cell door: a load-bearing element at scene-center so a mid-frame camera crop is never
+          near-blank paper — heavy plank door, hinges, a small barred slot, and the deadbolt */}
+      <rect x={820} y={260} width={280} height={560} fill={PAPERC} stroke={INK} strokeWidth={5} />
+      {[0, 1, 2, 3].map((i) => <line key={i} x1={820 + i * 70} y1={260} x2={820 + i * 70} y2={820} stroke={INK} strokeWidth={2} opacity={0.4} />)}
+      <rect x={870} y={340} width={180} height={70} fill="none" stroke={INK} strokeWidth={3} />{[0, 1, 2, 3].map((i) => <line key={i} x1={890 + i * 40} y1={340} x2={890 + i * 40} y2={410} stroke={INK} strokeWidth={2.5} />)}
+      <rect x={1050} y={540} width={44} height={22} rx={3} fill="#2a313a" stroke={INK} strokeWidth={3} /><circle cx={1030} cy={551} r={7} fill="#2a313a" stroke={INK} strokeWidth={2.5} />
+      <rect x={806} y={244} width={14} height={590} fill={INK} opacity={0.5} /><rect x={806} y={280} width={14} height={30} fill={INK} opacity={0.7} /><rect x={806} y={760} width={14} height={30} fill={INK} opacity={0.7} />
     </g>
   ),
   // the Feds' listening post: a wall of pinned surveillance photos + red string, a blinded window (reelDeck prop)
@@ -1802,7 +1837,7 @@ const MILITARY = {
     return <Stage backdrop="battlefield" bg="url(#spaper)" figBehind
       fig={{pose: A.walk(f, fps), x, y: 748, scale: 0.95, view: 'profile', facing: 1, expr: FACES.hardened}} />;},
   commandPost: () => {const f = useCurrentFrame();
-    return <Stage backdrop="serverRoom" prop="mapTable" bg="url(#sclean)" figBehind
+    return <Stage backdrop={SURVIVAL_TOPIC ? 'commandTent' : 'serverRoom'} prop="mapTable" bg="url(#sclean)" figBehind
       fig={{pose: A.stand(f), x: 800, y: 860, scale: 1.25, view: 'front', expr: FACES.cold}}
       extras={[{pose: A.stand(f), x: 1180, y: 860, scale: 1.1, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
   decoration: () => {const f = useCurrentFrame();
