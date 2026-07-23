@@ -2,7 +2,7 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 19912,
+  "totalFrames": 19913,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
@@ -16,7 +16,8 @@
       "audio": "audio/t00.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 698
+      "durationInFrames": 698,
+      "gap": 0.7
     },
     {
       "id": "t01",
@@ -26,7 +27,8 @@
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
       "startFrame": 698,
-      "durationInFrames": 543
+      "durationInFrames": 543,
+      "gap": 0.25
     },
     {
       "id": "t02",
@@ -39,7 +41,8 @@
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
       "startFrame": 1241,
-      "durationInFrames": 638
+      "durationInFrames": 638,
+      "gap": 0.25
     },
     {
       "id": "t03",
@@ -49,7 +52,8 @@
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
       "startFrame": 1879,
-      "durationInFrames": 539
+      "durationInFrames": 539,
+      "gap": 0.25
     },
     {
       "id": "t04",
@@ -59,7 +63,8 @@
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
       "startFrame": 2418,
-      "durationInFrames": 585
+      "durationInFrames": 585,
+      "gap": 0.25
     },
     {
       "id": "t05",
@@ -69,7 +74,8 @@
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
       "startFrame": 3003,
-      "durationInFrames": 549
+      "durationInFrames": 549,
+      "gap": 0.25
     },
     {
       "id": "t06",
@@ -82,7 +88,8 @@
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
       "startFrame": 3552,
-      "durationInFrames": 606
+      "durationInFrames": 606,
+      "gap": 0.25
     },
     {
       "id": "t07",
@@ -92,7 +99,8 @@
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
       "startFrame": 4158,
-      "durationInFrames": 592
+      "durationInFrames": 592,
+      "gap": 0.25
     },
     {
       "id": "t08",
@@ -105,7 +113,8 @@
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
       "startFrame": 4750,
-      "durationInFrames": 758
+      "durationInFrames": 758,
+      "gap": 0.25
     },
     {
       "id": "t09",
@@ -118,7 +127,8 @@
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
       "startFrame": 5508,
-      "durationInFrames": 617
+      "durationInFrames": 617,
+      "gap": 0.25
     },
     {
       "id": "t10",
@@ -128,7 +138,8 @@
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
       "startFrame": 6125,
-      "durationInFrames": 524
+      "durationInFrames": 524,
+      "gap": 0.25
     },
     {
       "id": "t11",
@@ -138,7 +149,8 @@
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
       "startFrame": 6649,
-      "durationInFrames": 569
+      "durationInFrames": 569,
+      "gap": 0.25
     },
     {
       "id": "t11b",
@@ -148,7 +160,8 @@
       "audio": "audio/t11b.wav",
       "audioStartFrame": 3,
       "startFrame": 7218,
-      "durationInFrames": 651
+      "durationInFrames": 651,
+      "gap": 0.25
     },
     {
       "id": "t12",
@@ -161,7 +174,8 @@
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
       "startFrame": 7869,
-      "durationInFrames": 559
+      "durationInFrames": 559,
+      "gap": 0.25
     },
     {
       "id": "t13",
@@ -171,7 +185,8 @@
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
       "startFrame": 8428,
-      "durationInFrames": 542
+      "durationInFrames": 542,
+      "gap": 0.25
     },
     {
       "id": "t14",
@@ -181,7 +196,8 @@
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
       "startFrame": 8970,
-      "durationInFrames": 558
+      "durationInFrames": 558,
+      "gap": 0.25
     },
     {
       "id": "t15",
@@ -191,7 +207,8 @@
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
       "startFrame": 9528,
-      "durationInFrames": 645
+      "durationInFrames": 645,
+      "gap": 0.25
     },
     {
       "id": "t16",
@@ -201,7 +218,8 @@
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
       "startFrame": 10173,
-      "durationInFrames": 611
+      "durationInFrames": 611,
+      "gap": 0.25
     },
     {
       "id": "t17",
@@ -214,7 +232,8 @@
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
       "startFrame": 10784,
-      "durationInFrames": 669
+      "durationInFrames": 669,
+      "gap": 1.4
     },
     {
       "id": "t18",
@@ -224,7 +243,8 @@
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
       "startFrame": 11453,
-      "durationInFrames": 884
+      "durationInFrames": 884,
+      "gap": 0.25
     },
     {
       "id": "t19",
@@ -234,7 +254,8 @@
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
       "startFrame": 12337,
-      "durationInFrames": 576
+      "durationInFrames": 576,
+      "gap": 0.25
     },
     {
       "id": "t20",
@@ -247,7 +268,8 @@
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
       "startFrame": 12913,
-      "durationInFrames": 648
+      "durationInFrames": 648,
+      "gap": 0.25
     },
     {
       "id": "t21",
@@ -257,7 +279,8 @@
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
       "startFrame": 13561,
-      "durationInFrames": 755
+      "durationInFrames": 755,
+      "gap": 0.25
     },
     {
       "id": "t22",
@@ -267,7 +290,8 @@
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
       "startFrame": 14316,
-      "durationInFrames": 612
+      "durationInFrames": 612,
+      "gap": 0.25
     },
     {
       "id": "t23",
@@ -277,7 +301,8 @@
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
       "startFrame": 14928,
-      "durationInFrames": 551
+      "durationInFrames": 551,
+      "gap": 0.25
     },
     {
       "id": "t24",
@@ -290,7 +315,8 @@
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
       "startFrame": 15479,
-      "durationInFrames": 585
+      "durationInFrames": 585,
+      "gap": 0.25
     },
     {
       "id": "t25",
@@ -300,7 +326,8 @@
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
       "startFrame": 16064,
-      "durationInFrames": 685
+      "durationInFrames": 686,
+      "gap": 0.25
     },
     {
       "id": "t26",
@@ -309,8 +336,9 @@
       "template": "riceField",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 16749,
-      "durationInFrames": 573
+      "startFrame": 16750,
+      "durationInFrames": 573,
+      "gap": 0.25
     },
     {
       "id": "t27",
@@ -319,8 +347,9 @@
       "template": "dinner",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 17322,
-      "durationInFrames": 594
+      "startFrame": 17323,
+      "durationInFrames": 594,
+      "gap": 0.25
     },
     {
       "id": "t28",
@@ -329,8 +358,9 @@
       "template": "campWall",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 17916,
-      "durationInFrames": 693
+      "startFrame": 17917,
+      "durationInFrames": 693,
+      "gap": 0.7
     },
     {
       "id": "t29",
@@ -342,8 +372,9 @@
       "template": "window",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 18609,
-      "durationInFrames": 694
+      "startFrame": 18610,
+      "durationInFrames": 694,
+      "gap": 0.25
     },
     {
       "id": "t30",
@@ -352,8 +383,9 @@
       "template": "lobby",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 19303,
-      "durationInFrames": 609
+      "startFrame": 19304,
+      "durationInFrames": 609,
+      "gap": 0.7
     }
   ]
 }
