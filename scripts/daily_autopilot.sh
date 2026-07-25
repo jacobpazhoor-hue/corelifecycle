@@ -158,8 +158,6 @@ python3 scripts/yt_analytics.py || echo "analytics refresh failed (non-fatal)"
 
 # 1) CREATIVE — pick topic, research, write content.py + ops/episode_meta.json (per AUTOPILOT_PROMPT)
 echo "--- creative agent ---"
-# Count this as a full build attempt (see budget guard above)
-python3 -c "import json,os; f='runs/autopilot_attempts.json'; d=json.load(open(f)) if os.path.exists(f) else {}; c=d.get('count',0) if d.get('date')=='$TODAY' else 0; json.dump({'date':'$TODAY','count':c+1}, open(f,'w'))" 2>/dev/null || true
 "$CLAUDE" --print --model sonnet "$(cat docs/AUTOPILOT_PROMPT.txt)"
 
 # 1b) GUARD — the creative agent MUST have advanced to a NEW (unproduced) topic. If it failed (e.g.
@@ -172,6 +170,11 @@ if ! python3 -c "import json,sys;t='$NEWTOPIC';p=[x['topic'] for x in json.load(
   exit 0
 fi
 echo "creative agent advanced to NEW topic: $NEWTOPIC"
+# Count this as a full build attempt ONLY now that the creative agent has actually advanced to a new
+# topic — i.e. we are committing to a real build+render+review. Counting BEFORE this guard (the old
+# behavior) let two transient creative-agent failures that produce nothing burn the whole day's
+# MAX_BUILDS_PER_DAY budget and dark the channel (2026-07-24). Failed-agent HALTs no longer count.
+python3 -c "import json,os; f='runs/autopilot_attempts.json'; d=json.load(open(f)) if os.path.exists(f) else {}; c=d.get('count',0) if d.get('date')=='$TODAY' else 0; json.dump({'date':'$TODAY','count':c+1}, open(f,'w'))" 2>/dev/null || true
 
 # 2) BUILD + GATE + SMOKE (crisp VO + music + quality gate + 1-frame render check). HALT if it fails.
 echo "--- build + gate + smoke ---"
