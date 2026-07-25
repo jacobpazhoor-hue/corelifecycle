@@ -1811,8 +1811,11 @@ const MED = {
 // Startup pack (founder / tech)
 const STARTUP = {
   garageStart: () => {const f = useCurrentFrame(); const {fps} = useVideoConfig();
+    // x pulled left of the bench's laptop (fixed at x900-1020) — at x=900 the seated typing pose's
+    // head lands directly under the laptop, and since figBehind draws the prop OVER the figure, the
+    // laptop's PAPERC screen+base painted a blank pale shape over the face/hair (reviewer t05 defect).
     return <Stage backdrop="garage" prop="bench" bg="url(#spaper)" figBehind
-      fig={{pose: A.type_(f, fps), x: 900, y: 878, scale: 1.25, view: 'profile', facing: 1, expr: FACES.earnest}} />;},
+      fig={{pose: A.type_(f, fps), x: 780, y: 878, scale: 1.25, view: 'profile', facing: 1, expr: FACES.earnest}} />;},
   startupGrow: () => {const f = useCurrentFrame(); const {fps} = useVideoConfig();
     return <Stage backdrop="startupOffice" bg="url(#spaper)"
       fig={{pose: A.stand(f), x: 540, y: 880, scale: 1.5, view: 'front', expr: FACES.focused}}

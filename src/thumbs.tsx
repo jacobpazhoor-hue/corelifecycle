@@ -505,7 +505,11 @@ const ThumbPoster: React.FC = () => {
   const Art = propFor();
   const WORD = ((meta as any).thumb?.word || 'YOU').toUpperCase();
   const ws = Math.min(176, Math.floor(560 / Math.max(WORD.length, 1)));
-  const HS = 1.85;                      // hero scale
+  // Reviewer flagged the hero as well under the bible's "hero >=40% of frame" guidance with a flat
+  // expression. A full-body standing figure can't literally hit 40% of frame WIDTH without its head
+  // clipping the top of a 720-tall canvas (height:width ratio is ~4.4:1) — 2.25 is the scale ceiling
+  // before the head runs off-frame at this ground line, so push to just under that ceiling.
+  const HS = 2.15;                      // hero scale (was 1.85)
   const GY = 648;                       // ground line — hero stands ON it, nothing gets cropped
   return (
     <Wrap plain>
@@ -516,7 +520,7 @@ const ThumbPoster: React.FC = () => {
       <Art />
       {/* StickFigure's y is the HIP, not the feet — thigh+shin (110) must be subtracted or the
           legs render off the bottom of the frame. */}
-      <Hero x={252} y={GY - 110 * HS} scale={HS} facing={1} expr={face('smug')} />
+      <Hero x={300} y={GY - 110 * HS} scale={HS} facing={1} expr={face('shock')} />
       <Punch x={556} y={150} fs={ws} anchor="middle" fill={HOT} st="#111" sw={Math.max(11, ws * 0.15)}>{WORD}</Punch>
       {/* arrow swings OUT and back so it lands on the hero from the side — never across the face */}
       <path d="M 556 212 Q 452 268 352 214" stroke={HOT} strokeWidth={23} fill="none" strokeLinecap="round" />

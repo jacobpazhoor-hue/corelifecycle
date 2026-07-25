@@ -8,7 +8,7 @@
     "big": "$3,500,000,000,000",
     "before": "$0 VOTE",
     "after": "$90B FUND",
-    "expr": "cold",
+    "expr": "shock",
     "povline": "YOU DECIDE",
     "keyword": "ZERO",
     "setting": "pnlWall",
