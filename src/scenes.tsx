@@ -346,8 +346,13 @@ const S08: React.FC = () => {
 const S09: React.FC = () => {
   const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
   const x = interpolate(f, [0, durationInFrames], [CAPTION_SAFE_X, 1320]);  // was 480 -> walked in behind the caption card
+  // jet pushed back/up 2026-07-25: at its old position (cy 780, tail down to x1180) the fuselage sat
+  // right at the walking character's shoulder height and the tail fin ended up almost touching his
+  // briefcase arm, reading as the plane emerging from his body (reviewer t25 defect). Moved well above
+  // the walk line (cy 780 -> 570) and right (cx 1500 -> 1550) so there's a clear band of sky between
+  // the character's head (top ~y662) and the jet's lowest point (~y616) — background, not attached.
   return (<Frame bg="url(#dusk)">
-    <g fill="#111b27" opacity={0.95}><ellipse cx={1500} cy={780} rx={360} ry={48} /><polygon points="1500,760 1360,690 1330,700 1470,775" /><polygon points="1760,760 1840,690 1855,705 1800,775" /><polygon points="1230,782 1180,782 1210,756 1245,762" /></g>
+    <g fill="#111b27" opacity={0.95}><ellipse cx={1550} cy={570} rx={340} ry={46} /><polygon points="1550,550 1410,480 1380,490 1520,565" /><polygon points="1810,550 1890,480 1905,495 1850,565" /><polygon points="1280,572 1230,572 1260,546 1295,552" /></g>
     <line x1={0} y1={900} x2={1920} y2={900} stroke="#1a2230" strokeWidth={10} /><rect x={0} y={900} width={1920} height={180} fill="#1b2430" opacity={0.6} />
     <StickFigure pose={A.walk(f, fps)} x={x} y={840} scale={1.0} facing={1} view="profile" expr={FACES.cold} pal={LIGHT} briefcase frame={f} />
   </Frame>);

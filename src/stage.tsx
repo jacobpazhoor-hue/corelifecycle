@@ -1814,8 +1814,12 @@ const STARTUP = {
     // x pulled left of the bench's laptop (fixed at x900-1020) — at x=900 the seated typing pose's
     // head lands directly under the laptop, and since figBehind draws the prop OVER the figure, the
     // laptop's PAPERC screen+base painted a blank pale shape over the face/hair (reviewer t05 defect).
+    // y raised 878 -> 760 (2026-07-25): at 878 the head sat low enough that the bench's front edge
+    // (y700-728) cut straight across the eyes, AND the same low head landed inside the bottom-left
+    // money-card region once a medium/closeup shot pushed in on it (reviewer t05 defect #2). Raising
+    // the anchor keeps the whole head above both the desk plane and the card for the scene's duration.
     return <Stage backdrop="garage" prop="bench" bg="url(#spaper)" figBehind
-      fig={{pose: A.type_(f, fps), x: 780, y: 878, scale: 1.25, view: 'profile', facing: 1, expr: FACES.earnest}} />;},
+      fig={{pose: A.type_(f, fps), x: 780, y: 760, scale: 1.25, view: 'profile', facing: 1, expr: FACES.earnest}} />;},
   startupGrow: () => {const f = useCurrentFrame(); const {fps} = useVideoConfig();
     return <Stage backdrop="startupOffice" bg="url(#spaper)"
       fig={{pose: A.stand(f), x: 540, y: 880, scale: 1.5, view: 'front', expr: FACES.focused}}

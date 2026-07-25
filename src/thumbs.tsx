@@ -194,10 +194,46 @@ const Tape: React.FC<{y: number; label: string}> = ({y, label}) => (
   </g>
 );
 
-const Hero: React.FC<{x: number; y: number; scale: number; facing?: number; expr?: any; pose?: any; pal?: any; costume?: Costume}> =
-({x, y, scale, facing = -1, expr, pose, pal = LIGHT, costume = COSTUME}) => (
-  <g filter="url(#heroPop)"><StickFigure pose={pose ?? A.stand(0)} x={x} y={y} scale={scale} facing={facing} view="front" expr={expr} pal={pal} rough frame={0} costume={costume} /></g>
-);
+// StickFigure's shared Face() renders 'shock' at normal eye size (only brow angle + mouth shape
+// change) — right for subtler in-video reactions, but the reviewer flagged the thumbnail hero's
+// shock as reading as "a small open-mouth 'o' with dot eyes," not the pushed CTR treatment. Rather
+// than touching Face() (used by every in-episode expression), overlay genuinely oversized
+// eyes/brows/mouth/sweat at the figure's actual head position — thumbnail-only, opt-in via `shock`.
+const D2R = Math.PI / 180;
+const headCenter = (x: number, y: number, scale: number, facing: number, pose: any) => {
+  const p = pose ?? {spineLean: 2, headTilt: 0, bob: 0};
+  const shoulderX = Math.sin(p.spineLean * D2R) * 94 * facing, shoulderY = -Math.cos(p.spineLean * D2R) * 94 - p.bob;
+  const headA = p.spineLean + p.headTilt;
+  return {cx: x + scale * (shoulderX + Math.sin(headA * D2R) * 48 * facing), cy: y + scale * (shoulderY - Math.cos(headA * D2R) * 48)};
+};
+const ShockFace: React.FC<{cx: number; cy: number; r: number}> = ({cx, cy, r}) => {
+  const em = 1.7, ex = r * 0.34, eyeY = cy - r * 0.02, ew = r * 0.15 * em, eh = r * 0.21 * em;
+  const browY = cy - r * 0.34 - r * 0.22, bw = r * 0.34;
+  return (
+    <g>
+      <ellipse cx={cx - ex} cy={eyeY} rx={ew} ry={eh} fill="#fff" stroke={INK} strokeWidth={r * 0.05} />
+      <ellipse cx={cx + ex} cy={eyeY} rx={ew} ry={eh} fill="#fff" stroke={INK} strokeWidth={r * 0.05} />
+      <circle cx={cx - ex} cy={eyeY + eh * 0.15} r={ew * 0.4} fill={INK} />
+      <circle cx={cx + ex} cy={eyeY + eh * 0.15} r={ew * 0.4} fill={INK} />
+      <path d={`M ${cx - ex - bw / 2} ${browY + 10} Q ${cx - ex} ${browY - 14} ${cx - ex + bw / 2} ${browY + 4}`} fill="none" stroke={INK} strokeWidth={r * 0.075} strokeLinecap="round" />
+      <path d={`M ${cx + ex - bw / 2} ${browY + 4} Q ${cx + ex} ${browY - 14} ${cx + ex + bw / 2} ${browY + 10}`} fill="none" stroke={INK} strokeWidth={r * 0.075} strokeLinecap="round" />
+      <ellipse cx={cx} cy={cy + r * 0.46} rx={r * 0.18} ry={r * 0.24} fill={INK} />
+      <path d={`M ${cx + r * 0.74} ${cy - r * 0.2} q ${r * 0.12} ${r * 0.16} 0 ${r * 0.28} q ${-r * 0.12} ${-r * 0.12} 0 ${-r * 0.28}`} fill="#4FC3F7" stroke={INK} strokeWidth={r * 0.025} />
+    </g>
+  );
+};
+
+const Hero: React.FC<{x: number; y: number; scale: number; facing?: number; expr?: any; pose?: any; pal?: any; costume?: Costume; shock?: boolean}> =
+({x, y, scale, facing = -1, expr, pose, pal = LIGHT, costume = COSTUME, shock = false}) => {
+  const p = pose ?? A.stand(0);
+  const head = shock ? headCenter(x, y, scale, facing, p) : null;
+  return (
+    <g filter="url(#heroPop)">
+      <StickFigure pose={p} x={x} y={y} scale={scale} facing={facing} view="front" expr={expr} pal={pal} rough frame={0} costume={costume} />
+      {head && <ShockFace cx={head.cx} cy={head.cy} r={36 * scale} />}
+    </g>
+  );
+};
 
 // `plain` skips EnergyBG so an archetype can paint its own full-bleed scene (see ThumbPoster).
 const Wrap: React.FC<{children: React.ReactNode; burstX?: number; sun?: boolean; plain?: boolean}> = ({children, burstX, sun, plain}) => (
@@ -477,8 +513,11 @@ const Prop: Record<string, React.FC> = {
     </g>
   ),
   // VAULT of cash — money / wealth
+  // Reviewer: the vault "dominates the composition" next to a hero occupying only ~1/3 of the frame.
+  // Scaled down 0.85x, anchored on its original bottom-left corner (640,630) so it shrinks toward the
+  // hero's side instead of just floating smaller in place — frees up space and reads as less dominant.
   vault: () => (
-    <g transform="translate(600 120)">
+    <g transform="translate(606 196.5) scale(0.85)">
       <rect x={40} y={40} width={600} height={470} rx={26} fill="#d7dee6" stroke={INK} strokeWidth={10} />
       <rect x={92} y={92} width={496} height={366} rx={16} fill="#eef2f6" stroke={INK} strokeWidth={8} />
       <circle cx={340} cy={275} r={112} fill={M.pill} stroke={INK} strokeWidth={10} />
@@ -507,10 +546,11 @@ const ThumbPoster: React.FC = () => {
   const ws = Math.min(176, Math.floor(560 / Math.max(WORD.length, 1)));
   // Reviewer flagged the hero as well under the bible's "hero >=40% of frame" guidance with a flat
   // expression. A full-body standing figure can't literally hit 40% of frame WIDTH without its head
-  // clipping the top of a 720-tall canvas (height:width ratio is ~4.4:1) — 2.25 is the scale ceiling
-  // before the head runs off-frame at this ground line, so push to just under that ceiling.
-  const HS = 2.15;                      // hero scale (was 1.85)
-  const GY = 648;                       // ground line — hero stands ON it, nothing gets cropped
+  // clipping the top of a 720-tall canvas (height:width ratio is ~4.4:1). Lowering the ground line
+  // (was 648) buys extra headroom above it, which is what actually lets the scale go up further
+  // without the head — or its heroPop glow — running into the top edge.
+  const HS = 2.25;                      // hero scale (was 2.15, before that 1.85)
+  const GY = 695;                       // ground line (was 648) — hero stands ON it, nothing gets cropped
   return (
     <Wrap plain>
       <Sky a="#bfe4f7" b="#eef8ff" />
@@ -519,12 +559,14 @@ const ThumbPoster: React.FC = () => {
       <path d={`M 0 ${GY} L 1280 ${GY}`} stroke={INK} strokeWidth={7} />
       <Art />
       {/* StickFigure's y is the HIP, not the feet — thigh+shin (110) must be subtracted or the
-          legs render off the bottom of the frame. */}
-      <Hero x={300} y={GY - 110 * HS} scale={HS} facing={1} expr={face('shock')} />
+          legs render off the bottom of the frame. `shock` overlays genuinely oversized eyes/brows/
+          mouth/sweat (reviewer: the plain FACES.shock read as only a mild "o"-mouth surprise). */}
+      <Hero x={300} y={GY - 110 * HS} scale={HS} facing={1} expr={face('shock')} shock />
       <Punch x={556} y={150} fs={ws} anchor="middle" fill={HOT} st="#111" sw={Math.max(11, ws * 0.15)}>{WORD}</Punch>
-      {/* arrow swings OUT and back so it lands on the hero from the side — never across the face */}
-      <path d="M 556 212 Q 452 268 352 214" stroke={HOT} strokeWidth={23} fill="none" strokeLinecap="round" />
-      <path d="M 306 196 l 58 -12 l -14 54 Z" fill={HOT} stroke={INK} strokeWidth={6} strokeLinejoin="round" />
+      {/* arrow swings OUT and back so it lands on the hero from the side — never across the face.
+          Shifted down ~27px to track the hero's collar after the GY/HS bump above moved it. */}
+      <path d="M 556 239 Q 452 295 352 241" stroke={HOT} strokeWidth={23} fill="none" strokeLinecap="round" />
+      <path d="M 306 223 l 58 -12 l -14 54 Z" fill={HOT} stroke={INK} strokeWidth={6} strokeLinejoin="round" />
     </Wrap>
   );
 };
