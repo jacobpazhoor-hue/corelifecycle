@@ -2,389 +2,424 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 19913,
+  "totalFrames": 22278,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
-      "id": "t00",
+      "id": "t01",
       "level": null,
       "overlay": {
-        "big": "YEAR 1",
-        "sub": "THE WALL HAS NEVER BROKEN. UNTIL TONIGHT."
+        "big": "$40,000,000",
+        "sub": "ONE CLICK. RETURNS THE FUND \u2014 OR YOU."
       },
-      "template": "campWall",
-      "audio": "audio/t00.wav",
+      "template": "deskClose",
+      "audio": "audio/t01.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 698,
+      "durationInFrames": 760,
       "gap": 0.7
     },
     {
-      "id": "t01",
+      "id": "t02",
       "level": null,
       "overlay": null,
-      "template": "window",
-      "audio": "audio/t01.wav",
-      "audioStartFrame": 3,
-      "startFrame": 698,
-      "durationInFrames": 543,
-      "gap": 0.25
-    },
-    {
-      "id": "t02",
-      "level": "LEVEL 01  \u00b7  HOUR 1  \u00b7  THE DOOR CODE",
-      "overlay": {
-        "big": "1 BITE",
-        "sub": "THAT'S ALL IT TAKES"
-      },
-      "template": "suburbSiege",
+      "template": "deskSilhouette",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 1241,
-      "durationInFrames": 638,
+      "startFrame": 760,
+      "durationInFrames": 720,
       "gap": 0.25
     },
     {
       "id": "t03",
-      "level": null,
-      "overlay": null,
-      "template": "dinner",
+      "level": "LEVEL 01  \u00b7  ANALYST  \u00b7  THE INBOX",
+      "overlay": {
+        "big": "$0",
+        "sub": "CHECK AUTHORITY \u00b7 ~$120K/YR"
+      },
+      "template": "lectureHallScene",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 1879,
-      "durationInFrames": 539,
+      "startFrame": 1480,
+      "durationInFrames": 884,
       "gap": 0.25
     },
     {
       "id": "t04",
       "level": null,
       "overlay": null,
-      "template": "deskSilhouette",
+      "template": "fileWall",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 2418,
-      "durationInFrames": 585,
+      "startFrame": 2364,
+      "durationInFrames": 639,
       "gap": 0.25
     },
     {
       "id": "t05",
       "level": null,
-      "overlay": null,
-      "template": "window",
+      "overlay": {
+        "big": "$2,000,000",
+        "sub": "THE SEED ROUND YOU CAN'T FUND YET"
+      },
+      "template": "garageStart",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
       "startFrame": 3003,
-      "durationInFrames": 549,
+      "durationInFrames": 755,
       "gap": 0.25
     },
     {
       "id": "t06",
-      "level": "LEVEL 02  \u00b7  DAY 1  \u00b7  THE ROAD OUT",
-      "overlay": {
-        "big": "3 DAYS",
-        "sub": "IS ALL THE SUPPLY CHAIN EVER HAD"
-      },
-      "template": "hordeStreet",
+      "level": null,
+      "overlay": null,
+      "template": "boardroomNotes",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 3552,
-      "durationInFrames": 606,
+      "startFrame": 3758,
+      "durationInFrames": 862,
       "gap": 0.25
     },
     {
       "id": "t07",
-      "level": null,
-      "overlay": null,
-      "template": "highwayJam",
+      "level": "LEVEL 02  \u00b7  ASSOCIATE  \u00b7  THE SIGN-OFF",
+      "overlay": {
+        "big": "$250,000",
+        "sub": "CHECK AUTHORITY (WITH SIGN-OFF) \u00b7 ~$200K/YR"
+      },
+      "template": "desk",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 4158,
-      "durationInFrames": 592,
+      "startFrame": 4620,
+      "durationInFrames": 733,
       "gap": 0.25
     },
     {
       "id": "t08",
       "level": null,
       "overlay": {
-        "big": "2011",
-        "sub": "THE REAL CDC DRILL NOBODY RAN"
+        "big": "$15,000,000",
+        "sub": "SOMEONE ELSE'S TERM SHEET"
       },
-      "template": "fileWall",
+      "template": "startupGrow",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 4750,
-      "durationInFrames": 758,
+      "startFrame": 5353,
+      "durationInFrames": 613,
       "gap": 0.25
     },
     {
       "id": "t09",
-      "level": "LEVEL 03  \u00b7  DAY 3  \u00b7  THE LAST AISLE",
-      "overlay": {
-        "big": "72 HRS",
-        "sub": "IS HOW LONG BEFORE THE FIGHTING STARTS"
-      },
-      "template": "storeRaid",
+      "level": null,
+      "overlay": null,
+      "template": "window",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 5508,
-      "durationInFrames": 617,
+      "startFrame": 5966,
+      "durationInFrames": 648,
       "gap": 0.25
     },
     {
       "id": "t10",
-      "level": null,
-      "overlay": null,
-      "template": "erTrauma",
+      "level": "LEVEL 03  \u00b7  PRINCIPAL  \u00b7  THE BOARD SEAT",
+      "overlay": {
+        "big": "$3,000,000",
+        "sub": "YOUR FIRST TERM SHEET \u00b7 ~$300K/YR"
+      },
+      "template": "signing",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 6125,
-      "durationInFrames": 524,
+      "startFrame": 6614,
+      "durationInFrames": 580,
       "gap": 0.25
     },
     {
       "id": "t11",
       "level": null,
       "overlay": null,
-      "template": "frontline",
+      "template": "serverScale",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 6649,
-      "durationInFrames": 569,
-      "gap": 0.25
-    },
-    {
-      "id": "t11b",
-      "level": null,
-      "overlay": null,
-      "template": "highwayJam",
-      "audio": "audio/t11b.wav",
-      "audioStartFrame": 3,
-      "startFrame": 7218,
-      "durationInFrames": 651,
+      "startFrame": 7194,
+      "durationInFrames": 780,
       "gap": 0.25
     },
     {
       "id": "t12",
-      "level": "LEVEL 04  \u00b7  WEEK 1  \u00b7  THE BARRICADE",
-      "overlay": {
-        "big": "1 GAL",
-        "sub": "PER PERSON. PER DAY. YOU DON'T HAVE IT."
-      },
-      "template": "bunkerSiege",
+      "level": null,
+      "overlay": null,
+      "template": "boardroomHead",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 7869,
-      "durationInFrames": 559,
+      "startFrame": 7974,
+      "durationInFrames": 669,
       "gap": 0.25
     },
     {
       "id": "t13",
-      "level": null,
-      "overlay": null,
-      "template": "deskSilhouette",
+      "level": "LEVEL 04  \u00b7  PARTNER  \u00b7  THE VOTE",
+      "overlay": {
+        "big": "$15,000,000",
+        "sub": "CHECK AUTHORITY \u00b7 BOARD DIRECTOR NOW"
+      },
+      "template": "tower",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 8428,
-      "durationInFrames": 542,
+      "startFrame": 8643,
+      "durationInFrames": 563,
       "gap": 0.25
     },
     {
       "id": "t14",
       "level": null,
-      "overlay": null,
-      "template": "lobby",
+      "overlay": {
+        "big": "RETURN THE FUND",
+        "sub": "FOUR WORDS. INFINITE PRESSURE."
+      },
+      "template": "dinner",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 8970,
-      "durationInFrames": 558,
+      "startFrame": 9206,
+      "durationInFrames": 662,
       "gap": 0.25
     },
     {
       "id": "t15",
       "level": null,
       "overlay": null,
-      "template": "window",
+      "template": "fileWall",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 9528,
-      "durationInFrames": 645,
+      "startFrame": 9868,
+      "durationInFrames": 668,
       "gap": 0.25
     },
     {
       "id": "t16",
       "level": null,
       "overlay": null,
-      "template": "barracksLife",
+      "template": "deskSilhouette",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 10173,
-      "durationInFrames": 611,
-      "gap": 0.25
+      "startFrame": 10536,
+      "durationInFrames": 618,
+      "gap": 1.4
     },
     {
       "id": "t17",
-      "level": "LEVEL 05  \u00b7  WEEK 3  \u00b7  WHAT'S INSIDE",
+      "level": null,
       "overlay": {
-        "big": "12 HRS",
-        "sub": "TO SYMPTOMS. THEN NOTHING."
+        "big": "$0",
+        "sub": "THE MARK-DOWN. RENATA'S CALL."
       },
-      "template": "bunkerSiege",
+      "template": "pnlWall",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 10784,
-      "durationInFrames": 669,
-      "gap": 1.4
+      "startFrame": 11154,
+      "durationInFrames": 736,
+      "gap": 0.25
     },
     {
       "id": "t18",
       "level": null,
-      "overlay": null,
-      "template": "consult",
+      "overlay": {
+        "big": "-40",
+        "sub": "STAFF LET GO. YOU SIGN THE NOTICE."
+      },
+      "template": "layoffs",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 11453,
-      "durationInFrames": 884,
+      "startFrame": 11890,
+      "durationInFrames": 686,
       "gap": 0.25
     },
     {
       "id": "t19",
-      "level": null,
-      "overlay": null,
-      "template": "prisonCell",
+      "level": "LEVEL 05  \u00b7  GENERAL PARTNER  \u00b7  THE COMMIT",
+      "overlay": {
+        "big": "$300,000,000",
+        "sub": "THE FUND \u00b7 $4.5M OF IT IS YOURS"
+      },
+      "template": "atrium",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 12337,
-      "durationInFrames": 576,
+      "startFrame": 12576,
+      "durationInFrames": 585,
       "gap": 0.25
     },
     {
       "id": "t20",
-      "level": "LEVEL 06  \u00b7  MONTH 2  \u00b7  THE CHECKPOINT",
-      "overlay": {
-        "big": "1 IN 4",
-        "sub": "DOESN'T MAKE IT THROUGH THE FENCE"
-      },
-      "template": "checkpointTriage",
+      "level": null,
+      "overlay": null,
+      "template": "tradingFloor",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 12913,
-      "durationInFrames": 648,
+      "startFrame": 13161,
+      "durationInFrames": 741,
       "gap": 0.25
     },
     {
       "id": "t21",
       "level": null,
       "overlay": null,
-      "template": "commandPost",
+      "template": "warRoom",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 13561,
-      "durationInFrames": 755,
+      "startFrame": 13902,
+      "durationInFrames": 529,
       "gap": 0.25
     },
     {
       "id": "t22",
-      "level": null,
-      "overlay": null,
-      "template": "hordeStreet",
+      "level": "LEVEL 06  \u00b7  FOUND YOUR OWN FUND  \u00b7  THE NAME",
+      "overlay": {
+        "big": "$150,000,000",
+        "sub": "FUND I \u00b7 2 AND 20"
+      },
+      "template": "podiumScene",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 14316,
-      "durationInFrames": 612,
+      "startFrame": 14431,
+      "durationInFrames": 677,
       "gap": 0.25
     },
     {
       "id": "t23",
       "level": null,
       "overlay": null,
-      "template": "emptyChair",
+      "template": "lobby",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 14928,
-      "durationInFrames": 551,
+      "startFrame": 15108,
+      "durationInFrames": 608,
       "gap": 0.25
     },
     {
       "id": "t24",
-      "level": "LEVEL 07  \u00b7  YEAR 1  \u00b7  THE WALL",
+      "level": null,
       "overlay": {
-        "big": "40 ACRES",
-        "sub": "IS ALL YOU GET TO KEEP"
+        "big": "$3,000,000",
+        "sub": "THE FEE. JUST TO KEEP THE LIGHTS ON"
       },
-      "template": "campWall",
+      "template": "signing",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 15479,
-      "durationInFrames": 585,
+      "startFrame": 15716,
+      "durationInFrames": 614,
       "gap": 0.25
     },
     {
       "id": "t25",
-      "level": null,
-      "overlay": null,
-      "template": "commandPost",
+      "level": "LEVEL 07  \u00b7  THE PLATFORM",
+      "overlay": {
+        "big": "$90,000,000,000",
+        "sub": "WHAT THE TOP OF THIS INDUSTRY LOOKS LIKE"
+      },
+      "template": "jet",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 16064,
-      "durationInFrames": 686,
+      "startFrame": 16330,
+      "durationInFrames": 660,
       "gap": 0.25
     },
     {
       "id": "t26",
       "level": null,
       "overlay": null,
-      "template": "riceField",
+      "template": "revolvingDoor",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 16750,
-      "durationInFrames": 573,
+      "startFrame": 16990,
+      "durationInFrames": 559,
       "gap": 0.25
     },
     {
       "id": "t27",
       "level": null,
-      "overlay": null,
-      "template": "dinner",
+      "overlay": {
+        "big": "BILLION OR ZERO",
+        "sub": "THE DECK YOU PASS ON"
+      },
+      "template": "ipoBell",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 17323,
-      "durationInFrames": 594,
+      "startFrame": 17549,
+      "durationInFrames": 626,
       "gap": 0.25
     },
     {
       "id": "t28",
       "level": null,
-      "overlay": null,
-      "template": "campWall",
+      "overlay": {
+        "big": "$40,000,000",
+        "sub": "THE WIRE CLEARS. NOBODY CLAPS."
+      },
+      "template": "deskClose",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 17917,
-      "durationInFrames": 693,
-      "gap": 0.7
+      "startFrame": 18175,
+      "durationInFrames": 740,
+      "gap": 0.25
     },
     {
       "id": "t29",
-      "level": null,
+      "level": "LEVEL 08  \u00b7  THE ALLOCATORS",
       "overlay": {
-        "big": "2009",
-        "sub": "THE REAL MATH PAPER THAT SAID YOU'D LOSE"
+        "big": "$1,250,000,000,000",
+        "sub": "US VC, TOTAL. YOU'RE NOT EVEN 1%."
       },
-      "template": "window",
+      "template": "emptyChair",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 18610,
-      "durationInFrames": 694,
+      "startFrame": 18915,
+      "durationInFrames": 684,
       "gap": 0.25
     },
     {
       "id": "t30",
       "level": null,
-      "overlay": null,
-      "template": "lobby",
+      "overlay": {
+        "big": "$3,500,000,000,000",
+        "sub": "GLOBAL. THE PEOPLE WHO PICK THE PICKERS."
+      },
+      "template": "boardroomHead",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 19304,
-      "durationInFrames": 609,
+      "startFrame": 19599,
+      "durationInFrames": 695,
+      "gap": 0.25
+    },
+    {
+      "id": "t31",
+      "level": null,
+      "overlay": null,
+      "template": "rooftopEmpire",
+      "audio": "audio/t31.wav",
+      "audioStartFrame": 3,
+      "startFrame": 20294,
+      "durationInFrames": 676,
+      "gap": 0.25
+    },
+    {
+      "id": "t32",
+      "level": null,
+      "overlay": null,
+      "template": "window",
+      "audio": "audio/t32.wav",
+      "audioStartFrame": 3,
+      "startFrame": 20970,
+      "durationInFrames": 620,
+      "gap": 0.25
+    },
+    {
+      "id": "t33",
+      "level": null,
+      "overlay": null,
+      "template": "deskClose",
+      "audio": "audio/t33.wav",
+      "audioStartFrame": 3,
+      "startFrame": 21590,
+      "durationInFrames": 688,
       "gap": 0.7
     }
   ]

@@ -1,21 +1,22 @@
 {
   "thumb": {
-    "kicker": "COULD YOU SURVIVE",
-    "line1": "ZOMBIES",
+    "kicker": "EVERY LEVEL OF A",
+    "line1": "VENTURE CAPITALIST",
     "line2": "",
-    "tag": "1 IN 4",
-    "archetype": "setting",
-    "big": "40 ACRES",
-    "before": "DAY 1",
-    "after": "YEAR 1",
-    "expr": "shock",
-    "povline": "YOU CAN'T",
-    "keyword": "OUTRUN",
-    "setting": "hordeStreet",
-    "question": "WHO MAKES IT TO YEAR ONE?",
-    "mood": "survival",
-    "costume": "street",
-    "word": "RUN"
+    "tag": "ONE BET",
+    "archetype": "poster",
+    "big": "$3,500,000,000,000",
+    "before": "$0 VOTE",
+    "after": "$90B FUND",
+    "expr": "cold",
+    "povline": "YOU DECIDE",
+    "keyword": "ZERO",
+    "setting": "pnlWall",
+    "question": "WHO PICKS THE PICKERS?",
+    "mood": "money",
+    "costume": "suit",
+    "word": "ZERO",
+    "prop": "vault"
   },
-  "topic": "zombie_apocalypse"
+  "topic": "venture_capitalist"
 }

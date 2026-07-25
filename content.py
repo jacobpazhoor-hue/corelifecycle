@@ -1,331 +1,345 @@
 #!/usr/bin/env python3
-"""Could You Survive a Zombie Apocalypse? — POV doodle build, ~12.5 min.
-Grounded in docs/research/zombie_apocalypse.md. SURVIVAL format: the "levels" are a monotonic TIME/
-THREAT ladder (HOUR 1 -> DAY 1 -> DAY 3 -> WEEK 1 -> WEEK 3 -> MONTH 2 -> YEAR 1), not a job rank. The
-outbreak itself is FICTIONAL (its real-world inspiration is rabies — a real bite-transmitted, ~100%
-fatal-once-symptomatic pathogen [VERIFIED, CDC/WHO]); everything built around that premise — grid-
-failure timelines, water/supply-chain math, martial-law/triage doctrine, and two real institutional/
-academic artifacts about this exact scenario — is REAL and sourced in the research doc, flagged there.
-Second-person present-tense POV: a fictional composite suburban parent (spouse MARA, son DEC, 8) living
-an ordinary Tuesday when the outbreak reaches the street.
+"""Your Life as a Venture Capitalist at Every Level — POV doodle build, ~12 min.
+Grounded in docs/research/venture_capitalist.md. RANK format: analyst -> associate -> principal ->
+partner -> general partner -> your own fund -> a mega-platform -> the LPs above every fund. Second-
+person present-tense POV; the viewer IS a venture capitalist.
 
-REAL/VERIFIED mechanics woven in (see research doc; flags there): the CDC's actual 2011 "Preparedness
-101: Zombie Apocalypse" public-health campaign [VERIFIED, still archived]; the ~3-day just-in-time
-grocery-supply-chain rule of thumb behind FEMA's own "72-hour kit" guidance [REAL, widely cited];
-Hurricane Rita's real 100+-mile, 20+-hour evacuation gridlock (2005) [VERIFIED]; the Hurricane Katrina
-Superdome/Convention Center social-breakdown timeline, roughly 3-4 days [VERIFIED, general timeline;
-specific claims from initial reporting were disputed]; FEMA/CDC's real 1-gallon-of-water-per-person-
-per-day guidance, and the real 8.34 lb/gallon weight math [VERIFIED]; the real START/SALT mass-casualty
-"black tag" triage protocol (1983, Hoag Hospital/Newport Beach Fire Dept), still standard in U.S. EMS
-today [VERIFIED]; the real legal machinery (Insurrection Act / state emergency powers) that lets a
-governor deploy the National Guard for domestic checkpoints and curfews, as actually happened after
-Katrina and the 1992 LA riots [VERIFIED]; approximate biointensive subsistence-farming land math (~1/4
-to 1 acre per person) [FLAGGED, order-of-magnitude estimate]; and the closing share-beat — a REAL,
-peer-reviewed 2009 University of Ottawa/Carleton paper, "When Zombies Attack!," which used real
-epidemiological modeling to conclude that only immediate, overwhelming response prevents an outbreak
-from mathematically overwhelming civilization [VERIFIED, peer-reviewed, still cited/taught]. Also real:
-Romero's 1968 "Night of the Living Dead" established the SLOW zombie on purpose (inevitability over
-speed); sprinting zombies are a later invention (28 Days Later, 2002) [VERIFIED film history].
+SPINE: the on-screen big number is CAPITAL YOU CAN DEPLOY (check authority, then fund size, then
+industry AUM) — power, not personal wealth. The sub-caption carries personal pay/carry, which stays
+small and mostly UNREALIZED for most of the runtime (carry doesn't pay until portfolio companies
+exit, years later, if ever). The drama is the gap between the money you move and the money that's
+real — same "inverted spine" family as soldier/spy, applied to venture instead of the military/agency.
 
-SPINE (a survival stat each stage, not a salary — see research doc "Numbers that appear on screen"):
-0.4 MI at cold-open dread -> "1 BITE" (Hour 1) -> "3 DAYS" (Day 1, grocery supply-chain) -> "72 HRS"
-(Day 3, the social-breakdown window) -> "1 GAL" (Week 1, water per person per day) -> "12 HRS" (Week 3
-midpoint, the dramatized incubation countdown) -> "1 IN 4" (Month 2, checkpoint screening) -> "40 ACRES"
-(Year 1, the camp's self-sufficient land limit) -> [2009 — the real math paper, the closing fact].
+REAL/VERIFIED mechanics woven in (see research doc; flags there): the Correlation Ventures power-law
+dataset (~65% of VC deals return <1x, <4% return 10x+, top 0.4% return 50x+) [VERIFIED]; Bessemer
+Venture Partners' real, public "Anti-Portfolio" (David Cowan passing on Google in a garage, 1999-2000;
+also Apple, Facebook, Airbnb) [VERIFIED, bvp.com/anti-portfolio]; real 2025-2026 comp bands by level
+(analyst/associate/principal/partner, carry-by-level) [VERIFIED, multiple 2025 salary surveys]; real
+GP-commit norms (~1.5-1.7% median) [VERIFIED]; real AUM figures — a16z + Sequoia ~$90B each (Jan 2026),
+US VC industry ~$1.25T (NVCA 2025), global VC ~$3.5T (2026, up from ~$500B in 2008) [VERIFIED]. The
+specific check-authority dollar figures per level, the Fund I size, and the protagonist's portfolio
+company are FLAGGED as illustrative composites (research doc has the full breakdown).
 
-STORY: MARA — your spouse; her door-knock code ("two, a pause, one — so we know it's you," t02
-dialogue, the mentor's act-1 warning) is the sensory-anchor RITUAL, re-triggered at every stage (t14
-Cole's wrong knock, t15/t18 Cole's mocking echo of it, t30 you teaching it to a new family's kid — the
-loop-close payoff). She's bitten at the WEEK 3 midpoint reversal (t18) and black-tagged (t19) — the
-episode's real cost. DEC — your 8-year-old son; his asthma inhaler (a real, ordinary object made
-suddenly precious) is the concrete want, planted t02, critical at t16 ("four days left"), resolved at
-t26 (a real pharmacy shelf, three camps over). COLE — a rival survivor; refused water at the barricade
-(t14), foreshadows his own taunt (t15), delivers the midpoint dialogue taunt through the boarded window
-at the exact moment Mara's bite is found (t18), and reappears — infected, unrecognizable except for the
-jacket and the knock he never learned to soften — pressing the checkpoint fence six weeks later (t22),
-a loop the story resolves, not leaves open. SGT. REYES — the checkpoint's National Guard sergeant
-(t20/t21 dialogue, the authority who says the quiet part about the fence's math out loud); recurs at
-Year 1 running the camp's council (t25) — the checkpoint's cost becomes the camp's structure. BODY-
-DREAD MOTIF (fact, not feeling): "your hands are steady" — first at the cold open (t00), tightening to
-"your hands have stopped shaking a long time ago. That's the part that scares you most" by the Year 1
-apex (t24), then exactly repeated at the flash-forward's payoff (t28) — the through-line the ending
-answers. UNRESOLVED UNIVERSE THREAD (deliberate): "LIGHTHOUSE," a CB-radio callsign reading coordinates
-on a loop, first heard at the barricade (t13), mentioned again at the very end (t29) and never explained
-— planted for a future episode to pick up.
+STORY: DANA — the partner who recruits you at Level 1; her one-line warning ("nine hundred no's for
+every yes that counts") is the theme stated early, paid off almost verbatim in her final text at t32.
+She is quietly pushed out at Level 5 when her own fund's LPs don't re-up — the cost beat that proves
+no rank in this business is safe. MARCUS — a rival principal/partner; needles you at the height of your
+first championed deal (t11) and again, harder, the day it implodes (t18) — the betrayal is professional,
+not personal, and the show never resolves whether he was right. RENATA — the founder whose seed deck
+you fall for as an analyst but can't fund (t05); a rival fund backs her instead; you reclaim the deal
+at Principal (t10); her company turns out to be built on inflated numbers and implodes at the midpoint
+(t17); years later, at Level 7, she's back with a second, real company, and the cold open's $40M wire
+is you betting on her twice (t01/t28) — the fund-returning bet. PRIYA — a one-scene cameo (t22): the
+garage founder from `startup_unicorn.md`'s ending, now an LP writing angel checks, closing that
+episode's "already texting about a new idea" thread by showing up, years later, on the other side of
+the table. UNRESOLVED UNIVERSE THREAD (deliberate): a crypto deck you pass on at t27 ("billion or
+zero") — planted for a future `crypto_founder` episode to pick up; never resolved here. BODY-DREAD
+MOTIF (fact, not feeling): "your hands are steady" at the cold open (t01) -> "your hands don't move for
+a full ten seconds" at the reversal (t17) -> "your hands are steady again" at the payoff (t28) -> the
+thumb hovering, then left face-down, at the loop close (t33). SOUND ANCHOR: the phone, face down on
+the desk, that does or doesn't buzz — silent right before the reversal (t16), buzzing with the bad news
+(t17), buzzing with the wire confirmation (t28), and left deliberately unanswered at the very end (t33).
 
-Master open loop: the COLD OPEN (t00) is a FLASH-FORWARD to Year 1 — the camp wall's alarm, the fence
-coming down, unplaced and cut away before it resolves — then the story rewinds (t01) to Hour 1 and
-climbs back up to that exact moment, which resolves almost verbatim at t28 ("the wall holds. Barely.
-Not everyone's does.") before the true loop-close (t30) bends the ending back to Mara's original ritual,
-now taught to someone else's kid.
+Templates: composed ENTIRELY from EXISTING packs — no new template pack needed. Universal (deskClose/
+deskSilhouette/fileWall/window/signing/boardroomNotes/boardroomHead/tower/dinner/layoffs/atrium/
+warRoom/podiumScene/lobby/revolvingDoor/emptyChair/lectureHallScene) + STARTUP (garageStart/
+startupGrow/serverScale/ipoBell — reused from the FOUNDER's-eye view to the VC's, the check-writer
+watching from outside the cap table) + HEDGEFUND (tradingFloor/pnlWall) + REAL ESTATE (rooftopEmpire,
+re-purposed for a wealthy VC's isolated apex reflection, per the "hedgefund-pack-reused-cross-genre"
+and "relit-backdrop-new-template-pattern" precedents in improvements.json — packs built for one topic
+reading cleanly on an unrelated one). No two adjacent scenes share a template.
 
-Templates: 7 new bespoke settings in a ZOMBIE pack (hordeStreet/suburbSiege/highwayJam/storeRaid/
-bunkerSiege/checkpointTriage/campWall — see docs/TEMPLATES.md), composed with heavy reuse from MILITARY
-(frontline/commandPost/barracksLife), MED (erTrauma/consult), MAFIA (prisonCell), SAMURAI (riceField,
-re-purposed as the epilogue's replanted field), and universal (window/dinner/deskSilhouette/fileWall/
-lobby/emptyChair). No two adjacent scenes share a template. STRUCTURAL VARIATION vs the last 2
-(north_korea = MID-ACTION cold open / a straight rise that curdles at the midpoint / a literal
-image-repeat ending; startup_unicorn = AFTERMATH cold open / rise-then-fall-then-rise act two /
-torch-passing ending): this cold open is a FLASH-FORWARD (a specific later moment, not yet explained,
-cut away before it resolves — distinct from dropping into ongoing action or opening on wreckage
-already past); act two never "rises" at all — it's a COMPOUNDING DESCENT WITH A FALSE PLATEAU (the
-barricade is the one temporary safety point, and it fails too); the ending COMBINES a literal flash-
-forward payoff (t28, the exact same alarm and the exact same line) with a torch-passing ritual (t30,
-the door code taught to a new child) — neither pure image-repeat nor pure torch-passing alone.
+STRUCTURAL VARIATION vs the last 2 (zombie_apocalypse = FLASH-FORWARD cold open / compounding descent
+/ flash-forward-payoff + torch-passing ending; startup_unicorn = AFTERMATH cold open / rise-then-fall-
+then-rise / torch-passing ending): this cold open is MID-ACTION (dropped straight into an unresolved,
+present-tense decision, no rewind framing, no flash-forward label — the story simply cuts to Level 1
+after); act two is FLAT-THEN-SPIKE, not a smooth rise or a descent — title/rank climbs on schedule
+while personal money stays almost frozen for most of the runtime (echoing the "inverted-spine" pattern
+but structural, not just numerical: nothing "escalates" personally until the single spike at t28); the
+ending is ONE-DOOR-LEFT-OPEN, not torch-passing — no new hire, no ritual handed to a child; the last
+image is a door deliberately NOT walked through.
 
 PROMISE -> PAYOFF LEDGER:
-  * t00 flash-forward cold open (the Year 1 wall alarm, unplaced in time)   -> t28 (resolved: the exact same alarm, one year later in the telling)
-  * t02 the door-knock code (dialogue, Mara's act-1 warning)                -> t14 (Cole's wrong knock) -> t15/t18 (Cole mocks it) -> t30 (loop close: you teach it to a new family's kid)
-  * t02/t03 Dec's inhaler, days remaining (the concrete want)               -> t16 ("four days left") -> t26 (resolved: a real pharmacy shelf, three camps over)
-  * COLE planted (t14)                                                      -> t15 (foreshadow line) -> t18 dialogue (the midpoint taunt) -> t22 (resolved: infected, at the fence, unrecognized by Reyes)
-  * t13 the CB radio callsign "LIGHTHOUSE"                                  -> t29 (mentioned again — UNRESOLVED, deliberate, the one universe thread)
-  * REYES planted (t20) + dialogue (t21)                                    -> t25 (recurring: now runs the camp's council, a year later)
-  * t08 share beat: the real 2011 CDC "Zombie Apocalypse" preparedness guide -> paid immediately
-  * t18/t19 share beat + REVERSAL: the real 1983 START "black tag" triage protocol -> paid immediately, drives t19
-  * t29 share beat + closing fact: the real 2009 University of Ottawa zombie-outbreak math paper -> paid at the very end
-  * body-dread motif "your hands are steady" (t00)                          -> "hands have stopped shaking" (t24, the hardening arc) -> repeated verbatim (t28, the payoff)
+  * t01 cold open ($40M wire, Renata's name, thumb over the button)      -> t28 (resolved: the wire clears)
+  * t03 Dana's dialogue warning ("nine hundred no's...")                  -> t32 (echoed almost verbatim in her retirement text)
+  * t04 Priya name-dropped in the deal-flow forwards                      -> t22 (payoff: she appears in person as an LP)
+  * t05 Renata's seed deck, the deal you love but can't fund              -> t06 (passed) -> t08 (funded by a rival) -> t10 (reclaimed) -> t17 (implodes) -> t27 (her second company) -> t28 (the fund-returning bet)
+  * t11 Marcus's first jab ("falling in love with your own deal...")      -> t18 (paid off, harsher, the day the deal implodes)
+  * t14 "return the fund" phrase planted                                  -> t28 (paid off literally)
+  * t19 Dana absent from the Monday meeting, her fund not renewed         -> t32 (her arc closes: retired, one last text)
+  * t27 the crypto deck you pass on ("billion or zero")                   -> UNRESOLVED, deliberate universe thread (future crypto_founder episode)
+  * body-dread motif "your hands are steady" (t01)                        -> "hands don't move" (t17, the reversal) -> "hands are steady again" (t28, the payoff)
+  * sound anchor: the phone face-down, silent (t16) -> buzzing, bad news (t17) -> buzzing, the wire (t28) -> left face-down on purpose (t33)
+  * share beat: Correlation Ventures power-law stats (t01/t28 framing)    -> paid off structurally, the whole episode
+  * share beat: Bessemer's real Anti-Portfolio (Google/Cowan)             -> woven into t06's "wait, that's real?" beat
 """
 
 FPS = 30
 
 SCENES = [
-    # ---- COLD OPEN — flash-forward to Year 1, unplaced in time (the master loop) ----
-    dict(id="t00", level=None, template="campWall", gap=0.7, rate="-8%",
-         narration=("A klaxon splits the dark over the camp wall. Somewhere past the containers the "
-                    "fence is coming down — chain-link screaming, a hundred throats that don't breathe "
-                    "right. Dec is behind you, close enough to grab. Your hands are steady on the bar "
-                    "you're holding. That's the part that scares you. You don't know yet if the wall "
-                    "holds. Not for another year."),
-         overlay=dict(big="YEAR 1", sub="THE WALL HAS NEVER BROKEN. UNTIL TONIGHT.")),
+    # ---- COLD OPEN — mid-action, the wire, the thumb that hasn't moved ----
+    dict(id="t01", level=None, template="deskClose", gap=0.7,
+         narration=("Forty million dollars sits queued in a wire-transfer window, Renata's company on "
+                    "the recipient line, and your thumb hasn't moved in eleven seconds. Somewhere behind "
+                    "you a hundred other bets already went to zero to get you to this one. One click "
+                    "either returns the fund three times over or humiliates you in front of every LP "
+                    "who ever trusted your name twice. Your hands are steady. That's the part that "
+                    "scares you."),
+         overlay=dict(big="$40,000,000", sub="ONE CLICK. RETURNS THE FUND — OR YOU.")),
 
-    # ---- REWIND — the promise + cost-line ----
-    dict(id="t01", level=None, template="window",
-         narration=("None of that exists yet. Rewind three hundred sixty-four days and there's no wall, "
-                    "no klaxon, no camp — only a Tuesday, a kitchen, and a rule your family made as a "
-                    "joke before it became the only rule that mattered. You want to believe the first "
-                    "sign would be obvious. It isn't. Nobody's ever is."),
-         overlay=None),
-
-    # ---- LEVEL 01 · HOUR 1 · THE DOOR CODE — Mara, Dec, the ritual, the concrete want ----
-    dict(id="t02", level="LEVEL 01  ·  HOUR 1  ·  THE DOOR CODE", template="suburbSiege",
-         narration=("Mara meets you at the door with two knocks, a pause, one — the code you made up as "
-                    "a joke the week Dec was born, so you'd always know it was family. Dec's inhaler has "
-                    "eleven days left in it and no refill until payday. An ordinary Tuesday. You have no "
-                    "idea it's the last one."),
-         overlay=dict(big="1 BITE", sub="THAT'S ALL IT TAKES"),
-         dialogue=dict(text="Two knocks. A pause. One. If it's not that — it's not us.")),
-    dict(id="t03", level=None, template="dinner",
-         narration=("Dinner is grilled cheese because it's Tuesday and Tuesday is grilled cheese, and "
-                    "Dec narrates his whole day around a mouthful of it. The kitchen smells like butter "
-                    "and burnt crust. Somewhere two blocks over, a car alarm won't stop. Nobody looks "
-                    "up. Car alarms are Tuesday too, until they aren't."),
-         overlay=None),
-    dict(id="t04", level=None, template="deskSilhouette",
-         narration=("The ten o'clock news runs a thirty-second clip — a 'disturbance,' three dead, a "
-                    "neighborhood two counties over, gone before the weather segment. You mute it "
-                    "halfway through. This isn't the kind of thing that reaches a street like yours. "
-                    "Every family on this block will say that exact sentence tomorrow, and none of them "
-                    "will mean it as a warning."),
-         overlay=None),
-    dict(id="t05", level=None, template="window",
-         narration=("Through the blinds, Mr. Alvarez stands in his own driveway at midnight, not "
-                    "moving, facing the wrong direction. Don't call it strange. Call it the porch light. "
-                    "Call it anything but what it is. Your hand is already on the deadbolt before you "
-                    "decide to lock it — the first honest thing your body has done all night."),
+    # ---- PROMISE + COST-LINE ----
+    dict(id="t02", level=None, template="deskSilhouette",
+         narration=("None of this exists yet. Nine years back there's no wire, no fund with your name "
+                    "stenciled on the door, only a kid with a finance degree, four hundred thousand "
+                    "dollars of student debt, and a want so specific it embarrasses you to say out loud: "
+                    "to be the person who says yes correctly, just once, before anyone important is "
+                    "watching. Nobody warns you how many times you'll have to be right about someone "
+                    "else's whole life first."),
          overlay=None),
 
-    # ---- LEVEL 02 · DAY 1 · THE ROAD OUT — the minute-3 spectacle, first real horror delivered ----
-    dict(id="t06", level="LEVEL 02  ·  DAY 1  ·  THE ROAD OUT", template="hordeStreet", rate="+10%",
-         narration=("Mr. Alvarez comes through his own front door at 4 a.m. — through it, not out of "
-                    "it, wood and hinge and all — and the sound he makes isn't a scream. It's wrong in a "
-                    "way your body understands half a second before your mind does. Grab Dec. Grab "
-                    "Mara. Don't grab anything else. The car keys are already in your hand; you don't "
-                    "remember picking them up."),
-         overlay=dict(big="3 DAYS", sub="IS ALL THE SUPPLY CHAIN EVER HAD")),
-    dict(id="t07", level=None, template="highwayJam",
-         narration=("The highway is a parking lot by six, three lanes of brake lights pointed at a "
-                    "horizon nobody reaches. A hundred thousand people had this exact idea at the exact "
-                    "same time. A forty-minute drive takes most of the day, if it ends at all. Dec asks "
-                    "if this is like the hurricane drill from school. You tell him yes. You lie."),
+    # ---- LEVEL 01 · ANALYST · THE INBOX ----
+    dict(id="t03", level="LEVEL 01  ·  ANALYST  ·  THE INBOX", template="lectureHallScene",
+         narration=("Analyst training runs eight weeks — spreadsheets, term sheets, the private "
+                    "vocabulary of other people's ambition. Four hundred thousand dollars of debt "
+                    "doesn't feel any smaller in a conference room with a view like this one. Dana, the "
+                    "partner who plucked your resume off a pile of six hundred, pulls you aside on day "
+                    "one. Her warning is the only lesson from the entire eight weeks that actually "
+                    "sticks."),
+         overlay=dict(big="$0", sub="CHECK AUTHORITY · ~$120K/YR"),
+         dialogue=dict(text="You'll say no nine hundred times for every yes that counts. Get used to being wrong in public.")),
+    dict(id="t04", level=None, template="fileWall",
+         narration=("Three hundred pitch decks land in the shared inbox this week alone, the fan on "
+                    "your laptop humming under the load. You get an opinion on every one of them and a "
+                    "vote on none. One name keeps recurring in the forwarded threads: Priya, a garage "
+                    "founder who rode her own company to a bell eight years back and writes angel "
+                    "checks now. Everyone in the building wants five minutes with her."),
          overlay=None),
-    dict(id="t08", level=None, template="fileWall",
-         narration=("A gas station TV loops the same four minutes on every channel. A man in a "
-                    "government blazer keeps saying 'containment' like it still means something. Here's "
-                    "the part almost nobody remembers: years before tonight, the CDC published an "
-                    "actual public preparedness guide for exactly this — a real government document, "
-                    "filed under Zombie Apocalypse, meant half as a joke and half as a drill nobody "
-                    "ran. You didn't run it either."),
-         overlay=dict(big="2011", sub="THE REAL CDC DRILL NOBODY RAN")),
-
-    # ---- LEVEL 03 · DAY 3 · THE LAST AISLE — scarcity, first violence ----
-    dict(id="t09", level="LEVEL 03  ·  DAY 3  ·  THE LAST AISLE", template="storeRaid",
-         narration=("By the third day the grocery store has exactly what three days of empty shelves "
-                    "and no trucks always leaves: nothing in cereal, nothing in water, one dented can of "
-                    "green beans nobody wanted Monday. Take it anyway. The store doesn't restock because "
-                    "the people who restock it aren't coming. Nobody built this system to survive itself "
-                    "for even a week."),
-         overlay=dict(big="72 HRS", sub="IS HOW LONG BEFORE THE FIGHTING STARTS")),
-    dict(id="t10", level=None, template="erTrauma",
-         narration=("A man twice your size wants the can more than you do, and for four seconds in a "
-                    "parking lot you learn exactly how far 'more than you do' goes. He walks away with "
-                    "it. You walk away with a torn sleeve and a stranger pressing a shirt to your arm, "
-                    "saying the wound isn't deep, saying it twice, like saying it makes it true."),
-         overlay=None),
-    dict(id="t11", level=None, template="frontline",
-         narration=("The parking lot empties out wrong — too fast, too quiet, then not quiet at all. "
-                    "Don't look back. Count the exits instead. The car is four rows away and every one "
-                    "of those rows has something moving in it that used to be a person doing ordinary "
-                    "Tuesday things. Run the ordinary distance like it's the only thing that has ever "
-                    "mattered."),
+    dict(id="t05", level=None, template="garageStart",
+         narration=("A cold email gets you into an actual garage — folding chairs, a whiteboard fogged "
+                    "with a supply-chain diagram, the smell of solder and cold coffee gone bitter in a "
+                    "paper cup. Renata talks with her hands like the idea might fly off if she stops "
+                    "moving them. Two million dollars gets her to a real, sellable product. You believe "
+                    "every word of it before she finishes the sentence — the first deal you'll ever "
+                    "actually love."),
+         overlay=dict(big="$2,000,000", sub="THE SEED ROUND YOU CAN'T FUND YET")),
+    dict(id="t06", level=None, template="boardroomNotes",
+         narration=("Your memo runs four pages, all conviction, footnoted like a legal brief. The "
+                    "partner across the table reads two sentences of it and says 'too early, too weird' "
+                    "before you've finished the pitch out loud. Somewhere a firm called Bessemer keeps "
+                    "its own public list of exactly this mistake — they passed on meeting two Stanford "
+                    "kids named Larry and Sergey in a garage in 1999. Belief isn't a vote. Therefore you "
+                    "learn the real distance between loving a deal and being allowed to fund one."),
          overlay=None),
 
-    dict(id="t11b", level=None, template="highwayJam",
-         narration=("The drive home is the same empty highway backward, no traffic now because there's "
-                    "nowhere left worth driving to. Dec asks, quietly, if Mr. Alvarez is going to be "
-                    "okay. Don't answer that one directly. Answer the one underneath it instead — yes, "
-                    "you're going to be okay, yes, all three of you, and you say it like a fact instead "
-                    "of a hope because right now he needs the fact more."),
+    # ---- LEVEL 02 · ASSOCIATE · THE SIGN-OFF ----
+    dict(id="t07", level="LEVEL 02  ·  ASSOCIATE  ·  THE SIGN-OFF", template="desk",
+         narration=("Promotion means a title, a signature line underneath a partner's, and actual check "
+                    "authority for the first time — two hundred fifty thousand dollars, with sign-off "
+                    "required above it. Your apartment still has a roommate in it and a mattress on the "
+                    "floor; the business card in your wallet says something entirely different now. You "
+                    "stop losing sleep over the decks you passed on. You start losing sleep, instead, "
+                    "over the one you didn't get to fund."),
+         overlay=dict(big="$250,000", sub="CHECK AUTHORITY (WITH SIGN-OFF) · ~$200K/YR")),
+    dict(id="t08", level=None, template="startupGrow",
+         narration=("Renata raised anyway — a rival fund wrote the check yours wouldn't — and her "
+                    "company now fills an actual office, whiteboards multiplying, a product finally "
+                    "shipping to real customers. The round announcement lands in your inbox like a "
+                    "scoreboard update from a game you're not playing in yet. Fifteen million dollars, "
+                    "and not one of them is your firm's."),
+         overlay=dict(big="$15,000,000", sub="SOMEONE ELSE'S TERM SHEET")),
+    dict(id="t09", level=None, template="window",
+         narration=("But conviction has to start somewhere small. Your own sourced deal — a logistics "
+                    "tool nobody else in the building had noticed — finally gets the sign-off: two "
+                    "hundred fifty thousand dollars, your recommendation, your name quietly attached to "
+                    "an outcome for the first time in your career. It closes clean inside a month. "
+                    "Therefore the partners start asking your opinion before you offer it."),
          overlay=None),
 
-    # ---- LEVEL 04 · WEEK 1 · THE BARRICADE — the false plateau, Cole, the radio thread ----
-    dict(id="t12", level="LEVEL 04  ·  WEEK 1  ·  THE BARRICADE", template="bunkerSiege",
-         narration=("Nail the boards yourself, cross-braced, because a boarded window slows a body down "
-                    "and a locked door barely does. A gallon of water a person, a day — that's the real "
-                    "number, and four people times fourteen days is water you don't have and can't "
-                    "carry. Ration it like it's the only currency left. It is."),
-         overlay=dict(big="1 GAL", sub="PER PERSON. PER DAY. YOU DON'T HAVE IT.")),
-    dict(id="t13", level=None, template="deskSilhouette",
-         narration=("The CB radio catches a voice at 2 a.m., faint under the static: a callsign, "
-                    "'Lighthouse,' reading coordinates on a loop like a lullaby, promising walls and "
-                    "lights and a working well. Mara wants to believe it. You want to believe it more. "
-                    "Neither of you writes the coordinates down, and neither of you says why."),
-         overlay=None),
-    dict(id="t14", level=None, template="lobby",
-         narration=("A man named Cole knocks on the boarded door — three fast knocks, no pause, wrong "
-                    "on purpose or wrong from panic, you can't tell which. He says he has nothing, says "
-                    "it twice, says he'll take anything you can spare. You slide half a case of water "
-                    "through the gap in the boards and don't open the door. Cole remembers that."),
-         overlay=None),
-    dict(id="t15", level=None, template="window",
-         narration=("Cole doesn't leave quietly. He stands in the yard a full minute after the water's "
-                    "gone, staring at the boarded door like he's already found where the gaps are. "
-                    "'Everyone opens it eventually,' he says, mostly to himself — not yet the line "
-                    "you'll hear again in three weeks. You don't know that yet. Mara pulls you back from "
-                    "the window. Your eyes stay on him until the street swallows him."),
-         overlay=None),
-    dict(id="t16", level=None, template="barracksLife",
-         narration=("Sleep happens in shifts now, one of you always upright, always listening for two "
-                    "knocks and a pause and one. Dec's inhaler is down to four days. Mara hasn't said "
-                    "the word 'when' out loud yet, but you can hear her building up to it, the way you "
-                    "build up to a cold plunge. Your hands are steady, buttoning his coat in the dark. "
-                    "That's the part that scares you."),
-         overlay=None),
-
-    # ---- LEVEL 05 · WEEK 3 · WHAT'S INSIDE — the midpoint reversal ----
-    dict(id="t17", level="LEVEL 05  ·  WEEK 3  ·  WHAT'S INSIDE", template="bunkerSiege", gap=1.4,
-         narration=("Mara stops eating on the ninth day of the third week and says it's nothing. She "
-                    "favors her left arm carrying the water buckets and says it's nothing. The boarded "
-                    "room smells like wet plywood and the kerosene lamp, and under it, faint, something "
-                    "new — something you don't have a word for yet and don't want one. Ask her to roll "
-                    "up her sleeve. Ask her twice."),
-         overlay=dict(big="12 HRS", sub="TO SYMPTOMS. THEN NOTHING.")),
-    dict(id="t18", level=None, template="consult", rate="-10%",
-         narration=("The bite is small, already going dark at the edges, hidden three days under a "
-                    "sleeve because she didn't want this exact silence in this exact room. Nobody says "
-                    "anything for a while that has no clock on it. Outside, muffled through the boards, "
-                    "Cole is still out there — you didn't know he'd come back — and his voice finds the "
-                    "gap in the wood like it's looking for it."),
+    # ---- LEVEL 03 · PRINCIPAL · THE BOARD SEAT ----
+    dict(id="t10", level="LEVEL 03  ·  PRINCIPAL  ·  THE BOARD SEAT", template="signing",
+         narration=("Principal. Renata is raising again — the rival fund passed on her Series A, "
+                    "spooked by one slow quarter — and this time the term sheet has your firm's name at "
+                    "the top and yours on the signature line underneath it. Three million dollars. A "
+                    "board OBSERVER seat: the closest you've ever sat to the table that actually decides "
+                    "things."),
+         overlay=dict(big="$3,000,000", sub="YOUR FIRST TERM SHEET · ~$300K/YR")),
+    dict(id="t11", level=None, template="serverScale",
+         narration=("Her servers multiply, her headcount doubles twice in a year, and the growth curve "
+                    "on every board deck bends in exactly the direction the whole room is quietly "
+                    "praying for. Marcus, a principal from the deal team down the hall, catches you at "
+                    "the coffee machine — half joke, half warning, delivered with a smile that doesn't "
+                    "reach anywhere near his eyes."),
          overlay=None,
-         dialogue=dict(text="You really think that door holds forever? Everyone opens it eventually. She already did.")),
-    dict(id="t19", level=None, template="prisonCell",
-         narration=("Emergency crews have had a name for this decision since 1983, for choosing who "
-                    "gets saved when saving everyone isn't on the table: they tag it black, and they "
-                    "move on, because the alternative costs the people who can still be saved. You don't "
-                    "have a colored tag. You have a spare room and a deadbolt on the wrong side of the "
-                    "door, and you use it anyway."),
+         dialogue=dict(text="Careful. Falling in love with your own deal is how you blow up a portfolio.")),
+    dict(id="t12", level=None, template="boardroomHead",
+         narration=("But nobody in the room argues with a growth curve that steep, and your name starts "
+                    "appearing, unprompted, in the partner-track memo circulating two floors up from "
+                    "where you actually sit. Traction on a slide isn't the same thing as truth in a "
+                    "filed financial statement — you don't know that yet, not really, and nobody in this "
+                    "particular room says it out loud either, not even Dana."),
          overlay=None),
 
-    # ---- LEVEL 06 · MONTH 2 · THE CHECKPOINT — Reyes, the fence's math ----
-    dict(id="t20", level="LEVEL 06  ·  MONTH 2  ·  THE CHECKPOINT", template="checkpointTriage",
-         narration=("The checkpoint runs everyone through the same gate: a light on your eyes, a look "
-                    "at your arms, a form with boxes for bitten, exposed, and clean. A National Guard "
-                    "sergeant named Reyes runs the line like he's done it four thousand times, because "
-                    "he has. One in four who reach this fence don't make it through it. You make it "
-                    "through. Dec makes it through. You don't ask what happens to the fourth."),
-         overlay=dict(big="1 IN 4", sub="DOESN'T MAKE IT THROUGH THE FENCE")),
-    dict(id="t21", level=None, template="commandPost",
-         narration=("Reyes runs the sector out of a tent with a state flag and a stack of orders signed "
-                    "under emergency powers that let a governor call soldiers into their own streets. He "
-                    "didn't write the rules. He just enforces the version of them that keeps two hundred "
-                    "people fed on a truck built for eighty. You want to hate him for the fence. You "
-                    "mostly can't."),
+    # ---- LEVEL 04 · PARTNER · THE VOTE ----
+    dict(id="t13", level="LEVEL 04  ·  PARTNER  ·  THE VOTE", template="tower",
+         narration=("Partner. Full vote at Investment Committee, fifteen million dollars of check "
+                    "authority, and a board seat that's a DIRECTOR seat now — real fiduciary duty, the "
+                    "kind a lawyer can attach your actual name to if something goes wrong later. The "
+                    "climb from here looks less like a ladder and more like a wire with no net stretched "
+                    "under it."),
+         overlay=dict(big="$15,000,000", sub="CHECK AUTHORITY · BOARD DIRECTOR NOW")),
+    dict(id="t14", level=None, template="dinner",
+         narration=("You lead Renata's growth round yourself now — fifteen million dollars, a candlelit "
+                    "dinner with two co-investors angling politely for the exact same allocation you "
+                    "want for your own firm. Somewhere between the second course and the signature page, "
+                    "your partners start using a phrase about her company that you'll hear repeated, "
+                    "with steadily less warmth in it, for years after tonight's dinner is over."),
+         overlay=dict(big="RETURN THE FUND", sub="FOUR WORDS. INFINITE PRESSURE.")),
+    dict(id="t15", level=None, template="fileWall",
+         narration=("An LP due-diligence questionnaire lands the same week — forty pages asking, six "
+                    "different ways, how concentrated your fund's return really is on companies exactly "
+                    "like Renata's. You answer honestly. Page thirty reads: 'the fund's carry depends "
+                    "materially on a small number of positions.' Your own handwriting looks unfamiliar "
+                    "by the time you finish that sentence."),
+         overlay=None),
+    dict(id="t16", level=None, template="deskSilhouette", gap=1.4,
+         narration=("The numbers on Renata's dashboard look almost too clean this particular quarter — "
+                    "the kind of clean you'd flag immediately, on instinct, in anyone else's deal. Your "
+                    "phone sits face down on the desk and doesn't buzz. It hasn't buzzed all afternoon, "
+                    "not once. That particular kind of quiet used to mean nothing at all was wrong."),
+         overlay=None),
+
+    # ---- MIDPOINT REVERSAL ----
+    dict(id="t17", level=None, template="pnlWall", rate="-8%",
+         narration=("Then it buzzes. Renata's voice on the line is flatter than you've ever heard it — "
+                    "the revenue in every board deck for six straight months was inflated, real numbers "
+                    "a fraction of the reported ones, and not one of the other directors knew before you "
+                    "did. Your hands don't move for a full ten seconds after the call ends. The company "
+                    "you fell for first is worth, functionally, nothing."),
+         overlay=dict(big="$0", sub="THE MARK-DOWN. RENATA'S CALL.")),
+    dict(id="t18", level=None, template="layoffs",
+         narration=("Forty people lose their jobs in a single Friday email you personally help draft, "
+                    "your director's signature required at the bottom of the notice. Sign it anyway. "
+                    "Fiduciary duty doesn't pause for what any of this costs to sit through. Marcus "
+                    "finds you in the hallway afterward, not quite smiling, timing the line exactly "
+                    "right."),
+         overlay=dict(big="-40", sub="STAFF LET GO. YOU SIGN THE NOTICE."),
+         dialogue=dict(text="I told you. You don't get points for loving the ones that die.")),
+
+    # ---- LEVEL 05 · GENERAL PARTNER · THE COMMIT ----
+    dict(id="t19", level="LEVEL 05  ·  GENERAL PARTNER  ·  THE COMMIT", template="atrium",
+         narration=("But a blown-up board seat doesn't end a career here if you handle the wreckage "
+                    "honestly, and somehow, barely, you do. General Partner. The fund is three hundred "
+                    "million dollars now, and for the first time your own money is actually inside it — "
+                    "four and a half million, real, locked up for a decade, yours to lose along with "
+                    "everyone else's."),
+         overlay=dict(big="$300,000,000", sub="THE FUND · $4.5M OF IT IS YOURS")),
+    dict(id="t20", level=None, template="tradingFloor",
+         narration=("GP means watching the whole portfolio at once — forty companies across one long "
+                    "wall of monitors, a third climbing, a third flat, a handful quietly dying the way "
+                    "Renata's first one did. Dana isn't at the Monday meeting. Her fifth fund's LPs "
+                    "simply didn't re-up it. Nobody sends flowers for a fund that just stops. The seat "
+                    "only opens because hers closed, and you're the one who fills it."),
+         overlay=None),
+    dict(id="t21", level=None, template="warRoom",
+         narration=("Allocating across a fund you didn't build turns into driving a car with somebody "
+                    "else's hands still resting on the wheel. Therefore, quietly, on weekends, you start "
+                    "drafting the deck for something that would actually be yours — a fund with your own "
+                    "name stenciled on the door, for better or for a full decade of worse."),
+         overlay=None),
+
+    # ---- LEVEL 06 · FOUND YOUR OWN FUND · THE NAME ----
+    dict(id="t22", level="LEVEL 06  ·  FOUND YOUR OWN FUND  ·  THE NAME", template="podiumScene",
+         narration=("One hundred fifty million dollars — Fund One, and your own name is the entire "
+                    "pitch now, not your old firm's letterhead behind you. Every LP dinner is an "
+                    "audition with a check at the end of it. Two and twenty: a two-percent management "
+                    "fee, twenty percent of anything above an eight-percent floor. You explain the math "
+                    "so many times this month it stops sounding like math at all."),
+         overlay=dict(big="$150,000,000", sub="FUND I · 2 AND 20")),
+    dict(id="t23", level=None, template="lobby",
+         narration=("Priya walks into your firm's actual lobby to write a check as an LP — the same "
+                    "name from the forwarded decks nine years back, garage to bell, now funding the fund "
+                    "that once couldn't fund her friend's company. The room you built is smaller than "
+                    "the one you imagined at Level One, with worse coffee than you promised yourself "
+                    "it would have. It doesn't matter. She signs anyway."),
+         overlay=None),
+    dict(id="t24", level=None, template="signing",
+         narration=("Closing Fund One costs three million dollars a year just to keep the lights on and "
+                    "the two associates paid — the management fee, spent before a dollar of it is "
+                    "actually earned. Therefore the first real check this fund ever writes has to be the "
+                    "right one. You already know, before you'll admit it out loud to anyone, exactly "
+                    "whose name is going on it."),
+         overlay=dict(big="$3,000,000", sub="THE FEE. JUST TO KEEP THE LIGHTS ON")),
+
+    # ---- LEVEL 07 · THE PLATFORM ----
+    dict(id="t25", level="LEVEL 07  ·  THE PLATFORM", template="jet",
+         narration=("Five years scale the fund toward the top of an industry where the two biggest "
+                    "firms each manage roughly ninety billion dollars apiece — a single fundraise from "
+                    "one of them last year alone equaled almost a fifth of everything the entire US "
+                    "venture industry deployed. You are nowhere near that number yet. You fly toward it "
+                    "anyway, every quarter, a little closer."),
+         overlay=dict(big="$90,000,000,000", sub="WHAT THE TOP OF THIS INDUSTRY LOOKS LIKE")),
+    dict(id="t26", level=None, template="revolvingDoor",
+         narration=("Access compounds faster than carry ever does. Doors that used to need three warm "
+                    "introductions now open because a fund with your name on it called ahead. But the "
+                    "carry from Fund One still hasn't paid a single dollar — the portfolio companies "
+                    "haven't exited, and won't, most of them, for years, if they ever do at all."),
+         overlay=None),
+    dict(id="t27", level=None, template="ipoBell",
+         narration=("Renata pitches you again — a second company this time, real, built carefully out "
+                    "of the wreckage of the first one — and asks you personally to lead the follow-on. "
+                    "Another deck lands the same week, something about tokens, the summary line reading, "
+                    "almost word for word: billion or zero. You pass on it without a second thought and "
+                    "don't think about it again."),
+         overlay=dict(big="BILLION OR ZERO", sub="THE DECK YOU PASS ON")),
+
+    # ---- PAYOFF of the cold open ----
+    dict(id="t28", level=None, template="deskClose",
+         narration=("Forty million dollars, queued, Renata's name on the recipient line, your thumb "
+                    "hovering exactly where it was nine years and one collapsed company ago. This time "
+                    "you click. The wire clears in eleven seconds. Her company's next round prices at "
+                    "four times the last one — the single check that returns three times the entire "
+                    "fund. Your hands are steady again. Nobody claps. The machine already wants to know "
+                    "what's next."),
+         overlay=dict(big="$40,000,000", sub="THE WIRE CLEARS. NOBODY CLAPS.")),
+
+    # ---- LEVEL 08 · THE ALLOCATORS (apex) ----
+    dict(id="t29", level="LEVEL 08  ·  THE ALLOCATORS", template="emptyChair",
+         narration=("You're rich now, by any ordinary measure, running one of the names LPs actually "
+                    "chase instead of chasing. But above every fund — yours, the ninety-billion-dollar "
+                    "ones, all of it — sit the pensions and endowments and sovereign funds who decide "
+                    "who gets to raise a next one. The entire US venture industry moves one point two "
+                    "five trillion dollars. You are not even one percent of it."),
+         overlay=dict(big="$1,250,000,000,000", sub="US VC, TOTAL. YOU'RE NOT EVEN 1%.")),
+    dict(id="t30", level=None, template="boardroomHead",
+         narration=("Globally the number is three and a half trillion dollars, up from five hundred "
+                    "billion less than twenty years ago, and every dollar of it answers to some "
+                    "allocator's committee you will never personally sit on. The capital doesn't ask "
+                    "what you built. It doesn't ask what you believed. It only asks, every single year, "
+                    "what returned. That's the actual top of this ladder, and it has no office anywhere "
+                    "with your name on the door."),
+         overlay=dict(big="$3,500,000,000,000", sub="GLOBAL. THE PEOPLE WHO PICK THE PICKERS.")),
+    dict(id="t31", level=None, template="rooftopEmpire",
+         narration=("The apartment is bigger now, the view better, and most nights it's just you up "
+                    "here with a glass you don't finish, running numbers on funds that aren't even yours "
+                    "to run anymore. Marcus made partner somewhere else, married, two kids you hear "
+                    "about secondhand. Dana always said the nine hundred no's cost something. Nobody "
+                    "ever specifies, out loud, that the cost is usually this — the quiet, not the "
+                    "money."),
+         overlay=None),
+    dict(id="t32", level=None, template="window",
+         narration=("A text arrives from a number you haven't heard from in two years. Dana retired "
+                    "quietly last spring, the firm's newsletter said, a single line nobody read twice. "
+                    "Three words now, no context needed after nine years of the exact same lesson "
+                    "repeated in a hundred different rooms."),
          overlay=None,
-         dialogue=dict(text="Everyone in this camp lost someone at that fence. You get to grieve on your own time — not on my clock.")),
-    dict(id="t22", level=None, template="hordeStreet",
-         narration=("Six weeks later, on fence duty, you find Cole — what's left of deciding it's Cole, "
-                    "the same jacket, the same knock he never learned to soften. He's on the wrong side "
-                    "of the wire now, in the crowd pressing the fence at 3 a.m., one face in a hundred "
-                    "that used to be someone's front door. You do the job. You don't tell Reyes whose "
-                    "face it was."),
-         overlay=None),
-    dict(id="t23", level=None, template="emptyChair",
-         narration=("There's an empty folding chair at the communal table now where Mara should be, and "
-                    "nobody moves it, and nobody says her name at dinner, and Dec eats faster than he "
-                    "used to so he can leave the table first. Grief doesn't get a schedule here. It gets "
-                    "whatever's left after water duty and fence duty and the next thing, and the next."),
-         overlay=None),
+         dialogue=dict(text="Nine hundred no's. Then you get to find out if you were right about the one.")),
 
-    # ---- LEVEL 07 · YEAR 1 · THE WALL — the apex, at cost, the loops close ----
-    dict(id="t24", level="LEVEL 07  ·  YEAR 1  ·  THE WALL", template="campWall",
-         narration=("A year in, the camp holds on forty fenced acres — containers, a garden grid, a "
-                    "well, just enough land to almost feed everyone on it, which is the whole design and "
-                    "the whole limit both. You have a job now: night watch, west wall, the shift nobody "
-                    "wants. Your hands have stopped shaking a long time ago. That's the part that scares "
-                    "you most."),
-         overlay=dict(big="40 ACRES", sub="IS ALL YOU GET TO KEEP")),
-    dict(id="t25", level=None, template="commandPost",
-         narration=("Reyes runs the camp council now, the same clipped voice, the same four-thousand-"
-                    "times calm, except the orders aren't only about who gets through the fence anymore "
-                    "— they're about seed rotation, watch rotation, who teaches the kids their letters. "
-                    "The rules that kept you alive at the checkpoint are the same rules keeping you fed "
-                    "a year later. You still don't fully forgive him for the fence. You still stand his "
-                    "watch."),
+    # ---- LOOP CLOSE — the door left shut, on purpose ----
+    dict(id="t33", level=None, template="deskClose", gap=0.7,
+         narration=("A notification sits on your phone, face down on the desk, exactly the way it "
+                    "always has — a second look at the deck you passed on, the founder asking, "
+                    "politely, if you're sure. Your thumb hovers exactly the way it once hovered over "
+                    "forty million dollars. This time you leave it face down. Some doors you get to "
+                    "leave shut on purpose, and that, too, nine years in, still counts as a decision."),
          overlay=None),
-    dict(id="t26", level=None, template="riceField",
-         narration=("Dec is nine now and has a real inhaler again, from a real pharmacy shelf someone's "
-                    "supply run cleared out three camps over, and he kneels in the garden rows some "
-                    "mornings just to watch things grow on purpose. The dirt under your own nails isn't "
-                    "ash or plaster dust anymore. It's just dirt. You'd forgotten what that felt like."),
-         overlay=None),
-    dict(id="t27", level=None, template="dinner",
-         narration=("A new family came through the gate last month — a woman, a boy about Dec's age, a "
-                    "father who didn't make it as far as the fence. Dinner is canned stew and real "
-                    "bread, and for the first time in a year the table has more voices at it than "
-                    "silences. The boy watches Dec the way Dec once watched other kids on your old "
-                    "street. Ordinary, almost."),
-         overlay=None),
-    dict(id="t28", level=None, template="campWall", gap=0.7,
-         narration=("The klaxon splits the dark over the wall. Somewhere past the containers the fence "
-                    "is coming down — chain-link screaming, a hundred throats that don't breathe right, "
-                    "exactly the way you always knew it eventually would. Dec is behind you, close "
-                    "enough to grab. Your hands are steady on the bar you're holding. That's the part "
-                    "that scares you. The wall holds. Barely. Not everyone's does."),
-         overlay=None),
-    dict(id="t29", level=None, template="window",
-         narration=("Somewhere out past the tree line, if you still had the radio, Lighthouse would "
-                    "still be reading its coordinates on a loop — you never found out if it was real, "
-                    "and some nights you still think about driving out to check. Here's the true thing "
-                    "under all of it: a real math paper once modeled exactly this, outbreak against "
-                    "response time, and the numbers said the same thing every time. Fast, or not at "
-                    "all."),
-         overlay=dict(big="2009", sub="THE REAL MATH PAPER THAT SAID YOU'D LOSE")),
-
-    # ---- LOOP CLOSE — the new boy, the ritual passed on ----
-    dict(id="t30", level=None, template="lobby", gap=0.7,
-         narration=("Teach the new boy the knock at the gate — two, a pause, one — the same rule Mara "
-                    "made up as a joke before it became the only rule that mattered. He asks what it's "
-                    "for. Tell him the truth: it's how you know who's still you. The wall holds today. "
-                    "Tomorrow makes its own rules."),
-         overlay=None,
-         dialogue=dict(text="Two knocks. A pause. One. Now you know who's still you.")),
 ]
