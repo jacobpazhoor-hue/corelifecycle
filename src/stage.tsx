@@ -218,8 +218,11 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       {Array.from({length: 6}).map((_, r) => Array.from({length: 14}).map((_, c) => <rect key={r + '_' + c} x={40 + c * 140 + (r % 2 ? 70 : 0)} y={120 + r * 70} width={120} height={56} fill="none" stroke={LINE} strokeWidth={2} opacity={0.5} />))}
       <rect x={1180} y={170} width={560} height={300} fill="#fbfcfb" stroke={INK} strokeWidth={4} />
       <path d="M 1240 420 L 1340 280 L 1420 360 L 1540 250" fill="none" stroke="#c0392b" strokeWidth={4} />
-      {/* desks row */}
-      {[300, 760].map((x) => <rect key={x} x={x} y={640} width={300} height={26} rx={4} fill={PAPERC} stroke={INK} strokeWidth={4} />)}
+      {/* desks row — left desk (x300) sits below the standing front-figure's head at x540/y880;
+          keeping it at the typing-extras' y640 put its bar across the face (reviewer t07 defect),
+          so it's dropped to torso height where the figure (drawn on top) occludes it normally */}
+      <rect x={300} y={760} width={300} height={26} rx={4} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={760} y={640} width={300} height={26} rx={4} fill={PAPERC} stroke={INK} strokeWidth={4} />
     </g>
   ),
   serverRoom: ({frame}) => (
