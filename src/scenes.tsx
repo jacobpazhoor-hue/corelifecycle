@@ -430,8 +430,11 @@ const S13: React.FC = () => {  // layoffs — right-sizing; people leaving
     <Skyline frame={f} baseY={520} tint="#2a1622" o={0.5} /><Mullions o={0.28} />
     <rect x={1760} y={300} width={150} height={620} fill={PAPER} stroke={INK} strokeWidth={3} /><rect x={1760} y={300} width={20} height={620} fill={INK} />
     {leavers}
-    {/* color pop: red EXIT sign */}
-    <rect x={1775} y={250} width={118} height={40} rx={4} fill="#c0392b" /><text x={1834} y={279} textAnchor="middle" fill="#fff" fontFamily="'Helvetica Neue', sans-serif" fontWeight={800} fontSize={24} letterSpacing={2}>EXIT</text>
+    {/* color pop: red EXIT sign — pulled in from x1775 (right edge 1893, only 27px from the 1920
+        canvas edge): the auto-director's dolly-in push (even the mild 1.0->1.075 wide-shot push,
+        let alone the medium/closeup zooms) was enough to shove it past the frame boundary mid-shot,
+        rendering as a single clipped "E" (reviewer t22 defect). Now clear of every shot's safe zone. */}
+    <rect x={1550} y={250} width={118} height={40} rx={4} fill="#c0392b" /><text x={1609} y={279} textAnchor="middle" fill="#fff" fontFamily="'Helvetica Neue', sans-serif" fontWeight={800} fontSize={24} letterSpacing={2}>EXIT</text>
     <rect x={0} y={912} width={1920} height={168} fill={COL.floor} />
     <StickFigure pose={A.stand(f)} x={360} y={904} scale={1.5} facing={1} view="front" expr={FACES.hollow} pal={LIGHT} frame={f} />
   </Frame>);
@@ -442,8 +445,14 @@ const S14: React.FC = () => {  // power broker — the revolving door (govt <-> 
   const x = interpolate(f, [0, durationInFrames], [760, 1180]);
   const cols = [0, 1, 2, 3, 4].map((i) => <rect key={i} x={250 + i * 80} y={420} width={36} height={400} fill={PAPER} stroke={INK} strokeWidth={3} />);
   return (<Frame>
-    {/* government building left */}
-    <polygon points="210,420 590,420 400,300" fill={PAPER} stroke={INK} strokeWidth={3} />{cols}<rect x={230} y={820} width={400} height={16} fill={INK} />
+    {/* government building left. A solid-INK base/steps strip (x230-630,y820) used to sit here —
+        under this template's default-center zoom (no FOCUS entry), anything left-of-origin drifts
+        FARTHER toward the bottom-left corner as the shot dollies in, and that opaque rect's edge
+        ended up poking out past the money-card's left:72 boundary as an unexplained black block
+        (reviewer t23/t24 defect). The columns already read as a building without it, so it's cut
+        rather than repositioned — any point this far left-of-origin drifts into the same blind
+        corner regardless of size. */}
+    <polygon points="210,420 590,420 400,300" fill={PAPER} stroke={INK} strokeWidth={3} />{cols}
     {/* glass tower right */}
     <rect x={1340} y={180} width={420} height={700} fill={PAPER} stroke={INK} strokeWidth={3} /><Skyline frame={f} baseY={880} tint="#0c1826" o={0.5} />
     <line x1={0} y1={910} x2={1920} y2={910} stroke={INK} strokeWidth={8} />
@@ -549,13 +558,49 @@ const S18: React.FC = () => {  // the loop closes — a new young associate walk
   </Frame>);
 };
 
+// raidScene — a dedicated cold-open visual: federal agents carrying servers out in evidence boxes,
+// the desk's monitor still glowing behind them. deskSilhouette (S00) reads as an ordinary late-night
+// work desk; the cold open's narration promises the single highest-leverage beat in the episode
+// (agents, evidence bags, a wallet frozen mid-raid), so it gets its own backdrop instead of reusing
+// the same plain desk shot t18 already owns (reviewer defect: the cold open undersold its own hook).
+// No FOCUS entry on purpose — this always frames as wide/medium, never an auto-closeup crop.
+const S19: React.FC = () => {
+  const f = useCurrentFrame(); const {fps} = useVideoConfig();
+  const agent = (x0: number, s: number, delay: number) => (
+    <g key={x0}>
+      <StickFigure pose={A.walk(f + delay, fps)} x={x0} y={904} scale={s} facing={1} view="profile" pal={DIM} showFace={false} frame={f} />
+      {/* evidence box carried under the near arm, red tape stripe across the seam */}
+      <g transform={`translate(${x0 + 24 * s} ${904 - 108 * s})`}>
+        <rect x={-28} y={-20} width={56} height={40} fill={PAPER} stroke={INK} strokeWidth={3} />
+        <rect x={-28} y={-3} width={56} height={7} fill="#c0392b" opacity={0.9} />
+      </g>
+    </g>
+  );
+  return (<Frame>
+    <Skyline frame={f} baseY={760} tint="#0e1925" o={0.6} /><Mullions o={0.35} />
+    <rect x={0} y={820} width={1920} height={260} fill={COL.floor} /><rect x={0} y={820} width={1920} height={8} fill={INK} />
+    {/* the abandoned desk — a monitor nobody's unplugged yet, still glowing */}
+    <rect x={1440} y={760} width={280} height={26} rx={4} fill={PAPER} stroke={INK} strokeWidth={4} />
+    <Laptop cx={1540} deskY={760} frame={f} w={130} h={86} />
+    {/* the server rack, one unit already pulled */}
+    <rect x={1660} y={520} width={160} height={300} fill={PAPER} stroke={INK} strokeWidth={4} />
+    {Array.from({length: 5}).map((_, r) => <line key={r} x1={1660} y1={556 + r * 52} x2={1820} y2={556 + r * 52} stroke={INK} strokeWidth={2} opacity={0.5} />)}
+    {/* agents, evidence boxes under one arm, carrying the servers out */}
+    {agent(560, 0.72, 0)}
+    {agent(760, 0.62, 24)}
+    {/* the protagonist — kept right of CAPTION_SAFE_X so the $ overlay card never eats him — watching
+        it happen from what's left of his own office */}
+    <StickFigure pose={A.stand(f)} x={1020} y={920} scale={1.4} facing={-1} view="profile" expr={FACES.hollow} pal={LIGHT} frame={f} />
+  </Frame>);
+};
+
 // Reusable, TOPIC-AGNOSTIC visual archetypes. Any topic's script composes a video by picking
 // template names per scene (see content.py / docs/BIBLE.md). Adjacent scenes must differ.
 export const TEMPLATES: Record<string, React.FC> = {
   deskSilhouette: S00, desk: S01, fileWall: S02, tower: S03, boardroomNotes: S04,
   deskClose: S05, supervisor: S06, window: S07, signing: S08, jet: S09,
   dinner: S10, boardroomHead: S11, atrium: S12, layoffs: S13, revolvingDoor: S14,
-  warRoom: S16, emptyChair: S17, lobby: S18,
+  warRoom: S16, emptyChair: S17, lobby: S18, raidScene: S19,
   // composable topic packs (src/stage.tsx): generic + medical + startup + military + sports
   ...PACK_TEMPLATES,
 };

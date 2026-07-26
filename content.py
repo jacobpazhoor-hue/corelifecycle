@@ -46,14 +46,17 @@ at t26, returned empty at t30 and worn anyway, out of habit. BODY-DREAD MOTIF (f
 first time in four hundred days" at the reversal (t19) -> "your voice doesn't shake anymore... that's
 the part that should worry you" at the apex (t30), echoed once more, colder, at the very end.
 
-Templates: composed ENTIRELY from EXISTING packs — no new template pack needed, extending the
-`vc-composed-no-new-pack-cross-genre` precedent to a startup-flavored topic. Universal (deskSilhouette/
-deskClose/window/fileWall/signing/boardroomNotes/boardroomHead/atrium/layoffs/revolvingDoor/emptyChair/
-lobby/warRoom/dinner) + generic `podiumScene` + STARTUP (garageStart/startupGrow/serverScale/ipoBell,
-here reused straight-up from the founder's own POV instead of a check-writer's) + HEDGEFUND
-(tradingFloor/pnlWall, re-purposed from a trading desk to a token's live chart) + REAL ESTATE's
-`rooftopEmpire` (the apex reflection) + MAFIA's `courtroom` (re-narrated from a RICO trial to an SEC
-proceeding — same bench-and-seal setting, a different kind of case). No two adjacent scenes repeat.
+Templates: composed almost ENTIRELY from EXISTING packs, extending the `vc-composed-no-new-pack-
+cross-genre` precedent to a startup-flavored topic, plus ONE new universal template. Universal
+(deskSilhouette/deskClose/window/fileWall/signing/boardroomNotes/boardroomHead/atrium/layoffs/
+revolvingDoor/emptyChair/lobby/warRoom/dinner) + generic `podiumScene` + STARTUP (garageStart/
+startupGrow/serverScale/ipoBell, here reused straight-up from the founder's own POV instead of a
+check-writer's) + HEDGEFUND (tradingFloor/pnlWall, re-purposed from a trading desk to a token's live
+chart) + REAL ESTATE's `rooftopEmpire` (the apex reflection) + MAFIA's `courtroom` (re-narrated from a
+RICO trial to an SEC proceeding — same bench-and-seal setting, a different kind of case). New:
+`raidScene` (t01 cold open only) — agents carrying servers out in evidence boxes, the desk's monitor
+still glowing — added because reusing deskSilhouette (t18's plain late-night desk shot) undersold the
+episode's single highest-leverage beat (reviewer defect). No two adjacent scenes repeat.
 
 STRUCTURAL VARIATION vs the last 2 (venture_capitalist = MID-ACTION cold open / FLAT-THEN-SPIKE act two
 / ONE-DOOR-LEFT-OPEN ending; zombie_apocalypse = FLASH-FORWARD cold open / compounding-descent act two /
@@ -83,7 +86,7 @@ FPS = 30
 
 SCENES = [
     # ---- COLD OPEN — aftermath, the frozen wallet, before the rewind ----
-    dict(id="t01", level=None, template="deskSilhouette", gap=0.7,
+    dict(id="t01", level=None, template="raidScene", gap=0.7,
          narration=("Federal agents in windbreakers carry your servers out in evidence bags, one at a "
                     "time, down the same stairs you carried them up nine months ago. A monitor nobody's "
                     "unplugged yet still glows on the desk behind them. Don't ask which number is worse "

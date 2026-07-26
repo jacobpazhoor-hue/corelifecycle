@@ -161,10 +161,14 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
       <AbsoluteFill style={{boxShadow: 'inset 0 0 220px 10px rgba(22,16,9,0.13)', pointerEvents: 'none'}} />
       <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(20,15,8,0.16) 0%, rgba(20,15,8,0) 22%, rgba(20,15,8,0) 74%, rgba(20,15,8,0.20) 100%)', pointerEvents: 'none'}} />
 
-      {/* level label (persists across the cuts) */}
+      {/* level label (persists across the cuts). Background was rgba(...,0.82) — translucent enough
+          that a dark backdrop element (or the foreground occluder/vignette) drifting underneath it
+          could bleed through and wash out the text, especially on templates whose auto-zoom pushes
+          scenery toward this corner (reviewer t23/t24 defect: "DAY 460" read low-contrast under a
+          gray smudge). Solid fill guarantees the card's own contrast regardless of what's behind it. */}
       {scene.level && (
         <div style={{position: 'absolute', top: 70, left: 72, opacity: lvlOp, transform: `translateX(${lvlX}px)`, fontFamily: FONT}}>
-          <span style={{color: INK, fontSize: 33, fontWeight: 800, letterSpacing: 6, textTransform: 'uppercase', borderLeft: `5px solid ${GOLD}`, padding: '8px 16px 8px 18px', background: 'rgba(246,242,233,0.82)', borderRadius: 8, boxShadow: '0 4px 18px rgba(20,15,8,0.14)'}}>{scene.level}</span>
+          <span style={{color: INK, fontSize: 33, fontWeight: 800, letterSpacing: 6, textTransform: 'uppercase', borderLeft: `5px solid ${GOLD}`, padding: '8px 16px 8px 18px', background: '#f6f2e9', borderRadius: 8, boxShadow: '0 4px 18px rgba(20,15,8,0.14)'}}>{scene.level}</span>
         </div>
       )}
 
@@ -175,7 +179,7 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
         ? <CountUp from={from ?? 0} to={money.num} suffix={money.suffix} sub={scene.overlay.sub} dur={D} negative={negOverlay} />
         : (
           <div style={{position: 'absolute', bottom: 96, left: 72, opacity: staticOp, fontFamily: FONT, transform: `translateY(${staticRise}px)`,
-            background: 'rgba(246,242,233,0.80)', padding: '18px 24px 20px', borderRadius: 16, boxShadow: '0 6px 30px rgba(20,15,8,0.18)'}}>
+            background: '#f6f2e9', padding: '18px 24px 20px', borderRadius: 16, boxShadow: '0 6px 30px rgba(20,15,8,0.18)'}}>
             <div style={{display: 'inline-block', color: INK, fontSize: big.length > 12 ? 78 : 112, fontWeight: 800, letterSpacing: -2, lineHeight: 1.05,
               background: `linear-gradient(transparent 58%, ${negOverlay ? 'rgba(192,57,43,0.42)' : 'rgba(232,181,75,0.55)'} 58%)`, padding: '0 8px'}}>{big}</div>
             {scene.overlay.sub && <div style={{color: negOverlay ? NEG_SUB : '#9a7322', fontSize: 27, fontWeight: 800, letterSpacing: 5, marginTop: 14, textTransform: 'uppercase'}}>{scene.overlay.sub}</div>}

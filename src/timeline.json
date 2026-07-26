@@ -12,7 +12,7 @@
         "big": "$1,412,000,000",
         "sub": "WALLET FROZEN"
       },
-      "template": "deskSilhouette",
+      "template": "raidScene",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
       "startFrame": 0,

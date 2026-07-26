@@ -116,7 +116,9 @@ export const CountUp: React.FC<{from: number; to: number; suffix?: string; sub?:
   const highlight = negative ? 'rgba(192,57,43,0.42)' : 'rgba(232,181,75,0.55)';
   return (
     <div style={{position: 'absolute', bottom: 96, left: 72, opacity: op, transformOrigin: 'left bottom', transform: `scale(${pop})`, fontFamily: FONT,
-      background: 'rgba(246,242,233,0.80)', padding: '20px 26px 22px', borderRadius: 16, boxShadow: '0 6px 30px rgba(20,15,8,0.18)'}}>
+      // solid fill (was translucent rgba(...,0.80)) — see Video2.tsx's matching card for why: a
+      // translucent card lets whatever backdrop drifts underneath bleed through and wash out the sub-text.
+      background: '#f6f2e9', padding: '20px 26px 22px', borderRadius: 16, boxShadow: '0 6px 30px rgba(20,15,8,0.18)'}}>
       <div style={{width: barW, height: 7, background: accent, marginBottom: 14, borderRadius: 4}} />
       <div style={{display: 'inline-block', color: INK, fontSize: fs, fontWeight: 800, letterSpacing: -2, lineHeight: 1.05,
         background: `linear-gradient(transparent 58%, ${highlight} 58%)`, padding: '0 8px'}}>{fmt(val, dp)}{suffix}</div>
