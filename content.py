@@ -1,345 +1,336 @@
 #!/usr/bin/env python3
-"""Your Life as a Venture Capitalist at Every Level — POV doodle build, ~12 min.
-Grounded in docs/research/venture_capitalist.md. RANK format: analyst -> associate -> principal ->
-partner -> general partner -> your own fund -> a mega-platform -> the LPs above every fund. Second-
-person present-tense POV; the viewer IS a venture capitalist.
+"""POV: You Found a Crypto Startup (Billion or Zero) — POV doodle build, ~12.5 min.
+Grounded in docs/research/crypto_founder.md. SCENARIO format: the levels are an escalating DAY/MARKET-
+CAP ladder, not a job rank — one founder, one company, one token, from a $4,200 checking-account
+balance to a $1.4B paper peak to a federal settlement and back out the other side. Second-person
+present-tense POV: the viewer IS a first-time founder.
 
-SPINE: the on-screen big number is CAPITAL YOU CAN DEPLOY (check authority, then fund size, then
-industry AUM) — power, not personal wealth. The sub-caption carries personal pay/carry, which stays
-small and mostly UNREALIZED for most of the runtime (carry doesn't pay until portfolio companies
-exit, years later, if ever). The drama is the gap between the money you move and the money that's
-real — same "inverted spine" family as soldier/spy, applied to venture instead of the military/agency.
+REAL/VERIFIED mechanics woven in (see research doc; flags there): crypto seed rounds raising $2-5M at
+$20-30M FDV via a SAFT, with 5-10% seed allocations and 6mo-cliff/24mo-vest terms [VERIFIED]; the
+"gold standard" 4yr/1yr-cliff team-token vesting and the >5%-TGE-unlock sell-pressure red flag
+[VERIFIED]; the real 2025 base rate that only 3 of 56 VC-backed tokens that launched crossed a $1B FDV
+[VERIFIED, AInvest — the title's "billion or zero" mechanic AND this episode's share-worthy beat]; the
+real March-2022 Ronin/Axie Infinity bridge hack ($625M, compromised multisig keys, later attributed to
+the Lazarus Group) [VERIFIED] as the mechanical model for this episode's (fictional) treasury exploit;
+the real May-2022 Terra/Luna collapse (~$40-45B erased in about three days, Terraform Labs burning its
+$1.5B BTC reserve trying to defend the peg) [VERIFIED] as the model for this episode's own defend-the-
+peg moral compromise; Do Kwon's real December-2025 15-year sentence for that collapse [VERIFIED,
+Bloomberg/CNN/DOJ — referenced by name as the episode's "wait, that's real?" gut-punch, eight months
+before this episode's air date]; SBF/FTX's real 94%-in-a-day wealth collapse [VERIFIED] referenced
+without naming him; the real SEC "Wells notice" procedure [VERIFIED, standard mechanism] behind this
+episode's FLAGGED fictional settlement. The company, the token, the specific dollar path, and every
+named character are a fictional composite — no real founder or firm is depicted as fact.
 
-REAL/VERIFIED mechanics woven in (see research doc; flags there): the Correlation Ventures power-law
-dataset (~65% of VC deals return <1x, <4% return 10x+, top 0.4% return 50x+) [VERIFIED]; Bessemer
-Venture Partners' real, public "Anti-Portfolio" (David Cowan passing on Google in a garage, 1999-2000;
-also Apple, Facebook, Airbnb) [VERIFIED, bvp.com/anti-portfolio]; real 2025-2026 comp bands by level
-(analyst/associate/principal/partner, carry-by-level) [VERIFIED, multiple 2025 salary surveys]; real
-GP-commit norms (~1.5-1.7% median) [VERIFIED]; real AUM figures — a16z + Sequoia ~$90B each (Jan 2026),
-US VC industry ~$1.25T (NVCA 2025), global VC ~$3.5T (2026, up from ~$500B in 2008) [VERIFIED]. The
-specific check-authority dollar figures per level, the Fund I size, and the protagonist's portfolio
-company are FLAGGED as illustrative composites (research doc has the full breakdown).
+SPINE: the big gold number is MARKET CAP / TREASURY, not personal net worth — $4,200 (Day 1, all of it)
+-> $2.8M (seed) -> $140K (first real personal dollar) -> $780M (TGE launch day) -> $1.4B (the peak, "3
+of 56") -> -$620M (the exploit) -> -91% (the crash) -> $4.1M (legal fees) -> $2.1M (what's actually left
+after restitution). The gap between the market cap everyone watches and the money that's real is the
+whole drama, same inverted-spine family as venture_capitalist/hedge_fund_manager, but here the gap
+doesn't just lag — it inverts violently, once, at the midpoint.
 
-STORY: DANA — the partner who recruits you at Level 1; her one-line warning ("nine hundred no's for
-every yes that counts") is the theme stated early, paid off almost verbatim in her final text at t32.
-She is quietly pushed out at Level 5 when her own fund's LPs don't re-up — the cost beat that proves
-no rank in this business is safe. MARCUS — a rival principal/partner; needles you at the height of your
-first championed deal (t11) and again, harder, the day it implodes (t18) — the betrayal is professional,
-not personal, and the show never resolves whether he was right. RENATA — the founder whose seed deck
-you fall for as an analyst but can't fund (t05); a rival fund backs her instead; you reclaim the deal
-at Principal (t10); her company turns out to be built on inflated numbers and implodes at the midpoint
-(t17); years later, at Level 7, she's back with a second, real company, and the cold open's $40M wire
-is you betting on her twice (t01/t28) — the fund-returning bet. PRIYA — a one-scene cameo (t22): the
-garage founder from `startup_unicorn.md`'s ending, now an LP writing angel checks, closing that
-episode's "already texting about a new idea" thread by showing up, years later, on the other side of
-the table. UNRESOLVED UNIVERSE THREAD (deliberate): a crypto deck you pass on at t27 ("billion or
-zero") — planted for a future `crypto_founder` episode to pick up; never resolved here. BODY-DREAD
-MOTIF (fact, not feeling): "your hands are steady" at the cold open (t01) -> "your hands don't move for
-a full ten seconds" at the reversal (t17) -> "your hands are steady again" at the payoff (t28) -> the
-thumb hovering, then left face-down, at the loop close (t33). SOUND ANCHOR: the phone, face down on
-the desk, that does or doesn't buzz — silent right before the reversal (t16), buzzing with the bad news
-(t17), buzzing with the wire confirmation (t28), and left deliberately unanswered at the very end (t33).
+STORY: NAOMI — your co-founder, the one who understands the treasury better than you do; her act-1
+warning about the 2-of-3 multisig (t04 dialogue) is the theme stated early, paid off literally at the
+exploit (t19) and again in her resignation call (t20 dialogue) — she is the one person in the episode
+who is right the whole time and gets nothing for it. KELLAN — a rival founder; his first jab lands as a
+setup at t14, his harder one lands right after the crash (t22 dialogue) — the show never resolves
+whether he had any idea what was coming, and doesn't need to. PRIYA — a one-scene cameo (t06): the
+garage founder from `startup_unicorn.md`'s ending, later an LP in `venture_capitalist.md`, now an angel
+writing your seed check — the third episode in a row to touch her arc, always from a different side of
+the table. UNRESOLVED UNIVERSE THREAD (deliberate): the exploit wallet, tagged only `ghost.eth`,
+laundered through six mixers by noon (t20) and still an open FBI case (Special Agent Ruiz's card, t28)
+— never identified, planted for a future episode (fbi_undercover is next in the queue) to pick up.
+SENSORY ANCHOR: a steel cold-storage hardware wallet on a lanyard — empty in a drawer at t03, worn for
+the first time at t06, heavier at every level-up through the peak, surrendered to lawyers as evidence
+at t26, returned empty at t30 and worn anyway, out of habit. BODY-DREAD MOTIF (fact, not feeling):
+"your voice doesn't shake" first at t08 (a promise you can't back up yet) -> "your voice shakes for the
+first time in four hundred days" at the reversal (t19) -> "your voice doesn't shake anymore... that's
+the part that should worry you" at the apex (t30), echoed once more, colder, at the very end.
 
-Templates: composed ENTIRELY from EXISTING packs — no new template pack needed. Universal (deskClose/
-deskSilhouette/fileWall/window/signing/boardroomNotes/boardroomHead/tower/dinner/layoffs/atrium/
-warRoom/podiumScene/lobby/revolvingDoor/emptyChair/lectureHallScene) + STARTUP (garageStart/
-startupGrow/serverScale/ipoBell — reused from the FOUNDER's-eye view to the VC's, the check-writer
-watching from outside the cap table) + HEDGEFUND (tradingFloor/pnlWall) + REAL ESTATE (rooftopEmpire,
-re-purposed for a wealthy VC's isolated apex reflection, per the "hedgefund-pack-reused-cross-genre"
-and "relit-backdrop-new-template-pattern" precedents in improvements.json — packs built for one topic
-reading cleanly on an unrelated one). No two adjacent scenes share a template.
+Templates: composed ENTIRELY from EXISTING packs — no new template pack needed, extending the
+`vc-composed-no-new-pack-cross-genre` precedent to a startup-flavored topic. Universal (deskSilhouette/
+deskClose/window/fileWall/signing/boardroomNotes/boardroomHead/atrium/layoffs/revolvingDoor/emptyChair/
+lobby/warRoom/dinner) + generic `podiumScene` + STARTUP (garageStart/startupGrow/serverScale/ipoBell,
+here reused straight-up from the founder's own POV instead of a check-writer's) + HEDGEFUND
+(tradingFloor/pnlWall, re-purposed from a trading desk to a token's live chart) + REAL ESTATE's
+`rooftopEmpire` (the apex reflection) + MAFIA's `courtroom` (re-narrated from a RICO trial to an SEC
+proceeding — same bench-and-seal setting, a different kind of case). No two adjacent scenes repeat.
 
-STRUCTURAL VARIATION vs the last 2 (zombie_apocalypse = FLASH-FORWARD cold open / compounding descent
-/ flash-forward-payoff + torch-passing ending; startup_unicorn = AFTERMATH cold open / rise-then-fall-
-then-rise / torch-passing ending): this cold open is MID-ACTION (dropped straight into an unresolved,
-present-tense decision, no rewind framing, no flash-forward label — the story simply cuts to Level 1
-after); act two is FLAT-THEN-SPIKE, not a smooth rise or a descent — title/rank climbs on schedule
-while personal money stays almost frozen for most of the runtime (echoing the "inverted-spine" pattern
-but structural, not just numerical: nothing "escalates" personally until the single spike at t28); the
-ending is ONE-DOOR-LEFT-OPEN, not torch-passing — no new hire, no ritual handed to a child; the last
-image is a door deliberately NOT walked through.
+STRUCTURAL VARIATION vs the last 2 (venture_capitalist = MID-ACTION cold open / FLAT-THEN-SPIKE act two
+/ ONE-DOOR-LEFT-OPEN ending; zombie_apocalypse = FLASH-FORWARD cold open / compounding-descent act two /
+torch-passing ending): this cold open is AFTERMATH (agents already carrying the servers out, the wallet
+already frozen, before rewinding to Day 1 — last used 3 episodes back by startup_unicorn, not
+consecutively); act two is BOOM-BUST-BOOM — a full peak delivered BEFORE the midpoint (the $1.4B high
+at ~45%), then the reversal inverts it violently, rather than a slow climb or a flat-then-spike; the
+ending is COMPLICIT SILENCE, not torch-passing (no warm handoff, no wisdom offered) and not one-door-
+left-open (not passive avoidance) — you recognize the exact mistake in a stranger, choose not to warn
+her, and know precisely why not.
 
 PROMISE -> PAYOFF LEDGER:
-  * t01 cold open ($40M wire, Renata's name, thumb over the button)      -> t28 (resolved: the wire clears)
-  * t03 Dana's dialogue warning ("nine hundred no's...")                  -> t32 (echoed almost verbatim in her retirement text)
-  * t04 Priya name-dropped in the deal-flow forwards                      -> t22 (payoff: she appears in person as an LP)
-  * t05 Renata's seed deck, the deal you love but can't fund              -> t06 (passed) -> t08 (funded by a rival) -> t10 (reclaimed) -> t17 (implodes) -> t27 (her second company) -> t28 (the fund-returning bet)
-  * t11 Marcus's first jab ("falling in love with your own deal...")      -> t18 (paid off, harsher, the day the deal implodes)
-  * t14 "return the fund" phrase planted                                  -> t28 (paid off literally)
-  * t19 Dana absent from the Monday meeting, her fund not renewed         -> t32 (her arc closes: retired, one last text)
-  * t27 the crypto deck you pass on ("billion or zero")                   -> UNRESOLVED, deliberate universe thread (future crypto_founder episode)
-  * body-dread motif "your hands are steady" (t01)                        -> "hands don't move" (t17, the reversal) -> "hands are steady again" (t28, the payoff)
-  * sound anchor: the phone face-down, silent (t16) -> buzzing, bad news (t17) -> buzzing, the wire (t28) -> left face-down on purpose (t33)
-  * share beat: Correlation Ventures power-law stats (t01/t28 framing)    -> paid off structurally, the whole episode
-  * share beat: Bessemer's real Anti-Portfolio (Google/Cowan)             -> woven into t06's "wait, that's real?" beat
+  * t01 cold open (agents, the frozen $1,412,000,000 wallet)             -> t27 (resolved: it unfreezes, most of it routed to restitution)
+  * t02 promise/cost-line ("the number and the cost... the same number") -> t32 (echoed almost verbatim, the loop close)
+  * t03 the cold-storage brick, empty in a drawer                        -> t06 (worn first) -> t26 (surrendered) -> t30 (returned empty, worn anyway)
+  * t04 Naomi's dialogue warning (the 2-of-3 multisig)                   -> t19 (the exploit exploits exactly that) -> t20 (her resignation call)
+  * t05 nine funds pass on the deck ("interesting, not now")             -> t32 (mirrored: your own thumb over someone else's "not now")
+  * t08 "your voice doesn't shake" (a promise you can't back up)         -> t19 ("shakes for the first time in four hundred days") -> t30/t32 (restored, colder)
+  * t14 Kellan's first jab (setup)                                       -> t22 (paid off, harder, the day it craters)
+  * t16 the "3 of 56" stat / "billion or zero" as literal math           -> t21 (paid off: the crash is the other side of that same math)
+  * t20 the exploit wallet `ghost.eth`, unidentified                     -> t28 (FBI card, still open) -> UNRESOLVED, deliberate universe thread
+  * t24 Do Kwon named, 15 years, the same defend-the-peg move            -> paid off structurally: you made the same call at t17/t19 and knew it
+  * share beat: "3 of 56 tokens ever cross $1B" (t16)                    -> woven as the episode's literal title mechanic, paid off the whole runtime
 """
 
 FPS = 30
 
 SCENES = [
-    # ---- COLD OPEN — mid-action, the wire, the thumb that hasn't moved ----
-    dict(id="t01", level=None, template="deskClose", gap=0.7,
-         narration=("Forty million dollars sits queued in a wire-transfer window, Renata's company on "
-                    "the recipient line, and your thumb hasn't moved in eleven seconds. Somewhere behind "
-                    "you a hundred other bets already went to zero to get you to this one. One click "
-                    "either returns the fund three times over or humiliates you in front of every LP "
-                    "who ever trusted your name twice. Your hands are steady. That's the part that "
-                    "scares you."),
-         overlay=dict(big="$40,000,000", sub="ONE CLICK. RETURNS THE FUND — OR YOU.")),
+    # ---- COLD OPEN — aftermath, the frozen wallet, before the rewind ----
+    dict(id="t01", level=None, template="deskSilhouette", gap=0.7,
+         narration=("Federal agents in windbreakers carry your servers out in evidence bags, one at a "
+                    "time, down the same stairs you carried them up nine months ago. A monitor nobody's "
+                    "unplugged yet still glows on the desk behind them. Don't ask which number is worse "
+                    "— the one that's frozen, or the one that isn't. Cardboard tape ripping off the "
+                    "roll, zip ties cinching, the smell of cold coffee nobody finished drinking."),
+         overlay=dict(big="$1,412,000,000", sub="WALLET FROZEN")),
 
     # ---- PROMISE + COST-LINE ----
-    dict(id="t02", level=None, template="deskSilhouette",
-         narration=("None of this exists yet. Nine years back there's no wire, no fund with your name "
-                    "stenciled on the door, only a kid with a finance degree, four hundred thousand "
-                    "dollars of student debt, and a want so specific it embarrasses you to say out loud: "
-                    "to be the person who says yes correctly, just once, before anyone important is "
-                    "watching. Nobody warns you how many times you'll have to be right about someone "
-                    "else's whole life first."),
+    dict(id="t02", level=None, template="window",
+         narration=("Three hundred forty days ago none of this exists — not the wallet, not the "
+                    "number, not the word defendant clipped to a case file with your name on it, not "
+                    "even the office you'll lose. You want one thing: to build something real before "
+                    "anyone tells you no again. You don't know yet that the number and the cost are "
+                    "going to turn out to be exactly the same number."),
          overlay=None),
 
-    # ---- LEVEL 01 · ANALYST · THE INBOX ----
-    dict(id="t03", level="LEVEL 01  ·  ANALYST  ·  THE INBOX", template="lectureHallScene",
-         narration=("Analyst training runs eight weeks — spreadsheets, term sheets, the private "
-                    "vocabulary of other people's ambition. Four hundred thousand dollars of debt "
-                    "doesn't feel any smaller in a conference room with a view like this one. Dana, the "
-                    "partner who plucked your resume off a pile of six hundred, pulls you aside on day "
-                    "one. Her warning is the only lesson from the entire eight weeks that actually "
-                    "sticks."),
-         overlay=dict(big="$0", sub="CHECK AUTHORITY · ~$120K/YR"),
-         dialogue=dict(text="You'll say no nine hundred times for every yes that counts. Get used to being wrong in public.")),
-    dict(id="t04", level=None, template="fileWall",
-         narration=("Three hundred pitch decks land in the shared inbox this week alone, the fan on "
-                    "your laptop humming under the load. You get an opinion on every one of them and a "
-                    "vote on none. One name keeps recurring in the forwarded threads: Priya, a garage "
-                    "founder who rode her own company to a bell eight years back and writes angel "
-                    "checks now. Everyone in the building wants five minutes with her."),
-         overlay=None),
-    dict(id="t05", level=None, template="garageStart",
-         narration=("A cold email gets you into an actual garage — folding chairs, a whiteboard fogged "
-                    "with a supply-chain diagram, the smell of solder and cold coffee gone bitter in a "
-                    "paper cup. Renata talks with her hands like the idea might fly off if she stops "
-                    "moving them. Two million dollars gets her to a real, sellable product. You believe "
-                    "every word of it before she finishes the sentence — the first deal you'll ever "
-                    "actually love."),
-         overlay=dict(big="$2,000,000", sub="THE SEED ROUND YOU CAN'T FUND YET")),
-    dict(id="t06", level=None, template="boardroomNotes",
-         narration=("Your memo runs four pages, all conviction, footnoted like a legal brief. The "
-                    "partner across the table reads two sentences of it and says 'too early, too weird' "
-                    "before you've finished the pitch out loud. Somewhere a firm called Bessemer keeps "
-                    "its own public list of exactly this mistake — they passed on meeting two Stanford "
-                    "kids named Larry and Sergey in a garage in 1999. Belief isn't a vote. Therefore you "
-                    "learn the real distance between loving a deal and being allowed to fund one."),
+    # ---- LEVEL 01 · DAY 1 · THE GARAGE ----
+    dict(id="t03", level="LEVEL 01  ·  DAY 1  ·  $4,200", template="garageStart",
+         narration=("Four thousand two hundred dollars sits in checking, all of it, the day you quit. "
+                    "The garage smells like WD-40 and cold concrete; a space heater hums against your "
+                    "ankle while you type. A steel cold-storage brick sits empty in a drawer, waiting "
+                    "for keys that don't exist yet. You've told exactly one person the real number — "
+                    "Naomi, who studied cryptography before she studied you."),
+         overlay=dict(big="$4,200", sub="ALL OF IT. DAY 1.")),
+    dict(id="t04", level=None, template="deskClose",
+         narration=("Naomi draws the treasury architecture in dry-erase orange — three keys, two "
+                    "required to move anything, a diagram that takes up the whole whiteboard. Two is "
+                    "fast. Two is also, she says, exactly one compromised laptop away from everything "
+                    "the two of you have built. Marker squeaks. You nod like you're listening. Mostly "
+                    "you're thinking about launch day."),
+         overlay=None,
+         dialogue=dict(text="The day you need three signatures is the day you needed them yesterday.")),
+    dict(id="t05", level=None, template="fileWall",
+         narration=("Nine funds pass on the deck in eleven days, each rejection politer than the last "
+                    "and somehow worse for it. A tenth writes back a single line — interesting, not "
+                    "now — and you read it four times looking for the part where it means yes. It "
+                    "doesn't. Therefore you stop waiting on permission. Rent is due in six days, and "
+                    "self-belief doesn't clear at the bank."),
          overlay=None),
 
-    # ---- LEVEL 02 · ASSOCIATE · THE SIGN-OFF ----
-    dict(id="t07", level="LEVEL 02  ·  ASSOCIATE  ·  THE SIGN-OFF", template="desk",
-         narration=("Promotion means a title, a signature line underneath a partner's, and actual check "
-                    "authority for the first time — two hundred fifty thousand dollars, with sign-off "
-                    "required above it. Your apartment still has a roommate in it and a mattress on the "
-                    "floor; the business card in your wallet says something entirely different now. You "
-                    "stop losing sleep over the decks you passed on. You start losing sleep, instead, "
-                    "over the one you didn't get to fund."),
-         overlay=dict(big="$250,000", sub="CHECK AUTHORITY (WITH SIGN-OFF) · ~$200K/YR")),
-    dict(id="t08", level=None, template="startupGrow",
-         narration=("Renata raised anyway — a rival fund wrote the check yours wouldn't — and her "
-                    "company now fills an actual office, whiteboards multiplying, a product finally "
-                    "shipping to real customers. The round announcement lands in your inbox like a "
-                    "scoreboard update from a game you're not playing in yet. Fifteen million dollars, "
-                    "and not one of them is your firm's."),
-         overlay=dict(big="$15,000,000", sub="SOMEONE ELSE'S TERM SHEET")),
-    dict(id="t09", level=None, template="window",
-         narration=("But conviction has to start somewhere small. Your own sourced deal — a logistics "
-                    "tool nobody else in the building had noticed — finally gets the sign-off: two "
-                    "hundred fifty thousand dollars, your recommendation, your name quietly attached to "
-                    "an outcome for the first time in your career. It closes clean inside a month. "
-                    "Therefore the partners start asking your opinion before you offer it."),
+    # ---- LEVEL 02 · DAY 40 · THE SEED ----
+    dict(id="t06", level="LEVEL 02  ·  DAY 40  ·  $2,800,000 SEED", template="signing",
+         narration=("Priya signs the SAFT before she finishes her coffee — two point eight million "
+                    "dollars for eighteen percent of a token that doesn't exist yet, a name you "
+                    "recognize from a deck that made the rounds years before yours, back when she was "
+                    "the one pitching in a garage. Four-year vest, one-year cliff, nothing unlocks for a "
+                    "full year. You loop the cold-storage lanyard over your head for the first time — a "
+                    "small steel weight, cool against your sternum, exactly where a badge used to hang."),
+         overlay=dict(big="$2,800,000", sub="SEED · 18% TO THE TEAM")),
+    dict(id="t07", level=None, template="startupGrow",
+         narration=("Six hires in ten weeks, a testnet, a Discord server that never sleeps, a whiteboard "
+                    "wall of tickets nobody can close fast enough. Naomi wants a third key-holder before "
+                    "mainnet. There's no time, and worse, there's no one you trust that much yet. You "
+                    "promise her — soon — the way you'll later promise a lot of people a lot of things, "
+                    "meaning it every single time."),
+         overlay=None),
+    dict(id="t08", level=None, template="deskClose",
+         narration=("You announce a mainnet date onstage before the code is ready, because a date is "
+                    "the only thing that makes people believe you're real. Your voice doesn't shake "
+                    "when you say it. Therefore the team works nineteen-hour days for six weeks "
+                    "straight. The multisig stays at two of three. Nobody decides that. It just never "
+                    "becomes the emergency it should have been."),
          overlay=None),
 
-    # ---- LEVEL 03 · PRINCIPAL · THE BOARD SEAT ----
-    dict(id="t10", level="LEVEL 03  ·  PRINCIPAL  ·  THE BOARD SEAT", template="signing",
-         narration=("Principal. Renata is raising again — the rival fund passed on her Series A, "
-                    "spooked by one slow quarter — and this time the term sheet has your firm's name at "
-                    "the top and yours on the signature line underneath it. Three million dollars. A "
-                    "board OBSERVER seat: the closest you've ever sat to the table that actually decides "
-                    "things."),
-         overlay=dict(big="$3,000,000", sub="YOUR FIRST TERM SHEET · ~$300K/YR")),
+    # ---- LEVEL 03 · DAY 150 · THE FIRST REAL DOLLAR ----
+    dict(id="t09", level="LEVEL 03  ·  DAY 150  ·  $140,000", template="boardroomNotes",
+         narration=("A market maker wires the first real money that's ever touched your personal "
+                    "account — one hundred forty thousand dollars, vested, yours, taxable, actual, "
+                    "sitting in an app on your phone instead of a whiteboard projection. You stare at "
+                    "the number longer than you'd admit to anyone. It's the most money you've ever had. "
+                    "It's also, you don't know yet, a rounding error on what's coming."),
+         overlay=dict(big="$140,000", sub="THE FIRST REAL DOLLAR")),
+    dict(id="t10", level=None, template="podiumScene",
+         narration=("Onstage under conference lighting, three hundred people hold their phones up like "
+                    "lighters at a show you didn't know you were headlining. Sweat under the collar, the "
+                    "hum of the crowd mic. A journalist asks what the token is actually for. Your answer "
+                    "gets a laugh and, more usefully, a headline by morning. The room believes you "
+                    "before the code does."),
+         overlay=None),
     dict(id="t11", level=None, template="serverScale",
-         narration=("Her servers multiply, her headcount doubles twice in a year, and the growth curve "
-                    "on every board deck bends in exactly the direction the whole room is quietly "
-                    "praying for. Marcus, a principal from the deal team down the hall, catches you at "
-                    "the coffee machine — half joke, half warning, delivered with a smile that doesn't "
-                    "reach anywhere near his eyes."),
-         overlay=None,
-         dialogue=dict(text="Careful. Falling in love with your own deal is how you blow up a portfolio.")),
-    dict(id="t12", level=None, template="boardroomHead",
-         narration=("But nobody in the room argues with a growth curve that steep, and your name starts "
-                    "appearing, unprompted, in the partner-track memo circulating two floors up from "
-                    "where you actually sit. Traction on a slide isn't the same thing as truth in a "
-                    "filed financial statement — you don't know that yet, not really, and nobody in this "
-                    "particular room says it out loud either, not even Dana."),
+         narration=("Testnet load-testing breaks twice in one week under traffic nobody modeled for, "
+                    "fans screaming in the server closet at 4 a.m. Fix it fast. Fix it quiet. Don't tell "
+                    "the group chat which server actually caught fire. But the fixes hold, barely, and "
+                    "mainnet goes green four hours before the launch stream starts."),
          overlay=None),
 
-    # ---- LEVEL 04 · PARTNER · THE VOTE ----
-    dict(id="t13", level="LEVEL 04  ·  PARTNER  ·  THE VOTE", template="tower",
-         narration=("Partner. Full vote at Investment Committee, fifteen million dollars of check "
-                    "authority, and a board seat that's a DIRECTOR seat now — real fiduciary duty, the "
-                    "kind a lawyer can attach your actual name to if something goes wrong later. The "
-                    "climb from here looks less like a ladder and more like a wire with no net stretched "
-                    "under it."),
-         overlay=dict(big="$15,000,000", sub="CHECK AUTHORITY · BOARD DIRECTOR NOW")),
+    # ---- LEVEL 04 · DAY 300 · LAUNCH DAY ----
+    dict(id="t12", level="LEVEL 04  ·  DAY 300  ·  $780,000,000 MARKET CAP", template="ipoBell",
+         narration=("Token generation event, ten a.m., a countdown clock the whole internet is "
+                    "watching, the office packed shoulder to shoulder around three monitors. The listing "
+                    "goes live and the chart doesn't dip once — straight up, a green wall, seven hundred "
+                    "eighty million dollars of market cap by lunch. Somewhere a bell would ring if this "
+                    "business had bells. Instead there's just your own pulse, loud, in your ears, and "
+                    "the cold-storage brick suddenly heavier against your chest than it was this "
+                    "morning."),
+         overlay=dict(big="$780,000,000", sub="MARKET CAP · LAUNCH DAY")),
+    dict(id="t13", level=None, template="tradingFloor",
+         narration=("By evening the chart is a wall of green candles stacked so tight they read as a "
+                    "single line, the office phones buzzing nonstop with numbers nobody bothers to "
+                    "answer anymore. Strangers you've never met are up six figures because of a "
+                    "decision you made in a garage. Naomi watches the same screen from across the room "
+                    "and doesn't say anything, which is its own kind of sentence."),
+         overlay=None),
     dict(id="t14", level=None, template="dinner",
-         narration=("You lead Renata's growth round yourself now — fifteen million dollars, a candlelit "
-                    "dinner with two co-investors angling politely for the exact same allocation you "
-                    "want for your own firm. Somewhere between the second course and the signature page, "
-                    "your partners start using a phrase about her company that you'll hear repeated, "
-                    "with steadily less warmth in it, for years after tonight's dinner is over."),
-         overlay=dict(big="RETURN THE FUND", sub="FOUR WORDS. INFINITE PRESSURE.")),
-    dict(id="t15", level=None, template="fileWall",
-         narration=("An LP due-diligence questionnaire lands the same week — forty pages asking, six "
-                    "different ways, how concentrated your fund's return really is on companies exactly "
-                    "like Renata's. You answer honestly. Page thirty reads: 'the fund's carry depends "
-                    "materially on a small number of positions.' Your own handwriting looks unfamiliar "
-                    "by the time you finish that sentence."),
-         overlay=None),
-    dict(id="t16", level=None, template="deskSilhouette", gap=1.4,
-         narration=("The numbers on Renata's dashboard look almost too clean this particular quarter — "
-                    "the kind of clean you'd flag immediately, on instinct, in anyone else's deal. Your "
-                    "phone sits face down on the desk and doesn't buzz. It hasn't buzzed all afternoon, "
-                    "not once. That particular kind of quiet used to mean nothing at all was wrong."),
-         overlay=None),
-
-    # ---- MIDPOINT REVERSAL ----
-    dict(id="t17", level=None, template="pnlWall", rate="-8%",
-         narration=("Then it buzzes. Renata's voice on the line is flatter than you've ever heard it — "
-                    "the revenue in every board deck for six straight months was inflated, real numbers "
-                    "a fraction of the reported ones, and not one of the other directors knew before you "
-                    "did. Your hands don't move for a full ten seconds after the call ends. The company "
-                    "you fell for first is worth, functionally, nothing."),
-         overlay=dict(big="$0", sub="THE MARK-DOWN. RENATA'S CALL.")),
-    dict(id="t18", level=None, template="layoffs",
-         narration=("Forty people lose their jobs in a single Friday email you personally help draft, "
-                    "your director's signature required at the bottom of the notice. Sign it anyway. "
-                    "Fiduciary duty doesn't pause for what any of this costs to sit through. Marcus "
-                    "finds you in the hallway afterward, not quite smiling, timing the line exactly "
-                    "right."),
-         overlay=dict(big="-40", sub="STAFF LET GO. YOU SIGN THE NOTICE."),
-         dialogue=dict(text="I told you. You don't get points for loving the ones that die.")),
-
-    # ---- LEVEL 05 · GENERAL PARTNER · THE COMMIT ----
-    dict(id="t19", level="LEVEL 05  ·  GENERAL PARTNER  ·  THE COMMIT", template="atrium",
-         narration=("But a blown-up board seat doesn't end a career here if you handle the wreckage "
-                    "honestly, and somehow, barely, you do. General Partner. The fund is three hundred "
-                    "million dollars now, and for the first time your own money is actually inside it — "
-                    "four and a half million, real, locked up for a decade, yours to lose along with "
-                    "everyone else's."),
-         overlay=dict(big="$300,000,000", sub="THE FUND · $4.5M OF IT IS YOURS")),
-    dict(id="t20", level=None, template="tradingFloor",
-         narration=("GP means watching the whole portfolio at once — forty companies across one long "
-                    "wall of monitors, a third climbing, a third flat, a handful quietly dying the way "
-                    "Renata's first one did. Dana isn't at the Monday meeting. Her fifth fund's LPs "
-                    "simply didn't re-up it. Nobody sends flowers for a fund that just stops. The seat "
-                    "only opens because hers closed, and you're the one who fills it."),
-         overlay=None),
-    dict(id="t21", level=None, template="warRoom",
-         narration=("Allocating across a fund you didn't build turns into driving a car with somebody "
-                    "else's hands still resting on the wheel. Therefore, quietly, on weekends, you start "
-                    "drafting the deck for something that would actually be yours — a fund with your own "
-                    "name stenciled on the door, for better or for a full decade of worse."),
-         overlay=None),
-
-    # ---- LEVEL 06 · FOUND YOUR OWN FUND · THE NAME ----
-    dict(id="t22", level="LEVEL 06  ·  FOUND YOUR OWN FUND  ·  THE NAME", template="podiumScene",
-         narration=("One hundred fifty million dollars — Fund One, and your own name is the entire "
-                    "pitch now, not your old firm's letterhead behind you. Every LP dinner is an "
-                    "audition with a check at the end of it. Two and twenty: a two-percent management "
-                    "fee, twenty percent of anything above an eight-percent floor. You explain the math "
-                    "so many times this month it stops sounding like math at all."),
-         overlay=dict(big="$150,000,000", sub="FUND I · 2 AND 20")),
-    dict(id="t23", level=None, template="lobby",
-         narration=("Priya walks into your firm's actual lobby to write a check as an LP — the same "
-                    "name from the forwarded decks nine years back, garage to bell, now funding the fund "
-                    "that once couldn't fund her friend's company. The room you built is smaller than "
-                    "the one you imagined at Level One, with worse coffee than you promised yourself "
-                    "it would have. It doesn't matter. She signs anyway."),
-         overlay=None),
-    dict(id="t24", level=None, template="signing",
-         narration=("Closing Fund One costs three million dollars a year just to keep the lights on and "
-                    "the two associates paid — the management fee, spent before a dollar of it is "
-                    "actually earned. Therefore the first real check this fund ever writes has to be the "
-                    "right one. You already know, before you'll admit it out loud to anyone, exactly "
-                    "whose name is going on it."),
-         overlay=dict(big="$3,000,000", sub="THE FEE. JUST TO KEEP THE LIGHTS ON")),
-
-    # ---- LEVEL 07 · THE PLATFORM ----
-    dict(id="t25", level="LEVEL 07  ·  THE PLATFORM", template="jet",
-         narration=("Five years scale the fund toward the top of an industry where the two biggest "
-                    "firms each manage roughly ninety billion dollars apiece — a single fundraise from "
-                    "one of them last year alone equaled almost a fifth of everything the entire US "
-                    "venture industry deployed. You are nowhere near that number yet. You fly toward it "
-                    "anyway, every quarter, a little closer."),
-         overlay=dict(big="$90,000,000,000", sub="WHAT THE TOP OF THIS INDUSTRY LOOKS LIKE")),
-    dict(id="t26", level=None, template="revolvingDoor",
-         narration=("Access compounds faster than carry ever does. Doors that used to need three warm "
-                    "introductions now open because a fund with your name on it called ahead. But the "
-                    "carry from Fund One still hasn't paid a single dollar — the portfolio companies "
-                    "haven't exited, and won't, most of them, for years, if they ever do at all."),
-         overlay=None),
-    dict(id="t27", level=None, template="ipoBell",
-         narration=("Renata pitches you again — a second company this time, real, built carefully out "
-                    "of the wreckage of the first one — and asks you personally to lead the follow-on. "
-                    "Another deck lands the same week, something about tokens, the summary line reading, "
-                    "almost word for word: billion or zero. You pass on it without a second thought and "
-                    "don't think about it again."),
-         overlay=dict(big="BILLION OR ZERO", sub="THE DECK YOU PASS ON")),
-
-    # ---- PAYOFF of the cold open ----
-    dict(id="t28", level=None, template="deskClose",
-         narration=("Forty million dollars, queued, Renata's name on the recipient line, your thumb "
-                    "hovering exactly where it was nine years and one collapsed company ago. This time "
-                    "you click. The wire clears in eleven seconds. Her company's next round prices at "
-                    "four times the last one — the single check that returns three times the entire "
-                    "fund. Your hands are steady again. Nobody claps. The machine already wants to know "
-                    "what's next."),
-         overlay=dict(big="$40,000,000", sub="THE WIRE CLEARS. NOBODY CLAPS.")),
-
-    # ---- LEVEL 08 · THE ALLOCATORS (apex) ----
-    dict(id="t29", level="LEVEL 08  ·  THE ALLOCATORS", template="emptyChair",
-         narration=("You're rich now, by any ordinary measure, running one of the names LPs actually "
-                    "chase instead of chasing. But above every fund — yours, the ninety-billion-dollar "
-                    "ones, all of it — sit the pensions and endowments and sovereign funds who decide "
-                    "who gets to raise a next one. The entire US venture industry moves one point two "
-                    "five trillion dollars. You are not even one percent of it."),
-         overlay=dict(big="$1,250,000,000,000", sub="US VC, TOTAL. YOU'RE NOT EVEN 1%.")),
-    dict(id="t30", level=None, template="boardroomHead",
-         narration=("Globally the number is three and a half trillion dollars, up from five hundred "
-                    "billion less than twenty years ago, and every dollar of it answers to some "
-                    "allocator's committee you will never personally sit on. The capital doesn't ask "
-                    "what you built. It doesn't ask what you believed. It only asks, every single year, "
-                    "what returned. That's the actual top of this ladder, and it has no office anywhere "
-                    "with your name on the door."),
-         overlay=dict(big="$3,500,000,000,000", sub="GLOBAL. THE PEOPLE WHO PICK THE PICKERS.")),
-    dict(id="t31", level=None, template="rooftopEmpire",
-         narration=("The apartment is bigger now, the view better, and most nights it's just you up "
-                    "here with a glass you don't finish, running numbers on funds that aren't even yours "
-                    "to run anymore. Marcus made partner somewhere else, married, two kids you hear "
-                    "about secondhand. Dana always said the nine hundred no's cost something. Nobody "
-                    "ever specifies, out loud, that the cost is usually this — the quiet, not the "
-                    "money."),
-         overlay=None),
-    dict(id="t32", level=None, template="window",
-         narration=("A text arrives from a number you haven't heard from in two years. Dana retired "
-                    "quietly last spring, the firm's newsletter said, a single line nobody read twice. "
-                    "Three words now, no context needed after nine years of the exact same lesson "
-                    "repeated in a hundred different rooms."),
+         narration=("Kellan, building a rival chain two blocks over, buys you a drink you didn't ask "
+                    "for, ice clinking against the glass. He leans in over the bar noise, close enough "
+                    "that you smell the whiskey before the question lands."),
          overlay=None,
-         dialogue=dict(text="Nine hundred no's. Then you get to find out if you were right about the one.")),
+         dialogue=dict(text="Cute number. Who's actually got the keys to that treasury?")),
+    dict(id="t15", level=None, template="window",
+         narration=("Your name returns four hundred search results overnight, most of them wrong, a "
+                    "few of them cruel, one a photo you don't remember anyone taking. The glow of the "
+                    "screen at 3 a.m. is the only light in the apartment. On paper you're worth more "
+                    "than your parents' house times a thousand. In your actual bank account: one "
+                    "hundred forty thousand dollars, unchanged, still vesting, still not real."),
+         overlay=None),
 
-    # ---- LOOP CLOSE — the door left shut, on purpose ----
-    dict(id="t33", level=None, template="deskClose", gap=0.7,
-         narration=("A notification sits on your phone, face down on the desk, exactly the way it "
-                    "always has — a second look at the deck you passed on, the founder asking, "
-                    "politely, if you're sure. Your thumb hovers exactly the way it once hovered over "
-                    "forty million dollars. This time you leave it face down. Some doors you get to "
-                    "leave shut on purpose, and that, too, nine years in, still counts as a decision."),
+    # ---- LEVEL 05 · DAY 340 · THE PEAK ----
+    dict(id="t16", level="LEVEL 05  ·  DAY 340  ·  $1,400,000,000 MARKET CAP", template="pnlWall",
+         narration=("Fifty-six venture-backed tokens launched this cycle. Three crossed a billion "
+                    "dollars in market cap. Yours just became the third — one point four billion "
+                    "dollars — a club so small the other two members text you within the hour. Billion "
+                    "or zero was never a slogan. It was the actual math. Today the math goes your way."),
+         overlay=dict(big="$1,400,000,000", sub="MARKET CAP · 3 OF 56 EVER GET HERE")),
+    dict(id="t17", level=None, template="atrium",
+         narration=("The new office has a name on the glass door and a coffee machine nobody had to "
+                    "fight for, the smell of fresh paint still faint in the hallway. Twenty-two "
+                    "employees now, real payroll, an HR department that didn't exist eight months ago. "
+                    "The number on every screen keeps climbing. Nobody in the building asks, out loud, "
+                    "who still holds the only two keys that move it."),
+         overlay=None),
+    dict(id="t18", level=None, template="deskSilhouette", gap=1.4,
+         narration=("Two a.m., the office empty, the ticker's green glow the only light in the room, "
+                    "the building's HVAC ticking down the hall. Naomi's third-key proposal is still "
+                    "sitting, unanswered, in a channel nobody's opened in four months. Your phone is "
+                    "face down on the desk. It hasn't buzzed all night."),
+         overlay=None),
+
+    # ---- LEVEL 06 · DAY 402 · THE EXPLOIT ----
+    dict(id="t19", level="LEVEL 06  ·  DAY 402  ·  -$620,000,000 DRAINED", template="warRoom",
+         narration=("The alert hits at 6:14 a.m. — a withdrawal from the treasury multisig, then "
+                    "another, both signed with keys that were never supposed to sit on the same laptop "
+                    "Naomi warned you about a year ago. The kitchen still smells like the coffee you "
+                    "started brewing before you saw the screen. Six hundred twenty million dollars, "
+                    "gone, in the eleven minutes it takes coffee to brew. Your voice shakes for the "
+                    "first time in four hundred days."),
+         overlay=dict(big="-$620,000,000", sub="TREASURY DRAINED · 6:14 AM")),
+    dict(id="t20", level=None, template="fileWall",
+         narration=("Forensics traces the exploit to a wallet tagged only ghost.eth, laundered through "
+                    "six mixers by noon, gone before anyone can freeze it. Naomi's resignation email "
+                    "lands at nine, four sentences, cc'ing legal. She calls once, after, just to say the "
+                    "one thing she's been saying for a year, her voice flat in a way you've never heard "
+                    "it before."),
+         overlay=None,
+         dialogue=dict(text="I asked for a third key for four hundred days. You had every one of them.")),
+    dict(id="t21", level=None, template="tradingFloor",
+         narration=("The chart that took ten months to build erases itself in eleven hours, the sell "
+                    "wall so thick the app lags trying to render it. Panic-selling meets confirmed-hack "
+                    "meets a headline with your name in it, and the three feed each other until the "
+                    "candle is just red, straight down, off the bottom of the screen. One point four "
+                    "billion becomes one hundred twenty-six million before the exchanges halt trading."),
+         overlay=dict(big="-91%", sub="MARKET CAP · 11 HOURS")),
+    dict(id="t22", level=None, template="layoffs",
+         narration=("Twenty-two people become six by Friday, severance you fund personally because the "
+                    "treasury that's supposed to cover it is the treasury that's gone. Boxes stacked by "
+                    "the elevator, the badge readers already deactivated. Kellan calls, ostensibly to "
+                    "check in. He doesn't bother pretending anymore."),
+         overlay=None,
+         dialogue=dict(text="Billion or zero. Guess we know which one you actually built.")),
+
+    # ---- LEVEL 07 · DAY 460 · THE WELLS NOTICE ----
+    dict(id="t23", level="LEVEL 07  ·  DAY 460  ·  SEC WELLS NOTICE", template="revolvingDoor",
+         narration=("A courier hands you an envelope with a government seal instead of a knock on the "
+                    "door, the paper heavier than it should be for four pages. Inside: a Wells notice, "
+                    "the SEC's polite word for we're about to charge you, and a phone number for a "
+                    "securities lawyer you'll come to know better than your own family by spring."),
+         overlay=dict(big="SEC WELLS NOTICE", sub="DAY 460")),
+    dict(id="t24", level=None, template="courtroom",
+         narration=("Depositions run six hours a day for three weeks, fluorescent light, the recorder's "
+                    "little red dot always on. The lawyer's binder has a tab for a name that isn't yours "
+                    "— Do Kwon, fifteen years, sentenced eight months ago for defending a different "
+                    "collapsing peg with money that wasn't his to spend. You spent treasury reserves "
+                    "buying back your own token during the panic too, telling yourself, at the time, "
+                    "that it was temporary."),
+         overlay=None),
+    dict(id="t25", level=None, template="fileWall",
+         narration=("The number buys lawyers, three of them, billing by the six-minute increment. The "
+                    "number buys silence — an NDA for every employee who left angry. The number buys a "
+                    "settlement instead of a trial, which your lawyer calls a win. Nobody else in the "
+                    "room calls it that."),
+         overlay=None),
+    dict(id="t26", level=None, template="boardroomHead",
+         narration=("Four million one hundred thousand dollars in legal fees later, the SEC agrees to "
+                    "settle: no admission, a restitution fund for the drained wallets, a five-year "
+                    "officer-and-director bar. The cold-storage brick gets bagged as evidence somewhere "
+                    "in week two, tagged and sealed in a manila envelope. The collar of every shirt sits "
+                    "wrong for months before you place why."),
+         overlay=dict(big="$4,100,000", sub="LEGAL FEES · THE SETTLEMENT")),
+
+    # ---- LEVEL 08 · DAY 640 · WHAT'S LEFT ----
+    dict(id="t27", level="LEVEL 08  ·  DAY 640  ·  $2,100,000 AFTER RESTITUTION", template="signing",
+         narration=("You sign the restitution agreement with the same hand that once signed a SAFT in "
+                    "a garage, the pen a courthouse pen, chained to the counter. The frozen wallet "
+                    "unlocks in stages, most of it routed straight to the fund for people who lost real "
+                    "money over a decision made at 2 a.m. What's left, after everything: two million "
+                    "one hundred thousand dollars. Less than you'd have made staying at the old job and "
+                    "never quitting at all."),
+         overlay=dict(big="$2,100,000", sub="AFTER RESTITUTION + LEGAL")),
+    dict(id="t28", level=None, template="emptyChair",
+         narration=("The restitution fund pays out to eleven thousand wallets you'll never meet, in "
+                    "amounts that don't undo anyone's year. Special Agent Ruiz's card is still in your "
+                    "desk drawer — a case number for ghost.eth that was never closed, not yours to "
+                    "solve anymore. The chair across from yours, the one that used to be Naomi's, stays "
+                    "empty in every meeting from here on, by nobody's decision but somehow everybody's."),
+         overlay=None),
+    dict(id="t29", level=None, template="serverScale",
+         narration=("A v2 token launches eight months later, smaller, three signers required for "
+                    "anything above ten thousand dollars, an audit firm on retainer nobody argues about "
+                    "anymore, the new office half the size of the old one. It's the company you should "
+                    "have built the first time. Fewer people notice it exists. That, it turns out, might "
+                    "be the actual point."),
+         overlay=None),
+
+    # ---- LEVEL 09 · DAY 900 · THE OTHER SIDE OF THE TABLE ----
+    dict(id="t30", level="LEVEL 09  ·  DAY 900  ·  THE DECK YOU DON'T OPEN", template="rooftopEmpire",
+         narration=("The new apartment has a better view and a cold-storage brick returned by the "
+                    "lawyers, empty now — the coins moved to the restitution fund months ago. You still "
+                    "loop the lanyard over your head most mornings, out of habit. Your voice doesn't "
+                    "shake anymore, in meetings, in interviews, in rooms that used to make it shake. "
+                    "That's the part that should worry you."),
+         overlay=None),
+    dict(id="t31", level=None, template="lobby",
+         narration=("A twenty-four-year-old walks into your actual lobby with a deck under one arm and "
+                    "the exact posture you had in the garage — sure the number is going to change "
+                    "everything, not yet sure what the number is going to cost. Rain on the glass "
+                    "behind her. She pitches for eleven minutes without a single breath that sounds "
+                    "like doubt."),
+         overlay=None,
+         dialogue=dict(text="Billion or zero. I know how that sounds.")),
+
+    # ---- LOOP CLOSE — complicit silence, not a handoff ----
+    dict(id="t32", level=None, template="deskClose", gap=0.7,
+         narration=("You've read four hundred decks like this since the settlement. This one you "
+                    "actually like. Your thumb hovers over reply exactly the way a stranger's once "
+                    "hovered over yours, nine funds and one expensive lesson ago. You close the laptop "
+                    "instead. Somewhere in a garage tonight, someone is telling themselves the number "
+                    "and the cost aren't going to turn out to be the same number. They're wrong too. "
+                    "You already know it. You don't say so."),
          overlay=None),
 ]

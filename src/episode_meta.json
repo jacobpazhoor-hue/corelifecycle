@@ -1,22 +1,22 @@
 {
   "thumb": {
-    "kicker": "EVERY LEVEL OF A",
-    "line1": "VENTURE CAPITALIST",
+    "kicker": "THE FOUNDER WHO",
+    "line1": "TOKEN LAUNCHED",
     "line2": "",
-    "tag": "ONE BET",
+    "tag": "FROZEN",
     "archetype": "poster",
-    "big": "$3,500,000,000,000",
-    "before": "$0 VOTE",
-    "after": "$90B FUND",
+    "big": "$1,400,000,000",
+    "before": "$4,200",
+    "after": "FROZEN",
     "expr": "shock",
-    "povline": "YOU DECIDE",
-    "keyword": "ZERO",
-    "setting": "pnlWall",
-    "question": "WHO PICKS THE PICKERS?",
-    "mood": "money",
-    "costume": "suit",
-    "word": "ZERO",
+    "povline": "YOU LAUNCHED IT",
+    "keyword": "FROZEN",
+    "setting": "warRoom",
+    "question": "WHO GETS TO KEEP IT?",
+    "mood": "electric",
+    "costume": "street",
+    "word": "FROZEN",
     "prop": "vault"
   },
-  "topic": "venture_capitalist"
+  "topic": "crypto_founder"
 }

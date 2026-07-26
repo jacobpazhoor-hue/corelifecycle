@@ -2,135 +2,129 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 22278,
+  "totalFrames": 21076,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t01",
       "level": null,
       "overlay": {
-        "big": "$40,000,000",
-        "sub": "ONE CLICK. RETURNS THE FUND \u2014 OR YOU."
+        "big": "$1,412,000,000",
+        "sub": "WALLET FROZEN"
       },
-      "template": "deskClose",
+      "template": "deskSilhouette",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 760,
+      "durationInFrames": 709,
       "gap": 0.7
     },
     {
       "id": "t02",
       "level": null,
       "overlay": null,
-      "template": "deskSilhouette",
+      "template": "window",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 760,
-      "durationInFrames": 720,
+      "startFrame": 709,
+      "durationInFrames": 563,
       "gap": 0.25
     },
     {
       "id": "t03",
-      "level": "LEVEL 01  \u00b7  ANALYST  \u00b7  THE INBOX",
+      "level": "LEVEL 01  \u00b7  DAY 1  \u00b7  $4,200",
       "overlay": {
-        "big": "$0",
-        "sub": "CHECK AUTHORITY \u00b7 ~$120K/YR"
+        "big": "$4,200",
+        "sub": "ALL OF IT. DAY 1."
       },
-      "template": "lectureHallScene",
+      "template": "garageStart",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 1480,
-      "durationInFrames": 884,
+      "startFrame": 1272,
+      "durationInFrames": 704,
       "gap": 0.25
     },
     {
       "id": "t04",
       "level": null,
       "overlay": null,
-      "template": "fileWall",
+      "template": "deskClose",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 2364,
-      "durationInFrames": 639,
+      "startFrame": 1976,
+      "durationInFrames": 832,
       "gap": 0.25
     },
     {
       "id": "t05",
       "level": null,
-      "overlay": {
-        "big": "$2,000,000",
-        "sub": "THE SEED ROUND YOU CAN'T FUND YET"
-      },
-      "template": "garageStart",
+      "overlay": null,
+      "template": "fileWall",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 3003,
-      "durationInFrames": 755,
+      "startFrame": 2808,
+      "durationInFrames": 611,
       "gap": 0.25
     },
     {
       "id": "t06",
-      "level": null,
-      "overlay": null,
-      "template": "boardroomNotes",
+      "level": "LEVEL 02  \u00b7  DAY 40  \u00b7  $2,800,000 SEED",
+      "overlay": {
+        "big": "$2,800,000",
+        "sub": "SEED \u00b7 18% TO THE TEAM"
+      },
+      "template": "signing",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 3758,
-      "durationInFrames": 862,
+      "startFrame": 3419,
+      "durationInFrames": 810,
       "gap": 0.25
     },
     {
       "id": "t07",
-      "level": "LEVEL 02  \u00b7  ASSOCIATE  \u00b7  THE SIGN-OFF",
-      "overlay": {
-        "big": "$250,000",
-        "sub": "CHECK AUTHORITY (WITH SIGN-OFF) \u00b7 ~$200K/YR"
-      },
-      "template": "desk",
+      "level": null,
+      "overlay": null,
+      "template": "startupGrow",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 4620,
-      "durationInFrames": 733,
+      "startFrame": 4229,
+      "durationInFrames": 663,
       "gap": 0.25
     },
     {
       "id": "t08",
       "level": null,
-      "overlay": {
-        "big": "$15,000,000",
-        "sub": "SOMEONE ELSE'S TERM SHEET"
-      },
-      "template": "startupGrow",
+      "overlay": null,
+      "template": "deskClose",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 5353,
-      "durationInFrames": 613,
+      "startFrame": 4892,
+      "durationInFrames": 612,
       "gap": 0.25
     },
     {
       "id": "t09",
-      "level": null,
-      "overlay": null,
-      "template": "window",
+      "level": "LEVEL 03  \u00b7  DAY 150  \u00b7  $140,000",
+      "overlay": {
+        "big": "$140,000",
+        "sub": "THE FIRST REAL DOLLAR"
+      },
+      "template": "boardroomNotes",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 5966,
-      "durationInFrames": 648,
+      "startFrame": 5504,
+      "durationInFrames": 635,
       "gap": 0.25
     },
     {
       "id": "t10",
-      "level": "LEVEL 03  \u00b7  PRINCIPAL  \u00b7  THE BOARD SEAT",
-      "overlay": {
-        "big": "$3,000,000",
-        "sub": "YOUR FIRST TERM SHEET \u00b7 ~$300K/YR"
-      },
-      "template": "signing",
+      "level": null,
+      "overlay": null,
+      "template": "podiumScene",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 6614,
-      "durationInFrames": 580,
+      "startFrame": 6139,
+      "durationInFrames": 578,
       "gap": 0.25
     },
     {
@@ -140,286 +134,260 @@
       "template": "serverScale",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 7194,
-      "durationInFrames": 780,
+      "startFrame": 6717,
+      "durationInFrames": 577,
       "gap": 0.25
     },
     {
       "id": "t12",
-      "level": null,
-      "overlay": null,
-      "template": "boardroomHead",
+      "level": "LEVEL 04  \u00b7  DAY 300  \u00b7  $780,000,000 MARKET CAP",
+      "overlay": {
+        "big": "$780,000,000",
+        "sub": "MARKET CAP \u00b7 LAUNCH DAY"
+      },
+      "template": "ipoBell",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 7974,
-      "durationInFrames": 669,
+      "startFrame": 7294,
+      "durationInFrames": 853,
       "gap": 0.25
     },
     {
       "id": "t13",
-      "level": "LEVEL 04  \u00b7  PARTNER  \u00b7  THE VOTE",
-      "overlay": {
-        "big": "$15,000,000",
-        "sub": "CHECK AUTHORITY \u00b7 BOARD DIRECTOR NOW"
-      },
-      "template": "tower",
+      "level": null,
+      "overlay": null,
+      "template": "tradingFloor",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 8643,
-      "durationInFrames": 563,
+      "startFrame": 8147,
+      "durationInFrames": 656,
       "gap": 0.25
     },
     {
       "id": "t14",
       "level": null,
-      "overlay": {
-        "big": "RETURN THE FUND",
-        "sub": "FOUR WORDS. INFINITE PRESSURE."
-      },
+      "overlay": null,
       "template": "dinner",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 9206,
-      "durationInFrames": 662,
+      "startFrame": 8803,
+      "durationInFrames": 504,
       "gap": 0.25
     },
     {
       "id": "t15",
       "level": null,
       "overlay": null,
-      "template": "fileWall",
+      "template": "window",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 9868,
-      "durationInFrames": 668,
+      "startFrame": 9307,
+      "durationInFrames": 655,
       "gap": 0.25
     },
     {
       "id": "t16",
-      "level": null,
-      "overlay": null,
-      "template": "deskSilhouette",
+      "level": "LEVEL 05  \u00b7  DAY 340  \u00b7  $1,400,000,000 MARKET CAP",
+      "overlay": {
+        "big": "$1,400,000,000",
+        "sub": "MARKET CAP \u00b7 3 OF 56 EVER GET HERE"
+      },
+      "template": "pnlWall",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 10536,
-      "durationInFrames": 618,
-      "gap": 1.4
+      "startFrame": 9962,
+      "durationInFrames": 584,
+      "gap": 0.25
     },
     {
       "id": "t17",
       "level": null,
-      "overlay": {
-        "big": "$0",
-        "sub": "THE MARK-DOWN. RENATA'S CALL."
-      },
-      "template": "pnlWall",
+      "overlay": null,
+      "template": "atrium",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 11154,
-      "durationInFrames": 736,
+      "startFrame": 10546,
+      "durationInFrames": 689,
       "gap": 0.25
     },
     {
       "id": "t18",
       "level": null,
-      "overlay": {
-        "big": "-40",
-        "sub": "STAFF LET GO. YOU SIGN THE NOTICE."
-      },
-      "template": "layoffs",
+      "overlay": null,
+      "template": "deskSilhouette",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 11890,
-      "durationInFrames": 686,
-      "gap": 0.25
+      "startFrame": 11235,
+      "durationInFrames": 610,
+      "gap": 1.4
     },
     {
       "id": "t19",
-      "level": "LEVEL 05  \u00b7  GENERAL PARTNER  \u00b7  THE COMMIT",
+      "level": "LEVEL 06  \u00b7  DAY 402  \u00b7  -$620,000,000 DRAINED",
       "overlay": {
-        "big": "$300,000,000",
-        "sub": "THE FUND \u00b7 $4.5M OF IT IS YOURS"
+        "big": "-$620,000,000",
+        "sub": "TREASURY DRAINED \u00b7 6:14 AM"
       },
-      "template": "atrium",
+      "template": "warRoom",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 12576,
-      "durationInFrames": 585,
+      "startFrame": 11845,
+      "durationInFrames": 713,
       "gap": 0.25
     },
     {
       "id": "t20",
       "level": null,
       "overlay": null,
-      "template": "tradingFloor",
+      "template": "fileWall",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 13161,
-      "durationInFrames": 741,
+      "startFrame": 12558,
+      "durationInFrames": 811,
       "gap": 0.25
     },
     {
       "id": "t21",
       "level": null,
-      "overlay": null,
-      "template": "warRoom",
+      "overlay": {
+        "big": "-91%",
+        "sub": "MARKET CAP \u00b7 11 HOURS"
+      },
+      "template": "tradingFloor",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 13902,
-      "durationInFrames": 529,
+      "startFrame": 13369,
+      "durationInFrames": 653,
       "gap": 0.25
     },
     {
       "id": "t22",
-      "level": "LEVEL 06  \u00b7  FOUND YOUR OWN FUND  \u00b7  THE NAME",
-      "overlay": {
-        "big": "$150,000,000",
-        "sub": "FUND I \u00b7 2 AND 20"
-      },
-      "template": "podiumScene",
+      "level": null,
+      "overlay": null,
+      "template": "layoffs",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 14431,
-      "durationInFrames": 677,
+      "startFrame": 14022,
+      "durationInFrames": 625,
       "gap": 0.25
     },
     {
       "id": "t23",
-      "level": null,
-      "overlay": null,
-      "template": "lobby",
+      "level": "LEVEL 07  \u00b7  DAY 460  \u00b7  SEC WELLS NOTICE",
+      "overlay": {
+        "big": "SEC WELLS NOTICE",
+        "sub": "DAY 460"
+      },
+      "template": "revolvingDoor",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 15108,
-      "durationInFrames": 608,
+      "startFrame": 14647,
+      "durationInFrames": 512,
       "gap": 0.25
     },
     {
       "id": "t24",
       "level": null,
-      "overlay": {
-        "big": "$3,000,000",
-        "sub": "THE FEE. JUST TO KEEP THE LIGHTS ON"
-      },
-      "template": "signing",
+      "overlay": null,
+      "template": "courtroom",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 15716,
-      "durationInFrames": 614,
+      "startFrame": 15159,
+      "durationInFrames": 742,
       "gap": 0.25
     },
     {
       "id": "t25",
-      "level": "LEVEL 07  \u00b7  THE PLATFORM",
-      "overlay": {
-        "big": "$90,000,000,000",
-        "sub": "WHAT THE TOP OF THIS INDUSTRY LOOKS LIKE"
-      },
-      "template": "jet",
+      "level": null,
+      "overlay": null,
+      "template": "fileWall",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 16330,
-      "durationInFrames": 660,
+      "startFrame": 15901,
+      "durationInFrames": 475,
       "gap": 0.25
     },
     {
       "id": "t26",
       "level": null,
-      "overlay": null,
-      "template": "revolvingDoor",
+      "overlay": {
+        "big": "$4,100,000",
+        "sub": "LEGAL FEES \u00b7 THE SETTLEMENT"
+      },
+      "template": "boardroomHead",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 16990,
-      "durationInFrames": 559,
+      "startFrame": 16376,
+      "durationInFrames": 667,
       "gap": 0.25
     },
     {
       "id": "t27",
-      "level": null,
+      "level": "LEVEL 08  \u00b7  DAY 640  \u00b7  $2,100,000 AFTER RESTITUTION",
       "overlay": {
-        "big": "BILLION OR ZERO",
-        "sub": "THE DECK YOU PASS ON"
+        "big": "$2,100,000",
+        "sub": "AFTER RESTITUTION + LEGAL"
       },
-      "template": "ipoBell",
+      "template": "signing",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 17549,
-      "durationInFrames": 626,
+      "startFrame": 17043,
+      "durationInFrames": 739,
       "gap": 0.25
     },
     {
       "id": "t28",
       "level": null,
-      "overlay": {
-        "big": "$40,000,000",
-        "sub": "THE WIRE CLEARS. NOBODY CLAPS."
-      },
-      "template": "deskClose",
+      "overlay": null,
+      "template": "emptyChair",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 18175,
-      "durationInFrames": 740,
+      "startFrame": 17782,
+      "durationInFrames": 766,
       "gap": 0.25
     },
     {
       "id": "t29",
-      "level": "LEVEL 08  \u00b7  THE ALLOCATORS",
-      "overlay": {
-        "big": "$1,250,000,000,000",
-        "sub": "US VC, TOTAL. YOU'RE NOT EVEN 1%."
-      },
-      "template": "emptyChair",
+      "level": null,
+      "overlay": null,
+      "template": "serverScale",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 18915,
-      "durationInFrames": 684,
+      "startFrame": 18548,
+      "durationInFrames": 574,
       "gap": 0.25
     },
     {
       "id": "t30",
-      "level": null,
-      "overlay": {
-        "big": "$3,500,000,000,000",
-        "sub": "GLOBAL. THE PEOPLE WHO PICK THE PICKERS."
-      },
-      "template": "boardroomHead",
+      "level": "LEVEL 09  \u00b7  DAY 900  \u00b7  THE DECK YOU DON'T OPEN",
+      "overlay": null,
+      "template": "rooftopEmpire",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 19599,
-      "durationInFrames": 695,
+      "startFrame": 19122,
+      "durationInFrames": 614,
       "gap": 0.25
     },
     {
       "id": "t31",
       "level": null,
       "overlay": null,
-      "template": "rooftopEmpire",
+      "template": "lobby",
       "audio": "audio/t31.wav",
       "audioStartFrame": 3,
-      "startFrame": 20294,
-      "durationInFrames": 676,
+      "startFrame": 19736,
+      "durationInFrames": 607,
       "gap": 0.25
     },
     {
       "id": "t32",
       "level": null,
       "overlay": null,
-      "template": "window",
+      "template": "deskClose",
       "audio": "audio/t32.wav",
       "audioStartFrame": 3,
-      "startFrame": 20970,
-      "durationInFrames": 620,
-      "gap": 0.25
-    },
-    {
-      "id": "t33",
-      "level": null,
-      "overlay": null,
-      "template": "deskClose",
-      "audio": "audio/t33.wav",
-      "audioStartFrame": 3,
-      "startFrame": 21590,
-      "durationInFrames": 688,
+      "startFrame": 20343,
+      "durationInFrames": 733,
       "gap": 0.7
     }
   ]
