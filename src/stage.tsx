@@ -2479,8 +2479,12 @@ const WASTE = {
     const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="cemetery" bg="url(#spaper)"
       fig={{pose: A.stand(f), x: 1200, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}}
-      extras={[{pose: A.stand(f + 10), x: 860, y: 900, scale: 1.1, view: 'front', pal: DIM, face: false},
-               {pose: A.stand(f + 30), x: 960, y: 900, scale: 1.05, view: 'front', pal: DIM, face: false}]} />;},
+      extras={[{pose: A.stand(f + 10), x: 820, y: 900, scale: 1.1, view: 'front', pal: DIM, face: false},
+               // reviewer fix: this was an identical faceless clone of the mourner beside her, but
+               // narration names "a woman in a black coat" who glances back once — a visible,
+               // uneasy, looking-away expression reads as a distinct figure, not a duplicated
+               // silhouette (view/profile alone doesn't change this rig's face rendering).
+               {pose: A.stand(f + 30), x: 990, y: 900, scale: 1.1, view: 'front', pal: DIM, face: true, expr: FACES.conflicted}]} />;},
   // the graveside, loop-close (t30): the narration explicitly promises "this time you walk all the
   // way to the stone, not the edge of the plot" — reviewer fix: t01 and t30 previously shared the
   // identical static `graveside` template with the figure fixed at the same edge mark (x=1200) in
@@ -2496,9 +2500,12 @@ const WASTE = {
       fig={{pose: arrived ? A.stand(f) : A.walk(f, fps), x, y: 900, scale: 1.3,
             view: 'profile', facing: 1, expr: blendExpr(FACES.cold, FACES.hollow, t)}}
       extras={[{pose: A.stand(f + 10), x: 860, y: 900, scale: 1.05, view: 'front', pal: DIM, face: false}]} />;},
-  // one truck, one dawn route, the debt — the origin, reused later as a quiet callback
+  // one truck, one dawn route, the debt — the origin, reused later as a quiet callback. Reviewer fix:
+  // `figBehind` drew the truck prop OVER the figure at the same x/y, so the opaque compactor box cut
+  // the body in half (only the head above the roofline, legs below the chassis). Dropping figBehind
+  // draws the figure LAST (in front of the truck) so it reads as standing beside/in front of it, whole.
   dawnRoute: () => {const f = useCurrentFrame();
-    return <Stage backdrop="residentialDawn" prop="wasteTruck" bg="url(#swarm)" figBehind
+    return <Stage backdrop="residentialDawn" prop="wasteTruck" bg="url(#swarm)"
       fig={{pose: A.stand(f), x: 900, y: 906, scale: 1.25, view: 'profile', facing: 1, expr: FACES.earnest}} />;},
   // the fenced yard, the growing fleet
   truckYard: () => {const f = useCurrentFrame();
@@ -2509,9 +2516,12 @@ const WASTE = {
     const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="landfillFace" bg="url(#spaper)"
       fig={{pose: A.lookUp(f), x: 1010, y: 940, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.focused, t)}} />;},
-  // the route again, at night, the truck stopped — the reversal (reuses SPY's nightStreet backdrop)
+  // the route again, at night, the truck stopped — the reversal (reuses SPY's nightStreet backdrop).
+  // Reviewer fix: same figBehind-over-truck compositing bug as dawnRoute, and this is the midpoint
+  // reversal (Marcus's death) — the episode's most important beat — so dropping figBehind here matters
+  // most: the figure now draws whole, in front of the stopped truck, instead of split by the chassis.
   routeAftermath: () => {const f = useCurrentFrame();
-    return <Stage backdrop="nightStreet" prop="wasteTruck" bg="url(#spaper)" figBehind
+    return <Stage backdrop="nightStreet" prop="wasteTruck" bg="url(#spaper)"
       fig={{pose: A.stand(f), x: 900, y: 906, scale: 1.25, view: 'front', expr: FACES.hollow}}
       extras={[{pose: A.stand(f + 15), x: 1400, y: 906, scale: 1.05, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
 };
