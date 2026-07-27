@@ -32,7 +32,8 @@ STORY: NAOMI — your co-founder, the one who understands the treasury better th
 warning about the 2-of-3 multisig (t04 dialogue) is the theme stated early, paid off literally at the
 exploit (t19) and again in her resignation call (t20 dialogue) — she is the one person in the episode
 who is right the whole time and gets nothing for it. KELLAN — a rival founder; his first jab lands as a
-setup at t14, his harder one lands right after the crash (t22 dialogue) — the show never resolves
+setup at t14 (dialogue), his harder one lands right after the crash (t22, folded into narration to keep
+the episode's in-world dialogue count at 4 per the BIBLE's 2-4 ceiling) — the show never resolves
 whether he had any idea what was coming, and doesn't need to. PRIYA — a one-scene cameo (t06): the
 garage founder from `startup_unicorn.md`'s ending, later an LP in `venture_capitalist.md`, now an angel
 writing your seed check — the third episode in a row to touch her arc, always from a different side of
@@ -75,7 +76,7 @@ PROMISE -> PAYOFF LEDGER:
   * t04 Naomi's dialogue warning (the 2-of-3 multisig)                   -> t19 (the exploit exploits exactly that) -> t20 (her resignation call)
   * t05 nine funds pass on the deck ("interesting, not now")             -> t32 (mirrored: your own thumb over someone else's "not now")
   * t08 "your voice doesn't shake" (a promise you can't back up)         -> t19 ("shakes for the first time in four hundred days") -> t30/t32 (restored, colder)
-  * t14 Kellan's first jab (setup)                                       -> t22 (paid off, harder, the day it craters)
+  * t14 Kellan's first jab (setup, dialogue)                             -> t22 (paid off, harder, the day it craters — narration)
   * t16 the "3 of 56" stat / "billion or zero" as literal math           -> t21 (paid off: the crash is the other side of that same math)
   * t20 the exploit wallet `ghost.eth`, unidentified                     -> t28 (FBI card, still open) -> UNRESOLVED, deliberate universe thread
   * t24 Do Kwon named, 15 years, the same defend-the-peg move            -> paid off structurally: you made the same call at t17/t19 and knew it
@@ -253,9 +254,8 @@ SCENES = [
          narration=("Twenty-two people become six by Friday, severance you fund personally because the "
                     "treasury that's supposed to cover it is the treasury that's gone. Boxes stacked by "
                     "the elevator, the badge readers already deactivated. Kellan calls, ostensibly to "
-                    "check in. He doesn't bother pretending anymore."),
-         overlay=None,
-         dialogue=dict(text="Billion or zero. Guess we know which one you actually built.")),
+                    "check in — 'billion or zero,' he says, and now you both know which one you built."),
+         overlay=None),
 
     # ---- LEVEL 07 · DAY 460 · THE WELLS NOTICE ----
     dict(id="t23", level="LEVEL 07  ·  DAY 460  ·  SEC WELLS NOTICE", template="revolvingDoor",

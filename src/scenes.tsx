@@ -467,18 +467,21 @@ const S15: React.FC = () => {  // the private dinner — Geneva
 
 const S16: React.FC = () => {  // the Architect — war room / sovereign
   const f = useCurrentFrame();
-  const cities = [[760, 430], [1180, 380], [980, 520], [840, 560], [1240, 540], [1080, 300]];
+  // Globe center offset LEFT of the figure's x (980) — centered directly behind previously read as a
+  // halo/hat at the exploit-reveal beat (reviewer defect, t19). Off-axis keeps it a background prop.
+  const gx = 640, gy = 420;
+  const cities = [[gx - 220, gy - 10], [gx + 200, gy - 60], [gx, gy + 80], [gx - 140, gy + 120], [gx + 260, gy + 100], [gx + 100, gy - 140]];
   const lit = (i: number) => i % 2 === 0;
   return (<Frame bg="url(#teal)" haze="glowTeal">
     {/* side screens */}
     <rect x={60} y={300} width={260} height={420} fill={PAPER} stroke={INK} strokeWidth={3} /><ScreenLines x={84} y={320} w={210} frame={f} />
     <rect x={1600} y={300} width={260} height={420} fill={PAPER} stroke={INK} strokeWidth={3} /><ScreenLines x={1624} y={320} w={210} frame={f} />
     {/* globe */}
-    <circle cx={980} cy={440} r={240} fill="none" stroke={INK} strokeWidth={3} />
-    <ellipse cx={980} cy={440} rx={240} ry={90} fill="none" stroke={INK} strokeWidth={2} />
-    <ellipse cx={980} cy={440} rx={120} ry={240} fill="none" stroke={INK} strokeWidth={2} />
-    <path d={`M 820 360 Q 1080 240 1180 380`} fill="none" stroke="#f2c14e" strokeWidth={2} opacity={0.6} />
-    <path d={`M 840 560 Q 1000 640 1240 540`} fill="none" stroke={INK} strokeWidth={2} opacity={0.5} />
+    <circle cx={gx} cy={gy} r={240} fill="none" stroke={INK} strokeWidth={3} />
+    <ellipse cx={gx} cy={gy} rx={240} ry={90} fill="none" stroke={INK} strokeWidth={2} />
+    <ellipse cx={gx} cy={gy} rx={120} ry={240} fill="none" stroke={INK} strokeWidth={2} />
+    <path d={`M ${gx - 160} ${gy - 80} Q ${gx + 100} ${gy - 200} ${gx + 200} ${gy - 60}`} fill="none" stroke="#f2c14e" strokeWidth={2} opacity={0.6} />
+    <path d={`M ${gx - 140} ${gy + 120} Q ${gx + 20} ${gy + 200} ${gx + 260} ${gy + 100}`} fill="none" stroke={INK} strokeWidth={2} opacity={0.5} />
     {cities.map(([cx, cy], i) => <circle key={i} cx={cx} cy={cy} r={lit(i) ? 7 : 5} fill={lit(i) ? '#f2c14e' : '#bfe0ff'} opacity={lit(i) ? 0.9 * (0.6 + 0.4 * Math.sin(f * 0.12 + i)) : 0.5} />)}
     <rect x={0} y={900} width={1920} height={180} fill={COL.floor} />
     <StickFigure pose={A.stand(f)} x={980} y={892} scale={1.5} facing={1} view="front" expr={FACES.cold} pal={LIGHT} frame={f} />

@@ -123,8 +123,12 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
   // was [20, 36, ...]: a 16-frame ramp left the card at low opacity/contrast for a long,
   // clearly-visible beat (e.g. the "2011" fileWall share-beat) before settling. Matches
   // CountUp's snappier onset so text reads at full contrast almost as soon as it appears.
-  const staticOp = interpolate(f, [10, 20, D - 18, D], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const staticRise = interpolate(f, [10, 28], [18, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
+  // EXIT window shortened from 18->10 frames (was D-18,D): over a busy backdrop (e.g. revolvingDoor's
+  // window grid) the old long linear fade spent many frames at mid-opacity, letting the art bleed
+  // through the card and read as a double-exposed ghost (reviewer defect, t23 "SEC WELLS NOTICE").
+  // Paired with an exit LIFT below so the card reads as a quick slide-away, not a lingering blend.
+  const staticOp = interpolate(f, [10, 20, D - 10, D], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const staticRise = interpolate(f, [10, 28, D - 10, D], [18, 0, 0, -16], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
 
   let t = 0;
   return (
