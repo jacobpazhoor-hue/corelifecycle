@@ -49,7 +49,7 @@ citation's echo at t24.
 Templates: 5 NEW (a small waste-hauling roll-up pack in src/stage.tsx — cemetery/dawnRoute/truckYard/
 landfillView/routeAftermath, the last reusing SPY's existing `nightStreet` backdrop re-staged rather
 than authoring a second night-street asset) + universal (window/dinner/fileWall/boardroomNotes/
-revolvingDoor/deskClose/emptyChair/signing/atrium/podiumScene) + STARTUP's `ipoBell` (reused straight
+revolvingDoor/deskClose/emptyChair/signing/atrium/podiumScene/foundationScene) + STARTUP's `ipoBell` (reused straight
 from its own pack) + MAFIA's `courtroom` (re-narrated from a RICO trial to an OSHA administrative
 hearing, same bench-and-seal reuse crypto_founder validated for an SEC proceeding) + REAL ESTATE's
 `rooftopEmpire` (the apex reflection). No two adjacent scenes repeat a template.
@@ -313,7 +313,7 @@ SCENES = [
                     "shake anymore, signing anything, of any size, in any room. That's the part that "
                     "should worry you."),
          overlay=dict(big="$2,600,000,000", sub="THE ALARM STILL GOES OFF")),
-    dict(id="t28", level=None, template="podiumScene",
+    dict(id="t28", level=None, template="foundationScene",
          narration=("A hospital wing, a safety-research chair at a state university, a foundation with "
                     "your name and a mission statement that never once uses the word truck. The plaque "
                     "behind you lists twelve founding donors; yours is the only name with a number this "
@@ -332,7 +332,7 @@ SCENES = [
          dialogue=dict(text="Dad. You've checked your watch four times since I got here. It's not even 2 a.m.")),
 
     # ---- LOOP CLOSE — return-and-partial-repair, not a handoff ----
-    dict(id="t30", level=None, template="graveside", gap=0.7,
+    dict(id="t30", level=None, template="gravesideReturn", gap=0.7,
          narration=("The visits cost less to make once the company went public — a car, a driver, no "
                     "calendar conflict left to blame, no excuse that holds up under its own weight "
                     "anymore. This time you walk all the way to the stone, not the edge of the plot. "

@@ -40,7 +40,7 @@ export const FOCUS: Record<string, [number, number]> = {
   startupGrow: [0.30, 0.64], lectureHallScene: [0.51, 0.16],
   supervisor: [0.17, 0.66], atrium: [0.50, 0.78], warRoom: [0.51, 0.78], layoffs: [0.19, 0.78],
   boardroomHead: [0.50, 0.56], emptyChair: [0.29, 0.78], fileWall: [0.22, 0.74], podiumScene: [0.58, 0.78],
-  countRoom: [0.28, 0.62],
+  countRoom: [0.28, 0.62], foundationScene: [0.32, 0.78],
 };
 
 // dp = decimal places to keep. Count-ups pass the precision of their SETTLED target so a

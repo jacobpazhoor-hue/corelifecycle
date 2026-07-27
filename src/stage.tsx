@@ -1416,12 +1416,12 @@ const BG: Record<string, React.FC<{frame: number}>> = {
   truckDepot: ({frame}) => (
     <g>
       <rect x={0} y={820} width={1920} height={260} fill={FLOOR} /><line x1={0} y1={820} x2={1920} y2={820} stroke={INK} strokeWidth={5} />
+      {/* the fleet, receding into depth — reviewer fix: reuse the exact dawnRoute truck illustration
+          (scaled down per row) instead of a separate boxy stand-in, so the story's central prop reads
+          as the same vehicle throughout the episode */}
       {[0, 1, 2].map((i) => {const x = 1120 + i * 230; const s = 1 - i * 0.18; const y = 700 + i * 14;
-        return <g key={i} opacity={1 - i * 0.16}>
-          <rect x={x} y={y} width={220 * s} height={110 * s} rx={6} fill={PAPERC} stroke={INK} strokeWidth={3.5} />
-          <rect x={x} y={y - 60 * s} width={70 * s} height={60 * s} fill={PAPERC} stroke={INK} strokeWidth={3.5} />
-          {[0.2, 0.8].map((f2, k) => <circle key={k} cx={x + f2 * 220 * s} cy={y + 110 * s} r={22 * s} fill={PAPERC} stroke={INK} strokeWidth={3} />)}
-        </g>;})}
+        const k = 0.24 * s; const cx = x + 110 * s; const groundY = y + 110 * s;
+        return <g key={i} transform={`translate(${cx} ${groundY}) scale(${k})`}><WasteTruckArt opacity={1 - i * 0.16} /></g>;})}
       <line x1={0} y1={760} x2={1920} y2={760} stroke="#8a949c" strokeWidth={4} opacity={0.7} />
       {Array.from({length: 30}).map((_, i) => <path key={i} d={`M ${i * 64} 660 L ${i * 64 + 32} 760 M ${i * 64 + 32} 660 L ${i * 64} 760`} stroke="#8a949c" strokeWidth={1.5} opacity={0.5} />)}
       <line x1={1700} y1={820} x2={1700} y2={340} stroke={INK} strokeWidth={5} />
@@ -1450,6 +1450,23 @@ const BG: Record<string, React.FC<{frame: number}>> = {
 function y_(v: number) {return v;}
 
 // =================== PROPS (mid plane) ===================
+// side-profile rear-loader garbage truck (cab + compactor body + rear hopper + exhaust stack), in
+// local coords with the origin at the wheel/ground-contact line — a shared illustration so any scene
+// that needs "the" truck (dawnRoute's foreground prop, truckYard's depot fleet) draws the same
+// detailed art at whatever position/scale it needs instead of each authoring its own silhouette
+// (reviewer fix: truckYard previously used a plain boxy stand-in that didn't match dawnRoute's truck).
+const WasteTruckArt: React.FC<{opacity?: number}> = ({opacity = 1}) => (
+  <g opacity={opacity}>
+    <rect x={-305} y={-244} width={640} height={186} rx={8} fill={PAPERC} stroke={INK} strokeWidth={5} />
+    <path d="M 335 -244 L 425 -244 L 445 -168 L 425 -58 L 335 -58 Z" fill={PAPERC} stroke={INK} strokeWidth={5} />
+    <rect x={423} y={-74} width={18} height={26} fill="#c0392b" stroke={INK} strokeWidth={2} />
+    <path d="M -445 -58 L -445 -168 L -385 -234 L -305 -234 L -305 -58 Z" fill={PAPERC} stroke={INK} strokeWidth={5} />
+    <path d="M -425 -172 L -391 -222 L -319 -222 L -319 -172 Z" fill="#c9d3d8" stroke={INK} strokeWidth={4} />
+    <line x1={-455} y1={-284} x2={-455} y2={-234} stroke={INK} strokeWidth={5} />
+    {[-205, -85, 35, 155, 255].map((x) => <line key={x} x1={x} y1={-244} x2={x} y2={-58} stroke={INK} strokeWidth={2} opacity={0.4} />)}
+    {[-365, 55, 295].map((x) => <g key={x}><circle cx={x} cy={-54} r={54} fill={PAPERC} stroke={INK} strokeWidth={6} /><circle cx={x} cy={-54} r={19} fill="#c9b98f" stroke={INK} strokeWidth={3} /></g>)}
+  </g>
+);
 const PROP: Record<string, React.FC<{frame: number}>> = {
   // a side-profile pickup — the narco convoy truck; sits in FRONT of the figure (figBehind) so the
   // figure reads as standing beside / behind it. Reusable vehicle primitive (per improvements ledger).
@@ -1469,17 +1486,8 @@ const PROP: Record<string, React.FC<{frame: number}>> = {
   ),
   // a side-profile rear-loader garbage truck — cab + compactor body + rear hopper + exhaust stack.
   // Reusable vehicle primitive for the waste-hauling pack (per improvements ledger).
-  wasteTruck: ({frame}) => (
-    <g>
-      <rect x={620} y={716} width={640} height={186} rx={8} fill={PAPERC} stroke={INK} strokeWidth={5} />
-      <path d="M 1260 716 L 1350 716 L 1370 792 L 1350 902 L 1260 902 Z" fill={PAPERC} stroke={INK} strokeWidth={5} />
-      <rect x={1348} y={886} width={18} height={26} fill="#c0392b" stroke={INK} strokeWidth={2} />
-      <path d="M 480 902 L 480 792 L 540 726 L 620 726 L 620 902 Z" fill={PAPERC} stroke={INK} strokeWidth={5} />
-      <path d="M 500 788 L 534 738 L 606 738 L 606 788 Z" fill="#c9d3d8" stroke={INK} strokeWidth={4} />
-      <line x1={470} y1={676} x2={470} y2={726} stroke={INK} strokeWidth={5} />
-      {[720, 840, 960, 1080, 1180].map((x) => <line key={x} x1={x} y1={716} x2={x} y2={902} stroke={INK} strokeWidth={2} opacity={0.4} />)}
-      {[560, 980, 1220].map((x) => <g key={x}><circle cx={x} cy={906} r={54} fill={PAPERC} stroke={INK} strokeWidth={6} /><circle cx={x} cy={906} r={19} fill="#c9b98f" stroke={INK} strokeWidth={3} /></g>)}
-    </g>
+  wasteTruck: () => (
+    <g transform="translate(925 960)"><WasteTruckArt /></g>
   ),
   operatingTable: ({frame}) => (
     <g>
@@ -1499,6 +1507,49 @@ const PROP: Record<string, React.FC<{frame: number}>> = {
       <rect x={868} y={744} width={184} height={26} rx={4} fill={PAPERC} stroke={INK} strokeWidth={4} />
       {/* mic */}
       <line x1={1000} y1={744} x2={1014} y2={690} stroke={INK} strokeWidth={3} /><circle cx={1016} cy={684} r={9} fill={PAPERC} stroke={INK} strokeWidth={3} />
+    </g>
+  ),
+  // podium topped with the gold "award shaped like a truck" (t26 industry award beat, reviewer fix:
+  // this used to share the bare podium prop with t28's foundation ribbon-cutting and read identical)
+  podiumTrophy: ({frame}) => (
+    <g>
+      <path d="M 880 760 L 1040 760 L 1020 940 L 900 940 Z" fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={868} y={744} width={184} height={26} rx={4} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      {/* trophy cup on the podium ledge, gold-plated per narration */}
+      <rect x={944} y={706} width={32} height={38} fill={GOLD} stroke={INK} strokeWidth={3} />
+      <path d="M 916 660 Q 916 706 960 706 Q 1004 706 1004 660 L 1004 634 L 916 634 Z" fill={GOLD} stroke={INK} strokeWidth={4} />
+      <path d="M 916 642 Q 892 642 892 668 Q 892 690 916 690" fill="none" stroke={INK} strokeWidth={4} />
+      <path d="M 1004 642 Q 1028 642 1028 668 Q 1028 690 1004 690" fill="none" stroke={INK} strokeWidth={4} />
+      {/* tiny truck silhouette engraved on the cup face — "an award shaped like a truck" */}
+      <g transform="translate(930 656) scale(0.46)">
+        <rect x={0} y={20} width={56} height={24} fill={INK} opacity={0.85} />
+        <path d="M 56 44 L 56 20 L 70 20 L 78 34 L 78 44 Z" fill={INK} opacity={0.85} />
+        <circle cx={14} cy={46} r={8} fill={INK} opacity={0.85} /><circle cx={64} cy={46} r={8} fill={INK} opacity={0.85} />
+      </g>
+      {/* chrome-reflection glint the narration name-checks */}
+      <circle cx={932} cy={648} r={5 + Math.sin(frame * 0.3) * 2} fill="#fff8d8" opacity={0.85} />
+      <line x1={1000} y1={744} x2={1014} y2={690} stroke={INK} strokeWidth={3} /><circle cx={1016} cy={684} r={9} fill={PAPERC} stroke={INK} strokeWidth={3} />
+    </g>
+  ),
+  // ribbon-cutting + donor plaque (t28 foundation beat, reviewer fix: give it a distinct silhouette
+  // from t26's award podium instead of reusing the bare podium prop for both)
+  ribbonPlaque: ({frame}) => (
+    <g>
+      <rect x={760} y={700} width={16} height={220} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={1144} y={700} width={16} height={220} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      {/* ribbon strung between the posts, cut at center */}
+      <path d="M 776 786 Q 860 796 930 790" fill="none" stroke="#c0392b" strokeWidth={12} />
+      <path d="M 990 790 Q 1060 796 1144 786" fill="none" stroke="#c0392b" strokeWidth={12} />
+      {/* scissors at the cut */}
+      <g transform={`translate(960 788) rotate(${18 + Math.sin(frame * 0.2) * 4})`}>
+        <line x1={-26} y1={-10} x2={26} y2={10} stroke={INK} strokeWidth={4} />
+        <line x1={-26} y1={10} x2={26} y2={-10} stroke={INK} strokeWidth={4} />
+        <circle cx={-26} cy={-10} r={7} fill="none" stroke={INK} strokeWidth={3} />
+        <circle cx={-26} cy={10} r={7} fill="none" stroke={INK} strokeWidth={3} />
+      </g>
+      {/* donor plaque with the founding-donor lines */}
+      <rect x={860} y={840} width={200} height={94} rx={4} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      {[0, 1, 2, 3].map((i) => <line key={i} x1={882} y1={864 + i * 18} x2={1038} y2={864 + i * 18} stroke={INK} strokeWidth={2} opacity={i === 0 ? 0.9 : 0.45} />)}
     </g>
   ),
   scrubSink: ({frame}) => (
@@ -1864,8 +1915,14 @@ const GEN = {
       extras={[{pose: A.sit(f + 20), x: 700, y: 286, scale: 0.6, view: 'front', pal: DIM, face: false},
                {pose: A.sit(f + 40), x: 1240, y: 286, scale: 0.6, view: 'front', pal: DIM, face: false}]} />;},
   podiumScene: () => {const f = useCurrentFrame();
-    return <Stage backdrop="podiumStage" prop="podium" bg="url(#swarm)"
+    return <Stage backdrop="podiumStage" prop="podiumTrophy" bg="url(#swarm)"
       fig={{pose: A.stand(f), x: 1110, y: 940, scale: 1.5, view: 'front', expr: FACES.cold}} />;},
+  // distinct from podiumScene (reviewer fix: t26's trophy award and t28's foundation ribbon-cutting
+  // were sharing the identical bare-podium staging) — ribbon + scissors + donor plaque, figure off to
+  // the side as if just having cut it rather than standing to give a speech.
+  foundationScene: () => {const f = useCurrentFrame();
+    return <Stage backdrop="podiumStage" prop="ribbonPlaque" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 620, y: 940, scale: 1.5, view: 'front', facing: 1, expr: FACES.cold}} />;},
 };
 
 // Medical pack (surgeon / doctor)
@@ -2417,13 +2474,28 @@ const ZOMBIE = {
 // truckDepot, landfillFace) + 1 reusable vehicle prop (wasteTruck); the reversal reuses the existing
 // SPY pack's `nightStreet` backdrop re-staged with the truck stopped, per the relit-backdrop pattern.
 const WASTE = {
-  // the graveside — the cold open + its loop-close payoff
+  // the graveside — the cold open, static at the edge of the plot (t01; "don't move yet")
   graveside: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
     const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="cemetery" bg="url(#spaper)"
       fig={{pose: A.stand(f), x: 1200, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}}
       extras={[{pose: A.stand(f + 10), x: 860, y: 900, scale: 1.1, view: 'front', pal: DIM, face: false},
                {pose: A.stand(f + 30), x: 960, y: 900, scale: 1.05, view: 'front', pal: DIM, face: false}]} />;},
+  // the graveside, loop-close (t30): the narration explicitly promises "this time you walk all the
+  // way to the stone, not the edge of the plot" — reviewer fix: t01 and t30 previously shared the
+  // identical static `graveside` template with the figure fixed at the same edge mark (x=1200) in
+  // both, so the payoff never visibly landed. Here the figure walks in from that same edge mark toward
+  // the mound/headstone (cx=1580 in the cemetery backdrop), stopping right beside it, before the shot
+  // ends — a visibly different blocking from the cold open's static edge mark.
+  gravesideReturn: () => {const f = useCurrentFrame(); const {fps, durationInFrames: d} = useVideoConfig();
+    const walkEnd = d * 0.6;
+    const x = interpolate(f, [0, walkEnd], [1200, 1460], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const arrived = f > walkEnd;
+    const t = interpolate(f, [walkEnd, d], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="cemetery" bg="url(#spaper)"
+      fig={{pose: arrived ? A.stand(f) : A.walk(f, fps), x, y: 900, scale: 1.3,
+            view: 'profile', facing: 1, expr: blendExpr(FACES.cold, FACES.hollow, t)}}
+      extras={[{pose: A.stand(f + 10), x: 860, y: 900, scale: 1.05, view: 'front', pal: DIM, face: false}]} />;},
   // one truck, one dawn route, the debt — the origin, reused later as a quiet callback
   dawnRoute: () => {const f = useCurrentFrame();
     return <Stage backdrop="residentialDawn" prop="wasteTruck" bg="url(#swarm)" figBehind
