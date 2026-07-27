@@ -1378,6 +1378,73 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       <rect x={0} y={840} width={1920} height={240} fill="#3a4536" /><line x1={0} y1={840} x2={1920} y2={840} stroke={INK} strokeWidth={5} opacity={0.4} />
     </g>
   ),
+  // --- waste-hauling roll-up (self_made_billionaire) ---
+  // a small cemetery: scattered headstones, a low iron fence, the fresh mound with flowers —
+  // the cold open + its loop-close payoff
+  cemetery: ({frame}) => (
+    <g>
+      <rect x={0} y={820} width={1920} height={260} fill={FLOOR} /><line x1={0} y1={820} x2={1920} y2={820} stroke={INK} strokeWidth={5} />
+      {[{x: 200, y: 760, s: 0.8}, {x: 420, y: 780, s: 0.7}, {x: 1500, y: 780, s: 0.7}, {x: 1700, y: 760, s: 0.8}].map((h, i) => (
+        <path key={i} opacity={0.7} d={`M ${h.x} ${h.y} L ${h.x} ${h.y - 90 * h.s} Q ${h.x + 30 * h.s} ${h.y - 120 * h.s} ${h.x + 60 * h.s} ${h.y - 90 * h.s} L ${h.x + 60 * h.s} ${h.y} Z`} fill={PAPERC} stroke={INK} strokeWidth={3} />
+      ))}
+      {/* the fresh mound + flowers, set apart to the right so it never underlaps a standing figure */}
+      <ellipse cx={1580} cy={862} rx={170} ry={32} fill="#c9b98f" stroke={INK} strokeWidth={3} opacity={0.85} />
+      {[1500, 1560, 1620].map((x, i) => <circle key={x} cx={x} cy={844} r={9} fill={i % 2 ? '#c0392b' : GOLD} opacity={0.8} />)}
+      {/* low iron fence, far background */}
+      <line x1={0} y1={700} x2={1920} y2={700} stroke={INK} strokeWidth={3} opacity={0.4} />
+      {Array.from({length: 24}).map((_, i) => <line key={i} x1={i * 84} y1={660} x2={i * 84} y2={700} stroke={INK} strokeWidth={2} opacity={0.4} />)}
+    </g>
+  ),
+  // a curb-side row of small houses at dawn, a bin at the curb — the origin route + its callback
+  residentialDawn: ({frame}) => (
+    <g>
+      <rect x={0} y={840} width={1920} height={240} fill={FLOOR} /><line x1={0} y1={840} x2={1920} y2={840} stroke={INK} strokeWidth={5} />
+      {[{x: 60, w: 260, h: 220}, {x: 340, w: 220, h: 190}, {x: 1440, w: 220, h: 190}, {x: 1680, w: 240, h: 220}].map((h, i) => (
+        <g key={i} opacity={0.9}>
+          <rect x={h.x} y={840 - h.h} width={h.w} height={h.h} fill={PAPERC} stroke={INK} strokeWidth={3} />
+          <path d={`M ${h.x - 20} ${840 - h.h} L ${h.x + h.w / 2} ${840 - h.h - 90} L ${h.x + h.w + 20} ${840 - h.h} Z`} fill={PAPERC} stroke={INK} strokeWidth={3} />
+          <circle cx={h.x + h.w * 0.25} cy={840 - h.h * 0.4} r={7} fill={GOLD} opacity={0.6 + 0.3 * Math.sin(frame * 0.1 + i)} />
+        </g>
+      ))}
+      <line x1={200} y1={840} x2={200} y2={480} stroke={INK} strokeWidth={5} />
+      <ellipse cx={200} cy={470} rx={30} ry={16} fill={PAPERC} stroke={INK} strokeWidth={3} />
+      <ellipse cx={200} cy={490} rx={70} ry={40} fill="url(#sglow)" opacity={0.6} />
+      <rect x={1120} y={780} width={70} height={70} rx={6} fill={PAPERC} stroke={INK} strokeWidth={3} />
+    </g>
+  ),
+  // the fenced yard — chain-link, sodium light, a receding row of parked trucks — the scaling fleet
+  truckDepot: ({frame}) => (
+    <g>
+      <rect x={0} y={820} width={1920} height={260} fill={FLOOR} /><line x1={0} y1={820} x2={1920} y2={820} stroke={INK} strokeWidth={5} />
+      {[0, 1, 2].map((i) => {const x = 1120 + i * 230; const s = 1 - i * 0.18; const y = 700 + i * 14;
+        return <g key={i} opacity={1 - i * 0.16}>
+          <rect x={x} y={y} width={220 * s} height={110 * s} rx={6} fill={PAPERC} stroke={INK} strokeWidth={3.5} />
+          <rect x={x} y={y - 60 * s} width={70 * s} height={60 * s} fill={PAPERC} stroke={INK} strokeWidth={3.5} />
+          {[0.2, 0.8].map((f2, k) => <circle key={k} cx={x + f2 * 220 * s} cy={y + 110 * s} r={22 * s} fill={PAPERC} stroke={INK} strokeWidth={3} />)}
+        </g>;})}
+      <line x1={0} y1={760} x2={1920} y2={760} stroke="#8a949c" strokeWidth={4} opacity={0.7} />
+      {Array.from({length: 30}).map((_, i) => <path key={i} d={`M ${i * 64} 660 L ${i * 64 + 32} 760 M ${i * 64 + 32} 660 L ${i * 64} 760`} stroke="#8a949c" strokeWidth={1.5} opacity={0.5} />)}
+      <line x1={1700} y1={820} x2={1700} y2={340} stroke={INK} strokeWidth={5} />
+      <ellipse cx={1700} cy={330} rx={40} ry={18} fill={GOLD} stroke={INK} strokeWidth={3} opacity={0.8} />
+      <ellipse cx={1700} cy={360} rx={90} ry={50} fill="url(#sglow)" opacity={0.5} />
+    </g>
+  ),
+  // the tipping face — a mound of waste, a bulldozer silhouette, a lit flare stack, circling gulls
+  landfillFace: ({frame}) => (
+    <g>
+      <rect x={0} y={880} width={1920} height={200} fill={FLOOR} /><line x1={0} y1={880} x2={1920} y2={880} stroke={INK} strokeWidth={5} />
+      <path d="M 0 880 Q 400 620 900 700 Q 1300 760 1920 640 L 1920 880 Z" fill="#c9b98f" stroke={INK} strokeWidth={4} opacity={0.9} />
+      {Array.from({length: 10}).map((_, i) => <line key={i} x1={140 + i * 170} y1={840 - (i % 3) * 30} x2={180 + i * 170} y2={820 - (i % 3) * 30} stroke={INK} strokeWidth={2} opacity={0.3} />)}
+      <g transform="translate(1120 640)">
+        <rect x={-70} y={-20} width={140} height={50} fill="#3a4048" stroke={INK} strokeWidth={3} />
+        <rect x={-40} y={-55} width={70} height={40} fill="#3a4048" stroke={INK} strokeWidth={3} />
+        <line x1={-80} y1={30} x2={80} y2={30} stroke={INK} strokeWidth={6} />
+      </g>
+      <line x1={1600} y1={880} x2={1600} y2={480} stroke="#5b6875" strokeWidth={10} />
+      <path d={`M 1600 480 q ${10 + Math.sin(frame * 0.3) * 8} -40 0 -70 q ${-10 - Math.sin(frame * 0.25) * 8} 30 0 70`} fill="#e08a4a" opacity={0.85} />
+      {[0, 1, 2].map((i) => {const a = frame * 0.02 + i * 2.1; return <path key={i} d={`M ${700 + Math.cos(a) * 200} ${360 + Math.sin(a) * 60} q 14 -10 28 0 q 14 10 28 0`} fill="none" stroke={INK} strokeWidth={2} opacity={0.5} />;})}
+    </g>
+  ),
 };
 // tiny helper so inline math reads cleanly above
 function y_(v: number) {return v;}
@@ -1398,6 +1465,20 @@ const PROP: Record<string, React.FC<{frame: number}>> = {
       {/* wheels */}
       {[700, 1240].map((x) => <g key={x}><circle cx={x} cy={900} r={62} fill={PAPERC} stroke={INK} strokeWidth={6} /><circle cx={x} cy={900} r={22} fill="#c9b98f" stroke={INK} strokeWidth={4} /></g>)}
       <line x1={1360} y1={840} x2={1400} y2={840} stroke={INK} strokeWidth={4} />
+    </g>
+  ),
+  // a side-profile rear-loader garbage truck — cab + compactor body + rear hopper + exhaust stack.
+  // Reusable vehicle primitive for the waste-hauling pack (per improvements ledger).
+  wasteTruck: ({frame}) => (
+    <g>
+      <rect x={620} y={716} width={640} height={186} rx={8} fill={PAPERC} stroke={INK} strokeWidth={5} />
+      <path d="M 1260 716 L 1350 716 L 1370 792 L 1350 902 L 1260 902 Z" fill={PAPERC} stroke={INK} strokeWidth={5} />
+      <rect x={1348} y={886} width={18} height={26} fill="#c0392b" stroke={INK} strokeWidth={2} />
+      <path d="M 480 902 L 480 792 L 540 726 L 620 726 L 620 902 Z" fill={PAPERC} stroke={INK} strokeWidth={5} />
+      <path d="M 500 788 L 534 738 L 606 738 L 606 788 Z" fill="#c9d3d8" stroke={INK} strokeWidth={4} />
+      <line x1={470} y1={676} x2={470} y2={726} stroke={INK} strokeWidth={5} />
+      {[720, 840, 960, 1080, 1180].map((x) => <line key={x} x1={x} y1={716} x2={x} y2={902} stroke={INK} strokeWidth={2} opacity={0.4} />)}
+      {[560, 980, 1220].map((x) => <g key={x}><circle cx={x} cy={906} r={54} fill={PAPERC} stroke={INK} strokeWidth={6} /><circle cx={x} cy={906} r={19} fill="#c9b98f" stroke={INK} strokeWidth={3} /></g>)}
     </g>
   ),
   operatingTable: ({frame}) => (
@@ -2331,4 +2412,36 @@ const ZOMBIE = {
       fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.4, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE};
+// Waste-hauling roll-up pack (self_made_billionaire — one truck -> a regional roll-up -> owning
+// disposal -> a PE recap -> a public company). 4 new bespoke backdrops (cemetery, residentialDawn,
+// truckDepot, landfillFace) + 1 reusable vehicle prop (wasteTruck); the reversal reuses the existing
+// SPY pack's `nightStreet` backdrop re-staged with the truck stopped, per the relit-backdrop pattern.
+const WASTE = {
+  // the graveside — the cold open + its loop-close payoff
+  graveside: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="cemetery" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 1200, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}}
+      extras={[{pose: A.stand(f + 10), x: 860, y: 900, scale: 1.1, view: 'front', pal: DIM, face: false},
+               {pose: A.stand(f + 30), x: 960, y: 900, scale: 1.05, view: 'front', pal: DIM, face: false}]} />;},
+  // one truck, one dawn route, the debt — the origin, reused later as a quiet callback
+  dawnRoute: () => {const f = useCurrentFrame();
+    return <Stage backdrop="residentialDawn" prop="wasteTruck" bg="url(#swarm)" figBehind
+      fig={{pose: A.stand(f), x: 900, y: 906, scale: 1.25, view: 'profile', facing: 1, expr: FACES.earnest}} />;},
+  // the fenced yard, the growing fleet
+  truckYard: () => {const f = useCurrentFrame();
+    return <Stage backdrop="truckDepot" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 860, y: 900, scale: 1.35, view: 'front', expr: FACES.focused}} />;},
+  // the tipping face — owning disposal, not just collection, the biggest valuation lever
+  landfillView: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="landfillFace" bg="url(#spaper)"
+      fig={{pose: A.lookUp(f), x: 1010, y: 940, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.focused, t)}} />;},
+  // the route again, at night, the truck stopped — the reversal (reuses SPY's nightStreet backdrop)
+  routeAftermath: () => {const f = useCurrentFrame();
+    return <Stage backdrop="nightStreet" prop="wasteTruck" bg="url(#spaper)" figBehind
+      fig={{pose: A.stand(f), x: 900, y: 906, scale: 1.25, view: 'front', expr: FACES.hollow}}
+      extras={[{pose: A.stand(f + 15), x: 1400, y: 906, scale: 1.05, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE};

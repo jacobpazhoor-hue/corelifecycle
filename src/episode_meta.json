@@ -1,22 +1,22 @@
 {
   "thumb": {
-    "kicker": "THE FOUNDER WHO",
-    "line1": "TOKEN LAUNCHED",
+    "kicker": "THE HAULER WHO",
+    "line1": "BUILT AN EMPIRE",
     "line2": "",
-    "tag": "FROZEN",
+    "tag": "BURIED",
     "archetype": "poster",
-    "big": "$1,400,000,000",
-    "before": "$4,200",
-    "after": "FROZEN",
-    "expr": "shock",
-    "povline": "YOU LAUNCHED IT",
-    "keyword": "FROZEN",
-    "setting": "warRoom",
-    "question": "WHO GETS TO KEEP IT?",
-    "mood": "electric",
-    "costume": "street",
-    "word": "FROZEN",
+    "big": "$2,600,000,000",
+    "before": "-$52,000",
+    "after": "BURIED",
+    "expr": "hollow",
+    "povline": "YOU STARTED WITH ONE TRUCK",
+    "keyword": "BURIED",
+    "setting": "landfillView",
+    "question": "WHO PAID THE PRICE?",
+    "mood": "money",
+    "costume": "suit",
+    "word": "BURIED",
     "prop": "vault"
   },
-  "topic": "crypto_founder"
+  "topic": "self_made_billionaire"
 }

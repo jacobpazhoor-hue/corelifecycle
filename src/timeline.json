@@ -2,21 +2,21 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 21041,
+  "totalFrames": 22253,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t01",
       "level": null,
       "overlay": {
-        "big": "$1,412,000,000",
-        "sub": "WALLET FROZEN"
+        "big": "$2,600,000,000",
+        "sub": "YOU PAID FOR THE FLOWERS"
       },
-      "template": "raidScene",
+      "template": "graveside",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 709,
+      "durationInFrames": 845,
       "gap": 0.7
     },
     {
@@ -26,33 +26,33 @@
       "template": "window",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 709,
-      "durationInFrames": 563,
+      "startFrame": 845,
+      "durationInFrames": 728,
       "gap": 0.25
     },
     {
       "id": "t03",
-      "level": "LEVEL 01  \u00b7  DAY 1  \u00b7  $4,200",
+      "level": "LEVEL 01  \u00b7  YEAR 1  \u00b7  -$52,000",
       "overlay": {
-        "big": "$4,200",
-        "sub": "ALL OF IT. DAY 1."
+        "big": "-$52,000",
+        "sub": "ONE TRUCK \u00b7 20 STOPS"
       },
-      "template": "garageStart",
+      "template": "dawnRoute",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 1272,
-      "durationInFrames": 704,
+      "startFrame": 1573,
+      "durationInFrames": 866,
       "gap": 0.25
     },
     {
       "id": "t04",
       "level": null,
       "overlay": null,
-      "template": "deskClose",
+      "template": "dinner",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 1976,
-      "durationInFrames": 832,
+      "startFrame": 2439,
+      "durationInFrames": 904,
       "gap": 0.25
     },
     {
@@ -62,33 +62,36 @@
       "template": "fileWall",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 2808,
-      "durationInFrames": 611,
+      "startFrame": 3343,
+      "durationInFrames": 751,
       "gap": 0.25
     },
     {
       "id": "t06",
-      "level": "LEVEL 02  \u00b7  DAY 40  \u00b7  $2,800,000 SEED",
+      "level": "LEVEL 02  \u00b7  YEAR 3  \u00b7  $140,000",
       "overlay": {
-        "big": "$2,800,000",
-        "sub": "SEED \u00b7 18% TO THE TEAM"
+        "big": "$140,000",
+        "sub": "SEVEN TRUCKS"
       },
-      "template": "signing",
+      "template": "truckYard",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 3419,
-      "durationInFrames": 810,
+      "startFrame": 4094,
+      "durationInFrames": 702,
       "gap": 0.25
     },
     {
       "id": "t07",
       "level": null,
-      "overlay": null,
-      "template": "startupGrow",
+      "overlay": {
+        "big": "37.4 PER 100,000",
+        "sub": "DEADLIER THAN POLICE WORK"
+      },
+      "template": "lectureHallScene",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 4229,
-      "durationInFrames": 663,
+      "startFrame": 4796,
+      "durationInFrames": 725,
       "gap": 0.25
     },
     {
@@ -98,296 +101,274 @@
       "template": "deskClose",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 4892,
-      "durationInFrames": 612,
+      "startFrame": 5521,
+      "durationInFrames": 674,
       "gap": 0.25
     },
     {
       "id": "t09",
-      "level": "LEVEL 03  \u00b7  DAY 150  \u00b7  $140,000",
+      "level": "LEVEL 03  \u00b7  YEAR 6  \u00b7  $1,400,000",
       "overlay": {
-        "big": "$140,000",
-        "sub": "THE FIRST REAL DOLLAR"
+        "big": "$1,400,000",
+        "sub": "31 TRUCKS \u00b7 THREE COUNTIES"
       },
-      "template": "boardroomNotes",
+      "template": "signing",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 5504,
-      "durationInFrames": 635,
+      "startFrame": 6195,
+      "durationInFrames": 793,
       "gap": 0.25
     },
     {
       "id": "t10",
       "level": null,
       "overlay": null,
-      "template": "podiumScene",
+      "template": "dawnRoute",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 6139,
-      "durationInFrames": 578,
+      "startFrame": 6988,
+      "durationInFrames": 669,
       "gap": 0.25
     },
     {
       "id": "t11",
       "level": null,
       "overlay": null,
-      "template": "serverScale",
+      "template": "atrium",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 6717,
-      "durationInFrames": 577,
+      "startFrame": 7657,
+      "durationInFrames": 782,
       "gap": 0.25
     },
     {
       "id": "t12",
-      "level": "LEVEL 04  \u00b7  DAY 300  \u00b7  $780,000,000 MARKET CAP",
+      "level": "LEVEL 04  \u00b7  YEAR 9  \u00b7  $14,000,000",
       "overlay": {
-        "big": "$780,000,000",
-        "sub": "MARKET CAP \u00b7 LAUNCH DAY"
+        "big": "$14,000,000",
+        "sub": "THE LANDFILL YOU NOW OWN"
       },
-      "template": "ipoBell",
+      "template": "landfillView",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 7294,
-      "durationInFrames": 853,
+      "startFrame": 8439,
+      "durationInFrames": 725,
       "gap": 0.25
     },
     {
       "id": "t13",
       "level": null,
       "overlay": null,
-      "template": "tradingFloor",
+      "template": "boardroomNotes",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 8147,
-      "durationInFrames": 656,
+      "startFrame": 9164,
+      "durationInFrames": 639,
       "gap": 0.25
     },
     {
       "id": "t14",
       "level": null,
       "overlay": null,
-      "template": "dinner",
+      "template": "window",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 8803,
-      "durationInFrames": 504,
+      "startFrame": 9803,
+      "durationInFrames": 577,
       "gap": 0.25
     },
     {
       "id": "t15",
-      "level": null,
-      "overlay": null,
-      "template": "window",
+      "level": "LEVEL 05  \u00b7  YEAR 12  \u00b7  $68,000,000",
+      "overlay": {
+        "big": "$68,000,000",
+        "sub": "A BUYOUT OFFER"
+      },
+      "template": "revolvingDoor",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 9307,
-      "durationInFrames": 655,
+      "startFrame": 10380,
+      "durationInFrames": 765,
       "gap": 0.25
     },
     {
       "id": "t16",
-      "level": "LEVEL 05  \u00b7  DAY 340  \u00b7  $1,400,000,000 MARKET CAP",
-      "overlay": {
-        "big": "$1,400,000,000",
-        "sub": "MARKET CAP \u00b7 3 OF 56 EVER GET HERE"
-      },
-      "template": "pnlWall",
+      "level": null,
+      "overlay": null,
+      "template": "deskClose",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 9962,
-      "durationInFrames": 584,
+      "startFrame": 11145,
+      "durationInFrames": 740,
       "gap": 0.25
     },
     {
       "id": "t17",
       "level": null,
       "overlay": null,
-      "template": "atrium",
+      "template": "dawnRoute",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 10546,
-      "durationInFrames": 689,
-      "gap": 0.25
-    },
-    {
-      "id": "t18",
-      "level": null,
-      "overlay": null,
-      "template": "deskSilhouette",
-      "audio": "audio/t18.wav",
-      "audioStartFrame": 3,
-      "startFrame": 11235,
-      "durationInFrames": 610,
+      "startFrame": 11885,
+      "durationInFrames": 439,
       "gap": 1.4
     },
     {
-      "id": "t19",
-      "level": "LEVEL 06  \u00b7  DAY 402  \u00b7  -$620,000,000 DRAINED",
+      "id": "t18",
+      "level": "LEVEL 06  \u00b7  YEAR 13  \u00b7  -1",
       "overlay": {
-        "big": "-$620,000,000",
-        "sub": "TREASURY DRAINED \u00b7 6:14 AM"
+        "big": "-1",
+        "sub": "MARCUS ODELL \u00b7 14 YEARS ON THE TRUCKS"
       },
-      "template": "warRoom",
+      "template": "routeAftermath",
+      "audio": "audio/t18.wav",
+      "audioStartFrame": 3,
+      "startFrame": 12324,
+      "durationInFrames": 885,
+      "gap": 0.25
+    },
+    {
+      "id": "t19",
+      "level": null,
+      "overlay": null,
+      "template": "emptyChair",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 11845,
-      "durationInFrames": 713,
+      "startFrame": 13209,
+      "durationInFrames": 714,
       "gap": 0.25
     },
     {
       "id": "t20",
       "level": null,
-      "overlay": null,
+      "overlay": {
+        "big": "$496,542",
+        "sub": "OSHA \u00b7 WILLFUL CITATION"
+      },
       "template": "fileWall",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 12558,
-      "durationInFrames": 811,
+      "startFrame": 13923,
+      "durationInFrames": 767,
       "gap": 0.25
     },
     {
       "id": "t21",
-      "level": null,
+      "level": "LEVEL 07  \u00b7  YEAR 16  \u00b7  $410,000,000",
       "overlay": {
-        "big": "-91%",
-        "sub": "MARKET CAP \u00b7 11 HOURS"
+        "big": "$410,000,000",
+        "sub": "THE SALE CLOSES ANYWAY"
       },
-      "template": "tradingFloor",
+      "template": "courtroom",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 13369,
-      "durationInFrames": 653,
+      "startFrame": 14690,
+      "durationInFrames": 703,
       "gap": 0.25
     },
     {
       "id": "t22",
       "level": null,
       "overlay": null,
-      "template": "layoffs",
+      "template": "signing",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 14022,
-      "durationInFrames": 590,
+      "startFrame": 15393,
+      "durationInFrames": 612,
       "gap": 0.25
     },
     {
       "id": "t23",
-      "level": "LEVEL 07  \u00b7  DAY 460  \u00b7  SEC WELLS NOTICE",
-      "overlay": {
-        "big": "SEC WELLS NOTICE",
-        "sub": "DAY 460"
-      },
-      "template": "revolvingDoor",
+      "level": null,
+      "overlay": null,
+      "template": "dinner",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 14612,
-      "durationInFrames": 512,
+      "startFrame": 16005,
+      "durationInFrames": 907,
       "gap": 0.25
     },
     {
       "id": "t24",
-      "level": null,
-      "overlay": null,
-      "template": "courtroom",
+      "level": "LEVEL 08  \u00b7  YEAR 20  \u00b7  $1,200,000,000",
+      "overlay": {
+        "big": "$1,200,000,000",
+        "sub": "THE FIRST BILLION"
+      },
+      "template": "ipoBell",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 15124,
-      "durationInFrames": 742,
+      "startFrame": 16912,
+      "durationInFrames": 758,
       "gap": 0.25
     },
     {
       "id": "t25",
       "level": null,
       "overlay": null,
-      "template": "fileWall",
+      "template": "atrium",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 15866,
-      "durationInFrames": 475,
+      "startFrame": 17670,
+      "durationInFrames": 740,
       "gap": 0.25
     },
     {
       "id": "t26",
       "level": null,
-      "overlay": {
-        "big": "$4,100,000",
-        "sub": "LEGAL FEES \u00b7 THE SETTLEMENT"
-      },
-      "template": "boardroomHead",
+      "overlay": null,
+      "template": "podiumScene",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 16341,
-      "durationInFrames": 667,
+      "startFrame": 18410,
+      "durationInFrames": 787,
       "gap": 0.25
     },
     {
       "id": "t27",
-      "level": "LEVEL 08  \u00b7  DAY 640  \u00b7  $2,100,000 AFTER RESTITUTION",
+      "level": "LEVEL 09  \u00b7  YEAR 24  \u00b7  $2,600,000,000",
       "overlay": {
-        "big": "$2,100,000",
-        "sub": "AFTER RESTITUTION + LEGAL"
+        "big": "$2,600,000,000",
+        "sub": "THE ALARM STILL GOES OFF"
       },
-      "template": "signing",
+      "template": "rooftopEmpire",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 17008,
-      "durationInFrames": 739,
+      "startFrame": 19197,
+      "durationInFrames": 748,
       "gap": 0.25
     },
     {
       "id": "t28",
       "level": null,
       "overlay": null,
-      "template": "emptyChair",
+      "template": "podiumScene",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 17747,
-      "durationInFrames": 766,
+      "startFrame": 19945,
+      "durationInFrames": 741,
       "gap": 0.25
     },
     {
       "id": "t29",
       "level": null,
       "overlay": null,
-      "template": "serverScale",
+      "template": "window",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 18513,
-      "durationInFrames": 574,
+      "startFrame": 20686,
+      "durationInFrames": 849,
       "gap": 0.25
     },
     {
       "id": "t30",
-      "level": "LEVEL 09  \u00b7  DAY 900  \u00b7  THE DECK YOU DON'T OPEN",
+      "level": null,
       "overlay": null,
-      "template": "rooftopEmpire",
+      "template": "graveside",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 19087,
-      "durationInFrames": 614,
-      "gap": 0.25
-    },
-    {
-      "id": "t31",
-      "level": null,
-      "overlay": null,
-      "template": "lobby",
-      "audio": "audio/t31.wav",
-      "audioStartFrame": 3,
-      "startFrame": 19701,
-      "durationInFrames": 607,
-      "gap": 0.25
-    },
-    {
-      "id": "t32",
-      "level": null,
-      "overlay": null,
-      "template": "deskClose",
-      "audio": "audio/t32.wav",
-      "audioStartFrame": 3,
-      "startFrame": 20308,
-      "durationInFrames": 733,
+      "startFrame": 21535,
+      "durationInFrames": 718,
       "gap": 0.7
     }
   ]
