@@ -2,374 +2,371 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 22253,
+  "totalFrames": 21296,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t01",
       "level": null,
       "overlay": {
-        "big": "$2,600,000,000",
-        "sub": "YOU PAID FOR THE FLOWERS"
+        "big": "1 IN 292,201,338",
+        "sub": "THE ODDS THAT NIGHT NEVER MATTERED LESS"
       },
-      "template": "graveside",
+      "template": "ticketCounter",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 845,
+      "durationInFrames": 793,
       "gap": 0.7
     },
     {
       "id": "t02",
       "level": null,
       "overlay": null,
-      "template": "window",
+      "template": "deskSilhouette",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 845,
-      "durationInFrames": 728,
+      "startFrame": 793,
+      "durationInFrames": 762,
       "gap": 0.25
     },
     {
       "id": "t03",
-      "level": "LEVEL 01  \u00b7  YEAR 1  \u00b7  -$52,000",
+      "level": "LEVEL 01  \u00b7  THE TICKET  \u00b7  $4,200",
       "overlay": {
-        "big": "-$52,000",
-        "sub": "ONE TRUCK \u00b7 20 STOPS"
+        "big": "$4,200",
+        "sub": "MATEO'S ER BILL \u2014 WHAT YOU DON'T HAVE"
       },
-      "template": "dawnRoute",
+      "template": "trailerPorch",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 1573,
-      "durationInFrames": 866,
+      "startFrame": 1555,
+      "durationInFrames": 668,
       "gap": 0.25
     },
     {
       "id": "t04",
       "level": null,
       "overlay": null,
-      "template": "dinner",
+      "template": "ticketCounter",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 2439,
-      "durationInFrames": 904,
+      "startFrame": 2223,
+      "durationInFrames": 843,
       "gap": 0.25
     },
     {
       "id": "t05",
       "level": null,
       "overlay": null,
-      "template": "fileWall",
+      "template": "window",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 3343,
-      "durationInFrames": 751,
+      "startFrame": 3066,
+      "durationInFrames": 698,
       "gap": 0.25
     },
     {
       "id": "t06",
-      "level": "LEVEL 02  \u00b7  YEAR 3  \u00b7  $140,000",
-      "overlay": {
-        "big": "$140,000",
-        "sub": "SEVEN TRUCKS"
-      },
-      "template": "truckYard",
+      "level": null,
+      "overlay": null,
+      "template": "deskSilhouette",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 4094,
-      "durationInFrames": 702,
+      "startFrame": 3764,
+      "durationInFrames": 822,
       "gap": 0.25
     },
     {
       "id": "t07",
-      "level": null,
+      "level": "LEVEL 02  \u00b7  THE MATCH  \u00b7  $412,000,000",
       "overlay": {
-        "big": "37.4 PER 100,000",
-        "sub": "DEADLIER THAN POLICE WORK"
+        "big": "$412,000,000",
+        "sub": "THE ADVERTISED JACKPOT"
       },
-      "template": "lectureHallScene",
+      "template": "ticketCounter",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 4796,
-      "durationInFrames": 725,
-      "gap": 0.25
+      "startFrame": 4586,
+      "durationInFrames": 664,
+      "gap": 0.7
     },
     {
       "id": "t08",
       "level": null,
       "overlay": null,
-      "template": "deskClose",
+      "template": "lobby",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 5521,
-      "durationInFrames": 674,
+      "startFrame": 5250,
+      "durationInFrames": 677,
       "gap": 0.25
     },
     {
       "id": "t09",
-      "level": "LEVEL 03  \u00b7  YEAR 6  \u00b7  $1,400,000",
+      "level": "LEVEL 03  \u00b7  THE CLAIM  \u00b7  $135,000,000",
       "overlay": {
-        "big": "$1,400,000",
-        "sub": "31 TRUCKS \u00b7 THREE COUNTIES"
+        "big": "$135,000,000",
+        "sub": "AFTER THE HAIRCUT AND THE IRS"
       },
-      "template": "signing",
+      "template": "boardroomNotes",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 6195,
-      "durationInFrames": 793,
+      "startFrame": 5927,
+      "durationInFrames": 683,
       "gap": 0.25
     },
     {
       "id": "t10",
       "level": null,
       "overlay": null,
-      "template": "dawnRoute",
+      "template": "signing",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 6988,
-      "durationInFrames": 669,
+      "startFrame": 6610,
+      "durationInFrames": 709,
       "gap": 0.25
     },
     {
       "id": "t11",
-      "level": null,
-      "overlay": null,
-      "template": "atrium",
+      "level": "LEVEL 04  \u00b7  THE FIRST SPEND  \u00b7  $118,000,000",
+      "overlay": {
+        "big": "$118,000,000",
+        "sub": "AFTER THE HOUSE, THE DEBT, THE GIFTS"
+      },
+      "template": "openHouse",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 7657,
-      "durationInFrames": 782,
+      "startFrame": 7319,
+      "durationInFrames": 869,
       "gap": 0.25
     },
     {
       "id": "t12",
-      "level": "LEVEL 04  \u00b7  YEAR 9  \u00b7  $14,000,000",
-      "overlay": {
-        "big": "$14,000,000",
-        "sub": "THE LANDFILL YOU NOW OWN"
-      },
-      "template": "landfillView",
+      "level": null,
+      "overlay": null,
+      "template": "dinner",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 8439,
-      "durationInFrames": 725,
+      "startFrame": 8188,
+      "durationInFrames": 601,
       "gap": 0.25
     },
     {
       "id": "t13",
-      "level": null,
-      "overlay": null,
-      "template": "boardroomNotes",
+      "level": "LEVEL 05  \u00b7  THE LINE FORMS  \u00b7  61 ASKS",
+      "overlay": {
+        "big": "61",
+        "sub": "PEOPLE WHO'VE ASKED THIS MONTH"
+      },
+      "template": "galaBallroom",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 9164,
-      "durationInFrames": 639,
+      "startFrame": 8789,
+      "durationInFrames": 627,
       "gap": 0.25
     },
     {
       "id": "t14",
       "level": null,
       "overlay": null,
-      "template": "window",
+      "template": "deskClose",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 9803,
-      "durationInFrames": 577,
+      "startFrame": 9416,
+      "durationInFrames": 669,
       "gap": 0.25
     },
     {
       "id": "t15",
-      "level": "LEVEL 05  \u00b7  YEAR 12  \u00b7  $68,000,000",
-      "overlay": {
-        "big": "$68,000,000",
-        "sub": "A BUYOUT OFFER"
-      },
-      "template": "revolvingDoor",
+      "level": null,
+      "overlay": null,
+      "template": "courtroom",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 10380,
-      "durationInFrames": 765,
+      "startFrame": 10085,
+      "durationInFrames": 617,
       "gap": 0.25
     },
     {
       "id": "t16",
-      "level": null,
+      "level": "LEVEL 06  \u00b7  THE DRAIN  \u00b7  SIGNED, UNREAD",
       "overlay": null,
-      "template": "deskClose",
+      "template": "consult",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 11145,
-      "durationInFrames": 740,
-      "gap": 0.25
+      "startFrame": 10702,
+      "durationInFrames": 834,
+      "gap": 1.4
     },
     {
       "id": "t17",
       "level": null,
-      "overlay": null,
-      "template": "dawnRoute",
+      "overlay": {
+        "big": "-$71,000,000",
+        "sub": "THE FUND WAS NEVER REGISTERED"
+      },
+      "template": "deskSilhouette",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 11885,
-      "durationInFrames": 439,
-      "gap": 1.4
+      "startFrame": 11536,
+      "durationInFrames": 780,
+      "gap": 0.25
     },
     {
       "id": "t18",
-      "level": "LEVEL 06  \u00b7  YEAR 13  \u00b7  -1",
-      "overlay": {
-        "big": "-1",
-        "sub": "MARCUS ODELL \u00b7 14 YEARS ON THE TRUCKS"
-      },
-      "template": "routeAftermath",
+      "level": null,
+      "overlay": null,
+      "template": "safehouse",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 12324,
-      "durationInFrames": 885,
+      "startFrame": 12316,
+      "durationInFrames": 744,
       "gap": 0.25
     },
     {
       "id": "t19",
-      "level": null,
-      "overlay": null,
-      "template": "emptyChair",
+      "level": "LEVEL 07  \u00b7  THE FALL  \u00b7  $19,000,000",
+      "overlay": {
+        "big": "$19,000,000",
+        "sub": "WHAT'S LEFT, AFTER THE LAWYERS"
+      },
+      "template": "window",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 13209,
-      "durationInFrames": 714,
+      "startFrame": 13060,
+      "durationInFrames": 758,
       "gap": 0.25
     },
     {
       "id": "t20",
       "level": null,
-      "overlay": {
-        "big": "$496,542",
-        "sub": "OSHA \u00b7 WILLFUL CITATION"
-      },
-      "template": "fileWall",
+      "overlay": null,
+      "template": "emptyChair",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 13923,
-      "durationInFrames": 767,
+      "startFrame": 13818,
+      "durationInFrames": 651,
       "gap": 0.25
     },
     {
       "id": "t21",
-      "level": "LEVEL 07  \u00b7  YEAR 16  \u00b7  $410,000,000",
+      "level": null,
       "overlay": {
-        "big": "$410,000,000",
-        "sub": "THE SALE CLOSES ANYWAY"
+        "big": "3\u20135 YEARS",
+        "sub": "HOW LONG A WINDFALL TAKES TO FIND THE CRACKS ALREADY THERE"
       },
-      "template": "courtroom",
+      "template": "window",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 14690,
-      "durationInFrames": 703,
+      "startFrame": 14469,
+      "durationInFrames": 724,
       "gap": 0.25
     },
     {
       "id": "t22",
       "level": null,
       "overlay": null,
-      "template": "signing",
+      "template": "openHouse",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 15393,
-      "durationInFrames": 612,
+      "startFrame": 15193,
+      "durationInFrames": 692,
       "gap": 0.25
     },
     {
       "id": "t23",
-      "level": null,
+      "level": "LEVEL 08  \u00b7  THE REBUILD  \u00b7  $27,000,000",
       "overlay": null,
-      "template": "dinner",
+      "template": "revolvingDoor",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 16005,
-      "durationInFrames": 907,
+      "startFrame": 15885,
+      "durationInFrames": 660,
       "gap": 0.25
     },
     {
       "id": "t24",
-      "level": "LEVEL 08  \u00b7  YEAR 20  \u00b7  $1,200,000,000",
-      "overlay": {
-        "big": "$1,200,000,000",
-        "sub": "THE FIRST BILLION"
-      },
-      "template": "ipoBell",
+      "level": null,
+      "overlay": null,
+      "template": "familyVault",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 16912,
-      "durationInFrames": 758,
+      "startFrame": 16545,
+      "durationInFrames": 777,
       "gap": 0.25
     },
     {
       "id": "t25",
       "level": null,
-      "overlay": null,
+      "overlay": {
+        "big": "$27,000,000",
+        "sub": "BORING MONEY. IT TOOK YEARS TO WANT THAT."
+      },
       "template": "atrium",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 17670,
-      "durationInFrames": 740,
+      "startFrame": 17322,
+      "durationInFrames": 736,
       "gap": 0.25
     },
     {
       "id": "t26",
-      "level": null,
+      "level": "LEVEL 09  \u00b7  YEARS LATER  \u00b7  THE NUMBER NOW",
       "overlay": null,
-      "template": "podiumScene",
+      "template": "foundationScene",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 18410,
-      "durationInFrames": 787,
+      "startFrame": 18058,
+      "durationInFrames": 715,
       "gap": 0.25
     },
     {
       "id": "t27",
-      "level": "LEVEL 09  \u00b7  YEAR 24  \u00b7  $2,600,000,000",
-      "overlay": {
-        "big": "$2,600,000,000",
-        "sub": "THE ALARM STILL GOES OFF"
-      },
-      "template": "rooftopEmpire",
+      "level": null,
+      "overlay": null,
+      "template": "yachtDeck",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 19197,
-      "durationInFrames": 748,
+      "startFrame": 18773,
+      "durationInFrames": 573,
       "gap": 0.25
     },
     {
       "id": "t28",
       "level": null,
       "overlay": null,
-      "template": "foundationScene",
+      "template": "lobby",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 19945,
-      "durationInFrames": 741,
+      "startFrame": 19346,
+      "durationInFrames": 609,
       "gap": 0.25
     },
     {
       "id": "t29",
       "level": null,
-      "overlay": null,
+      "overlay": {
+        "big": "$3,100,000",
+        "sub": "THE REST ISN'T YOURS TO TOUCH"
+      },
       "template": "window",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 20686,
-      "durationInFrames": 849,
+      "startFrame": 19955,
+      "durationInFrames": 560,
       "gap": 0.25
     },
     {
       "id": "t30",
       "level": null,
       "overlay": null,
-      "template": "gravesideReturn",
+      "template": "ticketCounter",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 21535,
-      "durationInFrames": 718,
-      "gap": 0.7
+      "startFrame": 20515,
+      "durationInFrames": 781,
+      "gap": 0.25
     }
   ]
 }

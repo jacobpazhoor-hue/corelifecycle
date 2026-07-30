@@ -1,343 +1,347 @@
 #!/usr/bin/env python3
-"""Your Life From $0 to Billionaire at Every Level (What It Costs) — POV doodle build, ~12 min.
-Grounded in docs/research/self_made_billionaire.md. RANK format: the levels are a NET WORTH ladder
-(not a single job title) — one founder, one waste-hauling roll-up, from -$52,000 in debt for a used
-truck to a $2.6 billion public company, twenty-four years later. Second-person present-tense POV: the
-viewer IS a first-time small-business owner who builds a blue-collar empire, not a tech founder — a
-deliberate departure from founder/startup_unicorn/crypto_founder (all software) and venture_capitalist/
-hedge_fund_manager (finance), per ops/analytics.json's finding that BUILDER aspiration wins (founder =
-41% of all channel views) while passive/institutional-finance ladders flop.
+"""POV: You Win the Lottery (Every Level of the Money) — POV doodle build, ~12 min.
+Grounded in docs/research/lottery_winner.md. SCENARIO format: the levels are escalating TIME/DECISION
+points across a single life-changing event and its aftermath (the ticket -> the match -> the claim ->
+the first spend -> the family line -> the drain -> the fall -> the rebuild -> the number now), not job
+ranks. Second-person present-tense POV: the viewer IS an ordinary forklift operator who wins a $412M
+Powerball jackpot and lives what the real research says actually happens next — a spike, then a real
+crash, then a smaller, guarded, honestly-earned number at the end.
 
-REAL/VERIFIED mechanics woven in (see research doc; flags there): the real shape of H. Wayne Huizenga's
-1962 start — $5,000 borrowed from a father-in-law, one used garbage truck, 20 commercial accounts
-[VERIFIED, inflation-adjusted here to a modern -$52,000 debt] — as the historical MODEL for this
-episode's fictional protagonist, not a biography; real 2025-2026 waste-hauling roll-up acquisition
-multiples (3.0-5.5x SDE for owner-operators, up to 9.5-11.0x EBITDA once a permitted landfill is owned)
-[VERIFIED, CT Acquisitions/Kingdom Broker]; the real 2024 US average landfill tipping fee (~$62/ton)
-[VERIFIED, EREF]; the real, current OSHA maximum per-violation penalty for willful/repeat violations
-($165,514, 2025-2026, no inflation adjustment for 2026) [VERIFIED, DOL/OSHA]; and the episode's central
-share-worthy fact — refuse and recyclable material collection's real BLS fatality rate (37.4 deaths per
-100,000 full-time workers in 2024, the 5th deadliest US occupation, ahead of most police work; 4th
-deadliest in 2023 at 41.4/100,000) [VERIFIED, BLS National Census of Fatal Occupational Injuries] — the
-real mechanism behind this episode's midpoint reversal. The protagonist, company, driver, rival, and
-dealmaker are a FICTIONAL COMPOSITE; no real founder or company is depicted as fact.
+REAL/VERIFIED mechanics woven in (see research doc; flags there): Powerball jackpot odds are 1 in
+292,201,338 [VERIFIED, official prize chart]; the lump-sum cash option is ~50-60% (commonly ~52%) of
+the advertised annuitized jackpot, paid immediately, before any tax [VERIFIED, 2026 lottery-tax
+coverage]; the IRS withholds 24% automatically but a jackpot lands you in the 37% top bracket, meaning
+more is owed at filing [VERIFIED]; roughly half of US states allow anonymous claiming via a trust. The
+episode's central "wait — that's real?" reversal: the widely-repeated "70% of lottery winners go
+broke" statistic is NOT a real, sourced figure — NEFE, the organization it's constantly misattributed
+to, has stated on the record it never produced or can confirm it [VERIFIED]. The real, peer-reviewed
+finding (Hankins, Hoekstra & Skiba, Review of Economics and Statistics, 2011) is quieter and scarier in
+a different way: winners of MODEST prizes ($50K-$150K), especially those already financially precarious
+before they won, file for bankruptcy at a higher rate within 3-5 years [VERIFIED]. This episode's
+"curse" beats (a robbery-adjacent threat, a predatory advisor, repeated lawsuits) are a dramatized
+recombination of three real, well-documented cases — Jack Whittaker ($314.9M Powerball, 2002, robbed
+repeatedly, sued repeatedly, said "I wish I'd torn that ticket up"), William "Bud" Post III ($16.2M
+Pennsylvania, 1988, bankrupt within years, his own brother convicted in a murder-for-hire plot over the
+winnings), and Abraham Shakespeare ($30M Florida Lotto, 2006, murdered in 2009 by a woman who'd gained
+control of his money) — used ONLY as real-world grounding texture, never as the protagonist. The
+protagonist, Dale, Renn, Mateo, Priya Chen, Terrence, and every named character in this episode are a
+FICTIONAL COMPOSITE; no real winner is depicted as fact.
 
-SPINE: the big gold number is NET WORTH (not company revenue) — -$52,000 (Year 1, all debt) -> $140,000
-(Year 3) -> $1,400,000 (Year 6, the first million) -> $14,000,000 (Year 9, owning disposal) ->
-$68,000,000 (Year 12, the PE offer) -> -1 (Year 13, the reversal — a name, not a dollar) ->
-$410,000,000 (Year 16) -> $1,200,000,000 (Year 20, the first billion) -> $2,600,000,000 (Year 24, the
-apex). The sub-caption never carries a second dollar figure — trucks, counties, a body count — so the
-gap between "what you're worth" and "what it cost" stays legible without competing with the gold number.
+SPINE: the gold overlay is a SPIKE, not a climb — the advertised jackpot ($412,000,000) at the match,
+cut to the real lump-sum-after-tax cash figure ($135,000,000) at the claim, spent down to $118M, held
+near $104M through the family-ask level, then CRATERS at the midpoint reversal (-$71,000,000, a
+predatory "guaranteed" fund) to $19,000,000 at rock bottom, before a slow, boring, verified rebuild to
+$27,000,000 — and the closing twist echoes the claim-level "advertised vs. actual" gap one more time:
+of that $27M, only $3,100,000 is actually yours to touch without a trustee's signature, the rest locked
+in trust for people who aren't you. The sub-caption carries non-dollar cost beats (61 PEOPLE WHO'VE
+ASKED, 3-5 YEARS bankruptcy-study finding) so the gap between the number and the cost stays legible.
 
-STORY: ROY — your father-in-law, cosigns the first loan, his act-1 warning (t04 dialogue) that the
-truck doesn't care about your letterhead is the theme stated early, paid off structurally (never
-literally repeated) by the moral turn at t16 and the reversal at t18. DENNY KOWALSKI — a rival hauler
-undercutting on illegal dumping, his taunt at t11 ("guess which of us learns that's a mistake first")
-is answered, bitterly, by you being the one who learns it. MARCUS ODELL — planted by name at t07 (an
-orientation session that states the real BLS fatality stat while he laughs it off), warmed at t10, killed
-at the reversal t18 on the exact mechanism the stat describes (a backing accident, no spotter camera —
-the line item cut at t16 to protect a PE recap's multiple). GRANT ASHFORD — the PE dealmaker, introduced
-at t15, whose t23 dialogue plants the UNRESOLVED UNIVERSE THREAD (deliberate): his fund is already
-circling another distressed regional hauler two states over, never named, for a future episode to pick
-up. SENSORY ANCHOR: a $19 digital watch, alarm fixed at 2:00 a.m. since Year 1 — re-triggered at every
-level-up (t03, t06, t08, t17, t27) and finally noticed BY someone else (your daughter Ellie, t29 dialogue)
-before its last beep closes the loop (t30). BODY-DREAD MOTIF (fact, not feeling): "your hands don't
-shake" first at t09 (signing the first roll-up) -> inverted at the reversal t18 ("your hands shake...
-the first time in longer than you can place") -> restored, colder, at the apex t27 and the OSHA
-citation's echo at t24.
+STORY: DALE — the gas-station clerk who's sold you a ticket every Friday for six years, warm, never a
+villain; his act-1 warning (t04 dialogue, "odds don't care how bad you need it") is the theme stated
+early, paid off literally by the closing line. RENN — your sister; her son MATEO's $4,200 ER bill is
+the named, concrete want (Level 1), paid off cleanly and immediately at Level 4 — the only number in
+the whole story that ever feels entirely clean. PRIYA CHEN — the wealth advisor who structures the
+claim helpfully at Level 3, then steers you into an unregistered "friends and family" fund you sign
+without your lawyer present; her cold, unapologetic line at the reversal ("You signed every page
+yourself") is the rival's taunt at the midpoint. TERRENCE — an old warehouse coworker who resurfaces
+claiming a "fifth ticket" existed in your old Friday office pool that no one ever claimed — the
+UNRESOLVED UNIVERSE THREAD (deliberate); mentioned twice, never resolved. SENSORY ANCHOR: the smell of
+burnt gas-station coffee under a buzzing fluorescent strip light — re-triggered at every level-up (t04,
+t09, t16, t22, t30) including, ironically, in Priya's eleven-dollar-coffee office (t09) as a contrast
+beat. BODY-DREAD MOTIF (fact, not feeling): "your hands don't move" at the numbers match (t06) ->
+"don't shake, not yet" signing the trust (t10) -> "don't shake signing it" at the fund that drains
+everything (t16, the line you'll remember longest) -> restored, guarded, at the rebuild (t23).
 
-Templates: 5 NEW (a small waste-hauling roll-up pack in src/stage.tsx — cemetery/dawnRoute/truckYard/
-landfillView/routeAftermath, the last reusing SPY's existing `nightStreet` backdrop re-staged rather
-than authoring a second night-street asset) + universal (window/dinner/fileWall/boardroomNotes/
-revolvingDoor/deskClose/emptyChair/signing/atrium/podiumScene/foundationScene) + STARTUP's `ipoBell` (reused straight
-from its own pack) + MAFIA's `courtroom` (re-narrated from a RICO trial to an OSHA administrative
-hearing, same bench-and-seal reuse crypto_founder validated for an SEC proceeding) + REAL ESTATE's
-`rooftopEmpire` (the apex reflection). No two adjacent scenes repeat a template.
+Templates: 2 NEW (a small lottery pack in src/stage.tsx — ticketCounter/trailerPorch) + DYNASTY's
+`galaBallroom`/`suburbHouse`(REALESTATE)/`familyVault`/`yachtDeck` (repurposed from old-money to new
+money's isolation and protection) + MAFIA's `courtroom` (re-narrated from RICO to civil nuisance suits)
++ SPY's `safehouse` (re-narrated from a target wall to a forensic accountant's tracing board) + MED's
+`consult` + GEN's `foundationScene` + universal (deskSilhouette/window/lobby/boardroomNotes/signing/
+dinner/deskClose/fileWall/emptyChair/revolvingDoor/atrium). No two adjacent scenes repeat a template.
 
-STRUCTURAL VARIATION vs the last 2 (venture_capitalist = MID-ACTION cold open / FLAT-THEN-SPIKE act
-two / ONE-DOOR-LEFT-OPEN ending; crypto_founder = AFTERMATH cold open / BOOM-BUST-BOOM act two /
-COMPLICIT-SILENCE ending): this cold open is FLASH-FORWARD (a funeral years into the arc, cut away
-before you reach the grave, then rewind to Year 1 — last used 3 episodes back by zombie_apocalypse, not
-consecutively); act two is a STEADY CLIMB WITH ONE VERTICAL DROP — no boom-bust cycling, no flat plateau,
-just an uninterrupted rise across levels 1-5 until the single, clean midpoint reversal; the ending is
-RETURN-AND-PARTIAL-REPAIR — no mentorship handoff (not torch-passing), nothing left ambiguous for the
-protagonist (not one-door-left-open), no mirrored silent choice with a new stranger (not complicit
-silence) — instead the loop-close scene shows you finally doing the one small, costly, non-triumphant
-thing you didn't do at the original funeral: walking all the way to the stone.
+STRUCTURAL VARIATION vs the last 2 (self_made_billionaire = FLASH-FORWARD cold open / STEADY-CLIMB-
+WITH-ONE-DROP act two / RETURN-AND-PARTIAL-REPAIR ending; crypto_founder = AFTERMATH cold open /
+BOOM-BUST-BOOM act two / COMPLICIT-SILENCE ending): this cold open is MID-ACTION (a tense, unresolved
+standoff at the gas-station door, cut away before it resolves — last used 2 episodes back by
+venture_capitalist, not consecutively); act two is a single RISE-THEN-FALL-THEN-PARTIAL-RECOVERY arc —
+one spike, one real crash, one slow honest climb back, not multiple boom-bust cycles and not a steady
+line with one drop; the ending is CYCLICAL — the loop-close scene returns to the EXACT same counter,
+the exact same clerk, and resolves the cold open's standoff directly (not a torch-passing mentorship,
+not one door left ambiguously open, not a silent mirrored choice with a stranger) before landing on a
+quiet, quotable, non-triumphant final line.
 
 PROMISE -> PAYOFF LEDGER:
-  * t01 cold open ("you paid for the flowers," "don't move yet")          -> t30 (this time you walk to the stone)
-  * t02 promise/cost-line (the number and the debt trade places)          -> paid off across the arc; echoed at t30's closing line
-  * t03 the $19 watch, alarm fixed at 2:00 a.m.                           -> t06/t08/t17/t27 (re-triggered) -> t29 (Ellie notices) -> t30 (the last beep)
-  * t04 Roy's dialogue warning (the truck doesn't care about letterhead) -> paid off structurally at t16 (the moral turn) and t18 (the reversal)
-  * t07 Marcus planted by name + the real BLS fatality stat               -> t18 (killed on exactly that mechanism) -> t19/t25/t28 (his absence/legacy)
-  * t08 the county contract win / Denny's undercutting rumor              -> t11 (Denny's taunt) -> t18-20 (you're the one who learns the lesson)
-  * t11 Denny's taunt ("guess which of us learns that first")             -> answered bitterly: you do, not him
-  * t15/t16 the safety-budget line cut for the PE recap                   -> t17 (silence) -> t18 (the reversal exploits exactly that cut)
-  * t20 the OSHA citation figure ($496,542)                               -> t24 (echoed: "nobody on this floor knows that number. You do.")
-  * t23 Grant's mention of another distressed hauler two states over      -> UNRESOLVED, deliberate universe thread for a future episode
-  * t29 Ellie notices the watch-check                                     -> t30 (the watch's last beep, acknowledged, not fixed)
-  * share beat: the real BLS "37.4 per 100,000" stat (t07)                -> paid off literally as the mechanism of the reversal (t18)
+  * t01 cold open (the hoodie man blocking the door, "don't move yet")    -> t30 (resolved: it's Dez, an old coworker, not a threat)
+  * t02 promise/cost-line ("you'll know exactly, to the dollar, and past it") -> paid off across the arc, echoed at t30
+  * sensory anchor: burnt gas-station coffee + fluorescent hum            -> t04/t09/t16/t22/t30 (re-triggered, including ironically at Priya's office)
+  * t03 Mateo's $4,200 ER bill (the named want)                          -> t11 (paid off same-day, the cleanest number in the story)
+  * t04 Dale's dialogue warning ("odds don't care how bad you need it")   -> echoed structurally all arc -> literal payoff in t30's closing line
+  * t06 body-dread motif ("your hands don't move")                       -> t10 ("don't shake, not yet") -> t16 (drains everything, "you'll remember longest") -> t23 (restored, guarded)
+  * t09 the trust/anonymity choice                                       -> t24 (familyVault, "own nothing, control everything") -> t29 (the $3.1M twist)
+  * t14 Terrence's "fifth ticket" rumor                                  -> UNRESOLVED, deliberate universe thread; revisited, not resolved, at t28
+  * t15 the first lawsuit                                                -> escalates t19 (more lawsuits) -> resolved by t23 (real fiduciary counsel)
+  * t16 Priya's unregistered "friends and family" fund, signed unread    -> t17 THE REVERSAL (-$71,000,000)
+  * share beat: the debunked "70% go broke" myth + the real 2011 study   -> t21, reframes the whole arc's meaning
 """
 
 FPS = 30
 
 SCENES = [
-    # ---- COLD OPEN — flash-forward, a funeral years into the arc, cut away before it resolves ----
-    dict(id="t01", level=None, template="graveside", gap=0.7,
-         narration=("The suit costs eleven thousand dollars, more than Marcus made in three months "
-                    "back when three months was still something anyone here tracked. You stand at the "
-                    "edge of the plot, not the front, close enough to hear the pastor's voice go thin "
-                    "at the end of a sentence he doesn't finish. Diesel and cut grass. A woman in a "
-                    "black coat glances back once. Your phone buzzes once in your pocket — a board "
-                    "member, a wire transfer, something that can't actually wait. Don't move yet."),
-         overlay=dict(big="$2,600,000,000", sub="YOU PAID FOR THE FLOWERS")),
+    # ---- COLD OPEN — mid-action, cut away before it resolves ----
+    dict(id="t01", level=None, template="ticketCounter", gap=0.7,
+         narration=("Fluorescent hum, and under it the smell of burnt gas-station coffee — the same "
+                    "smell for six years running. Someone is holding the door shut from outside. A man "
+                    "in a gray hoodie stands between you and the parking lot, both hands buried in his "
+                    "pockets. 'Just enough to fix what's broken,' he says, too calm for what his hands "
+                    "might be doing. Dale freezes behind the register. Six years ago, you stood exactly "
+                    "here for a dollar-two ticket. Don't move yet."),
+         overlay=dict(big="1 IN 292,201,338", sub="THE ODDS THAT NIGHT NEVER MATTERED LESS")),
 
     # ---- PROMISE + COST-LINE ----
-    dict(id="t02", level=None, template="window",
-         narration=("Twelve years earlier none of this exists — not the suit, not the funeral, not a "
-                    "name you'll spend the rest of your life trying not to think about out loud. You "
-                    "want one thing: to stop owing anyone money by Friday, the way the collection "
-                    "notices keep phrasing it, politely, like it's a request. You don't know yet that "
-                    "the number and the debt are going to trade places, then trade back, then cost you "
-                    "someone else's name entirely."),
+    dict(id="t02", level=None, template="deskSilhouette",
+         narration=("Rewind six years. None of this exists yet — not the hoodie, not the door held "
+                    "shut, not the number that will replace your name in every room you walk into "
+                    "afterward. Right now the forklift needs a new battery, the rent is three days "
+                    "late, and nobody in this story has said the word jackpot out loud yet. You want to "
+                    "know what one actually costs. Everyone thinks they do. By the end you'll know "
+                    "exactly, to the dollar, and past it."),
          overlay=None),
 
-    # ---- LEVEL 01 · YEAR 1 · -$52,000 ----
-    dict(id="t03", level="LEVEL 01  ·  YEAR 1  ·  -$52,000", template="dawnRoute",
-         narration=("Fifty-two thousand dollars, borrowed from Roy, your wife's father, buys one used "
-                    "truck and twenty stops nobody else wants — a diner, a dry cleaner, eighteen houses "
-                    "on a route the last owner couldn't be bothered to finish. WD-40 and last night's "
-                    "coffee on your hands by five a.m. A nineteen-dollar digital watch on your wrist "
-                    "beeps at 2:00 — the only alarm you own, the only one you'll ever need. You've told "
-                    "exactly one person the real number. Roy asked for it in writing."),
-         overlay=dict(big="-$52,000", sub="ONE TRUCK · 20 STOPS")),
-    dict(id="t04", level=None, template="dinner",
-         narration=("Roy's kitchen smells like burnt coffee and the same WD-40 already in your "
-                    "knuckles. He drove a truck himself for eleven years before his knees gave out, and "
-                    "he never once asks for the loan back out loud. He signed it without reading the "
-                    "terms twice; he watches you eat like he's deciding something. Sunday dinner, same "
-                    "stool at the counter, same warning every week, worded a little differently each "
-                    "time so it doesn't wear out."),
+    # ---- LEVEL 01 · THE TICKET · $4,200 ----
+    dict(id="t03", level="LEVEL 01  ·  THE TICKET  ·  $4,200", template="trailerPorch",
+         narration=("Fourteen-fifty an hour on the forklift, third shift, a propane tank reading a "
+                    "quarter full on the porch behind you. Your sister Renn's boy Mateo spent Tuesday "
+                    "night in an ER bed wheezing, and insurance covers most of it — not the four "
+                    "thousand two hundred dollars still sitting on a bill with your name on the "
+                    "co-sign line. Rent is due Friday. So is the bill. Only one of them can actually "
+                    "wait."),
+         overlay=dict(big="$4,200", sub="MATEO'S ER BILL — WHAT YOU DON'T HAVE")),
+    dict(id="t04", level=None, template="ticketCounter",
+         narration=("Every Friday for six years, one ticket, same six numbers — your father's "
+                    "birthday, backward, plus the one he always called lucky before the word stopped "
+                    "meaning anything to either of you. Dale rings it up without looking up from the "
+                    "register, the way he has a hundred Fridays before this one, exact change ready "
+                    "before you even reach the counter. The ticket rack glows red and gold behind him "
+                    "under a strip light that's buzzed since before either of you worked here."),
          overlay=None,
-         dialogue=dict(text="The truck doesn't care what letters end up after your name. Don't ever let it forget that.")),
-    dict(id="t05", level=None, template="fileWall",
-         narration=("Three banks say no in nine days, each letter using politer language than the last "
-                    "for the same word. A route sheet with twenty stops on it doesn't impress a loan "
-                    "committee, no matter how neatly you've typed it. Therefore you stop asking "
-                    "permission. You knock on twenty more doors yourself; on the eleventh, a diner "
-                    "owner named Frank says yes before you finish the pitch, cash up front, no "
-                    "contract. That's the whole strategy for a year."),
+         dialogue=dict(text="Odds don't care how bad you need it, kid.")),
+    dict(id="t05", level=None, template="window",
+         narration=("2 a.m., the ticket photographed four times on your phone — in case the paper "
+                    "smudges, in case the dog gets to it, in case something you can't name yet happens "
+                    "to a slip of paper worth checking on. The drawing isn't until tomorrow night. "
+                    "Therefore none of this checking changes one single number. Count the digits again "
+                    "anyway. Sleep was never really the plan tonight, not with six numbers doing laps "
+                    "behind your eyes."),
          overlay=None),
 
-    # ---- LEVEL 02 · YEAR 3 · $140,000 ----
-    dict(id="t06", level="LEVEL 02  ·  YEAR 3  ·  $140,000", template="truckYard",
-         narration=("Seven trucks now, parked nose-to-tail behind a fence you own the lock to. Tar and "
-                    "hot metal at six p.m., cicadas loud enough to cover the dispatch radio most "
-                    "nights. A hundred forty thousand dollars sits in an account that isn't overdrawn "
-                    "for the first time in three years — actual number, actual bank, no asterisk next "
-                    "to it. The watch still beeps at 2:00. You still get up."),
-         overlay=dict(big="$140,000", sub="SEVEN TRUCKS")),
-    dict(id="t07", level=None, template="lectureHallScene",
-         narration=("Orientation, folding chairs, a trainer's laser pointer lands on a government "
-                    "statistic nobody in the room expected: refuse collection kills more workers per "
-                    "capita than police work does, more than construction, more than half the jobs "
-                    "people call dangerous out loud. Marcus Odell, new hire, twenty-six, laughs it off "
-                    "in the back row — the wrong kind of quiet for a fact like that. Write his name "
-                    "down. You'll need it later."),
-         overlay=dict(big="37.4 PER 100,000", sub="DEADLIER THAN POLICE WORK")),
-    dict(id="t08", level=None, template="deskClose",
-         narration=("The county contract is worth more than your first four years combined, and it's "
-                    "yours by one bid, four percent under the next number — Denny Kowalski's number, "
-                    "you'll learn later, the same week he starts skipping the dump fees nobody's "
-                    "checking. Late at night, alone, the spreadsheet finally balances for the first "
-                    "time since you started. The watch beeps at 2:00 anyway. You never reset it. You "
-                    "don't know why yet."),
+    # ---- (still Level 01) the match ----
+    dict(id="t06", level=None, template="deskSilhouette",
+         narration=("Seven. Fourteen. Nineteen. Twenty-six. Forty-four. The fifth ball is still "
+                    "spinning on a muted TV when your stomach drops out from under the rest of you. "
+                    "Powerball: eight. Your hands don't move. That's the part that scares you — not the "
+                    "numbers matching, the stillness after. The remote stays warm in your other hand. "
+                    "You never once think to set it down, and a studio audience on screen is cheering "
+                    "for a number they don't know yet is yours."),
          overlay=None),
 
-    # ---- LEVEL 03 · YEAR 6 · $1,400,000 ----
-    dict(id="t09", level="LEVEL 03  ·  YEAR 6  ·  $1,400,000", template="signing",
-         narration=("Three tiny haulers sign over their routes for a fraction of what they're worth, "
-                    "seller financing on the rest — thirty-one trucks, three counties, thirty-one "
-                    "accents at your table when you're being generous about calling it a company. Two "
-                    "of the three owners tear up signing away thirty years each; the third only asks "
-                    "if the trucks keep their names painted on the doors. One point four million "
-                    "dollars, the first million multiplied. The pen doesn't shake. Yours never has."),
-         overlay=dict(big="$1,400,000", sub="31 TRUCKS · THREE COUNTIES")),
-    dict(id="t10", level=None, template="dawnRoute",
-         narration=("Marcus rides the footboard on your old original route now, the one you drove "
-                    "yourself for four straight years. Same porch lights. Same dog at 1409 that still "
-                    "hates the truck at exactly the same pitch it did back then — loyalty, maybe, or "
-                    "just a lack of imagination. He says the job's easy money if you don't think about "
-                    "it too hard. Don't correct him. He's not wrong yet."),
-         overlay=None),
-    dict(id="t11", level=None, template="atrium",
-         narration=("An industry mixer, a hotel atrium, a signature cocktail nobody asked for. Denny "
-                    "finds you by the window, ice clinking, a grin that's spent money on dental work "
-                    "you haven't gotten around to yet. You could tell him what the real margin on the "
-                    "county contract actually is. You don't. Some numbers are worth more unsaid than "
-                    "said."),
-         overlay=None,
-         dialogue=dict(text="Cheaper trucks, cheaper dumps, cheaper everything. Guess which one of us learns that's a mistake first.")),
-
-    # ---- LEVEL 04 · YEAR 9 · $14,000,000 ----
-    dict(id="t12", level="LEVEL 04  ·  YEAR 9  ·  $14,000,000", template="landfillView",
-         narration=("A transfer station, then half a landfill — the actual dirt, the actual permit, "
-                    "the thing that turns a hauling company into an owner of disposal itself. Methane "
-                    "flares off a stack in the distance, gulls circling like they're paid to work the "
-                    "tipping face. Fourteen million dollars, and the multiple on the business triples "
-                    "overnight, because you stopped renting the ending of your own supply chain from "
-                    "somebody else."),
-         overlay=dict(big="$14,000,000", sub="THE LANDFILL YOU NOW OWN")),
-    dict(id="t13", level=None, template="boardroomNotes",
-         narration=("A real board now, five chairs, a CFO who talks in EBITDA the way Roy talks in "
-                    "engine trouble. Nine and a half times earnings, they say, once you own the "
-                    "disposal asset outright — an actual number, on an actual slide, for what your "
-                    "name is worth on paper before anyone's actually paid it. You nod like you "
-                    "understand every word of it. Mostly you do."),
-         overlay=None),
-    dict(id="t14", level=None, template="window",
-         narration=("Twenty-six years old feels like a story about someone else now. The skyline from "
-                    "this floor is new; the coffee is better; the smell under your fingernails is "
-                    "exactly the same no matter how many people you pay to keep it off you. A courier "
-                    "delivers a card with a fund's name embossed on heavier paper than anything you "
-                    "own. You don't call back yet."),
+    # ---- LEVEL 02 · THE MATCH · $412,000,000 ----
+    dict(id="t07", level="LEVEL 02  ·  THE MATCH  ·  $412,000,000", template="ticketCounter", gap=0.7,
+         narration=("Dale scans the ticket four times before the machine locks up and prints CLAIM AT "
+                    "LOTTERY HEADQUARTERS instead of a dollar figure. The whole store goes quiet around "
+                    "the sound of it. A stranger three feet away is filming you on his phone before "
+                    "you've said one word out loud. Four hundred twelve million dollars, advertised, "
+                    "and you haven't claimed a single cent of it yet."),
+         overlay=dict(big="$412,000,000", sub="THE ADVERTISED JACKPOT")),
+    dict(id="t08", level=None, template="lobby",
+         narration=("Lottery headquarters has a security desk, a waiting room with better chairs than "
+                    "any DMV, and a clipboard asking one question first: claim under your own name, "
+                    "public record forever, or through a trust, and disappear from it. Half the states "
+                    "don't give you a choice at all. Yours does. Therefore the first real decision of "
+                    "the rest of your life is whether anyone gets to know it was you."),
          overlay=None),
 
-    # ---- LEVEL 05 · YEAR 12 · $68,000,000 ----
-    dict(id="t15", level="LEVEL 05  ·  YEAR 12  ·  $68,000,000", template="revolvingDoor",
-         narration=("Grant Ashford's office has a view and no personality, the way money that's tired "
-                    "of being noticed always looks. His fund wants sixty percent, a board seat, and a "
-                    "number with your name on it that used to be a rounding error: sixty-eight million "
-                    "dollars, wired in stages, contingent on the numbers holding. Therefore the due "
-                    "diligence begins — a hundred-line spreadsheet of everything the business spends "
-                    "money on that it technically doesn't have to."),
-         overlay=dict(big="$68,000,000", sub="A BUYOUT OFFER")),
-    dict(id="t16", level=None, template="deskClose",
-         narration=("Line 44 of a hundred: camera-and-spotter upgrades for the whole fleet, four "
-                    "hundred sixty thousand dollars, marked optional pending recap timeline. You've "
-                    "read this line eleven times tonight, alone, the office dark around the one lit "
-                    "screen. Your hand doesn't shake signing off on cutting it — that's the part that "
-                    "should worry you, not the number. Six weeks, you tell yourself. We'll circle back "
-                    "after the deal closes."),
-         overlay=None),
-    dict(id="t17", level=None, template="dawnRoute", gap=1.4,
-         narration=("Five a.m., the yard radio quieter than usual, one truck already out on the old "
-                    "original route before the sun's up. The watch on your wrist reads 2:03 and you "
-                    "don't remember hearing it go off. Cold coffee. No wind."),
+    # ---- LEVEL 03 · THE CLAIM · $135,000,000 ----
+    dict(id="t09", level="LEVEL 03  ·  THE CLAIM  ·  $135,000,000", template="boardroomNotes",
+         narration=("Priya Chen has a coffee that costs eleven dollars and tastes like nothing, and "
+                    "your four hundred twelve million on a whiteboard, cut down live in front of you. "
+                    "The lump-sum option is fifty-two percent of that, before tax — two hundred "
+                    "fourteen million. Federal withholding takes twenty-four points off the top; the "
+                    "real bracket takes thirty-seven. What's actually, finally yours: about a third of "
+                    "the number that made the news."),
+         overlay=dict(big="$135,000,000", sub="AFTER THE HAIRCUT AND THE IRS")),
+    dict(id="t10", level=None, template="signing",
+         narration=("You sign as a trust, not a name — Priya's idea, the one piece of advice out of "
+                    "this whole ordeal that costs you nothing later. The pen is heavier than a "
+                    "two-dollar ticket has any right to make you expect, and the notary stamps three "
+                    "separate pages without once looking up. Your hands don't shake, not yet. That's a "
+                    "fact worth remembering, plainly, without decoration. It won't stay true forever."),
          overlay=None),
 
-    # ---- LEVEL 06 · YEAR 13 · -1 — THE REVERSAL ----
-    dict(id="t18", level="LEVEL 06  ·  YEAR 13  ·  -1", template="routeAftermath", rate="-10%",
-         narration=("The radio call comes in flat, procedural, the way bad news always tries to sound "
-                    "smaller than it is: backed over on the old route, the one without a spotter "
-                    "camera, the one that was supposed to get one in six weeks. Marcus Odell. Fourteen "
-                    "years on the trucks, two kids, a wife who still calls dispatch by his old radio "
-                    "number out of habit. Your hands shake signing the incident report — the first "
-                    "time in longer than you can actually place."),
-         overlay=dict(big="-1", sub="MARCUS ODELL · 14 YEARS ON THE TRUCKS")),
-    dict(id="t19", level=None, template="emptyChair",
-         narration=("His seat at the dispatch table stays empty for a month before anyone can bring "
-                    "themselves to fill it, a coffee ring on the desk nobody wipes away. Someone leaves "
-                    "his time card on the seat, uncashed, like a place setting nobody wants to clear. "
-                    "Twenty-six accounts send flowers, more than you got for the county contract win. "
-                    "Nobody says the words safety budget out loud. Everybody's doing the math anyway."),
+    # ---- LEVEL 04 · THE FIRST SPEND · $118,000,000 ----
+    dict(id="t11", level="LEVEL 04  ·  THE FIRST SPEND  ·  $118,000,000", template="openHouse",
+         narration=("Mateo's bill gets paid same-day, wired, gone — the smallest number in this whole "
+                    "story and the only one that ever feels entirely, completely clean, no fine print "
+                    "attached anywhere. Renn gets a house outright, no mortgage, her name only on the "
+                    "deed, a spare room already painted for a nephew who doesn't need it yet. You quit "
+                    "the forklift job by text message, five words, and delete the app before anyone can "
+                    "reply. One hundred eighteen million left, after the house, the debt, the gifts."),
+         overlay=dict(big="$118,000,000", sub="AFTER THE HOUSE, THE DEBT, THE GIFTS")),
+    dict(id="t12", level=None, template="dinner",
+         narration=("Sunday dinner, twice the usual plates on the table, a cousin you haven't spoken "
+                    "to since a wedding asking, casually, between bites, what it's like now. Renn "
+                    "laughs a half-second too fast at a joke that wasn't funny. Under the noise, a new "
+                    "kind of math is already starting — who gets asked first, who gets asked twice, who "
+                    "never gets asked at all."),
          overlay=None),
-    dict(id="t20", level=None, template="fileWall",
-         narration=("OSHA's file runs sixty pages: a willful citation, the maximum penalty on the books "
-                    "— a hundred sixty-five thousand five hundred fourteen dollars, times three, "
-                    "because the finding wasn't isolated to one truck or one route. The inspector's "
-                    "report uses the word foreseeable four times in six pages. You count them. The "
-                    "number is a rounding error against sixty-eight million. That's exactly the problem "
-                    "with the number."),
-         overlay=dict(big="$496,542", sub="OSHA · WILLFUL CITATION")),
 
-    # ---- LEVEL 07 · YEAR 16 · $410,000,000 ----
-    dict(id="t21", level="LEVEL 07  ·  YEAR 16  ·  $410,000,000", template="courtroom",
-         narration=("A hearing room, fluorescent light, a government seal behind a bench that isn't a "
-                    "judge's — an administrative law judge, technically, though it doesn't feel like a "
-                    "technicality from the defense table. The citation stands. The fine gets paid "
-                    "inside a week, wired same-day, the way you'd pay for anything you wanted gone that "
-                    "fast, that quietly. The recap closes anyway, four months later, right on "
-                    "schedule."),
-         overlay=dict(big="$410,000,000", sub="THE SALE CLOSES ANYWAY")),
-    dict(id="t22", level=None, template="signing",
-         narration=("Grant's fund takes sixty percent for two hundred forty-six million dollars, cash, "
-                    "wired in three tranches — the largest number that's ever landed in an account "
-                    "that's actually yours. The pen you sign with is the same model as the one from "
-                    "the very first loan, twelve years old, still working, ink a little dry at the "
-                    "cap. Small detail. You don't mention it to anyone."),
+    # ---- LEVEL 05 · THE LINE FORMS · 61 ASKS ----
+    dict(id="t13", level="LEVEL 05  ·  THE LINE FORMS  ·  61 ASKS", template="galaBallroom",
+         narration=("A small gathering turns into a receiving line without anyone deciding it should. "
+                    "A former neighbor needs a truck payment covered. A church you visited twice wants "
+                    "a wing named after you. Sixty-one people have asked you for money this month alone "
+                    "— you know the exact number because you started keeping a list, and hating "
+                    "yourself a little more with every new name added to it."),
+         overlay=dict(big="61", sub="PEOPLE WHO'VE ASKED THIS MONTH")),
+    dict(id="t14", level=None, template="deskClose",
+         narration=("Terrence texts from the old warehouse floor, three years since you last spoke a "
+                    "single word to each other — a fifth ticket, he says, from the Friday pool you all "
+                    "used to run before the layoffs, one nobody ever actually claimed. He doesn't ask "
+                    "outright. He just mentions it, twice, two different ways, days apart. Don't answer "
+                    "either message. Some math doesn't add up no matter how many times you run it in "
+                    "your head."),
          overlay=None),
-    dict(id="t23", level=None, template="dinner",
-         narration=("Grant orders wine that costs more than Roy's first loan and doesn't check the "
-                    "label before it's poured, raising a glass to the deal, to the multiple, never once "
-                    "to Marcus, whose name he's never once said out loud in your presence. He mentions, "
-                    "almost in passing, a distressed regional hauler two states over his fund's already "
-                    "circling — a name that doesn't mean anything to you yet, and won't, for a long "
-                    "time."),
-         overlay=None,
-         dialogue=dict(text="The fine's a rounding error. The multiple's the multiple. That's the whole business, if you're honest about it.")),
+    dict(id="t15", level=None, template="courtroom",
+         narration=("A cousin of Renn's files first, a promised-share claim built on a conversation "
+                    "nobody else remembers happening the way he describes it under oath. Your lawyer "
+                    "calls it nuisance litigation and tells you to expect four more before the year is "
+                    "out. He's right about the number. He's wrong about the word nuisance — every one "
+                    "of them has a real, actual face you used to know."),
+         overlay=None),
 
-    # ---- LEVEL 08 · YEAR 20 · $1,200,000,000 ----
-    dict(id="t24", level="LEVEL 08  ·  YEAR 20  ·  $1,200,000,000", template="ipoBell",
-         narration=("The bell isn't a real bell — a button on a screen, a countdown, a national "
-                    "platform absorbing your company into a ticker symbol that isn't your name "
-                    "anymore. One point two billion dollars, the first billion, official, audited, "
-                    "real. Somewhere underneath it sits a number OSHA already priced at four hundred "
-                    "ninety-six thousand five hundred forty-two. Nobody on this floor knows that "
-                    "number. You do."),
-         overlay=dict(big="$1,200,000,000", sub="THE FIRST BILLION")),
+    # ---- LEVEL 06 · THE DRAIN · SIGNED, UNREAD ----
+    dict(id="t16", level="LEVEL 06  ·  THE DRAIN  ·  SIGNED, UNREAD", template="consult", gap=1.4,
+         narration=("Priya has a fund, private, 'friends and family only,' guaranteed returns typed in "
+                    "a font confident enough to make guaranteed look almost true. Your lawyer is in "
+                    "Denver this week, unreachable until Monday. You sign without him, once, because "
+                    "once feels harmless when you're this tired of reading fine print at midnight. Your "
+                    "hands don't shake signing it. That's the part you'll remember longest, later, once "
+                    "you understand exactly what it actually cost you."),
+         overlay=None),
+    dict(id="t17", level=None, template="deskSilhouette",
+         narration=("The statement arrives on a Tuesday, an envelope no different from any other: "
+                    "seventy-one million dollars, gone into a fund that was never registered with "
+                    "anyone, anywhere, ever, under any name that checks out. Priya doesn't apologize on "
+                    "the call. She doesn't raise her voice either. The silence where an explanation "
+                    "should be sits there, unfilled, and is somehow the loudest part of the entire "
+                    "conversation."),
+         overlay=dict(big="-$71,000,000", sub="THE FUND WAS NEVER REGISTERED"),
+         dialogue=dict(text="You signed every page yourself.")),
+    dict(id="t18", level=None, template="safehouse",
+         narration=("A forensic accountant's office now — corkboard, red string, seven shell companies "
+                    "tracing back through three different holding names to a P.O. box in a state you've "
+                    "never once set foot in. He calls it a common pattern, a real phrase pulled from a "
+                    "real study, about winners just like you, filed away somewhere as a footnote. "
+                    "Common doesn't make it cheaper. It just makes it less surprising, which turns out "
+                    "not to be the same thing as easier."),
+         overlay=None),
+
+    # ---- LEVEL 07 · THE FALL · $19,000,000 ----
+    dict(id="t19", level="LEVEL 07  ·  THE FALL  ·  $19,000,000", template="window",
+         narration=("Two more lawsuits land before the forensic report is even finished being typed — "
+                    "a former friend, a contractor, both citing conversations that happened, "
+                    "technically, but not the way either of them is describing them now under oath, in "
+                    "front of strangers. Legal fees eat faster than the fund ever did, month over month. "
+                    "Nineteen million dollars left, on paper, most of it already spoken for by people "
+                    "who still have your old phone number."),
+         overlay=dict(big="$19,000,000", sub="WHAT'S LEFT, AFTER THE LAWYERS")),
+    dict(id="t20", level=None, template="emptyChair",
+         narration=("Renn stops answering on the third call, then the fourth, then stops texting back "
+                    "even the single word she used to at least send. Her chair at Sunday dinner stays "
+                    "empty two weeks running, then three, then long enough that you stop setting a "
+                    "plate for it. Money buys the ER bill. Money buys the house. Money does not buy "
+                    "your sister trusting a single word you say about any of it anymore."),
+         overlay=None),
+    dict(id="t21", level=None, template="window",
+         narration=("The number everyone quotes — seventy percent of winners go broke — turns out to "
+                    "be a stat nobody can actually source; the organization it's always credited to "
+                    "says on the record it never produced it. The real study is quieter: modest "
+                    "winners, already drowning before the ticket, file for bankruptcy at a higher rate "
+                    "within three to five years. Winning didn't fix the hole. It just made the hole big "
+                    "enough to be a headline."),
+         overlay=dict(big="3–5 YEARS", sub="HOW LONG A WINDFALL TAKES TO FIND THE CRACKS ALREADY THERE")),
+    dict(id="t22", level=None, template="openHouse",
+         narration=("You show up at Renn's door unannounced, no lawyer, no check, no envelope of any "
+                    "kind — just you, hands empty, for the first time in over a year. She lets you as "
+                    "far as the porch, not the kitchen, and that's further than the last three weeks "
+                    "got you combined. Mateo waves once from the window behind her. Therefore it isn't "
+                    "nothing. It just isn't fixed yet either, and you don't try to make it sound like "
+                    "more than it is."),
+         overlay=None),
+
+    # ---- LEVEL 08 · THE REBUILD · $27,000,000 ----
+    dict(id="t23", level="LEVEL 08  ·  THE REBUILD  ·  $27,000,000", template="revolvingDoor",
+         narration=("New counsel this time, a fiduciary by law, not by favor — someone whose entire fee "
+                    "structure depends on you staying rich long-term, not on you feeling flattered this "
+                    "quarter. Therefore the first thing she does, day one, is fire three people who "
+                    "were never actually working for you to begin with. It takes eleven full months "
+                    "just to get back to a number you can say out loud without flinching at it."),
+         overlay=None),
+    dict(id="t24", level=None, template="familyVault",
+         narration=("A trust gets built the right way this time, walled off from your own signature, "
+                    "three separate approvals required for anything larger than a birthday check — "
+                    "money for Mateo's college, for Renn's kids you haven't even met yet, locked behind "
+                    "a door even you can't open alone anymore. Own nothing, control everything, your "
+                    "new lawyer repeats, the way people repeat a line they've clearly said to a hundred "
+                    "winners exactly like you before, and meant every time."),
+         overlay=None),
     dict(id="t25", level=None, template="atrium",
-         narration=("Four thousand employees now, most of whom will never learn the name behind the "
-                    "internal memo that quietly renamed a safety line item nobody questions at "
-                    "orientation anymore. The atrium has a company timeline on the wall — one truck, "
-                    "one route, a fence you didn't own yet, a photograph of a smile that's easy to "
-                    "mistake for uncomplicated. Marcus isn't on it. Nobody built a plaque for a policy "
-                    "that used to be optional."),
-         overlay=None),
-    dict(id="t26", level=None, template="podiumScene",
-         narration=("An industry association hands you an award shaped like a truck, gold-plated, "
-                    "absurd, heavier than it looks. The word self-made gets used four times in six "
-                    "minutes by someone who wasn't there for any of the twenty years it actually took. "
-                    "Your reflection in the trophy's chrome is stretched wide enough that you don't "
-                    "recognize the smile on it. Cameras flash. Smile the way you've practiced. Don't "
-                    "mention the fence, the fine, or the funeral."),
-         overlay=None),
+         narration=("The rebuild is boring on purpose — index funds, three rental properties, a modest "
+                    "stake in a business you actually understand because you once ran one out of the "
+                    "back of a truck, the smell of diesel still the most honest thing in the whole "
+                    "portfolio. Twenty-seven million dollars, verified, diversified, nothing about it "
+                    "interesting enough to make the news twice. It took years, real years, to learn how "
+                    "to want exactly that."),
+         overlay=dict(big="$27,000,000", sub="BORING MONEY. IT TOOK YEARS TO WANT THAT.")),
 
-    # ---- LEVEL 09 · YEAR 24 · $2,600,000,000 ----
-    dict(id="t27", level="LEVEL 09  ·  YEAR 24  ·  $2,600,000,000", template="rooftopEmpire",
-         narration=("Two point six billion dollars, audited, diversified, boring in the way real "
-                    "wealth eventually gets. The watch on your wrist cost nineteen dollars twenty-three "
-                    "years ago and is somehow still running, still set for 2:00, still the only alarm "
-                    "in a penthouse with four others you've never learned to use. Your hands don't "
-                    "shake anymore, signing anything, of any size, in any room. That's the part that "
-                    "should worry you."),
-         overlay=dict(big="$2,600,000,000", sub="THE ALARM STILL GOES OFF")),
-    dict(id="t28", level=None, template="foundationScene",
-         narration=("A hospital wing, a safety-research chair at a state university, a foundation with "
-                    "your name and a mission statement that never once uses the word truck. The plaque "
-                    "behind you lists twelve founding donors; yours is the only name with a number this "
-                    "size attached to it. Ribbon, scissors, applause. A reporter asks what you're "
-                    "proudest of. The real answer has fourteen years and a route number in it. You "
-                    "give the other one instead."),
+    # ---- LEVEL 09 · YEARS LATER · THE NUMBER NOW ----
+    dict(id="t26", level="LEVEL 09  ·  YEARS LATER  ·  THE NUMBER NOW", template="foundationScene",
+         narration=("A scholarship fund, Mateo's name on the first plaque, quietly, for kids with a "
+                    "bill like his and no cousin anywhere holding a winning ticket. Ribbon, scissors, a "
+                    "reporter asking what advice you'd give the next person whose numbers come up "
+                    "someday. There's a true answer, long, about the hoodie, the counter, the smell of "
+                    "burnt coffee that never actually left you no matter how far you moved. You give "
+                    "the shorter one instead."),
+         overlay=None),
+    dict(id="t27", level=None, template="yachtDeck",
+         narration=("A boat you use four days a year, alone more often than not, open water in every "
+                    "direction and nobody left out here to ask you for anything. Gulls, engine hum, "
+                    "salt on your lips instead of burnt coffee for once. The quiet is the most "
+                    "expensive thing you've ever actually bought, and the first one that's never once "
+                    "tried to sue you for it."),
+         overlay=None),
+    dict(id="t28", level=None, template="lobby",
+         narration=("The old warehouse floor still smells like diesel and cold concrete, exactly the "
+                    "way it did the last decade you clocked in here. Terrence nods once, doesn't smile, "
+                    "doesn't mention the fifth ticket out loud this time either — just holds it there, "
+                    "in the space between you, the way he has for years now. Some debts stay open on "
+                    "purpose. You let this one stay that way."),
          overlay=None),
     dict(id="t29", level=None, template="window",
-         narration=("Your daughter Ellie is nineteen and home for a weekend that took four calendar "
-                    "invites to schedule. She asks, not unkindly, when you're going to slow down, the "
-                    "way people ask questions they already know the honest answer to. You don't have "
-                    "an answer that isn't a number. The window behind her holds the same skyline as "
-                    "every other window you've stood at for a decade, and for the first time you can't "
-                    "tell which floor you're actually on."),
-         overlay=None,
-         dialogue=dict(text="Dad. You've checked your watch four times since I got here. It's not even 2 a.m.")),
+         narration=("The real number, the one that actually matters, was never the twenty-seven "
+                    "million on the statement. It's the three million one hundred thousand you can "
+                    "touch without a trustee's signature sitting next to yours — everything else locked "
+                    "away for people who aren't you anymore, by your own design this time, on purpose, "
+                    "finally, after learning it the expensive way."),
+         overlay=dict(big="$3,100,000", sub="THE REST ISN'T YOURS TO TOUCH")),
 
-    # ---- LOOP CLOSE — return-and-partial-repair, not a handoff ----
-    dict(id="t30", level=None, template="gravesideReturn", gap=0.7,
-         narration=("The visits cost less to make once the company went public — a car, a driver, no "
-                    "calendar conflict left to blame, no excuse that holds up under its own weight "
-                    "anymore. This time you walk all the way to the stone, not the edge of the plot. "
-                    "Diesel and cut grass, same as the funeral, eleven years on. The watch beeps at "
-                    "2:00. You get up. You always do. That was never going to be the part that "
-                    "changed."),
-         overlay=None),
+    # ---- LOOP CLOSE — cyclical, the same counter, resolving the cold open ----
+    dict(id="t30", level=None, template="ticketCounter",
+         narration=("The hoodie isn't reaching for a weapon, just his phone — a hospital bill, his "
+                    "daughter, four thousand two hundred dollars, the exact number you used to owe "
+                    "once, down to the cent. You recognize that particular kind of fear before he even "
+                    "finishes the sentence. Dale rings up two things this time: the bill, paid quiet, "
+                    "no fuss, and one more ticket for you, same six numbers as always. The odds haven't "
+                    "changed. You have."),
+         overlay=None,
+         dialogue=dict(text="Same numbers?")),
 ]

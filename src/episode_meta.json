@@ -1,22 +1,22 @@
 {
   "thumb": {
-    "kicker": "THE HAULER WHO",
-    "line1": "BUILT AN EMPIRE",
+    "kicker": "THE WINNER WHO",
+    "line1": "LOST MOST OF IT",
     "line2": "",
-    "tag": "BURIED",
+    "tag": "CURSED",
     "archetype": "poster",
-    "big": "$2,600,000,000",
-    "before": "-$52,000",
-    "after": "BURIED",
-    "expr": "hollow",
-    "povline": "YOU STARTED WITH ONE TRUCK",
-    "keyword": "BURIED",
-    "setting": "landfillView",
-    "question": "WHO PAID THE PRICE?",
+    "big": "$412,000,000",
+    "before": "BROKE",
+    "after": "CURSED",
+    "expr": "shock",
+    "povline": "YOU WIN THE LOTTERY",
+    "keyword": "CURSED",
+    "setting": "ticketCounter",
+    "question": "WHO ACTUALLY KEEPS IT?",
     "mood": "money",
-    "costume": "uniform",
-    "word": "BURIED",
+    "costume": "suit",
+    "word": "CURSED",
     "prop": "vault"
   },
-  "topic": "self_made_billionaire"
+  "topic": "lottery_winner"
 }

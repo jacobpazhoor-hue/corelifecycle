@@ -1445,6 +1445,45 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       {[0, 1, 2].map((i) => {const a = frame * 0.02 + i * 2.1; return <path key={i} d={`M ${700 + Math.cos(a) * 200} ${360 + Math.sin(a) * 60} q 14 -10 28 0 q 14 10 28 0`} fill="none" stroke={INK} strokeWidth={2} opacity={0.5} />;})}
     </g>
   ),
+  // a convenience-store checkout counter — ticket rack + glowing LOTTERY sign behind the register —
+  // the cold open + its loop-close payoff, the Friday ticket ritual
+  counterStore: ({frame}) => (
+    <g>
+      <rect x={0} y={780} width={1920} height={300} fill={FLOOR} /><line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={5} />
+      <rect x={0} y={260} width={1920} height={520} fill={PAPERC} opacity={0.45} />
+      <rect x={620} y={300} width={520} height={340} rx={6} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      {Array.from({length: 6}).map((_, i) => (
+        <rect key={i} x={640 + (i % 3) * 170} y={320 + Math.floor(i / 3) * 160} width={150} height={140} rx={4}
+          fill={i % 2 ? GOLD : '#c0392b'} opacity={0.75} stroke={INK} strokeWidth={2} />
+      ))}
+      <rect x={640} y={216} width={500} height={64} rx={8} fill="#c0392b" stroke={INK} strokeWidth={3} />
+      <text x={890} y={260} fontSize={38} fontWeight={900} fill="#fff" textAnchor="middle" fontFamily="Arial Black, sans-serif">LOTTERY</text>
+      <ellipse cx={890} cy={248} rx={280} ry={90} fill="url(#sglow)" opacity={0.55 + 0.15 * Math.sin(frame * 0.08)} />
+      <rect x={1150} y={700} width={640} height={140} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={1150} y={660} width={640} height={44} fill={PAPERC} stroke={INK} strokeWidth={3} />
+      <rect x={1610} y={636} width={110} height={72} rx={6} fill="#3a4048" stroke={INK} strokeWidth={3} />
+      <rect x={40} y={520} width={260} height={260} fill="none" stroke={INK} strokeWidth={3} opacity={0.4} />
+      {[0, 1, 2].map((i) => <line key={i} x1={40} y1={600 + i * 60} x2={300} y2={600 + i * 60} stroke={INK} strokeWidth={2} opacity={0.35} />)}
+      <rect x={700} y={140} width={520} height={22} rx={4} fill="#fff7e2" stroke={INK} strokeWidth={2} opacity={0.9} />
+    </g>
+  ),
+  // a modest single-wide home at dusk — porch light, propane tank, gravel drive — the ordinary want
+  // before any of this existed, the Level-1 comfort beat
+  trailerHome: ({frame}) => (
+    <g>
+      <rect x={0} y={860} width={1920} height={220} fill={FLOOR} /><line x1={0} y1={860} x2={1920} y2={860} stroke={INK} strokeWidth={5} />
+      <rect x={520} y={600} width={780} height={260} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={520} y={572} width={780} height={30} fill={PAPERC} stroke={INK} strokeWidth={3} />
+      {[0, 1, 2].map((i) => (
+        <rect key={i} x={600 + i * 220} y={660} width={130} height={110} fill={i === 1 ? '#fff3d6' : '#dce8f2'} stroke={INK} strokeWidth={3} opacity={i === 1 ? 0.9 : 0.7} />
+      ))}
+      <ellipse cx={710} cy={720} rx={160} ry={90} fill="url(#sglow)" opacity={0.5 + 0.15 * Math.sin(frame * 0.06)} />
+      <rect x={480} y={800} width={70} height={90} rx={30} fill="#c7cfd6" stroke={INK} strokeWidth={3} />
+      <rect x={520} y={860} width={200} height={60} fill={PAPERC} stroke={INK} strokeWidth={3} opacity={0.8} />
+      <circle cx={560} cy={780} r={10} fill={GOLD} opacity={0.85} />
+      {Array.from({length: 40}).map((_, i) => <circle key={i} cx={(i * 53) % 1920} cy={870 + (i * 7) % 40} r={2} fill="#8a949c" opacity={0.3} />)}
+    </g>
+  ),
 };
 // tiny helper so inline math reads cleanly above
 function y_(v: number) {return v;}
@@ -2526,4 +2565,23 @@ const WASTE = {
       extras={[{pose: A.stand(f + 15), x: 1400, y: 906, scale: 1.05, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE};
+// Lottery pack (lottery_winner — a scenario episode). Only 2 new bespoke backdrops (the ticket
+// counter, the modest home); the rest of the ladder composes from DYNASTY (heirGates/estateGrounds/
+// galaBallroom/yachtDeck/familyVault)/MAFIA (courtroom)/SPY (safehouse, repurposed as the forensic
+// tracing board)/MED (consult)/REALESTATE (suburbHouse)/GEN (podiumScene/foundationScene)/universal.
+const LOTTERY = {
+  // the counter, Dale behind it — the cold open + its loop-close payoff, the Friday ticket ritual
+  ticketCounter: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="counterStore" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 1300, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.worried, t)}}
+      extras={[{pose: A.stand(f + 10), x: 1700, y: 880, scale: 1.05, view: 'front', pal: DIM, face: false}]} />;},
+  // the modest home at dusk — comfort + the named want, before any of this existed. Figure kept well
+  // clear of CAPTION_SAFE_X (this scene's long sub-caption widens the money card past the usual ~700px)
+  trailerPorch: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="trailerHome" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 1220, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.exhausted, t)}} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY};
