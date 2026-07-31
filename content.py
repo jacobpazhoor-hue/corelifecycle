@@ -178,10 +178,10 @@ SCENES = [
          narration=("A city inspector signs off on a foundation nobody actually poured to code, for a "
                     "fee smaller than the concrete alone should have cost. Your junior men present the "
                     "numbers like it's an ordinary business, because to them, by now, it genuinely is. "
-                    "You used to flinch at moments like this. Somewhere in the last year, without "
-                    "noticing exactly when, you stopped."),
+                    "You used to flinch at moments like this. Somewhere in the last year, unmarked, "
+                    "you stopped."),
          overlay=None),
-    dict(id="t15", level=None, template="teaCeremony", gap=1.4,
+    dict(id="t15", level=None, template="teaCeremonySplit", gap=1.4,
          narration=("A sit-down called with less notice than usual, Sato's face doing the math before "
                     "his mouth does. A rival faction inside the syndicate — bigger, hungrier, tired of "
                     "an old man's slow rules — is asking every gumi to choose a side by the end of the "
@@ -307,8 +307,8 @@ SCENES = [
     dict(id="t30", level=None, template="neonAlley",
          narration=("Same kind of alley, decades later, rain instead of neon. A kid maybe fifteen "
                     "stands over a fallen collector's boy, hands shaking in a way yours stopped doing a "
-                    "long time ago. You don't offer him the cup yet. You just watch, the way Sato once "
-                    "watched you, long enough to see how long he stays standing before you decide "
-                    "whether this one is worth the debt."),
+                    "long time ago. You don't offer him the cup yet. You just hold still, the way "
+                    "Sato once held still over you, long enough that he stays standing before you "
+                    "decide whether this one is worth the debt."),
          overlay=None),
 ]

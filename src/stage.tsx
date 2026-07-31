@@ -2731,6 +2731,16 @@ const YAKUZA = {
   yubitsumeRite: () => {const f = useCurrentFrame();
     return <Stage backdrop="yubitsumeRoom" bg="url(#spaper)"
       fig={{pose: A.sit(f), x: 960, y: 906, scale: 1.25, view: 'front', expr: FACES.hardened}} />;},
+  // the tea room again, restaged for the split: reviewer fix — this scene and the earlier rivalry
+  // sit-down (SAMURAI's teaCeremony) read as the same picture despite the escalation between them.
+  // Front-on camera instead of the profile two-shot, the swordStand prop instead of the tea table,
+  // cooler blue-toned light instead of warm, and Sato up on his feet and turned away rather than
+  // seated across the table — he's already leaning toward the other room.
+  teaCeremonySplit: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="teaRoom" prop="swordStand" bg="url(#spaper)" figBehind
+      fig={{pose: A.sit(f), x: 620, y: 800, scale: 1.25, view: 'front', expr: blendExpr(FACES.worried, FACES.hardened, t)}}
+      extras={[{pose: A.stand(f), x: 1280, y: 900, scale: 1.2, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
 };
 
 export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA};

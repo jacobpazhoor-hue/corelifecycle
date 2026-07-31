@@ -2,7 +2,7 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 21139,
+  "totalFrames": 21077,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
@@ -183,17 +183,17 @@
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
       "startFrame": 9209,
-      "durationInFrames": 634,
+      "durationInFrames": 586,
       "gap": 0.25
     },
     {
       "id": "t15",
       "level": null,
       "overlay": null,
-      "template": "teaCeremony",
+      "template": "teaCeremonySplit",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 9843,
+      "startFrame": 9795,
       "durationInFrames": 698,
       "gap": 1.4
     },
@@ -207,7 +207,7 @@
       "template": "warRoom",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 10541,
+      "startFrame": 10493,
       "durationInFrames": 840,
       "gap": 0.25
     },
@@ -221,7 +221,7 @@
       "template": "tower",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 11381,
+      "startFrame": 11333,
       "durationInFrames": 691,
       "gap": 0.25
     },
@@ -232,7 +232,7 @@
       "template": "hospitalRounds",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 12072,
+      "startFrame": 12024,
       "durationInFrames": 612,
       "gap": 0.25
     },
@@ -246,7 +246,7 @@
       "template": "wiretap",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 12684,
+      "startFrame": 12636,
       "durationInFrames": 843,
       "gap": 0.25
     },
@@ -260,7 +260,7 @@
       "template": "oyabunOffice",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 13527,
+      "startFrame": 13479,
       "durationInFrames": 788,
       "gap": 0.25
     },
@@ -271,7 +271,7 @@
       "template": "signing",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 14315,
+      "startFrame": 14267,
       "durationInFrames": 553,
       "gap": 0.25
     },
@@ -282,7 +282,7 @@
       "template": "commission",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 14868,
+      "startFrame": 14820,
       "durationInFrames": 710,
       "gap": 0.25
     },
@@ -296,7 +296,7 @@
       "template": "oyabunOffice",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 15578,
+      "startFrame": 15530,
       "durationInFrames": 694,
       "gap": 0.25
     },
@@ -307,7 +307,7 @@
       "template": "waterfront",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 16272,
+      "startFrame": 16224,
       "durationInFrames": 600,
       "gap": 0.25
     },
@@ -321,7 +321,7 @@
       "template": "yubitsumeRite",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 16872,
+      "startFrame": 16824,
       "durationInFrames": 829,
       "gap": 0.25
     },
@@ -335,7 +335,7 @@
       "template": "shrineOathRite",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 17701,
+      "startFrame": 17653,
       "durationInFrames": 747,
       "gap": 0.7
     },
@@ -349,7 +349,7 @@
       "template": "fileWall",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 18448,
+      "startFrame": 18400,
       "durationInFrames": 541,
       "gap": 0.25
     },
@@ -363,7 +363,7 @@
       "template": "revolvingDoor",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 18989,
+      "startFrame": 18941,
       "durationInFrames": 804,
       "gap": 0.25
     },
@@ -374,7 +374,7 @@
       "template": "hospitalRounds",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 19793,
+      "startFrame": 19745,
       "durationInFrames": 716,
       "gap": 0.25
     },
@@ -385,8 +385,8 @@
       "template": "neonAlley",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 20509,
-      "durationInFrames": 630,
+      "startFrame": 20461,
+      "durationInFrames": 616,
       "gap": 0.25
     }
   ]
