@@ -2,370 +2,391 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 21296,
+  "totalFrames": 21139,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t01",
       "level": null,
       "overlay": {
-        "big": "1 IN 292,201,338",
-        "sub": "THE ODDS THAT NIGHT NEVER MATTERED LESS"
+        "big": "11 YEARS",
+        "sub": "A FILE THAT'S NEVER HELD UP IN COURT"
       },
-      "template": "ticketCounter",
+      "template": "neonAlley",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 793,
+      "durationInFrames": 737,
       "gap": 0.7
     },
     {
       "id": "t02",
       "level": null,
       "overlay": null,
-      "template": "deskSilhouette",
+      "template": "window",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 793,
-      "durationInFrames": 762,
+      "startFrame": 737,
+      "durationInFrames": 643,
       "gap": 0.25
     },
     {
       "id": "t03",
-      "level": "LEVEL 01  \u00b7  THE TICKET  \u00b7  $4,200",
+      "level": "RANK I  \u00b7  KOBUN  \u00b7  $600",
       "overlay": {
-        "big": "$4,200",
-        "sub": "MATEO'S ER BILL \u2014 WHAT YOU DON'T HAVE"
+        "big": "$600",
+        "sub": "WHAT YUMI OWES ISHII BY FRIDAY"
       },
-      "template": "trailerPorch",
+      "template": "rentalUnits",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 1555,
-      "durationInFrames": 668,
+      "startFrame": 1380,
+      "durationInFrames": 690,
       "gap": 0.25
     },
     {
       "id": "t04",
       "level": null,
       "overlay": null,
-      "template": "ticketCounter",
+      "template": "backAlley",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 2223,
-      "durationInFrames": 843,
+      "startFrame": 2070,
+      "durationInFrames": 583,
       "gap": 0.25
     },
     {
       "id": "t05",
       "level": null,
-      "overlay": null,
-      "template": "window",
+      "overlay": {
+        "big": "$40/WK",
+        "sub": "THE ALLOWANCE OF A KOBUN"
+      },
+      "template": "shrineOathRite",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 3066,
-      "durationInFrames": 698,
+      "startFrame": 2653,
+      "durationInFrames": 737,
       "gap": 0.25
     },
     {
       "id": "t06",
-      "level": null,
-      "overlay": null,
-      "template": "deskSilhouette",
+      "level": "RANK II  \u00b7  WAKASHU  \u00b7  $400/WK",
+      "overlay": {
+        "big": "$400/WK",
+        "sub": "COLLECTED. NONE OF IT KEPT."
+      },
+      "template": "pachinkoFloor",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 3764,
-      "durationInFrames": 822,
+      "startFrame": 3390,
+      "durationInFrames": 745,
       "gap": 0.25
     },
     {
       "id": "t07",
-      "level": "LEVEL 02  \u00b7  THE MATCH  \u00b7  $412,000,000",
+      "level": null,
       "overlay": {
-        "big": "$412,000,000",
-        "sub": "THE ADVERTISED JACKPOT"
+        "big": "1 SHOT",
+        "sub": "WIDE. CLOSE ENOUGH TO COUNT."
       },
-      "template": "ticketCounter",
+      "template": "waterfront",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 4586,
-      "durationInFrames": 664,
-      "gap": 0.7
+      "startFrame": 4135,
+      "durationInFrames": 692,
+      "gap": 0.25
     },
     {
       "id": "t08",
       "level": null,
       "overlay": null,
-      "template": "lobby",
+      "template": "teaCeremony",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 5250,
-      "durationInFrames": 677,
+      "startFrame": 4827,
+      "durationInFrames": 744,
       "gap": 0.25
     },
     {
       "id": "t09",
-      "level": "LEVEL 03  \u00b7  THE CLAIM  \u00b7  $135,000,000",
+      "level": "RANK III  \u00b7  SHATEI  \u00b7  200 HRS",
       "overlay": {
-        "big": "$135,000,000",
-        "sub": "AFTER THE HAIRCUT AND THE IRS"
+        "big": "200 HRS",
+        "sub": "THE INK THAT NEVER WASHES OFF"
       },
-      "template": "boardroomNotes",
+      "template": "irezumiParlor",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 5927,
-      "durationInFrames": 683,
+      "startFrame": 5571,
+      "durationInFrames": 728,
       "gap": 0.25
     },
     {
       "id": "t10",
       "level": null,
-      "overlay": null,
-      "template": "signing",
+      "overlay": {
+        "big": "$2,000/MO",
+        "sub": "YOUR FIRST CUT, MADE OFFICIAL"
+      },
+      "template": "shrineOathRite",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 6610,
-      "durationInFrames": 709,
+      "startFrame": 6299,
+      "durationInFrames": 771,
       "gap": 0.25
     },
     {
       "id": "t11",
-      "level": "LEVEL 04  \u00b7  THE FIRST SPEND  \u00b7  $118,000,000",
-      "overlay": {
-        "big": "$118,000,000",
-        "sub": "AFTER THE HOUSE, THE DEBT, THE GIFTS"
-      },
-      "template": "openHouse",
+      "level": null,
+      "overlay": null,
+      "template": "pachinkoFloor",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 7319,
-      "durationInFrames": 869,
+      "startFrame": 7070,
+      "durationInFrames": 622,
       "gap": 0.25
     },
     {
       "id": "t12",
       "level": null,
-      "overlay": null,
-      "template": "dinner",
+      "overlay": {
+        "big": "30%",
+        "sub": "THE CUT THAT LEAVES BY MORNING"
+      },
+      "template": "countRoom",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 8188,
-      "durationInFrames": 601,
+      "startFrame": 7692,
+      "durationInFrames": 754,
       "gap": 0.25
     },
     {
       "id": "t13",
-      "level": "LEVEL 05  \u00b7  THE LINE FORMS  \u00b7  61 ASKS",
+      "level": "RANK IV  \u00b7  SHATEI-GASHIRA  \u00b7  $18,000/MO",
       "overlay": {
-        "big": "61",
-        "sub": "PEOPLE WHO'VE ASKED THIS MONTH"
+        "big": "$18,000/MO",
+        "sub": "LAUNDERED THROUGH CONCRETE"
       },
-      "template": "galaBallroom",
+      "template": "constructionSite",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 8789,
-      "durationInFrames": 627,
+      "startFrame": 8446,
+      "durationInFrames": 763,
       "gap": 0.25
     },
     {
       "id": "t14",
       "level": null,
       "overlay": null,
-      "template": "deskClose",
+      "template": "boardroomNotes",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 9416,
-      "durationInFrames": 669,
+      "startFrame": 9209,
+      "durationInFrames": 634,
       "gap": 0.25
     },
     {
       "id": "t15",
       "level": null,
       "overlay": null,
-      "template": "courtroom",
+      "template": "teaCeremony",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 10085,
-      "durationInFrames": 617,
-      "gap": 0.25
-    },
-    {
-      "id": "t16",
-      "level": "LEVEL 06  \u00b7  THE DRAIN  \u00b7  SIGNED, UNREAD",
-      "overlay": null,
-      "template": "consult",
-      "audio": "audio/t16.wav",
-      "audioStartFrame": 3,
-      "startFrame": 10702,
-      "durationInFrames": 834,
+      "startFrame": 9843,
+      "durationInFrames": 698,
       "gap": 1.4
     },
     {
-      "id": "t17",
+      "id": "t16",
       "level": null,
       "overlay": {
-        "big": "-$71,000,000",
-        "sub": "THE FUND WAS NEVER REGISTERED"
+        "big": "EXCOMMUNICATED",
+        "sub": "HAMON: DISOWNED, THEN DEAD"
       },
-      "template": "deskSilhouette",
+      "template": "warRoom",
+      "audio": "audio/t16.wav",
+      "audioStartFrame": 3,
+      "startFrame": 10541,
+      "durationInFrames": 840,
+      "gap": 0.25
+    },
+    {
+      "id": "t17",
+      "level": "RANK V  \u00b7  SHIBUCH\u014c  \u00b7  $60,000/MO",
+      "overlay": {
+        "big": "$60,000/MO",
+        "sub": "SATO'S TERRITORY, NOW YOURS"
+      },
+      "template": "tower",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 11536,
-      "durationInFrames": 780,
+      "startFrame": 11381,
+      "durationInFrames": 691,
       "gap": 0.25
     },
     {
       "id": "t18",
       "level": null,
       "overlay": null,
-      "template": "safehouse",
+      "template": "hospitalRounds",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 12316,
-      "durationInFrames": 744,
+      "startFrame": 12072,
+      "durationInFrames": 612,
       "gap": 0.25
     },
     {
       "id": "t19",
-      "level": "LEVEL 07  \u00b7  THE FALL  \u00b7  $19,000,000",
+      "level": null,
       "overlay": {
-        "big": "$19,000,000",
-        "sub": "WHAT'S LEFT, AFTER THE LAWYERS"
+        "big": "-90%",
+        "sub": "MEMBERSHIP SINCE THE 1963 PEAK"
       },
-      "template": "window",
+      "template": "wiretap",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 13060,
-      "durationInFrames": 758,
+      "startFrame": 12684,
+      "durationInFrames": 843,
       "gap": 0.25
     },
     {
       "id": "t20",
-      "level": null,
-      "overlay": null,
-      "template": "emptyChair",
+      "level": "RANK VI  \u00b7  WAKAGASHIRA  \u00b7  $2,400,000/YR",
+      "overlay": {
+        "big": "$2,400,000/YR",
+        "sub": "EVERY CREW'S TRIBUTE CROSSES YOUR DESK"
+      },
+      "template": "oyabunOffice",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 13818,
-      "durationInFrames": 651,
+      "startFrame": 13527,
+      "durationInFrames": 788,
       "gap": 0.25
     },
     {
       "id": "t21",
       "level": null,
-      "overlay": {
-        "big": "3\u20135 YEARS",
-        "sub": "HOW LONG A WINDFALL TAKES TO FIND THE CRACKS ALREADY THERE"
-      },
-      "template": "window",
+      "overlay": null,
+      "template": "signing",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 14469,
-      "durationInFrames": 724,
+      "startFrame": 14315,
+      "durationInFrames": 553,
       "gap": 0.25
     },
     {
       "id": "t22",
       "level": null,
       "overlay": null,
-      "template": "openHouse",
+      "template": "commission",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 15193,
-      "durationInFrames": 692,
+      "startFrame": 14868,
+      "durationInFrames": 710,
       "gap": 0.25
     },
     {
       "id": "t23",
-      "level": "LEVEL 08  \u00b7  THE REBUILD  \u00b7  $27,000,000",
-      "overlay": null,
-      "template": "revolvingDoor",
+      "level": "RANK VII  \u00b7  OYABUN  \u00b7  $11,000,000/YR",
+      "overlay": {
+        "big": "$11,000,000/YR",
+        "sub": "THE EMPIRE, YOUR NAME ON NONE OF IT"
+      },
+      "template": "oyabunOffice",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 15885,
-      "durationInFrames": 660,
+      "startFrame": 15578,
+      "durationInFrames": 694,
       "gap": 0.25
     },
     {
       "id": "t24",
       "level": null,
       "overlay": null,
-      "template": "familyVault",
+      "template": "waterfront",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 16545,
-      "durationInFrames": 777,
+      "startFrame": 16272,
+      "durationInFrames": 600,
       "gap": 0.25
     },
     {
       "id": "t25",
       "level": null,
       "overlay": {
-        "big": "$27,000,000",
-        "sub": "BORING MONEY. IT TOOK YEARS TO WANT THAT."
+        "big": "1 JOINT",
+        "sub": "TAKEN INSTEAD OF HIM"
       },
-      "template": "atrium",
+      "template": "yubitsumeRite",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 17322,
-      "durationInFrames": 736,
+      "startFrame": 16872,
+      "durationInFrames": 829,
       "gap": 0.25
     },
     {
       "id": "t26",
-      "level": "LEVEL 09  \u00b7  YEARS LATER  \u00b7  THE NUMBER NOW",
-      "overlay": null,
-      "template": "foundationScene",
+      "level": "RANK VIII  \u00b7  KUMICH\u014c  \u00b7  $340,000,000/YR",
+      "overlay": {
+        "big": "$340,000,000",
+        "sub": "WHAT THE WHOLE SYNDICATE MOVES A YEAR"
+      },
+      "template": "shrineOathRite",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 18058,
-      "durationInFrames": 715,
-      "gap": 0.25
+      "startFrame": 17701,
+      "durationInFrames": 747,
+      "gap": 0.7
     },
     {
       "id": "t27",
       "level": null,
-      "overlay": null,
-      "template": "yachtDeck",
+      "overlay": {
+        "big": "$0",
+        "sub": "WHAT'S ACTUALLY IN YOUR NAME"
+      },
+      "template": "fileWall",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 18773,
-      "durationInFrames": 573,
+      "startFrame": 18448,
+      "durationInFrames": 541,
       "gap": 0.25
     },
     {
       "id": "t28",
       "level": null,
-      "overlay": null,
-      "template": "lobby",
+      "overlay": {
+        "big": "3 BANKS",
+        "sub": "BEFORE ONE SAID YES"
+      },
+      "template": "revolvingDoor",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 19346,
-      "durationInFrames": 609,
+      "startFrame": 18989,
+      "durationInFrames": 804,
       "gap": 0.25
     },
     {
       "id": "t29",
       "level": null,
-      "overlay": {
-        "big": "$3,100,000",
-        "sub": "THE REST ISN'T YOURS TO TOUCH"
-      },
-      "template": "window",
+      "overlay": null,
+      "template": "hospitalRounds",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 19955,
-      "durationInFrames": 560,
+      "startFrame": 19793,
+      "durationInFrames": 716,
       "gap": 0.25
     },
     {
       "id": "t30",
       "level": null,
       "overlay": null,
-      "template": "ticketCounter",
+      "template": "neonAlley",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 20515,
-      "durationInFrames": 781,
+      "startFrame": 20509,
+      "durationInFrames": 630,
       "gap": 0.25
     }
   ]

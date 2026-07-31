@@ -1,22 +1,22 @@
 {
   "thumb": {
-    "kicker": "THE WINNER WHO",
-    "line1": "LOST MOST OF IT",
+    "kicker": "THE RANK WHERE",
+    "line1": "YOU STOP COUNTING FRIENDS",
     "line2": "",
-    "tag": "CURSED",
+    "tag": "MARKED",
     "archetype": "poster",
-    "big": "$412,000,000",
-    "before": "BROKE",
-    "after": "CURSED",
-    "expr": "shock",
-    "povline": "YOU WIN THE LOTTERY",
-    "keyword": "CURSED",
-    "setting": "ticketCounter",
-    "question": "WHO ACTUALLY KEEPS IT?",
-    "mood": "money",
-    "costume": "suit",
-    "word": "CURSED",
+    "big": "$340,000,000",
+    "before": "NOBODY",
+    "after": "MARKED",
+    "expr": "hardened",
+    "povline": "YOU TAKE THE CUP",
+    "keyword": "MARKED",
+    "setting": "oyabunOffice",
+    "question": "WHO OWNS YOUR NAME NOW?",
+    "mood": "crime",
+    "costume": "street",
+    "word": "INK",
     "prop": "vault"
   },
-  "topic": "lottery_winner"
+  "topic": "yakuza"
 }

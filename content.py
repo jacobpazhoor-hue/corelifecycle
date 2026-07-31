@@ -1,347 +1,314 @@
 #!/usr/bin/env python3
-"""POV: You Win the Lottery (Every Level of the Money) — POV doodle build, ~12 min.
-Grounded in docs/research/lottery_winner.md. SCENARIO format: the levels are escalating TIME/DECISION
-points across a single life-changing event and its aftermath (the ticket -> the match -> the claim ->
-the first spend -> the family line -> the drain -> the fall -> the rebuild -> the number now), not job
-ranks. Second-person present-tense POV: the viewer IS an ordinary forklift operator who wins a $412M
-Powerball jackpot and lives what the real research says actually happens next — a spike, then a real
-crash, then a smaller, guarded, honestly-earned number at the end.
+"""Your Life in the Yakuza at Every Rank (You Owe a Finger) — POV doodle build, ~12 min.
+Grounded in docs/research/yakuza.md. RANK format: kobun -> wakashu -> shatei -> shatei-gashira ->
+shibucho -> wakagashira -> oyabun -> kumicho. Second-person present-tense POV: the viewer IS a
+street kid recruited into a fictional, composite gumi (family) and climbs the documented core yakuza
+hierarchy (elaborated to 8 rungs for pacing -- flagged in research), grounded in verified mechanics:
+sakazuki cup ceremonies, yubitsume (finger-joint atonement), irezumi/tebori tattooing (200-600 hrs,
+VERIFIED range), jonokin tribute, the real 2015 Yamaguchi-gumi/Kobe-Yamaguchi-gumi split (used only as
+fictionalized background grounding, never depicted as this episode's literal history), the 1992 Botaiho
++ 2009-2011 prefectural exclusion ordinances, and the ~90% collapse in NPA-reported membership from a
+184,100 peak (1963) to roughly 17,600 in 2025 [all VERIFIED, see research doc]. The gumi, the syndicate,
+and every named character (Sato, Kenji, Yumi, Ishii) are a FICTIONAL COMPOSITE -- no real, currently
+active organization or living individual is depicted.
 
-REAL/VERIFIED mechanics woven in (see research doc; flags there): Powerball jackpot odds are 1 in
-292,201,338 [VERIFIED, official prize chart]; the lump-sum cash option is ~50-60% (commonly ~52%) of
-the advertised annuitized jackpot, paid immediately, before any tax [VERIFIED, 2026 lottery-tax
-coverage]; the IRS withholds 24% automatically but a jackpot lands you in the 37% top bracket, meaning
-more is owed at filing [VERIFIED]; roughly half of US states allow anonymous claiming via a trust. The
-episode's central "wait — that's real?" reversal: the widely-repeated "70% of lottery winners go
-broke" statistic is NOT a real, sourced figure — NEFE, the organization it's constantly misattributed
-to, has stated on the record it never produced or can confirm it [VERIFIED]. The real, peer-reviewed
-finding (Hankins, Hoekstra & Skiba, Review of Economics and Statistics, 2011) is quieter and scarier in
-a different way: winners of MODEST prizes ($50K-$150K), especially those already financially precarious
-before they won, file for bankruptcy at a higher rate within 3-5 years [VERIFIED]. This episode's
-"curse" beats (a robbery-adjacent threat, a predatory advisor, repeated lawsuits) are a dramatized
-recombination of three real, well-documented cases — Jack Whittaker ($314.9M Powerball, 2002, robbed
-repeatedly, sued repeatedly, said "I wish I'd torn that ticket up"), William "Bud" Post III ($16.2M
-Pennsylvania, 1988, bankrupt within years, his own brother convicted in a murder-for-hire plot over the
-winnings), and Abraham Shakespeare ($30M Florida Lotto, 2006, murdered in 2009 by a woman who'd gained
-control of his money) — used ONLY as real-world grounding texture, never as the protagonist. The
-protagonist, Dale, Renn, Mateo, Priya Chen, Terrence, and every named character in this episode are a
-FICTIONAL COMPOSITE; no real winner is depicted as fact.
+SPINE: an UNBROKEN NUMERIC CLIMB -- the dollar figure never craters (unlike lottery_winner's spike-
+crash-rebuild or mob_boss's RICO seizure); the only real drop across the arc is moral/relational (the
+mentor's death), not financial. $40/WK (kobun) -> $400/WK handled, not kept (wakashu) -> $2,000/MO
+(shatei, made) -> $18,000/MO (shatei-gashira) -> $60,000/MO (shibucho) -> $2,400,000/YR (wakagashira)
+-> $11,000,000/YR (oyabun) -> $340,000,000/YR across the whole syndicate (kumicho) -- undercut
+immediately by the apex twist: $0 in your own actual name, no account a court can find.
 
-SPINE: the gold overlay is a SPIKE, not a climb — the advertised jackpot ($412,000,000) at the match,
-cut to the real lump-sum-after-tax cash figure ($135,000,000) at the claim, spent down to $118M, held
-near $104M through the family-ask level, then CRATERS at the midpoint reversal (-$71,000,000, a
-predatory "guaranteed" fund) to $19,000,000 at rock bottom, before a slow, boring, verified rebuild to
-$27,000,000 — and the closing twist echoes the claim-level "advertised vs. actual" gap one more time:
-of that $27M, only $3,100,000 is actually yours to touch without a trustee's signature, the rest locked
-in trust for people who aren't you. The sub-caption carries non-dollar cost beats (61 PEOPLE WHO'VE
-ASKED, 3-5 YEARS bankruptcy-study finding) so the gap between the number and the cost stays legible.
+STORY: SATO -- the mid-level oyabun who recruits you off a stairwell, sponsors your first sakazuki,
+teaches giri (duty) over ninjo (feeling); the mentor. His betrayal/loss payoff (the midpoint reversal,
+~53%): a syndicate-wide split (grounded in the real 2015 Yamaguchi-gumi fracture) forces him to refuse
+the breakaway faction; he's hamon'd (excommunicated), then killed. KENJI -- your fellow recruit, faster
+and colder, who sides with the breakaway faction and is the one who confirms Sato's death to you (the
+rival's taunt at the reversal); he outlives Sato by decades as an aging peer, then dies in old age at
+the loop-close, resolving the mentor arc. YUMI -- your mother, missing two joints of her left hand to a
+wringer-machine accident, owing loan shark Ishii $600 by Friday -- the named, concrete want (Level 1),
+paid off same-scene. The mother's ACCIDENTAL missing joints are echoed deliberately at Level 7 (t25)
+when you take a yubitsume joint yourself, ON PURPOSE, for a debt that was never yours. SENSORY/MOTIF
+ANCHOR: the sakazuki sake cup, poured three times across the arc (t05 joining, t10 made, t26 kumicho),
+paired each time with the body-dread fact "your hand doesn't shake taking it" -- deepening, not fading,
+each time it recurs. ANAPHORA (t12): "The family buys respect. The family buys protection. The family
+never once buys you out of owing it."
 
-STORY: DALE — the gas-station clerk who's sold you a ticket every Friday for six years, warm, never a
-villain; his act-1 warning (t04 dialogue, "odds don't care how bad you need it") is the theme stated
-early, paid off literally by the closing line. RENN — your sister; her son MATEO's $4,200 ER bill is
-the named, concrete want (Level 1), paid off cleanly and immediately at Level 4 — the only number in
-the whole story that ever feels entirely clean. PRIYA CHEN — the wealth advisor who structures the
-claim helpfully at Level 3, then steers you into an unregistered "friends and family" fund you sign
-without your lawyer present; her cold, unapologetic line at the reversal ("You signed every page
-yourself") is the rival's taunt at the midpoint. TERRENCE — an old warehouse coworker who resurfaces
-claiming a "fifth ticket" existed in your old Friday office pool that no one ever claimed — the
-UNRESOLVED UNIVERSE THREAD (deliberate); mentioned twice, never resolved. SENSORY ANCHOR: the smell of
-burnt gas-station coffee under a buzzing fluorescent strip light — re-triggered at every level-up (t04,
-t09, t16, t22, t30) including, ironically, in Priya's eleven-dollar-coffee office (t09) as a contrast
-beat. BODY-DREAD MOTIF (fact, not feeling): "your hands don't move" at the numbers match (t06) ->
-"don't shake, not yet" signing the trust (t10) -> "don't shake signing it" at the fund that drains
-everything (t16, the line you'll remember longest) -> restored, guarded, at the rebuild (t23).
-
-Templates: 2 NEW (a small lottery pack in src/stage.tsx — ticketCounter/trailerPorch) + DYNASTY's
-`galaBallroom`/`suburbHouse`(REALESTATE)/`familyVault`/`yachtDeck` (repurposed from old-money to new
-money's isolation and protection) + MAFIA's `courtroom` (re-narrated from RICO to civil nuisance suits)
-+ SPY's `safehouse` (re-narrated from a target wall to a forensic accountant's tracing board) + MED's
-`consult` + GEN's `foundationScene` + universal (deskSilhouette/window/lobby/boardroomNotes/signing/
-dinner/deskClose/fileWall/emptyChair/revolvingDoor/atrium). No two adjacent scenes repeat a template.
+Templates: 6 NEW (a small yakuza pack in src/stage.tsx -- neonAlley/shrineOathRite/irezumiParlor/
+pachinkoFloor/oyabunOffice/yubitsumeRite) + MAFIA's backAlley/countRoom/courtroom/wiretap/waterfront/
+commission (re-narrated: the council of allied oyabun) + SAMURAI's teaCeremony + REALESTATE's
+rentalUnits/constructionSite + MED's hospitalRounds + universal (window/fileWall/tower/boardroomNotes/
+signing/revolvingDoor/warRoom). No two adjacent scenes repeat a template.
 
 STRUCTURAL VARIATION vs the last 2 (self_made_billionaire = FLASH-FORWARD cold open / STEADY-CLIMB-
-WITH-ONE-DROP act two / RETURN-AND-PARTIAL-REPAIR ending; crypto_founder = AFTERMATH cold open /
-BOOM-BUST-BOOM act two / COMPLICIT-SILENCE ending): this cold open is MID-ACTION (a tense, unresolved
-standoff at the gas-station door, cut away before it resolves — last used 2 episodes back by
-venture_capitalist, not consecutively); act two is a single RISE-THEN-FALL-THEN-PARTIAL-RECOVERY arc —
-one spike, one real crash, one slow honest climb back, not multiple boom-bust cycles and not a steady
-line with one drop; the ending is CYCLICAL — the loop-close scene returns to the EXACT same counter,
-the exact same clerk, and resolves the cold open's standoff directly (not a torch-passing mentorship,
-not one door left ambiguously open, not a silent mirrored choice with a stranger) before landing on a
-quiet, quotable, non-triumphant final line.
+WITH-ONE-DROP act two / RETURN-AND-PARTIAL-REPAIR ending; lottery_winner = MID-ACTION cold open /
+RISE-THEN-FALL-THEN-PARTIAL-RECOVERY act two / CYCLICAL same-spot ending): this cold open is AFTERMATH
+(you just outside a violent night, cut away before it resolves who's hurt -- last used 3 episodes back
+by crypto_founder, not consecutively); act two is an UNBROKEN NUMERIC CLIMB whose only real drop is
+moral (distinct from both prior shapes' financial dips/crashes); the ending is TORCH-PASSING -- the
+loop-close returns to the alley's TYPE of moment but a NEW kid, and you make a deliberate choice about
+whether to extend him the cup, rather than a literal same-spot repeat (not consecutive with lottery's
+CYCLICAL ending).
 
 PROMISE -> PAYOFF LEDGER:
-  * t01 cold open (the hoodie man blocking the door, "don't move yet")    -> t30 (resolved: it's Dez, an old coworker, not a threat)
-  * t02 promise/cost-line ("you'll know exactly, to the dollar, and past it") -> paid off across the arc, echoed at t30
-  * sensory anchor: burnt gas-station coffee + fluorescent hum            -> t04/t09/t16/t22/t30 (re-triggered, including ironically at Priya's office)
-  * t03 Mateo's $4,200 ER bill (the named want)                          -> t11 (paid off same-day, the cleanest number in the story)
-  * t04 Dale's dialogue warning ("odds don't care how bad you need it")   -> echoed structurally all arc -> literal payoff in t30's closing line
-  * t06 body-dread motif ("your hands don't move")                       -> t10 ("don't shake, not yet") -> t16 (drains everything, "you'll remember longest") -> t23 (restored, guarded)
-  * t09 the trust/anonymity choice                                       -> t24 (familyVault, "own nothing, control everything") -> t29 (the $3.1M twist)
-  * t14 Terrence's "fifth ticket" rumor                                  -> UNRESOLVED, deliberate universe thread; revisited, not resolved, at t28
-  * t15 the first lawsuit                                                -> escalates t19 (more lawsuits) -> resolved by t23 (real fiduciary counsel)
-  * t16 Priya's unregistered "friends and family" fund, signed unread    -> t17 THE REVERSAL (-$71,000,000)
-  * share beat: the debunked "70% go broke" myth + the real 2011 study   -> t21, reframes the whole arc's meaning
+  * t01 cold open (blood on your knuckles, a detective who's never made a charge stick) -> t28 (the
+    detective retires without ever making a case stick; only the exclusion list ever touched you)
+  * t02 promise/cost-line ("you don't know yet what 'in' actually costs")                -> paid off across the arc, echoed at t27/t30
+  * sensory anchor: the sakazuki cup + "your hand doesn't shake" body-dread                -> t05 (joining) -> t10 (made) -> t26 (kumicho, "that fact doesn't scare you anymore. It should.")
+  * t03 the $600 owed to Ishii by Friday (the named want)                                  -> t05 (paid off same-night, the cleanest transaction in the whole story)
+  * t03 Yumi's two missing finger joints (accidental)                                      -> t25 (echoed on purpose: you take a yubitsume joint yourself, for a debt that isn't yours)
+  * t05 Sato's dialogue ("a cup poured is a debt that outlives you")                        -> echoed structurally all arc -> literal payoff in t29's closing line
+  * t08 Sato's second line ("giri before ninjo")                                           -> tested and broken at t16 (the split forces the choice this line warned about)
+  * t12 anaphora ("the family buys respect... buys protection... never buys you out")       -> reframed at t27 ("own nothing, control everything")
+  * t15 the split is called (gap=1.4 silence before the reversal line)                     -> t16 THE REVERSAL (Sato hamon'd, then killed; Kenji's taunt)
+  * t19 share beat: the real ~90% membership collapse since the 1963 peak                  -> reframes t28's apex-but-excluded ending
+  * UNRESOLVED UNIVERSE THREAD (deliberate): the detective's eleven-year file, unclosed     -> mentioned at t01/t28, never fully resolved
 """
 
 FPS = 30
 
 SCENES = [
-    # ---- COLD OPEN — mid-action, cut away before it resolves ----
-    dict(id="t01", level=None, template="ticketCounter", gap=0.7,
-         narration=("Fluorescent hum, and under it the smell of burnt gas-station coffee — the same "
-                    "smell for six years running. Someone is holding the door shut from outside. A man "
-                    "in a gray hoodie stands between you and the parking lot, both hands buried in his "
-                    "pockets. 'Just enough to fix what's broken,' he says, too calm for what his hands "
-                    "might be doing. Dale freezes behind the register. Six years ago, you stood exactly "
-                    "here for a dollar-two ticket. Don't move yet."),
-         overlay=dict(big="1 IN 292,201,338", sub="THE ODDS THAT NIGHT NEVER MATTERED LESS")),
+    # ---- COLD OPEN — AFTERMATH, cut away before it resolves who's hurt ----
+    dict(id="t01", level=None, template="neonAlley", gap=0.7,
+         narration=("Neon bleeds red across wet asphalt outside a club's back door. Your knuckles are "
+                    "open — not from throwing anything, from someone else's teeth. A detective stands "
+                    "under the streetlamp across the alley, close enough to arrest you, hands staying "
+                    "in his coat pockets instead. He's chased your name through three ranks and eleven "
+                    "years of files that never once held up in court. Behind you, the door stops "
+                    "swinging. Don't look at it twice."),
+         overlay=dict(big="11 YEARS", sub="A FILE THAT'S NEVER HELD UP IN COURT")),
 
     # ---- PROMISE + COST-LINE ----
-    dict(id="t02", level=None, template="deskSilhouette",
-         narration=("Rewind six years. None of this exists yet — not the hoodie, not the door held "
-                    "shut, not the number that will replace your name in every room you walk into "
-                    "afterward. Right now the forklift needs a new battery, the rent is three days "
-                    "late, and nobody in this story has said the word jackpot out loud yet. You want to "
-                    "know what one actually costs. Everyone thinks they do. By the end you'll know "
-                    "exactly, to the dollar, and past it."),
+    dict(id="t02", level=None, template="window",
+         narration=("Rewind decades. None of this exists yet — not the jacket, not the detective who "
+                    "knows your name and can't use it, not the door you won't look at twice. Right now "
+                    "you're eleven, and the only thing behind any door is your mother, counting coins "
+                    "twice to be sure of the total. You want in. You don't know yet what 'in' actually "
+                    "costs, or that the bill never really closes."),
          overlay=None),
 
-    # ---- LEVEL 01 · THE TICKET · $4,200 ----
-    dict(id="t03", level="LEVEL 01  ·  THE TICKET  ·  $4,200", template="trailerPorch",
-         narration=("Fourteen-fifty an hour on the forklift, third shift, a propane tank reading a "
-                    "quarter full on the porch behind you. Your sister Renn's boy Mateo spent Tuesday "
-                    "night in an ER bed wheezing, and insurance covers most of it — not the four "
-                    "thousand two hundred dollars still sitting on a bill with your name on the "
-                    "co-sign line. Rent is due Friday. So is the bill. Only one of them can actually "
-                    "wait."),
-         overlay=dict(big="$4,200", sub="MATEO'S ER BILL — WHAT YOU DON'T HAVE")),
-    dict(id="t04", level=None, template="ticketCounter",
-         narration=("Every Friday for six years, one ticket, same six numbers — your father's "
-                    "birthday, backward, plus the one he always called lucky before the word stopped "
-                    "meaning anything to either of you. Dale rings it up without looking up from the "
-                    "register, the way he has a hundred Fridays before this one, exact change ready "
-                    "before you even reach the counter. The ticket rack glows red and gold behind him "
-                    "under a strip light that's buzzed since before either of you worked here."),
+    # ---- RANK I · KOBUN · $600 (the want) ----
+    dict(id="t03", level="RANK I  ·  KOBUN  ·  $600", template="rentalUnits",
+         narration=("The apartment sits above a pachinko hall; the machines' clatter comes up through "
+                    "the floorboards like a second heartbeat. Your mother, Yumi, folds shirts at a dry "
+                    "cleaner two streets over, missing the last two joints of her left hand to a "
+                    "wringer machine nobody ever fixed. She owes the loan shark Ishii six hundred "
+                    "dollars by Friday, doubling weekly. You count the tea tin twice. It isn't close."),
+         overlay=dict(big="$600", sub="WHAT YUMI OWES ISHII BY FRIDAY")),
+    dict(id="t04", level=None, template="backAlley",
+         narration=("Ishii sends a collector instead of coming himself — a boy barely older than you, "
+                    "already good at this. You block the stairwell with your whole unimpressive body, "
+                    "and he laughs before he hits you. From the alley's mouth, an older man in a cheap "
+                    "good suit watches without moving. He doesn't help. He just watches how long you "
+                    "stay standing."),
+         overlay=None),
+    dict(id="t05", level=None, template="shrineOathRite",
+         narration=("The man's name is Sato — oyabun of a gumi three streets wide, nothing more. He "
+                    "doesn't offer money. He offers the cup: sake poured by his own hand, three sips, a "
+                    "debt owed nowhere but to the family now. Your hand doesn't shake taking it. That's "
+                    "the part that scares you. Ishii is paid by morning. You don't ask by whom, or what "
+                    "it actually cost him."),
+         overlay=dict(big="$40/WK", sub="THE ALLOWANCE OF A KOBUN"),
+         dialogue=dict(text="A cup poured is a debt that outlives you.")),
+
+    # ---- RANK II · WAKASHU · $400/WK ----
+    dict(id="t06", level="RANK II  ·  WAKASHU  ·  $400/WK", template="pachinkoFloor",
+         narration=("Wakashu means young one — running, not deciding. Your job is the hall's Friday "
+                    "envelope: four hundred dollars in small bills, collected from a manager too scared "
+                    "to skim it himself. Your cut, if Sato feels generous, is whatever he decides. Rows "
+                    "of chrome machines rattle around you, feeding on nickel bets from men who never "
+                    "leave. None of what passes through your hands is yours. Not yet."),
+         overlay=dict(big="$400/WK", sub="COLLECTED. NONE OF IT KEPT.")),
+    dict(id="t07", level=None, template="waterfront",
+         narration=("A late delivery at the docks — crates nobody is supposed to count, including you. "
+                    "Therefore when a rival crew's headlights swing across the containers, running is "
+                    "the only decision that's actually yours to make. A shot goes wide over your head, "
+                    "close enough to move the air. You don't drop the crate. You don't know yet that "
+                    "not dropping it is the reason Sato starts trusting you."),
+         overlay=dict(big="1 SHOT", sub="WIDE. CLOSE ENOUGH TO COUNT.")),
+    dict(id="t08", level=None, template="teaCeremony",
+         narration=("A sit-down over green tea and rules neither of you wrote. Kenji is Sato's other "
+                    "new wakashu — faster hands, colder eyes, the kind of calm you can't fake at "
+                    "seventeen. He doesn't threaten you outright. He counts, out loud, how many jobs "
+                    "you've each run this month, and smiles when his number is higher. Sato watches "
+                    "both of you count."),
          overlay=None,
-         dialogue=dict(text="Odds don't care how bad you need it, kid.")),
-    dict(id="t05", level=None, template="window",
-         narration=("2 a.m., the ticket photographed four times on your phone — in case the paper "
-                    "smudges, in case the dog gets to it, in case something you can't name yet happens "
-                    "to a slip of paper worth checking on. The drawing isn't until tomorrow night. "
-                    "Therefore none of this checking changes one single number. Count the digits again "
-                    "anyway. Sleep was never really the plan tonight, not with six numbers doing laps "
-                    "behind your eyes."),
+         dialogue=dict(text="Giri before ninjo. Duty before feeling.")),
+
+    # ---- RANK III · SHATEI · 200 HRS ----
+    dict(id="t09", level="RANK III  ·  SHATEI  ·  200 HRS", template="irezumiParlor",
+         narration=("Becoming shatei starts with the needle, not the cup. Two hundred hours of "
+                    "hand-poked ink, one careful line at a time, covering your back in a dragon that "
+                    "means nothing to outsiders and everything to the six other men who carry the same "
+                    "one. Every session costs a week you can't work, paid in pain instead of yen. The "
+                    "tattoo never fully heals. Neither, it turns out, does the reason you got it."),
+         overlay=dict(big="200 HRS", sub="THE INK THAT NEVER WASHES OFF")),
+    dict(id="t10", level=None, template="shrineOathRite",
+         narration=("This cup is different — poured before the altar, Sato's own oyabun presiding, six "
+                    "made men as witnesses. Shatei now, officially: a made man, sworn to a code with "
+                    "real teeth. Your hand still doesn't shake taking it. Your first real cut of the "
+                    "business clears two thousand dollars a month — more than your mother saw in a "
+                    "year folding shirts. You send half of it home before you count what's left."),
+         overlay=dict(big="$2,000/MO", sub="YOUR FIRST CUT, MADE OFFICIAL")),
+    dict(id="t11", level=None, template="pachinkoFloor",
+         narration=("Your own corner of the hall now — three rows of machines, a manager who calls you "
+                    "by name and means it nervously. Kenji gets the better corner, the one nearer the "
+                    "door where the money moves faster, and doesn't let you forget it. Sato says "
+                    "nothing when you ask why. Therefore you learn the answer without being told: this "
+                    "family promotes speed, not fairness."),
+         overlay=None),
+    dict(id="t12", level=None, template="countRoom",
+         narration=("Every Friday, a cut of everything you and Kenji both earned leaves in a shared "
+                    "envelope by morning — jonokin, tribute, the word for money that was never actually "
+                    "yours to keep. Kicking up isn't a metaphor here; it's arithmetic, done under a bare "
+                    "bulb, by hand, every week without exception. The family buys respect. The family "
+                    "buys protection. The family never once buys you out of owing it."),
+         overlay=dict(big="30%", sub="THE CUT THAT LEAVES BY MORNING")),
+
+    # ---- RANK IV · SHATEI-GASHIRA · $18,000/MO ----
+    dict(id="t13", level="RANK IV  ·  SHATEI-GASHIRA  ·  $18,000/MO", template="constructionSite",
+         narration=("Shatei-gashira means your own crew — six men, a construction-front company with "
+                    "your name on none of the paperwork, and a public contract nobody else was ever "
+                    "going to be allowed to underbid. Eighteen thousand dollars a month moves through "
+                    "accounts you control but don't own, laundered through concrete and rebar instead "
+                    "of green tea. Kenji runs the crew next door. Neither of you is told, yet, that "
+                    "only one crew survives what's coming."),
+         overlay=dict(big="$18,000/MO", sub="LAUNDERED THROUGH CONCRETE")),
+    dict(id="t14", level=None, template="boardroomNotes",
+         narration=("A city inspector signs off on a foundation nobody actually poured to code, for a "
+                    "fee smaller than the concrete alone should have cost. Your junior men present the "
+                    "numbers like it's an ordinary business, because to them, by now, it genuinely is. "
+                    "You used to flinch at moments like this. Somewhere in the last year, without "
+                    "noticing exactly when, you stopped."),
+         overlay=None),
+    dict(id="t15", level=None, template="teaCeremony", gap=1.4,
+         narration=("A sit-down called with less notice than usual, Sato's face doing the math before "
+                    "his mouth does. A rival faction inside the syndicate — bigger, hungrier, tired of "
+                    "an old man's slow rules — is asking every gumi to choose a side by the end of the "
+                    "month. Kenji is already in the other room. The wrong room. Sato knows it before "
+                    "anyone says his name out loud."),
          overlay=None),
 
-    # ---- (still Level 01) the match ----
-    dict(id="t06", level=None, template="deskSilhouette",
-         narration=("Seven. Fourteen. Nineteen. Twenty-six. Forty-four. The fifth ball is still "
-                    "spinning on a muted TV when your stomach drops out from under the rest of you. "
-                    "Powerball: eight. Your hands don't move. That's the part that scares you — not the "
-                    "numbers matching, the stillness after. The remote stays warm in your other hand. "
-                    "You never once think to set it down, and a studio audience on screen is cheering "
-                    "for a number they don't know yet is yours."),
+    # ---- MIDPOINT REVERSAL — the split, hamon, Sato's death, Kenji's taunt ----
+    dict(id="t16", level=None, template="warRoom",
+         narration=("The split breaks the syndicate down the middle inside a single week — a real "
+                    "fracture that happened once to a real yakuza empire, not just this one. Sato "
+                    "refuses to bend the knee to the breakaway faction. Hamon: excommunicated, disowned "
+                    "on paper and in every hall that used to open for him. Three nights later, he's "
+                    "dead in a parking garage, and the man who confirms it to you is Kenji."),
+         overlay=dict(big="EXCOMMUNICATED", sub="HAMON: DISOWNED, THEN DEAD"),
+         dialogue=dict(text="Loyalty was always going to be the losing bet.")),
+
+    # ---- RANK V · SHIBUCHŌ · $60,000/MO ----
+    dict(id="t17", level="RANK V  ·  SHIBUCHŌ  ·  $60,000/MO", template="tower",
+         narration=("Someone has to hold the territory Sato leaves empty, and grief doesn't get "
+                    "scheduled time for a shibucho. You take the branch — sixty thousand dollars a "
+                    "month moving through six businesses across four blocks, more power in one "
+                    "afternoon than you'd earned across the last six years combined. Therefore the "
+                    "promotion doesn't feel like winning. It feels like being handed a bill with "
+                    "someone else's name still on it."),
+         overlay=dict(big="$60,000/MO", sub="SATO'S TERRITORY, NOW YOURS")),
+    dict(id="t18", level=None, template="hospitalRounds",
+         narration=("A war this quiet still keeps a body count — three of your own men in beds this "
+                    "month alone, one who won't walk again, none of it reported to any police anywhere. "
+                    "You visit because Sato would have, not because it changes the ledger. The man in "
+                    "the third bed doesn't recognize you through the bandages. You're grateful, for "
+                    "once, not to be recognized."),
+         overlay=None),
+    dict(id="t19", level=None, template="wiretap",
+         narration=("The National Police Agency doesn't need a wiretap to know your name anymore — a "
+                    "1992 law and a decade of local ordinances after it built a public exclusion list, "
+                    "and yours is already on it. Banks refuse you an account. Landlords refuse you a "
+                    "lease. Membership in this life has fallen roughly ninety percent since its 1960s "
+                    "peak, and every year it drops further, for exactly this reason. You're rising "
+                    "inside a world that's disappearing under you."),
+         overlay=dict(big="-90%", sub="MEMBERSHIP SINCE THE 1963 PEAK")),
+
+    # ---- RANK VI · WAKAGASHIRA · $2,400,000/YR ----
+    dict(id="t20", level="RANK VI  ·  WAKAGASHIRA  ·  $2,400,000/YR", template="oyabunOffice",
+         narration=("Wakagashira — the whole family's second, Sato's old title, worn now by the boy who "
+                    "used to hide in a stairwell. Every shatei-gashira's tribute crosses your desk "
+                    "before anyone else's; on paper, 2.4 million dollars a year moves through hands "
+                    "that are, still, technically, not your own. Sato's sword hangs above a small "
+                    "shrine shelf in the corner. You touch neither. Some things stay exactly where the "
+                    "dead left them."),
+         overlay=dict(big="$2,400,000/YR", sub="EVERY CREW'S TRIBUTE CROSSES YOUR DESK")),
+    dict(id="t21", level=None, template="signing",
+         narration=("You sign for a hotel development nobody in this city can trace back further than a "
+                    "shell company three names deep — the family's biggest legitimate front yet, worth "
+                    "more on paper than the entire pachinko chain that raised you. Your signature isn't "
+                    "your real name. Neither, most days now, is the face you wear in daylight."),
+         overlay=None),
+    dict(id="t22", level=None, template="commission",
+         narration=("A council of oyabun from every allied gumi meets twice a year in a windowless room, "
+                    "to divide territory the old man used to divide alone. You sit at the table now, "
+                    "one voice among a dozen — power that widens the moment you stop needing anyone's "
+                    "permission first. Kenji sits three seats down, running his own branch of the "
+                    "winning faction. Neither of you says Sato's name out loud."),
          overlay=None),
 
-    # ---- LEVEL 02 · THE MATCH · $412,000,000 ----
-    dict(id="t07", level="LEVEL 02  ·  THE MATCH  ·  $412,000,000", template="ticketCounter", gap=0.7,
-         narration=("Dale scans the ticket four times before the machine locks up and prints CLAIM AT "
-                    "LOTTERY HEADQUARTERS instead of a dollar figure. The whole store goes quiet around "
-                    "the sound of it. A stranger three feet away is filming you on his phone before "
-                    "you've said one word out loud. Four hundred twelve million dollars, advertised, "
-                    "and you haven't claimed a single cent of it yet."),
-         overlay=dict(big="$412,000,000", sub="THE ADVERTISED JACKPOT")),
-    dict(id="t08", level=None, template="lobby",
-         narration=("Lottery headquarters has a security desk, a waiting room with better chairs than "
-                    "any DMV, and a clipboard asking one question first: claim under your own name, "
-                    "public record forever, or through a trust, and disappear from it. Half the states "
-                    "don't give you a choice at all. Yours does. Therefore the first real decision of "
-                    "the rest of your life is whether anyone gets to know it was you."),
+    # ---- RANK VII · OYABUN · $11,000,000/YR ----
+    dict(id="t23", level="RANK VII  ·  OYABUN  ·  $11,000,000/YR", template="oyabunOffice",
+         narration=("Your own gumi now, under the syndicate's larger banner — construction, real "
+                    "estate, three pachinko chains, eleven million dollars a year moving through an "
+                    "empire with your name on none of it. Sato's sword still hangs where he left it; "
+                    "you finally take it down, not to use, just to stop looking at it every day. Being "
+                    "the boss mostly means deciding who else has to make the calls you used to make "
+                    "yourself."),
+         overlay=dict(big="$11,000,000/YR", sub="THE EMPIRE, YOUR NAME ON NONE OF IT")),
+    dict(id="t24", level=None, template="waterfront",
+         narration=("The docks again, except now you're the one whose headlights swing across someone "
+                    "else's delivery — a smaller crew moving product without your blessing, on your "
+                    "own territory. You could let it go. Therefore you don't, because letting it go is "
+                    "exactly how territory stops being yours, and territory is the only thing in this "
+                    "life that was ever actually yours to lose."),
          overlay=None),
+    dict(id="t25", level=None, template="yubitsumeRite",
+         narration=("One of your men botched the hotel deal badly enough to cost the gumi real money, "
+                    "real reputation — an apology has to be made the old way, or the whole crew reads "
+                    "it as weakness. He offers his own finger. You take the blade off the tray instead "
+                    "and do it yourself, in front of him, the way Sato once explained but you never "
+                    "watched him do. Your mother lost two joints to a machine she never chose. You take "
+                    "one on purpose, for a debt that was never yours."),
+         overlay=dict(big="1 JOINT", sub="TAKEN INSTEAD OF HIM")),
 
-    # ---- LEVEL 03 · THE CLAIM · $135,000,000 ----
-    dict(id="t09", level="LEVEL 03  ·  THE CLAIM  ·  $135,000,000", template="boardroomNotes",
-         narration=("Priya Chen has a coffee that costs eleven dollars and tastes like nothing, and "
-                    "your four hundred twelve million on a whiteboard, cut down live in front of you. "
-                    "The lump-sum option is fifty-two percent of that, before tax — two hundred "
-                    "fourteen million. Federal withholding takes twenty-four points off the top; the "
-                    "real bracket takes thirty-seven. What's actually, finally yours: about a third of "
-                    "the number that made the news."),
-         overlay=dict(big="$135,000,000", sub="AFTER THE HAIRCUT AND THE IRS")),
-    dict(id="t10", level=None, template="signing",
-         narration=("You sign as a trust, not a name — Priya's idea, the one piece of advice out of "
-                    "this whole ordeal that costs you nothing later. The pen is heavier than a "
-                    "two-dollar ticket has any right to make you expect, and the notary stamps three "
-                    "separate pages without once looking up. Your hands don't shake, not yet. That's a "
-                    "fact worth remembering, plainly, without decoration. It won't stay true forever."),
-         overlay=None),
+    # ---- RANK VIII · KUMICHŌ · $340,000,000/YR ----
+    dict(id="t26", level="RANK VIII  ·  KUMICHŌ  ·  $340,000,000/YR", template="shrineOathRite", gap=0.7,
+         narration=("The old kumicho dies quietly of age, not violence, and the cup passes to you in a "
+                    "ceremony forty men deep — supreme boss now, of a syndicate whose businesses move "
+                    "an estimated three hundred forty million dollars a year, across a country that's "
+                    "spent decades trying to make people like you disappear. Your hand doesn't shake "
+                    "taking this cup either. By now, that fact doesn't scare you anymore. It should."),
+         overlay=dict(big="$340,000,000", sub="WHAT THE WHOLE SYNDICATE MOVES A YEAR")),
+    dict(id="t27", level=None, template="fileWall",
+         narration=("On paper, an empire. In your own name: nothing — no deed, no account, no share "
+                    "certificate anywhere a court could actually find and seize. Every real kumicho "
+                    "learns this same lesson eventually. Own nothing. Control everything. Die, "
+                    "technically, broke."),
+         overlay=dict(big="$0", sub="WHAT'S ACTUALLY IN YOUR NAME")),
+    dict(id="t28", level=None, template="revolvingDoor",
+         narration=("Three banks turn you away before a fourth agrees to hold money for a man with your "
+                    "name attached to it — the exclusion ordinances, not the police, finally did what "
+                    "eleven years of detective work never managed. He retired last spring, that "
+                    "detective, without ever once making a charge stick; only a form, a checkbox, an "
+                    "exclusion list, touched you in the end. Being kumicho means being the richest man "
+                    "in the building who still can't sign for the building."),
+         overlay=dict(big="3 BANKS", sub="BEFORE ONE SAID YES")),
 
-    # ---- LEVEL 04 · THE FIRST SPEND · $118,000,000 ----
-    dict(id="t11", level="LEVEL 04  ·  THE FIRST SPEND  ·  $118,000,000", template="openHouse",
-         narration=("Mateo's bill gets paid same-day, wired, gone — the smallest number in this whole "
-                    "story and the only one that ever feels entirely, completely clean, no fine print "
-                    "attached anywhere. Renn gets a house outright, no mortgage, her name only on the "
-                    "deed, a spare room already painted for a nephew who doesn't need it yet. You quit "
-                    "the forklift job by text message, five words, and delete the app before anyone can "
-                    "reply. One hundred eighteen million left, after the house, the debt, the gifts."),
-         overlay=dict(big="$118,000,000", sub="AFTER THE HOUSE, THE DEBT, THE GIFTS")),
-    dict(id="t12", level=None, template="dinner",
-         narration=("Sunday dinner, twice the usual plates on the table, a cousin you haven't spoken "
-                    "to since a wedding asking, casually, between bites, what it's like now. Renn "
-                    "laughs a half-second too fast at a joke that wasn't funny. Under the noise, a new "
-                    "kind of math is already starting — who gets asked first, who gets asked twice, who "
-                    "never gets asked at all."),
-         overlay=None),
-
-    # ---- LEVEL 05 · THE LINE FORMS · 61 ASKS ----
-    dict(id="t13", level="LEVEL 05  ·  THE LINE FORMS  ·  61 ASKS", template="galaBallroom",
-         narration=("A small gathering turns into a receiving line without anyone deciding it should. "
-                    "A former neighbor needs a truck payment covered. A church you visited twice wants "
-                    "a wing named after you. Sixty-one people have asked you for money this month alone "
-                    "— you know the exact number because you started keeping a list, and hating "
-                    "yourself a little more with every new name added to it."),
-         overlay=dict(big="61", sub="PEOPLE WHO'VE ASKED THIS MONTH")),
-    dict(id="t14", level=None, template="deskClose",
-         narration=("Terrence texts from the old warehouse floor, three years since you last spoke a "
-                    "single word to each other — a fifth ticket, he says, from the Friday pool you all "
-                    "used to run before the layoffs, one nobody ever actually claimed. He doesn't ask "
-                    "outright. He just mentions it, twice, two different ways, days apart. Don't answer "
-                    "either message. Some math doesn't add up no matter how many times you run it in "
-                    "your head."),
-         overlay=None),
-    dict(id="t15", level=None, template="courtroom",
-         narration=("A cousin of Renn's files first, a promised-share claim built on a conversation "
-                    "nobody else remembers happening the way he describes it under oath. Your lawyer "
-                    "calls it nuisance litigation and tells you to expect four more before the year is "
-                    "out. He's right about the number. He's wrong about the word nuisance — every one "
-                    "of them has a real, actual face you used to know."),
-         overlay=None),
-
-    # ---- LEVEL 06 · THE DRAIN · SIGNED, UNREAD ----
-    dict(id="t16", level="LEVEL 06  ·  THE DRAIN  ·  SIGNED, UNREAD", template="consult", gap=1.4,
-         narration=("Priya has a fund, private, 'friends and family only,' guaranteed returns typed in "
-                    "a font confident enough to make guaranteed look almost true. Your lawyer is in "
-                    "Denver this week, unreachable until Monday. You sign without him, once, because "
-                    "once feels harmless when you're this tired of reading fine print at midnight. Your "
-                    "hands don't shake signing it. That's the part you'll remember longest, later, once "
-                    "you understand exactly what it actually cost you."),
-         overlay=None),
-    dict(id="t17", level=None, template="deskSilhouette",
-         narration=("The statement arrives on a Tuesday, an envelope no different from any other: "
-                    "seventy-one million dollars, gone into a fund that was never registered with "
-                    "anyone, anywhere, ever, under any name that checks out. Priya doesn't apologize on "
-                    "the call. She doesn't raise her voice either. The silence where an explanation "
-                    "should be sits there, unfilled, and is somehow the loudest part of the entire "
-                    "conversation."),
-         overlay=dict(big="-$71,000,000", sub="THE FUND WAS NEVER REGISTERED"),
-         dialogue=dict(text="You signed every page yourself.")),
-    dict(id="t18", level=None, template="safehouse",
-         narration=("A forensic accountant's office now — corkboard, red string, seven shell companies "
-                    "tracing back through three different holding names to a P.O. box in a state you've "
-                    "never once set foot in. He calls it a common pattern, a real phrase pulled from a "
-                    "real study, about winners just like you, filed away somewhere as a footnote. "
-                    "Common doesn't make it cheaper. It just makes it less surprising, which turns out "
-                    "not to be the same thing as easier."),
-         overlay=None),
-
-    # ---- LEVEL 07 · THE FALL · $19,000,000 ----
-    dict(id="t19", level="LEVEL 07  ·  THE FALL  ·  $19,000,000", template="window",
-         narration=("Two more lawsuits land before the forensic report is even finished being typed — "
-                    "a former friend, a contractor, both citing conversations that happened, "
-                    "technically, but not the way either of them is describing them now under oath, in "
-                    "front of strangers. Legal fees eat faster than the fund ever did, month over month. "
-                    "Nineteen million dollars left, on paper, most of it already spoken for by people "
-                    "who still have your old phone number."),
-         overlay=dict(big="$19,000,000", sub="WHAT'S LEFT, AFTER THE LAWYERS")),
-    dict(id="t20", level=None, template="emptyChair",
-         narration=("Renn stops answering on the third call, then the fourth, then stops texting back "
-                    "even the single word she used to at least send. Her chair at Sunday dinner stays "
-                    "empty two weeks running, then three, then long enough that you stop setting a "
-                    "plate for it. Money buys the ER bill. Money buys the house. Money does not buy "
-                    "your sister trusting a single word you say about any of it anymore."),
-         overlay=None),
-    dict(id="t21", level=None, template="window",
-         narration=("The number everyone quotes — seventy percent of winners go broke — turns out to "
-                    "be a stat nobody can actually source; the organization it's always credited to "
-                    "says on the record it never produced it. The real study is quieter: modest "
-                    "winners, already drowning before the ticket, file for bankruptcy at a higher rate "
-                    "within three to five years. Winning didn't fix the hole. It just made the hole big "
-                    "enough to be a headline."),
-         overlay=dict(big="3–5 YEARS", sub="HOW LONG A WINDFALL TAKES TO FIND THE CRACKS ALREADY THERE")),
-    dict(id="t22", level=None, template="openHouse",
-         narration=("You show up at Renn's door unannounced, no lawyer, no check, no envelope of any "
-                    "kind — just you, hands empty, for the first time in over a year. She lets you as "
-                    "far as the porch, not the kitchen, and that's further than the last three weeks "
-                    "got you combined. Mateo waves once from the window behind her. Therefore it isn't "
-                    "nothing. It just isn't fixed yet either, and you don't try to make it sound like "
-                    "more than it is."),
-         overlay=None),
-
-    # ---- LEVEL 08 · THE REBUILD · $27,000,000 ----
-    dict(id="t23", level="LEVEL 08  ·  THE REBUILD  ·  $27,000,000", template="revolvingDoor",
-         narration=("New counsel this time, a fiduciary by law, not by favor — someone whose entire fee "
-                    "structure depends on you staying rich long-term, not on you feeling flattered this "
-                    "quarter. Therefore the first thing she does, day one, is fire three people who "
-                    "were never actually working for you to begin with. It takes eleven full months "
-                    "just to get back to a number you can say out loud without flinching at it."),
-         overlay=None),
-    dict(id="t24", level=None, template="familyVault",
-         narration=("A trust gets built the right way this time, walled off from your own signature, "
-                    "three separate approvals required for anything larger than a birthday check — "
-                    "money for Mateo's college, for Renn's kids you haven't even met yet, locked behind "
-                    "a door even you can't open alone anymore. Own nothing, control everything, your "
-                    "new lawyer repeats, the way people repeat a line they've clearly said to a hundred "
-                    "winners exactly like you before, and meant every time."),
-         overlay=None),
-    dict(id="t25", level=None, template="atrium",
-         narration=("The rebuild is boring on purpose — index funds, three rental properties, a modest "
-                    "stake in a business you actually understand because you once ran one out of the "
-                    "back of a truck, the smell of diesel still the most honest thing in the whole "
-                    "portfolio. Twenty-seven million dollars, verified, diversified, nothing about it "
-                    "interesting enough to make the news twice. It took years, real years, to learn how "
-                    "to want exactly that."),
-         overlay=dict(big="$27,000,000", sub="BORING MONEY. IT TOOK YEARS TO WANT THAT.")),
-
-    # ---- LEVEL 09 · YEARS LATER · THE NUMBER NOW ----
-    dict(id="t26", level="LEVEL 09  ·  YEARS LATER  ·  THE NUMBER NOW", template="foundationScene",
-         narration=("A scholarship fund, Mateo's name on the first plaque, quietly, for kids with a "
-                    "bill like his and no cousin anywhere holding a winning ticket. Ribbon, scissors, a "
-                    "reporter asking what advice you'd give the next person whose numbers come up "
-                    "someday. There's a true answer, long, about the hoodie, the counter, the smell of "
-                    "burnt coffee that never actually left you no matter how far you moved. You give "
-                    "the shorter one instead."),
-         overlay=None),
-    dict(id="t27", level=None, template="yachtDeck",
-         narration=("A boat you use four days a year, alone more often than not, open water in every "
-                    "direction and nobody left out here to ask you for anything. Gulls, engine hum, "
-                    "salt on your lips instead of burnt coffee for once. The quiet is the most "
-                    "expensive thing you've ever actually bought, and the first one that's never once "
-                    "tried to sue you for it."),
-         overlay=None),
-    dict(id="t28", level=None, template="lobby",
-         narration=("The old warehouse floor still smells like diesel and cold concrete, exactly the "
-                    "way it did the last decade you clocked in here. Terrence nods once, doesn't smile, "
-                    "doesn't mention the fifth ticket out loud this time either — just holds it there, "
-                    "in the space between you, the way he has for years now. Some debts stay open on "
-                    "purpose. You let this one stay that way."),
-         overlay=None),
-    dict(id="t29", level=None, template="window",
-         narration=("The real number, the one that actually matters, was never the twenty-seven "
-                    "million on the statement. It's the three million one hundred thousand you can "
-                    "touch without a trustee's signature sitting next to yours — everything else locked "
-                    "away for people who aren't you anymore, by your own design this time, on purpose, "
-                    "finally, after learning it the expensive way."),
-         overlay=dict(big="$3,100,000", sub="THE REST ISN'T YOURS TO TOUCH")),
-
-    # ---- LOOP CLOSE — cyclical, the same counter, resolving the cold open ----
-    dict(id="t30", level=None, template="ticketCounter",
-         narration=("The hoodie isn't reaching for a weapon, just his phone — a hospital bill, his "
-                    "daughter, four thousand two hundred dollars, the exact number you used to owe "
-                    "once, down to the cent. You recognize that particular kind of fear before he even "
-                    "finishes the sentence. Dale rings up two things this time: the bill, paid quiet, "
-                    "no fuss, and one more ticket for you, same six numbers as always. The odds haven't "
-                    "changed. You have."),
+    # ---- LOOP CLOSE — torch-passing, resolving the mentor arc ----
+    dict(id="t29", level=None, template="hospitalRounds",
+         narration=("Kenji, seventy-one now, three seats down from you for forty years and never once a "
+                    "friend, dies the way most of the men who chose the other side eventually did — "
+                    "quietly, replaced years ago by faces with no tattoos and no cup ceremony at all, "
+                    "the kind police can't track because there's nothing left to track. You sit with "
+                    "him anyway. Some debts stay open on purpose."),
          overlay=None,
-         dialogue=dict(text="Same numbers?")),
+         dialogue=dict(text="Tell Sato I kept the code.")),
+    dict(id="t30", level=None, template="neonAlley",
+         narration=("Same kind of alley, decades later, rain instead of neon. A kid maybe fifteen "
+                    "stands over a fallen collector's boy, hands shaking in a way yours stopped doing a "
+                    "long time ago. You don't offer him the cup yet. You just watch, the way Sato once "
+                    "watched you, long enough to see how long he stays standing before you decide "
+                    "whether this one is worth the debt."),
+         overlay=None),
 ]

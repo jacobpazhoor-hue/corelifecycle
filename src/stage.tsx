@@ -1484,6 +1484,105 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       {Array.from({length: 40}).map((_, i) => <circle key={i} cx={(i * 53) % 1920} cy={870 + (i * 7) % 40} r={2} fill="#8a949c" opacity={0.3} />)}
     </g>
   ),
+  // --- Yakuza pack (yakuza) ---
+  // narrow Kabukichō-style neon alley at night, converging facades, red/gold neon signboards, hanging
+  // lanterns — the cold open (AFTERMATH) + its torch-passing loop-close payoff
+  kabukichoAlley: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#181418" />
+      <rect x={0} y={700} width={1920} height={380} fill="#0f0c10" /><line x1={0} y1={700} x2={1920} y2={700} stroke="#000" strokeWidth={3} opacity={0.5} />
+      {Array.from({length: 5}).map((_, i) => <rect key={i} x={i * 400 - 60} y={720 + i * 10} width={220} height={6} fill={GOLD} opacity={0.08 + 0.05 * Math.sin(frame * 0.05 + i)} />)}
+      <path d="M 0 60 L 640 260 L 640 720 L 0 720 Z" fill="#241f28" stroke={INK} strokeWidth={3} opacity={0.9} />
+      <path d="M 1920 60 L 1280 260 L 1280 720 L 1920 720 Z" fill="#241f28" stroke={INK} strokeWidth={3} opacity={0.9} />
+      {[{x: 120, c: '#c0392b'}, {x: 220, c: GOLD}, {x: 320, c: '#c0392b'}, {x: 1560, c: GOLD}, {x: 1660, c: '#c0392b'}, {x: 1760, c: GOLD}].map((s, i) => (
+        <g key={i}>
+          <rect x={s.x} y={140} width={70} height={420} fill="#100d12" stroke={s.c} strokeWidth={3} opacity={0.9} />
+          {Array.from({length: 5}).map((_, k) => <rect key={k} x={s.x + 14} y={170 + k * 76} width={42} height={50} fill={s.c} opacity={0.35 + 0.25 * Math.sin(frame * 0.08 + i + k)} />)}
+        </g>
+      ))}
+      {[760, 1160].map((x) => (
+        <g key={x}><line x1={x} y1={0} x2={x} y2={220} stroke="#000" strokeWidth={3} />
+          <ellipse cx={x} cy={250} rx={44} ry={58} fill="#c0392b" stroke={INK} strokeWidth={3} opacity={0.85} />
+          <ellipse cx={x} cy={250} rx={90} ry={140} fill="url(#sglow)" opacity={0.35} /></g>
+      ))}
+      <rect x={0} y={1000} width={1920} height={80} fill="#000" opacity={0.4} />
+    </g>
+  ),
+  // the shrine altar — a simplified vermillion torii + a low altar with two sake cups, dim witnesses
+  // ringed behind — the sakazuki cup, poured three times across the arc
+  shrineAltar: ({frame}) => (
+    <g>
+      <rect x={0} y={800} width={1920} height={280} fill={FLOOR} /><line x1={0} y1={800} x2={1920} y2={800} stroke={INK} strokeWidth={5} />
+      {Array.from({length: 6}).map((_, i) => {const x = 360 + i * 240; return <g key={i} opacity={0.35}><circle cx={x} cy={560} r={26} fill={INK} /><rect x={x - 28} y={586} width={56} height={210} fill={INK} /></g>;})}
+      <g opacity={0.85}>
+        <rect x={860} y={260} width={200} height={26} rx={4} fill="#a33a26" stroke={INK} strokeWidth={3} />
+        <rect x={880} y={286} width={20} height={220} fill="#a33a26" stroke={INK} strokeWidth={3} />
+        <rect x={1020} y={286} width={20} height={220} fill="#a33a26" stroke={INK} strokeWidth={3} />
+        <rect x={840} y={310} width={240} height={16} fill="#a33a26" stroke={INK} strokeWidth={2.5} />
+      </g>
+      <rect x={840} y={640} width={240} height={26} rx={4} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <circle cx={900} cy={624} r={14} fill={GOLD} stroke={INK} strokeWidth={2.5} opacity={0.9} />
+      <circle cx={1020} cy={624} r={14} fill={GOLD} stroke={INK} strokeWidth={2.5} opacity={0.9} />
+      <ellipse cx={960} cy={560} rx={260} ry={170} fill="url(#sglow)" opacity={0.6} />
+    </g>
+  ),
+  // tattoo studio — a wall of flash sketches, a low work lamp over the stool — the irezumi, body debt
+  tattooStudio: ({frame}) => (
+    <g>
+      <rect x={0} y={800} width={1920} height={280} fill={FLOOR} /><line x1={0} y1={800} x2={1920} y2={800} stroke={INK} strokeWidth={5} />
+      <rect x={1240} y={200} width={560} height={480} fill="#d8cdb4" stroke={INK} strokeWidth={4} opacity={0.5} />
+      {Array.from({length: 6}).map((_, i) => {const c = i % 3, r = Math.floor(i / 3); const x = 1280 + c * 170, y = 240 + r * 220;
+        return <g key={i}><rect x={x} y={y} width={140} height={180} fill={PAPERC} stroke={INK} strokeWidth={2.5} opacity={0.8} />
+          <path d={`M ${x + 20} ${y + 140} q 30 -100 100 -110 q -40 40 -20 100`} fill="none" stroke={INK} strokeWidth={2} opacity={0.6} /></g>;})}
+      <rect x={520} y={720} width={200} height={30} rx={10} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <line x1={620} y1={750} x2={620} y2={800} stroke={INK} strokeWidth={4} />
+      <line x1={300} y1={300} x2={300} y2={560} stroke={INK} strokeWidth={3} />
+      <ellipse cx={300} cy={576} rx={70} ry={22} fill={GOLD} opacity={0.8} />
+      <ellipse cx={300} cy={600} rx={220} ry={140} fill="url(#sglow)" opacity={0.6} />
+      <rect x={200} y={640} width={110} height={60} fill="#2a313a" stroke={INK} strokeWidth={3} opacity={0.7} />
+    </g>
+  ),
+  // a bare tatami room — a low table, a folded white cloth + tray, a single hanging bulb — yubitsume
+  yubitsumeRoom: ({frame}) => (
+    <g>
+      <rect x={0} y={820} width={1920} height={260} fill={FLOOR} /><line x1={0} y1={820} x2={1920} y2={820} stroke={INK} strokeWidth={5} />
+      {Array.from({length: 6}).map((_, i) => <rect key={i} x={i * 320} y={820} width={300} height={260} fill="none" stroke={INK} strokeWidth={1.5} opacity={0.15} />)}
+      <rect x={820} y={780} width={280} height={20} rx={4} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={880} y={750} width={100} height={28} fill="#f7f3e8" stroke={INK} strokeWidth={2.5} opacity={0.95} />
+      <line x1={900} y1={760} x2={960} y2={760} stroke="#c0392b" strokeWidth={2} opacity={0.6} />
+      <ellipse cx={960} cy={620} rx={280} ry={180} fill="url(#sglow)" opacity={0.45} />
+      <line x1={960} y1={140} x2={960} y2={300} stroke={INK} strokeWidth={2} opacity={0.5} />
+      <ellipse cx={960} cy={310} rx={20} ry={12} fill={GOLD} opacity={0.7} />
+    </g>
+  ),
+  // the pachinko hall — rows of glowing vertical machines — the front business, the earn
+  pachinkoHall: ({frame}) => (
+    <g>
+      <rect x={0} y={800} width={1920} height={280} fill={FLOOR} /><line x1={0} y1={800} x2={1920} y2={800} stroke={INK} strokeWidth={5} />
+      <rect x={0} y={140} width={1920} height={660} fill="#241f28" opacity={0.9} />
+      {Array.from({length: 12}).map((_, i) => {const x = 40 + i * 158; const lit = (i + Math.floor(frame / 20)) % 4 === 0;
+        return <g key={i}><rect x={x} y={220} width={130} height={500} fill="#302a34" stroke={INK} strokeWidth={2.5} />
+          <circle cx={x + 65} cy={340} r={44} fill="none" stroke={lit ? GOLD : '#5a5460'} strokeWidth={3} opacity={lit ? 0.9 : 0.4} />
+          {Array.from({length: 5}).map((_, k) => <circle key={k} cx={x + 30 + (k % 3) * 35} cy={480 + Math.floor(k / 3) * 60} r={4} fill={lit ? GOLD : '#5a5460'} opacity={0.6} />)}
+        </g>;})}
+      <ellipse cx={960} cy={560} rx={700} ry={160} fill="url(#sglow)" opacity={0.3 + 0.1 * Math.sin(frame * 0.05)} />
+    </g>
+  ),
+  // the oyabun's study — donStudy's paneled/blinded office re-staged with a kamidana shrine shelf and
+  // a mounted katana — power, giving the order
+  oyabunStudy: ({frame}) => (
+    <g>
+      <rect x={0} y={780} width={1920} height={300} fill={FLOOR} /><line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={5} />
+      <rect x={220} y={200} width={420} height={360} fill="#2a313a" stroke={INK} strokeWidth={4} />
+      {Array.from({length: 9}).map((_, i) => <line key={i} x1={220} y1={240 + i * 38} x2={640} y2={240 + i * 38} stroke={PAPERC} strokeWidth={4} opacity={0.5} />)}
+      <rect x={1300} y={220} width={220} height={16} fill="#a33a26" stroke={INK} strokeWidth={2.5} opacity={0.85} />
+      <rect x={1330} y={180} width={60} height={44} fill={PAPERC} stroke={INK} strokeWidth={2.5} />
+      <path d="M 1320 180 L 1360 150 L 1400 180 Z" fill={PAPERC} stroke={INK} strokeWidth={2.5} />
+      <line x1={1310} y1={310} x2={1500} y2={280} stroke="#c9d3d8" strokeWidth={6} />
+      <line x1={1310} y1={310} x2={1290} y2={330} stroke={INK} strokeWidth={6} />
+      <ellipse cx={1660} cy={360} rx={90} ry={160} fill="url(#sglow)" opacity={0.4} />
+    </g>
+  ),
 };
 // tiny helper so inline math reads cleanly above
 function y_(v: number) {return v;}
@@ -2584,4 +2683,40 @@ const LOTTERY = {
       fig={{pose: A.stand(f), x: 1220, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.exhausted, t)}} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY};
+// Yakuza pack (yakuza — kobun -> wakashu -> shatei -> shatei-gashira -> shibuchō -> wakagashira ->
+// oyabun -> kumichō). 6 new bespoke backdrops; the rest of the ladder composes from MAFIA's
+// backAlley/countRoom/courtroom/prisonCell/wiretap/waterfront/commission, SAMURAI's teaCeremony,
+// REALESTATE's rentalUnits/constructionSite, MED's hospitalRounds, and universal templates.
+const YAKUZA = {
+  // the neon alley — the cold open (AFTERMATH) + its torch-passing loop-close payoff
+  neonAlley: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="kabukichoAlley" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 1220, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
+  // the shrine altar — the sakazuki cup, poured three times across the arc (joining / made / kumichō)
+  shrineOathRite: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="shrineAltar" bg="url(#swarm)"
+      fig={{pose: A.sit(f), x: 700, y: 800, scale: 1.2, view: 'front', expr: blendExpr(FACES.earnest, FACES.focused, t)}}
+      extras={[{pose: A.sit(f + 30), x: 1220, y: 800, scale: 1.15, view: 'front', pal: DIM, face: false}]} />;},
+  // the tattoo parlor — the irezumi, body debt made real
+  irezumiParlor: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="tattooStudio" bg="url(#swarm)" figBehind
+      fig={{pose: A.sit(f), x: 640, y: 800, scale: 1.2, view: 'profile', facing: 1, expr: blendExpr(FACES.worried, FACES.hardened, t)}} />;},
+  // the pachinko floor — the front business, the earn, rows of chrome and noise
+  pachinkoFloor: () => {const f = useCurrentFrame();
+    return <Stage backdrop="pachinkoHall" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 880, y: 900, scale: 1.3, view: 'front', expr: FACES.focused}} />;},
+  // the oyabun's study — the kamidana + the mounted sword, giving the order
+  oyabunOffice: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="oyabunStudy" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.hardened, t)}} />;},
+  // the atonement room — yubitsume, the debt paid in a joint instead of yen
+  yubitsumeRite: () => {const f = useCurrentFrame();
+    return <Stage backdrop="yubitsumeRoom" bg="url(#spaper)"
+      fig={{pose: A.sit(f), x: 960, y: 906, scale: 1.25, view: 'front', expr: FACES.hardened}} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA};
