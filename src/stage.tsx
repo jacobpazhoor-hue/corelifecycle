@@ -2735,12 +2735,14 @@ const YAKUZA = {
   // sit-down (SAMURAI's teaCeremony) read as the same picture despite the escalation between them.
   // Front-on camera instead of the profile two-shot, the swordStand prop instead of the tea table,
   // cooler blue-toned light instead of warm, and Sato up on his feet and turned away rather than
-  // seated across the table — he's already leaning toward the other room.
+  // seated across the table — he's already leaning toward the other room. Second reviewer fix: Sato
+  // still rendered face:false (a blank oval) here despite the sibling shrineOathRite/teaCeremony fix
+  // — give him the same eyes/brows/mouth rig, worried reading as the math running before his mouth does.
   teaCeremonySplit: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
     const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="teaRoom" prop="swordStand" bg="url(#spaper)" figBehind
       fig={{pose: A.sit(f), x: 620, y: 800, scale: 1.25, view: 'front', expr: blendExpr(FACES.worried, FACES.hardened, t)}}
-      extras={[{pose: A.stand(f), x: 1280, y: 900, scale: 1.2, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+      extras={[{pose: A.stand(f), x: 1280, y: 900, scale: 1.2, view: 'profile', facing: -1, pal: DIM, expr: FACES.worried}]} />;},
 };
 
 export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA};
