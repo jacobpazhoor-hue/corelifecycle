@@ -142,7 +142,7 @@ SCENES = [
                     "means nothing to outsiders and everything to the six other men who carry the same "
                     "one. Every session costs a week you can't work, paid in pain instead of yen. The "
                     "tattoo never fully heals. Neither, it turns out, does the reason you got it."),
-         overlay=dict(big="200 HRS", sub="THE INK THAT NEVER WASHES OFF")),
+         overlay=dict(big="200 HRS", sub="THE INK NEVER WASHES OFF")),
     dict(id="t10", level=None, template="shrineOathRite",
          narration=("This cup is different — poured before the altar, Sato's own oyabun presiding, six "
                     "made men as witnesses. Shatei now, officially: a made man, sworn to a code with "

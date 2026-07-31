@@ -1578,6 +1578,13 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       <rect x={1300} y={220} width={220} height={16} fill="#a33a26" stroke={INK} strokeWidth={2.5} opacity={0.85} />
       <rect x={1330} y={180} width={60} height={44} fill={PAPERC} stroke={INK} strokeWidth={2.5} />
       <path d="M 1320 180 L 1360 150 L 1400 180 Z" fill={PAPERC} stroke={INK} strokeWidth={2.5} />
+      {/* reviewer fix: the katana previously floated with no visible support between the shelf above
+          and the blade — two wall pegs (short posts + a cradle knob) now hang from the shelf's
+          underside down to the blade, reading as a mounted katana-kake instead of a misplaced prop. */}
+      <line x1={1360} y1={236} x2={1360} y2={302} stroke={INK} strokeWidth={4} />
+      <circle cx={1360} cy={303} r={5} fill={INK} />
+      <line x1={1460} y1={236} x2={1460} y2={286} stroke={INK} strokeWidth={4} />
+      <circle cx={1460} cy={287} r={5} fill={INK} />
       <line x1={1310} y1={310} x2={1500} y2={280} stroke="#c9d3d8" strokeWidth={6} />
       <line x1={1310} y1={310} x2={1290} y2={330} stroke={INK} strokeWidth={6} />
       <ellipse cx={1660} cy={360} rx={90} ry={160} fill="url(#sglow)" opacity={0.4} />
@@ -2406,12 +2413,15 @@ const SAMURAI = {
     const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="castleGate" bg="url(#spaper)"
       fig={{pose: A.stand(f), x: 560, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.worried, FACES.cold, t)}} />;},
-  // the tea room: the sit-down, the warning, the politics — a low table by the tokonoma
+  // the tea room: the sit-down, the warning, the politics — a low table by the tokonoma. Reviewer
+  // fix: the seated second (Kenji, in the yakuza pack's reuse of this template) always rendered
+  // face:false, a blank oval, across every one of his named/dialogue scenes — give him the same
+  // eyes/brows/mouth rig as the protagonist, smug/cold to match his written characterization.
   teaCeremony: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
     const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="teaRoom" prop="teaTable" bg="url(#swarm)" figBehind
       fig={{pose: A.sit(f), x: 680, y: 800, scale: 1.2, view: 'profile', facing: 1, expr: blendExpr(FACES.focused, FACES.conflicted, t)}}
-      extras={[{pose: A.sit(f + 40), x: 1240, y: 800, scale: 1.2, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+      extras={[{pose: A.sit(f + 40), x: 1240, y: 800, scale: 1.2, view: 'profile', facing: -1, pal: DIM, expr: FACES.smug}]} />;},
   // the lord's audience hall: presented, promoted, and later ruling from the dais yourself
   lordAudience: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
     const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -2693,12 +2703,16 @@ const YAKUZA = {
     const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="kabukichoAlley" bg="url(#sclean)"
       fig={{pose: A.stand(f), x: 1220, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
-  // the shrine altar — the sakazuki cup, poured three times across the arc (joining / made / kumichō)
+  // the shrine altar — the sakazuki cup, poured three times across the arc (joining / made / kumichō).
+  // The presiding figure is Sato, the named mentor who recurs across the whole arc — reviewer fix:
+  // he (and Kenji, in teaCeremony below) previously always rendered face:false (a blank oval), even
+  // in named, dialogue-bearing scenes. Giving him a face here reuses the same eyes/brows/mouth rig
+  // as the protagonist, just dimmed/hardened to read as the elder presiding.
   shrineOathRite: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
     const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="shrineAltar" bg="url(#swarm)"
       fig={{pose: A.sit(f), x: 700, y: 800, scale: 1.2, view: 'front', expr: blendExpr(FACES.earnest, FACES.focused, t)}}
-      extras={[{pose: A.sit(f + 30), x: 1220, y: 800, scale: 1.15, view: 'front', pal: DIM, face: false}]} />;},
+      extras={[{pose: A.sit(f + 30), x: 1220, y: 800, scale: 1.15, view: 'front', pal: DIM, expr: FACES.hardened}]} />;},
   // the tattoo parlor — the irezumi, body debt made real
   irezumiParlor: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
     const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
