@@ -1723,12 +1723,13 @@ const BG: Record<string, React.FC<{frame: number}>> = {
           <rect x={x - 46} y={170} width={92} height={34} fill="#3a3444" stroke={INK} strokeWidth={3} />
         </g>
       ))}
-      <rect x={870} y={560} width={180} height={220} fill={GOLD} stroke={INK} strokeWidth={4} opacity={0.75} />
-      <path d="M 870 560 L 900 420 L 1020 420 L 1050 560 Z" fill={GOLD} stroke={INK} strokeWidth={4} opacity={0.8} />
+      <rect x={870} y={560} width={180} height={220} fill={GOLD} stroke={INK} strokeWidth={4} />
+      {[610, 660, 710].map((y) => <line key={y} x1={880} y1={y} x2={1040} y2={y} stroke={INK} strokeWidth={2} opacity={0.4} />)}
+      <path d="M 870 560 L 900 420 L 1020 420 L 1050 560 Z" fill={GOLD} stroke={INK} strokeWidth={4} />
       <rect x={760} y={760} width={400} height={40} fill="#3a3444" stroke={INK} strokeWidth={3} />
       <rect x={1180} y={260} width={520} height={340} fill="#efe6cf" stroke={INK} strokeWidth={4} opacity={0.9} />
-      <path d="M 1180 260 L 1440 260 L 1440 600 L 1180 600 Z" fill={GOLD} opacity={0.35} />
-      <path d="M 1440 260 L 1700 260 L 1700 600 L 1440 600 Z" fill="#5b6875" opacity={0.35} />
+      <path d="M 1180 260 L 1440 260 L 1440 600 L 1180 600 Z" fill={GOLD} fillOpacity={0.35} stroke={INK} strokeWidth={3} />
+      <path d="M 1440 260 L 1700 260 L 1700 600 L 1440 600 Z" fill="#5b6875" fillOpacity={0.35} stroke={INK} strokeWidth={3} />
       <line x1={1440} y1={260} x2={1440} y2={600} stroke={INK} strokeWidth={3} opacity={0.6} />
       <ellipse cx={960} cy={560} rx={420} ry={180} fill="url(#sglow)" opacity={0.35} />
     </g>
@@ -2393,10 +2394,13 @@ const ROMAN = {
     const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="romanForum" bg="url(#swarm)"
       fig={{pose: A.stand(f), x: 520, y: 868, scale: 1.4, view: 'front', expr: blendExpr(FACES.worried, FACES.conflicted, t)}} />;},
+  // reviewer fix (t15): the mapTable prop's front face spans y720-840, which used to slice through
+  // both figures' necks/chins at their old y=856 anchor -- raised both figures so the table crosses
+  // at the chest/shoulder line instead, below the visible faces.
   warCouncil: () => {const f = useCurrentFrame();
     return <Stage backdrop="tentCamp" prop="mapTable" bg="url(#sclean)" figBehind
-      fig={{pose: A.stand(f), x: 800, y: 856, scale: 1.25, view: 'front', expr: FACES.cold}}
-      extras={[{pose: A.stand(f), x: 1180, y: 856, scale: 1.1, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+      fig={{pose: A.stand(f), x: 800, y: 822, scale: 1.25, view: 'front', expr: FACES.cold}}
+      extras={[{pose: A.stand(f), x: 1180, y: 812, scale: 1.1, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
   throne: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
     const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="throneHall" bg="url(#swarm)"

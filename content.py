@@ -13,7 +13,12 @@ caravan at Otrar), the Yam relay system (200-300km/day, VERIFIED), the paiza pas
 independent khanates (Golden Horde/Chagatai/Ilkhanate/Yuan), and Kublai Khan's chao paper currency
 (VERIFIED capital penalty for refusal/counterfeiting, per Marco Polo's account) [all VERIFIED, see
 research doc]. Per-rank silver ("balish") figures are ILLUSTRATIVE/dramatized -- no payroll ledger for
-individual Mongol ranks survives, unlike a modern salary; flagged in the research doc. Chuluun,
+individual Mongol ranks survives, unlike a modern salary; flagged in the research doc. Balish is used
+as the single wealth unit across the ENTIRE spine (t09-t29), including the pre-Mongke-standardization
+early scenes (t09/t12), as a deliberate anachronism so the 0 -> 2 -> 600 -> 4,000 -> 11,000 -> 90,000
+-> 400,000 progression reads as one continuous, comparable climb rather than switching currencies
+mid-story; the research doc's period-accurate dirham note for t12 is acknowledged but not used, for
+that reason. Chuluun,
 Ganbaatar, and Sarnai are a FICTIONAL COMPOSITE -- no real historical individual is depicted as the
 protagonist; Genghis Khan, Möngke, Kublai, Ariq Böke, and Marco Polo are referenced only as real,
 independently documented background events.
@@ -202,7 +207,7 @@ SCENES = [
                     "the same reckless speed — the fastest messages on earth for the next six centuries. "
                     "It's the best thing this empire ever built. It's also how bad news travels exactly "
                     "as fast as good."),
-         overlay=dict(big="250 MILES", sub="A DAY. FASTEST ON EARTH.")),
+         overlay=dict(big="185 MILES", sub="A DAY. FASTEST ON EARTH.")),
 
     # ---- MIDPOINT REVERSAL — Möngke's death, the civil war, Ganbaatar's taunt ----
     dict(id="t17", level=None, template="commission",
