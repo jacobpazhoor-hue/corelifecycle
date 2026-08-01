@@ -18,7 +18,10 @@ as the single wealth unit across the ENTIRE spine (t09-t29), including the pre-M
 early scenes (t09/t12), as a deliberate anachronism so the 0 -> 2 -> 600 -> 4,000 -> 11,000 -> 90,000
 -> 400,000 progression reads as one continuous, comparable climb rather than switching currencies
 mid-story; the research doc's period-accurate dirham note for t12 is acknowledged but not used, for
-that reason. Chuluun,
+that reason. NOTE: t15's tumen-commander figure ("4,000 balish a year") is deliberately raised 10x
+over the research doc's illustrative "400 balish a year" -- 400 would sit below t12's 600 and break
+the spine's required monotonic climb, so it was scaled up for escalation while staying within the
+"illustrative, no ledger survives" latitude the research doc itself grants. Chuluun,
 Ganbaatar, and Sarnai are a FICTIONAL COMPOSITE -- no real historical individual is depicted as the
 protagonist; Genghis Khan, Möngke, Kublai, Ariq Böke, and Marco Polo are referenced only as real,
 independently documented background events.
@@ -48,9 +51,12 @@ Templates: 7 NEW (a Mongol pack in src/stage.tsx -- steppeCamp/horsebackDrill/st
 yamRelayStation/khanAudienceTent/khaganThrone) + ROMAN's warCouncil/praetorians (reframed as the
 kheshig guard)/throne (a lesser khanate throne, distinct from the bespoke apex khaganThrone)/
 commission (reframed as the kurultai) + SAMURAI's merchantHouse/teaCeremony + DYNASTY's portraitHall
-(Chinggisid bloodline legitimacy) + SPY's debrief + universal window/tower/fileWall/signing.
-Deliberately avoids modern-coded universal templates (desk/boardroomNotes/revolvingDoor/warRoom/
-emptyChair) as anachronistic for a 13th-century setting. No two adjacent scenes repeat a template.
+(Chinggisid bloodline legitimacy) + SPY's debrief + universal fileWall.
+Deliberately avoids modern-coded universal templates (window/tower/signing/desk/boardroomNotes/
+revolvingDoor/warRoom/emptyChair) as anachronistic for a 13th-century setting -- window/tower/signing
+render a modern skyscraper skyline (and, at one prior draft, a corporate briefcase), so every scene
+that would have used them is reassigned to a Mongol-pack or reframed template instead. No two
+adjacent scenes repeat a template.
 
 STRUCTURAL VARIATION vs the last 2 (lottery_winner = MID-ACTION cold open / spike-crash-rebuild act
 two / CYCLICAL same-spot ending; yakuza = AFTERMATH cold open / unbroken-climb-moral-only-reversal /
@@ -88,7 +94,7 @@ SCENES = [
          overlay=dict(big="16%", sub="OF ALL LAND ON EARTH, ONCE")),
 
     # ---- PROMISE + COST-LINE ----
-    dict(id="t02", level=None, template="window",
+    dict(id="t02", level=None, template="horsebackDrill",
          narration=("Rewind sixty years. None of this exists yet: not the throne, not the map, not the "
                     "envoy who won't bow. There's only grass to the horizon in every direction and a "
                     "boy who has never once been warm in winter. You will end up owning more land than "
@@ -134,7 +140,7 @@ SCENES = [
                     "one body for one man's fear — the law's oldest, coldest lesson. Nobody in your "
                     "arban runs. Not out of courage. Out of arithmetic."),
          overlay=dict(big="1 DESERTER", sub="TEN MEN PUNISHED FOR HIM")),
-    dict(id="t08", level=None, template="tower",
+    dict(id="t08", level=None, template="warCouncil",
          narration=("Word passes down from Chuluun before sunrise: the arban rides tonight, first "
                     "blood, first real test past the drill ground's straw men. Ganbaatar's unit rides "
                     "beside yours, close enough that outrunning him becomes its own kind of survival. "
@@ -157,7 +163,7 @@ SCENES = [
                     "seal is the one thing this empire cannot let anyone touch and live. Therefore, "
                     "within the week, the whole ordu turns west."),
          overlay=dict(big="450", sub="KILLED UNDER THE KHAN'S SEAL")),
-    dict(id="t11", level=None, template="tower",
+    dict(id="t11", level=None, template="horsebackDrill",
          narration=("Weeks of riding blur into a single ache in your hips and a permanent grit of dust "
                     "behind your teeth. Ganbaatar's jaghun rides the opposite flank, close enough at "
                     "night to hear his men's fires, far enough that you stop checking. Chuluun says "
@@ -301,7 +307,7 @@ SCENES = [
                     "whole empire's treasury a year, on paper. On paper is doing quite a lot of the work "
                     "in that sentence."),
          overlay=dict(big="400,000 BALISH", sub="THE WHOLE TREASURY, ON PAPER")),
-    dict(id="t28", level=None, template="signing",
+    dict(id="t28", level=None, template="khanAudienceTent",
          narration=("Your treasury stops moving silver at all and starts printing paper instead — "
                     "mulberry bark pressed thin, stamped with your seal, worth exactly as much as your "
                     "word is. You sign the decree yourself: refuse it in payment, or print your own, and "
@@ -319,7 +325,7 @@ SCENES = [
                     "today, bought back the men who used to kneel without being asked."),
          overlay=dict(big="3 OF 4", sub="KHANATES THAT DON'T ANSWER"),
          dialogue=dict(text="Three of four. The fourth was always going to be the hard one.")),
-    dict(id="t30", level=None, template="window",
+    dict(id="t30", level=None, template="steppeCamp",
          narration=("Alone in the map room after everyone else has gone to sleep, your seal ring "
                     "sitting where the bow-callus used to be, worn smooth by forty years instead of a "
                     "bowstring. The Ilkhanate's letter is still on the desk, still unopened, the name on "
