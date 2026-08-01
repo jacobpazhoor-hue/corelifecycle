@@ -2,21 +2,21 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 21077,
+  "totalFrames": 21934,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t01",
       "level": null,
       "overlay": {
-        "big": "11 YEARS",
-        "sub": "A FILE THAT'S NEVER HELD UP IN COURT"
+        "big": "16%",
+        "sub": "OF ALL LAND ON EARTH, ONCE"
       },
-      "template": "neonAlley",
+      "template": "khaganThrone",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 737,
+      "durationInFrames": 626,
       "gap": 0.7
     },
     {
@@ -26,367 +26,361 @@
       "template": "window",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 737,
-      "durationInFrames": 643,
+      "startFrame": 626,
+      "durationInFrames": 616,
       "gap": 0.25
     },
     {
       "id": "t03",
-      "level": "RANK I  \u00b7  KOBUN  \u00b7  $600",
+      "level": "LEVEL 01  \u00b7  THE HERDER'S SON",
       "overlay": {
-        "big": "$600",
-        "sub": "WHAT YUMI OWES ISHII BY FRIDAY"
+        "big": "11 SHEEP",
+        "sub": "TWO OF THEM ARE SICK"
       },
-      "template": "rentalUnits",
+      "template": "steppeCamp",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 1380,
-      "durationInFrames": 690,
+      "startFrame": 1242,
+      "durationInFrames": 709,
       "gap": 0.25
     },
     {
       "id": "t04",
       "level": null,
-      "overlay": null,
-      "template": "backAlley",
+      "overlay": {
+        "big": "3 SHEEP",
+        "sub": "LEFT AFTER THE RAID"
+      },
+      "template": "steppeRaid",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 2070,
-      "durationInFrames": 583,
+      "startFrame": 1951,
+      "durationInFrames": 622,
       "gap": 0.25
     },
     {
       "id": "t05",
       "level": null,
-      "overlay": {
-        "big": "$40/WK",
-        "sub": "THE ALLOWANCE OF A KOBUN"
-      },
-      "template": "shrineOathRite",
+      "overlay": null,
+      "template": "steppeCamp",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 2653,
-      "durationInFrames": 737,
+      "startFrame": 2573,
+      "durationInFrames": 665,
       "gap": 0.25
     },
     {
       "id": "t06",
-      "level": "RANK II  \u00b7  WAKASHU  \u00b7  $400/WK",
+      "level": "LEVEL 02  \u00b7  ARBAN  \u00b7  TEN MEN",
       "overlay": {
-        "big": "$400/WK",
-        "sub": "COLLECTED. NONE OF IT KEPT."
+        "big": "10 MEN",
+        "sub": "ONE FAMILY, BY LAW NOW"
       },
-      "template": "pachinkoFloor",
+      "template": "horsebackDrill",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 3390,
-      "durationInFrames": 745,
+      "startFrame": 3238,
+      "durationInFrames": 770,
       "gap": 0.25
     },
     {
       "id": "t07",
       "level": null,
       "overlay": {
-        "big": "1 SHOT",
-        "sub": "WIDE. CLOSE ENOUGH TO COUNT."
+        "big": "1 DESERTER",
+        "sub": "TEN MEN PUNISHED FOR HIM"
       },
-      "template": "waterfront",
+      "template": "debrief",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 4135,
-      "durationInFrames": 692,
+      "startFrame": 4008,
+      "durationInFrames": 693,
       "gap": 0.25
     },
     {
       "id": "t08",
       "level": null,
       "overlay": null,
-      "template": "teaCeremony",
+      "template": "tower",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 4827,
-      "durationInFrames": 744,
+      "startFrame": 4701,
+      "durationInFrames": 655,
       "gap": 0.25
     },
     {
       "id": "t09",
-      "level": "RANK III  \u00b7  SHATEI  \u00b7  200 HRS",
+      "level": "LEVEL 03  \u00b7  JAGHUN COMMANDER  \u00b7  100 MEN",
       "overlay": {
-        "big": "200 HRS",
-        "sub": "THE INK NEVER WASHES OFF"
+        "big": "2 BALISH",
+        "sub": "YOUR FIRST KHUBI SHARE"
       },
-      "template": "irezumiParlor",
+      "template": "steppeRaid",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 5571,
-      "durationInFrames": 728,
+      "startFrame": 5356,
+      "durationInFrames": 722,
       "gap": 0.25
     },
     {
       "id": "t10",
       "level": null,
       "overlay": {
-        "big": "$2,000/MO",
-        "sub": "YOUR FIRST CUT, MADE OFFICIAL"
+        "big": "450",
+        "sub": "KILLED UNDER THE KHAN'S SEAL"
       },
-      "template": "shrineOathRite",
+      "template": "merchantHouse",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 6299,
-      "durationInFrames": 771,
+      "startFrame": 6078,
+      "durationInFrames": 655,
       "gap": 0.25
     },
     {
       "id": "t11",
       "level": null,
       "overlay": null,
-      "template": "pachinkoFloor",
+      "template": "tower",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 7070,
-      "durationInFrames": 622,
+      "startFrame": 6733,
+      "durationInFrames": 771,
       "gap": 0.25
     },
     {
       "id": "t12",
-      "level": null,
+      "level": "LEVEL 04  \u00b7  MINGHAN COMMANDER  \u00b7  1,000 MEN",
       "overlay": {
-        "big": "30%",
-        "sub": "THE CUT THAT LEAVES BY MORNING"
+        "big": "600 BALISH",
+        "sub": "THE SACKED CITY'S SHARE"
       },
-      "template": "countRoom",
+      "template": "siegeWalls",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 7692,
-      "durationInFrames": 754,
+      "startFrame": 7504,
+      "durationInFrames": 822,
       "gap": 0.25
     },
     {
       "id": "t13",
-      "level": "RANK IV  \u00b7  SHATEI-GASHIRA  \u00b7  $18,000/MO",
-      "overlay": {
-        "big": "$18,000/MO",
-        "sub": "LAUNDERED THROUGH CONCRETE"
-      },
-      "template": "constructionSite",
+      "level": null,
+      "overlay": null,
+      "template": "fileWall",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 8446,
-      "durationInFrames": 763,
+      "startFrame": 8326,
+      "durationInFrames": 784,
       "gap": 0.25
     },
     {
       "id": "t14",
       "level": null,
       "overlay": null,
-      "template": "boardroomNotes",
+      "template": "praetorians",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 9209,
-      "durationInFrames": 586,
+      "startFrame": 9110,
+      "durationInFrames": 723,
       "gap": 0.25
     },
     {
       "id": "t15",
-      "level": null,
-      "overlay": null,
-      "template": "teaCeremonySplit",
+      "level": "LEVEL 05  \u00b7  TUMEN COMMANDER  \u00b7  NOYAN",
+      "overlay": {
+        "big": "4,000 BALISH",
+        "sub": "A YEAR THROUGH YOUR TUMEN"
+      },
+      "template": "warCouncil",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 9795,
-      "durationInFrames": 698,
-      "gap": 1.4
+      "startFrame": 9833,
+      "durationInFrames": 743,
+      "gap": 0.25
     },
     {
       "id": "t16",
       "level": null,
       "overlay": {
-        "big": "EXCOMMUNICATED",
-        "sub": "HAMON: DISOWNED, THEN DEAD"
+        "big": "250 MILES",
+        "sub": "A DAY. FASTEST ON EARTH."
       },
-      "template": "warRoom",
+      "template": "yamRelayStation",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 10493,
-      "durationInFrames": 840,
-      "gap": 0.25
+      "startFrame": 10576,
+      "durationInFrames": 803,
+      "gap": 1.4
     },
     {
       "id": "t17",
-      "level": "RANK V  \u00b7  SHIBUCH\u014c  \u00b7  $60,000/MO",
+      "level": null,
       "overlay": {
-        "big": "$60,000/MO",
-        "sub": "SATO'S TERRITORY, NOW YOURS"
+        "big": "2 KHANS",
+        "sub": "CLAIMING ONE THRONE"
       },
-      "template": "tower",
+      "template": "commission",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 11333,
-      "durationInFrames": 691,
+      "startFrame": 11379,
+      "durationInFrames": 856,
       "gap": 0.25
     },
     {
       "id": "t18",
       "level": null,
       "overlay": null,
-      "template": "hospitalRounds",
+      "template": "steppeRaid",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 12024,
-      "durationInFrames": 612,
+      "startFrame": 12235,
+      "durationInFrames": 712,
       "gap": 0.25
     },
     {
       "id": "t19",
-      "level": null,
+      "level": "LEVEL 06  \u00b7  REGIONAL NOYAN  \u00b7  GOVERNOR",
       "overlay": {
-        "big": "-90%",
-        "sub": "MEMBERSHIP SINCE THE 1963 PEAK"
+        "big": "11,000 BALISH",
+        "sub": "A YEAR. YOU KEEP 300."
       },
-      "template": "wiretap",
+      "template": "khanAudienceTent",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 12636,
-      "durationInFrames": 843,
+      "startFrame": 12947,
+      "durationInFrames": 769,
       "gap": 0.25
     },
     {
       "id": "t20",
-      "level": "RANK VI  \u00b7  WAKAGASHIRA  \u00b7  $2,400,000/YR",
-      "overlay": {
-        "big": "$2,400,000/YR",
-        "sub": "EVERY CREW'S TRIBUTE CROSSES YOUR DESK"
-      },
-      "template": "oyabunOffice",
+      "level": null,
+      "overlay": null,
+      "template": "yamRelayStation",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 13479,
-      "durationInFrames": 788,
+      "startFrame": 13716,
+      "durationInFrames": 663,
       "gap": 0.25
     },
     {
       "id": "t21",
       "level": null,
       "overlay": null,
-      "template": "signing",
+      "template": "merchantHouse",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 14267,
-      "durationInFrames": 553,
+      "startFrame": 14379,
+      "durationInFrames": 781,
       "gap": 0.25
     },
     {
       "id": "t22",
       "level": null,
       "overlay": null,
-      "template": "commission",
+      "template": "debrief",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 14820,
-      "durationInFrames": 710,
+      "startFrame": 15160,
+      "durationInFrames": 781,
       "gap": 0.25
     },
     {
       "id": "t23",
-      "level": "RANK VII  \u00b7  OYABUN  \u00b7  $11,000,000/YR",
+      "level": "LEVEL 07  \u00b7  KHAN OF THE KHANATE",
       "overlay": {
-        "big": "$11,000,000/YR",
-        "sub": "THE EMPIRE, YOUR NAME ON NONE OF IT"
+        "big": "90,000 BALISH",
+        "sub": "THE KHANATE'S YEARLY TAKE"
       },
-      "template": "oyabunOffice",
+      "template": "throne",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 15530,
-      "durationInFrames": 694,
+      "startFrame": 15941,
+      "durationInFrames": 684,
       "gap": 0.25
     },
     {
       "id": "t24",
       "level": null,
       "overlay": null,
-      "template": "waterfront",
+      "template": "portraitHall",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 16224,
-      "durationInFrames": 600,
+      "startFrame": 16625,
+      "durationInFrames": 785,
       "gap": 0.25
     },
     {
       "id": "t25",
       "level": null,
-      "overlay": {
-        "big": "1 JOINT",
-        "sub": "TAKEN INSTEAD OF HIM"
-      },
-      "template": "yubitsumeRite",
+      "overlay": null,
+      "template": "teaCeremony",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 16824,
-      "durationInFrames": 829,
+      "startFrame": 17410,
+      "durationInFrames": 697,
       "gap": 0.25
     },
     {
       "id": "t26",
-      "level": "RANK VIII  \u00b7  KUMICH\u014c  \u00b7  $340,000,000/YR",
-      "overlay": {
-        "big": "$340,000,000",
-        "sub": "WHAT THE WHOLE SYNDICATE MOVES A YEAR"
-      },
-      "template": "shrineOathRite",
+      "level": null,
+      "overlay": null,
+      "template": "praetorians",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 17653,
-      "durationInFrames": 747,
-      "gap": 0.7
+      "startFrame": 18107,
+      "durationInFrames": 709,
+      "gap": 0.25
     },
     {
       "id": "t27",
-      "level": null,
+      "level": "LEVEL 08  \u00b7  KHAGAN  \u00b7  GREAT KHAN",
       "overlay": {
-        "big": "$0",
-        "sub": "WHAT'S ACTUALLY IN YOUR NAME"
+        "big": "400,000 BALISH",
+        "sub": "THE WHOLE TREASURY, ON PAPER"
       },
-      "template": "fileWall",
+      "template": "khaganThrone",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 18400,
-      "durationInFrames": 541,
-      "gap": 0.25
+      "startFrame": 18816,
+      "durationInFrames": 800,
+      "gap": 0.7
     },
     {
       "id": "t28",
       "level": null,
       "overlay": {
-        "big": "3 BANKS",
-        "sub": "BEFORE ONE SAID YES"
+        "big": "DEATH",
+        "sub": "FOR REFUSING YOUR OWN MONEY"
       },
-      "template": "revolvingDoor",
+      "template": "signing",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 18941,
-      "durationInFrames": 804,
+      "startFrame": 19616,
+      "durationInFrames": 769,
       "gap": 0.25
     },
     {
       "id": "t29",
       "level": null,
-      "overlay": null,
-      "template": "hospitalRounds",
+      "overlay": {
+        "big": "3 OF 4",
+        "sub": "KHANATES THAT DON'T ANSWER"
+      },
+      "template": "khaganThrone",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 19745,
-      "durationInFrames": 716,
+      "startFrame": 20385,
+      "durationInFrames": 830,
       "gap": 0.25
     },
     {
       "id": "t30",
       "level": null,
       "overlay": null,
-      "template": "neonAlley",
+      "template": "window",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 20461,
-      "durationInFrames": 616,
+      "startFrame": 21215,
+      "durationInFrames": 719,
       "gap": 0.25
     }
   ]

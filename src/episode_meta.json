@@ -1,22 +1,22 @@
 {
   "thumb": {
     "kicker": "THE RANK WHERE",
-    "line1": "YOU STOP COUNTING FRIENDS",
+    "line1": "THE EMPIRE STOPS ANSWERING",
     "line2": "",
-    "tag": "MARKED",
+    "tag": "DIVIDED",
     "archetype": "poster",
-    "big": "$340,000,000",
-    "before": "NOBODY",
-    "after": "MARKED",
-    "expr": "hardened",
-    "povline": "YOU TAKE THE CUP",
-    "keyword": "MARKED",
-    "setting": "oyabunOffice",
-    "question": "WHO OWNS YOUR NAME NOW?",
-    "mood": "crime",
-    "costume": "street",
-    "word": "INK",
-    "prop": "vault"
+    "big": "400,000 BALISH",
+    "before": "HERDER",
+    "after": "DIVIDED",
+    "expr": "shock",
+    "povline": "YOU ARE THE KHAGAN",
+    "keyword": "DIVIDED",
+    "setting": "khaganThrone",
+    "question": "WHO STILL ANSWERS TO YOU?",
+    "mood": "epic",
+    "costume": "royal",
+    "word": "SPLIT",
+    "prop": "tower"
   },
-  "topic": "yakuza"
+  "topic": "mongol_empire"
 }

@@ -1590,6 +1590,149 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       <ellipse cx={1660} cy={360} rx={90} ry={160} fill="url(#sglow)" opacity={0.4} />
     </g>
   ),
+  // --- Mongol Empire pack (mongol_empire) ---
+  // the ger camp on open steppe — rolling grassland (Ridges), two felt gers, a small penned herd —
+  // the herder origin, the cold-open's "before", the loop-close callback
+  steppeCamp: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#swarm)" />
+      <Ridges baseY={620} layers={3} seed={11} roll={0.85} amp={70} tint={PAPERC} />
+      <rect x={0} y={780} width={1920} height={300} fill={FLOOR} /><line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={5} />
+      {[{x: 1420, s: 1.15}, {x: 1620, s: 0.85}].map((g, i) => (
+        <g key={i} opacity={0.9} transform={`translate(${g.x} 780) scale(${g.s})`}>
+          <path d="M -150 0 Q -150 -160 0 -180 Q 150 -160 150 0 Z" fill={PAPERC} stroke={INK} strokeWidth={4} />
+          <ellipse cx={0} cy={-178} rx={26} ry={10} fill="#4a4038" stroke={INK} strokeWidth={3} />
+          <rect x={-24} y={-60} width={48} height={60} fill="#3a3128" stroke={INK} strokeWidth={3} />
+        </g>
+      ))}
+      {Array.from({length: 10}).map((_, i) => {const x = 140 + i * 46 + (i % 3) * 10; const y = 920 + (i % 2) * 20; return <ellipse key={i} cx={x} cy={y} rx={20} ry={14} fill={PAPERC} stroke={INK} strokeWidth={2} opacity={0.8} />;})}
+      <ellipse cx={1500} cy={700} rx={300} ry={120} fill="url(#sglow)" opacity={0.4} />
+    </g>
+  ),
+  // the drill ground — straw-dummy target posts receding into the steppe, two waiting horses, distant
+  // ridgeline — the arban recruit's mounted-archery training
+  horsebackDrill: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#spaper)" />
+      <Ridges baseY={560} layers={2} seed={22} roll={0.6} amp={60} tint={PAPERC} />
+      <rect x={0} y={760} width={1920} height={320} fill={FLOOR} /><line x1={0} y1={760} x2={1920} y2={760} stroke={INK} strokeWidth={5} />
+      {[{x: 1500, s: 1}, {x: 1650, s: 0.8}, {x: 1780, s: 0.6}].map((p, i) => (
+        <g key={i} opacity={0.85}>
+          <line x1={p.x} y1={760} x2={p.x} y2={760 - 140 * p.s} stroke={INK} strokeWidth={4} />
+          <circle cx={p.x} cy={760 - 160 * p.s} r={22 * p.s} fill={PAPERC} stroke={INK} strokeWidth={3} />
+          <circle cx={p.x} cy={760 - 160 * p.s} r={8 * p.s} fill="#c0392b" opacity={0.7} />
+        </g>
+      ))}
+      {[{x: 280, y: 820}, {x: 420, y: 840}].map((h, i) => (
+        <g key={i} opacity={0.55} transform={`translate(${h.x} ${h.y})`}>
+          <path d="M -60 0 Q -70 -60 -20 -70 L 40 -70 Q 70 -70 70 -30 L 70 0 Z" fill="#c2ccd6" stroke={INK} strokeWidth={2.5} />
+          <line x1={-40} y1={0} x2={-40} y2={40} stroke={INK} strokeWidth={4} />
+          <line x1={40} y1={0} x2={40} y2={40} stroke={INK} strokeWidth={4} />
+        </g>
+      ))}
+      <ellipse cx={960} cy={500} rx={500} ry={160} fill="url(#sglow)" opacity={0.3} />
+    </g>
+  ),
+  // the night raid — torches, burning tents on the far edge of a rival camp — the first khubi, jaghun command
+  steppeRaid: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#1c1a22" />
+      <rect x={0} y={780} width={1920} height={300} fill="#141218" /><line x1={0} y1={780} x2={1920} y2={780} stroke="#000" strokeWidth={3} opacity={0.5} />
+      {[{x: 1400}, {x: 1620}, {x: 1780}].map((t, i) => (
+        <g key={i} opacity={0.8}>
+          <path d={`M ${t.x - 70} 780 Q ${t.x - 70} 660 ${t.x} 640 Q ${t.x + 70} 660 ${t.x + 70} 780 Z`} fill="#241f28" stroke={INK} strokeWidth={3} />
+          <path d={`M ${t.x - 10} 640 q ${8 + Math.sin(frame * 0.3 + i) * 10} -50 -6 -80 q -10 30 4 80`} fill="#e0703a" opacity={0.85} />
+        </g>
+      ))}
+      {[240, 420].map((x, i) => (
+        <g key={x}>
+          <line x1={x} y1={900} x2={x} y2={760} stroke={INK} strokeWidth={5} />
+          <ellipse cx={x} cy={745} rx={18} ry={26} fill={GOLD} opacity={0.7 + 0.2 * Math.sin(frame * 0.4 + i)} />
+          <ellipse cx={x} cy={745} rx={60} ry={90} fill="url(#sglow)" opacity={0.35} />
+        </g>
+      ))}
+      <ellipse cx={1560} cy={700} rx={340} ry={160} fill="url(#sglow)" opacity={0.35} />
+    </g>
+  ),
+  // the siege — a crenellated city wall on fire, smoke, a trebuchet in the foreground — the Khwarazmian
+  // campaign, minghan/tumen command, the moral-cost beat
+  siegeWalls: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#2a2530" />
+      <rect x={0} y={800} width={1920} height={280} fill={FLOOR} opacity={0.15} /><line x1={0} y1={800} x2={1920} y2={800} stroke={INK} strokeWidth={5} />
+      <rect x={0} y={500} width={1920} height={300} fill="#3a3440" stroke={INK} strokeWidth={4} />
+      {Array.from({length: 20}).map((_, i) => <rect key={i} x={i * 100} y={470} width={60} height={40} fill="#3a3440" stroke={INK} strokeWidth={3} />)}
+      {[300, 900, 1500].map((x, i) => (
+        <path key={x} d={`M ${x} 500 q ${10 + Math.sin(frame * 0.2 + i) * 14} -70 -10 -120 q -14 40 4 120`} fill="#e0703a" opacity={0.8} />
+      ))}
+      {Array.from({length: 3}).map((_, i) => {const a = frame * 0.01 + i * 2; return <path key={i} d={`M ${500 + i * 400 + Math.cos(a) * 40} ${420 + Math.sin(a) * 20} q 40 -20 80 0 q 40 20 80 0`} fill="none" stroke="#8a8290" strokeWidth={3} opacity={0.5} />;})}
+      <g transform="translate(300 780)" opacity={0.85}>
+        <line x1={0} y1={0} x2={0} y2={-220} stroke={INK} strokeWidth={8} />
+        <line x1={-30} y1={-10} x2={30} y2={-10} stroke={INK} strokeWidth={8} />
+        <line x1={0} y1={-180} x2={-140} y2={-260} stroke={INK} strokeWidth={6} />
+        <circle cx={-140} cy={-260} r={16} fill={INK} />
+      </g>
+      <ellipse cx={960} cy={560} rx={600} ry={160} fill="url(#sglow)" opacity={0.25} />
+    </g>
+  ),
+  // the Yam relay post — a hitching rail of fresh horses, a post hut, a rider's dust trail streaking off
+  // toward the horizon — the empire's speed, the share-worthy 200mi/day beat
+  yamRelayStation: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#sclean)" />
+      <Ridges baseY={540} layers={2} seed={33} roll={0.8} amp={50} tint={PAPERC} />
+      <rect x={0} y={780} width={1920} height={300} fill={FLOOR} /><line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={5} />
+      <line x1={1280} y1={860} x2={1780} y2={860} stroke={INK} strokeWidth={5} />
+      {[1360, 1500, 1650].map((x) => (
+        <g key={x} opacity={0.7} transform={`translate(${x} 860)`}>
+          <path d="M -50 0 Q -60 -55 -14 -64 L 34 -64 Q 62 -64 62 -26 L 62 0 Z" fill="#c2ccd6" stroke={INK} strokeWidth={2.5} />
+          <line x1={-30} y1={0} x2={-30} y2={36} stroke={INK} strokeWidth={4} /><line x1={30} y1={0} x2={30} y2={36} stroke={INK} strokeWidth={4} />
+        </g>
+      ))}
+      <rect x={1150} y={700} width={140} height={100} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <path d="M 1136 700 L 1220 640 L 1304 700 Z" fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <path d={`M ${300 + (frame * 3) % 1200} 840 q -120 10 -220 30`} fill="none" stroke="#c9b98f" strokeWidth={10} opacity={0.4} />
+      <ellipse cx={1220} cy={650} rx={260} ry={120} fill="url(#sglow)" opacity={0.35} />
+    </g>
+  ),
+  // the great khan's audience tent — a felt-ribbed ger ceiling overhead, kneeling retainers either
+  // side, a gold paiza tablet on its stand — the governor's investiture, taxation, the Yam authority
+  khanAudienceTent: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#fdf3da" />
+      <path d="M 0 620 Q 960 380 1920 620 L 1920 700 Q 960 480 0 700 Z" fill="#e8d9ab" stroke={INK} strokeWidth={4} opacity={0.85} />
+      {Array.from({length: 9}).map((_, i) => {const x = 140 + i * 210; return <line key={i} x1={960} y1={440} x2={x} y2={640} stroke={INK} strokeWidth={2} opacity={0.3} />;})}
+      <circle cx={960} cy={440} r={40} fill="none" stroke={INK} strokeWidth={3} opacity={0.5} />
+      <rect x={0} y={780} width={1920} height={300} fill={FLOOR} /><line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={5} />
+      {[0, 1, 2].map((i) => <ellipse key={'L' + i} cx={260 + i * 110} cy={860} rx={40} ry={26} fill={PAPERC} stroke={INK} strokeWidth={2.5} opacity={0.55 - i * 0.08} />)}
+      {[0, 1, 2].map((i) => <ellipse key={'R' + i} cx={1660 - i * 110} cy={860} rx={40} ry={26} fill={PAPERC} stroke={INK} strokeWidth={2.5} opacity={0.55 - i * 0.08} />)}
+      <rect x={1440} y={700} width={70} height={110} rx={8} fill={GOLD} stroke={INK} strokeWidth={3} opacity={0.85} />
+      <ellipse cx={960} cy={620} rx={420} ry={140} fill="url(#sglow)" opacity={0.4} />
+    </g>
+  ),
+  // the Khagan's throne hall — columns, a raised gold throne, a wall map of the empire with one
+  // quarter shaded a colder tone (the khanates that no longer answer) — the flash-forward cold open
+  // + the apex + its loop-close payoff
+  khaganThrone: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#241f2c" />
+      <rect x={0} y={780} width={1920} height={300} fill="#1a1620" /><line x1={0} y1={780} x2={1920} y2={780} stroke="#000" strokeWidth={3} opacity={0.5} />
+      {[220, 1700].map((x) => (
+        <g key={x} opacity={0.8}>
+          <rect x={x - 30} y={200} width={60} height={580} fill="#3a3444" stroke={INK} strokeWidth={3} />
+          <rect x={x - 46} y={170} width={92} height={34} fill="#3a3444" stroke={INK} strokeWidth={3} />
+        </g>
+      ))}
+      <rect x={870} y={560} width={180} height={220} fill={GOLD} stroke={INK} strokeWidth={4} opacity={0.75} />
+      <path d="M 870 560 L 900 420 L 1020 420 L 1050 560 Z" fill={GOLD} stroke={INK} strokeWidth={4} opacity={0.8} />
+      <rect x={760} y={760} width={400} height={40} fill="#3a3444" stroke={INK} strokeWidth={3} />
+      <rect x={1180} y={260} width={520} height={340} fill="#efe6cf" stroke={INK} strokeWidth={4} opacity={0.9} />
+      <path d="M 1180 260 L 1440 260 L 1440 600 L 1180 600 Z" fill={GOLD} opacity={0.35} />
+      <path d="M 1440 260 L 1700 260 L 1700 600 L 1440 600 Z" fill="#5b6875" opacity={0.35} />
+      <line x1={1440} y1={260} x2={1440} y2={600} stroke={INK} strokeWidth={3} opacity={0.6} />
+      <ellipse cx={960} cy={560} rx={420} ry={180} fill="url(#sglow)" opacity={0.35} />
+    </g>
+  ),
 };
 // tiny helper so inline math reads cleanly above
 function y_(v: number) {return v;}
@@ -2745,4 +2888,44 @@ const YAKUZA = {
       extras={[{pose: A.stand(f), x: 1280, y: 900, scale: 1.2, view: 'profile', facing: -1, pal: DIM, expr: FACES.worried}]} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA};
+// Mongol Empire pack (mongol_empire — herder's son -> arban -> jaghun -> minghan -> tumen/noyan ->
+// governor -> khan of a khanate -> Khagan). 7 new bespoke backdrops; the rest of the ladder composes
+// from ROMAN's warCouncil/praetorians/throne/commission, SAMURAI's sengokuField/teaCeremony/
+// merchantHouse, DYNASTY's portraitHall, SPY's debrief, and universal templates.
+const MONGOL = {
+  // the ger camp — comfort + the named want, before any of this existed; also the loop-close callback
+  steppeCamp: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="steppeCamp" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 900, y: 940, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.worried, t)}} />;},
+  // the drill ground — mounted-archery training, the arban recruit
+  horsebackDrill: () => {const f = useCurrentFrame();
+    return <Stage backdrop="horsebackDrill" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: FACES.focused}} />;},
+  // the night raid — torches, burning tents — the first khubi, jaghun command
+  steppeRaid: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="steppeRaid" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.focused, FACES.hardened, t)}} />;},
+  // the siege — the Khwarazmian campaign, minghan/tumen command, the moral-cost beat
+  siegeWalls: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="siegeWalls" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.hardened, FACES.hollow, t)}} />;},
+  // the Yam relay post — the empire's speed, the share-worthy 200mi/day beat
+  yamRelayStation: () => {const f = useCurrentFrame();
+    return <Stage backdrop="yamRelayStation" bg="url(#sclean)"
+      fig={{pose: A.lookUp(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: FACES.focused}} />;},
+  // the audience tent — the governor's investiture, the paiza, tax/tribute authority
+  khanAudienceTent: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="khanAudienceTent" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 900, y: 906, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.focused, t)}} />;},
+  // the Khagan's throne hall — the flash-forward cold open + the apex + its loop-close payoff
+  khaganThrone: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="khaganThrone" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 960, y: 892, scale: 1.35, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA, ...MONGOL};
