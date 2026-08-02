@@ -1,22 +1,22 @@
 {
   "thumb": {
-    "kicker": "THE RANK WHERE",
-    "line1": "THE EMPIRE STOPS ANSWERING",
+    "kicker": "EVERY LEVEL OF AN",
+    "line1": "THE INFILTRATOR",
     "line2": "",
-    "tag": "DIVIDED",
+    "tag": "BLOWN",
     "archetype": "poster",
-    "big": "400,000 BALISH",
-    "before": "HERDER",
-    "after": "DIVIDED",
+    "big": "$4B+",
+    "before": "RECRUIT",
+    "after": "BURNED",
     "expr": "shock",
-    "povline": "YOU ARE THE KHAGAN",
-    "keyword": "DIVIDED",
-    "setting": "khaganThrone",
-    "question": "WHO STILL ANSWERS TO YOU?",
-    "mood": "epic",
-    "costume": "royal",
-    "word": "SPLIT",
+    "povline": "YOU BECOME HIM",
+    "keyword": "BURNED",
+    "setting": "backAlley",
+    "question": "WHO ARE YOU REALLY?",
+    "mood": "electric",
+    "costume": "suit",
+    "word": "BURNED",
     "prop": "tower"
   },
-  "topic": "mongol_empire"
+  "topic": "fbi_undercover"
 }

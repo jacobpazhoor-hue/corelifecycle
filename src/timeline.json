@@ -2,385 +2,443 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 21934,
+  "totalFrames": 20032,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t01",
       "level": null,
       "overlay": {
-        "big": "16%",
-        "sub": "OF ALL LAND ON EARTH, ONCE"
+        "big": "4 WORDS",
+        "sub": "THE WRONG ONES END YOU"
       },
-      "template": "khaganThrone",
+      "template": "backAlley",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 626,
+      "durationInFrames": 630,
       "gap": 0.7
     },
     {
       "id": "t02",
       "level": null,
       "overlay": null,
-      "template": "horsebackDrill",
+      "template": "desk",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 626,
+      "startFrame": 630,
       "durationInFrames": 616,
       "gap": 0.25
     },
     {
       "id": "t03",
-      "level": "LEVEL 01  \u00b7  THE HERDER'S SON",
+      "level": "LEVEL 01  \u00b7  NEW AGENT TRAINEE",
       "overlay": {
-        "big": "11 SHEEP",
-        "sub": "TWO OF THEM ARE SICK"
+        "big": "$41,860",
+        "sub": "YOUR FIRST-YEAR TRAINEE PAY"
       },
-      "template": "steppeCamp",
+      "template": "lectureHallScene",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 1242,
-      "durationInFrames": 709,
+      "startFrame": 1246,
+      "durationInFrames": 619,
       "gap": 0.25
     },
     {
       "id": "t04",
       "level": null,
       "overlay": {
-        "big": "3 SHEEP",
-        "sub": "LEFT AFTER THE RAID"
+        "big": "BADGE #",
+        "sub": "A NUMBER BEFORE A NAME"
       },
-      "template": "steppeRaid",
+      "template": "signing",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 1951,
-      "durationInFrames": 622,
+      "startFrame": 1865,
+      "durationInFrames": 613,
       "gap": 0.25
     },
     {
       "id": "t05",
       "level": null,
       "overlay": null,
-      "template": "steppeCamp",
+      "template": "tradecraft",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 2573,
-      "durationInFrames": 665,
+      "startFrame": 2478,
+      "durationInFrames": 530,
       "gap": 0.25
     },
     {
       "id": "t06",
-      "level": "LEVEL 02  \u00b7  ARBAN  \u00b7  TEN MEN",
-      "overlay": {
-        "big": "10 MEN",
-        "sub": "ONE FAMILY, BY LAW NOW"
-      },
-      "template": "horsebackDrill",
+      "level": null,
+      "overlay": null,
+      "template": "barracksLife",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 3238,
-      "durationInFrames": 770,
+      "startFrame": 3008,
+      "durationInFrames": 616,
       "gap": 0.25
     },
     {
       "id": "t07",
-      "level": null,
+      "level": "LEVEL 02  \u00b7  SPECIAL AGENT  \u00b7  FIELD OFFICE",
       "overlay": {
-        "big": "1 DESERTER",
-        "sub": "TEN MEN PUNISHED FOR HIM"
+        "big": "1 SECOND",
+        "sub": "HE ALMOST MADE THE VAN"
       },
-      "template": "debrief",
+      "template": "surveillance",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 4008,
-      "durationInFrames": 693,
-      "gap": 0.25
+      "startFrame": 3624,
+      "durationInFrames": 570,
+      "gap": 0.7
     },
     {
       "id": "t08",
       "level": null,
       "overlay": null,
-      "template": "warCouncil",
+      "template": "fileWall",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 4701,
-      "durationInFrames": 655,
+      "startFrame": 4194,
+      "durationInFrames": 527,
       "gap": 0.25
     },
     {
       "id": "t09",
-      "level": "LEVEL 03  \u00b7  JAGHUN COMMANDER  \u00b7  100 MEN",
+      "level": null,
       "overlay": {
-        "big": "2 BALISH",
-        "sub": "YOUR FIRST KHUBI SHARE"
+        "big": "3 AGENTS",
+        "sub": "DECIDE IF YOU'RE FIT FOR THIS"
       },
-      "template": "steppeRaid",
+      "template": "boardroomNotes",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 5356,
-      "durationInFrames": 722,
+      "startFrame": 4721,
+      "durationInFrames": 585,
       "gap": 0.25
     },
     {
       "id": "t10",
       "level": null,
-      "overlay": {
-        "big": "450",
-        "sub": "KILLED UNDER THE KHAN'S SEAL"
-      },
-      "template": "merchantHouse",
+      "overlay": null,
+      "template": "debrief",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 6078,
-      "durationInFrames": 655,
+      "startFrame": 5306,
+      "durationInFrames": 653,
       "gap": 0.25
     },
     {
       "id": "t11",
-      "level": null,
-      "overlay": null,
-      "template": "horsebackDrill",
+      "level": "LEVEL 03  \u00b7  CERTIFIED UNDERCOVER EMPLOYEE",
+      "overlay": {
+        "big": "RAY COLE",
+        "sub": "THE NAME ON EVERYTHING NOW"
+      },
+      "template": "station",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 6733,
-      "durationInFrames": 771,
+      "startFrame": 5959,
+      "durationInFrames": 528,
       "gap": 0.25
     },
     {
       "id": "t12",
-      "level": "LEVEL 04  \u00b7  MINGHAN COMMANDER  \u00b7  1,000 MEN",
-      "overlay": {
-        "big": "600 BALISH",
-        "sub": "THE SACKED CITY'S SHARE"
-      },
-      "template": "siegeWalls",
+      "level": null,
+      "overlay": null,
+      "template": "consult",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 7504,
-      "durationInFrames": 822,
+      "startFrame": 6487,
+      "durationInFrames": 540,
       "gap": 0.25
     },
     {
       "id": "t13",
       "level": null,
       "overlay": null,
-      "template": "fileWall",
+      "template": "tradecraft",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 8326,
-      "durationInFrames": 784,
+      "startFrame": 7027,
+      "durationInFrames": 542,
       "gap": 0.25
     },
     {
       "id": "t14",
       "level": null,
-      "overlay": null,
-      "template": "praetorians",
+      "overlay": {
+        "big": "$12,000",
+        "sub": "EVIDENCE. NONE OF IT YOURS."
+      },
+      "template": "deadDrop",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 9110,
-      "durationInFrames": 723,
+      "startFrame": 7569,
+      "durationInFrames": 587,
       "gap": 0.25
     },
     {
       "id": "t15",
-      "level": "LEVEL 05  \u00b7  TUMEN COMMANDER  \u00b7  NOYAN",
+      "level": "LEVEL 04  \u00b7  DEEP COVER  \u00b7  SAL'S CREW",
       "overlay": {
-        "big": "4,000 BALISH",
-        "sub": "A YEAR THROUGH YOUR TUMEN"
+        "big": "$80,000",
+        "sub": "COUNTED. STILL NOT YOURS."
       },
-      "template": "warCouncil",
+      "template": "cardGame",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 9833,
-      "durationInFrames": 743,
+      "startFrame": 8156,
+      "durationInFrames": 509,
       "gap": 0.25
     },
     {
       "id": "t16",
       "level": null,
-      "overlay": {
-        "big": "185 MILES",
-        "sub": "A DAY. FASTEST ON EARTH."
-      },
-      "template": "yamRelayStation",
+      "overlay": null,
+      "template": "redSauce",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 10576,
-      "durationInFrames": 803,
-      "gap": 1.4
+      "startFrame": 8665,
+      "durationInFrames": 552,
+      "gap": 0.25
     },
     {
       "id": "t17",
       "level": null,
       "overlay": {
-        "big": "2 KHANS",
-        "sub": "CLAIMING ONE THRONE"
+        "big": "$1.2M",
+        "sub": "A LEDGER YOU COPIED, NOT KEPT"
       },
-      "template": "commission",
+      "template": "socialClub",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 11379,
-      "durationInFrames": 856,
+      "startFrame": 9217,
+      "durationInFrames": 495,
       "gap": 0.25
     },
     {
       "id": "t18",
       "level": null,
       "overlay": null,
-      "template": "steppeRaid",
+      "template": "dinner",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 12235,
-      "durationInFrames": 712,
-      "gap": 0.25
+      "startFrame": 9712,
+      "durationInFrames": 609,
+      "gap": 1.4
     },
     {
       "id": "t19",
-      "level": "LEVEL 06  \u00b7  REGIONAL NOYAN  \u00b7  GOVERNOR",
+      "level": "LEVEL 05  \u00b7  THE WIRE  \u00b7  CASE AGENT",
       "overlay": {
-        "big": "11,000 BALISH",
-        "sub": "A YEAR. YOU KEEP 300."
+        "big": "$9M",
+        "sub": "SEIZED THE SAME NIGHT"
       },
-      "template": "khanAudienceTent",
+      "template": "waterfront",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 12947,
-      "durationInFrames": 769,
+      "startFrame": 10321,
+      "durationInFrames": 682,
       "gap": 0.25
     },
     {
       "id": "t20",
       "level": null,
       "overlay": null,
-      "template": "yamRelayStation",
+      "template": "wiretap",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 13716,
-      "durationInFrames": 663,
+      "startFrame": 11003,
+      "durationInFrames": 518,
       "gap": 0.25
     },
     {
       "id": "t21",
       "level": null,
-      "overlay": null,
-      "template": "merchantHouse",
+      "overlay": {
+        "big": "6 MONTHS",
+        "sub": "CONFIRMED IN ONE AFTERNOON"
+      },
+      "template": "prisonCell",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 14379,
-      "durationInFrames": 781,
+      "startFrame": 11521,
+      "durationInFrames": 616,
       "gap": 0.25
     },
     {
       "id": "t22",
       "level": null,
       "overlay": null,
-      "template": "debrief",
+      "template": "safehouse",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 15160,
-      "durationInFrames": 781,
+      "startFrame": 12137,
+      "durationInFrames": 504,
       "gap": 0.25
     },
     {
       "id": "t23",
-      "level": "LEVEL 07  \u00b7  KHAN OF THE KHANATE",
+      "level": "LEVEL 06  \u00b7  SUPERVISORY SPECIAL AGENT",
       "overlay": {
-        "big": "90,000 BALISH",
-        "sub": "THE KHANATE'S YEARLY TAKE"
+        "big": "$40M",
+        "sub": "FORFEITED ACROSS YOUR CASES"
       },
-      "template": "throne",
+      "template": "boardroomHead",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 15941,
-      "durationInFrames": 684,
+      "startFrame": 12641,
+      "durationInFrames": 654,
       "gap": 0.25
     },
     {
       "id": "t24",
       "level": null,
       "overlay": null,
-      "template": "portraitHall",
+      "template": "commandPost",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 16625,
-      "durationInFrames": 785,
+      "startFrame": 13295,
+      "durationInFrames": 529,
       "gap": 0.25
     },
     {
       "id": "t25",
       "level": null,
       "overlay": null,
-      "template": "teaCeremony",
+      "template": "warRoom",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 17410,
-      "durationInFrames": 697,
+      "startFrame": 13824,
+      "durationInFrames": 580,
       "gap": 0.25
     },
     {
       "id": "t26",
       "level": null,
       "overlay": null,
-      "template": "praetorians",
+      "template": "debrief",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 18107,
-      "durationInFrames": 709,
+      "startFrame": 14404,
+      "durationInFrames": 540,
       "gap": 0.25
     },
     {
       "id": "t27",
-      "level": "LEVEL 08  \u00b7  KHAGAN  \u00b7  GREAT KHAN",
+      "level": "LEVEL 07  \u00b7  ASAC / SAC  \u00b7  FIELD OFFICE",
       "overlay": {
-        "big": "400,000 BALISH",
-        "sub": "THE WHOLE TREASURY, ON PAPER"
+        "big": "$180,000",
+        "sub": "THE FIRST NUMBER THAT'S YOURS"
       },
-      "template": "khaganThrone",
+      "template": "atrium",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 18816,
-      "durationInFrames": 800,
-      "gap": 0.7
+      "startFrame": 14944,
+      "durationInFrames": 541,
+      "gap": 0.25
     },
     {
       "id": "t28",
       "level": null,
-      "overlay": {
-        "big": "DEATH",
-        "sub": "FOR REFUSING YOUR OWN MONEY"
-      },
-      "template": "khanAudienceTent",
+      "overlay": null,
+      "template": "revolvingDoor",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 19616,
-      "durationInFrames": 769,
+      "startFrame": 15485,
+      "durationInFrames": 532,
       "gap": 0.25
     },
     {
       "id": "t29",
       "level": null,
       "overlay": {
-        "big": "3 OF 4",
-        "sub": "KHANATES THAT DON'T ANSWER"
+        "big": "$300M",
+        "sub": "SEIZED BY YOUR OFFICE"
       },
-      "template": "khaganThrone",
+      "template": "podiumScene",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 20385,
-      "durationInFrames": 830,
+      "startFrame": 16017,
+      "durationInFrames": 502,
       "gap": 0.25
     },
     {
       "id": "t30",
       "level": null,
       "overlay": null,
-      "template": "steppeCamp",
+      "template": "window",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 21215,
-      "durationInFrames": 719,
+      "startFrame": 16519,
+      "durationInFrames": 553,
+      "gap": 0.25
+    },
+    {
+      "id": "t31",
+      "level": "LEVEL 08  \u00b7  THE BUREAU ABOVE YOU",
+      "overlay": {
+        "big": "$4B+",
+        "sub": "SEIZED NATIONWIDE, EVERY YEAR"
+      },
+      "template": "courtroom",
+      "audio": "audio/t31.wav",
+      "audioStartFrame": 3,
+      "startFrame": 17072,
+      "durationInFrames": 542,
+      "gap": 0.25
+    },
+    {
+      "id": "t32",
+      "level": null,
+      "overlay": {
+        "big": "THE FILE",
+        "sub": "SAL KNEW. HE LET YOU LIVE."
+      },
+      "template": "backAlley",
+      "audio": "audio/t32.wav",
+      "audioStartFrame": 3,
+      "startFrame": 17614,
+      "durationInFrames": 578,
+      "gap": 0.7
+    },
+    {
+      "id": "t33",
+      "level": null,
+      "overlay": {
+        "big": "AGE 57",
+        "sub": "MANDATORY. NO EXCEPTIONS."
+      },
+      "template": "emptyChair",
+      "audio": "audio/t33.wav",
+      "audioStartFrame": 3,
+      "startFrame": 18192,
+      "durationInFrames": 583,
+      "gap": 0.25
+    },
+    {
+      "id": "t34",
+      "level": null,
+      "overlay": null,
+      "template": "lobby",
+      "audio": "audio/t34.wav",
+      "audioStartFrame": 3,
+      "startFrame": 18775,
+      "durationInFrames": 670,
+      "gap": 0.25
+    },
+    {
+      "id": "t35",
+      "level": null,
+      "overlay": null,
+      "template": "lectureHallScene",
+      "audio": "audio/t35.wav",
+      "audioStartFrame": 3,
+      "startFrame": 19445,
+      "durationInFrames": 587,
       "gap": 0.25
     }
   ]
