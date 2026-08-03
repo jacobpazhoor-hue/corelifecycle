@@ -104,9 +104,12 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
   const occY = 96 + noise1(f * 0.017, seed + 3) * 4;
   // per-level grade derived from levelProgress (CSS only)
   const tint = gradeTint(prog);
-  const tintOp = interpolate(prog, [0, 1], [0.03, 0.09]);
-  const darkOp = interpolate(prog, [0, 1], [0.0, 0.05]);
-  const grade = `saturate(${(1 + 0.18 * prog).toFixed(3)}) contrast(${(1 + 0.06 * prog).toFixed(3)}) brightness(${(1 - 0.045 * prog).toFixed(3)})`;
+  // 2026-08-03: reviewer flagged Levels 2-5 (arenaSand reused across those climbs) as reading as the
+  // same cool grey-tan grade -- the old [0.03,0.09]/[0,0.05] range was too subtle across that band.
+  // Deepened so the warm->cool shift is visible mid-climb, not just at the very top of the range.
+  const tintOp = interpolate(prog, [0, 1], [0.06, 0.24]);
+  const darkOp = interpolate(prog, [0, 1], [0.0, 0.12]);
+  const grade = `saturate(${(1 + 0.3 * prog).toFixed(3)}) contrast(${(1 + 0.12 * prog).toFixed(3)}) brightness(${(1 - 0.08 * prog).toFixed(3)})`;
   // Only animate a money count-up when the overlay is genuinely a dollar figure
   // (string starts with '$'). Otherwise — command counts ("~150 UNDER YOUR
   // COMMAND") and cost beats ("-1 KIA") — render the full string verbatim as

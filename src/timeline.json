@@ -2,7 +2,7 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 21911,
+  "totalFrames": 22056,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
@@ -229,7 +229,7 @@
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
       "startFrame": 11638,
-      "durationInFrames": 542,
+      "durationInFrames": 687,
       "gap": 1.4
     },
     {
@@ -242,7 +242,7 @@
       "template": "arenaSand",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 12180,
+      "startFrame": 12325,
       "durationInFrames": 767,
       "gap": 0.25
     },
@@ -253,7 +253,7 @@
       "template": "arenaGate",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 12947,
+      "startFrame": 13092,
       "durationInFrames": 633,
       "gap": 0.25
     },
@@ -267,7 +267,7 @@
       "template": "rudisCeremony",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 13580,
+      "startFrame": 13725,
       "durationInFrames": 571,
       "gap": 0.25
     },
@@ -278,7 +278,7 @@
       "template": "ludusYard",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 14151,
+      "startFrame": 14296,
       "durationInFrames": 611,
       "gap": 0.25
     },
@@ -289,7 +289,7 @@
       "template": "arenaSand",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 14762,
+      "startFrame": 14907,
       "durationInFrames": 728,
       "gap": 0.25
     },
@@ -300,7 +300,7 @@
       "template": "ludusOffice",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 15490,
+      "startFrame": 15635,
       "durationInFrames": 625,
       "gap": 0.25
     },
@@ -314,7 +314,7 @@
       "template": "countRoom",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 16115,
+      "startFrame": 16260,
       "durationInFrames": 590,
       "gap": 0.25
     },
@@ -325,7 +325,7 @@
       "template": "ludusYard",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 16705,
+      "startFrame": 16850,
       "durationInFrames": 604,
       "gap": 0.25
     },
@@ -336,7 +336,7 @@
       "template": "arenaSand",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 17309,
+      "startFrame": 17454,
       "durationInFrames": 605,
       "gap": 0.25
     },
@@ -347,7 +347,7 @@
       "template": "arenaGate",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 17914,
+      "startFrame": 18059,
       "durationInFrames": 635,
       "gap": 0.25
     },
@@ -361,7 +361,7 @@
       "template": "imperialBox",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 18549,
+      "startFrame": 18694,
       "durationInFrames": 667,
       "gap": 0.25
     },
@@ -372,7 +372,7 @@
       "template": "arenaSand",
       "audio": "audio/t31.wav",
       "audioStartFrame": 3,
-      "startFrame": 19216,
+      "startFrame": 19361,
       "durationInFrames": 639,
       "gap": 0.25
     },
@@ -383,7 +383,7 @@
       "template": "praetorians",
       "audio": "audio/t32.wav",
       "audioStartFrame": 3,
-      "startFrame": 19855,
+      "startFrame": 20000,
       "durationInFrames": 634,
       "gap": 0.25
     },
@@ -394,7 +394,7 @@
       "template": "ludusYard",
       "audio": "audio/t33.wav",
       "audioStartFrame": 3,
-      "startFrame": 20489,
+      "startFrame": 20634,
       "durationInFrames": 747,
       "gap": 0.25
     },
@@ -405,7 +405,7 @@
       "template": "arenaGate",
       "audio": "audio/t34.wav",
       "audioStartFrame": 3,
-      "startFrame": 21236,
+      "startFrame": 21381,
       "durationInFrames": 675,
       "gap": 0.25
     }

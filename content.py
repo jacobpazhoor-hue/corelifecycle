@@ -190,7 +190,8 @@ SCENES = [
                     "loud, doesn't leave the room the way it should."),
          overlay=None),
     dict(id="t19", level=None, template="ludusYard", gap=1.4,
-         narration=("Priscus rubs oil into a practice sword he hasn't swung in years, slower than the "
+         narration=("Months pass, seven more wins chalked up without you counting them one by one, and "
+                    "Priscus rubs oil into a practice sword he hasn't swung in years, slower than the "
                     "job needs. Twenty-nine, he says — not a count this time, just a number sitting in "
                     "the air between you. He starts a sentence twice and finishes neither. The yard has "
                     "never been this quiet at dusk before."),
