@@ -3087,11 +3087,14 @@ const GLADIATOR = {
   // the rudis — the wooden sword of freedom offered on the same sand, a dim figure extending it.
   // Shares arenaSand's backdrop art but is a distinct template/staging (kneeling, a second figure,
   // a cooler lamp-lit bg) so it never reads as the same picture as the regular fight beats.
+  // reviewer fix (t22): the magistrate rendered face:false (a blank oval) on this held, static shot —
+  // the episode's central emotional beat — while the protagonist beside him had full facial detail.
+  // Give him the same eyes/brows/mouth rig, cold/formal to match a magistrate presiding over the rite.
   rudisCeremony: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
     const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="arenaSand" bg="url(#swarm)"
       fig={{pose: A.sit(f), x: 900, y: 906, scale: 1.25, view: 'front', expr: blendExpr(FACES.hollow, FACES.hardened, t)}}
-      extras={[{pose: A.stand(f), x: 1300, y: 900, scale: 1.2, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+      extras={[{pose: A.stand(f), x: 1300, y: 900, scale: 1.2, view: 'profile', facing: -1, pal: DIM, expr: FACES.cold}]} />;},
   // the lanista's office — the roster board, scrolls and a wax tablet on the desk — ownership, the
   // games-business ladder (Levels 3-4 roster tracking, later Level 7 as lanista)
   ludusOffice: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();

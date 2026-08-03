@@ -2,7 +2,7 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 22056,
+  "totalFrames": 22063,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
@@ -362,7 +362,7 @@
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
       "startFrame": 18694,
-      "durationInFrames": 667,
+      "durationInFrames": 674,
       "gap": 0.25
     },
     {
@@ -372,7 +372,7 @@
       "template": "arenaSand",
       "audio": "audio/t31.wav",
       "audioStartFrame": 3,
-      "startFrame": 19361,
+      "startFrame": 19368,
       "durationInFrames": 639,
       "gap": 0.25
     },
@@ -383,7 +383,7 @@
       "template": "praetorians",
       "audio": "audio/t32.wav",
       "audioStartFrame": 3,
-      "startFrame": 20000,
+      "startFrame": 20007,
       "durationInFrames": 634,
       "gap": 0.25
     },
@@ -394,7 +394,7 @@
       "template": "ludusYard",
       "audio": "audio/t33.wav",
       "audioStartFrame": 3,
-      "startFrame": 20634,
+      "startFrame": 20641,
       "durationInFrames": 747,
       "gap": 0.25
     },
@@ -405,7 +405,7 @@
       "template": "arenaGate",
       "audio": "audio/t34.wav",
       "audioStartFrame": 3,
-      "startFrame": 21381,
+      "startFrame": 21388,
       "durationInFrames": 675,
       "gap": 0.25
     }

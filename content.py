@@ -278,8 +278,8 @@ SCENES = [
          narration=("An invitation up into the box itself, for games marking a conquest you've never "
                     "seen on any map — Trajan's Dacian triumph, a hundred and twenty-three days, ten "
                     "thousand men across the whole run. Somewhere in that number is a boy who once "
-                    "refused barley. You fund a fraction of it. You don't watch most of it. From up here "
-                    "the sand looks smaller than it ever did standing on it."),
+                    "refused barley. You fund a fraction of it. Most of it happens without you in the "
+                    "room. From up here the sand looks smaller than it ever did standing on it."),
          overlay=dict(big="123 DAYS", sub="10,000 MEN. AN EMPIRE'S TREASURY.")),
     dict(id="t31", level=None, template="arenaSand",
          narration=("The crowd's roar hits the same register it always did, sixty thousand throats "
