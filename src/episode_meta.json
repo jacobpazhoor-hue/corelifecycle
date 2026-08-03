@@ -1,22 +1,21 @@
 {
   "thumb": {
-    "kicker": "EVERY LEVEL OF AN",
-    "line1": "THE INFILTRATOR",
+    "kicker": "EVERY LEVEL OF A",
+    "line1": "GLADIATOR",
     "line2": "",
-    "tag": "BLOWN",
+    "tag": "THE THUMB DECIDES",
     "archetype": "poster",
-    "big": "$4B+",
-    "before": "RECRUIT",
-    "after": "BURNED",
+    "big": "12,000 HS",
+    "before": "BOUGHT",
+    "after": "OWNED",
     "expr": "shock",
-    "povline": "YOU BECOME HIM",
-    "keyword": "BURNED",
-    "setting": "backAlley",
-    "question": "WHO ARE YOU REALLY?",
-    "mood": "electric",
-    "costume": "suit",
-    "word": "BURNED",
-    "prop": "tower"
+    "povline": "YOU ARE PROPERTY THAT WINS",
+    "keyword": "MERCY",
+    "setting": "arenaSand",
+    "question": "WHO TURNS THE THUMB?",
+    "mood": "epic",
+    "costume": "uniform",
+    "word": "MERCY"
   },
-  "topic": "fbi_undercover"
+  "topic": "gladiator"
 }

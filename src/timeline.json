@@ -2,443 +2,411 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 20032,
+  "totalFrames": 21911,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t01",
       "level": null,
       "overlay": {
-        "big": "4 WORDS",
-        "sub": "THE WRONG ONES END YOU"
+        "big": "4 SECONDS",
+        "sub": "THE THUMB HASN'T TURNED YET"
       },
-      "template": "backAlley",
+      "template": "arenaSand",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 630,
+      "durationInFrames": 634,
       "gap": 0.7
     },
     {
       "id": "t02",
       "level": null,
       "overlay": null,
-      "template": "desk",
+      "template": "riceField",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 630,
-      "durationInFrames": 616,
+      "startFrame": 634,
+      "durationInFrames": 638,
       "gap": 0.25
     },
     {
       "id": "t03",
-      "level": "LEVEL 01  \u00b7  NEW AGENT TRAINEE",
+      "level": "LEVEL 01  \u00b7  NOVICIUS",
       "overlay": {
-        "big": "$41,860",
-        "sub": "YOUR FIRST-YEAR TRAINEE PAY"
+        "big": "600 HS",
+        "sub": "YOUR PRICE. LESS THAN THE HORSE."
       },
-      "template": "lectureHallScene",
+      "template": "slaveMarket",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 1246,
-      "durationInFrames": 619,
+      "startFrame": 1272,
+      "durationInFrames": 647,
       "gap": 0.25
     },
     {
       "id": "t04",
       "level": null,
-      "overlay": {
-        "big": "BADGE #",
-        "sub": "A NUMBER BEFORE A NAME"
-      },
-      "template": "signing",
+      "overlay": null,
+      "template": "ludusYard",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 1865,
-      "durationInFrames": 613,
+      "startFrame": 1919,
+      "durationInFrames": 643,
       "gap": 0.25
     },
     {
       "id": "t05",
       "level": null,
       "overlay": null,
-      "template": "tradecraft",
+      "template": "arenaGate",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 2478,
-      "durationInFrames": 530,
+      "startFrame": 2562,
+      "durationInFrames": 754,
       "gap": 0.25
     },
     {
       "id": "t06",
-      "level": null,
+      "level": "LEVEL 02  \u00b7  TIRO",
       "overlay": null,
-      "template": "barracksLife",
+      "template": "ludusYard",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 3008,
-      "durationInFrames": 616,
+      "startFrame": 3316,
+      "durationInFrames": 595,
       "gap": 0.25
     },
     {
       "id": "t07",
-      "level": "LEVEL 02  \u00b7  SPECIAL AGENT  \u00b7  FIELD OFFICE",
-      "overlay": {
-        "big": "1 SECOND",
-        "sub": "HE ALMOST MADE THE VAN"
-      },
-      "template": "surveillance",
+      "level": null,
+      "overlay": null,
+      "template": "arenaGate",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 3624,
-      "durationInFrames": 570,
-      "gap": 0.7
+      "startFrame": 3911,
+      "durationInFrames": 561,
+      "gap": 0.25
     },
     {
       "id": "t08",
       "level": null,
-      "overlay": null,
-      "template": "fileWall",
+      "overlay": {
+        "big": "62 HS",
+        "sub": "YOUR FIRST CUT OF THE PURSE"
+      },
+      "template": "arenaSand",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 4194,
-      "durationInFrames": 527,
+      "startFrame": 4472,
+      "durationInFrames": 654,
       "gap": 0.25
     },
     {
       "id": "t09",
       "level": null,
-      "overlay": {
-        "big": "3 AGENTS",
-        "sub": "DECIDE IF YOU'RE FIT FOR THIS"
-      },
-      "template": "boardroomNotes",
+      "overlay": null,
+      "template": "ludusYard",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 4721,
-      "durationInFrames": 585,
+      "startFrame": 5126,
+      "durationInFrames": 648,
       "gap": 0.25
     },
     {
       "id": "t10",
-      "level": null,
-      "overlay": null,
-      "template": "debrief",
+      "level": "LEVEL 03  \u00b7  QUARTUS PALUS",
+      "overlay": {
+        "big": "500 HS",
+        "sub": "TOSSED FROM THE CROWD, NOT PAID"
+      },
+      "template": "arenaSand",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 5306,
-      "durationInFrames": 653,
+      "startFrame": 5774,
+      "durationInFrames": 606,
       "gap": 0.25
     },
     {
       "id": "t11",
-      "level": "LEVEL 03  \u00b7  CERTIFIED UNDERCOVER EMPLOYEE",
-      "overlay": {
-        "big": "RAY COLE",
-        "sub": "THE NAME ON EVERYTHING NOW"
-      },
-      "template": "station",
+      "level": null,
+      "overlay": null,
+      "template": "ludusOffice",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 5959,
-      "durationInFrames": 528,
+      "startFrame": 6380,
+      "durationInFrames": 653,
       "gap": 0.25
     },
     {
       "id": "t12",
       "level": null,
       "overlay": null,
-      "template": "consult",
+      "template": "arenaGate",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 6487,
-      "durationInFrames": 540,
+      "startFrame": 7033,
+      "durationInFrames": 626,
       "gap": 0.25
     },
     {
       "id": "t13",
-      "level": null,
-      "overlay": null,
-      "template": "tradecraft",
+      "level": "LEVEL 04  \u00b7  SECUNDUS PALUS",
+      "overlay": {
+        "big": "3,000 HS",
+        "sub": "YOUR MARKET VALUE, QUOTED ALOUD"
+      },
+      "template": "arenaSand",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 7027,
-      "durationInFrames": 542,
+      "startFrame": 7659,
+      "durationInFrames": 705,
       "gap": 0.25
     },
     {
       "id": "t14",
       "level": null,
-      "overlay": {
-        "big": "$12,000",
-        "sub": "EVIDENCE. NONE OF IT YOURS."
-      },
-      "template": "deadDrop",
+      "overlay": null,
+      "template": "ludusYard",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 7569,
-      "durationInFrames": 587,
+      "startFrame": 8364,
+      "durationInFrames": 709,
       "gap": 0.25
     },
     {
       "id": "t15",
-      "level": "LEVEL 04  \u00b7  DEEP COVER  \u00b7  SAL'S CREW",
-      "overlay": {
-        "big": "$80,000",
-        "sub": "COUNTED. STILL NOT YOURS."
-      },
-      "template": "cardGame",
+      "level": null,
+      "overlay": null,
+      "template": "arenaGate",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 8156,
-      "durationInFrames": 509,
+      "startFrame": 9073,
+      "durationInFrames": 606,
       "gap": 0.25
     },
     {
       "id": "t16",
       "level": null,
       "overlay": null,
-      "template": "redSauce",
+      "template": "forumScene",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 8665,
-      "durationInFrames": 552,
+      "startFrame": 9679,
+      "durationInFrames": 577,
       "gap": 0.25
     },
     {
       "id": "t17",
-      "level": null,
+      "level": "LEVEL 05  \u00b7  PRIMUS PALUS",
       "overlay": {
-        "big": "$1.2M",
-        "sub": "A LEDGER YOU COPIED, NOT KEPT"
+        "big": "12,000 HS",
+        "sub": "THE EMPEROR'S OWN CAP ON YOUR PRICE"
       },
-      "template": "socialClub",
+      "template": "arenaSand",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 9217,
-      "durationInFrames": 495,
+      "startFrame": 10256,
+      "durationInFrames": 713,
       "gap": 0.25
     },
     {
       "id": "t18",
       "level": null,
       "overlay": null,
-      "template": "dinner",
+      "template": "imperialBox",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 9712,
-      "durationInFrames": 609,
-      "gap": 1.4
+      "startFrame": 10969,
+      "durationInFrames": 669,
+      "gap": 0.25
     },
     {
       "id": "t19",
-      "level": "LEVEL 05  \u00b7  THE WIRE  \u00b7  CASE AGENT",
-      "overlay": {
-        "big": "$9M",
-        "sub": "SEIZED THE SAME NIGHT"
-      },
-      "template": "waterfront",
+      "level": null,
+      "overlay": null,
+      "template": "ludusYard",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 10321,
-      "durationInFrames": 682,
-      "gap": 0.25
+      "startFrame": 11638,
+      "durationInFrames": 542,
+      "gap": 1.4
     },
     {
       "id": "t20",
       "level": null,
-      "overlay": null,
-      "template": "wiretap",
+      "overlay": {
+        "big": "6 YEARS",
+        "sub": "RETIRED, UNTIL TODAY'S BILL"
+      },
+      "template": "arenaSand",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 11003,
-      "durationInFrames": 518,
+      "startFrame": 12180,
+      "durationInFrames": 767,
       "gap": 0.25
     },
     {
       "id": "t21",
       "level": null,
-      "overlay": {
-        "big": "6 MONTHS",
-        "sub": "CONFIRMED IN ONE AFTERNOON"
-      },
-      "template": "prisonCell",
+      "overlay": null,
+      "template": "arenaGate",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 11521,
-      "durationInFrames": 616,
+      "startFrame": 12947,
+      "durationInFrames": 633,
       "gap": 0.25
     },
     {
       "id": "t22",
-      "level": null,
-      "overlay": null,
-      "template": "safehouse",
+      "level": "LEVEL 06  \u00b7  FREE MAN",
+      "overlay": {
+        "big": "THE RUDIS",
+        "sub": "OFFERED. YOU HAND IT BACK."
+      },
+      "template": "rudisCeremony",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 12137,
-      "durationInFrames": 504,
+      "startFrame": 13580,
+      "durationInFrames": 571,
       "gap": 0.25
     },
     {
       "id": "t23",
-      "level": "LEVEL 06  \u00b7  SUPERVISORY SPECIAL AGENT",
-      "overlay": {
-        "big": "$40M",
-        "sub": "FORFEITED ACROSS YOUR CASES"
-      },
-      "template": "boardroomHead",
+      "level": null,
+      "overlay": null,
+      "template": "ludusYard",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 12641,
-      "durationInFrames": 654,
+      "startFrame": 14151,
+      "durationInFrames": 611,
       "gap": 0.25
     },
     {
       "id": "t24",
       "level": null,
       "overlay": null,
-      "template": "commandPost",
+      "template": "arenaSand",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 13295,
-      "durationInFrames": 529,
+      "startFrame": 14762,
+      "durationInFrames": 728,
       "gap": 0.25
     },
     {
       "id": "t25",
-      "level": null,
+      "level": "LEVEL 07  \u00b7  LANISTA",
       "overlay": null,
-      "template": "warRoom",
+      "template": "ludusOffice",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 13824,
-      "durationInFrames": 580,
+      "startFrame": 15490,
+      "durationInFrames": 625,
       "gap": 0.25
     },
     {
       "id": "t26",
       "level": null,
-      "overlay": null,
-      "template": "debrief",
+      "overlay": {
+        "big": "150,000 HS",
+        "sub": "A SHOW'S BUDGET. YOU SUPPLY THE MEN."
+      },
+      "template": "countRoom",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 14404,
-      "durationInFrames": 540,
+      "startFrame": 16115,
+      "durationInFrames": 590,
       "gap": 0.25
     },
     {
       "id": "t27",
-      "level": "LEVEL 07  \u00b7  ASAC / SAC  \u00b7  FIELD OFFICE",
-      "overlay": {
-        "big": "$180,000",
-        "sub": "THE FIRST NUMBER THAT'S YOURS"
-      },
-      "template": "atrium",
+      "level": null,
+      "overlay": null,
+      "template": "ludusYard",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 14944,
-      "durationInFrames": 541,
+      "startFrame": 16705,
+      "durationInFrames": 604,
       "gap": 0.25
     },
     {
       "id": "t28",
       "level": null,
       "overlay": null,
-      "template": "revolvingDoor",
+      "template": "arenaSand",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 15485,
-      "durationInFrames": 532,
+      "startFrame": 17309,
+      "durationInFrames": 605,
       "gap": 0.25
     },
     {
       "id": "t29",
       "level": null,
-      "overlay": {
-        "big": "$300M",
-        "sub": "SEIZED BY YOUR OFFICE"
-      },
-      "template": "podiumScene",
+      "overlay": null,
+      "template": "arenaGate",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 16017,
-      "durationInFrames": 502,
+      "startFrame": 17914,
+      "durationInFrames": 635,
       "gap": 0.25
     },
     {
       "id": "t30",
-      "level": null,
-      "overlay": null,
-      "template": "window",
+      "level": "LEVEL 08  \u00b7  THE EDITOR ABOVE YOU",
+      "overlay": {
+        "big": "123 DAYS",
+        "sub": "10,000 MEN. AN EMPIRE'S TREASURY."
+      },
+      "template": "imperialBox",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 16519,
-      "durationInFrames": 553,
+      "startFrame": 18549,
+      "durationInFrames": 667,
       "gap": 0.25
     },
     {
       "id": "t31",
-      "level": "LEVEL 08  \u00b7  THE BUREAU ABOVE YOU",
-      "overlay": {
-        "big": "$4B+",
-        "sub": "SEIZED NATIONWIDE, EVERY YEAR"
-      },
-      "template": "courtroom",
+      "level": null,
+      "overlay": null,
+      "template": "arenaSand",
       "audio": "audio/t31.wav",
       "audioStartFrame": 3,
-      "startFrame": 17072,
-      "durationInFrames": 542,
+      "startFrame": 19216,
+      "durationInFrames": 639,
       "gap": 0.25
     },
     {
       "id": "t32",
       "level": null,
-      "overlay": {
-        "big": "THE FILE",
-        "sub": "SAL KNEW. HE LET YOU LIVE."
-      },
-      "template": "backAlley",
+      "overlay": null,
+      "template": "praetorians",
       "audio": "audio/t32.wav",
       "audioStartFrame": 3,
-      "startFrame": 17614,
-      "durationInFrames": 578,
-      "gap": 0.7
+      "startFrame": 19855,
+      "durationInFrames": 634,
+      "gap": 0.25
     },
     {
       "id": "t33",
       "level": null,
-      "overlay": {
-        "big": "AGE 57",
-        "sub": "MANDATORY. NO EXCEPTIONS."
-      },
-      "template": "emptyChair",
+      "overlay": null,
+      "template": "ludusYard",
       "audio": "audio/t33.wav",
       "audioStartFrame": 3,
-      "startFrame": 18192,
-      "durationInFrames": 583,
+      "startFrame": 20489,
+      "durationInFrames": 747,
       "gap": 0.25
     },
     {
       "id": "t34",
       "level": null,
       "overlay": null,
-      "template": "lobby",
+      "template": "arenaGate",
       "audio": "audio/t34.wav",
       "audioStartFrame": 3,
-      "startFrame": 18775,
-      "durationInFrames": 670,
-      "gap": 0.25
-    },
-    {
-      "id": "t35",
-      "level": null,
-      "overlay": null,
-      "template": "lectureHallScene",
-      "audio": "audio/t35.wav",
-      "audioStartFrame": 3,
-      "startFrame": 19445,
-      "durationInFrames": 587,
+      "startFrame": 21236,
+      "durationInFrames": 675,
       "gap": 0.25
     }
   ]

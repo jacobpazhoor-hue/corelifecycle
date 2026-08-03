@@ -1,288 +1,314 @@
 #!/usr/bin/env python3
-"""Your Life as an Undercover Agent at Every Level — POV doodle build, ~12 min.
-Grounded in docs/research/fbi_undercover.md. RANK format: New Agent Trainee (Quantico) -> Special
-Agent, First Office of Assignment -> Certified Undercover Employee (first Group I op) -> Deep cover
-(embedded in Sal's crew) -> Case agent (the wire, the takedown) -> Supervisory Special Agent -> ASAC/
-SAC -> the Bureau above you. Second-person present-tense POV: the viewer IS a composite FBI agent
-who rises through the real, documented Bureau ladder: 21-week Quantico training (VERIFIED-standard),
-the Certified Undercover Employee designation + DOJ's Group I/Group II Attorney General's Guidelines
-(VERIFIED, real policy), the GS pay scale + 25% Law Enforcement Availability Pay (VERIFIED via search),
-and the statutory mandatory retirement age of 57 for federal law-enforcement officers (VERIFIED, 5
-U.S.C. §8335). Real background grounding: Joseph D. Pistone/"Donnie Brasco"'s six-year (1976-1981)
-infiltration of the Bonanno crime family, referenced only for the genre's documented real stakes
-(a reported bounty, a marriage lost to the double life) -- never depicted as this episode's literal
-protagonist. Sal Trapani, Dominic Farro, Frank Delgado, Mara, and Nicky are a FICTIONAL COMPOSITE.
+"""Your Life as a Gladiator at Every Level — POV doodle build, ~12 min.
+Grounded in docs/research/gladiator.md. History/rank-hybrid format (per topic_queue.json: format
+"history" with a rank-style title spine): Novicius (bought at the block) -> Tiro (first bout) ->
+Quartus/Tertius Palus -> Secundus Palus -> Primus Palus (the champion) -> Free Man (the rudis
+offered, refused) -> Lanista (owns the ludus) -> the Editor/emperor above you. Second-person
+present-tense POV: the viewer IS a composite gladiator who climbs the real, documented palus grading
+system (VERIFIED: TheCollector, Rome Wiki) through a ludus (gladiator school) run by a lanista, ending
+above even the ludus at the editor/emperor who funds the games. Real background grounding: the palus
+ranking tiers, the rudis (wooden sword of discharge, ~30 fights/~5 years), Flamma's four refused
+freedoms (Hadrian-era, tombstone-verified), Marcus Attilius's upset of Hilarus (Pompeii graffito),
+Marcus Aurelius's real 12,000-sestertii re-enlistment cap, the munera cost tiers, and Trajan's
+123-day/~10,000-man Dacian triumph games (Cassius Dio via Jerome, flagged as a later secondary
+figure, order-of-magnitude only) -- and Commodus's real documented arena appearances + assassination,
+referenced only as background, never as this episode's literal protagonist. Priscus (doctore/mentor)
+and Barca (rival) are a FICTIONAL COMPOSITE; "Priscus" borrows the name of one half of the real,
+Martial-documented double-rudis pair from the Colosseum's 80 AD inaugural games as grounding texture,
+not a claim that this is literally that man.
 
-SPINE: EVIDENCE vs PAYCHECK -- a new dual-track flavor (see research doc + ops/improvements.json).
-The big gold overlay is money that moves through your hands as EVIDENCE ($12,000 buy money -> $80,000
-skim -> $1.2M ledger -> $9M seizure warrant -> $40M forfeited across your squad's cases -> $300M/yr
-your office seizes -> $4B+ nationwide) and is never legally yours; the paycheck track (sub-caption/
-overlay) stays capped by statute regardless of danger ($41,860 trainee -> ... -> $180,000 SAC -> a
-fixed pension at mandatory age-57 retirement) -- the one number in the whole climb the Bureau controls
-completely instead of you. Distinct from the six prior spine flavors already catalogued (valuation-
-vs-personal, inverted power-vs-pay, control-vs-own, scenario pure-money, dual-track-valuation,
-unbroken-climb-moral-only-reversal).
+SPINE: PRICE OF A MAN vs. WINS-TO-FREEDOM -- a new flavor (see research doc; distinct from the seven
+prior spine flavors already catalogued: valuation-vs-personal, inverted power-vs-pay, control-vs-own,
+scenario pure-money, dual-track-valuation, unbroken-climb-moral-only-reversal, evidence-vs-paycheck).
+The big gold overlay tracks your MARKET VALUE -- what the lanista could sell you for, what an editor
+pays to rent you (600 HS -> 62 HS purse-share -> 500 HS crowd tosses -> 3,000 HS quoted value ->
+12,000 HS, Marcus Aurelius's real re-enlistment cap) -- money that is never legally yours to spend; a
+parallel win-count toward the real 30-fight rudis threshold runs underneath, and perversely the more
+famous (and more profitable to keep fighting) you become, the less anyone around you wants that count
+to finish.
 
-STRUCTURAL VARIATION vs the last 2 produced (yakuza = AFTERMATH cold open / unbroken-climb-moral-
-only-reversal / TORCH-PASSING ending; mongol_empire = FLASH-FORWARD cold open / rise-then-fracture /
-ONE-DOOR-LEFT-OPEN ending): this cold open is MID-ACTION (a real, documented mob loyalty-test moment
--- any suspicion of being a federal agent could mean summary execution, per organized-crime literature
-including Pistone's own account); act two's shape is LIKABLE-TARGET MORAL EROSION (the evidence number
-only ever climbs -- the true cost is affection for the man you're building a case against, not a
-financial dip); the ending is CYCLICAL -- forced retirement at 57, guest-teaching a new trainee in the
-same Quantico classroom the story opened in, almost answering to the wrong name.
+STRUCTURAL VARIATION vs the last 2 produced (mongol_empire = FLASH-FORWARD cold open / rise-then-
+fracture / ONE-DOOR-LEFT-OPEN ending; fbi_undercover = MID-ACTION cold open / likable-target moral-
+erosion / CYCLICAL ending): this cold open is AFTERMATH (standing over a fallen opponent, the crowd's
+thumb not yet turned, cut away before the verdict); act two's shape is RISE-THEN-REVERSAL-THEN-RISE-
+AGAIN (the personal rank climb never truly reverses, but the midpoint costs you Priscus, and the
+"freedom" the whole climb was nominally for gets refused at Level 6, same as it cost the real Flamma);
+the ending is TORCH-PASSING, blended with a CYCLICAL image (the final line bends back to the cold
+open's exact unresolved thumb) -- distinct from yakuza's torch-passing (no cyclical image close) and
+mongol's one-door-left-open (no direct echo of the cold open at all).
 
 PROMISE -> PAYOFF LEDGER:
-  * t01 cold open (Dominic's gun, "you a cop")                    -> t32 (the file: Sal knew, and stopped Dominic anyway)
-  * t02 promise/cost-line (Delgado's photo of a younger stranger)  -> paid off across t22/t26/t30 (Delgado's own divorce/retirement, Mara leaving) and t33 (your own fixed pension)
-  * sensory anchor: the wedding ring                               -> worn t03 -> ordered off t11 -> a shape in your pocket t18 -> reached for, absent, t30/t33 -> back on, worn smooth, t35
-  * t03 the $41,860 vs. $190,000 named want                        -> paid off at t27's $180,000 ("the first number that's actually yours")
-  * t10 Delgado's mentor line ("most don't come all the way back") -> tested at t22 -> paid off at t34/t35
-  * t16 Nicky, Sal's son, "Uncle Ray"                               -> UNRESOLVED UNIVERSE THREAD (deliberate) -> referenced again at t23, never fully closed
-  * t17 Dominic's suspicion                                        -> the midpoint dock scene t19 -> resolved only at t32
-  * t18 silence beat (gap=1.4)                                     -> t19 THE REVERSAL (the dock, the gun, Dominic's taunt)
-  * t29 the $300M share-worthy figure                               -> undercut immediately by t30's domestic cost, echoed at t31's $4B+ apex
+  * t01 cold open (the thumb not yet turned)                    -> t34 (the loop close, a new fighter's own thumb-verdict, unresolved and cyclical)
+  * t02 promise/cost-line (Marcia, the debt, "you don't know what it costs") -> the DEBT pays off at t22 (the farm bought back); MARCIA HERSELF -- whether she ever learns your arena name, whether you ever see her again -- is the deliberate UNRESOLVED UNIVERSE THREAD
+  * sensory anchor: the barley bowl                              -> given/humiliating t04 -> ritual t06 -> weight before the first fight t07 -> untouched in grief t21 -> served by your own hand t23/t27 -> offered again, torch-passed, t33
+  * t03 the 600 HS price ("less than the horse")                 -> escalates t08($62)/t10($500)/t13($3,000)/t17($12,000) -> inverted at t26 ($150,000 -- now on the other side of the number)
+  * t09 Priscus's tally count ("twenty-nine to go") + mentor warning -> tested t19 (silence beat) -> t20 (his death) -> paid off at t22 (thirty marks reached, refused anyway)
+  * t12 Barca's rivalry introduced                                -> paid off at t24 (his taunt, answered by the crowd, not by you)
+  * t15 the first death that isn't yours (a fellow tiro)          -> echoed, inverted, at t28 (a fighter dies under YOUR ownership, the ledger side of the same cost)
+  * t18 the editor points you out / "Priscus hasn't fought in six years" -> THE REVERSAL at t20
+  * t20 Priscus's dying line ("watch the gate")                   -> lived out literally at t29 -> repeated verbatim, torch-passed, at t33 -> paid off visually at t34
+  * t30 the 123-day/10,000-man share-worthy fact                  -> undercut immediately by t31 ("the house doesn't sleep well") and t32 (Commodus, the box isn't safe either)
 """
 
 FPS = 30
 
 SCENES = [
-    # ---- COLD OPEN — MID-ACTION, cut away before it resolves ----
-    dict(id="t01", level=None, template="backAlley", gap=0.7,
-         narration=("The gun's muzzle is still warm against your temple — fired recently, just not at "
-                    "you, not yet. Dominic Farro's hand doesn't shake. 'You a cop,' he says, 'tell me "
-                    "now, or God tells you later.' Four words, wrong ones, and this alley keeps your "
-                    "body. Say nothing. Count the trash-can lids. Don't blink first."),
-         overlay=dict(big="4 WORDS", sub="THE WRONG ONES END YOU")),
+    # ---- COLD OPEN — AFTERMATH, cut away before the verdict ----
+    dict(id="t01", level=None, template="arenaSand", gap=0.7,
+         narration=("Sand in your teeth, blood cooling on a stranger's blade already dropped in the "
+                    "dirt. Sixty thousand throats have gone quiet at once — the worst sound in Rome. A "
+                    "closed fist turns slowly above the first tier, thumb tucked, deciding a life that "
+                    "isn't yours to keep. Don't look at the box. Count your own heartbeats instead. Get "
+                    "to four before it opens."),
+         overlay=dict(big="4 SECONDS", sub="THE THUMB HASN'T TURNED YET")),
 
     # ---- PROMISE + COST-LINE ----
-    dict(id="t02", level=None, template="desk",
-         narration=("Rewind three years. None of this exists yet — not Dominic, not the alley, not the "
-                    "name you'll answer to more than your own. Frank Delgado, the agent who recruited "
-                    "you, keeps a photo pinned above his desk: himself at thirty, thinner, a stranger's "
-                    "face. You want his job one day. He wants you to understand the price tag first."),
+    dict(id="t02", level=None, template="riceField",
+         narration=("Three years earlier none of this exists — not the sand, not the fist above the "
+                    "box, not the name Rome will shout instead of your own. A border farm, a dead "
+                    "father's debts, a sister named Marcia too young to understand why soldiers are "
+                    "counting the goats twice. You want the debt gone. You don't yet know what Rome "
+                    "charges for that, or that it isn't paid in coin."),
          overlay=None),
 
-    # ---- LEVEL 01 · NEW AGENT TRAINEE ----
-    dict(id="t03", level="LEVEL 01  ·  NEW AGENT TRAINEE", template="lectureHallScene",
-         narration=("Twenty-one weeks at Quantico, and the instructor says evidentiary chain like a "
-                    "prayer. Your law-school roommate just signed for $190,000 at a downtown firm. Your "
-                    "trainee pay: $41,860, before tax, before Mara stops mentioning it out loud. You "
-                    "didn't come here for the money. You keep telling yourself that helps."),
-         overlay=dict(big="$41,860", sub="YOUR FIRST-YEAR TRAINEE PAY")),
-    dict(id="t04", level=None, template="signing",
-         narration=("Right hand raised in a hallway that still smells of new carpet, the Oath of Office "
-                    "recited alongside forty strangers who scatter to forty field offices by Friday. "
-                    "'Support and defend' sounds simple out loud, in a building where your photo is "
-                    "already filed under a badge number instead of a name. You call Mara after. Not before."),
-         overlay=dict(big="BADGE #", sub="A NUMBER BEFORE A NAME")),
-    dict(id="t05", level=None, template="tradecraft",
-         narration=("Hogan's Alley: a fake town built only to shoot at you, actors playing bank robbers "
-                    "who scream real enough to chill your hands. Your instructor calls hesitation before "
-                    "the first shot the thing that gets agents killed. You clear the scenario under the "
-                    "max. Nobody claps. Nobody here is supposed to."),
+    # ---- LEVEL 01 · NOVICIUS ----
+    dict(id="t03", level="LEVEL 01  ·  NOVICIUS", template="slaveMarket",
+         narration=("The auctioneer's stick taps your jaw sideways, checking teeth like you're "
+                    "livestock, because today you are. Six hundred sesterces — less than the horse tied "
+                    "beside the block, and the horse doesn't flinch at the number. A lanista's man counts "
+                    "out coin without once meeting your eyes. Marcia's face is three hundred miles behind "
+                    "you and getting further with every one he drops."),
+         overlay=dict(big="600 HS", sub="YOUR PRICE. LESS THAN THE HORSE.")),
+    dict(id="t04", level=None, template="ludusYard",
+         narration=("Chains off, a wooden bowl of grey barley mash pushed into your hands before anyone "
+                    "asks your name. Eat, says the man watching you — Priscus, doctore, more scar than "
+                    "face. Fat cushions the cut, he says, like it's kindness. It takes months to learn "
+                    "he's right: the men who starve here die faster, prettier, and completely unmourned."),
          overlay=None),
-    dict(id="t06", level=None, template="barracksLife",
-         narration=("The dorm smells of gun oil and instant coffee, forty trainees down the hall "
-                    "pretending the same thing you are: that a wedding ring means the same thing here it "
-                    "did at home. Mara's voice on the phone gets thinner every Sunday, not sadder, just "
-                    "further away. You spin the ring off, on, off. Delgado, passing, doesn't say stop."),
+    dict(id="t05", level=None, template="arenaGate",
+         narration=("Priscus walks you past the tunnel mouth once, just to watch your face do it. "
+                    "Torchlight gutters against wet stone; ahead, a rectangle of white daylight roars "
+                    "faintly, sixty thousand voices flattened by distance into one long breath. Not yet, "
+                    "he says. Not for months. Eat first. Grow first. The relief lasts exactly as long as "
+                    "the sentence does, and not one second longer."),
          overlay=None),
 
-    # ---- LEVEL 02 · SPECIAL AGENT · FIELD OFFICE (minute-3 spectacle) ----
-    dict(id="t07", level="LEVEL 02  ·  SPECIAL AGENT  ·  FIELD OFFICE", template="surveillance",
-         gap=0.7,
-         narration=("First office of assignment, a stakeout van that smells worse than the dorm ever "
-                    "did. The target stares dead at the van — at you — one full second before deciding a "
-                    "parked car isn't worth the trouble. Delgado exhales like he'd been holding it the "
-                    "whole time. Your own heartbeat wasn't there a second ago. It's back now, loud."),
-         overlay=dict(big="1 SECOND", sub="HE ALMOST MADE THE VAN")),
-    dict(id="t08", level=None, template="fileWall",
-         narration=("Weeks of logs, plates, a name that means nothing yet: Sal Trapani. Delgado slides "
-                    "your first review across without looking up. 'Unusually comfortable lying,' he "
-                    "writes, and means it as the highest compliment the Bureau has. You're not sure yet "
-                    "whether to be proud of that sentence."),
+    # ---- LEVEL 02 · TIRO (minute-3 spectacle) ----
+    dict(id="t06", level="LEVEL 02  ·  TIRO", template="ludusYard",
+         narration=("Six months on the wooden post, the same eleven strikes until your shoulders stop "
+                    "asking why. Barley three times a day, weight you didn't want piling onto a frame "
+                    "built for farm work, not this. Priscus corrects your grip with a stick across the "
+                    "knuckles, never the blade. Pain teaches faster than kindness, he says. He isn't wrong."),
          overlay=None),
-    dict(id="t09", level=None, template="boardroomNotes",
-         narration=("Delgado pitches you to the undercover review board like a defense attorney — a "
-                    "psych workup, a marriage he doesn't mention, six years of his own case as the only "
-                    "qualification he thinks he needs to cite. Three senior agents ask if you can lie to "
-                    "someone's face for years without it costing you anything. You answer the question "
-                    "they didn't ask instead."),
-         overlay=dict(big="3 AGENTS", sub="DECIDE IF YOU'RE FIT FOR THIS")),
-    dict(id="t10", level=None, template="debrief",
-         narration=("Delgado picks the undercover-certification applicants himself, and picks you over "
-                    "three agents with twice your seniority. He ran six years under someone else's name "
-                    "once, divorced twice, remarried never. He doesn't warn you about bullets. He warns "
-                    "you about something slower."),
+    dict(id="t07", level=None, template="arenaGate",
+         narration=("The bars lift on a system nobody explains twice. Your hands are steady. That's the "
+                    "part that scares you — not the shaking, the absence of it, like your body already "
+                    "knows something your mind hasn't caught up to. Barley sits like a stone behind your "
+                    "ribs. Past the light, a name that isn't yours yet gets announced instead."),
+         overlay=None),
+    dict(id="t08", level=None, template="arenaSand",
+         narration=("Your opponent has fourteen fights and twelve wins; you have zero of either. Nobody "
+                    "in the tiers expects the newcomer still standing after — least of all you, blade "
+                    "shaking now that it's finally safe to. The crowd doesn't chant your name. It doesn't "
+                    "know it yet. Sixty-two sesterces land in your palm afterward, damp, the first money "
+                    "you've ever owned outright."),
+         overlay=dict(big="62 HS", sub="YOUR FIRST CUT OF THE PURSE")),
+    dict(id="t09", level=None, template="ludusYard",
+         narration=("Priscus doesn't celebrate wins. He counts them out loud against thirty — the number "
+                    "that buys you out from under all of this — and chalks one mark inside the yard wall, "
+                    "twenty-nine still bare. Some men chase the count. Some men forget one was ever kept. "
+                    "He watches to see which kind you'll be before you've decided it yourself."),
          overlay=None,
-         dialogue=dict(text="You don't play a man. You become him till the job ends. Most don't come all the way back.")),
+         dialogue=dict(text="Don't fall in love with the sand before it lets you go.")),
 
-    # ---- LEVEL 03 · CERTIFIED UNDERCOVER EMPLOYEE · FIRST OP ----
-    dict(id="t11", level="LEVEL 03  ·  CERTIFIED UNDERCOVER EMPLOYEE", template="station",
-         narration=("Certified Undercover Employee: a file at Headquarters that has to clear before "
-                    "you're legally allowed to become someone else. Group I, they call Sal Trapani's "
-                    "crew — sensitive enough Washington signs off before you do. Take off the ring, "
-                    "Delgado says, before you even ask why. Ray Cole doesn't wear one."),
-         overlay=dict(big="RAY COLE", sub="THE NAME ON EVERYTHING NOW")),
-    dict(id="t12", level=None, template="consult",
-         narration=("Six hours with a Bureau psychologist who isn't looking for weakness, exactly — "
-                    "she's looking for the specific kind of person who can hold two names in one head "
-                    "without one of them winning. Family strain gets its own section in her report, "
-                    "longer than the section on danger. You answer honestly. Some answers surprise you "
-                    "on the way out."),
+    # ---- LEVEL 03 · QUARTUS/TERTIUS PALUS ----
+    dict(id="t10", level="LEVEL 03  ·  QUARTUS PALUS", template="arenaSand",
+         narration=("Six marks on the tally now, quartus palus chalked beside your name for the first "
+                    "time — a rank, not just a number. A woman in the third tier throws a bronze bracelet "
+                    "instead of coin; a boy near the wall screams a name that turns out to be yours, "
+                    "badly pronounced. Barca, two posts over in the yard, watches the bracelet land and "
+                    "does not clap."),
+         overlay=dict(big="500 HS", sub="TOSSED FROM THE CROWD, NOT PAID")),
+    dict(id="t11", level=None, template="ludusOffice",
+         narration=("Priscus's ledger hangs behind his desk, every fighter's record chalked in columns: "
+                    "wins, purses, a number the lanista calls your worth without once calling it your "
+                    "wage. Yours is climbing faster than most. He doesn't say congratulations. He says a "
+                    "rising number gets you more fights, not fewer — and more fights is not the same "
+                    "thing as more life."),
          overlay=None),
-    dict(id="t13", level=None, template="tradecraft",
-         narration=("You learn Sal's whole world by rote before you ever shake his hand — his dead "
-                    "wife's name, his son's Little League batting average, the diner he's superstitious "
-                    "about, the exact sugar in his espresso. Cover-story drilling, Delgado calls it. Ray "
-                    "Cole's biography gets more real, some weeks, than your own does."),
-         overlay=None),
-    dict(id="t14", level=None, template="deadDrop",
-         narration=("Twelve thousand dollars, marked, photographed, counted twice before it leaves the "
-                    "Bureau's hands and once more once Sal's crew counts it themselves. None of it is "
-                    "yours — evidence wearing the shape of cash. Your real paycheck posts the same "
-                    "Friday it always does: sixty-three thousand, untouched by any of this."),
-         overlay=dict(big="$12,000", sub="EVIDENCE. NONE OF IT YOURS.")),
-
-    # ---- LEVEL 04 · DEEP COVER · SAL'S CREW ----
-    dict(id="t15", level="LEVEL 04  ·  DEEP COVER  ·  SAL'S CREW", template="cardGame",
-         narration=("Sal Trapani deals you into a back-room game like you've always been there, and "
-                    "three hands in, it feels true. Fifty-eight, funny, generous with the wrong kind of "
-                    "money, genuinely glad you're around. Nobody warned you the hardest part of this job "
-                    "is liking the man you're built to destroy."),
-         overlay=dict(big="$80,000", sub="COUNTED. STILL NOT YOURS.")),
-    dict(id="t16", level=None, template="redSauce",
-         narration=("Sal's son Nicky turns nine at a back-table birthday dinner and calls you Uncle Ray "
-                    "without anyone teaching him to. Sal toasts you like family, a hand heavy on your "
-                    "shoulder the way your own father never managed. You laugh at all the right moments. "
-                    "Ray Cole is good at this. That's the part that scares you."),
-         overlay=None),
-    dict(id="t17", level=None, template="socialClub",
-         narration=("The crew's rules are simpler than the Bureau's: never talk business on a phone, "
-                    "never bring a stranger to the club, never ask where the money that isn't yours "
-                    "actually goes. A junior associate named Dominic Farro watches you a beat too long "
-                    "every time you walk in. Sal waves it off. You don't."),
-         overlay=dict(big="$1.2M", sub="A LEDGER YOU COPIED, NOT KEPT")),
-    dict(id="t18", level=None, template="dinner", gap=1.4,
-         narration=("Three missed calls from Mara, cold fries on the seat of a car registered to nobody "
-                    "you actually are. The ring is a shape in your jacket pocket you've stopped reaching "
-                    "for without noticing. The dashboard clock reads 3:14 a.m. and you don't remember "
-                    "driving here. Some nights, woken fast, you can't say which name would come out first."),
+    dict(id="t12", level=None, template="arenaGate",
+         narration=("Barca fights secutor to your murmillo, faster than anyone in the yard and twice as "
+                    "proud of it. He corners you at the gate before a shared bill, close enough that "
+                    "torchlight catches the scar bisecting one eyebrow. Enjoy the bracelets, he says. "
+                    "Bracelets don't chalk marks on Priscus's wall. Yours does — and it terrifies him "
+                    "more than he'll say out loud."),
          overlay=None),
 
-    # ---- MIDPOINT REVERSAL — the dock, the gun handed to you ----
-    dict(id="t19", level="LEVEL 05  ·  THE WIRE  ·  CASE AGENT", template="waterfront",
-         narration=("Dominic drags a suspected rat onto the dock at 2 a.m. and hands you the gun, calm "
-                    "as a favor between friends. You can't stop it without ending yourself, the case, and "
-                    "every agent whose future rides on it. Sal watches you hesitate and, for the first "
-                    "time, looks almost afraid for you."),
-         overlay=dict(big="$9M", sub="SEIZED THE SAME NIGHT"),
-         dialogue=dict(text="Family bleeds together, Ray, or family doesn't trust you.")),
-    dict(id="t20", level=None, template="wiretap",
-         narration=("The recorder taped under your ribs catches every word that will convict Sal, "
-                    "including the ones where he calls you his own son's godfather. The tape doesn't lie "
-                    "the way you do. It just listens. Delgado calls it the cleanest case of his career. "
-                    "You call it something you don't have a word for yet, and don't go looking for one."),
+    # ---- LEVEL 04 · SECUNDUS PALUS ----
+    dict(id="t13", level="LEVEL 04  ·  SECUNDUS PALUS", template="arenaSand",
+         narration=("Secundus palus now, fourteen marks chalked, and the games get bigger the way debts "
+                    "do — quietly, then all at once. A retiarius's net catches your ankle mid-turn and "
+                    "the crowd's gasp arrives before your own does. You cut free on instinct you didn't "
+                    "know you'd trained. Three thousand sesterces sits under your name in Priscus's "
+                    "ledger by nightfall. You don't remember agreeing to be worth that."),
+         overlay=dict(big="3,000 HS", sub="YOUR MARKET VALUE, QUOTED ALOUD")),
+    dict(id="t14", level=None, template="ludusYard",
+         narration=("Priscus's hands shake now on cold mornings, a tremor he hides by keeping them busy "
+                    "— resetting the post, restacking practice swords, anything. He teaches you the "
+                    "retiarius counter he almost died learning himself, thirty years and one bad knee "
+                    "ago. Some lessons cost the teacher more than the student, he says, and doesn't "
+                    "explain which kind this one is."),
          overlay=None),
-    dict(id="t21", level=None, template="prisonCell",
-         narration=("A courier two rungs below Dominic gets picked up on an unrelated gun charge and, "
-                    "given the math, decides cooperating beats a decade upstate. He doesn't know your "
-                    "real name either — nobody outside the Bureau does anymore. His statement corroborates "
-                    "six months of your own recordings in one afternoon, cheaper than anything you risked "
-                    "to get them yourself."),
-         overlay=dict(big="6 MONTHS", sub="CONFIRMED IN ONE AFTERNOON")),
-    dict(id="t22", level=None, template="safehouse",
-         narration=("The target wall pins Sal's photo dead center, red string running to Dominic, to the "
-                    "ledger, to eleven other names you've eaten dinner with. Delgado asks if you can "
-                    "still do the job. You say yes before you've decided it's true. Ray Cole would say "
-                    "yes. Some days you're not sure who's answering."),
+    dict(id="t15", level=None, template="arenaGate",
+         narration=("A tiro two years newer than you doesn't walk back through this same tunnel one "
+                    "afternoon — a name you knew, a bunk you passed daily, gone in the time it takes a "
+                    "net to land wrong. Priscus doesn't stop training that evening. Grief on a schedule "
+                    "this tight is a luxury the ludus can't extend you. You eat the barley anyway. It "
+                    "tastes like nothing at all."),
          overlay=None),
-
-    # ---- LEVEL 06 · SUPERVISORY SPECIAL AGENT · RUNNING OTHERS ----
-    dict(id="t23", level="LEVEL 06  ·  SUPERVISORY SPECIAL AGENT", template="boardroomHead",
-         narration=("Sal takes eleven years, Dominic fourteen. Nicky is nineteen the last time you "
-                    "check, quietly, a habit you can't quite break. Supervisory Special Agent now — a "
-                    "desk, a squad of certified undercover employees, none paid one extra dollar for the "
-                    "specific danger of becoming someone else. Same GS scale as the analyst three doors down."),
-         overlay=dict(big="$40M", sub="FORFEITED ACROSS YOUR CASES")),
-    dict(id="t24", level=None, template="commandPost",
-         narration=("You brief a twenty-six-year-old agent on her first Group I op the way Delgado once "
-                    "briefed you — the file, the cover, the family she's about to be adopted into and "
-                    "eventually betray. She asks if it gets easier. You give her the true answer instead "
-                    "of the comforting one. You don't tell her about the ring."),
-         overlay=None),
-    dict(id="t25", level=None, template="warRoom",
-         narration=("Six cases running at once now across three field offices, a wall of screens instead "
-                    "of one target wall, your own name on the authorization line instead of the case file. "
-                    "The scale is bigger. The stakes, somehow, read smaller from up here — numbers on a "
-                    "screen instead of a hand heavy on your shoulder at a birthday dinner."),
-         overlay=None),
-    dict(id="t26", level=None, template="debrief",
-         narration=("Her case runs four years, cleaner than yours. Delgado retires the year she gets "
-                    "certified — a pension, a fishing boat, silence where a family used to be. You send a "
-                    "card. He doesn't write back. Some costs get paid quietly, off to the side, where the "
-                    "story doesn't usually look."),
+    dict(id="t16", level=None, template="forumScene",
+         narration=("The pompa parades every fighter through the forum before the games, and a stranger "
+                    "in the colonnade shouts a name Priscus gave you — not the one Marcia would still "
+                    "recognize. Fig sellers wave. A boy copies your walk, badly. Three hundred miles from "
+                    "a farm you can barely picture now, the wrong name is starting to feel like the true "
+                    "one."),
          overlay=None),
 
-    # ---- LEVEL 07 · ASAC / SAC · FIELD OFFICE ----
-    dict(id="t27", level="LEVEL 07  ·  ASAC / SAC  ·  FIELD OFFICE", template="atrium",
-         narration=("Assistant Special Agent in Charge, then Special Agent in Charge of the whole field "
-                    "office — budget lines, press liaisons, a corner office with a window Ray Cole never "
-                    "once stood behind. A hundred and eighty thousand dollars a year: the first number in "
-                    "this entire climb that's actually, legally, yours to spend."),
-         overlay=dict(big="$180,000", sub="THE FIRST NUMBER THAT'S YOURS")),
-    dict(id="t28", level=None, template="revolvingDoor",
-         narration=("DOJ liaisons, Congressional staffers, a Senator's aide who wants the forfeiture "
-                    "numbers dressed up before he'll release your office's budget. The Bureau's real "
-                    "currency was never cash or convictions. It's the story told about both, and you're "
-                    "still good at building a story someone else believes completely."),
+    # ---- LEVEL 05 · PRIMUS PALUS ----
+    dict(id="t17", level="LEVEL 05  ·  PRIMUS PALUS", template="arenaSand",
+         narration=("Primus palus, the top chalk-mark, the one Priscus says maybe one fighter in twenty "
+                    "ever reaches wearing his own teeth. Marcus Aurelius himself has capped what a "
+                    "lanista can charge to rent you out again — twelve thousand sesterces, an emperor's "
+                    "own ceiling on your price. Twenty-two marks now. Eight from free. The math should "
+                    "feel like hope. It feels like a leash getting longer, not shorter."),
+         overlay=dict(big="12,000 HS", sub="THE EMPEROR'S OWN CAP ON YOUR PRICE")),
+    dict(id="t18", level=None, template="imperialBox",
+         narration=("This month's editor — a senator financing the games for votes he'll never admit "
+                    "wanting — has you pointed out from the box above the sand, the way a buyer points "
+                    "at good livestock. Someone up there likes the story: student and teacher, same "
+                    "ludus, same wall. Priscus hasn't fought in six years. That detail, said once too "
+                    "loud, doesn't leave the room the way it should."),
          overlay=None),
-    dict(id="t29", level=None, template="podiumScene",
-         narration=("A press conference: three hundred million dollars in assets seized under your office "
-                    "this year, cameras on your good side, a reporter asking how it feels. You give the "
-                    "line Delgado gave you a decade back — 'like justice' — smoother than it should come, "
-                    "considering you still don't fully believe it."),
-         overlay=dict(big="$300M", sub="SEIZED BY YOUR OFFICE")),
-    dict(id="t30", level=None, template="window",
-         narration=("Mara left in year six, not out of anger, just exhaustion at competing with a man who "
-                    "wasn't legally real. Neither of you calls it anyone's fault out loud. You wear the "
-                    "ring most days now, out of habit more than meaning. Some nights you still reach for "
-                    "it in a jacket pocket that stopped existing fifteen years ago."),
+    dict(id="t19", level=None, template="ludusYard", gap=1.4,
+         narration=("Priscus rubs oil into a practice sword he hasn't swung in years, slower than the "
+                    "job needs. Twenty-nine, he says — not a count this time, just a number sitting in "
+                    "the air between you. He starts a sentence twice and finishes neither. The yard has "
+                    "never been this quiet at dusk before."),
+         overlay=None),
+    dict(id="t20", level=None, template="arenaSand",
+         narration=("The editor's bill reads STUDENT AGAINST TEACHER, letters big enough for the cheap "
+                    "seats, and Priscus walks onto the sand across from you like a man keeping an "
+                    "appointment he made decades ago. You lower your blade twice. Twice, the crowd boos "
+                    "it back up. On the third, before the thumb can turn, Priscus turns his own wrist "
+                    "and takes the choice off the table himself."),
+         overlay=dict(big="6 YEARS", sub="RETIRED, UNTIL TODAY'S BILL"),
+         dialogue=dict(text="Don't watch me. Watch the gate. That's where you live now.")),
+    dict(id="t21", level=None, template="arenaGate",
+         narration=("The barley bowl sits untouched on the bench where Priscus always left his. Nobody "
+                    "in the ludus says his name out loud for three days, like grief might be contagious. "
+                    "You find yourself walking to the gate at the exact hour he used to stand there — not "
+                    "fighting, not training, just measuring the light in the tunnel the way he taught you "
+                    "without meaning to."),
          overlay=None),
 
-    # ---- LEVEL 08 · THE BUREAU ABOVE YOU ----
-    dict(id="t31", level="LEVEL 08  ·  THE BUREAU ABOVE YOU", template="courtroom",
-         narration=("A closed-door hearing, DOJ oversight counsel across the table, asking about a "
-                    "nationwide forfeiture total running past four billion dollars a year, every field "
-                    "office, every year. Nobody in the room asks what it cost the agents who actually "
-                    "walked into those rooms wearing someone else's name. You don't volunteer it."),
-         overlay=dict(big="$4B+", sub="SEIZED NATIONWIDE, EVERY YEAR")),
-    dict(id="t32", level=None, template="backAlley", gap=0.7,
-         narration=("Twenty years later you learn, secondhand, what happened after the alley: Dominic "
-                    "never pulled the trigger, because Sal — already half-suspecting, the file confirms "
-                    "— put a hand on his arm and said let it go, we need him tonight. Sal knew. Sal let "
-                    "you live anyway. You read that page three times before you can close the file."),
-         overlay=dict(big="THE FILE", sub="SAL KNEW. HE LET YOU LIVE.")),
-    dict(id="t33", level=None, template="emptyChair",
-         narration=("Fifty-seven. Federal law retires you whether you're ready or not — the same statute "
-                    "for every agent who ever wore the badge, SAC or trainee, no exceptions bought or "
-                    "earned. Your pension: forty percent of your best three years, fixed, final — the one "
-                    "number in this whole climb the Bureau controls instead of you."),
-         overlay=dict(big="AGE 57", sub="MANDATORY. NO EXCEPTIONS.")),
-
-    # ---- LOOP CLOSE — cyclical, resolving the cold open's tension, one thread left open ----
-    dict(id="t34", level=None, template="lobby",
-         narration=("A guest lecture at Quantico, twenty-one weeks into some stranger's twenty-one weeks "
-                    "— a trainee the age you were the day Delgado first watched you lie convincingly. She "
-                    "asks if it gets easier. You almost answer as Ray Cole before you catch it, the wrong "
-                    "name right on the edge of your mouth, twenty years later."),
+    # ---- LEVEL 06 · FREE MAN (rudis offered, refused) ----
+    dict(id="t22", level="LEVEL 06  ·  FREE MAN", template="rudisCeremony",
+         narration=("Thirty marks on the wall. A magistrate holds out the rudis at the games' close — "
+                    "the wooden sword, the discharge, Marcia's farm bought back twice over and a name "
+                    "that could go home to it. Every fighter in the ludus watches you reach for it. You "
+                    "take it, turn it once in the light. Then you hand it back and ask for another "
+                    "contract instead."),
+         overlay=dict(big="THE RUDIS", sub="OFFERED. YOU HAND IT BACK.")),
+    dict(id="t23", level=None, template="ludusYard",
+         narration=("A new tiro flinches at the practice post the way you once did, and you correct his "
+                    "grip with a flat hand instead of Priscus's stick, because some of his lessons you "
+                    "kept and some you didn't. Fat cushions the cut, you tell him, handing over a bowl of "
+                    "barley he clearly hates already. He'll understand the kindness of it in about six "
+                    "months. Everyone does."),
+         overlay=None),
+    dict(id="t24", level=None, template="arenaSand",
+         narration=("Barca, primus palus at a rival ludus now, shares the bill with you for an "
+                    "anniversary spectacle the whole city turns out for. He's slower than he was, meaner "
+                    "about it, close enough at the gate for only you to hear him. You don't answer with "
+                    "words. The crowd answers for you, and for once Barca doesn't watch the bracelets "
+                    "land — he watches you."),
          overlay=None,
-         dialogue=dict(text="It gets easier to do. It never gets easier to undo.")),
-    dict(id="t35", level=None, template="lectureHallScene",
-         narration=("The classroom smells the same as it did twenty years ago — chalk, gun oil, someone's "
-                    "nervous coffee. Your ring is back on, worn smooth now at the spot the old callus "
-                    "never got the chance to form. Ray Cole doesn't officially exist anymore. Reaching for "
-                    "your own name first, some nights, you're not entirely sure that's true."),
+         dialogue=dict(text="Free men don't usually stay. What's still chasing you?")),
+
+    # ---- LEVEL 07 · LANISTA ----
+    dict(id="t25", level="LEVEL 07  ·  LANISTA", template="ludusOffice",
+         narration=("Priscus's old ludus comes up for sale the year its aging owner dies with no sons, "
+                    "and you buy it before the thought finishes forming — less a plan than a reflex. Your "
+                    "name goes on the door where his used to be. The ledger, the tallies, the barley "
+                    "rations: all yours to set now, and you set them exactly the way he did, without once "
+                    "deciding to."),
+         overlay=None),
+    dict(id="t26", level=None, template="countRoom",
+         narration=("A games budget lands on your table for a mid-tier bill: a hundred and fifty "
+                    "thousand sesterces, five ranks of fighters priced by how likely each is to die "
+                    "entertainingly. You supply the men. You take the operator's cut. It's, on paper, "
+                    "the exact arrangement that once priced you at six hundred — you're just standing on "
+                    "the other side of the number now."),
+         overlay=dict(big="150,000 HS", sub="A SHOW'S BUDGET. YOU SUPPLY THE MEN.")),
+    dict(id="t27", level=None, template="ludusYard",
+         narration=("A boy arrives in chains one grey morning, maybe sixteen, a farm accent thick enough "
+                    "to place the province without asking. He won't eat the barley at first. Neither did "
+                    "you. You don't tell him that yet — some lessons only land once a person's already "
+                    "halfway through learning them the hard way, same as every lesson that ever mattered "
+                    "here."),
+         overlay=None),
+    dict(id="t28", level=None, template="arenaSand",
+         narration=("One of your own fighters goes down badly in a bill you priced yourself — a shortcut "
+                    "in the matching, taken to save four thousand sesterces you didn't need to save. He "
+                    "doesn't get up on his own. You cover the funeral cost without being asked to, and "
+                    "tell yourself that's the difference between you and the lanista who once bought you. "
+                    "Some nights the math doesn't agree."),
+         overlay=None),
+    dict(id="t29", level=None, template="arenaGate",
+         narration=("You stand at the gate now the way Priscus used to, watching someone else's chest "
+                    "rise and fall too fast in the dark before it opens. The urge to say something useful "
+                    "arrives too late, same as it always does. Not fighting anymore doesn't mean not "
+                    "afraid anymore — it just moves the fear to a worse position: watching, unable to "
+                    "take the hit for anyone."),
+         overlay=None),
+
+    # ---- LEVEL 08 · THE EDITOR ABOVE YOU ----
+    dict(id="t30", level="LEVEL 08  ·  THE EDITOR ABOVE YOU", template="imperialBox",
+         narration=("An invitation up into the box itself, for games marking a conquest you've never "
+                    "seen on any map — Trajan's Dacian triumph, a hundred and twenty-three days, ten "
+                    "thousand men across the whole run. Somewhere in that number is a boy who once "
+                    "refused barley. You fund a fraction of it. You don't watch most of it. From up here "
+                    "the sand looks smaller than it ever did standing on it."),
+         overlay=dict(big="123 DAYS", sub="10,000 MEN. AN EMPIRE'S TREASURY.")),
+    dict(id="t31", level=None, template="arenaSand",
+         narration=("The crowd's roar hits the same register it always did, sixty thousand throats "
+                    "folding into one sound, except now it's a sound you bought instead of survived. A "
+                    "fighter goes down two rings out and the thumb turns before you've decided how you "
+                    "feel about it. You used to be the wager. Now you're the house, and the house, it "
+                    "turns out, still doesn't sleep well."),
+         overlay=None),
+    dict(id="t32", level=None, template="praetorians",
+         narration=("Word travels down from the palace faster than anything else does: an emperor fought "
+                    "in this same arena once, staged bouts against half-armed men, paid himself a "
+                    "fortune from the treasury for every appearance — and died anyway, strangled in his "
+                    "own bath by a man he trusted with his back turned. The box is higher than the sand. "
+                    "It was never actually safe."),
+         overlay=None),
+
+    # ---- LOOP CLOSE — torch-passing, bending back to the cold open ----
+    dict(id="t33", level=None, template="ludusYard",
+         narration=("Years past owning the place outright, you still meet every new arrival at the post "
+                    "yourself instead of sending an underling, chains barely off, a barley bowl already "
+                    "in your hand before anyone asks for it. This one won't eat it either. You crouch to "
+                    "his eye level anyway, the way it was once done for you, and hand over the only true "
+                    "thing anyone ever gave you first."),
+         overlay=None,
+         dialogue=dict(text="Don't watch me. Watch the gate. That's where you live now.")),
+    dict(id="t34", level=None, template="arenaGate",
+         narration=("The boy walks the tunnel toward the white rectangle of daylight the exact way you "
+                    "once did, slow, chin up, hands steadier than they should be. You don't follow him "
+                    "out. You stand where Priscus stood, measuring the light the way he taught you "
+                    "without meaning to, and somewhere past the bars sixty thousand throats are already "
+                    "going quiet, waiting on a fist that hasn't turned yet."),
          overlay=None),
 ]

@@ -1734,6 +1734,113 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       <ellipse cx={960} cy={560} rx={420} ry={180} fill="url(#sglow)" opacity={0.35} />
     </g>
   ),
+  // --- Gladiator pack (gladiator) ---
+  // the slave market — a raised auction block under a striped awning, a colonnaded market town
+  // receding on one side — Level 1, "you are property," where the figure is bought
+  slaveMarket: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#spaper)" />
+      {Array.from({length: 6}).map((_, i) => {const x = 1180 + i * 120; return (
+        <rect key={x} x={x} y={360 - i * 4} width={40 - i * 2} height={420 + i * 4} fill={PAPERC} stroke={INK} strokeWidth={3} opacity={0.85 - i * 0.06} />
+      );})}
+      <rect x={0} y={780} width={1920} height={300} fill={FLOOR} /><line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={5} />
+      <path d="M 260 780 L 260 520 L 760 520 L 760 780 Z" fill={PAPERC} stroke={INK} strokeWidth={4} opacity={0.9} />
+      {Array.from({length: 8}).map((_, i) => <rect key={i} x={260 + i * 62.5} y={520} width={31} height={40} fill={i % 2 ? '#c0392b' : PAPERC} opacity={0.6} />)}
+      <line x1={260} y1={520} x2={260} y2={460} stroke={INK} strokeWidth={5} /><line x1={760} y1={520} x2={760} y2={460} stroke={INK} strokeWidth={5} />
+      <rect x={340} y={780} width={280} height={80} fill="#8a6a42" stroke={INK} strokeWidth={4} />
+      <rect x={370} y={730} width={220} height={50} fill="#a0805a" stroke={INK} strokeWidth={4} />
+      {Array.from({length: 5}).map((_, i) => <line key={i} x1={370 + i * 44} y1={730} x2={370 + i * 44} y2={780} stroke={INK} strokeWidth={2} opacity={0.35} />)}
+      <ellipse cx={500} cy={640} rx={340} ry={160} fill="url(#sglow)" opacity={0.3} />
+    </g>
+  ),
+  // the ludus training yard — walled, dusty ground, a covered portico along one side, a weapon rack
+  // of wooden swords + round shields against the back wall — the recurring "home base"
+  ludusYard: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#spaper)" />
+      <rect x={0} y={760} width={1920} height={320} fill="#e4d4ad" /><line x1={0} y1={760} x2={1920} y2={760} stroke={INK} strokeWidth={5} />
+      <rect x={0} y={280} width={1920} height={480} fill={FLOOR} opacity={0.5} />
+      <rect x={1400} y={340} width={520} height={30} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      {[1440, 1560, 1680, 1800].map((x) => <line key={x} x1={x} y1={370} x2={x} y2={760} stroke={INK} strokeWidth={5} />)}
+      <path d="M 1400 340 L 1440 300 L 1920 300 L 1920 340 Z" fill={PAPERC} stroke={INK} strokeWidth={3} opacity={0.7} />
+      <rect x={140} y={420} width={360} height={16} fill="#5a4530" stroke={INK} strokeWidth={3} />
+      {[0, 1, 2, 3].map((i) => <line key={i} x1={180 + i * 80} y1={436} x2={180 + i * 80} y2={560} stroke="#6a5a3c" strokeWidth={10} strokeLinecap="round" />)}
+      {[0, 1].map((i) => <circle key={i} cx={620 + i * 130} cy={480} r={54} fill="none" stroke={INK} strokeWidth={5} opacity={0.75} />)}
+      {[0, 1].map((i) => <circle key={'d' + i} cx={620 + i * 130} cy={480} r={18} fill="#8a6a42" opacity={0.6} />)}
+      <ellipse cx={960} cy={540} rx={600} ry={220} fill="url(#sglow)" opacity={0.2} />
+    </g>
+  ),
+  // the porta — the dark stone tunnel/gate beneath the stands: iron portcullis bars, guttering wall
+  // torches, a bright shaft of daylight ahead where the tunnel opens onto the sand — waiting to fight
+  arenaGate: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#1c1a22" />
+      <rect x={0} y={820} width={1920} height={260} fill="#141218" /><line x1={0} y1={820} x2={1920} y2={820} stroke="#000" strokeWidth={3} opacity={0.5} />
+      <path d="M 0 0 L 620 200 L 620 820 L 0 1080 Z" fill="#26222c" stroke={INK} strokeWidth={4} />
+      <path d="M 1920 0 L 1300 200 L 1300 820 L 1920 1080 Z" fill="#26222c" stroke={INK} strokeWidth={4} />
+      <path d="M 700 220 L 1220 220 L 1300 820 L 620 820 Z" fill="#f4dca0" opacity={0.9} />
+      <ellipse cx={960} cy={520} rx={340} ry={340} fill="url(#sglow)" opacity={0.6} />
+      {Array.from({length: 9}).map((_, i) => <rect key={i} x={660 + i * 72} y={220} width={14} height={600} fill="#0d0b10" opacity={0.92} />)}
+      <rect x={660} y={220} width={648} height={20} fill="#0d0b10" opacity={0.92} />
+      {[240, 1680].map((x, i) => (
+        <g key={x}>
+          <line x1={x} y1={640} x2={x} y2={520} stroke={INK} strokeWidth={5} />
+          <path d={`M ${x - 10} 520 q ${8 + Math.sin(frame * 0.3 + i) * 10} -46 -6 -76 q -10 30 6 76`} fill="#e0703a" opacity={0.85} />
+          <ellipse cx={x} cy={520} rx={70} ry={100} fill="url(#sglow)" opacity={0.4} />
+        </g>
+      ))}
+    </g>
+  ),
+  // the amphitheater sand — THE master reused backdrop: warm sand floor, tiered stone cavea receding
+  // upward, a scalloped velarium shade awning along the top edge, a scattering of dim crowd marks
+  arenaSand: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#sclean)" />
+      {[0, 1, 2, 3, 4].map((i) => (
+        <path key={i} d={`M 0 ${360 + i * 62} Q 960 ${300 + i * 62} 1920 ${360 + i * 62} L 1920 ${400 + i * 62} Q 960 ${340 + i * 62} 0 ${400 + i * 62} Z`}
+          fill={i % 2 ? '#d8cdb4' : '#e6ddc8'} stroke={INK} strokeWidth={2} opacity={0.7} />
+      ))}
+      {Array.from({length: 14}).map((_, i) => <path key={i} d={`M ${i * 140} 0 Q ${i * 140 + 70} 60 ${i * 140 + 140} 0`} fill="#c94f3f" stroke={INK} strokeWidth={2} opacity={0.55} />)}
+      {Array.from({length: 40}).map((_, i) => {const row = i % 5; const x = rnd(i * 3.1) * 1900 + 10; const y = 372 + row * 62 + rnd(i * 1.7) * 20; return <ellipse key={i} cx={x} cy={y} rx={9} ry={12} fill="#2a2620" opacity={0.22} />;})}
+      <rect x={0} y={660} width={1920} height={420} fill="#d9c08a" /><line x1={0} y1={660} x2={1920} y2={660} stroke={INK} strokeWidth={5} />
+      {Array.from({length: 10}).map((_, i) => <ellipse key={i} cx={rnd(i * 2.7) * 1920} cy={700 + rnd(i * 4.1) * 340} rx={40} ry={6} fill="#c2a76e" opacity={0.4} />)}
+      <ellipse cx={960} cy={780} rx={700} ry={220} fill="url(#sglow)" opacity={0.25} />
+    </g>
+  ),
+  // the lanista's office — a desk with rolled scrolls + a wax tablet, a wall-mounted roster board of
+  // tally lines, warm lamp-lit interior — the business of ownership
+  ludusOffice: ({frame}) => (
+    <g>
+      <rect x={0} y={780} width={1920} height={300} fill={FLOOR} /><line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={5} />
+      <rect x={220} y={220} width={420} height={340} fill="#5a4530" stroke={INK} strokeWidth={4} />
+      {Array.from({length: 7}).map((_, i) => <line key={i} x1={260} y1={264 + i * 40} x2={600} y2={264 + i * 40} stroke={PAPERC} strokeWidth={4} opacity={0.55} />)}
+      <rect x={1300} y={760} width={480} height={30} rx={6} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <rect x={1340} y={790} width={400} height={110} fill={PAPERC} stroke={INK} strokeWidth={3} />
+      <rect x={1370} y={728} width={90} height={24} rx={12} fill="#e8d9ab" stroke={INK} strokeWidth={3} />
+      <rect x={1470} y={732} width={80} height={20} rx={10} fill="#e8d9ab" stroke={INK} strokeWidth={3} />
+      <rect x={1600} y={724} width={70} height={50} fill="#3a2f22" stroke={INK} strokeWidth={3} />
+      <line x1={960} y1={0} x2={960} y2={140} stroke={INK} strokeWidth={3} /><circle cx={960} cy={156} r={16} fill={GOLD} opacity={0.9} /><path d="M 960 156 L 640 780 L 1280 780 Z" fill="url(#sglow)" opacity={0.4} />
+    </g>
+  ),
+  // the imperial box (pulvinar) — the editor's raised viewing box overlooking the arena: an ornate
+  // gold-accented railing in the foreground, purple drapery above, the sand + cavea glimpsed below —
+  // a high vantage point looking down. Richer/cooler than arenaSand — the apex, above even the editor
+  imperialBox: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#2a2233" />
+      <path d="M 0 0 L 1920 0 L 1920 220 Q 960 320 0 220 Z" fill="#4a2f5a" stroke={INK} strokeWidth={4} opacity={0.9} />
+      {Array.from({length: 10}).map((_, i) => <line key={i} x1={i * 213} y1={0} x2={i * 213} y2={220 + Math.sin(i) * 30} stroke={INK} strokeWidth={2} opacity={0.3} />)}
+      {[0, 1, 2].map((i) => (
+        <path key={i} d={`M 300 ${420 + i * 30} Q 960 ${390 + i * 30} 1620 ${420 + i * 30} L 1620 ${440 + i * 30} Q 960 ${410 + i * 30} 300 ${440 + i * 30} Z`}
+          fill="#5a4d66" stroke={INK} strokeWidth={2} opacity={0.5} />
+      ))}
+      <rect x={300} y={520} width={1320} height={220} fill="#c9a86a" opacity={0.5} />
+      <rect x={0} y={800} width={1920} height={280} fill="#241d2c" /><line x1={0} y1={800} x2={1920} y2={800} stroke={INK} strokeWidth={5} />
+      <rect x={0} y={760} width={1920} height={50} fill={GOLD} stroke={INK} strokeWidth={4} opacity={0.85} />
+      {Array.from({length: 17}).map((_, i) => <rect key={i} x={40 + i * 112} y={810} width={20} height={200} fill={GOLD} stroke={INK} strokeWidth={3} opacity={0.7} />)}
+      <ellipse cx={960} cy={480} rx={600} ry={200} fill="url(#sglow)" opacity={0.3} />
+    </g>
+  ),
 };
 // tiny helper so inline math reads cleanly above
 function y_(v: number) {return v;}
@@ -2152,6 +2259,21 @@ const PROP: Record<string, React.FC<{frame: number}>> = {
           </g>
         );
       })}
+    </g>
+  ),
+  // two stout wooden palus training posts driven into the ground, wrapped strap-lines, a practice
+  // sword leaning at the base of the near post — the ludus yard, figBehind (posts read in front)
+  palusPost: ({frame}) => (
+    <g opacity={0.95}>
+      {[520, 660].map((x, i) => (
+        <g key={x}>
+          <line x1={x} y1={980} x2={x} y2={620} stroke="#6a5a3c" strokeWidth={30} strokeLinecap="round" />
+          <line x1={x} y1={980} x2={x} y2={620} stroke={INK} strokeWidth={2} opacity={0.3} />
+          {[700, 780, 860].map((y) => <line key={y} x1={x - 15} y1={y} x2={x + 15} y2={y + (i ? -6 : 6)} stroke="#3a2f22" strokeWidth={5} opacity={0.6} />)}
+        </g>
+      ))}
+      <line x1={500} y1={980} x2={560} y2={860} stroke="#8a6a42" strokeWidth={10} strokeLinecap="round" />
+      <line x1={500} y1={900} x2={520} y2={892} stroke="#8a6a42" strokeWidth={10} strokeLinecap="round" />
     </g>
   ),
   none: () => <g />,
@@ -2932,4 +3054,56 @@ const MONGOL = {
       fig={{pose: A.stand(f), x: 960, y: 892, scale: 1.35, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA, ...MONGOL};
+// Gladiator pack (gladiator — novicius through primus palus to lanista and the editor above). 6 new
+// bespoke backdrops + 1 prop; the rest of the ladder composes from ROMAN's forumScene/praetorians/
+// throne, MAFIA's countRoom, and SAMURAI's riceField.
+const GLADIATOR = {
+  // the slave market — the auction block, the awning, the market town — Level 1, "you are property"
+  slaveMarket: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="slaveMarket" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 940, y: 896, scale: 1.3, view: 'front', expr: blendExpr(FACES.worried, FACES.hollow, t)}} />;},
+  // the ludus training yard — the recurring home base. Reused ~8x across very different emotional
+  // beats (training, the mentor, later teaching the next generation): every call site in content.py
+  // is a SEPARATE scene pointing at this SAME function, so the expr here can't be overridden per
+  // scene. Following raftDay/teaCeremony's pattern for a reused template — pick one neutral-ish
+  // blended pair and let the surrounding, DISTINCT templates carry the sharper emotional beats.
+  ludusYard: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="ludusYard" prop="palusPost" bg="url(#spaper)" figBehind
+      fig={{pose: A.stand(f), x: 940, y: 900, scale: 1.3, view: 'profile', facing: 1, expr: blendExpr(FACES.earnest, FACES.hardened, t)}} />;},
+  // the porta — the dark tunnel beneath the stands, torches, the bright shaft of sand-daylight ahead
+  // — waiting to fight
+  arenaGate: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="arenaGate" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.worried, FACES.focused, t)}} />;},
+  // the amphitheater sand — THE master reused backdrop: the cold open, every fight beat, the
+  // midpoint reversal
+  arenaSand: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="arenaSand" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.38, view: 'front', expr: blendExpr(FACES.focused, FACES.hardened, t)}} />;},
+  // the rudis — the wooden sword of freedom offered on the same sand, a dim figure extending it.
+  // Shares arenaSand's backdrop art but is a distinct template/staging (kneeling, a second figure,
+  // a cooler lamp-lit bg) so it never reads as the same picture as the regular fight beats.
+  rudisCeremony: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="arenaSand" bg="url(#swarm)"
+      fig={{pose: A.sit(f), x: 900, y: 906, scale: 1.25, view: 'front', expr: blendExpr(FACES.hollow, FACES.hardened, t)}}
+      extras={[{pose: A.stand(f), x: 1300, y: 900, scale: 1.2, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+  // the lanista's office — the roster board, scrolls and a wax tablet on the desk — ownership, the
+  // games-business ladder (Levels 3-4 roster tracking, later Level 7 as lanista)
+  ludusOffice: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="ludusOffice" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.focused, FACES.cold, t)}} />;},
+  // the imperial box — the editor's/emperor's pulvinar looking down over the sand — richer/cooler
+  // than arenaSand, the apex above even the editor
+  imperialBox: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="imperialBox" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA, ...MONGOL, ...GLADIATOR};
