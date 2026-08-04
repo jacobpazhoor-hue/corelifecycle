@@ -1,6 +1,7 @@
 {
   "visualMode": "doodle",
   "model": "flux",
+  "backend": "modal_flux",
   "styleSuffix": "cinematic illustrated, painterly depth, layered foreground and background, dramatic filmic lighting, muted cinematic palette",
   "povRules": "first-person or over-the-shoulder view, environment seen from the viewer's own eyes, no face-on recurring people",
   "moves": ["pushIn", "parallaxPan", "orbitLite", "rackFocus"],

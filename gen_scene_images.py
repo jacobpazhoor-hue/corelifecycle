@@ -51,15 +51,59 @@ def fetch_image(prompt, seed, style, out_path, retries=3, _get=requests.get):
             time.sleep(2 ** attempt)
     return False
 
-def generate_all(scenes, slug, style, fetch=fetch_image, depth=make_depth):
+def modal_flux_backend(jobs, style):
+    """jobs: [{"sid","prompt","seed","out"}]. Generates via Modal FLUX, writes JPEGs to each 'out'.
+    Returns {sid: bool}."""
+    from gen_images_modal import run_flux
+    payload = [{"sid": j["sid"], "prompt": j["prompt"], "seed": j["seed"]} for j in jobs]
+    results = run_flux(payload, width=style.get("width", 1280), height=style.get("height", 720))
+    ok = {}
+    for j in jobs:
+        data = results.get(j["sid"])
+        if data:
+            os.makedirs(os.path.dirname(j["out"]), exist_ok=True)
+            with open(j["out"], "wb") as f:
+                f.write(data)
+            ok[j["sid"]] = True
+        else:
+            ok[j["sid"]] = False
+    return ok
+
+def _pollinations_backend(jobs, style):
+    """Adapter: loops the legacy per-scene fetch_image so the old path still works."""
+    ok = {}
+    for j in jobs:
+        ok[j["sid"]] = fetch_image(j["prompt"], j["seed"], style, j["out"])
+    return ok
+
+def generate_all(scenes, slug, style, backend=None, depth=make_depth):
+    if backend is None:
+        backend = modal_flux_backend if style.get("backend") == "modal_flux" else _pollinations_backend
     moves = style.get("moves") or ["pushIn"]
     manifest = {"mode": style.get("visualMode", "doodle"), "scenes": {}, "fallback": []}
+
+    paths = {sc["id"]: asset_paths(slug, sc["id"]) for sc in scenes}
+    jobs = []
+    for sc in scenes:
+        sid = sc["id"]
+        ap = paths[sid]
+        if not os.path.exists(ap["img"]):
+            jobs.append({
+                "sid": sid, "prompt": build_prompt(sc, style),
+                "seed": scene_seed(slug, sid), "out": ap["img"],
+            })
+
+    if jobs:
+        try:
+            backend(jobs, style)
+        except Exception as e:
+            print(f"gen_scene_images: NON-FATAL backend error, "
+                  f"sending {len(jobs)} scene(s) to fallback: {e}")
+
     for i, sc in enumerate(scenes):
         sid = sc["id"]
-        ap = asset_paths(slug, sid)
-        prompt = build_prompt(sc, style)
-        seed = scene_seed(slug, sid)
-        if os.path.exists(ap["img"]) or fetch(prompt, seed, style, ap["img"]):
+        ap = paths[sid]
+        if os.path.exists(ap["img"]):
             if not os.path.exists(ap["depth"]):
                 depth(ap["img"], ap["depth"])
             manifest["scenes"][sid] = {

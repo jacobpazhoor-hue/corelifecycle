@@ -68,10 +68,15 @@ class TestGenerateAll(unittest.TestCase):
 
     def test_all_ok_builds_manifest_with_moves(self):
         scenes = [{"id":"t01","template":"a"},{"id":"t02","template":"b"},{"id":"t03","template":"c"}]
-        def fake_fetch(prompt, seed, style, out, **k):
-            from PIL import Image; os.makedirs(os.path.dirname(out), exist_ok=True)
-            Image.new("RGB",(8,8),(50,50,50)).save(out); return True
-        m = generate_all(scenes, "vc", self._style(), fetch=fake_fetch)
+        def fake_backend(jobs, style):
+            from PIL import Image
+            ok = {}
+            for j in jobs:
+                os.makedirs(os.path.dirname(j["out"]), exist_ok=True)
+                Image.new("RGB",(8,8),(50,50,50)).save(j["out"])
+                ok[j["sid"]] = True
+            return ok
+        m = generate_all(scenes, "vc", self._style(), backend=fake_backend)
         self.assertEqual(m["mode"], "photo")
         self.assertEqual(set(m["scenes"]), {"t01","t02","t03"})
         self.assertEqual(m["scenes"]["t01"]["move"], "pushIn")
@@ -81,15 +86,63 @@ class TestGenerateAll(unittest.TestCase):
 
     def test_failed_scene_goes_to_fallback(self):
         scenes = [{"id":"t01","template":"a"},{"id":"t02","template":"b"}]
-        def flaky(prompt, seed, style, out, **k):
-            if "t02" in out:  # asset path carries sid
-                return False
-            from PIL import Image; os.makedirs(os.path.dirname(out), exist_ok=True)
-            Image.new("RGB",(8,8),(9,9,9)).save(out); return True
-        m = generate_all(scenes, "vc", self._style(), fetch=flaky)
+        def flaky_backend(jobs, style):
+            from PIL import Image
+            ok = {}
+            for j in jobs:
+                if j["sid"] == "t02":
+                    ok[j["sid"]] = False
+                    continue
+                os.makedirs(os.path.dirname(j["out"]), exist_ok=True)
+                Image.new("RGB",(8,8),(9,9,9)).save(j["out"])
+                ok[j["sid"]] = True
+            return ok
+        m = generate_all(scenes, "vc", self._style(), backend=flaky_backend)
         self.assertIn("t01", m["scenes"])
         self.assertNotIn("t02", m["scenes"])
         self.assertEqual(m["fallback"], ["t02"])
+
+    def test_cached_skip_batches_uncached_only_and_reports_fallback(self):
+        """Batched backend: a scene already cached on disk must NOT be sent as a job, moves wrap
+        by scene index (not job index), and sids the backend reports False -> fallback."""
+        scenes = [{"id":"t01","template":"a"},{"id":"t02","template":"b"},
+                  {"id":"t03","template":"c"},{"id":"t04","template":"d"}]
+        ap = asset_paths("vc", "t01")
+        os.makedirs(ap["dir"], exist_ok=True)
+        from PIL import Image
+        Image.new("RGB",(8,8),(1,1,1)).save(ap["img"])  # pre-seed t01 as already cached
+
+        seen_sids = []
+        def fake_backend(jobs, style):
+            ok = {}
+            for j in jobs:
+                seen_sids.append(j["sid"])
+                if j["sid"] == "t04":
+                    ok[j["sid"]] = False
+                    continue
+                os.makedirs(os.path.dirname(j["out"]), exist_ok=True)
+                Image.new("RGB",(8,8),(2,2,2)).save(j["out"])
+                ok[j["sid"]] = True
+            return ok
+
+        m = generate_all(scenes, "vc", self._style(), backend=fake_backend)
+        self.assertNotIn("t01", seen_sids)  # cached scene never entered the batch
+        self.assertEqual(set(seen_sids), {"t02", "t03", "t04"})
+        self.assertEqual(set(m["scenes"]), {"t01", "t02", "t03"})
+        self.assertEqual(m["fallback"], ["t04"])
+        self.assertEqual(m["scenes"]["t01"]["move"], "pushIn")       # index 0
+        self.assertEqual(m["scenes"]["t02"]["move"], "parallaxPan")  # index 1
+        self.assertEqual(m["scenes"]["t03"]["move"], "pushIn")       # index 2 wraps
+
+    def test_backend_raises_sends_all_uncached_to_fallback(self):
+        """Total backend failure is non-fatal: it must not propagate and every uncached scene
+        goes to fallback instead."""
+        scenes = [{"id":"t01","template":"a"},{"id":"t02","template":"b"}]
+        def boom_backend(jobs, style):
+            raise RuntimeError("modal down")
+        m = generate_all(scenes, "vc", self._style(), backend=boom_backend)
+        self.assertEqual(m["scenes"], {})
+        self.assertEqual(set(m["fallback"]), {"t01", "t02"})
 
 class TestMainNonFatal(unittest.TestCase):
     def test_main_does_not_raise_and_writes_safe_manifest_on_error(self):
