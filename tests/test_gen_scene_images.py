@@ -107,3 +107,18 @@ class TestMainNonFatal(unittest.TestCase):
         finally:
             if backup is not None:
                 open(mpath, "w").write(backup)
+
+class TestEffectiveMode(unittest.TestCase):
+    def test_routine_visualmode_overrides_style(self):
+        import gen_scene_images as g, tempfile, json as _j
+        with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
+            _j.dump({"visualMode": "photo"}, f); p = f.name
+        self.assertEqual(g.effective_mode({"visualMode": "doodle"}, routine_path=p), "photo")
+    def test_falls_back_to_style_when_routine_missing(self):
+        import gen_scene_images as g
+        self.assertEqual(g.effective_mode({"visualMode": "doodle"}, routine_path="/no/such/file.json"), "doodle")
+    def test_falls_back_when_routine_has_no_visualmode(self):
+        import gen_scene_images as g, tempfile, json as _j
+        with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
+            _j.dump({"autoUpload": True}, f); p = f.name
+        self.assertEqual(g.effective_mode({"visualMode": "doodle"}, routine_path=p), "doodle")

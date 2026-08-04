@@ -3,6 +3,17 @@ from photo_style import load_style, STYLE_PATH
 from depth import make_depth
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
+ROUTINE_PATH = os.path.join(ROOT, "ops", "routine.json")
+
+def effective_mode(style, routine_path=ROUTINE_PATH):
+    """visualMode authority: ops/routine.json wins if it sets one, else photo_style.json's value."""
+    try:
+        rm = json.load(open(routine_path)).get("visualMode")
+        if rm:
+            return rm
+    except Exception:
+        pass
+    return style.get("visualMode", "doodle")
 
 def build_prompt(scene, style):
     intent = (scene.get("visual") or scene.get("template") or "a cinematic scene").strip()
@@ -60,6 +71,7 @@ def generate_all(scenes, slug, style, fetch=fetch_image, depth=make_depth):
 
 def main():
     style = load_style(STYLE_PATH)
+    style = {**style, "visualMode": effective_mode(style)}
     manifest = {"mode": "doodle", "scenes": {}, "fallback": []}
     try:
         meta = json.load(open(os.path.join(ROOT, "ops", "episode_meta.json")))
