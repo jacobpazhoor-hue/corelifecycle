@@ -3,6 +3,7 @@ import {AbsoluteFill, Sequence, interpolate, useCurrentFrame, useVideoConfig, sp
 import {TEMPLATES} from './scenes';
 import {noise1} from './anim';
 import slice from './slice.json';
+import {PhotoStage, Move} from './photoStage';
 
 // ============================================================================
 // DIRECTION / ANIMATION ENGINE (vertical slice of the Quality Plan).
@@ -72,8 +73,11 @@ const SCALE: Record<string, number> = {wide: 1.0, medium: 1.5, closeup: 2.2};
 // camera move, not a linear PowerPoint creep). Per-shot push amount: wides breathe more, closeups less.
 const EXPO = Easing.bezier(0.16, 1, 0.3, 1);
 const PUSH_TO: Record<string, number> = {wide: 1.075, medium: 1.05, closeup: 1.03};
-export const FramedScene: React.FC<{template: string; type: string; focus: [number, number]; dur: number}> =
-({template, type, focus, dur}) => {
+export const FramedScene: React.FC<{template: string; type: string; focus: [number, number]; dur: number; photo?: {img: string; depth: string; move: Move}}> =
+({template, type, focus, dur, photo}) => {
+  if (photo) {
+    return <PhotoStage img={photo.img} depth={photo.depth} move={photo.move} dur={dur} />;
+  }
   const f = useCurrentFrame();
   const Art = TEMPLATES[template];
   const base = SCALE[type] ?? 1.0;

@@ -3,6 +3,10 @@ import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame,
 import timeline from './timeline.json';
 import {FramedScene, FOCUS, CountUp, splitMoney, isNegativeOverlay} from './director';
 import {shake, noise1, hash} from './anim';
+import {Move} from './photoStage';
+import PHOTO_RAW from './photo_manifest.json';
+
+const PHOTO = PHOTO_RAW as {mode: string; scenes: Record<string, {img: string; depth: string; move: Move}>; fallback: string[]};
 
 const seedOf = (id: string) => id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
 
@@ -134,6 +138,7 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
   const staticOp = interpolate(f, [10, 20, D - 10, D], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const staticRise = interpolate(f, [10, 28, D - 10, D], [18, 0, 0, -16], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
 
+  const photo = PHOTO.mode === 'photo' && PHOTO.scenes[scene.id] ? PHOTO.scenes[scene.id] : undefined;
   let t = 0;
   return (
     <AbsoluteFill style={{opacity: beatOp, backgroundColor: PAPER}}>
@@ -144,7 +149,7 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
           const seq = (
             <Sequence key={i} from={t} durationInFrames={sh.dur}>
               <ShotFade dur={sh.dur}>
-                <FramedScene template={scene.template} type={sh.type} focus={focus} dur={sh.dur} />
+                <FramedScene template={scene.template} type={sh.type} focus={focus} dur={sh.dur} photo={photo} />
               </ShotFade>
             </Sequence>);
           t += sh.dur;
