@@ -1841,6 +1841,116 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       <ellipse cx={960} cy={480} rx={600} ry={200} fill="url(#sglow)" opacity={0.3} />
     </g>
   ),
+  // --- Bratva pack backdrops (bratva) ---
+  // a grim Khrushchyovka courtyard block — repeating panel-facade windows (some lit), a broken swing
+  // frame, a laundry line strung between two poles — Level 1 origin, the want
+  courtyardBg: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#3a4048" />
+      <rect x={0} y={80} width={1920} height={620} fill="#4a5058" stroke={INK} strokeWidth={4} />
+      {Array.from({length: 8}).map((_, r) => Array.from({length: 12}).map((_, c) => {
+        const lit = (r * 12 + c + Math.floor(frame / 50)) % 9 === 0;
+        return <rect key={r + '_' + c} x={40 + c * 156} y={110 + r * 74} width={100} height={54} fill={lit ? GOLD : '#2a2f36'} stroke={INK} strokeWidth={2} opacity={lit ? 0.75 : 0.55} />;
+      }))}
+      <rect x={0} y={700} width={1920} height={380} fill={FLOOR} /><line x1={0} y1={700} x2={1920} y2={700} stroke={INK} strokeWidth={5} />
+      <g opacity={0.7}><line x1={1300} y1={640} x2={1300} y2={900} stroke={INK} strokeWidth={5} /><line x1={1560} y1={640} x2={1560} y2={900} stroke={INK} strokeWidth={5} />
+        <line x1={1300} y1={700} x2={1560} y2={700} stroke="#8a95a0" strokeWidth={3} /><line x1={1300} y1={640} x2={1560} y2={860} stroke="#8a95a0" strokeWidth={4} opacity={0.6} /></g>
+      <line x1={220} y1={760} x2={620} y2={760} stroke={INK} strokeWidth={3} opacity={0.5} />
+      {[280, 360, 440, 520].map((x, i) => <rect key={i} x={x} y={760 + Math.sin(frame * 0.04 + i) * 4} width={54} height={36} fill={i % 2 ? '#c9d4dc' : '#9fb0bd'} opacity={0.8} />)}
+      <ellipse cx={960} cy={780} rx={600} ry={200} fill="url(#sglow)" opacity={0.25} />
+    </g>
+  ),
+  // a bare back-room stool under a single bulb, a small table with ink bottles + a buzzing coil
+  // tattoo rig — the recurring sensory anchor, re-triggered at every level-up
+  tattooCellBg: ({frame}) => (
+    <g>
+      <rect x={0} y={800} width={1920} height={280} fill={FLOOR} /><line x1={0} y1={800} x2={1920} y2={800} stroke={INK} strokeWidth={5} />
+      <rect x={0} y={0} width={1920} height={800} fill="#2c2824" />
+      {Array.from({length: 24}).map((_, i) => <line key={i} x1={i * 82} y1={0} x2={i * 82} y2={800} stroke={INK} strokeWidth={1} opacity={0.12} />)}
+      <rect x={1280} y={700} width={220} height={100} fill="#5a4530" stroke={INK} strokeWidth={4} />
+      {[1320, 1370, 1420, 1460].map((x, i) => <rect key={i} x={x} y={720} width={22} height={40} fill={i % 2 ? '#8a3a2a' : '#2a2a2a'} stroke={INK} strokeWidth={2} opacity={0.85} />)}
+      <circle cx={1360} cy={716} r={10} fill="#c9432a" opacity={0.8} />
+      <line x1={640} y1={140} x2={640} y2={420} stroke={INK} strokeWidth={2} opacity={0.5} />
+      <ellipse cx={640} cy={440} rx={30} ry={16} fill={GOLD} opacity={0.85} />
+      <ellipse cx={640} cy={520} rx={260} ry={200} fill="url(#sglow)" opacity={0.55} />
+    </g>
+  ),
+  // the banya (steam bathhouse) — wood-plank walls, a stove of glowing stones, drifting steam, a
+  // low bench — the skhodka / sit-down where deals and verdicts happen
+  banyaRoom: ({frame}) => (
+    <g>
+      <rect x={0} y={780} width={1920} height={300} fill="#6a4f36" /><line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={5} />
+      <rect x={0} y={0} width={1920} height={780} fill="#7a5c3e" />
+      {Array.from({length: 16}).map((_, i) => <line key={i} x1={i * 122} y1={0} x2={i * 122} y2={780} stroke={INK} strokeWidth={2} opacity={0.18} />)}
+      <rect x={1400} y={560} width={260} height={220} fill="#3a332c" stroke={INK} strokeWidth={4} />
+      {Array.from({length: 12}).map((_, i) => <circle key={i} cx={1420 + (i % 4) * 56} cy={600 + Math.floor(i / 4) * 50} r={16} fill={i % 3 === 0 ? '#e8703a' : '#4a4038'} opacity={0.8} />)}
+      <ellipse cx={1530} cy={520} rx={140} ry={90} fill="url(#sglow)" opacity={0.4} />
+      {Array.from({length: 7}).map((_, i) => <ellipse key={i} cx={200 + i * 240 + Math.sin(frame * 0.03 + i) * 30} cy={300 + Math.cos(frame * 0.02 + i) * 60} rx={110} ry={60} fill="#fff" opacity={0.08 + 0.04 * Math.sin(frame * 0.05 + i)} />)}
+      <rect x={200} y={700} width={520} height={30} rx={8} fill="#8a6a44" stroke={INK} strokeWidth={4} />
+      <ellipse cx={960} cy={640} rx={700} ry={220} fill="url(#sglow)" opacity={0.2} />
+    </g>
+  ),
+  // a small shop — a barred counter window, a wall calendar, sparse shelves — the krysha collection run
+  shopCounter: ({frame}) => (
+    <g>
+      <rect x={0} y={760} width={1920} height={320} fill={FLOOR} /><line x1={0} y1={760} x2={1920} y2={760} stroke={INK} strokeWidth={5} />
+      <rect x={0} y={0} width={1920} height={760} fill="#e6ddc8" opacity={0.5} />
+      {Array.from({length: 4}).map((_, r) => Array.from({length: 6}).map((_, c) => (
+        <rect key={r + '_' + c} x={80 + c * 260} y={100 + r * 130} width={200} height={100} fill="#d8cdb4" stroke={INK} strokeWidth={2} opacity={0.5} />
+      )))}
+      <rect x={1180} y={560} width={620} height={220} fill="#8a7a5a" stroke={INK} strokeWidth={4} />
+      {Array.from({length: 8}).map((_, i) => <line key={i} x1={1200 + i * 76} y1={560} x2={1200 + i * 76} y2={780} stroke={INK} strokeWidth={3} opacity={0.5} />)}
+      <rect x={1180} y={780} width={620} height={40} fill="#5a4d38" stroke={INK} strokeWidth={4} />
+      <rect x={1620} y={300} width={90} height={130} fill={PAPERC} stroke={INK} strokeWidth={3} opacity={0.85} />
+      {Array.from({length: 4}).map((_, i) => <line key={i} x1={1636} y1={330 + i * 24} x2={1694} y2={330 + i * 24} stroke={INK} strokeWidth={1.5} opacity={0.4} />)}
+      <ellipse cx={960} cy={560} rx={600} ry={180} fill="url(#sglow)" opacity={0.25} />
+    </g>
+  ),
+  // a dim circle of candlelight — a folded prison blanket + a glass of tea in a metal holder on the
+  // floor before the kneeling candidate, a ring of dim seated elders behind — the koronatsiya
+  koronatsiyaCircle: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#1c1a22" />
+      <rect x={0} y={840} width={1920} height={240} fill="#151318" /><line x1={0} y1={840} x2={1920} y2={840} stroke={INK} strokeWidth={5} />
+      {Array.from({length: 8}).map((_, i) => {const a = (i / 8) * Math.PI * 2; const x = 960 + Math.cos(a) * 640, y = 700 + Math.sin(a) * 90;
+        return <g key={i} opacity={0.4}><circle cx={x} cy={y - 40} r={24} fill={INK} /><rect x={x - 26} y={y - 16} width={52} height={190} fill={INK} /></g>;})}
+      <rect x={900} y={820} width={120} height={16} fill="#8a3a2a" stroke={INK} strokeWidth={2} opacity={0.85} />
+      <rect x={1040} y={800} width={30} height={40} fill="#c9c2a8" stroke={INK} strokeWidth={2} opacity={0.85} />
+      {Array.from({length: 5}).map((_, i) => <circle key={i} cx={300 + i * 350} cy={500 + Math.sin(frame * 0.05 + i) * 10} r={6} fill={GOLD} opacity={0.6 + 0.3 * Math.sin(frame * 0.08 + i)} />)}
+      <ellipse cx={960} cy={680} rx={340} ry={220} fill="url(#sglow)" opacity={0.5} />
+    </g>
+  ),
+  // a wooden boardwalk pier at dusk — railing, a distant foreign skyline, a lit Ferris wheel silhouette
+  // on the horizon — the network reaching abroad
+  brightonBoardwalk: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={640} fill="#6a7a8c" />
+      <rect x={0} y={560} width={1920} height={140} fill="#4a5a6c" opacity={0.7} />
+      {Array.from({length: 6}).map((_, i) => <path key={i} d={`M 0 ${600 + i * 12} q 480 -10 960 0 t 960 0`} fill="none" stroke={PAPERC} strokeWidth={2} opacity={0.2} />)}
+      <g opacity={0.6}>{[1300, 1400, 1500, 1560, 1660, 1740].map((x, i) => <rect key={i} x={x} y={480 - (i % 3) * 40} width={40} height={200 + (i % 3) * 40} fill="#2a2f38" />)}</g>
+      <circle cx={1560} cy={420} r={70} fill="none" stroke={GOLD} strokeWidth={4} opacity={0.6} />
+      {Array.from({length: 8}).map((_, i) => {const a = (i / 8) * Math.PI * 2 + frame * 0.01; return <circle key={i} cx={1560 + Math.cos(a) * 70} cy={420 + Math.sin(a) * 70} r={7} fill={GOLD} opacity={0.7} />;})}
+      <rect x={0} y={700} width={1920} height={380} fill="#8a6a44" /><line x1={0} y1={700} x2={1920} y2={700} stroke={INK} strokeWidth={5} />
+      {Array.from({length: 25}).map((_, i) => <line key={i} x1={i * 80} y1={700} x2={i * 80} y2={1080} stroke={INK} strokeWidth={2} opacity={0.2} />)}
+      <line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={5} opacity={0.5} />
+      <ellipse cx={960} cy={520} rx={700} ry={200} fill="url(#sglow)" opacity={0.2} />
+    </g>
+  ),
+  // the pakhan's office — a heavy desk, a samovar, a wall map of the country with regions pinned, a
+  // fur ushanka on a hook — the apex, "the money still isn't yours"
+  pakhanOffice: ({frame}) => (
+    <g>
+      <rect x={0} y={780} width={1920} height={300} fill={FLOOR} /><line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={5} />
+      <rect x={220} y={180} width={520} height={420} fill="#3a4048" stroke={INK} strokeWidth={4} opacity={0.7} />
+      <path d="M 240 200 q 220 -40 480 0 l 0 380 q -240 30 -480 0 Z" fill="none" stroke={GOLD} strokeWidth={2} opacity={0.5} />
+      {[{x: 340, y: 300}, {x: 520, y: 380}, {x: 640, y: 260}].map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={10} fill="#c0392b" opacity={0.85} />)}
+      <ellipse cx={1500} cy={520} rx={70} ry={100} fill="#8a6a44" stroke={INK} strokeWidth={4} />
+      <ellipse cx={1500} cy={430} rx={40} ry={30} fill="#8a6a44" stroke={INK} strokeWidth={3} />
+      <rect x={1470} y={400} width={60} height={16} fill={GOLD} opacity={0.8} />
+      <ellipse cx={1720} cy={340} rx={60} ry={40} fill="#3a2f22" stroke={INK} strokeWidth={3} opacity={0.85} />
+      <ellipse cx={960} cy={620} rx={600} ry={200} fill="url(#sglow)" opacity={0.3} />
+    </g>
+  ),
 };
 // tiny helper so inline math reads cleanly above
 function y_(v: number) {return v;}
@@ -3109,4 +3219,50 @@ const GLADIATOR = {
       fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA, ...MONGOL, ...GLADIATOR};
+// Bratva pack (bratva — patsan -> boyevik -> brigadir -> avtoritet -> smotryashchiy -> vor v zakone
+// (koronatsiya) -> a foreign cell -> pakhan). 7 new bespoke backdrops; the rest of the ladder
+// composes from MAFIA's backAlley/countRoom/courtroom/wiretap/commission and universal templates
+// (revolvingDoor for the bribed captain, boardroomNotes/signing for the legit front, jet/warRoom for
+// the foreign cell, window/dinner/emptyChair/streetCorner elsewhere).
+const BRATVA = {
+  // the courtyard — Level 1 origin, the named want, before any of this
+  courtyardBlock: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="courtyardBg" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.worried, t)}} />;},
+  // the tattoo cell — the recurring sensory anchor, a needle earning a mark. figBehind so the coil
+  // rig table reads in front of the seated figure.
+  tattooCell: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="tattooCellBg" bg="url(#swarm)" figBehind
+      fig={{pose: A.sit(f), x: 900, y: 800, scale: 1.2, view: 'profile', facing: 1, expr: blendExpr(FACES.worried, FACES.hardened, t)}} />;},
+  // the banya — the cold open (MID-ACTION) + every skhodka sit-down after it
+  banyaSitDown: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="banyaRoom" bg="url(#swarm)"
+      fig={{pose: A.sit(f), x: 820, y: 820, scale: 1.2, view: 'front', expr: blendExpr(FACES.cold, FACES.hardened, t)}}
+      extras={[{pose: A.sit(f + 20), x: 1300, y: 820, scale: 1.15, view: 'front', pal: DIM, expr: FACES.hollow}]} />;},
+  // the shop counter — a krysha collection run, a scared shopkeeper behind the register
+  shopKrysha: () => {const f = useCurrentFrame();
+    return <Stage backdrop="shopCounter" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 1220, y: 900, scale: 1.3, view: 'front', expr: FACES.cold}}
+      extras={[{pose: A.stand(f), x: 1620, y: 900, scale: 0.95, view: 'front', pal: DIM, expr: FACES.worried}]} />;},
+  // the koronatsiya circle — the crowning; a ring of dim elders, the code made literal
+  koronatsiyaRite: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="koronatsiyaCircle" bg="url(#swarm)"
+      fig={{pose: A.sit(f), x: 960, y: 900, scale: 1.25, view: 'front', expr: blendExpr(FACES.hollow, FACES.hardened, t)}} />;},
+  // the Brighton boardwalk — the network reaching abroad (Solntsevskaya's real 1992 export, grounding
+  // texture, not a literal claim of identity)
+  brightonPier: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="brightonBoardwalk" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.focused, FACES.cold, t)}} />;},
+  // the pakhan's office — the apex, the samovar and the wall map, the money still not yours
+  pakhanApex: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="pakhanOffice" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA, ...MONGOL, ...GLADIATOR, ...BRATVA};

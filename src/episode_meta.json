@@ -1,21 +1,22 @@
 {
   "thumb": {
-    "kicker": "EVERY LEVEL OF A",
-    "line1": "GLADIATOR",
+    "kicker": "EVERY RANK OF THE",
+    "line1": "BRATVA",
     "line2": "",
-    "tag": "THE THUMB DECIDES",
+    "tag": "THE CODE OWNS YOU",
     "archetype": "poster",
-    "big": "12,000 HS",
-    "before": "BOUGHT",
-    "after": "OWNED",
-    "expr": "shock",
-    "povline": "YOU ARE PROPERTY THAT WINS",
-    "keyword": "MERCY",
-    "setting": "arenaSand",
-    "question": "WHO TURNS THE THUMB?",
-    "mood": "epic",
-    "costume": "uniform",
-    "word": "MERCY"
+    "big": "$0",
+    "before": "PATSAN",
+    "after": "PAKHAN",
+    "expr": "cold",
+    "povline": "YOU NEVER TALK",
+    "keyword": "MARKED",
+    "setting": "koronatsiyaRite",
+    "question": "WHO OWNS THE FUND?",
+    "mood": "crime",
+    "costume": "street",
+    "word": "MARKED",
+    "prop": "vault"
   },
-  "topic": "gladiator"
+  "topic": "bratva"
 }
