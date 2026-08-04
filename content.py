@@ -127,8 +127,8 @@ SCENES = [
          narration=("Steam again, the same wood-planked room, but this time you're the one Ded Grisha "
                     "vouches for at the low table. A brigade of your own — six men, three blocks, a "
                     "route that used to be Tolik's before Tolik stopped being useful to anyone. The "
-                    "stove hisses the same way it did the night of the razor, cedar and salt again. You "
-                    "notice. You say nothing about it."),
+                    "stove hisses the same way it did the night of the razor, cedar and salt again, "
+                    "unmentioned, same as it was then."),
          overlay=None),
     dict(id="t11", level=None, template="countRoom",
          narration=("A banded stack under a bare bulb, fourteen thousand dollars this month across the "

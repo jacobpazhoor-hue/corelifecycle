@@ -2,7 +2,7 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 21110,
+  "totalFrames": 21995,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
@@ -121,7 +121,7 @@
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
       "startFrame": 5961,
-      "durationInFrames": 656,
+      "durationInFrames": 649,
       "gap": 0.25
     },
     {
@@ -134,7 +134,7 @@
       "template": "countRoom",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 6617,
+      "startFrame": 6610,
       "durationInFrames": 644,
       "gap": 0.25
     },
@@ -145,7 +145,7 @@
       "template": "revolvingDoor",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 7261,
+      "startFrame": 7254,
       "durationInFrames": 697,
       "gap": 0.25
     },
@@ -156,7 +156,7 @@
       "template": "tattooCell",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 7958,
+      "startFrame": 7951,
       "durationInFrames": 639,
       "gap": 0.25
     },
@@ -167,7 +167,7 @@
       "template": "boardroomNotes",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 8597,
+      "startFrame": 8590,
       "durationInFrames": 729,
       "gap": 0.25
     },
@@ -181,7 +181,7 @@
       "template": "signing",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 9326,
+      "startFrame": 9319,
       "durationInFrames": 651,
       "gap": 0.25
     },
@@ -192,7 +192,7 @@
       "template": "window",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 9977,
+      "startFrame": 9970,
       "durationInFrames": 683,
       "gap": 0.25
     },
@@ -203,7 +203,7 @@
       "template": "commission",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 10660,
+      "startFrame": 10653,
       "durationInFrames": 665,
       "gap": 0.25
     },
@@ -214,7 +214,7 @@
       "template": "wiretap",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 11325,
+      "startFrame": 11318,
       "durationInFrames": 716,
       "gap": 1.4
     },
@@ -225,7 +225,7 @@
       "template": "backAlley",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 12041,
+      "startFrame": 12034,
       "durationInFrames": 688,
       "gap": 0.25
     },
@@ -236,8 +236,8 @@
       "template": "emptyChair",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 12729,
-      "durationInFrames": 85,
+      "startFrame": 12722,
+      "durationInFrames": 640,
       "gap": 0.25
     },
     {
@@ -250,7 +250,7 @@
       "template": "koronatsiyaRite",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 12814,
+      "startFrame": 13362,
       "durationInFrames": 860,
       "gap": 0.25
     },
@@ -261,7 +261,7 @@
       "template": "window",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 13674,
+      "startFrame": 14222,
       "durationInFrames": 782,
       "gap": 0.25
     },
@@ -272,7 +272,7 @@
       "template": "tattooCell",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 14456,
+      "startFrame": 15004,
       "durationInFrames": 662,
       "gap": 0.25
     },
@@ -283,7 +283,7 @@
       "template": "dinner",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 15118,
+      "startFrame": 15666,
       "durationInFrames": 711,
       "gap": 0.25
     },
@@ -297,7 +297,7 @@
       "template": "jet",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 15829,
+      "startFrame": 16377,
       "durationInFrames": 568,
       "gap": 0.25
     },
@@ -308,7 +308,7 @@
       "template": "brightonPier",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 16397,
+      "startFrame": 16945,
       "durationInFrames": 789,
       "gap": 0.25
     },
@@ -319,7 +319,7 @@
       "template": "warRoom",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 17186,
+      "startFrame": 17734,
       "durationInFrames": 723,
       "gap": 0.25
     },
@@ -333,7 +333,7 @@
       "template": "pakhanApex",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 17909,
+      "startFrame": 18457,
       "durationInFrames": 736,
       "gap": 0.7
     },
@@ -344,8 +344,8 @@
       "template": "countRoom",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 18645,
-      "durationInFrames": 319,
+      "startFrame": 19193,
+      "durationInFrames": 656,
       "gap": 0.25
     },
     {
@@ -355,7 +355,7 @@
       "template": "emptyChair",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 18964,
+      "startFrame": 19849,
       "durationInFrames": 751,
       "gap": 0.25
     },
@@ -366,7 +366,7 @@
       "template": "tattooCell",
       "audio": "audio/t31.wav",
       "audioStartFrame": 3,
-      "startFrame": 19715,
+      "startFrame": 20600,
       "durationInFrames": 730,
       "gap": 0.25
     },
@@ -377,7 +377,7 @@
       "template": "window",
       "audio": "audio/t32.wav",
       "audioStartFrame": 3,
-      "startFrame": 20445,
+      "startFrame": 21330,
       "durationInFrames": 665,
       "gap": 0.25
     }
