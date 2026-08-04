@@ -20,6 +20,8 @@ def load_style(path=STYLE_PATH):
             data = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError, OSError):
         return dict(DEFAULTS)
+    if not isinstance(data, dict):
+        return dict(DEFAULTS)
     merged = dict(DEFAULTS)
     merged.update({k: v for k, v in data.items() if v is not None})
     return merged

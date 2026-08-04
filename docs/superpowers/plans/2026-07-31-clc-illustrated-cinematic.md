@@ -736,11 +736,11 @@ git commit -m "feat(clc-photo): non-fatal image step in build + visualMode toggl
 
 **Files:** none (verification only).
 
-- [ ] **Step 1:** Set `ops/photo_style.json` `visualMode` to `"photo"` locally (do NOT commit).
+- [ ] **Step 1:** Set `ops/routine.json` `visualMode` to `"photo"` locally (do NOT commit). `routine.json` is authoritative via `effective_mode()`; `photo_style.json`'s `visualMode` stays as the inert default and only its style fields (`styleSuffix`, etc.) matter once photo mode is on.
 - [ ] **Step 2:** Run `python3 gen_scene_images.py`; confirm `public/images/<slug>/` fills with stills + depth maps and `src/photo_manifest.json` shows `mode=photo` with few/no fallbacks.
 - [ ] **Step 3:** Eyeball 3–4 generated stills for the target look; if flat, iterate `styleSuffix` in `photo_style.json` and re-run (cached images for unchanged prompts are reused; delete `public/images/<slug>/` to force regen).
 - [ ] **Step 4:** `python3 build.py` then a full local or Modal render; run `python3 qa_watch.py out/episode.mp4` and review sampled frames for blank/flat scenes and readable parallax.
-- [ ] **Step 5:** Revert `visualMode` to `doodle` until you decide to flip the channel for real. Decision + retention comparison is owner-run per spec §6.
+- [ ] **Step 5:** Revert `ops/routine.json` `visualMode` to `doodle` until you decide to flip the channel for real. Decision + retention comparison is owner-run per spec §6.
 
 ---
 

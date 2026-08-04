@@ -47,7 +47,8 @@ def fetch_image(prompt, seed, style, out_path, retries=3, _get=requests.get):
                 return True
         except requests.RequestException:
             pass
-        time.sleep(2 ** attempt)
+        if attempt < retries - 1:
+            time.sleep(2 ** attempt)
     return False
 
 def generate_all(scenes, slug, style, fetch=fetch_image, depth=make_depth):
@@ -87,7 +88,11 @@ def main():
         print(f"gen_scene_images: NON-FATAL error, falling back to doodle manifest: {e}")
         manifest = {"mode": "doodle", "scenes": {}, "fallback": []}
     try:
-        json.dump(manifest, open(os.path.join(ROOT, "src", "photo_manifest.json"), "w"), indent=2)
+        dest = os.path.join(ROOT, "src", "photo_manifest.json")
+        tmp = dest + ".tmp"
+        with open(tmp, "w") as f:
+            json.dump(manifest, f, indent=2)
+        os.replace(tmp, dest)
     except Exception as e:
         print(f"gen_scene_images: could not write manifest: {e}")
     print(f"gen_scene_images: mode={manifest['mode']} "

@@ -8,9 +8,9 @@ class TestDepth(unittest.TestCase):
         src = os.path.join(d, "src.jpg")
         Image.new("RGB", (320, 180), (120, 120, 120)).save(src)
         out = make_depth(src, os.path.join(d, "src.depth.png"))
-        im = Image.open(out)
-        self.assertEqual(im.mode, "L")
-        self.assertEqual(im.size, (320, 180))
+        with Image.open(out) as im:
+            self.assertEqual(im.mode, "L")
+            self.assertEqual(im.size, (320, 180))
 
     def test_bottom_is_nearer_than_top(self):
         import numpy as np
