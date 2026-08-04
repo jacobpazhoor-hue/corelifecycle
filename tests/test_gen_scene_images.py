@@ -1,4 +1,4 @@
-import os, tempfile, unittest
+import os, tempfile, unittest, json
 from unittest import mock
 from gen_scene_images import build_prompt, scene_seed, asset_paths, fetch_image, generate_all
 
@@ -90,3 +90,20 @@ class TestGenerateAll(unittest.TestCase):
         self.assertIn("t01", m["scenes"])
         self.assertNotIn("t02", m["scenes"])
         self.assertEqual(m["fallback"], ["t02"])
+
+class TestMainNonFatal(unittest.TestCase):
+    def test_main_does_not_raise_and_writes_safe_manifest_on_error(self):
+        import gen_scene_images as g
+        mpath = os.path.join(g.ROOT, "src", "photo_manifest.json")
+        backup = open(mpath).read() if os.path.exists(mpath) else None
+        try:
+            with mock.patch.object(g, "load_style", return_value={
+                     "visualMode": "photo", "model": "flux", "width": 8, "height": 8,
+                     "styleSuffix": "S", "povRules": "P", "moves": ["pushIn"]}), \
+                 mock.patch.object(g, "generate_all", side_effect=RuntimeError("boom")):
+                g.main()  # must NOT raise
+            m = json.load(open(mpath))
+            self.assertEqual(m, {"mode": "doodle", "scenes": {}, "fallback": []})
+        finally:
+            if backup is not None:
+                open(mpath, "w").write(backup)

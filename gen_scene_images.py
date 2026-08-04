@@ -60,18 +60,24 @@ def generate_all(scenes, slug, style, fetch=fetch_image, depth=make_depth):
 
 def main():
     style = load_style(STYLE_PATH)
+    manifest = {"mode": "doodle", "scenes": {}, "fallback": []}
     try:
         meta = json.load(open(os.path.join(ROOT, "ops", "episode_meta.json")))
         slug = (meta.get("topic") or "episode").strip().replace(" ", "_")
     except Exception:
         slug = "episode"
-    import importlib, content  # content.py in ROOT
-    importlib.reload(content)
-    if style.get("visualMode") != "photo":
+    try:
+        if style.get("visualMode") == "photo":
+            import importlib, content  # only imported in photo mode
+            importlib.reload(content)
+            manifest = generate_all(content.SCENES, slug, style)
+    except Exception as e:
+        print(f"gen_scene_images: NON-FATAL error, falling back to doodle manifest: {e}")
         manifest = {"mode": "doodle", "scenes": {}, "fallback": []}
-    else:
-        manifest = generate_all(content.SCENES, slug, style)
-    json.dump(manifest, open(os.path.join(ROOT, "src", "photo_manifest.json"), "w"), indent=2)
+    try:
+        json.dump(manifest, open(os.path.join(ROOT, "src", "photo_manifest.json"), "w"), indent=2)
+    except Exception as e:
+        print(f"gen_scene_images: could not write manifest: {e}")
     print(f"gen_scene_images: mode={manifest['mode']} "
           f"ok={len(manifest['scenes'])} fallback={len(manifest['fallback'])}")
 
