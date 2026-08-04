@@ -69,6 +69,31 @@ def modal_flux_backend(jobs, style):
             ok[j["sid"]] = False
     return ok
 
+def local_sdxl_backend(jobs, style):
+    """jobs: [{"sid","prompt","seed","out"}]. Generates via local SDXL-Turbo (MPS), writes JPEGs
+    to each 'out'. Returns {sid: bool}. Non-fatal: a model-load/OOM failure sends all sids to
+    fallback (False) instead of raising."""
+    from gen_images_local import generate, free
+    payload = [{"sid": j["sid"], "prompt": j["prompt"], "seed": j["seed"]} for j in jobs]
+    try:
+        results = generate(payload, width=style.get("width", 1024), height=style.get("height", 576))
+    except Exception as e:
+        print(f"gen_scene_images: local_sdxl_backend NON-FATAL error: {e}")
+        results = {}
+    finally:
+        free()  # release ~7GB before the render step
+    ok = {}
+    for j in jobs:
+        data = results.get(j["sid"])
+        if data:
+            os.makedirs(os.path.dirname(j["out"]), exist_ok=True)
+            with open(j["out"], "wb") as f:
+                f.write(data)
+            ok[j["sid"]] = True
+        else:
+            ok[j["sid"]] = False
+    return ok
+
 def _pollinations_backend(jobs, style):
     """Adapter: loops the legacy per-scene fetch_image so the old path still works."""
     ok = {}
@@ -78,7 +103,13 @@ def _pollinations_backend(jobs, style):
 
 def generate_all(scenes, slug, style, backend=None, depth=make_depth):
     if backend is None:
-        backend = modal_flux_backend if style.get("backend") == "modal_flux" else _pollinations_backend
+        chosen = style.get("backend")
+        if chosen == "modal_flux":
+            backend = modal_flux_backend
+        elif chosen == "local_sdxl":
+            backend = local_sdxl_backend
+        else:
+            backend = _pollinations_backend
     moves = style.get("moves") or ["pushIn"]
     manifest = {"mode": style.get("visualMode", "doodle"), "scenes": {}, "fallback": []}
 

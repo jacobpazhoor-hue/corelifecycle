@@ -5,14 +5,14 @@ STYLE_PATH = os.path.join(ROOT, "ops", "photo_style.json")
 DEFAULTS = {
     "visualMode": "doodle",
     "model": "flux",
-    "backend": "modal_flux",
+    "backend": "local_sdxl",
     "styleSuffix": ("cinematic illustrated, painterly depth, layered foreground and "
                     "background, dramatic filmic lighting, muted cinematic palette"),
     "povRules": ("first-person or over-the-shoulder view, environment seen from the "
                  "viewer's own eyes, no face-on recurring people"),
     "moves": ["pushIn", "parallaxPan", "orbitLite", "rackFocus"],
-    "width": 1280,
-    "height": 720,
+    "width": 512,
+    "height": 512,
 }
 
 def load_style(path=STYLE_PATH):

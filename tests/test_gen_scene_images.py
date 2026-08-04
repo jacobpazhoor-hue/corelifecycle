@@ -144,6 +144,37 @@ class TestGenerateAll(unittest.TestCase):
         self.assertEqual(m["scenes"], {})
         self.assertEqual(set(m["fallback"]), {"t01", "t02"})
 
+class TestLocalSdxlDispatch(unittest.TestCase):
+    """generate_all must dispatch to local_sdxl_backend when style['backend'] == 'local_sdxl'.
+    Hermetic: patches gen_scene_images.local_sdxl_backend with a fake so no model/MPS is touched."""
+    def tearDown(self):
+        import shutil
+        base = os.path.join(os.path.dirname(os.path.dirname(__file__)), "public", "images", "vc")
+        if os.path.exists(base):
+            shutil.rmtree(base)
+
+    def test_local_sdxl_backend_string_selects_local_sdxl_backend(self):
+        import gen_scene_images as g
+        scenes = [{"id": "t01", "template": "a"}, {"id": "t02", "template": "b"}]
+        style = {"visualMode": "photo", "model": "flux", "backend": "local_sdxl",
+                 "width": 8, "height": 8, "styleSuffix": "S", "povRules": "P",
+                 "moves": ["pushIn"]}
+        calls = []
+        def fake_local_sdxl_backend(jobs, style):
+            from PIL import Image
+            calls.append([j["sid"] for j in jobs])
+            ok = {}
+            for j in jobs:
+                os.makedirs(os.path.dirname(j["out"]), exist_ok=True)
+                Image.new("RGB", (8, 8), (7, 7, 7)).save(j["out"])
+                ok[j["sid"]] = True
+            return ok
+        with mock.patch.object(g, "local_sdxl_backend", fake_local_sdxl_backend):
+            m = g.generate_all(scenes, "vc", style)  # backend=None -> must dispatch by style
+        self.assertEqual(calls, [["t01", "t02"]])
+        self.assertEqual(set(m["scenes"]), {"t01", "t02"})
+        self.assertEqual(m["fallback"], [])
+
 class TestMainNonFatal(unittest.TestCase):
     def test_main_does_not_raise_and_writes_safe_manifest_on_error(self):
         import gen_scene_images as g
