@@ -1,4 +1,6 @@
-import hashlib, os, time, urllib.parse, requests
+import hashlib, os, time, urllib.parse, requests, json
+from photo_style import load_style, STYLE_PATH
+from depth import make_depth
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 
@@ -36,3 +38,42 @@ def fetch_image(prompt, seed, style, out_path, retries=3, _get=requests.get):
             pass
         time.sleep(2 ** attempt)
     return False
+
+def generate_all(scenes, slug, style, fetch=fetch_image, depth=make_depth):
+    moves = style.get("moves") or ["pushIn"]
+    manifest = {"mode": style.get("visualMode", "doodle"), "scenes": {}, "fallback": []}
+    for i, sc in enumerate(scenes):
+        sid = sc["id"]
+        ap = asset_paths(slug, sid)
+        prompt = build_prompt(sc, style)
+        seed = scene_seed(slug, sid)
+        if os.path.exists(ap["img"]) or fetch(prompt, seed, style, ap["img"]):
+            if not os.path.exists(ap["depth"]):
+                depth(ap["img"], ap["depth"])
+            manifest["scenes"][sid] = {
+                "img": ap["rel_img"], "depth": ap["rel_depth"],
+                "move": moves[i % len(moves)],
+            }
+        else:
+            manifest["fallback"].append(sid)
+    return manifest
+
+def main():
+    style = load_style(STYLE_PATH)
+    try:
+        meta = json.load(open(os.path.join(ROOT, "ops", "episode_meta.json")))
+        slug = (meta.get("topic") or "episode").strip().replace(" ", "_")
+    except Exception:
+        slug = "episode"
+    import importlib, content  # content.py in ROOT
+    importlib.reload(content)
+    if style.get("visualMode") != "photo":
+        manifest = {"mode": "doodle", "scenes": {}, "fallback": []}
+    else:
+        manifest = generate_all(content.SCENES, slug, style)
+    json.dump(manifest, open(os.path.join(ROOT, "src", "photo_manifest.json"), "w"), indent=2)
+    print(f"gen_scene_images: mode={manifest['mode']} "
+          f"ok={len(manifest['scenes'])} fallback={len(manifest['fallback'])}")
+
+if __name__ == "__main__":
+    main()

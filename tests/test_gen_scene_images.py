@@ -1,6 +1,6 @@
 import os, tempfile, unittest
 from unittest import mock
-from gen_scene_images import build_prompt, scene_seed, asset_paths, fetch_image
+from gen_scene_images import build_prompt, scene_seed, asset_paths, fetch_image, generate_all
 
 class TestHelpers(unittest.TestCase):
     def test_build_prompt_uses_visual_then_style(self):
@@ -54,3 +54,39 @@ class TestFetch(unittest.TestCase):
                              retries=3, _get=boom)
         self.assertFalse(ok)
         self.assertEqual(calls["n"], 3)
+
+class TestGenerateAll(unittest.TestCase):
+    def _style(self):
+        return {"visualMode":"photo","model":"flux","width":8,"height":8,
+                "styleSuffix":"S","povRules":"P","moves":["pushIn","parallaxPan"]}
+
+    def tearDown(self):
+        import shutil
+        base = os.path.join(os.path.dirname(os.path.dirname(__file__)), "public", "images", "vc")
+        if os.path.exists(base):
+            shutil.rmtree(base)
+
+    def test_all_ok_builds_manifest_with_moves(self):
+        scenes = [{"id":"t01","template":"a"},{"id":"t02","template":"b"},{"id":"t03","template":"c"}]
+        def fake_fetch(prompt, seed, style, out, **k):
+            from PIL import Image; os.makedirs(os.path.dirname(out), exist_ok=True)
+            Image.new("RGB",(8,8),(50,50,50)).save(out); return True
+        m = generate_all(scenes, "vc", self._style(), fetch=fake_fetch)
+        self.assertEqual(m["mode"], "photo")
+        self.assertEqual(set(m["scenes"]), {"t01","t02","t03"})
+        self.assertEqual(m["scenes"]["t01"]["move"], "pushIn")
+        self.assertEqual(m["scenes"]["t02"]["move"], "parallaxPan")
+        self.assertEqual(m["scenes"]["t03"]["move"], "pushIn")  # wraps
+        self.assertEqual(m["fallback"], [])
+
+    def test_failed_scene_goes_to_fallback(self):
+        scenes = [{"id":"t01","template":"a"},{"id":"t02","template":"b"}]
+        def flaky(prompt, seed, style, out, **k):
+            if "t02" in out:  # asset path carries sid
+                return False
+            from PIL import Image; os.makedirs(os.path.dirname(out), exist_ok=True)
+            Image.new("RGB",(8,8),(9,9,9)).save(out); return True
+        m = generate_all(scenes, "vc", self._style(), fetch=flaky)
+        self.assertIn("t01", m["scenes"])
+        self.assertNotIn("t02", m["scenes"])
+        self.assertEqual(m["fallback"], ["t02"])
