@@ -37,6 +37,10 @@ except Exception as e:
 # sync the Remotion-importable copy the Thumbnail reads
 json.dump({"thumb": meta["thumb"], "topic": meta.get("topic", "")}, open(os.path.join(ROOT, "src", "episode_meta.json"), "w"), indent=2)
 
+# 0.5) SCENE IMAGES (photo visual mode) — NON-FATAL: any failure falls back to doodle per scene,
+# and visualMode="doodle" makes this a no-op. Must run before the smoke render consumes assets.
+run("python3 gen_scene_images.py")
+
 # 1) VO + music
 for step in ("python3 gen_voice_edge.py", "python3 make_ambient.py"):
     if run(step) != 0:

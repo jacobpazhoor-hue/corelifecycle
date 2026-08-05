@@ -1,6 +1,7 @@
 {
   "cron": "0 2 * * *",
   "publishMode": "public",
+  "visualMode": "doodle",
   "autoUpload": true,
   "minMinutes": 11,
   "improvementsPerRun": 2,
