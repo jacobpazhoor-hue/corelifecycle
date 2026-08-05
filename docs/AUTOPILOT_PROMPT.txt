@@ -158,9 +158,13 @@ DO, in order:
      electric=spy / intel / tech / hacker (cyan);  money=wealth / billionaire / heir / trillionaire (green-gold);
      survival=survive / lost / stranded / castaway (teal). Match the crime/military/history topics across
      danger|crime|epic|royal so consecutive uploads look different.
-   Fields: archetype — DEFAULT TO "poster" (2026-07-20 owner direction: it is the house style, do
-   NOT rotate away from it without a reason). The other archetypes below stay available as a fallback
-   when a topic genuinely has no fitting prop.
+   Fields: archetype — ROTATE for feed variety (2026-08-04 owner direction, REVERSES the 2026-07-20
+   "poster is house style, do NOT rotate" rule: shipping the identical poster layout every day made the
+   thumbnails blur together in the feed). HARD RULE: do NOT reuse an archetype used in the last 3
+   produced episodes — before writing thumb.archetype, check the archetype value of the last ~3 entries
+   in the produced history (git log -p ops/episode_meta.json, or the produced_topics context) and pick a
+   DIFFERENT one that fits THIS episode's format. Cycle through the set below so consecutive uploads never
+   share a layout. poster stays a strong option in the rotation — just NEVER the automatic default.
      • poster (HOUSE STYLE — a big illustrated PROP fills the frame, ONE red word, a red arrow onto a
        costumed hero standing in the scene). Fields:
          word    — the ONE word of copy, default "YOU". Keep it to ONE short word; the prop does the
@@ -171,8 +175,8 @@ DO, in order:
                    (military→uniform, medical→scrubs, crime→street, empire→royal, careers→suit).
          expr    — the hero's face: smug|cold|hardened|hollow|worried|shock.
        The word + arrow are ALWAYS red in code — do not ask for another colour, it is the CTR device.
-   Legacy archetypes (fallback only; ROTATE among them if you must leave poster, NOT used in the last
-   ~3 produced_topics):
+   Archetypes to rotate among (pick the best fit for the format; the no-repeat-in-last-3 rule above
+   applies to ALL of these AND poster — vary mood/costume too so the feed never looks monotone):
      • pov  (PRIMARY — MasterPOVs style): povline (verb phrase, e.g. "YOU ARE A", "YOU CAN'T",
        "YOU INHERIT", "YOU MUST"), keyword (the RED word, ≤9 chars, NOT a title word: "BURNED",
        "TRAITOR","BILLIONS","LEVEL 9"), expr (figure mood: smug|cold|hardened|hollow|worried|shock).
