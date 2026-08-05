@@ -1,22 +1,22 @@
 {
   "thumb": {
-    "kicker": "EVERY RANK OF THE",
-    "line1": "BRATVA",
+    "kicker": "EVERY LEVEL OF AN",
+    "line1": "ASTRONAUT",
     "line2": "",
-    "tag": "THE CODE OWNS YOU",
-    "archetype": "poster",
-    "big": "$0",
-    "before": "PATSAN",
-    "after": "PAKHAN",
+    "tag": "MOST NEVER FLY",
+    "archetype": "pov",
+    "big": "$93B",
+    "before": "ENGINEER",
+    "after": "COMMANDER",
     "expr": "shock",
-    "povline": "YOU NEVER TALK",
-    "keyword": "MARKED",
-    "setting": "koronatsiyaRite",
-    "question": "WHO OWNS THE FUND?",
-    "mood": "crime",
-    "costume": "street",
-    "word": "MARKED",
-    "prop": "vault"
+    "povline": "YOU MIGHT NEVER",
+    "keyword": "GROUNDED",
+    "setting": "evaEmergency",
+    "question": "WHO GETS GROUNDED?",
+    "mood": "danger",
+    "costume": "field",
+    "word": "GROUNDED",
+    "prop": "rocket"
   },
-  "topic": "bratva"
+  "topic": "astronaut"
 }

@@ -1,1 +1,5 @@
-{ "mode": "doodle", "scenes": {}, "fallback": [] }
+{
+  "mode": "doodle",
+  "scenes": {},
+  "fallback": []
+}

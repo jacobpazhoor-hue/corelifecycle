@@ -1951,6 +1951,153 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       <ellipse cx={960} cy={620} rx={600} ry={200} fill="url(#sglow)" opacity={0.3} />
     </g>
   ),
+  // --- Space pack backdrops (astronaut) ---
+  // a two-seat T-38 supersonic jet cockpit — canopy frame arching overhead, motion-streaked sky,
+  // instrument dials in the foreground — ASCAN jet training, where the real training-fatality risk lives
+  t38Cockpit: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#bfe4f7" />
+      {Array.from({length: 10}).map((_, i) => {const y = 80 + i * 90; const off = (frame * 6 + i * 53) % 2200 - 300;
+        return <rect key={i} x={off} y={y} width={220} height={8} fill="#fff" opacity={0.35} rx={4} />;})}
+      <ellipse cx={960} cy={720} rx={1400} ry={520} fill="#eef2f6" opacity={0.5} />
+      <path d="M -40 60 Q 960 -140 1960 60 L 1960 200 Q 960 20 -40 200 Z" fill="#2a2f38" stroke={INK} strokeWidth={5} opacity={0.92} />
+      <path d="M 200 900 L 300 640 L 1620 640 L 1720 900 Z" fill="#1c1f26" stroke={INK} strokeWidth={5} />
+      {[420, 620, 820, 1020, 1220, 1420].map((x, i) => <circle key={i} cx={x} cy={800} r={38} fill="#3a4048" stroke={GOLD} strokeWidth={3} opacity={0.85} />)}
+      <rect x={0} y={920} width={1920} height={160} fill="#141820" /><line x1={0} y1={920} x2={1920} y2={920} stroke={INK} strokeWidth={5} />
+      <ellipse cx={960} cy={420} rx={700} ry={220} fill="url(#sglow)" opacity={0.35} />
+    </g>
+  ),
+  // the Neutral Buoyancy Lab — a training pool with a submerged ISS mockup module, rising bubbles —
+  // spacewalk training, the world's largest indoor pool (real, ~6.2M gallons)
+  nbl: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#1c5f7a" />
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#sclean)" opacity={0.25} />
+      {Array.from({length: 16}).map((_, i) => <rect key={i} x={i * 120} y={40} width={110} height={40} fill="#2f7a94" opacity={0.3} />)}
+      <ellipse cx={1420} cy={620} rx={340} ry={130} fill="#0f3a4d" stroke={INK} strokeWidth={4} opacity={0.75} />
+      <rect x={1220} y={560} width={400} height={120} rx={60} fill="#14495e" stroke={INK} strokeWidth={4} opacity={0.8} />
+      {[1280, 1360, 1440, 1520, 1600].map((x, i) => <circle key={i} cx={x} cy={620} r={16} fill="#bfe4f7" opacity={0.5} />)}
+      {Array.from({length: 26}).map((_, i) => {const x = rnd(i * 3.3) * 1920; const y = (((rnd(i * 1.9) * 1080) - (frame / 30) * (20 + rnd(i) * 30)) % 1120 + 1120) % 1120;
+        return <circle key={i} cx={x} cy={y} r={4 + rnd(i * 2) * 6} fill="#eaf7ff" opacity={0.35} />;})}
+      <rect x={0} y={880} width={1920} height={200} fill="#0d2e3d" /><line x1={0} y1={880} x2={1920} y2={880} stroke={INK} strokeWidth={4} opacity={0.4} />
+      <ellipse cx={900} cy={520} rx={620} ry={260} fill="url(#sglow)" opacity={0.2} />
+    </g>
+  ),
+  // the launch capsule interior — curved conical hull, a round porthole showing the flame/sky, an
+  // instrument panel, harness straps across the seat below — the danger beat, liftoff
+  capsuleLaunch: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#1a1c22" />
+      <path d="M 0 0 Q 300 540 0 1080 L 300 1080 Q 500 540 300 0 Z" fill="#2a2d36" stroke={INK} strokeWidth={4} opacity={0.9} />
+      <path d="M 1920 0 Q 1620 540 1920 1080 L 1620 1080 Q 1420 540 1620 0 Z" fill="#2a2d36" stroke={INK} strokeWidth={4} opacity={0.9} />
+      {Array.from({length: 8}).map((_, i) => <circle key={i} cx={340 + i * 15} cy={120 + i * 90} r={5} fill={INK} opacity={0.3} />)}
+      <circle cx={960} cy={300} r={150} fill="#0a0c12" stroke={PAPERC} strokeWidth={10} />
+      {Array.from({length: 40}).map((_, i) => {const a = rnd(i * 7) * Math.PI * 2; const r = rnd(i * 3) * 130;
+        return <circle key={i} cx={960 + Math.cos(a) * r} cy={300 + Math.sin(a) * r} r={1.4} fill="#fff" opacity={0.7} />;})}
+      <ellipse cx={960} cy={420} rx={140} ry={70} fill={frame % 40 < 20 ? '#f2a33d' : '#e0703a'} opacity={0.5} />
+      <rect x={620} y={700} width={680} height={200} rx={16} fill="#33383f" stroke={INK} strokeWidth={5} />
+      {[700, 820, 940, 1060, 1180].map((x, i) => <rect key={i} x={x} y={730} width={60} height={40} fill="#3fb0e0" opacity={0.5} />)}
+      <line x1={780} y1={900} x2={1140} y2={1080} stroke="#c0392b" strokeWidth={12} opacity={0.6} />
+      <line x1={1140} y1={900} x2={780} y2={1080} stroke="#c0392b" strokeWidth={12} opacity={0.6} />
+      <ellipse cx={960} cy={280} rx={200} ry={120} fill="url(#sglow)" opacity={0.3} />
+    </g>
+  ),
+  // the ISS Cupola — the 7-window dome, Earth's curve filling the view — the recurring master anchor
+  // for "first sight of Earth" and every quiet command-deck reflection after it
+  cupolaEarth: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#05060a" />
+      {Array.from({length: 70}).map((_, i) => {const x = rnd(i * 1.7) * 1920; const y = rnd(i * 2.3) * 500;
+        return <circle key={i} cx={x} cy={y} r={rnd(i) * 1.6 + 0.4} fill="#fff" opacity={0.5 + rnd(i * 3) * 0.4} />;})}
+      <path d="M -200 1080 Q 960 560 2120 1080 Z" fill="#1a5fae" stroke={INK} strokeWidth={4} />
+      <path d="M -100 1000 Q 960 640 1980 1000 Z" fill="#2f7fd6" opacity={0.6} />
+      {[300, 700, 1100, 1500].map((x, i) => <ellipse key={i} cx={x} cy={960 - i * 10} rx={90} ry={26} fill="#fff" opacity={0.5} />)}
+      <path d="M 260 60 L 500 60 L 500 1080" fill="none" stroke="#0d0e12" strokeWidth={26} />
+      <path d="M 1660 60 L 1420 60 L 1420 1080" fill="none" stroke="#0d0e12" strokeWidth={26} />
+      <line x1={780} y1={60} x2={780} y2={1080} stroke="#0d0e12" strokeWidth={26} />
+      <line x1={1140} y1={60} x2={1140} y2={1080} stroke="#0d0e12" strokeWidth={26} />
+      <rect x={0} y={0} width={260} height={1080} fill="#0d0e12" />
+      <rect x={1660} y={0} width={260} height={1080} fill="#0d0e12" />
+      <rect x={0} y={0} width={1920} height={60} fill="#0d0e12" />
+      <rect x={0} y={960} width={1920} height={30} fill="#1a1c22" />
+      <ellipse cx={960} cy={700} rx={500} ry={220} fill="url(#sglow)" opacity={0.15} />
+    </g>
+  ),
+  // outside the station — black starfield, the Earth's blue curve below, the truss the figure is
+  // tethered to, a gold tether line — every EVA beat, including the midpoint water-intrusion reversal
+  evaSpacewalk: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#05060a" />
+      {Array.from({length: 90}).map((_, i) => {const x = rnd(i * 1.3) * 1920; const y = rnd(i * 2.9) * 760;
+        return <circle key={i} cx={x} cy={y} r={rnd(i) * 1.6 + 0.4} fill="#fff" opacity={0.4 + rnd(i * 4) * 0.5} />;})}
+      <path d="M -300 1080 Q 960 500 2220 1080 Z" fill="#1a5fae" stroke={INK} strokeWidth={4} />
+      <path d="M -200 980 Q 960 580 2080 980 Z" fill="#2f7fd6" opacity={0.55} />
+      <circle cx={1650} cy={220} r={90} fill="#fff6d8" opacity={0.9} />
+      <circle cx={1650} cy={220} r={140} fill="url(#sglow)" opacity={0.5} />
+      <rect x={0} y={640} width={1920} height={60} fill="#c9d3d8" stroke={INK} strokeWidth={4} opacity={0.85} />
+      {Array.from({length: 16}).map((_, i) => <line key={i} x1={i * 130} y1={640} x2={i * 130 + 65} y2={700} stroke={INK} strokeWidth={2} opacity={0.4} />)}
+      <rect x={1400} y={560} width={220} height={140} fill="#dbe3e8" stroke={INK} strokeWidth={4} opacity={0.85} />
+      <path d={`M 1000 700 Q ${960 + Math.sin(frame * 0.05) * 20} 800 960 900`} fill="none" stroke="#f2c14e" strokeWidth={3} opacity={0.6} strokeDasharray="6 6" />
+    </g>
+  ),
+  // Mission Control — a big wall screen with an orbit-track map, rows of consoles receding — the
+  // ground side of every launch/EVA/landing, where the "1 vote" apex line lands
+  missionControl: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#0c1420" />
+      <rect x={260} y={80} width={1400} height={480} rx={10} fill="#0a1826" stroke={INK} strokeWidth={5} />
+      <path d="M 320 500 Q 700 160 1080 500 T 1600 480" fill="none" stroke="#3fb0e0" strokeWidth={3} opacity={0.7} />
+      {Array.from({length: 5}).map((_, i) => <circle key={i} cx={340 + i * 280} cy={220 + ((i * 57 + frame / 6) % 260)} r={8} fill="#f2c14e" opacity={0.85} />)}
+      {Array.from({length: 40}).map((_, i) => {const x = 300 + rnd(i * 3) * 1300; const y = 120 + rnd(i * 5) * 420;
+        return <circle key={i} cx={x} cy={y} r={1.2} fill="#fff" opacity={0.3} />;})}
+      {[0, 1, 2].map((r) => (
+        <g key={r} opacity={0.85 - r * 0.15}>
+          <rect x={140 - r * 40} y={700 + r * 90} width={1640 + r * 80} height={70} rx={8} fill="#182636" stroke={INK} strokeWidth={3} />
+          {Array.from({length: 8}).map((_, i) => <rect key={i} x={200 - r * 40 + i * 210} y={708 + r * 90} width={70} height={40} fill="#3fb0e0" opacity={0.35} />)}
+        </g>
+      ))}
+      <rect x={0} y={980} width={1920} height={100} fill="#060a12" />
+      <ellipse cx={960} cy={320} rx={700} ry={220} fill="url(#sglow)" opacity={0.2} />
+    </g>
+  ),
+  // inside the ISS — equipment racks along curved walls, a small round Earth-glimpse window, cable
+  // handholds — commanding the station, the day-to-day of Level 06
+  stationOps: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#e8ecef" />
+      <path d="M 0 0 Q 960 -80 1920 0 L 1920 1080 Q 960 1160 0 1080 Z" fill="#dde3e8" opacity={0.5} />
+      {[0, 1].map((side) => (
+        <g key={side} transform={side ? 'translate(1920,0) scale(-1,1)' : ''}>
+          <rect x={40} y={140} width={340} height={760} fill="#c9d3d8" stroke={INK} strokeWidth={4} opacity={0.85} />
+          {Array.from({length: 8}).map((_, i) => <rect key={i} x={64} y={170 + i * 88} width={292} height={64} fill="#eef2f6" stroke={INK} strokeWidth={2} opacity={0.7} />)}
+        </g>
+      ))}
+      <circle cx={960} cy={300} r={80} fill="#05060a" stroke={PAPERC} strokeWidth={8} />
+      <path d="M 900 340 Q 960 300 1020 340 L 1020 380 Q 960 350 900 380 Z" fill="#2f7fd6" opacity={0.8} />
+      {Array.from({length: 6}).map((_, i) => <path key={i} d={`M ${500 + i * 160} 200 Q ${520 + i * 160} ${260 + Math.sin(frame * 0.03 + i) * 20} ${540 + i * 160} 320`} fill="none" stroke={INK} strokeWidth={2} opacity={0.3} />)}
+      <rect x={0} y={940} width={1920} height={140} fill="#c2ccd6" /><line x1={0} y1={940} x2={1920} y2={940} stroke={INK} strokeWidth={4} />
+      <ellipse cx={960} cy={500} rx={600} ry={260} fill="url(#sglow)" opacity={0.15} />
+    </g>
+  ),
+  // the lunar surface — black sky, Earth hanging small and blue, grey cratered regolith, a footprint
+  // trail, a planted flag — the cold open + the apex + its loop-close payoff, THE master reused anchor
+  lunarSurface: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={620} fill="#05060a" />
+      {Array.from({length: 60}).map((_, i) => {const x = rnd(i * 1.9) * 1920; const y = rnd(i * 3.1) * 560;
+        return <circle key={i} cx={x} cy={y} r={rnd(i) * 1.5 + 0.4} fill="#fff" opacity={0.4 + rnd(i * 4) * 0.5} />;})}
+      <circle cx={1560} cy={200} r={70} fill="#2f7fd6" />
+      <path d="M 1500 170 Q 1560 150 1620 190 Q 1580 230 1520 210 Z" fill="#fff" opacity={0.6} />
+      <ellipse cx={1560} cy={200} rx={110} ry={110} fill="url(#sglow)" opacity={0.35} />
+      <rect x={0} y={620} width={1920} height={460} fill="#b7ada0" /><line x1={0} y1={620} x2={1920} y2={620} stroke={INK} strokeWidth={3} opacity={0.5} />
+      {Array.from({length: 10}).map((_, i) => {const x = rnd(i * 2.3) * 1920; const y = 660 + rnd(i * 4.1) * 380; const r = 14 + rnd(i * 5) * 30;
+        return <ellipse key={i} cx={x} cy={y} rx={r} ry={r * 0.4} fill="#a49a8c" stroke={INK} strokeWidth={2} opacity={0.5} />;})}
+      {Array.from({length: 6}).map((_, i) => <ellipse key={i} cx={700 + i * 90} cy={940 - i * 4} rx={16} ry={9} fill="#8f8578" opacity={0.5} />)}
+      <line x1={1300} y1={1000} x2={1300} y2={760} stroke={INK} strokeWidth={5} />
+      <path d="M 1300 760 L 1440 780 L 1300 820 Z" fill="#c0392b" stroke={INK} strokeWidth={3} />
+      <ellipse cx={960} cy={780} rx={700} ry={200} fill="url(#sglow)" opacity={0.15} />
+    </g>
+  ),
 };
 // tiny helper so inline math reads cleanly above
 function y_(v: number) {return v;}
@@ -3265,4 +3412,64 @@ const BRATVA = {
       fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA, ...MONGOL, ...GLADIATOR, ...BRATVA};
+// Space pack (astronaut — applicant -> ASCAN -> unassigned -> ISS crew member -> veteran/spacewalker
+// -> Expedition Commander -> Chief Astronaut Office -> Artemis-era lunar commander). 8 new bespoke
+// backdrops (this is the first off-world topic; nothing existing covers zero-g/vacuum/vehicle
+// interiors). lunarSurface doubles as the cold open, the apex, and the loop-close payoff. cupolaEarth
+// is the recurring sensory-anchor beat (first sight of Earth, re-triggered at every level-up).
+const SPACE = {
+  // the T-38 supersonic jet cockpit — ASCAN flight training, a named instructor in the back seat
+  jetTrain: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="t38Cockpit" bg="url(#swarm)"
+      fig={{pose: A.sit(f), x: 900, y: 860, scale: 1.2, view: 'front', expr: blendExpr(FACES.earnest, FACES.focused, t)}}
+      extras={[{pose: A.sit(f + 15), x: 1320, y: 800, scale: 1.0, view: 'front', pal: DIM, expr: FACES.cold}]} />;},
+  // the Neutral Buoyancy Lab — spacewalk training in the world's largest indoor pool, a submerged
+  // ISS mockup, rising bubbles
+  poolTrain: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="nbl" bg="url(#sclean)" figBehind
+      fig={{pose: A.stand(f), x: 960, y: 760, scale: 1.15, view: 'front', expr: blendExpr(FACES.focused, FACES.hardened, t)}} />;},
+  // the launch capsule — strapped into the seat, the porthole flame, the danger beat
+  launchSeat: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="capsuleLaunch" bg="url(#swarm)"
+      fig={{pose: A.sit(f), x: 960, y: 840, scale: 1.25, view: 'front', expr: blendExpr(FACES.worried, FACES.hardened, t)}} />;},
+  // the ISS Cupola — the recurring master anchor: first sight of Earth, re-triggered every level-up
+  cupolaView: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="cupolaEarth" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 960, y: 800, scale: 1.2, view: 'front', expr: blendExpr(FACES.awe, FACES.hollow, t)}} />;},
+  // outside the station on tether — the calm before the midpoint reversal
+  evaWalk: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="evaSpacewalk" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 960, y: 760, scale: 1.2, view: 'front', expr: blendExpr(FACES.focused, FACES.worried, t)}} />;},
+  // the midpoint reversal itself — the real 2013 helmet water-intrusion type of emergency. Shares
+  // evaWalk's backdrop art but is a distinct template/staging (zoomed tight on the visor, a cooler
+  // gradient) so it never reads as the same picture as the calm EVA beat, per the
+  // arenaSand/rudisCeremony shared-backdrop-distinct-staging pattern.
+  evaEmergency: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="evaSpacewalk" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 960, y: 820, scale: 1.55, view: 'front', expr: blendExpr(FACES.worried, FACES.hollow, t)}} />;},
+  // Mission Control — the ground side, the institutional-math beat (grounding who flies, who's cut)
+  controlRoom: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="missionControl" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.25, view: 'front', expr: blendExpr(FACES.cold, FACES.hardened, t)}}
+      extras={[{pose: A.sit(f), x: 1400, y: 900, scale: 0.9, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+  // inside the ISS — commanding the station, a crewmate nearby, Level 06 day-to-day
+  stationCommand: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="stationOps" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 900, y: 840, scale: 1.25, view: 'front', expr: blendExpr(FACES.hardened, FACES.cold, t)}}
+      extras={[{pose: A.stand(f + 10), x: 1340, y: 850, scale: 1.0, view: 'profile', facing: -1, pal: DIM, expr: FACES.exhausted}]} />;},
+  // the lunar surface — the flash-forward cold open, the Artemis-era apex, its loop-close payoff
+  moonSurface: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="lunarSurface" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.awe, FACES.hollow, t)}} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA, ...MONGOL, ...GLADIATOR, ...BRATVA, ...SPACE};
