@@ -1,22 +1,22 @@
 {
   "thumb": {
-    "kicker": "EVERY LEVEL OF AN",
-    "line1": "ASTRONAUT",
+    "kicker": "EVERY RANK IN THE",
+    "line1": "OTTOMAN EMPIRE",
     "line2": "",
-    "tag": "MOST NEVER FLY",
-    "archetype": "pov",
-    "big": "$93B",
-    "before": "ENGINEER",
-    "after": "COMMANDER",
+    "tag": "OVERDUE",
+    "archetype": "ladder",
+    "big": "OVERDUE",
+    "before": "PEASANT BOY",
+    "after": "SADRAZAM",
     "expr": "shock",
-    "povline": "YOU MIGHT NEVER",
-    "keyword": "GROUNDED",
-    "setting": "evaEmergency",
-    "question": "WHO GETS GROUNDED?",
-    "mood": "danger",
-    "costume": "field",
-    "word": "GROUNDED",
-    "prop": "rocket"
+    "povline": "YOU BECOME",
+    "keyword": "OVERDUE",
+    "setting": "sultanAudience",
+    "question": "WHO'S WATCHING THE GRILLE?",
+    "mood": "royal",
+    "costume": "royal",
+    "word": "OVERDUE",
+    "prop": "vault"
   },
-  "topic": "astronaut"
+  "topic": "ottoman_empire"
 }

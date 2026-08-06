@@ -2098,6 +2098,96 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       <ellipse cx={960} cy={780} rx={700} ry={200} fill="url(#sglow)" opacity={0.15} />
     </g>
   ),
+  // --- Ottoman Empire pack (ottoman_empire) ---
+  // a Balkan hill village — the family's stone-and-timber house, a small church spire on the far
+  // ridge — Level 1, the named want, the origin AND the devshirme-collection restage AND the loop
+  // callback (the same village, generations later)
+  balkanVillage: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#spaper)" />
+      <Ridges baseY={600} layers={3} seed={41} roll={0.75} amp={65} tint={PAPERC} trees={6} treeKind="pine" />
+      <rect x={0} y={760} width={1920} height={320} fill={FLOOR} /><line x1={0} y1={760} x2={1920} y2={760} stroke={INK} strokeWidth={5} />
+      <rect x={220} y={560} width={360} height={200} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <path d="M 200 560 L 400 460 L 600 560 Z" fill="#8a6a42" stroke={INK} strokeWidth={4} />
+      <rect x={330} y={640} width={80} height={120} fill="#4a4038" stroke={INK} strokeWidth={3} />
+      <rect x={250} y={600} width={50} height={50} fill="#cfe6f2" stroke={INK} strokeWidth={2.5} />
+      <g transform="translate(1540 520)" opacity={0.8}>
+        <rect x={-20} y={0} width={40} height={140} fill={PAPERC} stroke={INK} strokeWidth={3} />
+        <path d="M -20 0 L 0 -60 L 20 0 Z" fill="#7a8b98" stroke={INK} strokeWidth={3} />
+        <line x1={0} y1={-60} x2={0} y2={-84} stroke={INK} strokeWidth={3} />
+        <line x1={-10} y1={-72} x2={10} y2={-72} stroke={INK} strokeWidth={3} />
+      </g>
+      <ellipse cx={960} cy={650} rx={500} ry={140} fill="url(#sglow)" opacity={0.3} />
+    </g>
+  ),
+  // the acemi/Janissary barracks courtyard — an arcade of domed barracks buildings, and THE
+  // sensory-anchor prop: the regimental cauldron (kazan-i-serif) with steam rising — training,
+  // corps identity, every officer-command beat; re-staged (same art, different Stage) for the mutiny
+  janissaryBarracks: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#swarm)" />
+      <rect x={0} y={740} width={1920} height={340} fill={FLOOR} /><line x1={0} y1={740} x2={1920} y2={740} stroke={INK} strokeWidth={5} />
+      {Array.from({length: 7}).map((_, i) => {const x = i * 280; return (
+        <g key={i} opacity={0.85}>
+          <rect x={x} y={420} width={220} height={320} fill={PAPERC} stroke={INK} strokeWidth={3.5} />
+          <path d={`M ${x - 10} 420 Q ${x + 110} 360 ${x + 230} 420`} fill="none" stroke={INK} strokeWidth={3} />
+          <circle cx={x + 110} cy={400} r={30} fill={PAPERC} stroke={INK} strokeWidth={3} opacity={0.85} />
+        </g>
+      );})}
+      <g transform="translate(1500 900)">
+        <path d="M -90 -20 Q -90 60 0 60 Q 90 60 90 -20 Z" fill="#4a4038" stroke={INK} strokeWidth={4} />
+        <ellipse cx={0} cy={-20} rx={90} ry={22} fill="#5a4a38" stroke={INK} strokeWidth={4} />
+        <path d={`M -20 -50 q ${8 + Math.sin(frame * 0.15) * 8} -30 -6 -50`} fill="none" stroke="#c9b98f" strokeWidth={5} opacity={0.5} />
+        <path d={`M 20 -50 q ${-8 + Math.sin(frame * 0.17) * 8} -34 6 -54`} fill="none" stroke="#c9b98f" strokeWidth={5} opacity={0.4} />
+      </g>
+      <ellipse cx={960} cy={560} rx={600} ry={180} fill="url(#sglow)" opacity={0.3} />
+    </g>
+  ),
+  // the Imperial Council chamber (Divan-i Humayun) — a low U-shaped divan bench, a domed ceiling,
+  // and the VERIFIED Tower of Justice grille high on the far wall, a dim shadow behind it — no
+  // vizier ever knows, in the moment, whether the throne is watching. Level 07's share-worthy beat.
+  divanChamber: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#fdf3da" />
+      <path d="M 0 340 Q 960 120 1920 340" fill="none" stroke={INK} strokeWidth={4} opacity={0.5} />
+      {Array.from({length: 9}).map((_, i) => {const x = 140 + i * 210; return <line key={i} x1={960} y1={180} x2={x} y2={360} stroke={INK} strokeWidth={2} opacity={0.3} />;})}
+      <rect x={0} y={760} width={1920} height={320} fill={FLOOR} /><line x1={0} y1={760} x2={1920} y2={760} stroke={INK} strokeWidth={5} />
+      <rect x={560} y={800} width={800} height={40} fill="#8a6a42" stroke={INK} strokeWidth={3.5} />
+      <rect x={560} y={760} width={800} height={40} fill="#c0392b" opacity={0.4} />
+      <g transform="translate(1560 260)">
+        <rect x={-70} y={-90} width={140} height={180} fill="#3a3444" stroke={INK} strokeWidth={4} opacity={0.9} />
+        {Array.from({length: 6}).map((_, i) => <line key={i} x1={-70 + i * 24} y1={-90} x2={-70 + i * 24} y2={90} stroke={GOLD} strokeWidth={2} opacity={0.55} />)}
+        {Array.from({length: 6}).map((_, i) => <line key={i} x1={-70} y1={-90 + i * 36} x2={70} y2={-90 + i * 36} stroke={GOLD} strokeWidth={2} opacity={0.55} />)}
+        <ellipse cx={0} cy={0} rx={30} ry={60} fill="#0d0b10" opacity={0.35 + 0.15 * Math.sin(frame * 0.05)} />
+      </g>
+      <ellipse cx={960} cy={520} rx={620} ry={200} fill="url(#sglow)" opacity={0.3} />
+    </g>
+  ),
+  // the sultan's audience hall — a gold throne on its dais, heavy drapery, and a small silk-cord
+  // case set on a low cushion in the foreground — the MID-ACTION cold open, the Grand Vizier apex,
+  // and the loop-close payoff (VERIFIED: strangulation, never blood, was the custom for high office)
+  sultanAudience: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#2a1f22" />
+      <rect x={0} y={780} width={1920} height={300} fill="#1e1618" /><line x1={0} y1={780} x2={1920} y2={780} stroke="#000" strokeWidth={3} opacity={0.5} />
+      {[220, 1700].map((x) => (
+        <g key={x} opacity={0.85}>
+          <rect x={x - 30} y={200} width={60} height={580} fill="#3a2a2c" stroke={INK} strokeWidth={3} />
+          <rect x={x - 46} y={170} width={92} height={34} fill="#3a2a2c" stroke={INK} strokeWidth={3} />
+        </g>
+      ))}
+      <path d="M 700 160 Q 960 260 1220 160 L 1220 500 Q 960 440 700 500 Z" fill="#5c1f24" opacity={0.85} stroke={INK} strokeWidth={3} />
+      <rect x={860} y={560} width={200} height={220} fill={GOLD} stroke={INK} strokeWidth={4} />
+      <path d="M 860 560 L 890 400 L 1030 400 L 1060 560 Z" fill={GOLD} stroke={INK} strokeWidth={4} />
+      <rect x={740} y={760} width={440} height={40} fill="#3a2a2c" stroke={INK} strokeWidth={3} />
+      <g transform="translate(1360 900)">
+        <ellipse cx={0} cy={20} rx={60} ry={16} fill="#5c1f24" stroke={INK} strokeWidth={3} opacity={0.8} />
+        <rect x={-34} y={-16} width={68} height={34} rx={4} fill="#efe6cf" stroke={INK} strokeWidth={3} />
+        <line x1={-10} y1={0} x2={10} y2={0} stroke="#c0392b" strokeWidth={3} opacity={0.7} />
+      </g>
+      <ellipse cx={960} cy={620} rx={460} ry={200} fill="url(#sglow)" opacity={0.35} />
+    </g>
+  ),
 };
 // tiny helper so inline math reads cleanly above
 function y_(v: number) {return v;}
@@ -3472,4 +3562,45 @@ const SPACE = {
       fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.awe, FACES.hollow, t)}} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA, ...MONGOL, ...GLADIATOR, ...BRATVA, ...SPACE};
+// Ottoman Empire pack (ottoman_empire — Balkan peasant boy -> acemi oglan -> Janissary -> corbaci ->
+// sanjakbey -> beylerbey/pasha -> vizier -> Grand Vizier/Sadrazam). 4 new bespoke backdrops (a 5th
+// template, cauldronRevolt, deliberately REUSES janissaryBarracks's exact backdrop art under a
+// distinct staging, per the arenaSand/rudisCeremony and evaWalk/evaEmergency shared-backdrop
+// pattern). The rest of the ladder composes from ROMAN's legionDrill/shieldWall/warCouncil/
+// praetorians, SAMURAI's merchantHouse/lordAudience/keepTop, DYNASTY's portraitHall, and universal
+// fileWall/dinner — deliberately avoiding modern-coded universal templates (desk/deskSilhouette/
+// boardroomNotes/boardroomHead/revolvingDoor/warRoom/emptyChair all read anachronistic here).
+const OTTOMAN = {
+  // the Balkan hill village — Level 1's named want, the devshirme-collection restage, the loop callback
+  balkanVillage: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="balkanVillage" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.worried, t)}} />;},
+  // the barracks courtyard — THE recurring sensory anchor (the regimental cauldron), training through
+  // corbaci command
+  janissaryBarracks: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="janissaryBarracks" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.hardened, t)}} />;},
+  // the cauldron overturned — the MIDPOINT REVERSAL (the VERIFIED 1622 mutiny that deposed and killed
+  // Sultan Osman II). Shares janissaryBarracks' exact backdrop art but a cooler, chaotic staging with
+  // a dim massing crowd, per the arenaSand/rudisCeremony shared-backdrop-distinct-staging pattern.
+  cauldronRevolt: () => {const f = useCurrentFrame();
+    return <Stage backdrop="janissaryBarracks" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 900, y: 906, scale: 1.4, view: 'front', expr: FACES.hollow}}
+      extras={[{pose: A.stand(f + 12), x: 1360, y: 900, scale: 1.1, view: 'profile', facing: -1, pal: DIM, face: false},
+               {pose: A.stand(f + 24), x: 1480, y: 906, scale: 1.0, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+  // the Divan chamber — the Tower of Justice grille, Level 07's share-worthy "someone may be watching" beat
+  divanChamber: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="divanChamber" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.focused, FACES.cold, t)}} />;},
+  // the sultan's audience hall — the MID-ACTION cold open, the Grand Vizier apex, and the loop-close
+  // payoff (the same silk-cord case, a different name on it)
+  sultanAudience: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="sultanAudience" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA, ...MONGOL, ...GLADIATOR, ...BRATVA, ...SPACE, ...OTTOMAN};

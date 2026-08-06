@@ -1,323 +1,306 @@
 #!/usr/bin/env python3
-"""Your Life as an Astronaut at Every Level — POV doodle build, ~12 min.
-Grounded in docs/research/astronaut.md (web-verified Aug 2026: NASA.gov, NASA OIG reports,
-SpacePolicyOnline, Space.com, the NASA Mishap Investigation Board's Parmitano coverage). Rank format
-(per topic_queue.json: "Your Life as an Astronaut at Every Level"). Second-person present-tense POV:
-the viewer IS a composite civilian-engineer-turned-astronaut climbing the REAL NASA ladder — Applicant
-(VERIFIED: 8,000+ applied to the 2024 cycle, 10 chosen) -> Astronaut Candidate/ASCAN (2 years at
-Johnson Space Center: T-38 jets, the Neutral Buoyancy Lab, GS-12 base pay $100,287/yr) -> Astronaut
-(unassigned, a real 5-10+ year wait, some never fly) -> First flight/ISS crew member (a Crew Dragon
-seat costs NASA ~$55M) -> Veteran/EVA specialist (the midpoint reversal is grounded in the REAL July
-16, 2013 Parmitano helmet water-intrusion incident -- 1-1.5+ liters, NASA's own Mishap Investigation
-Board findings -- happening here to a FICTIONAL COMPOSITE protagonist, not a Parmitano biography) ->
-Expedition Commander (the ISS program runs partner nations an estimated ~$150B) -> Chief Astronaut
-Office (decides who flies, grounds people for medical reasons -- the moral-cost beat with no villain)
--> an Artemis-era lunar commander, the apex (grounded in the real, repeatedly-slipped Artemis program:
-Artemis II's real crewed lunar FLYBY, April 2026; NASA's own current plan pushes an actual crewed
-LANDING to Artemis III/IV-V, 2027-2028; no human has stood on the Moon since Apollo 17, Dec 1972 --
-this protagonist's landing is an explicitly LATER, still-hypothetical mission, not a claim this has
-already happened). Real mechanics woven in: the T-38 supersonic-jet fatality risk astronaut candidates
-train under (VERIFIED historical type of risk, e.g. the 1966 Elliot See/Charles Bassett crash --
-referenced only as general background texture, never attributed to this episode's fictional mentor as
-if he were a specific real astronaut); the real post-EVA "hot metal/gunpowder" ozone smell (NASA's own
-explanation, Dec 2021); the real Apollo-astronaut-reported "spent gunpowder" smell of lunar dust
-(Aldrin, Schmitt, Duke). Voss (mentor), Sable Chen (rival), Mara and Junie (family), and Petrova (the
-unresolved thread) are a FICTIONAL COMPOSITE -- no real astronaut is depicted as this protagonist.
+"""Your Life as Every Rank in the Ottoman Empire — POV doodle build, ~12 min.
+Grounded in docs/research/ottoman_empire.md (web-verified Aug 2026: osmanlitarihi.tr, realmofhistory.com,
+military-history.fandom.com/Wikipedia "Janissary", Wikipedia "Timar", hurriyetdailynews.com, belleten.gov.tr,
+topkapipalace.com.tr, listverse.com/smithsonianmag.com). History format (per topic_queue.json: "Your Life
+as Every Rank in the Ottoman Empire"). Second-person present-tense POV: the viewer IS a composite
+devshirme-collected Balkan peasant boy climbing the REAL, documented Ottoman "kul" (slave-of-the-sultan)
+pipeline — Balkan peasant boy -> Acemi oğlan (VERIFIED: devshirme, ~1 boy per 40 households, ages
+roughly 8-20) -> Janissary (VERIFIED: 3 akçe/day entry wage + 12 akçe/quarter cloth + 30 akçe weapons;
+forbidden to marry) -> Çorbacı (VERIFIED: the literal "soup-maker" officer title; VERIFIED 10 akçe/day
+cavalry-track promotion floor; the regimental cauldron/kazan-i-şerif and its overturning as the formal
+signal of mutiny) -> Sanjakbey (VERIFIED ziamet revenue band, 20,000-99,999 akçe/yr) -> Beylerbey/Pasha
+(VERIFIED hass revenue band, 100,000+ akçe/yr, three horsetails) -> Vizier (a Divan-ı Hümayun seat; the
+VERIFIED Tower of Justice grille, Kafes-i Müşebbek, through which the sultan or Valide Sultan could watch
+unseen) -> Grand Vizier/Sadrazam (VERIFIED: held the sultan's seal; VERIFIED apex-cost number, 44 of 284
+Grand Viziers executed on direct sultan's order across Ottoman history, 11 more dead in rebellions). The
+midpoint reversal is grounded in the REAL, documented 1622 Janissary mutiny that deposed and killed
+17-year-old Sultan Osman II — the first Ottoman sultan ever killed by his own corps — happening here
+around a FICTIONAL COMPOSITE protagonist and mentor, not a claim either is a specific real historical
+figure. The law of fratricide and the bostancıbaşı (head-gardener executioner) are referenced only as
+verified background texture. You, Elena, Davud Ağa, and Yusuf are a FICTIONAL COMPOSITE; no real Ottoman
+figure (Osman II, Mehmed II, Sokollu Mehmed Pasha) is depicted as this episode's protagonist.
 
-SPINE: THE INVERTED SPINE, ASTRONAUT-FLAVORED (grounded, per research, already validated on
-soldier/spy -- see [[inverted-spine-validated]] in ops/improvements.json). Personal pay stays a fixed,
-capped federal GS salary literally the whole career (~$100K at ASCAN, ~$152,258/yr as a veteran and
-still at the apex) while the PROGRAM dollars moving around the astronaut explode at every level: a
-single seat ($55M) -> the station program (~$150B) -> a single Artemis launch (~$4.2B, NASA
-OIG-verified) -> the whole Artemis campaign (~$93B through FY2025, NASA OIG's own headline figure).
-The joke lands literally at the apex overlay: $93B moving around you, and your paycheck is still a
-number the federal schedule sets, not you.
+STRUCTURAL VARIATION vs the last 2 produced (gladiator = AFTERMATH cold open / rise-then-reversal-then-
+rise / TORCH-PASSING ending; astronaut = FLASH-FORWARD cold open / dual-track-divergence / PURE CYCLICAL
+ending): this cold open is MID-ACTION — a silk-cord execution case set down in front of the protagonist,
+cut away before whose name is on it. Act two's shape is RISE-THEN-FRACTURE: the personal climb never
+reverses in rank, but the SYSTEM itself cracks at the midpoint (the corps proves it can kill its own
+sultan), which is the causal reason the protagonist is pushed out of the military track and into
+administration. The ending is CYCLICAL BUT DELIBERATELY UNRESOLVED — the loop closes on the exact same
+case from the cold open, this time confirmed as someone else's, while the episode's one deliberate
+unresolved universe thread (a sealed letter from the harem) stays sealed.
 
-STRUCTURAL VARIATION vs the last 2 produced (gladiator = AFTERMATH cold open / rise-then-reversal-
-then-rise-again / CYCLICAL-BLENDED ending; bratva = MID-ACTION cold open / rise-then-fall-then-colder-
-rise / ONE-DOOR-LEFT-OPEN ending): this cold open is FLASH-FORWARD -- the literal last chronological
-moment of the story (a boot about to touch lunar dust), cut away before the line gets said, then
-"None of this exists yet" rewinds to the actual beginning. Act two's shape is a DUAL-TRACK DIVERGENCE,
-not a fall: STATUS keeps climbing almost every level while PRESENCE (time actually spent with Mara and
-Junie) keeps falling in the opposite direction -- no single betrayal collapses the climb, the two lines
-just quietly cross. The ending is PURE CYCLICAL: the final scene is the literal same shot as the cold
-open, completed rather than reframed -- distinct from both recent endings.
-
-PROMISE -> PAYOFF LEDGER (ids below match the final relabeled t01-t33 sequence):
-  * t01 cold open (a boot about to touch the Moon, cut away before the first words)  -> RESOLVED at t33 (the boot lands, the words come)
-  * t02 promise/cost-line ("nobody warns you what wanting it costs the people who love you") -> paid across t11/t14/t17 (Mara + Junie's costs), explicitly named again at t33
-  * sensory anchor: the suit glove's wrist-lock click + the post-EVA "hot metal" smell -> introduced t07 (the click) -> first real payoff t22 (the smell, post-emergency) -> maximal payoff t33 (the same smell, now lunar dust, described without restating "smell" -- the callback engine)
-  * Mara, the named want/cost                                    -> introduced t03 -> her own sacrifice t11 -> the quarantine goodbye t14 -> present in t33's "house" line
-  * Junie, the named person                                       -> introduced t03 (age 5) -> the missed birthday t17 (age 9) -> the patched-through question t32 (age 17) -> ANSWERED implicitly at t33
-  * Commander Voss, the named mentor                               -> warns you t06 -> ages visibly t19 -> you ground him yourself t28 (the loss payoff, institutional, not a death)
-  * Sable Chen, the named rival                                    -> introduced t07 -> gets the first flight before you t13 -> taunts you at the midpoint t22 -> reunites as your ISS crewmate t25 -> becomes your Capcom, gives you the go, at the apex t31 (full-circle payoff)
-  * share-worthy facts: 8,000+ applicants/10 chosen (t04), the $55M seat (t15), the 1.5L of water (t21), 50+ years since a human last stood on the Moon (t32)
-  * PETROVA, the redacted flight-list file                         -> the ONE deliberate UNRESOLVED UNIVERSE THREAD, planted and left explicitly unresolved at t29, for a future episode
+PROMISE -> PAYOFF LEDGER (ids match the final t01-t32 sequence):
+  * t01 cold open (the silk-cord case, whose name is on it) -> RESOLVED at t32 (confirmed NOT yours, this time)
+  * t02 promise/cost-line ("wanting this costs more than anyone tells an eight-year-old") -> paid across t19/t20 (you become the one counting other families' sons) and t32
+  * sensory anchor: the wooden spoon tucked into the Janissary cap -> introduced t07 -> re-triggered t26 -> maximal payoff t32 ("the boy who was only ever fed by someone else's hand")
+  * Elena, the named person/want                                  -> introduced t03 -> the unread letter t08 -> PAID OFF at t30 (she can finally read it herself)
+  * Davud Ağa, the named mentor                                    -> warns you t07 -> ages under political strain t14 -> the loss payoff (dies stopping the mutiny) t17
+  * Yusuf, the named rival                                         -> introduced t11 -> the granary/moral-cost contrast t14 -> taunts you at the midpoint t17 -> the bribery offer t21 -> his failed maneuver against you t27 -> the closing dialogue line t31
+  * share-worthy fact #1: the cauldron-mutiny mechanic -> set up t07 -> pays off for real at the VERIFIED 1622 regicide, t16/t17
+  * share-worthy fact #2: the Tower of Justice grille (someone may always be watching) -> introduced t25 -> escalates to watching YOU at t31
+  * the 44-of-284 Grand Vizier execution stat -> foreshadowed t01 and t26 -> personal arithmetic t31 -> the unresolved dread of t32
+  * THE ONE DELIBERATE UNRESOLVED UNIVERSE THREAD: the sealed letter from the harem -> planted t24 -> still sealed, still unopened, at t32
 """
 
 FPS = 30
 
 SCENES = [
-    # ---- COLD OPEN — FLASH-FORWARD, cut away before the words ----
-    dict(id="t01", level=None, template="moonSurface", gap=0.7,
-         narration=("Boot touches dust that hasn't felt one in over fifty years. Black sky, no wind "
-                    "to carry the ringing in your ears, though your chest tightens anyway — the old "
-                    "animal kind of fear that doesn't care how many checklists you passed. Houston's "
-                    "voice crackles, waiting on the first words history gets to keep. Behind the "
-                    "visor, your mouth is already open. Don't say it yet."),
-         overlay=dict(big="ONE STEP", sub="MOON HASN'T HEARD YOU YET")),
+    # ---- COLD OPEN — MID-ACTION, cut away before whose name is on the case ----
+    dict(id="t01", level=None, template="sultanAudience", gap=0.7,
+         narration=("A small silk-covered case lands on the cushion in front of you — no herald, no "
+                    "warning, just an enormous hand setting it down and stepping back. Cedar and "
+                    "rosewater fill the hall. A fountain keeps running like nothing is happening. "
+                    "Forty-four men who sat exactly here opened a case like this one and never walked "
+                    "back out. Nobody has said your name yet."),
+         overlay=dict(big="44 OF 284", sub="GRAND VIZIERS THE SULTAN STRANGLED")),
 
     # ---- PROMISE + COST-LINE ----
-    dict(id="t02", level=None, template="desk",
-         narration=("None of this exists yet. Right now you're an aerospace engineer at a folding "
-                    "desk, running failure analysis on somebody else's rocket, sending applications "
-                    "into a silence that answers maybe one time in eight thousand. You want this so "
-                    "badly it embarrasses you. Nobody warns you what wanting it costs the people who "
-                    "love you."),
+    dict(id="t02", level=None, template="fileWall",
+         narration=("Rewind forty years. None of this exists yet — you're a name nobody has counted "
+                    "yet. Somewhere in Istanbul a clerk keeps a ledger of every Balkan household, "
+                    "tallying which ones owe the empire a son this cycle. One boy for every forty "
+                    "families. You want to matter to someone bigger than a village. Wanting that costs "
+                    "more than anyone tells an eight-year-old."),
          overlay=None),
 
-    # ---- LEVEL 01 · APPLICANT ----
-    dict(id="t03", level="LEVEL 01  ·  APPLICANT", template="dinner",
-         narration=("Mara clears two plates while Junie draws rockets in crayon at the table's edge, "
-                    "five years old and already certain you work at NASA. You don't correct her. The "
-                    "application sits open on a laptop you close every night before dinner, like "
-                    "closing it makes the odds better. Eight thousand people want your seat. You "
-                    "haven't told her that part."),
+    # ---- LEVEL 01 · A BALKAN VILLAGE ----
+    dict(id="t03", level="LEVEL 01  ·  A BALKAN VILLAGE", template="balkanVillage",
+         narration=("Your sister Elena is seven, missing her front teeth, and insists on carrying "
+                    "water in a jug too big for her arms because you always let her win the argument. "
+                    "The house has one good coat between three of you, and a woodsmoke smell that "
+                    "never leaves your clothes. Church bells count the hours here, not money. You have "
+                    "never once eaten meat on a weekday."),
          overlay=None),
-    dict(id="t04", level=None, template="fileWall",
-         narration=("Boxes of physicals, essays, flight logs, psych evaluations stacked floor to "
-                    "ceiling in a records office that smells like toner and old carpet. Somewhere in "
-                    "this pile is your file, one of more than eight thousand. NASA will choose ten. "
-                    "Lower odds than any university on earth, and nobody in this building is grading "
-                    "on a curve."),
-         overlay=dict(big="8,000+", sub="APPLICANTS. TEN GET IN.")),
-    dict(id="t05", level=None, template="podiumScene",
-         narration=("A phone call at 6 a.m., a NASA area code, and your hands shake too hard to "
-                    "answer on the first ring. Congratulations. Class of ten. Mara screams before you "
-                    "even hang up. Junie draws a rocket with your actual name on the side this time. "
-                    "You don't sleep that night — not from joy. From the sudden, physical weight of "
-                    "eight thousand people who didn't get this call."),
+    dict(id="t04", level=None, template="dinner",
+         narration=("Your mother portions the bread by weight, not by hunger, and nobody complains "
+                    "out loud about the piece smaller than yesterday's. Elena trades you her crust for "
+                    "a story instead, same as every night — the one about the sultan who lives past "
+                    "the mountains, more gold than God. You tell it easy. You've never once believed "
+                    "you'd get closer to him than that."),
          overlay=None),
+    dict(id="t05", level=None, template="fileWall",
+         narration=("A rider in a green turban reads names off a paper roll at the village well, and "
+                    "the well goes quiet in a way it never does for tax collectors. One boy for every "
+                    "forty households this cycle — the imam's ledger and the priest's ledger agree on "
+                    "the count before either man says a word to your mother. Elena's hand finds yours "
+                    "under the table that night. She doesn't ask why it's shaking."),
+         overlay=dict(big="1 IN 40", sub="HOUSEHOLDS PAY IN SONS")),
 
-    # ---- LEVEL 02 · ASTRONAUT CANDIDATE (ASCAN) ----
-    dict(id="t06", level="LEVEL 02  ·  ASTRONAUT CANDIDATE (ASCAN)", template="jetTrain",
-         narration=("Commander Alden Voss straps in behind you, a T-38's canopy sealing out Houston's "
-                    "heat. Two years of this before NASA calls you anything but a candidate — "
-                    "supersonic flight, robotics, Russian, survival school. Base pay: about what a "
-                    "mid-level engineer makes, less than you made building someone else's rocket. Voss "
-                    "keys the intercom before the runway."),
-         overlay=dict(big="$100,287/YR", sub="2 YRS BEFORE YOU QUALIFY"),
-         dialogue=dict(text="The airplane doesn't care how bad you want this. Fly it like it doesn't.")),
-    dict(id="t07", level=None, template="poolTrain",
-         narration=("Forty feet down in the Neutral Buoyancy Lab, a mockup station module drowned on "
-                    "purpose so your body can learn zero-g the hard way. The suit's gloves lock at the "
-                    "wrist with a click you'll feel in your sleep for the next two years. A sharp-eyed "
-                    "classmate named Sable Chen beats your dive time by four minutes and doesn't "
-                    "apologize for it once."),
+    # ---- LEVEL 02 · ACEMI OĞLAN ----
+    dict(id="t06", level="LEVEL 02  ·  ACEMI OĞLAN", template="balkanVillage",
+         narration=("The wagon takes four boys from three villages, and you're the only one who "
+                    "doesn't cry before the church spire disappears behind the ridge — not bravery, "
+                    "just a numbness that scares you more than crying would. An official strips you to "
+                    "check for illness, files your name in a Turkish spelling you don't recognize yet, "
+                    "and hands you a red felt cap. Elena's crust of bread is still in your pocket, "
+                    "going hard."),
          overlay=None),
-    dict(id="t08", level=None, template="controlRoom",
-         narration=("A simulator klaxon screams through a mock Mission Control, an instructor calling "
-                    "a launch-abort scenario nobody survives on paper. Voss doesn't flinch, doesn't "
-                    "raise his voice, just reads the checklist in the same flat tone he'd use for "
-                    "coffee orders. Two astronauts died in a T-38 crash decades before you were born. "
-                    "Nobody mentions it out loud. Everybody in this room already knows."),
-         overlay=None),
-    dict(id="t09", level=None, template="emptyChair",
-         narration=("A chair in the simulator bay stays empty by Friday — a classmate washed out this "
-                    "week, medically disqualified on a heart-rhythm flag nobody saw coming, gone "
-                    "without a goodbye anyone gets to properly say. Voss tells the eight of you still "
-                    "standing that finishing ASCAN guarantees exactly nothing. Some candidates in this "
-                    "room will wait a decade for a seat. Some, statistically, never fly at all."),
-         overlay=None),
-
-    # ---- LEVEL 03 · ASTRONAUT (UNASSIGNED) ----
-    dict(id="t10", level="LEVEL 03  ·  ASTRONAUT (UNASSIGNED)", template="window",
-         narration=("You pass the boards. NASA drops the word candidate from your title and adds "
-                    "nothing else. No mission. No date. Just a window office looking out at a launch "
-                    "pad you're not scheduled to stand near for years, maybe ever. The wait, it turns "
-                    "out, is its own kind of training — for patience nobody warned you was the actual "
-                    "job."),
-         overlay=dict(big="5–10 YRS", sub="SOME NEVER FLY AT ALL")),
-    dict(id="t11", level=None, template="dinner",
-         narration=("Mara turns down a promotion of her own that year — somebody has to be flexible "
-                    "enough to move to Houston on six weeks' notice if your number ever comes up, and "
-                    "it still hasn't. She never says she resents it. You've learned to hear the "
-                    "difference between what Mara says and what Mara means, mostly from the silences "
-                    "now, not the words."),
-         overlay=None),
-    dict(id="t12", level=None, template="podiumScene",
-         narration=("NASA sends unassigned astronauts out for school visits and the occasional "
-                    "Congressional budget hearing in the meantime, and you get good at both — "
-                    "practiced, warm, endlessly patient with the same question from every auditorium. "
-                    "A ten-year-old in the third row asks when you're actually going to space. You "
-                    "give her the honest answer for once: you don't know yet. She looks disappointed "
-                    "for you, not in you, which somehow lands worse than either."),
-         overlay=None),
-    dict(id="t13", level=None, template="boardroomNotes",
-         narration=("A flight director reads the next crew roster off a printed sheet in a room too "
-                    "small for the tension packed into it. Sable Chen's name comes first — six "
-                    "months, ISS, eight weeks out. Yours doesn't come at all, not this cycle, maybe "
-                    "not the next one either. She squeezes your shoulder on the way out, genuinely "
-                    "sorry, which somehow makes it worse than if she wasn't."),
-         overlay=None),
-
-    # ---- LEVEL 04 · FIRST FLIGHT — ISS CREW MEMBER ----
-    dict(id="t14", level="LEVEL 04  ·  FIRST FLIGHT", template="window",
-         narration=("Eleven months after Sable's crew leaves, your name finally clears — backup moved "
-                    "to prime after a medical scratch you try hard not to feel grateful for. "
-                    "Quarantine starts two weeks out, glass between you and Mara, glass between you "
-                    "and an eight-year-old palm pressed flat against it like she can push straight "
-                    "through if she leans hard enough. Nobody warned you goodbye would have a pane of "
-                    "glass in it."),
-         overlay=None),
-    dict(id="t15", level=None, template="launchSeat", gap=0.7,
-         narration=("Harness straps cinch tight enough to bruise, checklist chatter clipped and fast "
-                    "in your ear, a countdown you've heard in your sleep for a decade finally counting "
-                    "down for real. The capsule shudders once, twice, then the whole world turns to "
-                    "noise and gold-white flame filling the porthole. Something braced tight in your "
-                    "chest for ten years finally, violently, lets go somewhere around eight and a half "
-                    "minutes."),
-         overlay=dict(big="$55,000,000", sub="ONE SEAT. NOT YOUR SALARY.")),
-    dict(id="t16", level=None, template="cupolaView",
-         narration=("The Cupola's seven windows fill with a blue curve no photograph prepared you "
-                    "for, the whole argued-over planet turning silent and borderless underneath, no "
-                    "line drawn anywhere you can find. Somewhere down there Junie is asleep. You don't "
-                    "cry — astronauts don't, not on comm, not with the whole crew listening — but your "
-                    "throat does something it's never done before."),
-         overlay=dict(big="250 MI", sub="NO BORDERS FROM UP HERE")),
-    dict(id="t17", level=None, template="stationCommand",
-         narration=("Junie's ninth birthday happens two hundred fifty miles below a scheduled "
-                    "ten-minute call that gets bumped twice for an antenna realignment nobody can "
-                    "reschedule around a kid's cake. She's polite about it on the delayed line, too "
-                    "polite, the specific forgiving kind that costs a nine-year-old more than it "
-                    "should ever cost anyone. You float in an equipment rack afterward and don't move "
-                    "for a long while."),
-         overlay=None),
-    dict(id="t18", level=None, template="controlRoom",
-         narration=("Splashdown, quarantine again, a debrief room in Houston where a flight surgeon "
-                    "asks questions about your body you've never had to answer before — bone density, "
-                    "balance, a heart that quietly reshaped itself in microgravity without asking "
-                    "permission. Six months up, and you made it back whole. Voss is waiting outside "
-                    "with two words that don't sound like a reward at all: EVA-qualified."),
-         overlay=None),
-
-    # ---- LEVEL 05 · VETERAN / EVA SPECIALIST (midpoint zone) ----
-    dict(id="t19", level="LEVEL 05  ·  VETERAN / EVA SPECIALIST", template="poolTrain",
-         narration=("Three years and two flights later, EVA-qualified finally means the real thing — "
-                    "one more cert dive first, same pool, same drowned mockup module, except Sable's "
-                    "timing you from the surface now, and neither of you needs to prove anything to "
-                    "the other anymore. Voss watches from the gallery, slower on the stairs than he "
-                    "used to be, a fact you file away and say nothing about."),
-         overlay=None),
-    dict(id="t20", level=None, template="evaWalk", gap=1.4,
-         narration=("Two hundred fifty miles up, the airlock cycles open onto absolute black. Your "
-                    "gloves find the handrail exactly where training put it a hundred times before "
-                    "today. Wind doesn't exist out here to move anything, but the tether does, a slow "
-                    "gold arc against the Earth's blue curve below. Houston's voice goes quiet on comm "
-                    "for a stretch that feels longer than it actually is."),
-         overlay=None),
-    dict(id="t21", level=None, template="evaEmergency",
-         narration=("Cold spreads across the back of your neck first, then your ears, then your eyes "
-                    "— water, inside the helmet, no gravity to pull it anywhere but wherever it wants "
-                    "to go next. Houston's voice sharpens into instructions delivered too calmly to be "
-                    "reassuring. One and a half liters, they'll tell you after, pooling around your "
-                    "face while you count handholds back to the airlock blind, one at a time."),
-         overlay=dict(big="1.5L", sub="WATER, INSIDE YOUR HELMET")),
-    dict(id="t22", level=None, template="stationCommand",
-         narration=("The helmet comes off in the airlock to a smell like a gun just fired inside a "
-                    "furnace — hot metal, seared and sharp, atomic oxygen reacting the second real air "
-                    "hits the suit again after hours in vacuum. You're shaking, badly, trying hard to "
-                    "hide it under a level voice. Sable isn't buying the performance for a second."),
+    dict(id="t07", level=None, template="janissaryBarracks",
+         narration=("Barracks çorbacı Davud Ağa claims eleven of you before the others even get names "
+                    "assigned, and his first lesson has nothing to do with a sword. The regimental "
+                    "cauldron simmers day and night in the yard — mutton fat, woodsmoke, the smell "
+                    "that means home for the rest of your life starting tonight. He tucks a wooden "
+                    "spoon into your new cap himself, the corps' oldest mark of belonging to no one "
+                    "else."),
          overlay=None,
-         dialogue=dict(text="You scared everyone but yourself out there. Don't do that again.")),
-
-    # ---- LEVEL 06 · MISSION / EXPEDITION COMMANDER ----
-    dict(id="t23", level="LEVEL 06  ·  MISSION / EXPEDITION COMMANDER", template="cupolaView",
-         narration=("Two more flights and a promotion nobody throws a party for: Expedition "
-                    "Commander, responsible for five other lives and a station that's cost its "
-                    "partner nations something like a hundred fifty billion dollars to keep in orbit "
-                    "this long. The Cupola view hasn't changed one window of it in all these years. "
-                    "You have. It reads less like awe now, more like inventory."),
-         overlay=dict(big="$150B", sub="THE STATION IS YOURS NOW")),
-    dict(id="t24", level=None, template="boardroomNotes",
-         narration=("A crewmate's blood pressure crashes mid-checkup, three days from real help by "
-                    "any honest measure out here. You run the emergency protocol from memory, voice "
-                    "flat, hands steady — steady in a way that would have scared you seven years ago, "
-                    "back when steady was still something you were faking every single day. Command, "
-                    "it turns out, is just fear rehearsed until it stops looking like fear."),
-         overlay=None),
-    dict(id="t25", level=None, template="dinner",
-         narration=("Sable rotates up eight months into your command, and the two of you eat "
-                    "rehydrated lasagna out of foil pouches like it's the best meal either of you has "
-                    "had all year — which, this far from a real kitchen, it honestly might be. She "
-                    "doesn't mention the water incident. Neither do you. Some things a crew learns to "
-                    "carry instead of saying out loud, year after year, flight after flight."),
+         dialogue=dict(text="The cauldron feeds you now. Everything it gives you, it can also take back.")),
+    dict(id="t08", level=None, template="legionDrill",
+         narration=("Drill starts before sunrise and doesn't stop for weather, blistered palms, or the "
+                    "boy three files down who faints twice in one week and disappears by dinner. "
+                    "Janissaries don't marry, don't grow a beard, don't own land — the corps is "
+                    "legally your whole family now, married to a cauldron instead of a wife. You write "
+                    "Elena a letter you're not sure will ever reach a girl who can't read it herself."),
          overlay=None),
 
-    # ---- LEVEL 07 · CHIEF ASTRONAUT OFFICE ----
-    dict(id="t26", level="LEVEL 07  ·  CHIEF ASTRONAUT OFFICE", template="controlRoom",
-         narration=("Back on the ground for good this time, a desk with your name on the door and a "
-                    "title that decides who flies next: Chief Astronaut Office. A single Artemis "
-                    "launch runs the program something like four point two billion dollars. You don't "
-                    "sign off on the money. You sign off on the people it's spent on, and that's by "
-                    "far the heavier signature to put your name to."),
-         overlay=dict(big="$4.2B", sub="ONE LAUNCH, NOT YOURS")),
-    dict(id="t27", level=None, template="podiumScene",
-         narration=("Part of the job nobody mentions when they hand you the title: you make the 6 "
-                    "a.m. calls now, the ones that turn an overnight of waiting into a career that "
-                    "actually starts. Ten names get called this cycle, out of another eight thousand "
-                    "who don't. You remember exactly how your own call sounded on the other end of "
-                    "that line, and you try, every time, to sound like that — not like the desk you're "
-                    "calling from."),
+    # ---- LEVEL 03 · JANISSARY (minute-3 spectacle) ----
+    dict(id="t09", level="LEVEL 03  ·  JANISSARY", template="siegeWalls", gap=0.7,
+         narration=("Your first campaign is a fortress on the Danube that won't fall quietly — cannon "
+                    "smoke rolling low over the ditch, the ladder crew ahead of you screaming a name "
+                    "that stops being a word by the third try. Davud Ağa's hand closes on your collar "
+                    "before you can climb after them, hard enough to bruise, and shoves you flat half "
+                    "a second before the wall answers with grapeshot. Somebody else's blood is warm "
+                    "across your face."),
          overlay=None),
-    dict(id="t28", level=None, template="emptyChair",
-         narration=("Voss's flight physical flags a heart irregularity nobody, including him, saw "
-                    "coming. The decision sits on your desk needing exactly one signature — yours, no "
-                    "villain anywhere in the paperwork, just a number on a printout ending a "
-                    "thirty-year career before it's ready to end. He shakes your hand after. Doesn't "
-                    "argue. That's somehow the part you can't stop replaying at night."),
-         overlay=dict(big="GROUNDED", sub="MEDICALLY, NOT BY CHOICE")),
-    dict(id="t29", level=None, template="fileWall",
-         narration=("A file marked Petrova sits in the corner of your desk for a week before you "
-                    "finally open it — a candidate quietly pulled from the flight list eighteen "
-                    "months ago, reason redacted even to you, the office's highest-ranking astronaut. "
-                    "Nobody above your pay grade will explain it. You close the file, unresolved, and "
-                    "put it back exactly where you found it, same corner, same silence."),
+    dict(id="t10", level=None, template="janissaryBarracks",
+         narration=("Three akçe a day, paid after the siege — your first wage, plus twelve akçe for "
+                    "the quarter's cloth and thirty for powder and shot, none of it enough to matter "
+                    "and all of it entirely yours for the first time in your life. Davud Ağa doesn't "
+                    "celebrate with you. He counts the eleven boys he claimed and finds only nine "
+                    "still breathing, and says both missing names out loud once, then never again."),
+         overlay=dict(big="3 AKÇE/DAY", sub="YOUR FIRST WAGE, ANYONE'S")),
+    dict(id="t11", level=None, template="merchantHouse",
+         narration=("Yusuf came off the same wagon as you four years ago, faster with a blade and "
+                    "colder about who it gets used on, and he's already trading a dead officer's boots "
+                    "to a bazaar broker before the man is properly buried. He offers you a cut without "
+                    "lowering his voice. You say no. He shrugs like your no costs him nothing — which, "
+                    "this early, it doesn't."),
+         overlay=None),
+    dict(id="t12", level=None, template="legionCamp",
+         narration=("Night camp after the campaign, cauldron smoke drifting low over rows of tents, "
+                    "and Davud Ağa reads the dead out loud before anyone's allowed to eat — a ritual "
+                    "older than the corps' current borders. He makes you repeat two names from a "
+                    "different orta entirely, boys you never met. Grief, in this army, is deliberately "
+                    "made everyone's job, not just the ones who loved them."),
          overlay=None),
 
-    # ---- LEVEL 08 · ARTEMIS-ERA COMMANDER (apex) ----
-    dict(id="t30", level="LEVEL 08  ·  ARTEMIS-ERA COMMANDER", template="launchSeat", gap=0.7,
-         narration=("NASA offers you the seat nobody in the office thought they'd actually give you: "
-                    "commander, the next Artemis crew, an actual lunar landing this time, not another "
-                    "flyby. The whole campaign will run something like ninety-three billion dollars by "
-                    "the time it's finished, spread across a decade of hardware and delays. Your own "
-                    "paycheck stays exactly where the federal pay schedule says it should. Some "
-                    "inversions never stop being funny."),
-         overlay=dict(big="$93B", sub="STILL $152,258 A YEAR")),
-    dict(id="t31", level=None, template="controlRoom",
-         narration=("Sable's voice is the one on comm now, Capcom for this launch, the two of you "
-                    "circling all the way back to where a pool and a stopwatch first put you against "
-                    "each other twenty years ago. She reads the final go/no-go poll the way she used "
-                    "to read a dive time — flat, fast, no room left for doubt of any kind."),
-         overlay=None,
-         dialogue=dict(text="Go for landing. Don't waste it.")),
-    dict(id="t32", level=None, template="launchSeat",
-         narration=("The lander shudders through final descent, alarms chirping status instead of "
-                    "danger this time, Houston counting steady in your ear the whole way down. A "
-                    "patched-through call breaks protocol for exactly eleven seconds — Junie, "
-                    "seventeen now, asking the exact question she asked at five, in the exact same "
-                    "voice. The connection cuts before you can answer. Some questions get their answer "
-                    "a few minutes late, not never."),
-         overlay=dict(big="50+ YEARS", sub="SINCE ANYONE STOOD HERE"),
-         dialogue=dict(text="Dad, can you see our house?")),
+    # ---- LEVEL 04 · ÇORBACI ----
+    dict(id="t13", level="LEVEL 04  ·  ÇORBACI", template="janissaryBarracks",
+         narration=("Ten akçe a day now, an orta of a hundred men, and a title that translates, "
+                    "literally, to a joke a hundred years of soldiers would laugh you out of the yard "
+                    "for not knowing: soup-maker. You command a cauldron before you command men, in "
+                    "this corps — feed them right and they follow you into cannon fire. Davud Ağa "
+                    "salutes you first, before anyone else does, and means it."),
+         overlay=dict(big="10 AKÇE/DAY", sub="AN ORTA OF 100 MEN")),
+    dict(id="t14", level=None, template="shieldWall",
+         narration=("A relief column you're leading takes a border town that surrendered an hour "
+                    "before you arrived, and Yusuf's men torch the granary anyway, on nobody's order "
+                    "but his own. You could report it. You watch the grain smoke instead, and file the "
+                    "silence away as a decision, not an accident — the first one of those, and nowhere "
+                    "close to the last."),
+         overlay=None),
+    dict(id="t15", level=None, template="warCouncil",
+         narration=("Word moves through every orta faster than any official order: the young sultan's "
+                    "own advisors keep him boxed away from the men, and unpaid campaigns are making an "
+                    "army do arithmetic about who it actually answers to. Davud Ağa says nothing in "
+                    "the command tent that isn't safe to repeat outside it. His silence, lately, has "
+                    "started sounding like its own kind of warning."),
+         overlay=None),
+    dict(id="t16", level=None, template="janissaryBarracks", gap=1.4,
+         narration=("Nobody eats from the cauldron the morning it happens. Word passes orta to orta "
+                    "without a single man raising his voice — the food untouched, the yard too quiet "
+                    "for a barracks this size. Davud Ağa's face is doing something new. Not fear, "
+                    "exactly. Grief, maybe, for something that hasn't finished happening yet."),
+         overlay=None),
 
-    # ---- LOOP CLOSE — pure cyclical, the cold open completed ----
-    dict(id="t33", level=None, template="moonSurface",
-         narration=("Boot touches dust that hasn't felt one in over fifty years. The words finally "
-                    "come, plain, nothing like what you rehearsed in a mirror for a decade. The fear "
-                    "that got you here goes quiet — but the birthdays watched on delay, Voss's "
-                    "grounded signature, a redacted file you never got to close, none of it un-costs "
-                    "itself just because the boots finally landed. You can't see your house from up "
-                    "here. You know exactly what it cost to leave it."),
-         overlay=dict(big="ONE STEP", sub="TAKEN.")),
+    # ---- MIDPOINT REVERSAL — the verified 1622 regicide ----
+    dict(id="t17", level=None, template="cauldronRevolt",
+         narration=("The cauldron goes over on its side and nobody sets it back up. Seventeen-year-old "
+                    "Sultan Osman II is dragged off his horse streets from here by men who used to "
+                    "salute him, and by nightfall he's dead by a bowstring — the first sultan this "
+                    "corps has ever killed instead of served. Davud Ağa goes into the crowd to stop it "
+                    "and doesn't come back out of it. Yusuf finds you after, calm, already "
+                    "recalculating."),
+         overlay=dict(big="1622", sub="A SULTAN, KILLED BY HIS OWN CORPS"),
+         dialogue=dict(text="Pick a side before the corps picks it for you.")),
+    dict(id="t18", level=None, template="fileWall",
+         narration=("Istanbul spends a week pretending it's an orderly city, but a corps that can "
+                    "strangle its own sultan isn't a safe thing for anyone to be quietly loyal to "
+                    "anymore — including you. A patron who once watched you refuse a burning granary "
+                    "files your name for a different kind of promotion: administration, not command. "
+                    "Quieter, is the idea. Nowhere in this empire turns out to actually be that."),
+         overlay=None),
+
+    # ---- LEVEL 05 · SANJAKBEY ----
+    dict(id="t19", level="LEVEL 05  ·  SANJAKBEY", template="lordAudience",
+         narration=("A district comes with the title — a modest one, a ziamet worth some twenty "
+                    "thousand akçe a year, sipahi cavalry owed to you by law, and a hall full of "
+                    "villagers kneeling for decisions you're now the one making instead of receiving. "
+                    "None of the revenue is a wage. All of it passes through your hands on its way "
+                    "somewhere above you, which is, it turns out, the actual design."),
+         overlay=dict(big="20,000 AKÇE", sub="A DISTRICT'S REVENUE, NOT A WAGE")),
+    dict(id="t20", level=None, template="balkanVillage",
+         narration=("A tax dispute sends you to a village that could be any village — stone houses, "
+                    "one good coat between families, a church spire on the far ridge — and you "
+                    "collect the levy from a mother who looks at your rank and not your face. "
+                    "Somewhere, a clerk in a ledger like the one that once took you is counting her "
+                    "sons too. You don't ask which one. You already know how that question ends."),
+         overlay=None),
+    dict(id="t21", level=None, template="merchantHouse",
+         narration=("Yusuf holds the district next to yours now, richer than the revenue on paper "
+                    "should allow, and he explains the math without embarrassment over spiced coffee: "
+                    "a broker skims the tax count, a clerk looks away for a cut, everyone above them "
+                    "assumes the shortfall is just a bad harvest year. You decline, again. He tells "
+                    "you, not unkindly, that declining gets more expensive every rank you climb."),
+         overlay=None),
+
+    # ---- LEVEL 06 · BEYLERBEY / PASHA ----
+    dict(id="t22", level="LEVEL 06  ·  BEYLERBEY / PASHA", template="keepTop",
+         narration=("Three horsetails now, planted outside a citadel that's yours to hold, a hass "
+                    "grant worth more than a hundred thousand akçe a year moving through accounts that "
+                    "still aren't your money any more than the ziamet was. From the wall, the province "
+                    "looks like something you own. It isn't. You administer it for a throne you've "
+                    "still never once stood in front of."),
+         overlay=dict(big="100,000+ AKÇE", sub="A PROVINCE. STILL NOT YOURS")),
+    dict(id="t23", level=None, template="siegeWalls",
+         narration=("A rebellion in a border sanjak puts you on the other side of a siege you once "
+                    "climbed a ladder into as somebody else's soldier. You give the order this time, "
+                    "flat, without flinching — the same order Davud Ağa once gave over your own collar "
+                    "to keep you alive. The wall falls by dusk. Nobody drags you back from the breach "
+                    "this time. Distantly, that should matter more than it does."),
+         overlay=None),
+    dict(id="t24", level=None, template="praetorians",
+         narration=("A summons arrives under the Grand Vizier's own seal: come to the capital, a "
+                    "Divan seat is open. A eunuch hands you a second letter first, unmarked, sealed in "
+                    "violet wax nobody in your household recognizes — from the harem, is all anyone "
+                    "will confirm, no further name attached. You don't open it. Something tells you "
+                    "this isn't a letter meant to be opened yet."),
+         overlay=None),
+
+    # ---- LEVEL 07 · VIZIER ----
+    dict(id="t25", level="LEVEL 07  ·  VIZIER", template="divanChamber",
+         narration=("The Divan meets under a domed ceiling and a small latticed window set high in "
+                    "the far wall — the Tower of Justice, built so the sultan, or his mother, can "
+                    "watch every session unseen. Nobody in this room ever knows, in the moment, "
+                    "whether the throne is listening. You learn to speak like it always is. Everyone "
+                    "in this hall already has."),
+         overlay=dict(big="WHO'S WATCHING?", sub="THE THRONE, OR HIS MOTHER")),
+    dict(id="t26", level=None, template="portraitHall",
+         narration=("The Grand Vizier's residence keeps a hall of portraits going back generations — "
+                    "former sadrazams, former devshirme boys same as you, four gilt frames and a fifth "
+                    "left conspicuously empty. Your host mentions it almost as small talk: forty-four "
+                    "men who've held that title were strangled on direct order of the sultan they "
+                    "served. He says it the way other men mention weather."),
+         overlay=None),
+    dict(id="t27", level=None, template="merchantHouse",
+         narration=("Yusuf spends a month building a case against your appointment out of half-true "
+                    "reports and a debt you paid off years ago, and it almost works — until a "
+                    "defterdar's audit clears you faster than anyone expected. He doesn't apologize "
+                    "when the seal comes to you instead of him. He starts, immediately and visibly, "
+                    "the arithmetic of surviving the losing side of it."),
+         overlay=None),
+    dict(id="t28", level=None, template="divanChamber",
+         narration=("The sultan's own seal comes to you on a velvet cushion, an appointment nobody in "
+                    "the Divan objected to out loud, whatever they said in private afterward. Yusuf, "
+                    "three seats down, congratulates you with a smile that doesn't reach anywhere near "
+                    "his eyes. In your coat, a campaign spoon you've carried since you were eleven "
+                    "presses flat against your ribs."),
+         overlay=None),
+
+    # ---- LEVEL 08 · GRAND VIZIER (SADRAZAM) — apex ----
+    dict(id="t29", level="LEVEL 08  ·  GRAND VIZIER (SADRAZAM)", template="sultanAudience", gap=0.7,
+         narration=("Sadrazam. The seal is yours, the armies answer to you as Serdar-i Ekrem in the "
+                    "field, and there isn't a free-born pasha in this empire who outranks a former "
+                    "slave standing exactly where you're standing now. Cedar and rosewater again — the "
+                    "same hall this all started in, except this time it's your own name the herald "
+                    "calls first, not somebody else's."),
+         overlay=dict(big="SADRAZAM", sub="THE SEAL IS YOURS")),
+    dict(id="t30", level=None, template="warCouncil",
+         narration=("You move armies with a signature and treasuries with a sentence — more real "
+                    "power over more real land than any king currently ruling in Europe. None of it is "
+                    "technically yours. A courier brings unrelated news the same week: Elena, married "
+                    "now, three children, two good coats in the house instead of one. You send money "
+                    "north. She sends back the letter you once couldn't write her — reaching a girl "
+                    "who can finally read every word of it herself."),
+         overlay=None),
+    dict(id="t31", level=None, template="divanChamber",
+         narration=("The grille sits above your own council now, and some mornings the shadow behind "
+                    "it lingers a beat longer than procedure requires. Forty-four Grand Viziers "
+                    "strangled on direct order, out of two hundred eighty-four who ever held this "
+                    "exact seal — you did the arithmetic your first week and never once said it out "
+                    "loud. Roughly one in six. By any honest measure, you're overdue."),
+         overlay=dict(big="44 OF 284", sub="ONE IN SIX. YOU'RE OVERDUE."),
+         dialogue=dict(text="Everyone up here is overdue, dostum. Some of us just haven't opened the case yet.")),
+
+    # ---- LOOP CLOSE — cyclical, deliberately unresolved ----
+    dict(id="t32", level=None, template="sultanAudience",
+         narration=("The silk-covered case again — same hall, same fountain running like nothing is "
+                    "happening, the same enormous hand setting it down without a sound. This time it "
+                    "isn't for you. It's for the pasha kneeling one cushion over, and the relief in "
+                    "your chest is uglier than any grief you can find for him. In your coat, an old "
+                    "campaign spoon presses flat against your ribs — the boy who was only ever fed by "
+                    "someone else's hand, still in here somewhere. The letter from the harem is still "
+                    "in your other pocket, still sealed."),
+         overlay=dict(big="NOT TODAY", sub="THE CASE ISN'T YOURS THIS TIME")),
 ]

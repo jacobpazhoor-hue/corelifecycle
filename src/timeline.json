@@ -2,409 +2,392 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 22382,
+  "totalFrames": 21889,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t01",
       "level": null,
       "overlay": {
-        "big": "ONE STEP",
-        "sub": "MOON HASN'T HEARD YOU YET"
+        "big": "44 OF 284",
+        "sub": "GRAND VIZIERS THE SULTAN STRANGLED"
       },
-      "template": "moonSurface",
+      "template": "sultanAudience",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 690,
+      "durationInFrames": 631,
       "gap": 0.7
     },
     {
       "id": "t02",
       "level": null,
       "overlay": null,
-      "template": "desk",
+      "template": "fileWall",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 690,
-      "durationInFrames": 553,
+      "startFrame": 631,
+      "durationInFrames": 665,
       "gap": 0.25
     },
     {
       "id": "t03",
-      "level": "LEVEL 01  \u00b7  APPLICANT",
+      "level": "LEVEL 01  \u00b7  A BALKAN VILLAGE",
       "overlay": null,
-      "template": "dinner",
+      "template": "balkanVillage",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 1243,
-      "durationInFrames": 582,
+      "startFrame": 1296,
+      "durationInFrames": 587,
       "gap": 0.25
     },
     {
       "id": "t04",
       "level": null,
-      "overlay": {
-        "big": "8,000+",
-        "sub": "APPLICANTS. TEN GET IN."
-      },
-      "template": "fileWall",
+      "overlay": null,
+      "template": "dinner",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 1825,
-      "durationInFrames": 612,
+      "startFrame": 1883,
+      "durationInFrames": 615,
       "gap": 0.25
     },
     {
       "id": "t05",
       "level": null,
-      "overlay": null,
-      "template": "podiumScene",
+      "overlay": {
+        "big": "1 IN 40",
+        "sub": "HOUSEHOLDS PAY IN SONS"
+      },
+      "template": "fileWall",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 2437,
-      "durationInFrames": 639,
+      "startFrame": 2498,
+      "durationInFrames": 683,
       "gap": 0.25
     },
     {
       "id": "t06",
-      "level": "LEVEL 02  \u00b7  ASTRONAUT CANDIDATE (ASCAN)",
-      "overlay": {
-        "big": "$100,287/YR",
-        "sub": "2 YRS BEFORE YOU QUALIFY"
-      },
-      "template": "jetTrain",
+      "level": "LEVEL 02  \u00b7  ACEMI O\u011eLAN",
+      "overlay": null,
+      "template": "balkanVillage",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 3076,
-      "durationInFrames": 833,
+      "startFrame": 3181,
+      "durationInFrames": 657,
       "gap": 0.25
     },
     {
       "id": "t07",
       "level": null,
       "overlay": null,
-      "template": "poolTrain",
+      "template": "janissaryBarracks",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 3909,
-      "durationInFrames": 607,
+      "startFrame": 3838,
+      "durationInFrames": 850,
       "gap": 0.25
     },
     {
       "id": "t08",
       "level": null,
       "overlay": null,
-      "template": "controlRoom",
+      "template": "legionDrill",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 4516,
-      "durationInFrames": 761,
+      "startFrame": 4688,
+      "durationInFrames": 705,
       "gap": 0.25
     },
     {
       "id": "t09",
-      "level": null,
+      "level": "LEVEL 03  \u00b7  JANISSARY",
       "overlay": null,
-      "template": "emptyChair",
+      "template": "siegeWalls",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 5277,
-      "durationInFrames": 758,
-      "gap": 0.25
+      "startFrame": 5393,
+      "durationInFrames": 734,
+      "gap": 0.7
     },
     {
       "id": "t10",
-      "level": "LEVEL 03  \u00b7  ASTRONAUT (UNASSIGNED)",
+      "level": null,
       "overlay": {
-        "big": "5\u201310 YRS",
-        "sub": "SOME NEVER FLY AT ALL"
+        "big": "3 AK\u00c7E/DAY",
+        "sub": "YOUR FIRST WAGE, ANYONE'S"
       },
-      "template": "window",
+      "template": "janissaryBarracks",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 6035,
-      "durationInFrames": 584,
+      "startFrame": 6127,
+      "durationInFrames": 702,
       "gap": 0.25
     },
     {
       "id": "t11",
       "level": null,
       "overlay": null,
-      "template": "dinner",
+      "template": "merchantHouse",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 6619,
-      "durationInFrames": 540,
+      "startFrame": 6829,
+      "durationInFrames": 584,
       "gap": 0.25
     },
     {
       "id": "t12",
       "level": null,
       "overlay": null,
-      "template": "podiumScene",
+      "template": "legionCamp",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 7159,
-      "durationInFrames": 734,
+      "startFrame": 7413,
+      "durationInFrames": 692,
       "gap": 0.25
     },
     {
       "id": "t13",
-      "level": null,
-      "overlay": null,
-      "template": "boardroomNotes",
+      "level": "LEVEL 04  \u00b7  \u00c7ORBACI",
+      "overlay": {
+        "big": "10 AK\u00c7E/DAY",
+        "sub": "AN ORTA OF 100 MEN"
+      },
+      "template": "janissaryBarracks",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 7893,
-      "durationInFrames": 660,
+      "startFrame": 8105,
+      "durationInFrames": 669,
       "gap": 0.25
     },
     {
       "id": "t14",
-      "level": "LEVEL 04  \u00b7  FIRST FLIGHT",
+      "level": null,
       "overlay": null,
-      "template": "window",
+      "template": "shieldWall",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 8553,
-      "durationInFrames": 709,
+      "startFrame": 8774,
+      "durationInFrames": 582,
       "gap": 0.25
     },
     {
       "id": "t15",
       "level": null,
-      "overlay": {
-        "big": "$55,000,000",
-        "sub": "ONE SEAT. NOT YOUR SALARY."
-      },
-      "template": "launchSeat",
+      "overlay": null,
+      "template": "warCouncil",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 9262,
-      "durationInFrames": 760,
-      "gap": 0.7
+      "startFrame": 9356,
+      "durationInFrames": 671,
+      "gap": 0.25
     },
     {
       "id": "t16",
       "level": null,
-      "overlay": {
-        "big": "250 MI",
-        "sub": "NO BORDERS FROM UP HERE"
-      },
-      "template": "cupolaView",
+      "overlay": null,
+      "template": "janissaryBarracks",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 10022,
-      "durationInFrames": 653,
-      "gap": 0.25
+      "startFrame": 10027,
+      "durationInFrames": 618,
+      "gap": 1.4
     },
     {
       "id": "t17",
       "level": null,
-      "overlay": null,
-      "template": "stationCommand",
+      "overlay": {
+        "big": "1622",
+        "sub": "A SULTAN, KILLED BY HIS OWN CORPS"
+      },
+      "template": "cauldronRevolt",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 10675,
-      "durationInFrames": 688,
+      "startFrame": 10645,
+      "durationInFrames": 787,
       "gap": 0.25
     },
     {
       "id": "t18",
       "level": null,
       "overlay": null,
-      "template": "controlRoom",
+      "template": "fileWall",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 11363,
-      "durationInFrames": 668,
+      "startFrame": 11432,
+      "durationInFrames": 709,
       "gap": 0.25
     },
     {
       "id": "t19",
-      "level": "LEVEL 05  \u00b7  VETERAN / EVA SPECIALIST",
-      "overlay": null,
-      "template": "poolTrain",
+      "level": "LEVEL 05  \u00b7  SANJAKBEY",
+      "overlay": {
+        "big": "20,000 AK\u00c7E",
+        "sub": "A DISTRICT'S REVENUE, NOT A WAGE"
+      },
+      "template": "lordAudience",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 12031,
-      "durationInFrames": 658,
+      "startFrame": 12141,
+      "durationInFrames": 694,
       "gap": 0.25
     },
     {
       "id": "t20",
       "level": null,
       "overlay": null,
-      "template": "evaWalk",
+      "template": "balkanVillage",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 12689,
-      "durationInFrames": 746,
-      "gap": 1.4
+      "startFrame": 12835,
+      "durationInFrames": 634,
+      "gap": 0.25
     },
     {
       "id": "t21",
       "level": null,
-      "overlay": {
-        "big": "1.5L",
-        "sub": "WATER, INSIDE YOUR HELMET"
-      },
-      "template": "evaEmergency",
+      "overlay": null,
+      "template": "merchantHouse",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 13435,
-      "durationInFrames": 713,
+      "startFrame": 13469,
+      "durationInFrames": 718,
       "gap": 0.25
     },
     {
       "id": "t22",
-      "level": null,
-      "overlay": null,
-      "template": "stationCommand",
+      "level": "LEVEL 06  \u00b7  BEYLERBEY / PASHA",
+      "overlay": {
+        "big": "100,000+ AK\u00c7E",
+        "sub": "A PROVINCE. STILL NOT YOURS"
+      },
+      "template": "keepTop",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 14148,
-      "durationInFrames": 710,
+      "startFrame": 14187,
+      "durationInFrames": 573,
       "gap": 0.25
     },
     {
       "id": "t23",
-      "level": "LEVEL 06  \u00b7  MISSION / EXPEDITION COMMANDER",
-      "overlay": {
-        "big": "$150B",
-        "sub": "THE STATION IS YOURS NOW"
-      },
-      "template": "cupolaView",
+      "level": null,
+      "overlay": null,
+      "template": "siegeWalls",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 14858,
-      "durationInFrames": 644,
+      "startFrame": 14760,
+      "durationInFrames": 668,
       "gap": 0.25
     },
     {
       "id": "t24",
       "level": null,
       "overlay": null,
-      "template": "boardroomNotes",
+      "template": "praetorians",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 15502,
-      "durationInFrames": 683,
+      "startFrame": 15428,
+      "durationInFrames": 684,
       "gap": 0.25
     },
     {
       "id": "t25",
-      "level": null,
-      "overlay": null,
-      "template": "dinner",
+      "level": "LEVEL 07  \u00b7  VIZIER",
+      "overlay": {
+        "big": "WHO'S WATCHING?",
+        "sub": "THE THRONE, OR HIS MOTHER"
+      },
+      "template": "divanChamber",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 16185,
-      "durationInFrames": 654,
+      "startFrame": 16112,
+      "durationInFrames": 660,
       "gap": 0.25
     },
     {
       "id": "t26",
-      "level": "LEVEL 07  \u00b7  CHIEF ASTRONAUT OFFICE",
-      "overlay": {
-        "big": "$4.2B",
-        "sub": "ONE LAUNCH, NOT YOURS"
-      },
-      "template": "controlRoom",
+      "level": null,
+      "overlay": null,
+      "template": "portraitHall",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 16839,
-      "durationInFrames": 603,
+      "startFrame": 16772,
+      "durationInFrames": 645,
       "gap": 0.25
     },
     {
       "id": "t27",
       "level": null,
       "overlay": null,
-      "template": "podiumScene",
+      "template": "merchantHouse",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 17442,
-      "durationInFrames": 671,
+      "startFrame": 17417,
+      "durationInFrames": 648,
       "gap": 0.25
     },
     {
       "id": "t28",
       "level": null,
-      "overlay": {
-        "big": "GROUNDED",
-        "sub": "MEDICALLY, NOT BY CHOICE"
-      },
-      "template": "emptyChair",
+      "overlay": null,
+      "template": "divanChamber",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 18113,
-      "durationInFrames": 657,
+      "startFrame": 18065,
+      "durationInFrames": 611,
       "gap": 0.25
     },
     {
       "id": "t29",
-      "level": null,
-      "overlay": null,
-      "template": "fileWall",
+      "level": "LEVEL 08  \u00b7  GRAND VIZIER (SADRAZAM)",
+      "overlay": {
+        "big": "SADRAZAM",
+        "sub": "THE SEAL IS YOURS"
+      },
+      "template": "sultanAudience",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 18770,
-      "durationInFrames": 663,
-      "gap": 0.25
+      "startFrame": 18676,
+      "durationInFrames": 659,
+      "gap": 0.7
     },
     {
       "id": "t30",
-      "level": "LEVEL 08  \u00b7  ARTEMIS-ERA COMMANDER",
-      "overlay": {
-        "big": "$93B",
-        "sub": "STILL $152,258 A YEAR"
-      },
-      "template": "launchSeat",
+      "level": null,
+      "overlay": null,
+      "template": "warCouncil",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 19433,
-      "durationInFrames": 747,
-      "gap": 0.7
+      "startFrame": 19335,
+      "durationInFrames": 800,
+      "gap": 0.25
     },
     {
       "id": "t31",
       "level": null,
-      "overlay": null,
-      "template": "controlRoom",
+      "overlay": {
+        "big": "44 OF 284",
+        "sub": "ONE IN SIX. YOU'RE OVERDUE."
+      },
+      "template": "divanChamber",
       "audio": "audio/t31.wav",
       "audioStartFrame": 3,
-      "startFrame": 20180,
-      "durationInFrames": 648,
+      "startFrame": 20135,
+      "durationInFrames": 841,
       "gap": 0.25
     },
     {
       "id": "t32",
       "level": null,
       "overlay": {
-        "big": "50+ YEARS",
-        "sub": "SINCE ANYONE STOOD HERE"
+        "big": "NOT TODAY",
+        "sub": "THE CASE ISN'T YOURS THIS TIME"
       },
-      "template": "launchSeat",
+      "template": "sultanAudience",
       "audio": "audio/t32.wav",
       "audioStartFrame": 3,
-      "startFrame": 20828,
-      "durationInFrames": 797,
-      "gap": 0.25
-    },
-    {
-      "id": "t33",
-      "level": null,
-      "overlay": {
-        "big": "ONE STEP",
-        "sub": "TAKEN."
-      },
-      "template": "moonSurface",
-      "audio": "audio/t33.wav",
-      "audioStartFrame": 3,
-      "startFrame": 21625,
-      "durationInFrames": 757,
+      "startFrame": 20976,
+      "durationInFrames": 913,
       "gap": 0.25
     }
   ]
