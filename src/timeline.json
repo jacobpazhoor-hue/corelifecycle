@@ -2,7 +2,7 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 21889,
+  "totalFrames": 21871,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
@@ -251,7 +251,7 @@
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
       "startFrame": 13469,
-      "durationInFrames": 718,
+      "durationInFrames": 700,
       "gap": 0.25
     },
     {
@@ -264,8 +264,8 @@
       "template": "keepTop",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 14187,
-      "durationInFrames": 573,
+      "startFrame": 14169,
+      "durationInFrames": 580,
       "gap": 0.25
     },
     {
@@ -275,8 +275,8 @@
       "template": "siegeWalls",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 14760,
-      "durationInFrames": 668,
+      "startFrame": 14749,
+      "durationInFrames": 657,
       "gap": 0.25
     },
     {
@@ -286,8 +286,8 @@
       "template": "praetorians",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 15428,
-      "durationInFrames": 684,
+      "startFrame": 15406,
+      "durationInFrames": 687,
       "gap": 0.25
     },
     {
@@ -300,7 +300,7 @@
       "template": "divanChamber",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 16112,
+      "startFrame": 16093,
       "durationInFrames": 660,
       "gap": 0.25
     },
@@ -311,8 +311,8 @@
       "template": "portraitHall",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 16772,
-      "durationInFrames": 645,
+      "startFrame": 16753,
+      "durationInFrames": 656,
       "gap": 0.25
     },
     {
@@ -322,8 +322,8 @@
       "template": "merchantHouse",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 17417,
-      "durationInFrames": 648,
+      "startFrame": 17409,
+      "durationInFrames": 637,
       "gap": 0.25
     },
     {
@@ -333,8 +333,8 @@
       "template": "divanChamber",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 18065,
-      "durationInFrames": 611,
+      "startFrame": 18046,
+      "durationInFrames": 614,
       "gap": 0.25
     },
     {
@@ -347,7 +347,7 @@
       "template": "sultanAudience",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 18676,
+      "startFrame": 18660,
       "durationInFrames": 659,
       "gap": 0.7
     },
@@ -358,8 +358,8 @@
       "template": "warCouncil",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 19335,
-      "durationInFrames": 800,
+      "startFrame": 19319,
+      "durationInFrames": 782,
       "gap": 0.25
     },
     {
@@ -372,8 +372,8 @@
       "template": "divanChamber",
       "audio": "audio/t31.wav",
       "audioStartFrame": 3,
-      "startFrame": 20135,
-      "durationInFrames": 841,
+      "startFrame": 20101,
+      "durationInFrames": 857,
       "gap": 0.25
     },
     {
@@ -386,7 +386,7 @@
       "template": "sultanAudience",
       "audio": "audio/t32.wav",
       "audioStartFrame": 3,
-      "startFrame": 20976,
+      "startFrame": 20958,
       "durationInFrames": 913,
       "gap": 0.25
     }

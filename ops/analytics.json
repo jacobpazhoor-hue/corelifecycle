@@ -1,8 +1,8 @@
 {
-  "updated": "2026-07-22T14:53:52.477242+00:00",
+  "updated": "2026-08-07T04:51:33.190515+00:00",
   "channel": {
-    "videos": 34,
-    "views": 1174,
+    "videos": 45,
+    "views": 1304,
     "subscribers": 6
   },
   "videos": [
@@ -11,7 +11,7 @@
       "topic": "founder",
       "title": "Every Level of a Founder \u2014 From First Idea to IPO",
       "published": "2026-06-23T16:56:30Z",
-      "views": 412,
+      "views": 418,
       "likes": 12,
       "comments": 1,
       "duration": "PT14M5S"
@@ -21,8 +21,8 @@
       "topic": "black_market_surgeon",
       "title": "POV: You're a Black Market Surgeon (You Never Get to Stop)",
       "published": "2026-07-15T09:42:28Z",
-      "views": 217,
-      "likes": 2,
+      "views": 262,
+      "likes": 3,
       "comments": 0,
       "duration": "PT12M17S"
     },
@@ -61,7 +61,7 @@
       "topic": "hedge_fund_manager",
       "title": "Every Level of a Hedge Fund Manager \u2014 From Analyst to Billionaire",
       "published": "2026-06-24T20:32:02Z",
-      "views": 40,
+      "views": 42,
       "likes": 1,
       "comments": 0,
       "duration": "PT13M3S"
@@ -71,7 +71,7 @@
       "topic": null,
       "title": "Your Life as Every Rank in Special Forces (You Don't Exist)",
       "published": "2026-07-05T20:01:33Z",
-      "views": 39,
+      "views": 41,
       "likes": 0,
       "comments": 0,
       "duration": "PT12M10S"
@@ -81,7 +81,7 @@
       "topic": "spy",
       "title": "Your Life as a Spy at Every Level \u2014 Recruit to Spymaster",
       "published": "2026-06-28T18:47:28Z",
-      "views": 35,
+      "views": 37,
       "likes": 1,
       "comments": 0,
       "duration": "PT12M56S"
@@ -91,7 +91,7 @@
       "topic": "soldier",
       "title": "Every Level of a Soldier \u2014 From Recruit to Four-Star General",
       "published": "2026-06-26T15:08:40Z",
-      "views": 29,
+      "views": 31,
       "likes": 2,
       "comments": 0,
       "duration": "PT10M41S"
@@ -107,14 +107,34 @@
       "duration": "PT10M49S"
     },
     {
+      "id": "27K2uE6Um-E",
+      "topic": "north_korea",
+      "title": "Your Life at Every Rank in North Korea (You Can't Leave)",
+      "published": "2026-07-19T15:15:07Z",
+      "views": 22,
+      "likes": 1,
+      "comments": 0,
+      "duration": "PT12M48S"
+    },
+    {
       "id": "WB_Bl9gHCJE",
       "topic": "hitman",
       "title": "Your Life as a Hitman at Every Level (You Don't Retire)",
       "published": "2026-07-12T09:51:41Z",
-      "views": 20,
+      "views": 21,
       "likes": 0,
       "comments": 0,
       "duration": "PT11M37S"
+    },
+    {
+      "id": "VwPd_5wWjGM",
+      "topic": "mexican_cartel",
+      "title": "Your Life in a Cartel at Every Rank (No Way Out)",
+      "published": "2026-07-06T19:57:12Z",
+      "views": 19,
+      "likes": 1,
+      "comments": 0,
+      "duration": "PT13M28S"
     },
     {
       "id": "TZSLFLOwj4M",
@@ -127,24 +147,24 @@
       "duration": "PT12M51S"
     },
     {
-      "id": "VwPd_5wWjGM",
-      "topic": "mexican_cartel",
-      "title": "Your Life in a Cartel at Every Rank (No Way Out)",
-      "published": "2026-07-06T19:57:12Z",
-      "views": 18,
-      "likes": 1,
-      "comments": 0,
-      "duration": "PT13M28S"
-    },
-    {
       "id": "zCsRuMNJn0g",
       "topic": "roman_empire",
       "title": "Your Life as Every Rank in the Roman Empire (You Die at the Top)",
       "published": "2026-06-30T19:35:29Z",
-      "views": 16,
+      "views": 19,
       "likes": 1,
       "comments": 0,
       "duration": "PT13M5S"
+    },
+    {
+      "id": "uCYoOgX9J28",
+      "topic": "zombie_apocalypse",
+      "title": "Could You Survive a Zombie Apocalypse? (1 in 4 Don't Make It)",
+      "published": "2026-07-23T09:14:49Z",
+      "views": 18,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT11M4S"
     },
     {
       "id": "jTfmhC3peEM",
@@ -161,7 +181,7 @@
       "topic": null,
       "title": "POV: You're the World's First Trillionaire \ud83d\udcb0 #shorts",
       "published": "2026-07-12T15:45:41Z",
-      "views": 11,
+      "views": 13,
       "likes": 0,
       "comments": 0,
       "duration": "PT57S"
@@ -197,16 +217,6 @@
       "duration": "PT59S"
     },
     {
-      "id": "27K2uE6Um-E",
-      "topic": "north_korea",
-      "title": "Your Life at Every Rank in North Korea (You Can't Leave)",
-      "published": "2026-07-19T15:15:07Z",
-      "views": 9,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT12M48S"
-    },
-    {
       "id": "AWmf0DwSC-g",
       "topic": null,
       "title": "Every Level of a Surgeon \ud83d\udcb0 #shorts",
@@ -215,6 +225,26 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT53S"
+    },
+    {
+      "id": "Si2VnD9tM-s",
+      "topic": null,
+      "title": "Every Level of a Cartel \ud83d\udcb0 #shorts",
+      "published": "2026-07-06T20:07:21Z",
+      "views": 7,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT1M1S"
+    },
+    {
+      "id": "nPsCGe56xis",
+      "topic": "venture_capitalist",
+      "title": "Your Life as a VC at Every Level (One Bet Pays For All)",
+      "published": "2026-07-25T09:02:16Z",
+      "views": 6,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M23S"
     },
     {
       "id": "bMya7ugln5Q",
@@ -237,6 +267,36 @@
       "duration": "PT59S"
     },
     {
+      "id": "ivebwz9oj1A",
+      "topic": "crypto_founder",
+      "title": "POV: You Found a Crypto Startup (Billion or Zero)",
+      "published": "2026-07-27T02:47:06Z",
+      "views": 5,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT11M42S"
+    },
+    {
+      "id": "ZQpAzns70b4",
+      "topic": "lawyer",
+      "title": "Every Level of a Lawyer \u2014 From Associate to Managing Partner",
+      "published": "2026-06-21T01:34:05Z",
+      "views": 5,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT10M8S"
+    },
+    {
+      "id": "8JnMXsYfDhI",
+      "topic": "mongol_empire",
+      "title": "Your Life as Every Rank in the Mongol Empire (3 of 4 Never Kneel)",
+      "published": "2026-08-01T13:01:07Z",
+      "views": 4,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M12S"
+    },
+    {
       "id": "q2wg7eeg1eE",
       "topic": null,
       "title": "Every Level of a Rome Empire \ud83d\udcb0 #shorts",
@@ -257,14 +317,14 @@
       "duration": "PT53S"
     },
     {
-      "id": "ZQpAzns70b4",
-      "topic": "lawyer",
-      "title": "Every Level of a Lawyer \u2014 From Associate to Managing Partner",
-      "published": "2026-06-21T01:34:05Z",
-      "views": 4,
+      "id": "4TX8VMYpYp4",
+      "topic": null,
+      "title": "Every Level of a Black Market Surgeon \ud83d\udcb0 #shorts",
+      "published": "2026-07-15T09:44:43Z",
+      "views": 3,
       "likes": 0,
       "comments": 0,
-      "duration": "PT10M8S"
+      "duration": "PT41S"
     },
     {
       "id": "ilBfri70z-U",
@@ -275,6 +335,16 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT56S"
+    },
+    {
+      "id": "SP0IpgEj5xI",
+      "topic": "gladiator",
+      "title": "Your Life as a Gladiator at Every Level (Survive to Level 7)",
+      "published": "2026-08-03T15:20:43Z",
+      "views": 2,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M16S"
     },
     {
       "id": "2xY-_B5XiNo",
@@ -297,24 +367,44 @@
       "duration": "PT1M2S"
     },
     {
-      "id": "4TX8VMYpYp4",
-      "topic": null,
-      "title": "Every Level of a Black Market Surgeon \ud83d\udcb0 #shorts",
-      "published": "2026-07-15T09:44:43Z",
+      "id": "7mD1xx7tLXs",
+      "topic": "bratva",
+      "title": "Your Life in the Bratva at Every Rank (You Never Own It)",
+      "published": "2026-08-04T21:49:41Z",
       "views": 1,
       "likes": 0,
       "comments": 0,
-      "duration": "PT41S"
+      "duration": "PT12M14S"
     },
     {
-      "id": "Si2VnD9tM-s",
-      "topic": null,
-      "title": "Every Level of a Cartel \ud83d\udcb0 #shorts",
-      "published": "2026-07-06T20:07:21Z",
+      "id": "j_sHEG3GHpM",
+      "topic": "fbi_undercover",
+      "title": "Your Life as an Undercover Agent at Every Level (Not Even Yours)",
+      "published": "2026-08-02T10:04:09Z",
       "views": 1,
       "likes": 0,
       "comments": 0,
-      "duration": "PT1M1S"
+      "duration": "PT11M8S"
+    },
+    {
+      "id": "4sEp0GLAl3E",
+      "topic": "yakuza",
+      "title": "Your Life in the Yakuza at Every Rank (You Owe a Finger)",
+      "published": "2026-07-31T17:19:48Z",
+      "views": 1,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT11M43S"
+    },
+    {
+      "id": "xSGvTSOYVfU",
+      "topic": "lottery_winner",
+      "title": "POV: You Win the Lottery (Most Winners Don't Keep It)",
+      "published": "2026-07-30T15:40:17Z",
+      "views": 1,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT11M50S"
     },
     {
       "id": "SP3fs8c0BD0",
@@ -325,6 +415,26 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT5M22S"
+    },
+    {
+      "id": "0RMDnHa9tWg",
+      "topic": "astronaut",
+      "title": "Your Life as an Astronaut at Every Level (Most Never Fly)",
+      "published": "2026-08-06T00:14:46Z",
+      "views": 0,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M27S"
+    },
+    {
+      "id": "WcFQ_18MqJ4",
+      "topic": "self_made_billionaire",
+      "title": "Your Life From $0 to Billionaire at Every Level (What It Costs)",
+      "published": "2026-07-27T17:28:46Z",
+      "views": 0,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M22S"
     },
     {
       "id": "Oqf6w7jL8BM",
@@ -398,7 +508,7 @@
     }
   ],
   "insights": [
-    "Best so far: 'Every Level of a Founder \u2014 From First Idea to IPO' (412 views).",
+    "Best so far: 'Every Level of a Founder \u2014 From First Idea to IPO' (418 views).",
     "Lean into the patterns of the top performers (topic + title shape)."
   ],
   "note": "CTR/retention need the Analytics API (re-auth); these are Data-API stats."

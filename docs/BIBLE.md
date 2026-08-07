@@ -113,7 +113,11 @@ the graph bleeds — that's where the craft goes. >55% of viewers leave in minut
   darkening + bloom + saturation lift; NO SVG filters → render-safe). The writer doesn't set colors —
   just label each level ("LEVEL 0N · …") and the grade escalates itself. Keep warm-paper noir as the
   baseline (level 1); the world cools, then darkens toward the apex.
-- Overlays: level label top-left; big number bottom-left (the escalation), gold sub-caption.
+- Overlays: level label top-left; big number bottom-left (the escalation), gold sub-caption. The
+  money card auto-sizes to its widest line (the number or the sub) — keep `sub` to ~20-30 chars or it
+  can widen past a template's figure and bury it (confirmed on `fileWall`/`boardroomNotes`; safer
+  templates for a visible overlay: `deskSilhouette`, `window`, `tower`, `openHouse`). See
+  ops/improvements.json `money-card-width-scales-with-sub-caption-length`.
 
 ## Packaging (packager) — see PACKAGING_PLAYBOOK.md + QUALITY_MAX_PLAN.md §2.2 (title ≈50% of CTR,
    thumbnail ≈50%; target browse/suggested CTR 6–8%+).

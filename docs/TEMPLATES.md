@@ -29,7 +29,8 @@ adjacent scenes. Registry lives in src/scenes.tsx `TEMPLATES`; composable packs 
 | template | depicts | good for |
 |---|---|---|
 | lectureHallScene | tiered lecture hall, students | school, training, onboarding |
-| podiumScene | figure at a podium, audience, spotlight | pitches, press, addresses, awards |
+| podiumScene | figure at a podium with a gold "award" trophy, audience, spotlight | pitches, press, addresses, awards |
+| foundationScene | same stage re-dressed with a ribbon+scissors and donor plaque instead of the trophy | a second, visually distinct award/ceremony beat in the same episode (e.g. an award scene vs. a ribbon-cutting) |
 
 ## Medical pack (surgeon / doctor / nurse)
 | template | depicts | good for |
@@ -228,6 +229,145 @@ holding the bitten; SAMURAI's `riceField` re-purposed as the epilogue's replante
 foreground prop `hordeCrowd` — a crowd of dim off-kilter shambling silhouettes, drawn BEHIND the figure
 by default so the hero stays legible; only flip `figBehind` on if a shot needs the horde swarming in
 front.)
+
+## Waste-hauling roll-up pack (self_made_billionaire — one truck through a public roll-up)
+| template | depicts | good for |
+|---|---|---|
+| graveside | figure at a small cemetery, a fresh flower-covered mound, dim mourners behind, static at the edge of the plot | the cold open — "don't move yet" |
+| gravesideReturn | same cemetery, figure visibly walking in from the edge mark toward the mound/headstone and arriving | the loop-close payoff — "this time you walk all the way to the stone" |
+| dawnRoute | figure beside a garbage truck on a curb-side residential street at dawn | the origin — one truck, the first route, the debt |
+| truckYard | figure before a fenced depot yard, a receding row of parked trucks, a sodium light | the growing fleet, the roll-up scaling |
+| landfillView | figure overlooking a landfill tipping face — a bulldozer, a lit flare stack, circling gulls | owning disposal infrastructure, the biggest valuation lever |
+| routeAftermath | figure beside the same stopped truck at night (reuses SPY's `nightStreet` backdrop) | the reversal — the accident, the cost made real |
+| foundationScene | podium stage re-staged with a ribbon+scissors and a donor plaque instead of the trophy podium | the foundation ribbon-cutting beat, kept visually distinct from `podiumScene`'s award |
+
+(New reusable prop `wasteTruck` — a side-profile rear-loader garbage truck, figBehind; its art is shared
+via `WasteTruckArt` so `truckDepot`'s receding fleet reuses the exact same illustration instead of a
+separate boxy stand-in. New backdrops: `cemetery`, `residentialDawn`, `truckDepot`, `landfillFace`.
+`routeAftermath` deliberately reuses the existing SPY pack's `nightStreet` backdrop re-staged with the
+truck stopped, per the relit-backdrop-new-template pattern, instead of authoring a second night-street
+backdrop from scratch. `gravesideReturn` and `foundationScene` were added post-review to give `t30` and
+`t28` blocking distinct from `t01`/`t26` respectively — see verdict fixes.)
+
+## Lottery pack (lottery_winner — the ticket counter through the crash and rebuild)
+| template | depicts | good for |
+|---|---|---|
+| ticketCounter | figure at a convenience-store counter, a glowing LOTTERY ticket rack, a clerk behind | the cold open + its loop-close payoff, the Friday ticket ritual |
+| trailerPorch | figure before a modest single-wide home at dusk, porch light, propane tank | comfort + the named want, before any of this existed |
+
+(Only 2 new bespoke backdrops. The rest of the ladder composes ENTIRELY from existing packs: DYNASTY's
+`heirGates`/`estateGrounds`/`galaBallroom`/`yachtDeck`/`familyVault` (the mansion, the gala, the trust);
+MAFIA's `courtroom` (the lawsuits); SPY's `safehouse` (repurposed — the corkboard + red string becomes a
+forensic accountant's board tracing where the money went); MED's `consult` (the wealth advisor's office);
+REALESTATE's `openHouse` (the first house bought outright); GEN's `podiumScene`/`foundationScene` (the
+press conference, the charitable-giving beat); universal `dinner`/`deskClose`/`boardroomNotes`/`signing`/
+`window`/`emptyChair`/`lobby`/`atrium`/`revolvingDoor`/`fileWall`.)
+
+## Yakuza pack (yakuza — kobun through kumichō)
+| template | depicts | good for |
+|---|---|---|
+| neonAlley | figure in a narrow neon-lit night alley (converging facades, red/gold signboards, hanging lanterns) | the cold open + its torch-passing loop-close payoff |
+| shrineOathRite | figure kneeling before a small vermillion torii + altar with two sake cups, dim witnesses ringed behind | the sakazuki cup, poured at every promotion (joining / made / kumichō) |
+| irezumiParlor | figure seated before a wall of tattoo flash art under a low work lamp (figBehind) | the irezumi, becoming a made member, body debt |
+| pachinkoFloor | figure amid rows of glowing vertical pachinko machines | the front business, the earn, running the hall |
+| oyabunOffice | figure before a paneled study with a kamidana shrine shelf + a mounted katana | the boss's office, giving the order, power |
+| yubitsumeRite | figure kneeling at a bare low table with a folded white cloth + tray, a single hanging bulb | the atonement ritual, the dread beat |
+
+(The rest of the ladder composes ENTIRELY from existing packs: MAFIA's `backAlley`/`countRoom`/
+`courtroom`/`prisonCell`/`wiretap`/`waterfront`/`commission` (re-narrated: the council of allied
+oyabun); SAMURAI's `teaCeremony` (the sit-down); REALESTATE's `rentalUnits`/`constructionSite`; MED's
+`hospitalRounds`; universal `window`/`fileWall`/`tower`/`boardroomNotes`/`signing`/`revolvingDoor`/
+`warRoom`.)
+
+## Mongol pack (mongol_empire — herder's son through arban/jaghun/minghan/tumen to khan/Khagan)
+| template | depicts | good for |
+|---|---|---|
+| steppeCamp | figure before a felt ger camp on rolling grassland, a small penned herd | the herder origin, comfort + the named want, the loop-close callback |
+| horsebackDrill | figure at a straw-dummy archery range, waiting horses, distant ridgeline | the arban recruit's mounted-archery training |
+| steppeRaid | figure lit by torchlight, burning tents on the dark camp's far edge | the first khubi (loot-share), jaghun command, the night raid |
+| siegeWalls | figure before a crenellated city wall on fire, smoke, a trebuchet foreground | the Khwarazmian campaign, minghan/tumen command, the moral-cost siege |
+| yamRelayStation | figure at a hitching rail of fresh horses, a post hut, a rider's dust trail | the empire's speed, the Yam relay, the share-worthy 200mi/day beat |
+| khanAudienceTent | figure in a felt-ribbed ger audience tent, kneeling retainers, a gold paiza tablet | the governor's investiture, taxation, the Yam authority |
+| khaganThrone | figure before a raised gold throne + a wall map (one quarter shaded cold) | the flash-forward cold open, the Khagan apex, its loop-close payoff |
+
+(Only 7 new bespoke backdrops — this is the first Central-Asian-steppe topic so nothing existing
+covers horse culture. The rest of the ladder composes from ROMAN's `warCouncil`/`praetorians`
+(reframed as the kheshig guard)/`throne` (a lesser khanate throne, distinct from the bespoke apex
+`khaganThrone`)/`commission` (reframed as the kurultai council); SAMURAI's `sengokuField`/
+`teaCeremony`/`merchantHouse` (reframed as Silk Road tribute); DYNASTY's `portraitHall` (Chinggisid
+bloodline legitimacy — the empty fifth frame); SPY's `debrief` (a Yassa loyalty/desertion beat); and
+universal `tower`/`fileWall`/`signing`/`dinner`/`lobby`/`atrium`. Deliberately avoids reusing any
+modern-coded universal template — `desk`/`deskSilhouette`/`boardroomNotes`/`boardroomHead`/
+`revolvingDoor`/`warRoom`/`emptyChair` all read anachronistic for a 13th-century setting, so this
+pack leans on the pre-modern ROMAN/SAMURAI/DYNASTY packs instead.)
+
+## Gladiator pack (gladiator — novicius through primus palus to lanista and the editor above)
+| template | depicts | good for |
+|---|---|---|
+| slaveMarket | figure on/beside a raised auction block under a striped awning, a colonnaded market town behind | Level 1, "you are property," the sale |
+| ludusYard | figure training beside stout wooden palus posts in a walled dusty yard (portico + weapon rack) | the recurring home base — training, the mentor, later teaching the next generation |
+| arenaGate | figure in the dark stone porta beneath the stands, iron portcullis bars, torches, a bright shaft of daylight ahead | waiting to fight, the tunnel tension beat |
+| arenaSand | figure mid-sand in the amphitheater, tiered cavea seating, a velarium shade awning, a dim crowd | THE master reused backdrop — the cold open, every fight beat, the midpoint reversal |
+| rudisCeremony | kneeling figure on the same sand, a dim figure extending the wooden rudis | the offer of freedom refused/accepted — shares arenaSand's art, distinct staging |
+| ludusOffice | figure before a lanista's desk (scrolls + wax tablet) and a wall roster board | the business of ownership, roster-tracking, later running the ludus as lanista |
+| imperialBox | figure at the gold-railed pulvinar, purple drapery above, the sand + cavea glimpsed below | the editor's/emperor's apex, the wider imperial world above even the editor |
+
+(Reuses from ROMAN: `forumScene` (the pompa procession, the city recognizes your name), `praetorians`
+and `throne` (the wider imperial world above even the editor). Reuses from MAFIA: `countRoom`
+(re-narrated as the games-budget cash count). Reuses from SAMURAI: `riceField` (re-narrated as the
+pre-capture farm/village origin, the free life before capture).)
+
+## Bratva pack (bratva — patsan through boyevik/brigadir/avtoritet/smotryashchiy to vor v zakone, a foreign cell, and pakhan)
+| template | depicts | good for |
+|---|---|---|
+| courtyardBlock | figure in a grim Khrushchyovka apartment courtyard (panel facade, lit/unlit windows, a broken swing, a laundry line) | Level 1, the named want, the origin |
+| tattooCell | figure seated under a single bulb beside a buzzing coil-and-needle rig (figBehind) | the recurring sensory anchor — a new earned mark at (almost) every level-up |
+| banyaSitDown | figure in a fogged wood-plank banya, a glowing stone stove, drifting steam | the cold open (MID-ACTION) + every skhodka/sit-down after it |
+| shopKrysha | figure looming over a barred shop counter, a scared shopkeeper behind it | the krysha (protection) collection run |
+| koronatsiyaRite | kneeling figure in a candlelit ring of dim elders, a folded prison blanket + a glass of tea on the floor | the koronatsiya — the crowning, the code made literal |
+| brightonPier | figure on a dusk boardwalk pier, gulls, a lit Ferris wheel against a foreign skyline | the network exported abroad (grounded in the real 1992 Solntsevskaya/Ivankov dispatch to Brighton Beach) |
+| pakhanApex | figure before a heavy desk, a samovar, a wall map with regions pinned | the apex — power that still isn't personally spendable |
+
+(Reuses from MAFIA: `backAlley`/`countRoom`/`courtroom`/`wiretap`/`commission` (re-narrated as the
+council naming a smotryashchiy) and `streetCorner`. Reuses universal: `revolvingDoor` (the bribed
+captain), `boardroomNotes`/`signing` (the legit front business), `window`/`dinner`/`emptyChair`/
+`jet`/`warRoom`. Only 7 new bespoke backdrops, consistent with the yakuza/mongol/gladiator packs.)
+
+## Space pack (astronaut — applicant through ASCAN/unassigned/ISS crew/veteran/commander/Chief Astronaut Office to an Artemis-era lunar commander)
+| template | depicts | good for |
+|---|---|---|
+| jetTrain | figure in a T-38 supersonic jet cockpit, canopy arching overhead, a dim instructor in the back seat | ASCAN flight training, the named mentor's first appearance |
+| poolTrain | figure suspended in the Neutral Buoyancy Lab, a submerged ISS mockup, rising bubbles (figBehind) | spacewalk training in the world's largest indoor pool |
+| launchSeat | figure strapped into a capsule seat, a round porthole showing flame/sky, harness straps | the danger beat — liftoff |
+| cupolaView | figure at the 7-window ISS Cupola, Earth's curve filling the view | THE recurring sensory-anchor beat — first sight of Earth, re-triggered every level-up |
+| evaWalk | figure tethered outside the station, black starfield, Earth's blue curve below | the calm beat before the midpoint reversal |
+| evaEmergency | tight zoom on the same tethered figure, cooler gradient — shares evaWalk's backdrop art under a distinct staging | the midpoint reversal itself — the real 2013 helmet water-intrusion type of emergency |
+| controlRoom | figure before Mission Control's wall screen + console rows, a dim flight controller seated behind | the ground side, the institutional-math beat (who flies, who's grounded) |
+| stationCommand | figure amid the ISS's curved equipment racks, a dim crewmate nearby | commanding the station, Level 06 day-to-day |
+| moonSurface | figure on grey cratered regolith, black sky, Earth hanging small and blue, a planted flag | the flash-forward cold open, the Artemis-era apex, its loop-close payoff |
+
+(8 new bespoke backdrops — this is the first off-world topic, so nothing existing covers zero-g/
+vacuum/vehicle interiors. `cupolaView` is the sensory anchor motif (re-trigger it at every level-up,
+not just once). `moonSurface` deliberately triples as cold open, apex, and loop-close so the visual
+callback lands even though the episode never leaves 1920×1080 doodle-space for real photography.
+`evaEmergency` is a 9th template that reuses `evaWalk`'s backdrop art under a distinct zoomed-in
+staging, following the arenaSand/rudisCeremony shared-backdrop pattern, rather than authoring a 9th
+bespoke backdrop for a beat that's really the same location at a different emotional pitch.)
+
+## Ottoman pack (ottoman_empire — Balkan peasant boy through acemi oğlan/Janissary/çorbacı to sanjakbey/beylerbey/vizier/Grand Vizier)
+| template | depicts | good for |
+|---|---|---|
+| balkanVillage | figure before a stone-and-timber Balkan hill-village house, a small church spire on the far ridge | Level 1, the named want, the origin, the devshirme-collection restage, the loop-close callback |
+| janissaryBarracks | figure before an arcade of domed barracks buildings, the regimental cauldron (kazan-i-şerif) steaming in the foreground | the recurring sensory-anchor home base — training, the mentor, corbacı command |
+| cauldronRevolt | the same barracks art, re-staged cooler/chaotic with a dim massing crowd | the MIDPOINT REVERSAL — the verified 1622 mutiny that deposed and killed Sultan Osman II |
+| divanChamber | figure before the Imperial Council's low U-shaped bench, a latticed grille window high on the far wall (a shadow behind it) | the Divan seat, the verified Tower-of-Justice "someone may be watching" beat |
+| sultanAudience | figure before a gold throne on its dais, heavy drapery, a small silk-cord case set on a cushion | the MID-ACTION cold open, the Grand Vizier apex, the loop-close payoff |
+
+(Only 4 new bespoke backdrops — `cauldronRevolt` deliberately reuses `janissaryBarracks`' exact art
+under a distinct staging, per the arenaSand/rudisCeremony and evaWalk/evaEmergency pattern. The rest
+of the ladder composes from ROMAN's `legionDrill`/`shieldWall`/`warCouncil`/`praetorians`, SAMURAI's
+`merchantHouse`/`lordAudience`/`keepTop`, DYNASTY's `portraitHall`, and universal `fileWall`/`dinner`
+— deliberately avoiding modern-coded universal templates, same discipline as the MONGOL pack.)
 
 ## Adding a new domain pack
 If a topic needs settings none of these cover (e.g. soldier→battlefield, athlete→stadium,
