@@ -1,22 +1,22 @@
 {
   "thumb": {
-    "kicker": "EVERY RANK IN THE",
-    "line1": "OTTOMAN EMPIRE",
+    "kicker": "MOST WHO GET",
+    "line1": "RICH",
     "line2": "",
-    "tag": "OVERDUE",
-    "archetype": "ladder",
-    "big": "OVERDUE",
-    "before": "PEASANT BOY",
-    "after": "SADRAZAM",
+    "tag": "MAROONED",
+    "archetype": "number",
+    "big": "\u00a30",
+    "before": "GREEN HAND",
+    "after": "MAROONED",
     "expr": "shock",
-    "povline": "YOU BECOME",
-    "keyword": "OVERDUE",
-    "setting": "sultanAudience",
-    "question": "WHO'S WATCHING THE GRILLE?",
-    "mood": "royal",
-    "costume": "royal",
-    "word": "OVERDUE",
+    "povline": "YOU BECOME A",
+    "keyword": "MAROONED",
+    "setting": "executionDock",
+    "question": "WHO STAYS RICH?",
+    "mood": "epic",
+    "costume": "street",
+    "word": "YOU",
     "prop": "vault"
   },
-  "topic": "ottoman_empire"
+  "topic": "pirate"
 }

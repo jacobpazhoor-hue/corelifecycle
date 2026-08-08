@@ -2,21 +2,21 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 21871,
+  "totalFrames": 21591,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t01",
       "level": null,
       "overlay": {
-        "big": "44 OF 284",
-        "sub": "GRAND VIZIERS THE SULTAN STRANGLED"
+        "big": "52",
+        "sub": "HANGED IN ONE MORNING, 1722"
       },
-      "template": "sultanAudience",
+      "template": "executionDock",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 631,
+      "durationInFrames": 611,
       "gap": 0.7
     },
     {
@@ -26,19 +26,19 @@
       "template": "fileWall",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 631,
-      "durationInFrames": 665,
+      "startFrame": 611,
+      "durationInFrames": 606,
       "gap": 0.25
     },
     {
       "id": "t03",
-      "level": "LEVEL 01  \u00b7  A BALKAN VILLAGE",
+      "level": "LEVEL 01  \u00b7  A FISHING COVE",
       "overlay": null,
-      "template": "balkanVillage",
+      "template": "fishingCove",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 1296,
-      "durationInFrames": 587,
+      "startFrame": 1217,
+      "durationInFrames": 569,
       "gap": 0.25
     },
     {
@@ -48,346 +48,376 @@
       "template": "dinner",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 1883,
-      "durationInFrames": 615,
+      "startFrame": 1786,
+      "durationInFrames": 644,
       "gap": 0.25
     },
     {
       "id": "t05",
       "level": null,
       "overlay": {
-        "big": "1 IN 40",
-        "sub": "HOUSEHOLDS PAY IN SONS"
+        "big": "\u00a31.50/MO",
+        "sub": "IF THE CAPTAIN EVEN PAYS IT"
       },
-      "template": "fileWall",
+      "template": "shipDeck",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 2498,
-      "durationInFrames": 683,
+      "startFrame": 2430,
+      "durationInFrames": 650,
       "gap": 0.25
     },
     {
       "id": "t06",
-      "level": "LEVEL 02  \u00b7  ACEMI O\u011eLAN",
-      "overlay": null,
-      "template": "balkanVillage",
+      "level": null,
+      "overlay": {
+        "big": "JOIN, OR SWIM",
+        "sub": "THE CHOICE THEY GIVE YOU"
+      },
+      "template": "broadsideBattle",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 3181,
-      "durationInFrames": 657,
+      "startFrame": 3080,
+      "durationInFrames": 727,
       "gap": 0.25
     },
     {
       "id": "t07",
-      "level": null,
+      "level": "LEVEL 02  \u00b7  GREEN HAND",
       "overlay": null,
-      "template": "janissaryBarracks",
+      "template": "signing",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 3838,
-      "durationInFrames": 850,
+      "startFrame": 3807,
+      "durationInFrames": 673,
       "gap": 0.25
     },
     {
       "id": "t08",
       "level": null,
       "overlay": null,
-      "template": "legionDrill",
+      "template": "shipDeck",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 4688,
-      "durationInFrames": 705,
+      "startFrame": 4480,
+      "durationInFrames": 786,
       "gap": 0.25
     },
     {
       "id": "t09",
-      "level": "LEVEL 03  \u00b7  JANISSARY",
-      "overlay": null,
-      "template": "siegeWalls",
+      "level": null,
+      "overlay": {
+        "big": "\u00a30",
+        "sub": "GREEN HANDS SPLIT LAST"
+      },
+      "template": "countRoom",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 5393,
-      "durationInFrames": 734,
-      "gap": 0.7
+      "startFrame": 5266,
+      "durationInFrames": 716,
+      "gap": 0.25
     },
     {
       "id": "t10",
-      "level": null,
+      "level": "LEVEL 03  \u00b7  ABLE SEAMAN",
       "overlay": {
-        "big": "3 AK\u00c7E/DAY",
-        "sub": "YOUR FIRST WAGE, ANYONE'S"
+        "big": "1 SHARE",
+        "sub": "A FULL VOTE, FINALLY"
       },
-      "template": "janissaryBarracks",
+      "template": "shipDeck",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 6127,
-      "durationInFrames": 702,
+      "startFrame": 5982,
+      "durationInFrames": 698,
       "gap": 0.25
     },
     {
       "id": "t11",
       "level": null,
       "overlay": null,
-      "template": "merchantHouse",
+      "template": "broadsideBattle",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 6829,
-      "durationInFrames": 584,
+      "startFrame": 6680,
+      "durationInFrames": 671,
       "gap": 0.25
     },
     {
       "id": "t12",
       "level": null,
-      "overlay": null,
-      "template": "legionCamp",
+      "overlay": {
+        "big": "\u00a36",
+        "sub": "YOUR FIRST SHARE, EVER"
+      },
+      "template": "countRoom",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 7413,
-      "durationInFrames": 692,
+      "startFrame": 7351,
+      "durationInFrames": 657,
       "gap": 0.25
     },
     {
       "id": "t13",
-      "level": "LEVEL 04  \u00b7  \u00c7ORBACI",
+      "level": null,
       "overlay": {
-        "big": "10 AK\u00c7E/DAY",
-        "sub": "AN ORTA OF 100 MEN"
+        "big": "\u00a30",
+        "sub": "GONE IN NINE DAYS"
       },
-      "template": "janissaryBarracks",
+      "template": "nassauHarbor",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 8105,
-      "durationInFrames": 669,
+      "startFrame": 8008,
+      "durationInFrames": 670,
       "gap": 0.25
     },
     {
       "id": "t14",
-      "level": null,
-      "overlay": null,
-      "template": "shieldWall",
+      "level": "LEVEL 04  \u00b7  GUNNER",
+      "overlay": {
+        "big": "1.5 SHARES",
+        "sub": "GUNNER'S CUT"
+      },
+      "template": "shipDeck",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 8774,
-      "durationInFrames": 582,
+      "startFrame": 8678,
+      "durationInFrames": 637,
       "gap": 0.25
     },
     {
       "id": "t15",
       "level": null,
       "overlay": null,
-      "template": "warCouncil",
+      "template": "broadsideBattle",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 9356,
-      "durationInFrames": 671,
+      "startFrame": 9315,
+      "durationInFrames": 674,
       "gap": 0.25
     },
     {
       "id": "t16",
       "level": null,
-      "overlay": null,
-      "template": "janissaryBarracks",
+      "overlay": {
+        "big": "800 PIECES OF EIGHT",
+        "sub": "WRITTEN DOWN. VOTED ON. FOR A LEG."
+      },
+      "template": "countRoom",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 10027,
-      "durationInFrames": 618,
-      "gap": 1.4
+      "startFrame": 9989,
+      "durationInFrames": 631,
+      "gap": 0.25
     },
     {
       "id": "t17",
       "level": null,
-      "overlay": {
-        "big": "1622",
-        "sub": "A SULTAN, KILLED BY HIS OWN CORPS"
-      },
-      "template": "cauldronRevolt",
+      "overlay": null,
+      "template": "shipDeck",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 10645,
-      "durationInFrames": 787,
-      "gap": 0.25
+      "startFrame": 10620,
+      "durationInFrames": 727,
+      "gap": 1.4
     },
     {
       "id": "t18",
       "level": null,
-      "overlay": null,
-      "template": "fileWall",
+      "overlay": {
+        "big": "MAROONED",
+        "sub": "THE ARTICLES, TURNED ON YOU"
+      },
+      "template": "broadsideBattle",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 11432,
-      "durationInFrames": 709,
+      "startFrame": 11347,
+      "durationInFrames": 820,
       "gap": 0.25
     },
     {
       "id": "t19",
-      "level": "LEVEL 05  \u00b7  SANJAKBEY",
+      "level": null,
       "overlay": {
-        "big": "20,000 AK\u00c7E",
-        "sub": "A DISTRICT'S REVENUE, NOT A WAGE"
+        "big": "\u00a30",
+        "sub": "ONE PISTOL, ONE SHOT, THE SAND"
       },
-      "template": "lordAudience",
+      "template": "marooned",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 12141,
-      "durationInFrames": 694,
+      "startFrame": 12167,
+      "durationInFrames": 679,
       "gap": 0.25
     },
     {
       "id": "t20",
       "level": null,
       "overlay": null,
-      "template": "balkanVillage",
+      "template": "shipDeck",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 12835,
-      "durationInFrames": 634,
+      "startFrame": 12846,
+      "durationInFrames": 630,
       "gap": 0.25
     },
     {
       "id": "t21",
-      "level": null,
-      "overlay": null,
-      "template": "merchantHouse",
+      "level": "LEVEL 05  \u00b7  QUARTERMASTER",
+      "overlay": {
+        "big": "1.5\u20132 SHARES",
+        "sub": "QUARTERMASTER'S CUT"
+      },
+      "template": "signing",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 13469,
-      "durationInFrames": 700,
+      "startFrame": 13476,
+      "durationInFrames": 608,
       "gap": 0.25
     },
     {
       "id": "t22",
-      "level": "LEVEL 06  \u00b7  BEYLERBEY / PASHA",
+      "level": null,
       "overlay": {
-        "big": "100,000+ AK\u00c7E",
-        "sub": "A PROVINCE. STILL NOT YOURS"
+        "big": "\u00a3300",
+        "sub": "THE RICHEST SPLIT YET"
       },
-      "template": "keepTop",
+      "template": "countRoom",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 14169,
-      "durationInFrames": 580,
+      "startFrame": 14084,
+      "durationInFrames": 646,
       "gap": 0.25
     },
     {
       "id": "t23",
       "level": null,
-      "overlay": null,
-      "template": "siegeWalls",
+      "overlay": {
+        "big": "\u00a30",
+        "sub": "THE PARDON OFFERED. YOU SAIL ANYWAY."
+      },
+      "template": "nassauHarbor",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 14749,
-      "durationInFrames": 657,
+      "startFrame": 14730,
+      "durationInFrames": 571,
       "gap": 0.25
     },
     {
       "id": "t24",
-      "level": null,
-      "overlay": null,
-      "template": "praetorians",
+      "level": "LEVEL 06  \u00b7  CAPTAIN",
+      "overlay": {
+        "big": "2 SHARES",
+        "sub": "CAPTAIN \u2014 VOTED IN, VOTABLE OUT"
+      },
+      "template": "shipDeck",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 15406,
-      "durationInFrames": 687,
+      "startFrame": 15301,
+      "durationInFrames": 659,
       "gap": 0.25
     },
     {
       "id": "t25",
-      "level": "LEVEL 07  \u00b7  VIZIER",
-      "overlay": {
-        "big": "WHO'S WATCHING?",
-        "sub": "THE THRONE, OR HIS MOTHER"
-      },
-      "template": "divanChamber",
+      "level": null,
+      "overlay": null,
+      "template": "broadsideBattle",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 16093,
-      "durationInFrames": 660,
+      "startFrame": 15960,
+      "durationInFrames": 648,
       "gap": 0.25
     },
     {
       "id": "t26",
       "level": null,
-      "overlay": null,
-      "template": "portraitHall",
+      "overlay": {
+        "big": "\u00a31,000",
+        "sub": "A SHARE LIKE THIS COMES ONCE"
+      },
+      "template": "countRoom",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 16753,
-      "durationInFrames": 656,
+      "startFrame": 16608,
+      "durationInFrames": 586,
       "gap": 0.25
     },
     {
       "id": "t27",
       "level": null,
-      "overlay": null,
-      "template": "merchantHouse",
+      "overlay": {
+        "big": "\u00a30",
+        "sub": "THE PARDON, AGAIN. YOU SAIL AGAIN."
+      },
+      "template": "nassauHarbor",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 17409,
-      "durationInFrames": 637,
+      "startFrame": 17194,
+      "durationInFrames": 641,
       "gap": 0.25
     },
     {
       "id": "t28",
-      "level": null,
-      "overlay": null,
-      "template": "divanChamber",
+      "level": "LEVEL 07  \u00b7  COMMODORE",
+      "overlay": {
+        "big": "4 SHIPS",
+        "sub": "A SQUADRON, NOT JUST A CREW"
+      },
+      "template": "shipDeck",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 18046,
-      "durationInFrames": 614,
+      "startFrame": 17835,
+      "durationInFrames": 706,
       "gap": 0.25
     },
     {
       "id": "t29",
-      "level": "LEVEL 08  \u00b7  GRAND VIZIER (SADRAZAM)",
+      "level": null,
       "overlay": {
-        "big": "SADRAZAM",
-        "sub": "THE SEAL IS YOURS"
+        "big": "COMMODORE",
+        "sub": "COMMAND EVERYTHING. OWN NOTHING."
       },
-      "template": "sultanAudience",
+      "template": "captainsCabin",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 18660,
-      "durationInFrames": 659,
-      "gap": 0.7
+      "startFrame": 18541,
+      "durationInFrames": 721,
+      "gap": 0.25
     },
     {
       "id": "t30",
-      "level": null,
-      "overlay": null,
-      "template": "warCouncil",
+      "level": "LEVEL 08  \u00b7  THE RECKONING",
+      "overlay": {
+        "big": "52",
+        "sub": "HANGED IN ONE MORNING, 1722"
+      },
+      "template": "executionDock",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 19319,
-      "durationInFrames": 782,
-      "gap": 0.25
+      "startFrame": 19262,
+      "durationInFrames": 771,
+      "gap": 0.7
     },
     {
       "id": "t31",
       "level": null,
-      "overlay": {
-        "big": "44 OF 284",
-        "sub": "ONE IN SIX. YOU'RE OVERDUE."
-      },
-      "template": "divanChamber",
+      "overlay": null,
+      "template": "courtroom",
       "audio": "audio/t31.wav",
       "audioStartFrame": 3,
-      "startFrame": 20101,
-      "durationInFrames": 857,
+      "startFrame": 20033,
+      "durationInFrames": 860,
       "gap": 0.25
     },
     {
       "id": "t32",
       "level": null,
       "overlay": {
-        "big": "NOT TODAY",
-        "sub": "THE CASE ISN'T YOURS THIS TIME"
+        "big": "ONE PARDON LEFT",
+        "sub": "THE ROPE DOESN'T CARE"
       },
-      "template": "sultanAudience",
+      "template": "executionDock",
       "audio": "audio/t32.wav",
       "audioStartFrame": 3,
-      "startFrame": 20958,
-      "durationInFrames": 913,
+      "startFrame": 20893,
+      "durationInFrames": 698,
       "gap": 0.25
     }
   ]

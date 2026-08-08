@@ -2188,6 +2188,166 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       <ellipse cx={960} cy={620} rx={460} ry={200} fill="url(#sglow)" opacity={0.35} />
     </g>
   ),
+  // --- Pirate pack (pirate — Golden Age of Piracy) ---
+  // a poor coastal fishing cove — a leaning shack, a patched-net dinghy pulled up on the sand, a
+  // rickety jetty — Level 1, the named want, the origin AND the loop-close callback (older, same cove)
+  fishingCove: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#spaper)" />
+      <rect x={0} y={640} width={1920} height={440} fill="#9fc4d6" opacity={0.55} /><line x1={0} y1={640} x2={1920} y2={640} stroke={INK} strokeWidth={3} opacity={0.4} />
+      <rect x={0} y={860} width={1920} height={220} fill={FLOOR} /><line x1={0} y1={860} x2={1920} y2={860} stroke={INK} strokeWidth={5} />
+      <rect x={220} y={620} width={280} height={180} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      <path d="M 200 620 L 360 520 L 520 620 Z" fill="#8a6a42" stroke={INK} strokeWidth={4} />
+      <rect x={310} y={700} width={70} height={100} fill="#4a4038" stroke={INK} strokeWidth={3} />
+      <path d="M 1200 900 L 1200 640 L 1650 640" fill="none" stroke="#8a6a42" strokeWidth={10} strokeLinecap="round" />
+      {[1260, 1340, 1420, 1500, 1580].map((x) => <line key={x} x1={x} y1={640} x2={x} y2={700} stroke="#6a5636" strokeWidth={8} />)}
+      <path d="M 1440 900 Q 1560 860 1700 900 L 1690 950 Q 1560 920 1450 950 Z" fill="#c9a876" stroke={INK} strokeWidth={3.5} />
+      <ellipse cx={960} cy={700} rx={560} ry={160} fill="url(#sglow)" opacity={0.3} />
+    </g>
+  ),
+  // a merchant/pirate ship's working deck — mainmast rising out of frame, coiled rope, a capstan,
+  // open ocean horizon — THE recurring master/home-base beat: the grind, every rank still stands here
+  shipDeck: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#swarm)" />
+      <rect x={0} y={520} width={1920} height={120} fill="#4f7ea3" opacity={0.6} /><line x1={0} y1={520} x2={1920} y2={520} stroke={INK} strokeWidth={3} opacity={0.4} />
+      <rect x={0} y={640} width={1920} height={440} fill="#c9a876" /><line x1={0} y1={640} x2={1920} y2={640} stroke={INK} strokeWidth={5} />
+      {Array.from({length: 14}).map((_, i) => <line key={i} x1={i * 140} y1={640} x2={i * 140} y2={1080} stroke="#8a6a42" strokeWidth={2} opacity={0.4} />)}
+      <line x1={1500} y1={1080} x2={1500} y2={140} stroke="#4a3a26" strokeWidth={26} />
+      <path d={`M 1500 200 Q ${1500 + Math.sin(frame * 0.03) * 30 + 220} 260 ${1500 + Math.sin(frame * 0.03) * 10 + 300} 460 L 1500 500 Z`} fill={PAPERC} stroke={INK} strokeWidth={3} opacity={0.85} />
+      <g transform="translate(760 900)">
+        <ellipse cx={0} cy={0} rx={70} ry={22} fill="#6a5636" stroke={INK} strokeWidth={4} />
+        <circle cx={0} cy={-30} r={14} fill="#4a3a26" stroke={INK} strokeWidth={3} />
+      </g>
+      <path d="M 300 980 Q 380 940 460 980 Q 380 1000 300 980 Z" fill="#8a6a42" stroke={INK} strokeWidth={3} opacity={0.7} />
+      <ellipse cx={960} cy={560} rx={640} ry={160} fill="url(#sglow)" opacity={0.25} />
+    </g>
+  ),
+  // broadside battle — a foreground cannon mid-recoil, powder smoke, a damaged enemy ship silhouette
+  // on a stormy horizon — the danger escalation beat, the taking of a prize
+  broadsideBattle: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#3a4048" />
+      <rect x={0} y={560} width={1920} height={120} fill="#5a6a76" opacity={0.7} /><line x1={0} y1={560} x2={1920} y2={560} stroke={INK} strokeWidth={3} opacity={0.4} />
+      <rect x={0} y={680} width={1920} height={400} fill="#8a9aa2" /><line x1={0} y1={680} x2={1920} y2={680} stroke={INK} strokeWidth={5} />
+      <g transform="translate(1420 480)" opacity={0.85}>
+        <path d="M -120 120 L -60 -60 L 90 -60 L 130 120 Z" fill="#2c3238" stroke={INK} strokeWidth={4} />
+        <line x1={20} y1={-60} x2={20} y2={-220} stroke="#1c2126" strokeWidth={10} />
+        <path d="M 20 -190 L 100 -140 L 20 -110 Z" fill="#4a5258" opacity={0.7} />
+      </g>
+      {/* the deck cannon sits well clear of CAPTION_SAFE_X=760 so the money card never buries it */}
+      <g transform="translate(1180 940)">
+        <rect x={-40} y={-30} width={200} height={60} rx={10} fill="#3a2a20" stroke={INK} strokeWidth={5} />
+        <circle cx={-170} cy={0} r={34} fill="#1c1a18" stroke={INK} strokeWidth={4} />
+        <ellipse cx={-220} cy={-10} rx={70} ry={40} fill="#e6dfd0" opacity={frame % 30 < 10 ? 0.7 : 0.15} />
+      </g>
+      {Array.from({length: 5}).map((_, i) => {const t = (frame * 3 + i * 60) % 300;
+        return <circle key={i} cx={960 - i * 20} cy={430 - t * 0.4} r={20 + t * 0.15} fill="#cfd6da" opacity={Math.max(0, 0.5 - t / 300)} />;})}
+      <ellipse cx={1200} cy={520} rx={620} ry={220} fill="url(#sglow)" opacity={0.2} />
+    </g>
+  ),
+  // Nassau harbor — the Republic of Pirates, palm-lined colonial waterfront, tavern fronts, a forest
+  // of anchored masts in the bay — the haven, the pardon offered, the loot spent fast between voyages
+  nassauHarbor: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#sclean)" />
+      <rect x={0} y={560} width={1920} height={160} fill="#7fb3c9" opacity={0.55} /><line x1={0} y1={560} x2={1920} y2={560} stroke={INK} strokeWidth={3} opacity={0.4} />
+      {/* anchored ships in the bay: a small hull + a single mast each, so they read as boats, not stray sticks */}
+      {[380, 560, 1400, 1620].map((x, i) => (
+        <g key={i} opacity={0.75}>
+          <path d={`M ${x - 34} 558 Q ${x} 578 ${x + 34} 558 L ${x + 24} 578 L ${x - 24} 578 Z`} fill="#4a3a26" stroke={INK} strokeWidth={2.5} />
+          <line x1={x} y1={558} x2={x} y2={400} stroke="#5a4a34" strokeWidth={4} />
+          <path d={`M ${x} 410 L ${x + (i % 2 ? 46 : -46)} 460 L ${x} 480 Z`} fill={PAPERC} stroke={INK} strokeWidth={2} opacity={0.85} />
+        </g>
+      ))}
+      <rect x={0} y={720} width={1920} height={360} fill={FLOOR} /><line x1={0} y1={720} x2={1920} y2={720} stroke={INK} strokeWidth={5} />
+      {[120, 420, 720, 1560].map((x, i) => (
+        <g key={i} opacity={0.9}>
+          <rect x={x} y={480} width={220} height={240} fill={i % 2 ? '#d8c8a8' : PAPERC} stroke={INK} strokeWidth={3.5} />
+          <path d={`M ${x - 14} 480 L ${x + 110} 410 L ${x + 234} 480 Z`} fill="#8a5a3a" stroke={INK} strokeWidth={3} />
+        </g>
+      ))}
+      {/* palm trees — a leaning trunk with a canopy of fronds radiating from the TOP, not the mid-trunk */}
+      {[240, 1780].map((x, i) => (
+        <g key={i} transform={`translate(${x} 720)`}>
+          <path d={`M 0 0 Q ${i % 2 ? 30 : -30} -140 0 -260`} fill="none" stroke="#5a4a34" strokeWidth={12} strokeLinecap="round" />
+          {[-40, 10, 60, 110, 160].map((ang, k) => {const a = (ang - 90) * Math.PI / 180;
+            return <path key={k} d={`M 0 -260 Q ${Math.cos(a) * 60} ${-260 + Math.sin(a) * 60 - 20} ${Math.cos(a) * 130} ${-260 + Math.sin(a) * 130}`} fill="none" stroke="#4a7a3a" strokeWidth={9} strokeLinecap="round" />;})}
+        </g>
+      ))}
+      <ellipse cx={960} cy={560} rx={680} ry={180} fill="url(#sglow)" opacity={0.25} />
+    </g>
+  ),
+  // the captain's great cabin — a chart table with compass + dividers, an open treasure chest, wide
+  // stern windows on the night sea — command's private authority, the apex, "own nothing you can spend"
+  captainsCabin: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#241c1a" />
+      <rect x={0} y={780} width={1920} height={300} fill="#3a2a20" /><line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={4} opacity={0.5} />
+      <path d="M 1180 140 Q 1550 100 1780 260 L 1780 700 Q 1550 620 1180 660 Z" fill="#0d1620" stroke={INK} strokeWidth={5} />
+      {[0, 1, 2, 3].map((i) => <line key={i} x1={1230 + i * 140} y1={150} x2={1230 + i * 140} y2={670} stroke="#4a3a2c" strokeWidth={6} />)}
+      {Array.from({length: 30}).map((_, i) => <circle key={i} cx={1250 + rnd(i * 3) * 500} cy={200 + rnd(i * 5) * 400} r={1.4} fill="#fff" opacity={0.5} />)}
+      <rect x={520} y={760} width={480} height={44} fill="#5a4230" stroke={INK} strokeWidth={4} />
+      <rect x={560} y={720} width={200} height={44} rx={4} fill="#e8dcc0" stroke={INK} strokeWidth={2.5} />
+      <path d="M 620 742 Q 660 720 700 742" fill="none" stroke="#c0392b" strokeWidth={2} opacity={0.7} />
+      <g transform="translate(360 900)">
+        <path d="M -80 20 L -80 -30 L 80 -30 L 80 20 Z" fill="#5a4230" stroke={INK} strokeWidth={4} />
+        <path d="M -84 -30 Q 0 -70 84 -30" fill={GOLD} stroke={INK} strokeWidth={4} />
+        <rect x={-50} y={-24} width={100} height={16} fill={GOLD} opacity={0.85} />
+      </g>
+      <ellipse cx={960} cy={520} rx={520} ry={220} fill="url(#sglow)" opacity={0.2} />
+    </g>
+  ),
+  // marooned — a bare sandbar, a single leaning palm, an empty horizon in every direction — the real,
+  // verified discipline (theft, cowardice, breaking the Articles): left alone with almost nothing
+  marooned: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#sclean)" />
+      <rect x={0} y={600} width={1920} height={200} fill="#7fb3c9" opacity={0.5} /><line x1={0} y1={600} x2={1920} y2={600} stroke={INK} strokeWidth={3} opacity={0.4} />
+      <ellipse cx={960} cy={880} rx={620} ry={140} fill="#e6d5a8" stroke={INK} strokeWidth={4} />
+      <g transform="translate(1380 780)">
+        <path d={`M 0 260 Q ${10 + Math.sin(frame * 0.02) * 8} 60 0 -140`} fill="none" stroke="#6a5636" strokeWidth={12} />
+        {[0, 1, 2, 3, 4].map((i) => {const a = (i / 5) * Math.PI - Math.PI / 2 + Math.sin(frame * 0.02) * 0.08;
+          return <path key={i} d={`M 0 -140 Q ${Math.cos(a) * 90} ${-140 + Math.sin(a) * 60 - 40} ${Math.cos(a) * 150} ${-140 + Math.sin(a) * 90}`} fill="none" stroke="#4a7a3a" strokeWidth={8} />;})}
+      </g>
+      <g transform="translate(680 940)" opacity={0.8}>
+        <ellipse cx={0} cy={10} rx={22} ry={9} fill="#8a6a42" stroke={INK} strokeWidth={2.5} />
+      </g>
+      <ellipse cx={960} cy={640} rx={700} ry={200} fill="url(#sglow)" opacity={0.15} />
+    </g>
+  ),
+  // Execution Dock — a gallows frame + noose, a small crowd silhouette, a gibbet cage set off to the
+  // side (VERIFIED: Kidd's body gibbeted at Tilbury Point) — the reckoning, the cold open + its payoff
+  executionDock: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#3a3a3e" />
+      <rect x={0} y={640} width={1920} height={100} fill="#5a6268" opacity={0.7} /><line x1={0} y1={640} x2={1920} y2={640} stroke={INK} strokeWidth={3} opacity={0.4} />
+      <rect x={0} y={740} width={1920} height={340} fill="#8a8478" /><line x1={0} y1={740} x2={1920} y2={740} stroke={INK} strokeWidth={5} />
+      <g transform="translate(900 400)">
+        <line x1={-160} y1={340} x2={-160} y2={0} stroke="#3a2a20" strokeWidth={16} />
+        <line x1={160} y1={340} x2={160} y2={0} stroke="#3a2a20" strokeWidth={16} />
+        <line x1={-180} y1={0} x2={180} y2={0} stroke="#3a2a20" strokeWidth={18} />
+        <line x1={0} y1={0} x2={0} y2={70} stroke="#1c1a18" strokeWidth={5} />
+        <circle cx={0} cy={90} r={22} fill="none" stroke="#1c1a18" strokeWidth={5} />
+      </g>
+      <g transform="translate(1500 560)" opacity={0.85}>
+        <line x1={0} y1={0} x2={0} y2={-160} stroke="#3a2a20" strokeWidth={10} />
+        <path d="M -30 -40 L 30 -40 L 30 -160 L -30 -160 Z" fill="none" stroke="#2a2420" strokeWidth={4} />
+        {Array.from({length: 5}).map((_, i) => <line key={i} x1={-30} y1={-52 + i * 24} x2={30} y2={-52 + i * 24} stroke="#2a2420" strokeWidth={3} />)}
+      </g>
+      {/* the dim crowd — head + shoulders + legs so they read as watching figures, not lamp posts */}
+      {Array.from({length: 10}).map((_, i) => {const x = 40 + i * 190;
+        return (
+          <g key={i} opacity={0.55}>
+            <circle cx={x} cy={772} r={14} fill="#20242a" />
+            <path d={`M ${x - 20} 850 Q ${x} 782 ${x + 20} 850`} fill="#20242a" />
+            <line x1={x - 8} y1={850} x2={x - 8} y2={890} stroke="#20242a" strokeWidth={7} />
+            <line x1={x + 8} y1={850} x2={x + 8} y2={890} stroke="#20242a" strokeWidth={7} />
+          </g>
+        );})}
+      <ellipse cx={900} cy={420} rx={500} ry={180} fill="url(#sglow)" opacity={0.15} />
+    </g>
+  ),
 };
 // tiny helper so inline math reads cleanly above
 function y_(v: number) {return v;}
@@ -3603,4 +3763,50 @@ const OTTOMAN = {
       fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA, ...MONGOL, ...GLADIATOR, ...BRATVA, ...SPACE, ...OTTOMAN};
+// Pirate pack (pirate — green hand -> able seaman -> specialist (gunner/boatswain) -> quartermaster
+// -> captain -> commodore/fleet command -> the reckoning). 7 new bespoke backdrops (this is the first
+// tall-ship/naval topic; nothing existing covers rigging/broadsides/a gallows). The rest of the
+// ladder composes from universal `signing` (the Articles, voted and signed by the whole crew) and
+// MAFIA's `countRoom` (re-narrated: splitting shares of pieces of eight under a naked bulb),
+// `courtroom` (the Admiralty trial), `prisonCell` (captured, awaiting trial) — crime-adjacent packs
+// read fine for piracy per the cartel/yakuza/bratva cross-genre precedent. Also reuses OCEAN's
+// `oceanCapsize` for the storm danger beat rather than authoring a second storm backdrop.
+const PIRATE = {
+  // the fishing cove — Level 1's named want, the origin, the loop-close callback (older, same cove)
+  fishingCove: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="fishingCove" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.worried, t)}} />;},
+  // the working deck — THE recurring master/home-base beat, every rank still stands on this deck
+  shipDeck: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="shipDeck" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.hardened, t)}} />;},
+  // the broadside — a prize taken by force, the danger escalation, powder smoke and a damaged enemy hull
+  broadsideBattle: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="broadsideBattle" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 900, y: 906, scale: 1.35, view: 'front', expr: blendExpr(FACES.focused, FACES.hardened, t)}} />;},
+  // Nassau harbor — the Republic of Pirates, the haven, the pardon offered, the loot spent fast
+  nassauHarbor: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="nassauHarbor" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.exhausted, FACES.smug, t)}} />;},
+  // the captain's great cabin — the chart table, the chest, the stern windows — command's private
+  // authority, the apex: you can command a fortune and still not own a shilling of it
+  captainsCabin: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="captainsCabin" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.hardened, FACES.hollow, t)}} />;},
+  // marooned — the real, verified Articles punishment: a bare sandbar, an empty horizon, alone
+  marooned: () => {const f = useCurrentFrame();
+    return <Stage backdrop="marooned" bg="url(#sclean)"
+      fig={{pose: A.sit(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: FACES.hollow}} />;},
+  // Execution Dock — the cold open + its loop-close payoff, the reckoning above every rank
+  executionDock: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="executionDock" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 900, y: 1000, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA, ...MONGOL, ...GLADIATOR, ...BRATVA, ...SPACE, ...OTTOMAN, ...PIRATE};
