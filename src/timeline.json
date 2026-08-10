@@ -2,21 +2,21 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 21591,
+  "totalFrames": 22116,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t01",
       "level": null,
       "overlay": {
-        "big": "52",
-        "sub": "HANGED IN ONE MORNING, 1722"
+        "big": "14 SEASONS",
+        "sub": "ONE BANNER"
       },
-      "template": "executionDock",
+      "template": "rafterRetirement",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 611,
+      "durationInFrames": 667,
       "gap": 0.7
     },
     {
@@ -26,19 +26,19 @@
       "template": "fileWall",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 611,
-      "durationInFrames": 606,
+      "startFrame": 667,
+      "durationInFrames": 545,
       "gap": 0.25
     },
     {
       "id": "t03",
-      "level": "LEVEL 01  \u00b7  A FISHING COVE",
+      "level": "LEVEL 01  \u00b7  THE DRIVEWAY",
       "overlay": null,
-      "template": "fishingCove",
+      "template": "drivewayHoop",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 1217,
-      "durationInFrames": 569,
+      "startFrame": 1212,
+      "durationInFrames": 692,
       "gap": 0.25
     },
     {
@@ -48,376 +48,349 @@
       "template": "dinner",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 1786,
-      "durationInFrames": 644,
+      "startFrame": 1904,
+      "durationInFrames": 682,
       "gap": 0.25
     },
     {
       "id": "t05",
       "level": null,
-      "overlay": {
-        "big": "\u00a31.50/MO",
-        "sub": "IF THE CAPTAIN EVEN PAYS IT"
-      },
-      "template": "shipDeck",
+      "overlay": null,
+      "template": "highSchoolGym",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 2430,
-      "durationInFrames": 650,
+      "startFrame": 2586,
+      "durationInFrames": 707,
       "gap": 0.25
     },
     {
       "id": "t06",
       "level": null,
       "overlay": {
-        "big": "JOIN, OR SWIM",
-        "sub": "THE CHOICE THEY GIVE YOU"
+        "big": "0.03%",
+        "sub": "EVER REACH THE NBA"
       },
-      "template": "broadsideBattle",
+      "template": "boardroomNotes",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 3080,
-      "durationInFrames": 727,
+      "startFrame": 3293,
+      "durationInFrames": 649,
       "gap": 0.25
     },
     {
       "id": "t07",
-      "level": "LEVEL 02  \u00b7  GREEN HAND",
+      "level": "LEVEL 02  \u00b7  THE ROSTER",
       "overlay": null,
-      "template": "signing",
+      "template": "lectureHallScene",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 3807,
-      "durationInFrames": 673,
+      "startFrame": 3942,
+      "durationInFrames": 674,
       "gap": 0.25
     },
     {
       "id": "t08",
       "level": null,
       "overlay": null,
-      "template": "shipDeck",
+      "template": "arenaCourt",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 4480,
-      "durationInFrames": 786,
+      "startFrame": 4616,
+      "durationInFrames": 757,
       "gap": 0.25
     },
     {
       "id": "t09",
       "level": null,
       "overlay": {
-        "big": "\u00a30",
-        "sub": "GREEN HANDS SPLIT LAST"
+        "big": "1%",
+        "sub": "OF NCAA PLAYERS GET DRAFTED"
       },
-      "template": "countRoom",
+      "template": "window",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 5266,
-      "durationInFrames": 716,
+      "startFrame": 5373,
+      "durationInFrames": 610,
       "gap": 0.25
     },
     {
       "id": "t10",
-      "level": "LEVEL 03  \u00b7  ABLE SEAMAN",
-      "overlay": {
-        "big": "1 SHARE",
-        "sub": "A FULL VOTE, FINALLY"
-      },
-      "template": "shipDeck",
+      "level": null,
+      "overlay": null,
+      "template": "boardroomNotes",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 5982,
-      "durationInFrames": 698,
+      "startFrame": 5983,
+      "durationInFrames": 718,
       "gap": 0.25
     },
     {
       "id": "t11",
-      "level": null,
-      "overlay": null,
-      "template": "broadsideBattle",
+      "level": "LEVEL 03  \u00b7  UNDRAFTED",
+      "overlay": {
+        "big": "$40,500",
+        "sub": "G LEAGUE, FIVE MONTHS"
+      },
+      "template": "signing",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 6680,
-      "durationInFrames": 671,
+      "startFrame": 6701,
+      "durationInFrames": 668,
       "gap": 0.25
     },
     {
       "id": "t12",
       "level": null,
-      "overlay": {
-        "big": "\u00a36",
-        "sub": "YOUR FIRST SHARE, EVER"
-      },
-      "template": "countRoom",
+      "overlay": null,
+      "template": "gLeagueBus",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 7351,
-      "durationInFrames": 657,
+      "startFrame": 7369,
+      "durationInFrames": 805,
       "gap": 0.25
     },
     {
       "id": "t13",
       "level": null,
       "overlay": {
-        "big": "\u00a30",
-        "sub": "GONE IN NINE DAYS"
+        "big": "$578,577",
+        "sub": "HALF THE ROOKIE MINIMUM"
       },
-      "template": "nassauHarbor",
+      "template": "signing",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 8008,
-      "durationInFrames": 670,
+      "startFrame": 8174,
+      "durationInFrames": 601,
       "gap": 0.25
     },
     {
       "id": "t14",
-      "level": "LEVEL 04  \u00b7  GUNNER",
-      "overlay": {
-        "big": "1.5 SHARES",
-        "sub": "GUNNER'S CUT"
-      },
-      "template": "shipDeck",
+      "level": null,
+      "overlay": null,
+      "template": "iceBathRoom",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 8678,
-      "durationInFrames": 637,
+      "startFrame": 8775,
+      "durationInFrames": 683,
       "gap": 0.25
     },
     {
       "id": "t15",
-      "level": null,
-      "overlay": null,
-      "template": "broadsideBattle",
+      "level": "LEVEL 04  \u00b7  THE CALL-UP",
+      "overlay": {
+        "big": "$1,361,969",
+        "sub": "NBA ROOKIE MINIMUM"
+      },
+      "template": "arenaCourt",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 9315,
-      "durationInFrames": 674,
+      "startFrame": 9458,
+      "durationInFrames": 617,
       "gap": 0.25
     },
     {
       "id": "t16",
       "level": null,
-      "overlay": {
-        "big": "800 PIECES OF EIGHT",
-        "sub": "WRITTEN DOWN. VOTED ON. FOR A LEG."
-      },
-      "template": "countRoom",
+      "overlay": null,
+      "template": "tower",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 9989,
-      "durationInFrames": 631,
+      "startFrame": 10075,
+      "durationInFrames": 598,
       "gap": 0.25
     },
     {
       "id": "t17",
       "level": null,
       "overlay": null,
-      "template": "shipDeck",
+      "template": "arenaCourt",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 10620,
-      "durationInFrames": 727,
+      "startFrame": 10673,
+      "durationInFrames": 772,
       "gap": 1.4
     },
     {
       "id": "t18",
       "level": null,
       "overlay": {
-        "big": "MAROONED",
-        "sub": "THE ARTICLES, TURNED ON YOU"
+        "big": "ACL TORN",
+        "sub": "AVG CAREER: 4.5 YEARS"
       },
-      "template": "broadsideBattle",
+      "template": "erTrauma",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 11347,
-      "durationInFrames": 820,
-      "gap": 0.25
+      "startFrame": 11445,
+      "durationInFrames": 717,
+      "gap": 0.7
     },
     {
       "id": "t19",
       "level": null,
-      "overlay": {
-        "big": "\u00a30",
-        "sub": "ONE PISTOL, ONE SHOT, THE SAND"
-      },
-      "template": "marooned",
+      "overlay": null,
+      "template": "layoffs",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 12167,
-      "durationInFrames": 679,
+      "startFrame": 12162,
+      "durationInFrames": 838,
       "gap": 0.25
     },
     {
       "id": "t20",
       "level": null,
       "overlay": null,
-      "template": "shipDeck",
+      "template": "iceBathRoom",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 12846,
-      "durationInFrames": 630,
+      "startFrame": 13000,
+      "durationInFrames": 685,
       "gap": 0.25
     },
     {
       "id": "t21",
-      "level": "LEVEL 05  \u00b7  QUARTERMASTER",
-      "overlay": {
-        "big": "1.5\u20132 SHARES",
-        "sub": "QUARTERMASTER'S CUT"
-      },
-      "template": "signing",
+      "level": "LEVEL 05  \u00b7  THE COMEBACK",
+      "overlay": null,
+      "template": "gLeagueBus",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 13476,
-      "durationInFrames": 608,
+      "startFrame": 13685,
+      "durationInFrames": 727,
       "gap": 0.25
     },
     {
       "id": "t22",
       "level": null,
       "overlay": {
-        "big": "\u00a3300",
-        "sub": "THE RICHEST SPLIT YET"
+        "big": "10-DAY DEAL",
+        "sub": "NO GUARANTEE PAST DAY 10"
       },
-      "template": "countRoom",
+      "template": "arenaCourt",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 14084,
-      "durationInFrames": 646,
+      "startFrame": 14412,
+      "durationInFrames": 782,
       "gap": 0.25
     },
     {
       "id": "t23",
       "level": null,
-      "overlay": {
-        "big": "\u00a30",
-        "sub": "THE PARDON OFFERED. YOU SAIL ANYWAY."
-      },
-      "template": "nassauHarbor",
+      "overlay": null,
+      "template": "iceBathRoom",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 14730,
-      "durationInFrames": 571,
+      "startFrame": 15194,
+      "durationInFrames": 622,
       "gap": 0.25
     },
     {
       "id": "t24",
-      "level": "LEVEL 06  \u00b7  CAPTAIN",
-      "overlay": {
-        "big": "2 SHARES",
-        "sub": "CAPTAIN \u2014 VOTED IN, VOTABLE OUT"
-      },
-      "template": "shipDeck",
+      "level": null,
+      "overlay": null,
+      "template": "dinner",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 15301,
-      "durationInFrames": 659,
+      "startFrame": 15816,
+      "durationInFrames": 587,
       "gap": 0.25
     },
     {
       "id": "t25",
-      "level": null,
+      "level": "LEVEL 06  \u00b7  ALL-STAR",
       "overlay": null,
-      "template": "broadsideBattle",
+      "template": "arenaCourt",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 15960,
-      "durationInFrames": 648,
+      "startFrame": 16403,
+      "durationInFrames": 600,
       "gap": 0.25
     },
     {
       "id": "t26",
       "level": null,
-      "overlay": {
-        "big": "\u00a31,000",
-        "sub": "A SHARE LIKE THIS COMES ONCE"
-      },
-      "template": "countRoom",
+      "overlay": null,
+      "template": "boardroomNotes",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 16608,
-      "durationInFrames": 586,
+      "startFrame": 17003,
+      "durationInFrames": 785,
       "gap": 0.25
     },
     {
       "id": "t27",
       "level": null,
-      "overlay": {
-        "big": "\u00a30",
-        "sub": "THE PARDON, AGAIN. YOU SAIL AGAIN."
-      },
-      "template": "nassauHarbor",
+      "overlay": null,
+      "template": "podiumScene",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 17194,
-      "durationInFrames": 641,
+      "startFrame": 17788,
+      "durationInFrames": 646,
       "gap": 0.25
     },
     {
       "id": "t28",
-      "level": "LEVEL 07  \u00b7  COMMODORE",
+      "level": "LEVEL 07  \u00b7  SUPERMAX",
       "overlay": {
-        "big": "4 SHIPS",
-        "sub": "A SQUADRON, NOT JUST A CREW"
+        "big": "$313.9M",
+        "sub": "5-YEAR SUPERMAX DEAL"
       },
-      "template": "shipDeck",
+      "template": "signing",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 17835,
-      "durationInFrames": 706,
+      "startFrame": 18434,
+      "durationInFrames": 594,
       "gap": 0.25
     },
     {
       "id": "t29",
       "level": null,
-      "overlay": {
-        "big": "COMMODORE",
-        "sub": "COMMAND EVERYTHING. OWN NOTHING."
-      },
-      "template": "captainsCabin",
+      "overlay": null,
+      "template": "jet",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 18541,
-      "durationInFrames": 721,
+      "startFrame": 19028,
+      "durationInFrames": 922,
       "gap": 0.25
     },
     {
       "id": "t30",
       "level": "LEVEL 08  \u00b7  THE RECKONING",
       "overlay": {
-        "big": "52",
-        "sub": "HANGED IN ONE MORNING, 1722"
+        "big": "14 SEASONS",
+        "sub": "3X THE AVG CAREER"
       },
-      "template": "executionDock",
+      "template": "rafterRetirement",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 19262,
-      "durationInFrames": 771,
+      "startFrame": 19950,
+      "durationInFrames": 707,
       "gap": 0.7
     },
     {
       "id": "t31",
       "level": null,
-      "overlay": null,
-      "template": "courtroom",
+      "overlay": {
+        "big": "60%",
+        "sub": "BROKE WITHIN 5 YEARS"
+      },
+      "template": "iceBathRoom",
       "audio": "audio/t31.wav",
       "audioStartFrame": 3,
-      "startFrame": 20033,
-      "durationInFrames": 860,
+      "startFrame": 20657,
+      "durationInFrames": 754,
       "gap": 0.25
     },
     {
       "id": "t32",
       "level": null,
       "overlay": {
-        "big": "ONE PARDON LEFT",
-        "sub": "THE ROPE DOESN'T CARE"
+        "big": "RETIRED",
+        "sub": "THE ICE STOPS COMING"
       },
-      "template": "executionDock",
+      "template": "rafterRetirement",
       "audio": "audio/t32.wav",
       "audioStartFrame": 3,
-      "startFrame": 20893,
-      "durationInFrames": 698,
+      "startFrame": 21411,
+      "durationInFrames": 705,
       "gap": 0.25
     }
   ]

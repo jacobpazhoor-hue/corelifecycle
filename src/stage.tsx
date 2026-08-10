@@ -127,6 +127,18 @@ const Ridges: React.FC<{baseY: number; layers?: number; seed?: number; roll?: nu
   );
 };
 
+// Basketball hoop art shared across the basketball pack's backdrops (driveway/gym/arena) — a
+// backboard, an orange rim, and a net of converging lines, in local coords with origin at the rim.
+const HoopArt: React.FC<{x: number; y: number; scale?: number}> = ({x, y, scale = 1}) => (
+  <g transform={`translate(${x} ${y}) scale(${scale})`}>
+    <rect x={-90} y={-170} width={180} height={120} fill="#f4f1e8" stroke={INK} strokeWidth={5} />
+    <rect x={-46} y={-138} width={92} height={56} fill="none" stroke={INK} strokeWidth={3} opacity={0.6} />
+    <line x1={-90} y1={-50} x2={90} y2={-50} stroke={INK} strokeWidth={4} />
+    <ellipse cx={0} cy={-38} rx={54} ry={12} fill="none" stroke="#c0392b" strokeWidth={7} />
+    {[-40, -20, 0, 20, 40].map((lx) => <line key={lx} x1={lx * 0.9} y1={-32} x2={lx * 0.35} y2={38} stroke={INK} strokeWidth={2} opacity={0.5} />)}
+  </g>
+);
+
 // =================== BACKDROPS (far plane) ===================
 const BG: Record<string, React.FC<{frame: number}>> = {
   // tiered lecture hall — med school / training / any "learning" beat
@@ -2348,6 +2360,110 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       <ellipse cx={900} cy={420} rx={500} ry={180} fill="url(#sglow)" opacity={0.15} />
     </g>
   ),
+  // --- Basketball pack (basketball_player) ---
+  // the driveway hoop — Level 1's named want, the origin, the loop-close callback: a modest house
+  // facade, a cracked concrete driveway, a chain-link fence, a hoop bolted above the garage door
+  drivewayHoop: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#spaper)" />
+      <rect x={0} y={720} width={1920} height={360} fill="#c9c2ad" /><line x1={0} y1={720} x2={1920} y2={720} stroke={INK} strokeWidth={5} />
+      {Array.from({length: 6}).map((_, i) => <line key={i} x1={i * 340} y1={720} x2={i * 340 + 170} y2={1080} stroke={INK} strokeWidth={2} opacity={0.25} />)}
+      <rect x={900} y={280} width={620} height={460} fill={PAPERC} stroke={INK} strokeWidth={5} />
+      <path d="M 860 280 L 1210 100 L 1560 280 Z" fill="#8a5a3a" stroke={INK} strokeWidth={4} />
+      <rect x={960} y={520} width={500} height={220} fill="#c9b98f" stroke={INK} strokeWidth={4} />
+      {[1010, 1210, 1410].map((x) => <line key={x} x1={x} y1={520} x2={x} y2={740} stroke={INK} strokeWidth={2} opacity={0.4} />)}
+      <rect x={80} y={640} width={2} height={0} />
+      {Array.from({length: 14}).map((_, i) => <line key={i} x1={40 + i * 22} y1={620} x2={40 + i * 22} y2={720} stroke={INK} strokeWidth={2} opacity={0.3} />)}
+      <HoopArt x={1210} y={340} scale={0.85} />
+      <ellipse cx={1210} cy={500} rx={520} ry={160} fill="url(#sglow)" opacity={0.15} />
+    </g>
+  ),
+  // the high school gym — polished court, a hoop + scoreboard, tiered bleachers with a dim crowd
+  highSchoolGym: ({frame}) => (
+    <g>
+      {[0, 1, 2, 3].map((r) => <rect key={r} x={-20} y={120 + r * 66} width={1960} height={38} fill={PAPERC} stroke={INK} strokeWidth={2} opacity={0.6 - r * 0.08} />)}
+      {Array.from({length: 48}).map((_, i) => <circle key={i} cx={40 + (i % 24) * 80} cy={148 + Math.floor(i / 24) * 66} r={7} fill={INK} opacity={0.25} />)}
+      <rect x={0} y={640} width={1920} height={440} fill="#d8a860" /><line x1={0} y1={640} x2={1920} y2={640} stroke={INK} strokeWidth={5} />
+      <circle cx={960} cy={900} r={110} fill="none" stroke={INK} strokeWidth={4} opacity={0.5} />
+      <line x1={960} y1={640} x2={960} y2={1080} stroke={INK} strokeWidth={3} opacity={0.4} />
+      <rect x={870} y={500} width={220} height={36} fill="#141820" stroke={INK} strokeWidth={4} />
+      <text x={980} y={526} textAnchor="middle" fontFamily={SANS} fontSize={26} fontWeight={800} fill={GOLD}>42-40</text>
+      <HoopArt x={1560} y={720} scale={0.75} />
+      <ellipse cx={960} cy={780} rx={640} ry={200} fill="url(#sglow)" opacity={0.18} />
+    </g>
+  ),
+  // the G League bus — rows of seats receding, a window streaming blurred highway lights past —
+  // the grind, the recurring mentor's coach seat
+  gLeagueBus: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#1c2026" />
+      <path d="M 1150 60 L 1900 60 L 1900 640 L 1150 640 Z" fill="#0d1520" stroke={INK} strokeWidth={5} />
+      {Array.from({length: 22}).map((_, i) => {
+        const t = (frame * 3 + i * 90) % 900 - 200;
+        return <ellipse key={i} cx={1180 + (i % 6) * 130} cy={90 + t} rx={10} ry={38} fill="#f2c14e" opacity={0.35} />;})}
+      {[0, 1, 2, 3].map((r) => (
+        <g key={r} transform={`translate(${140 + r * 260} 700)`}>
+          <rect x={-70} y={-140} width={140} height={140} rx={10} fill={PAPERC} stroke={INK} strokeWidth={4} />
+          <rect x={-70} y={20} width={140} height={40} rx={6} fill={PAPERC} stroke={INK} strokeWidth={4} />
+        </g>
+      ))}
+      <rect x={0} y={840} width={1920} height={240} fill="#141820" /><line x1={0} y1={840} x2={1920} y2={840} stroke={INK} strokeWidth={4} opacity={0.5} />
+      <ellipse cx={960} cy={500} rx={700} ry={220} fill="url(#sglow)" opacity={0.12} />
+    </g>
+  ),
+  // the arena court — THE recurring master backdrop, relit differently across levels: a hanging
+  // jumbotron/scoreboard, a packed dark bowl of stands, a polished center-court logo, spotlight beams
+  arenaCourt: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#151a22" />
+      {[0, 1, 2, 3, 4].map((r) => <rect key={r} x={-20} y={80 + r * 60} width={1960} height={34} fill="#20262e" stroke={INK} strokeWidth={2} opacity={0.7 - r * 0.09} />)}
+      {Array.from({length: 70}).map((_, i) => <circle key={i} cx={30 + (i % 35) * 55} cy={100 + Math.floor(i / 35) * 60} r={5} fill="#3a4250" opacity={0.5} />)}
+      <rect x={780} y={30} width={360} height={140} fill="#0d1015" stroke={INK} strokeWidth={5} />
+      <text x={960} y={110} textAnchor="middle" fontFamily={SANS} fontSize={40} fontWeight={800} fill={GOLD}>{(88 + Math.floor(frame / 20) % 30)}-{(84 + Math.floor(frame / 24) % 30)}</text>
+      <rect x={0} y={700} width={1920} height={380} fill="#8a5a34" /><line x1={0} y1={700} x2={1920} y2={700} stroke={INK} strokeWidth={5} />
+      <circle cx={960} cy={940} r={130} fill="none" stroke={GOLD} strokeWidth={5} opacity={0.55} />
+      <line x1={960} y1={700} x2={960} y2={1080} stroke={GOLD} strokeWidth={3} opacity={0.4} />
+      <HoopArt x={200} y={780} scale={0.7} />
+      <HoopArt x={1720} y={780} scale={0.7} />
+      {[520, 1400].map((x, i) => <ellipse key={i} cx={x} cy={260} rx={200} ry={520} fill="url(#sglow)" opacity={0.14} />)}
+    </g>
+  ),
+  // the ice tub / training room — THE sensory-anchor home base: a steel ice tub, rolled athletic
+  // tape, cold blue-white light, a wall clock counting the minutes of every recovery
+  iceBathRoom: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#sclean)" />
+      <rect x={0} y={760} width={1920} height={320} fill="#cfe0e6" /><line x1={0} y1={760} x2={1920} y2={760} stroke={INK} strokeWidth={5} />
+      <rect x={980} y={640} width={520} height={220} rx={18} fill="#dfeef2" stroke={INK} strokeWidth={5} />
+      <ellipse cx={1240} cy={648} rx={250} ry={26} fill="#a9d2de" stroke={INK} strokeWidth={4} />
+      {Array.from({length: 6}).map((_, i) => (
+        <ellipse key={i} cx={1050 + i * 60 + Math.sin(frame * 0.05 + i) * 6} cy={648 + Math.cos(frame * 0.05 + i) * 3}
+          rx={14} ry={9} fill="#fff" stroke={INK} strokeWidth={1.5} opacity={0.85} />
+      ))}
+      <rect x={1360} y={480} width={26} height={170} fill="#c9c2ad" stroke={INK} strokeWidth={3} />
+      <circle cx={1373} cy={470} r={30} fill={PAPERC} stroke={INK} strokeWidth={3} />
+      <text x={1373} y={480} textAnchor="middle" fontFamily={SANS} fontSize={22} fontWeight={700} fill={INK}>12</text>
+      {[300, 460].map((x) => <rect key={x} x={x} y={560} width={70} height={120} rx={10} fill={PAPERC} stroke={INK} strokeWidth={3.5} />)}
+      <ellipse cx={1100} cy={560} rx={520} ry={180} fill="url(#sglow)" opacity={0.12} />
+    </g>
+  ),
+  // rafters retirement — an empty, dim arena; one spotlight on the bare court below; a jersey banner
+  // hanging still in the rafters — the flash-forward cold open + its loop-close payoff
+  rafterRetirement: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#0d1015" />
+      {[0, 1, 2, 3, 4].map((r) => <rect key={r} x={-20} y={60 + r * 60} width={1960} height={32} fill="#161b22" stroke={INK} strokeWidth={2} opacity={0.5 - r * 0.06} />)}
+      <rect x={0} y={720} width={1920} height={360} fill="#241c18" opacity={0.9} /><line x1={0} y1={720} x2={1920} y2={720} stroke={INK} strokeWidth={4} opacity={0.4} />
+      <g transform="translate(1140 60)">
+        <line x1={0} y1={0} x2={0} y2={-60} stroke="#2a2420" strokeWidth={6} />
+        <rect x={-70} y={0} width={140} height={200} fill="#171a20" stroke={GOLD} strokeWidth={4} />
+        <text x={0} y={70} textAnchor="middle" fontFamily={SANS} fontSize={44} fontWeight={800} fill={GOLD}>07</text>
+        <text x={0} y={160} textAnchor="middle" fontFamily={SANS} fontSize={20} fontWeight={700} fill={GOLD} opacity={0.85}>RETIRED</text>
+      </g>
+      <ellipse cx={960} cy={900} rx={280} ry={90} fill="url(#sglow)" opacity={0.35} />
+      <ellipse cx={960} cy={260} rx={180} ry={480} fill="url(#sglow)" opacity={0.1} />
+    </g>
+  ),
 };
 // tiny helper so inline math reads cleanly above
 function y_(v: number) {return v;}
@@ -3809,4 +3925,47 @@ const PIRATE = {
       fig={{pose: A.stand(f), x: 900, y: 1000, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA, ...MONGOL, ...GLADIATOR, ...BRATVA, ...SPACE, ...OTTOMAN, ...PIRATE};
+// Basketball pack (basketball_player — driveway hopeful through college/G-League/two-way/drafted
+// rookie/veteran/All-Star to a supermax superstar and the global-brand apex, and the empty rafters
+// above all of it). 6 new bespoke backdrops (this is the first team-sport-arena topic; the existing
+// generic SPORTS pack's stadiumField is soccer-coded and medalPodium is Olympic-coded, neither fits
+// an NBA ladder). The rest of the ladder composes from universal `layoffs` (re-narrated: waived,
+// cut from the roster), `signing`/`dinner`/`boardroomNotes`/`jet`/`window`/`tower`/`emptyChair`/
+// `lobby` for agent/contract/endorsement beats, and the GEN pack's `podiumScene` for draft night and
+// press conferences.
+const BASKETBALL = {
+  // the driveway hoop — Level 1's named want, the origin, the loop-close callback (older, same hoop)
+  drivewayHoop: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="drivewayHoop" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.worried, t)}} />;},
+  // the high school gym — the first spectacle, the scout in the stands, the scoreboard climbing
+  highSchoolGym: () => {const f = useCurrentFrame(); const {fps} = useVideoConfig();
+    return <Stage backdrop="highSchoolGym" bg="url(#swarm)" figBehind
+      fig={{pose: A.type_(f, fps), x: 900, y: 866, scale: 1.3, view: 'profile', facing: 1, expr: FACES.focused}} />;},
+  // the G League bus — the grind, the recurring mentor's coach seat, the long nights between towns
+  gLeagueBus: () => {const f = useCurrentFrame();
+    return <Stage backdrop="gLeagueBus" bg="url(#spaper)"
+      fig={{pose: A.sit(f), x: 900, y: 700, scale: 1.25, view: 'profile', facing: 1, expr: FACES.exhausted}}
+      extras={[{pose: A.sit(f + 10), x: 1160, y: 700, scale: 1.15, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
+  // the arena court — THE recurring master backdrop, reused across the rookie debut, the veteran
+  // grind, the All-Star run, and the supermax apex — relit differently (light/warm -> dark/gold) each
+  // time per the ludusYard/arenaSand shared-backdrop-distinct-staging pattern
+  arenaCourt: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="arenaCourt" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.35, view: 'front', expr: blendExpr(FACES.focused, FACES.hardened, t)}} />;},
+  // the ice tub — THE sensory anchor home base, re-triggered every level-up, bigger and colder each time
+  iceBathRoom: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="iceBathRoom" bg="url(#sclean)"
+      fig={{pose: A.sit(f), x: 900, y: 860, scale: 1.3, view: 'front', expr: blendExpr(FACES.hardened, FACES.hollow, t)}} />;},
+  // rafters retirement — the flash-forward cold open + its loop-close payoff: the empty arena, the
+  // jersey banner already hanging, cut away before the reason why is ever said out loud
+  rafterRetirement: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="rafterRetirement" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 900, y: 990, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA, ...MONGOL, ...GLADIATOR, ...BRATVA, ...SPACE, ...OTTOMAN, ...PIRATE, ...BASKETBALL};

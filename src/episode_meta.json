@@ -1,22 +1,22 @@
 {
   "thumb": {
-    "kicker": "MOST WHO GET",
-    "line1": "RICH",
+    "kicker": "EVERY LEVEL OF AN",
+    "line1": "NBA PLAYER",
     "line2": "",
-    "tag": "MAROONED",
-    "archetype": "number",
-    "big": "\u00a30",
-    "before": "GREEN HAND",
-    "after": "MAROONED",
+    "tag": "SUPERMAX",
+    "archetype": "beforeafter",
+    "big": "$313.9M",
+    "before": "UNDRAFTED",
+    "after": "SUPERMAX",
     "expr": "shock",
-    "povline": "YOU BECOME A",
-    "keyword": "MAROONED",
-    "setting": "executionDock",
+    "povline": "YOU BECOME AN",
+    "keyword": "SUPERMAX",
+    "setting": "arenaCourt",
     "question": "WHO STAYS RICH?",
-    "mood": "epic",
-    "costume": "street",
+    "mood": "money",
+    "costume": "uniform",
     "word": "YOU",
     "prop": "vault"
   },
-  "topic": "pirate"
+  "topic": "basketball_player"
 }

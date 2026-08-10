@@ -1,301 +1,305 @@
 #!/usr/bin/env python3
-"""Your Life as a Pirate at Every Rank — POV doodle build, ~12 min.
-Grounded in docs/research/pirate.md (Golden Age of Piracy, ~1650-1730; well-documented figures and
-events: Bartholomew Roberts and his 1721 Articles, Henry Every's 1695 Ganj-i-Sawai raid, the 1718
-Nassau "Republic of Pirates" and Woodes Rogers' King's Pardon, Captain Kidd's 1701 hanging + gibbeting,
-and the VERIFIED largest mass pirate execution in history: 52 of Roberts' surviving crew hanged at
-Cape Coast Castle, February 1722). Rank format (per topic_queue.json: "Your Life as a Pirate at Every
-Rank"). Second-person present-tense POV: the viewer IS a composite green hand who signs the Articles
-off a captured merchant ship and climbs the REAL, documented pirate-ship chain of command — green hand
-(no share) -> able seaman (VERIFIED: 1 share under Roberts' Articles) -> gunner/specialist (VERIFIED:
-1.25-1.5 shares) -> quartermaster (VERIFIED: the elected 2nd-in-command, 1.5-2 shares, could overrule
-a captain on anything short of a chase or a fight) -> captain (VERIFIED: elected, 2 shares, absolute
-authority ONLY in battle, votable OUT) -> commodore/fleet command (VERIFIED: Roberts himself commanded
-a small multi-ship squadron at his 1721-22 peak) -> THE RECKONING. The VERIFIED injury-compensation
-schedule (800 pieces of eight for a leg) and the "no purchase, no pay" wage system are the episode's
-share-worthy facts. "Walking the plank" is NOT used anywhere in this script — per the research doc it
-is a later literary invention, not a documented Golden Age practice; marooning (VERIFIED, a real
-Articles punishment) is used instead. You, Robbie, Josiah Blunt, and Gideon Slate are a FICTIONAL
-COMPOSITE; no real historical pirate (Roberts, Every, Kidd) is depicted as this episode's protagonist.
+"""Your Life as a Pro Basketball Player at Every Level — POV doodle build, ~12 min.
+Grounded in docs/research/basketball_player.md (all comp figures web-verified Aug 2026): the real,
+documented NBA pathway and pay ladder — high school hopeful (VERIFIED: ~0.03% of HS players ever
+reach the NBA) -> Division I college roster (VERIFIED: ~1% of all NCAA players are ever drafted;
+NIL money is real but wildly uneven) -> undrafted / G League ($40,500/season, VERIFIED) / two-way
+contract ($578,577, VERIFIED: exactly half the 2025-26 rookie minimum) -> drafted rookie (VERIFIED:
+$1,361,969 2025-26 rookie minimum; VERIFIED: average NBA career is only 4.5 years) -> veteran
+comeback on a real 10-day contract (VERIFIED CBA mechanic) -> All-Star -> supermax superstar
+(VERIFIED: Jayson Tatum's real 2025 5-year, $313,933,410 deal) -> the global-brand apex (referenced,
+not named, via the real scale of a $1B+ lifetime shoe deal) -> THE RECKONING, retirement, and the
+episode's share-worthy coda fact: VERIFIED, an estimated 60% of former NBA players are broke within
+five years of retirement (Sports Illustrated's 2009 investigation, reconfirmed by later reporting).
+You, Denise, Coach Ellis, Marcus, and Priya Osei are a FICTIONAL COMPOSITE; no real, named NBA player
+is depicted as this episode's protagonist. New BASKETBALL template pack added to src/stage.tsx
+(drivewayHoop/highSchoolGym/gLeagueBus/arenaCourt/iceBathRoom/rafterRetirement) per docs/TEMPLATES.md
+— the existing generic SPORTS pack's stadiumField (soccer-coded) and medalPodium (Olympic-coded)
+don't fit an NBA ladder; the rest composes from universal signing/dinner/boardroomNotes/tower/jet/
+window/fileWall/layoffs and the MEDICAL pack's erTrauma (re-narrated: the on-court injury cart-off).
 
-STRUCTURAL VARIATION vs the last 2 produced (astronaut = FLASH-FORWARD cold open / dual-track-
-divergence / PURE CYCLICAL ending; ottoman_empire = MID-ACTION cold open / rise-then-fracture /
-cyclical-but-deliberately-unresolved ending): this cold open is AFTERMATH — the violence (capture,
-the burned ship) has already happened off-screen; you're already in chains, already being marched,
-before the episode's first line. Act two's shape is RISE-THEN-FALL-THEN-RISE: rank and money climb
-cleanly through Level 4, CRASH to $0 at the midpoint (a real betrayal + the real marooning punishment),
-then climb again, past the previous peak, to Commodore. The ending is ONE-DOOR-LEFT-OPEN: the loop
-returns to the exact gallows steps of the cold open, but cuts away before the one open question (do
-you take the pardon offered a second time) is ever answered — not a fully closed circle.
+STRUCTURAL VARIATION vs the last 2 produced (ottoman_empire = MID-ACTION cold open / rise-then-
+fracture / cyclical-but-deliberately-unresolved ending; pirate = AFTERMATH cold open / rise-then-
+fall-then-rise with a DUAL crash / one-door-left-open ending): this cold open is FLASH-FORWARD — a
+jersey-retirement ceremony whose meaning (triumph or ending?) is deliberately ambiguous, cut away
+before it resolves. Act two's shape is a SINGLE clean rise, ONE catastrophic midpoint crash (a torn
+ACL, not a betrayal), and a harder-won rise past the old peak — distinct from pirate's two-crash
+spine. The ending is PURE CYCLICAL: the loop bends fully back to the opening ceremony, now completely
+understood, resolving (not leaving open) the cold-open loop — distinct from both of the last two.
 
 PROMISE -> PAYOFF LEDGER (ids match the final t01-t32 sequence):
-  * t01 cold open (the march to the gallows, 52 ahead of you, cut before the top step)      -> RESOLVED at t30-t32 (the same steps, this time counted as 52 too)
-  * t02 promise/cost-line ("wanting that has a price nobody prices honestly up front")       -> paid across t22 (the unopened chest), t29 (command everything, own nothing), t32
-  * sensory anchor: salt worked permanently into the cracks of your palms (touch, not sound)  -> introduced t03 -> re-triggered every level-up (t05/t08/t09/t14/t19/t30) -> maximal payoff t32 ("your hands already know exactly how this knot is tied")
-  * Robbie, the named person/want                                                            -> introduced t03 -> the letter/money thread t04/t12/t20 -> PAID OFF at t29 (his own boat, bought outright)
-  * Josiah Blunt, the named mentor                                                           -> introduces the Articles t07, warns you t08, stands the rail t17 -> the loss payoff (dies covering your escape) t18
-  * Gideon Slate, the named rival                                                            -> introduced t13 (skimming shares) -> taunts/frames you at the midpoint t18 -> the dialogue line t18 -> resolved (also hanged) t31
-  * share-worthy fact #1: the VERIFIED injury-compensation schedule (800 pieces of eight, a leg) -> planted t16, referenced again t30
-  * share-worthy fact #2: the VERIFIED 52-hanged Cape Coast Castle mass execution (1722)      -> foreshadowed t01 -> confirmed t30 -> paid off t31/t32
-  * the real 1718 Woodes Rogers pardon, offered and refused twice                             -> t23 (refused) -> t27 (refused again, louder doom) -> ONE LAST TIME, unanswered, t31/t32
-  * THE ONE DELIBERATE UNRESOLVED UNIVERSE THREAD: the locked sea chest with an unmatched sigil -> planted t22, never opened, never explained
+  * t01 cold open (the banner, the empty arena, ambiguous meaning, cut before it's explained)   -> RESOLVED at t30-t32 (the same banner, now fully understood)
+  * t02 promise/cost-line ("you don't know yet what they take down to put a banner up")          -> paid across t16 (the house), t29 (four visits a year), t31/t32
+  * sensory anchor: ice (a bag of frozen peas -> a training tub, bigger/colder every level)       -> introduced t05 -> re-triggered t14/t17/t20/t23/t31 -> maximal payoff t32 ("ice waits in a tub nobody hands you anymore")
+  * Denise, the named person/want (an elevator that doesn't work)                                -> introduced t03 -> t04/t06/t12/t16 (the house, PAID OFF) -> her own cost (the limp, missed years) t24/t29 -> the dialogue line t31
+  * Coach Ellis, the named mentor                                                                -> introduced t12 (the dialogue warning) -> the comeback t21 -> no false redemption arc, just present
+  * Marcus, the named rival                                                                      -> introduced t10 -> drafted instead of you t11 -> the taunt/dialogue line t19 -> never resolved further (a deliberate loose thread — most rivalries don't get a final scene either)
+  * share-worthy fact #1: VERIFIED odds (0.03% HS-to-NBA, 1% NCAA-to-drafted)                     -> planted t06/t09
+  * share-worthy fact #2: VERIFIED average NBA career length (4.5 years)                          -> planted t18 (the injury), paid off again t22 ("outlasted the average career by six months")
+  * share-worthy fact #3: VERIFIED 60% of former players broke within 5 years of retirement       -> the coda, t31
+  * THE ONE DELIBERATE UNRESOLVED UNIVERSE THREAD: a second Apex Management card, a different name under Priya Osei's, an office in a city never visited -> planted t10, reappears t27, never explained
 """
 
 FPS = 30
 
 SCENES = [
-    # ---- COLD OPEN — AFTERMATH, cut away before the top step ----
-    dict(id="t01", level=None, template="executionDock", gap=0.7,
-         narration=("Eleven wooden steps, and fifty-one boot-prints ahead of you already gone still "
-                    "in the blood. Smoke from the burned ship still catches at the back of your throat. "
-                    "A chaplain reads names off a list faster than any man wants his called. An officer "
-                    "argues with the hangman somewhere behind you about the order. Don't look back. "
-                    "Count the doors instead — there aren't any left."),
-         overlay=dict(big="52", sub="HANGED IN ONE MORNING, 1722")),
+    # ---- COLD OPEN — FLASH-FORWARD, ambiguous, cut before it resolves ----
+    dict(id="t01", level=None, template="rafterRetirement", gap=0.7,
+         narration=("One spotlight left on in an empty arena, aimed at a banner with your number "
+                    "stitched into it in gold nobody asked your opinion about. Twenty thousand seats, "
+                    "all empty. A suit, not a jersey. A voice behind you starts the word retirement and "
+                    "stops, unsure that's actually what this is. Don't check the exits. There isn't "
+                    "time to find one before the lights come up."),
+         overlay=dict(big="14 SEASONS", sub="ONE BANNER")),
 
     # ---- PROMISE + COST-LINE ----
     dict(id="t02", level=None, template="fileWall",
-         narration=("Rewind. None of this exists yet — not the rope, not the list, not the fifty-one "
-                    "names ahead of yours. Somewhere a customs clerk logs cargo manifests nobody in "
-                    "your family will ever own a line of. You want more than a manifest entry's worth "
-                    "of a life. Wanting that, it turns out, has a price nobody prices honestly up "
-                    "front."),
+         narration=("Rewind. None of it exists yet — not the banner, not the gold thread, not the "
+                    "suit. Somewhere your mother clocks out of a double shift nobody thanks her for by "
+                    "name. You want the banner. You want it bad enough to build a whole life around a "
+                    "hoop bolted to a garage. You don't know yet what they take down to put a banner "
+                    "up."),
          overlay=None),
 
-    # ---- LEVEL 01 · A FISHING COVE ----
-    dict(id="t03", level="LEVEL 01  ·  A FISHING COVE", template="fishingCove",
-         narration=("Your brother Robbie is nine, coughs through every winter, and still insists on "
-                    "hauling the nets himself so you can mend them instead. The shack smells of tar "
-                    "and drying cod, same as it has your whole life. One good coat between the both of "
-                    "you. Salt is already working into the cracks of your palms — it will never fully "
-                    "leave them again."),
+    # ---- LEVEL 01 · THE DRIVEWAY ----
+    dict(id="t03", level="LEVEL 01  ·  THE DRIVEWAY", template="drivewayHoop",
+         narration=("Your mother is Denise, forty-one, on her feet ten hours at Prescott General before "
+                    "this shift even started. The hoop above the garage door sits two degrees off true; "
+                    "you've never once fixed it because you know exactly how it plays now. Cracked "
+                    "concrete. One good pair of shoes, resoled twice. Six hundred makes before dinner, "
+                    "every single night, whether anyone's watching or not."),
          overlay=None),
     dict(id="t04", level=None, template="dinner",
-         narration=("Supper is cod tail and hard bread, split three ways by weight, not by hunger. "
-                    "Robbie trades you the bigger half for a story anyway, same as always — the one "
-                    "about ships that come back from the Indies with more silver than the church roof "
-                    "cost. You tell it easy. Somewhere past the harbor mouth, a captain shorthanded for "
-                    "his next crossing is already asking around for hands."),
+         narration=("Supper is whatever's on sale, split without anyone saying so out loud. Denise asks "
+                    "about school first, basketball second, same order every night, like the order "
+                    "itself is a kind of prayer. She's saved four hundred dollars toward an elevator "
+                    "repair the landlord keeps promising and never starts. You tell her someday you'll "
+                    "just buy the building. She laughs like it's a joke. You don't."),
          overlay=None),
-    dict(id="t05", level=None, template="shipDeck",
-         narration=("The merchant captain signs you on for a wage that sounds enormous until the "
-                    "purser explains it: one pound ten a month, paid on return, if the voyage turns a "
-                    "profit and if he remembers. Salt cracks deeper into your palms hauling line you've "
-                    "never touched before. Robbie's cough follows you down the gangplank in your head "
-                    "for three straight days at sea."),
-         overlay=dict(big="£1.50/MO", sub="IF THE CAPTAIN EVEN PAYS IT")),
-    dict(id="t06", level=None, template="broadsideBattle",
-         narration=("A sloop under a black flag runs you down eleven days out, and the merchant "
-                    "captain doesn't even reach for a pistol before striking his colors — fighting a "
-                    "crew that outguns you three to one buys nobody a funeral worth having. Cannon "
-                    "smoke drifts across both decks like fog that won't lift. Their quartermaster reads "
-                    "the choice out loud, bored, like he's done it forty times: join the account, or "
-                    "swim."),
-         overlay=dict(big="JOIN, OR SWIM", sub="THE CHOICE THEY GIVE YOU")),
+    dict(id="t05", level=None, template="highSchoolGym",
+         narration=("State semifinal, four seconds left, down one — the gym loud enough that the "
+                    "buzzer barely cuts through it. Catch. Turn. Release. The ball rolls the rim twice "
+                    "before it decides. A man in a windbreaker two rows up writes something down "
+                    "without clapping, which somehow says more than the whole gym screaming does. Your "
+                    "ankle rolls landing. Ice, for the first time, actually matters."),
+         overlay=None),
+    dict(id="t06", level=None, template="boardroomNotes",
+         narration=("Recruiters call the house phone before your ankle's even done swelling, offering "
+                    "trips, gear, promises that don't survive a signature. A guidance counselor pulls "
+                    "the odds up on a laptop, unprompted, like a warning label. But the man in the "
+                    "windbreaker calls back a second time. Denise takes the message on the back of an "
+                    "electric bill. Nobody offers to fix the elevator."),
+         overlay=dict(big="0.03%", sub="EVER REACH THE NBA")),
 
-    # ---- LEVEL 02 · GREEN HAND ----
-    dict(id="t07", level="LEVEL 02  ·  GREEN HAND", template="signing",
-         narration=("The Articles get read aloud before anyone signs, every clause, because a crew "
-                    "that can't read still gets to vote on what it lives and dies by. Equal shares, "
-                    "equal say, a captain who can be un-elected as easily as elected. You make your "
-                    "mark next to eleven others who can't write their names either. Josiah Blunt, the "
-                    "quartermaster, watches you do it without blinking."),
+    # ---- LEVEL 02 · THE ROSTER ----
+    dict(id="t07", level="LEVEL 02  ·  THE ROSTER", template="lectureHallScene",
+         narration=("Division I, a full ride, a jersey with your actual name across the back for the "
+                    "first time in your life. Class at eight, lift at eleven, film at two — the "
+                    "schedule owns you the way the driveway never did. NIL money is real now, "
+                    "technically; a teammate three lockers down signs a deal worth more than Denise "
+                    "makes in a year. Yours is worth a free sandwich."),
          overlay=None),
-    dict(id="t08", level=None, template="shipDeck",
-         narration=("Josiah Blunt has a scar for every year he's outlived the men who trained him, and "
-                    "his first lesson isn't about a cutlass. The Articles feed a green hand who earns "
-                    "his keep, and a share who's voted it — you're neither yet. Salt keeps working the "
-                    "calluses deeper while you learn to splice rope in the dark, hands remembering what "
-                    "your eyes still can't."),
+    dict(id="t08", level=None, template="arenaCourt",
+         narration=("Nationally televised, March, a shot clock winding down against the tournament's "
+                    "number-one seed. You pull up from twenty-six feet with a hand in your face — the "
+                    "kind of shot Coach would bench you for in practice — and it drops clean through a "
+                    "net gone silent for one full second before the building comes apart. Nine million "
+                    "replays rack up by morning, a season's worth of driveway reps compressed into six "
+                    "seconds of footage. Nobody can spell your name yet."),
+         overlay=None),
+    dict(id="t09", level=None, template="window",
+         narration=("A highlight doesn't pay an elevator repair. Your own shot loops on a phone screen "
+                    "at 2 a.m., counting shares like they're dollars, which they aren't. Draft boards "
+                    "rank you anywhere from the mid-first round to not ranked at all, depending which "
+                    "website gets checked that week. One percent of every college player in the "
+                    "country ever hears their name called on draft night."),
+         overlay=dict(big="1%", sub="OF NCAA PLAYERS GET DRAFTED")),
+    dict(id="t10", level=None, template="boardroomNotes",
+         narration=("An agent named Priya Osei leaves a card that says Apex Management and a number "
+                    "that answers on the first ring, always. So does Marcus's agent — Marcus, your "
+                    "best friend since fifth grade, same driveway, same six hundred makes a night for "
+                    "years. His mock-draft grade climbs every week. Yours holds steady, then quietly "
+                    "drops four spots the week of your ankle MRI."),
+         overlay=None),
+
+    # ---- LEVEL 03 · UNDRAFTED ----
+    dict(id="t11", level="LEVEL 03  ·  UNDRAFTED", template="signing",
+         narration=("Draft night, sixty names called across two rounds, and yours isn't one of them — "
+                    "Marcus goes twenty-second, hugging his mother live on national television while "
+                    "Denise sits with you in the next room, waiting on a phone that stays dark. Two "
+                    "hours later a G League team offers a deal so far under what you pictured your "
+                    "whole life that the number gets read twice before you sign it anyway."),
+         overlay=dict(big="$40,500", sub="G LEAGUE, FIVE MONTHS")),
+    dict(id="t12", level=None, template="gLeagueBus",
+         narration=("The bus leaves at 1 a.m. for a nine-hour drive nobody in the NBA ever has to "
+                    "make, engine rattling loud enough to drown out the radio. Coach Ellis, forty years "
+                    "in gyms nobody remembers the names of anymore, takes the seat across from you "
+                    "without asking permission. He's watched a hundred kids exactly this good disappear "
+                    "by twenty-five, quietly. Denise still has four hundred dollars saved."),
          overlay=None,
-         dialogue=dict(text="The Articles feed you. They can just as easy starve you. Earn the difference.")),
-    dict(id="t09", level=None, template="countRoom",
-         narration=("The first split happens under a single swinging lamp, pieces of eight counted "
-                    "into piles twice, because nobody trusts the first count including the man doing "
-                    "it. Full shares go first. Specialist shares next. Green hands split what's left, "
-                    "which tonight is nothing — the prize barely covered the powder it cost to take. "
-                    "Other men's palms fill. Yours stay empty, and salt-cracked, and yours."),
-         overlay=dict(big="£0", sub="GREEN HANDS SPLIT LAST")),
-
-    # ---- LEVEL 03 · ABLE SEAMAN (minute-3 spectacle) ----
-    dict(id="t10", level="LEVEL 03  ·  ABLE SEAMAN", template="shipDeck",
-         narration=("Six months and two prizes later, the crew votes you a full share — one show of "
-                    "hands, no ceremony, Josiah reading your name off the roll like it always belonged "
-                    "there. A full share means a full vote too: on the next target, the next captain, "
-                    "whether a wounded man gets put ashore or carried. Power here is one man, one "
-                    "voice, counted out loud in front of everyone."),
-         overlay=dict(big="1 SHARE", sub="A FULL VOTE, FINALLY")),
-    dict(id="t11", level=None, template="broadsideBattle",
-         narration=("A Portuguese trader tries to outrun you into a squall and loses the bet — "
-                    "grapeshot across her rigging, a boarding axe through her foremast shrouds, smoke "
-                    "thick enough to taste copper at the back of your throat. Her captain surrenders "
-                    "before you're halfway up the side. Below decks: crates of sugar, indigo, and a "
-                    "strongbox nobody on her crew will admit knowing the combination to."),
+         dialogue=dict(text="Everybody on this bus was the best player in their gym once.")),
+    dict(id="t13", level=None, template="signing",
+         narration=("Six weeks in, a two-way contract lands — half the rookie minimum, a locker in two "
+                    "different buildings, a life split exactly down the middle between the league "
+                    "you're chasing and the one that's actually paying you. You sign it in a hallway "
+                    "between drills, no ceremony, no cameras. It's still the best number you've ever "
+                    "seen with your own name attached to it."),
+         overlay=dict(big="$578,577", sub="HALF THE ROOKIE MINIMUM")),
+    dict(id="t14", level=None, template="iceBathRoom",
+         narration=("Ice, every night now, both ankles instead of one, a training-room tub that never "
+                    "quite gets cold enough to stop hurting by the count of sixty. Ice fixes the "
+                    "swelling. Ice fixes tomorrow's practice. Ice does not fix the part of you that "
+                    "still checks a phone at 1 a.m. for a call-up that hasn't come, over and over, "
+                    "screen light the only thing awake in the room. The water numbs faster than the "
+                    "waiting does."),
          overlay=None),
-    dict(id="t12", level=None, template="countRoom",
-         narration=("Six pounds, your first real share, counted into your own two hands under the "
-                    "swinging lamp this time. Six pounds is four months of a merchant wage for one "
-                    "afternoon of terror. Robbie's letter, when it finally reaches shore months later, "
-                    "doesn't say thank you — it says the coughing stopped, and the roof doesn't leak on "
-                    "his side anymore. That line buys more than the money did."),
-         overlay=dict(big="£6", sub="YOUR FIRST SHARE, EVER")),
-    dict(id="t13", level=None, template="nassauHarbor",
-         narration=("Nassau spends money faster than any prize can make it — rum, a room with an "
-                    "actual bed, a debt to a tavern keeper who smiles like he already owns your next "
-                    "voyage. Gideon Slate buys a round with coin that doesn't match his share. Nobody "
-                    "asks where the difference came from except you, once, out loud. He remembers "
-                    "exactly who asked. It's the first time he decides he doesn't like you."),
-         overlay=dict(big="£0", sub="GONE IN NINE DAYS")),
 
-    # ---- LEVEL 04 · GUNNER ----
-    dict(id="t14", level="LEVEL 04  ·  GUNNER", template="shipDeck",
-         narration=("A dead gunner's post opens up ugly — a swivel gun took his arm off at the "
-                    "shoulder — and the crew votes you into it before the deck's properly swabbed. One "
-                    "and a half shares now, and a station on the gun deck where the difference between "
-                    "living and not living is measured in seconds you don't get to practice. Salt and "
-                    "powder both live permanently under your fingernails."),
-         overlay=dict(big="1.5 SHARES", sub="GUNNER'S CUT")),
-    dict(id="t15", level=None, template="broadsideBattle",
-         narration=("A Royal Navy sloop mistakes you for easy hunting and nearly isn't wrong — her "
-                    "first broadside takes two men off the rail beside you, spray off the shot still "
-                    "warm on your face. Your hands load faster than your head can keep up with, which "
-                    "is, Josiah tells you after, the entire point of drilling until it's boring. Your "
-                    "pulse doesn't slow for an hour. None of it reads like courage."),
+    # ---- LEVEL 04 · THE CALL-UP ----
+    dict(id="t15", level="LEVEL 04  ·  THE CALL-UP", template="arenaCourt",
+         narration=("The call comes at 6 a.m. — a roster injury two states away, a flight booked "
+                    "already, a jersey with your name spelled right on the first try for once. "
+                    "Warmups under lights bright enough to erase the crowd behind them. The anthem. "
+                    "Your legs remember every driveway rep without being asked to. Somewhere in the "
+                    "stands, Denise is on a flight you paid for."),
+         overlay=dict(big="$1,361,969", sub="NBA ROOKIE MINIMUM")),
+    dict(id="t16", level=None, template="tower",
+         narration=("First paycheck bigger than anything either of you has ever seen on paper, and the "
+                    "first call isn't to a car dealership — it's to a realtor, for a one-story house "
+                    "with an elevator that isn't a metaphor because there isn't a second floor left to "
+                    "need one. Denise cries on the phone for a reason that has nothing to do with "
+                    "basketball. You did the thing you said you'd do."),
          overlay=None),
-    dict(id="t16", level=None, template="countRoom",
-         narration=("The Articles have a page for exactly this: eight hundred pieces of eight for a "
-                    "leg, six hundred for an arm, written down and voted on before anyone's blood is "
-                    "actually on the deck. A wounded gunner two ships over collects his eight hundred "
-                    "without a doctor's signature or a magistrate's approval — just the crew's word, "
-                    "kept. No merchant captain in the world pays that."),
-         overlay=dict(big="800 PIECES OF EIGHT", sub="WRITTEN DOWN. VOTED ON. FOR A LEG.")),
-    dict(id="t17", level=None, template="shipDeck", gap=1.4,
-         narration=("Middle watch, dead calm, the kind of night the sea goes flat as poured glass and "
-                    "every sound carries twice as far as it should. Josiah stands the rail beside you "
-                    "longer than the watch requires, quiet in a way that isn't like him. Gideon Slate "
-                    "hasn't spoken to you in three days. Salt sits cold and familiar in the cracks of "
-                    "your palms. Nothing is wrong yet. That's the part that doesn't sit right."),
+    dict(id="t17", level=None, template="arenaCourt", gap=1.4,
+         narration=("Twelve games into a real NBA rotation, minutes climbing every single week, a body "
+                    "that still does exactly what's asked of it without one word of complaint. Your "
+                    "legs are steady under you tonight, steadier than they've been in years, the crowd "
+                    "noise settling into something almost like comfort. That's the part that scares "
+                    "you. Nothing has gone wrong yet. Ice waits in the tub behind the tunnel, patient, "
+                    "right on schedule."),
          overlay=None),
 
     # ---- MIDPOINT REVERSAL ----
-    dict(id="t18", level=None, template="broadsideBattle",
-         narration=("Two Navy frigates come out of a dawn mist with no warning shot, and half the crew "
-                    "is dead or taken before anyone's fully dressed. Josiah goes down covering your run "
-                    "to the boats and doesn't get back up. Gideon reaches the quarterdeck first and "
-                    "tells the boarding officer, loud enough for the whole crew to hear, that the "
-                    "missing strongbox was your idea. Nobody has time to check if that's true."),
-         overlay=dict(big="MAROONED", sub="THE ARTICLES, TURNED ON YOU"),
-         dialogue=dict(text="Articles don't care whose idea it was. Just whose name gets said.")),
-    dict(id="t19", level=None, template="marooned",
-         narration=("The vote takes four minutes — marooning, not hanging, because even Gideon's lie "
-                    "can't quite manufacture enough evidence for a rope, and some scrap of the code "
-                    "still holds. One pistol, one shot, a keg of water, and a sandbar that disappears "
-                    "at high tide in about eleven hours. Salt is already in the cracks of your palms. "
-                    "It just has nothing left to hold onto out here."),
-         overlay=dict(big="£0", sub="ONE PISTOL, ONE SHOT, THE SAND")),
-    dict(id="t20", level=None, template="shipDeck",
-         narration=("A fishing lugger out of Nassau finds you on the fourth tide, more out of drifting "
-                    "curiosity than mercy, and the old man at the tiller doesn't ask a single question "
-                    "the whole way in — he's seen a marooned man's face before. Robbie's last letter is "
-                    "still dry in an oilskin pouch you never once let go of. You don't thank the old "
-                    "man out loud. He wouldn't believe you meant it yet."),
-         overlay=None),
-
-    # ---- LEVEL 05 · QUARTERMASTER ----
-    dict(id="t21", level="LEVEL 05  ·  QUARTERMASTER", template="signing",
-         narration=("A different crew, new Articles, and this time the vote that matters is for "
-                    "quartermaster — the man who splits the loot, settles disputes, and can overrule a "
-                    "captain on anything that isn't a chase or a fight. They elect you on Josiah's old "
-                    "reputation as much as your own, which is its own kind of debt. You read every "
-                    "clause aloud yourself this time."),
-         overlay=dict(big="1.5–2 SHARES", sub="QUARTERMASTER'S CUT")),
-    dict(id="t22", level=None, template="countRoom",
-         narration=("The richest split of your life so far — three hundred pounds, your two shares "
-                    "counted out clean, plus a locked sea chest from the same prize that nobody on "
-                    "either crew can open or claim. It's carved with initials that match no one aboard. "
-                    "You set it aside instead of forcing the lock. Some doors, Josiah used to say, you "
-                    "leave shut until they're actually yours to open."),
-         overlay=dict(big="£300", sub="THE RICHEST SPLIT YET")),
-    dict(id="t23", level=None, template="nassauHarbor",
-         narration=("Governor Woodes Rogers' pardon is nailed to half the posts in Nassau by the time "
-                    "you make port — surrender now, swear off the account, keep whatever you've got "
-                    "left. Half your crew takes it on the spot. You count what you've actually got "
-                    "left: three hundred pounds, already spent on debts and a coat for a trip home you "
-                    "keep not taking. You sail again instead."),
-         overlay=dict(big="£0", sub="THE PARDON OFFERED. YOU SAIL ANYWAY.")),
-
-    # ---- LEVEL 06 · CAPTAIN ----
-    dict(id="t24", level="LEVEL 06  ·  CAPTAIN", template="shipDeck",
-         narration=("The old captain freezes during a chase that needed a decision ten seconds ago, "
-                    "and the crew votes him out by acclamation before the enemy ship's even out of "
-                    "range — the fastest election in the history of this particular deck. You're "
-                    "captain by nightfall, with absolute say over exactly one thing: what happens in a "
-                    "fight. Every other decision on this ship still isn't yours alone to make."),
-         overlay=dict(big="2 SHARES", sub="CAPTAIN — VOTED IN, VOTABLE OUT")),
-    dict(id="t25", level=None, template="broadsideBattle",
-         narration=("A Spanish treasure galleon, low in the water and slow to turn, is the kind of "
-                    "prize captains dream about and mostly never see — you close under a false flag, "
-                    "run up the black one at forty yards, and her crew strikes without firing a single "
-                    "gun back. Smoke you never had to make drifts off her own frightened deck instead. "
-                    "It's the easiest fight of your entire career."),
-         overlay=None),
-    dict(id="t26", level=None, template="countRoom",
-         narration=("A thousand pounds a share — the kind of number Josiah told you about once, from a "
-                    "raid decades before either of you was born, a story sailors half-believe. You "
-                    "believe it now, personally, hands closing around your own count twice for "
-                    "accuracy. A share like this comes once, if it comes at all. You already know "
-                    "you're going to spend every pound of it."),
-         overlay=dict(big="£1,000", sub="A SHARE LIKE THIS COMES ONCE")),
-    dict(id="t27", level=None, template="nassauHarbor",
-         narration=("The pardon notice is still nailed to the same post, weathered a year duller, when "
-                    "you make port with a thousand pounds and nowhere honest left to explain where it "
-                    "came from. A customs officer who used to be a privateer himself offers you the "
-                    "paperwork personally, almost gently. You buy a round for the whole crew instead, "
-                    "and a faster ship, and tell yourself there's time later."),
-         overlay=dict(big="£0", sub="THE PARDON, AGAIN. YOU SAIL AGAIN.")),
-
-    # ---- LEVEL 07 · COMMODORE ----
-    dict(id="t28", level="LEVEL 07  ·  COMMODORE", template="shipDeck",
-         narration=("Three more captains fall in under your flag inside a single season — not by "
-                    "force, by reputation, the way water finds the lowest point without being told to. "
-                    "Four ships, close to three hundred men, more real command than most colonial "
-                    "governors can raise on a bad week. You're still, on paper, exactly one vote among "
-                    "your own crew. Nobody above you has ever once heard your actual name."),
-         overlay=dict(big="4 SHIPS", sub="A SQUADRON, NOT JUST A CREW")),
-    dict(id="t29", level=None, template="captainsCabin",
-         narration=("The great cabin has stern windows wide enough to frame four hulls riding at "
-                    "anchor under one moon, and a chart table crowded with routes half of Europe would "
-                    "pay to see. A chest of gold sits under it you cannot legally spend one coin of in "
-                    "any port that matters. Command everything. Own nothing you could hand across an "
-                    "honest counter. Robbie's letter says he's bought his own boat now, outright — none "
-                    "of your name attached to it."),
-         overlay=dict(big="COMMODORE", sub="COMMAND EVERYTHING. OWN NOTHING.")),
-
-    # ---- LEVEL 08 · THE RECKONING (apex cost) ----
-    dict(id="t30", level="LEVEL 08  ·  THE RECKONING", template="executionDock", gap=0.7,
-         narration=("Two Navy frigates that spent four months studying your patterns finally guess the "
-                    "right cove, and a squadron built on reputation turns out to need every ship to "
-                    "actually be present to fight — yours is the only one that was, that morning. "
-                    "Chains, a burned deck, eleven wooden steps waiting at the far end of a very short "
-                    "voyage. Salt is still in the cracks of your palms. Rope again, just not the kind "
-                    "you know how to splice."),
-         overlay=dict(big="52", sub="HANGED IN ONE MORNING, 1722")),
-    dict(id="t31", level=None, template="courtroom",
-         narration=("The Admiralty court doesn't take long — the flag, the log book, three witnesses "
-                    "who trade their own necks for yours, and a verdict everyone in the room already "
-                    "knew walking in. Cape Coast Castle hangs fifty-two men off your own count that "
-                    "same year, the largest morning of gallows this ocean has ever seen. Gideon Slate "
-                    "is item forty-one on a list read out loud in a voice that doesn't pause for any of "
-                    "the names."),
+    dict(id="t18", level=None, template="erTrauma", gap=0.7,
+         narration=("Your knee buckles on a landing identical to six hundred others you've made this "
+                    "year, and the sound it makes carries over the crowd noise before the pain does. "
+                    "Carts, a tunnel, a doctor's face already decided on something it hasn't said out "
+                    "loud yet. An MRI confirms it before sunrise: the ACL, fully torn. Average NBA "
+                    "career, four and a half years. You're two seasons in."),
+         overlay=dict(big="ACL TORN", sub="AVG CAREER: 4.5 YEARS")),
+    dict(id="t19", level=None, template="layoffs",
+         narration=("The team's option on your contract expires quietly, no press conference, no "
+                    "ceremony — a locker cleared out by somebody else while you're still in a leg "
+                    "brace three states away, learning to walk on crutches nobody photographs. Marcus "
+                    "texts a highlight from his own breakout season instead of checking in on yours. "
+                    "You call him anyway, out of habit more than hope. He picks up mid-workout, already "
+                    "somewhere else entirely."),
          overlay=None,
-         dialogue=dict(text="The pardon's still open. Say the words and it ends here.")),
+         dialogue=dict(text="Ice doesn't fix everything, man. Some of us just heal different.")),
+    dict(id="t20", level=None, template="iceBathRoom",
+         narration=("Rehab is six hours a day for a body that used to do this for free. The ice is "
+                    "colder now, or it just feels that way with nothing guaranteed on the other side of "
+                    "it. A therapist tracks your range of motion in a notebook like it's a stock chart "
+                    "trending the wrong direction, week over week, in handwriting too neat to argue "
+                    "with. Denise doesn't mention the house payment. You do the math anyway, every "
+                    "night."),
+         overlay=None),
 
-    # ---- LOOP CLOSE — one door left open ----
-    dict(id="t32", level=None, template="executionDock",
-         narration=("Eleven wooden steps again, fifty-two boot-prints ahead of yours instead of "
-                    "fifty-one, and the same chaplain reading names in the same flat voice. The young "
-                    "officer's offer is still sitting in the air, unanswered, exactly where you left "
-                    "it. Salt is still in the cracks of your palms — rope again, and your hands already "
-                    "know exactly how this particular knot is tied. Nobody has said your name yet."),
-         overlay=dict(big="ONE PARDON LEFT", sub="THE ROPE DOESN'T CARE")),
+    # ---- LEVEL 05 · THE COMEBACK ----
+    dict(id="t21", level="LEVEL 05  ·  THE COMEBACK", template="gLeagueBus",
+         narration=("Nine months of rehab earns you exactly one thing: a G League assignment again, "
+                    "the same bus, a different Coach Ellis quote every single week, the same worn seat "
+                    "across the aisle. He doesn't say I told you so. He doesn't have to — the silence "
+                    "does it for him. Your knee holds through a crossover for the first time since the "
+                    "tear, and something locked since the MRI finally, quietly, unclenches."),
+         overlay=None),
+    dict(id="t22", level=None, template="arenaCourt",
+         narration=("A ten-day contract lands — non-guaranteed past day ten, no security, no ceremony, "
+                    "the exact opposite of the deal you signed at twenty-two. You play the best "
+                    "basketball of your career anyway, out of something closer to fear than joy, "
+                    "sprinting back on defense on a knee that used to just do it automatically. Day "
+                    "nine, the team extends it for the rest of the season. You've now outlasted the "
+                    "average NBA career by six full months."),
+         overlay=dict(big="10-DAY DEAL", sub="NO GUARANTEE PAST DAY 10")),
+    dict(id="t23", level=None, template="iceBathRoom",
+         narration=("Both knees in the tub now instead of one, plus a shoulder that started clicking on "
+                    "cold mornings nobody warned you about at twenty-two. Ice fixes the swelling. Ice "
+                    "fixes whatever shows up clean on a scan. Ice does not fix the four years you can't "
+                    "get back, or the two full seasons Denise spent watching game film on a bad couch "
+                    "instead of seeing a doctor about her own knees."),
+         overlay=None),
+    dict(id="t24", level=None, template="dinner",
+         narration=("Denise is fifty-one now, still working, because retiring on your rookie money felt "
+                    "too much like admitting the injury won. The limp she's had a year without "
+                    "mentioning is there again tonight. She catches you staring and changes the subject "
+                    "to your next game instead. Some things get bought outright. Some things you just "
+                    "find out later you should've asked about sooner."),
+         overlay=None),
+
+    # ---- LEVEL 06 · ALL-STAR ----
+    dict(id="t25", level="LEVEL 06  ·  ALL-STAR", template="arenaCourt",
+         narration=("Three seasons after a torn ACL was supposed to end things quietly, your name gets "
+                    "read on national television as an All-Star reserve — the gym behind your eyes "
+                    "flashing back to a bent rim and six hundred makes a night before the broadcast "
+                    "even cuts to commercial. Denise is courtside this time, an actual ticket, not a "
+                    "flight you booked her on a hunch."),
+         overlay=None),
+    dict(id="t26", level=None, template="boardroomNotes",
+         narration=("A shoe company that wouldn't return your agent's calls three years ago now wants a "
+                    "signature line with your actual name stitched across the box. Priya Osei "
+                    "negotiates it across a conference table you couldn't have pictured from a G League "
+                    "bus seat at 1 a.m., every clause read aloud twice before either of you signs "
+                    "anything. Seven figures a year, guaranteed, the first money in your entire life "
+                    "that shows up whether you play one minute of it or not."),
+         overlay=None),
+    dict(id="t27", level=None, template="podiumScene",
+         narration=("All-Star weekend media day: forty reporters, a backdrop with your name on repeat, "
+                    "a question about the injury answered the same careful way every single time. "
+                    "Somewhere in the stack of interview requests is a second card from Apex "
+                    "Management — a different name under Priya's, an office address in a city you've "
+                    "never been to. Nobody explains it. You pocket it anyway."),
+         overlay=None),
+
+    # ---- LEVEL 07 · SUPERMAX ----
+    dict(id="t28", level="LEVEL 07  ·  SUPERMAX", template="signing",
+         narration=("The supermax offer arrives on your twenty-eighth birthday: five full years, every "
+                    "dollar guaranteed no matter what your knees decide to do next season or the one "
+                    "after. You sign it at a table with more cameras pointed at it than your entire "
+                    "rookie season combined — the largest number either you or Denise has ever seen "
+                    "written next to a human being's actual name."),
+         overlay=dict(big="$313.9M", sub="5-YEAR SUPERMAX DEAL")),
+    dict(id="t29", level=None, template="jet",
+         narration=("The private jet is real, the endorsement portfolio is real, a net worth with more "
+                    "zeros than the elevator repair ever needed, multiplied a thousand times over. "
+                    "Somewhere a bigger name than yours turned playing basketball into a billion actual "
+                    "dollars and a lifetime shoe deal nobody's grandchildren will outlive — the fantasy "
+                    "this entire ladder actually sells, one in a whole generation. All of it sits on "
+                    "paper, owned outright. Four visits to Denise, this whole year — that's the actual "
+                    "count."),
+         overlay=None),
+
+    # ---- LEVEL 08 · THE RECKONING (apex cost, resolves the cold open) ----
+    dict(id="t30", level="LEVEL 08  ·  THE RECKONING", template="rafterRetirement", gap=0.7,
+         narration=("Fourteen seasons, two more knee surgeries, and a front office that finally says, "
+                    "gently, that this year should be the last one — not a cut, not a trade, just math "
+                    "nobody in the building argues with anymore. The team plans a ceremony. A banner. "
+                    "Your actual number, stitched in gold you never once asked anyone's opinion about. "
+                    "You already know exactly how this particular night ends before it starts."),
+         overlay=dict(big="14 SEASONS", sub="3X THE AVG CAREER")),
+    dict(id="t31", level=None, template="iceBathRoom",
+         narration=("Sixty percent of players who make it this far are broke within five years of "
+                    "their last game — a real number, the one nobody puts on a banner. You're not one "
+                    "of them, technically; the house is paid off, the shoe deal outlives the knees. "
+                    "Denise sits in the tunnel with you before the ceremony starts, quiet, the way she "
+                    "used to be at the kitchen table."),
+         overlay=dict(big="60%", sub="BROKE WITHIN 5 YEARS"),
+         dialogue=dict(text="The banner doesn't hand anybody back the years, baby. Just so you know that.")),
+
+    # ---- LOOP CLOSE — pure cyclical, fully resolved ----
+    dict(id="t32", level=None, template="rafterRetirement",
+         narration=("One spotlight left on in an arena about to fill with twenty thousand people who "
+                    "paid to watch this exact moment. The banner rises. Your number, gold thread, no "
+                    "longer a suit you're guessing at the meaning of — a jersey, retired, a whole "
+                    "life's worth of six-hundred-makes-a-night finally spelled out above a court you'll "
+                    "never play on again. Ice waits in a tub nobody hands you anymore."),
+         overlay=dict(big="RETIRED", sub="THE ICE STOPS COMING")),
 ]
