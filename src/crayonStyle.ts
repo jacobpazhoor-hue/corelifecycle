@@ -25,8 +25,13 @@ export const CRAYON_FONT = 'Caveat';
  */
 export const CRAYON_TEXT_SLANT_DEG = 6;
 
-/** Subtitles measure ~50% of their title on the reference (bible §7). */
-export const CRAYON_SUBTITLE_RATIO = 0.5;
+/**
+ * Subtitles measure ~75% of their title on the reference (bible §7). The original 0.5 was an eyeball
+ * estimate; measuring the 4:05 chapter card two ways — cell-pixel height (23 px title vs 17 px
+ * subtitle) and width-per-character (0.565 frame / 20 chars vs 0.766 frame / 36 chars) — both land at
+ * 0.72–0.77.
+ */
+export const CRAYON_SUBTITLE_RATIO = 0.75;
 
 // ---------------------------------------------------------------------------
 // Ink + linework
