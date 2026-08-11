@@ -4,6 +4,7 @@ import {StickFigure, LIGHT, SIL, DIM, PAPER} from './figure';
 import {FACES, blendExpr} from './faces';
 import * as A from './actions';
 import {PACK_TEMPLATES} from './stage';
+import {SCENE_COLORS} from './crayonStyle';
 import meta from './episode_meta.json';
 
 // Some "universal" templates (window/dinner/deskSilhouette/lobby) default to a generic corporate
@@ -28,31 +29,37 @@ const CAPTION_SAFE_X = 760;
 
 const WIN_COLORS = ['#ffd98a', '#ffe7b4', '#ffcf72', '#ffdf9c']; // soft lit-window fills
 
+// FLAT FULL-FRAME GROUNDS (CRAYON_BIBLE §5), the same treatment stage.tsx got in WO-8a. The seven
+// `night`/`teal`/`amber`/`crimson`/`indigo`/`dusk`/`dayg` linear ramps that painted every Frame, and
+// the `vig` radial vignette laid over the top of every Frame at 0.12 alpha, are gone. The reason is
+// measurable, not aesthetic: Chromium DITHERS every gradient it paints, so adjacent pixels alternate
+// by ±1 even inside a purely vertical ramp. On a rendered still of t19 (layoffs) that held the
+// flat-fill metric — share of pixels exactly equal to their right neighbour — at 29.4% against the
+// reference's measured 74–92%.
+// Three flat keys stand in for the seven washes, taken from the per-scene colour tokens and matching
+// stage.tsx's BG_SKY/BG_COOL/BG_WARM so the two halves of an episode key the same way.
+const BG_SKY = SCENE_COLORS.daylight.bg;   // was #night / #dayg — daylight sky, bright atrium glass
+const BG_COOL = SCENE_COLORS.grey.bg;      // was #teal / #crimson / #indigo — cool, near-mono, corporate
+const BG_WARM = SCENE_COLORS.gold.bg;      // was #amber / #dusk — candlelit dinner, dusk tarmac
+
 const Defs: React.FC = () => (
   <defs>
-    {/* hand-drawn line wobble + paper grain */}
-    <filter id="rough" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="2" seed="4" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="3" /></filter>
-    <filter id="paper"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" result="t" /><feColorMatrix in="t" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0" /></filter>
-    {/* every "mood" id => a subtle paper tint (stays light, slight warm/cool variation) */}
-    <linearGradient id="night" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#bfe4f7" /><stop offset="1" stopColor="#f2fbff" /></linearGradient>
-    <linearGradient id="teal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#e8fbf4" /><stop offset="1" stopColor="#cdeee2" /></linearGradient>
-    <linearGradient id="amber" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fff7e2" /><stop offset="1" stopColor="#ffeac0" /></linearGradient>
-    <linearGradient id="crimson" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fff0ec" /><stop offset="1" stopColor="#ffdcd2" /></linearGradient>
-    <linearGradient id="indigo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#eeeaff" /><stop offset="1" stopColor="#d9d2f7" /></linearGradient>
-    <linearGradient id="dusk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ffeed2" /><stop offset="1" stopColor="#ffd9e2" /></linearGradient>
-    <linearGradient id="dayg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#cbeaf9" /><stop offset="1" stopColor="#ffffff" /></linearGradient>
-    {/* glows => faint warm light spots on paper */}
-    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stopColor="#fff3d6" stopOpacity="0.55" /><stop offset="1" stopColor="#fff3d6" stopOpacity="0" /></radialGradient>
+    {/* The `rough` (feDisplacementMap line wobble) and `paper` (feTurbulence grain) filters are gone:
+        both had 0 usages, and the reference art carries no texture at all (bible §5's naming warning).
+        What is left are the two LOCAL light gradients — a monitor wash and a window/skylight shaft.
+        Neither ever fills the frame, so each one's dithering costs flat-fill only over its own ellipse. */}
     <radialGradient id="glowGold" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stopColor="#ffe6ab" stopOpacity="0.6" /><stop offset="1" stopColor="#ffe6ab" stopOpacity="0" /></radialGradient>
-    <radialGradient id="glowTeal" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stopColor="#d8efe6" stopOpacity="0.5" /><stop offset="1" stopColor="#d8efe6" stopOpacity="0" /></radialGradient>
     <radialGradient id="lightTop" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stopColor="#ffffff" stopOpacity="0.7" /><stop offset="1" stopColor="#ffffff" stopOpacity="0" /></radialGradient>
-    {/* very subtle warm paper edge vignette + faint sweep */}
-    <radialGradient id="vig" cx="0.5" cy="0.5" r="0.75"><stop offset="0.6" stopColor="#6b5f48" stopOpacity="0" /><stop offset="1" stopColor="#6b5f48" stopOpacity="0.12" /></radialGradient>
-    <linearGradient id="sweep" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#ffffff" stopOpacity="0" /><stop offset="0.5" stopColor="#ffffff" stopOpacity="0.05" /><stop offset="1" stopColor="#ffffff" stopOpacity="0" /></linearGradient>
   </defs>
 );
 
-const Skyline: React.FC<{frame: number; baseY: number; tint?: string; o?: number}> = ({frame, baseY, tint = COL.city, o = 1}) => {
+// The skyline no longer takes `frame`. Roughly one lit window in ten used to flicker on
+// `sin(frame * 0.12 + id)`, and because those windows are scattered across the FULL width of the
+// building band, a motion-locality map read every cell of the upper two grid rows as active — 15 of
+// the 48 cells, in a file whose templates are supposed to be camera-locked (§3). Measured on t19
+// (layoffs) 10 frames apart, freezing the twinkle moved the lock from 24/48 to 39/48 cells at exactly
+// 0.0. Windows are simply lit or unlit now.
+const Skyline: React.FC<{baseY: number; tint?: string; o?: number}> = ({baseY, tint = COL.city, o = 1}) => {
   const b: {x: number; w: number; h: number}[] = [];
   let x = -40, i = 0;
   while (x < 1960) {const w = 42 + rnd(i) * 70, h = 110 + rnd(i * 3 + 1) * 330; b.push({x, w, h}); x += w + 8 + rnd(i * 5) * 18; i++;}
@@ -63,9 +70,8 @@ const Skyline: React.FC<{frame: number; baseY: number; tint?: string; o?: number
       for (let c = 0; c < cols; c++) for (let r = 0; r < rows; r++) {
         const id = idx * 97 + c * 7 + r;
         const lit = rnd(id) > 0.55;
-        const tw = lit && rnd(id * 2) > 0.8 ? (0.4 + 0.6 * (0.5 + 0.5 * Math.sin(frame * 0.12 + id))) : 1;
         wins.push(<rect key={c + '-' + r} x={bb.x + 8 + c * 20} y={top + 11 + r * 28} width={11} height={15} rx={1}
-          fill={lit ? WIN_COLORS[Math.floor(rnd(id * 3) * WIN_COLORS.length)] : 'none'} stroke={INK} strokeWidth={1.6} opacity={lit ? tw : 0.55} />);
+          fill={lit ? WIN_COLORS[Math.floor(rnd(id * 3) * WIN_COLORS.length)] : 'none'} stroke={INK} strokeWidth={1.6} opacity={lit ? 1 : 0.55} />);
       }
       return <g key={idx}><rect x={bb.x} y={top} width={bb.w} height={bb.h} fill={PAPER} stroke={INK} strokeWidth={3} />{wins}</g>;
     })}
@@ -100,28 +106,22 @@ const Mullions: React.FC<{o?: number}> = ({o = 0.5}) => (
   </g>
 );
 
-// atmosphere: top color haze + a slow moving light sweep + drifting dust (stimulation/refinement)
-const Atmos: React.FC<{frame: number; haze?: string}> = ({frame, haze = 'glow'}) => {
-  const sx = -700 + ((frame * 2.4) % 3400);
-  return (
-    <g>
-      <ellipse cx={760} cy={-120} rx={1500} ry={560} fill={`url(#${haze})`} opacity={0.22} />
-      <rect x={sx} y={-60} width={560} height={1200} fill="url(#sweep)" transform={`skewX(-16)`} />
-      {Array.from({length: 13}).map((_, i) => {
-        const x = rnd(i * 1.7) * 1920 + Math.sin(frame * 0.012 + i) * 44;
-        const y = (((rnd(i * 2.3) * 1080) - (frame / 30) * (6 + rnd(i) * 14)) % 1120 + 1120) % 1120;
-        return <circle key={i} cx={x} cy={y} r={1.6} fill="#b8b0a0" opacity={0.16} />;
-      })}
-    </g>
-  );
-};
+// `Atmos` is gone. It painted three separate bible violations over EVERY Frame: a 1500×560 radial
+// haze ellipse across the whole top of frame, a `sweep` gradient bar tracked across the full width
+// every frame, and 13 dust motes drifting on `frame`. The haze and the sweep were full-frame
+// gradients (§5, and see the BG_* note above on Chromium's dithering); the sweep and the motes were
+// whole-frame motion (§3 — the reference camera is static, motion is localised to characters/props).
 
-// ---- animated layers ----
-const Rain: React.FC<{frame: number; count?: number; o?: number}> = ({frame, count = 70, o = 0.22}) => {
+// ---- static weather layers ----
+// Rain is drawn, not animated. It used to advance every streak by speed/30 px per frame across the
+// full height of frame, which a motion-locality map reads as whole-frame motion in every cell (§3).
+// Kept rather than deleted because six templates (S00/S01/S04/S06/S07/S08) use it as the only thing
+// outside the window, and drawn-in streaks are ordinary flat-vector shorthand for rain.
+const Rain: React.FC<{count?: number; o?: number}> = ({count = 70, o = 0.22}) => {
   const ls: React.ReactNode[] = [];
   for (let i = 0; i < count; i++) {
-    const x = rnd(i * 3.1) * 2000 - 40, speed = 900 + rnd(i * 5.3) * 700, len = 16 + rnd(i * 7.7) * 24;
-    const y = (((rnd(i * 9.1) * 1200) + (frame / 30) * speed) % 1180) - 40;
+    const x = rnd(i * 3.1) * 2000 - 40, len = 16 + rnd(i * 7.7) * 24;
+    const y = ((rnd(i * 9.1) * 1200) % 1180) - 40;
     ls.push(<line key={i} x1={x} y1={y} x2={x - 7} y2={y + len} stroke={COL.line} strokeWidth={2} opacity={o * 0.7} />);
   }
   return <g>{ls}</g>;
@@ -188,28 +188,19 @@ const Document: React.FC<{x: number; y: number; handX: number; handY: number}> =
     <line x1={handX} y1={handY} x2={x - 6} y2={y + 12} stroke={INK} strokeWidth={6} strokeLinecap="round" />
   </g>
 );
-const Clouds: React.FC<{frame: number; baseY: number; o?: number}> = ({frame, baseY, o = 0.12}) => (
-  <g>{[0, 1, 2, 3, 4].map((i) => {const x = ((rnd(i * 2.7) * 2200) + (frame / 30) * (16 + i * 6)) % 2400 - 220; const y = baseY + rnd(i * 3.9) * 110 - 55; const s = 120 + rnd(i * 5.1) * 120; return <ellipse key={i} cx={x} cy={y} rx={s} ry={s * 0.4} fill="#ffffff" opacity={o} />;})}</g>
-);
-const CarLights: React.FC<{frame: number; y: number}> = ({frame, y}) => (
-  <g>{[0, 1, 2, 3, 4, 5].map((i) => {const dir = i % 2 ? 1 : -1; const t = ((frame / 30) * (240 + i * 50) + rnd(i) * 1920) % 2000; const x = dir > 0 ? t - 40 : 1960 - t; return <ellipse key={i} cx={x} cy={y} rx={22} ry={4} fill={dir > 0 ? '#ffd9a0' : '#ff8575'} opacity={0.5} />;})}</g>
-);
-const Motes: React.FC<{frame: number; n?: number}> = ({frame, n = 16}) => (
-  <g>{Array.from({length: n}).map((_, i) => {const x = rnd(i * 1.3) * 1920 + Math.sin(frame * 0.01 + i) * 28; const y = (((rnd(i * 2.1) * 1080) - (frame / 30) * (8 + rnd(i) * 16)) % 1120 + 1120) % 1120; return <circle key={i} cx={x} cy={y} r={1.7} fill="#cfe0f0" opacity={0.16} />;})}</g>
-);
+// `Clouds` (0 usages), `CarLights` (S03's traffic streaks) and `Motes` (16 dust circles, S02) are all
+// gone: each drifted across the full width or height on `frame`, which is the whole-frame motion §3
+// forbids. Clouds was dead code. CarLights is deleted rather than frozen because it draws headlight
+// ellipses with no vehicle under them — parked on the road they read as unexplained glowing blobs,
+// and S03's street already reads from the skyline, the kerb line and the ink road line.
 
-const Frame: React.FC<{children: React.ReactNode; bg?: string; haze?: string; atmos?: boolean}> = ({children, bg = 'url(#night)', haze = 'glow', atmos = true}) => {
-  const f = useCurrentFrame();
-  return (
-    <svg viewBox="0 0 1920 1080" width="100%" height="100%" style={{display: 'block'}}>
-      <Defs />
-      <rect x={0} y={0} width={1920} height={1080} fill={bg} />
-      {atmos && <Atmos frame={f} haze={haze} />}
-      {children}
-      <rect x={0} y={0} width={1920} height={1080} fill="url(#vig)" />
-    </svg>
-  );
-};
+const Frame: React.FC<{children: React.ReactNode; bg?: string}> = ({children, bg = BG_SKY}) => (
+  <svg viewBox="0 0 1920 1080" width="100%" height="100%" style={{display: 'block'}}>
+    <Defs />
+    <rect x={0} y={0} width={1920} height={1080} fill={bg} />
+    {children}
+  </svg>
+);
 
 const Desk: React.FC<{y: number}> = ({y}) => (
   <g>
@@ -222,8 +213,8 @@ const Desk: React.FC<{y: number}> = ({y}) => (
 const S00: React.FC = () => {
   const f = useCurrentFrame();
   return (<Frame>
-    {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={760} /> : <Skyline frame={f} baseY={760} />}
-    <Rain frame={f} o={0.26} /><Mullions o={0.55} />
+    {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={760} /> : <Skyline baseY={760} />}
+    <Rain o={0.26} /><Mullions o={0.55} />
     <StickFigure pose={A.sit(f)} x={1180} y={886} scale={1.2} facing={-1} view="profile" expr={FACES.tired} pal={LIGHT} frame={f} />
     <Desk y={830} />
     <Laptop cx={1095} deskY={830} frame={f} w={124} h={80} />
@@ -232,7 +223,7 @@ const S00: React.FC = () => {
 const S01: React.FC = () => {
   const f = useCurrentFrame(); const {fps} = useVideoConfig();
   return (<Frame>
-    <Skyline frame={f} baseY={620} tint="#0e1925" o={0.8} /><Rain frame={f} o={0.18} /><Mullions o={0.4} />
+    <Skyline baseY={620} tint="#0e1925" o={0.8} /><Rain o={0.18} /><Mullions o={0.4} />
     <StickFigure pose={A.type_(f, fps)} x={870} y={858} scale={1.6} facing={1} view="profile" expr={FACES.exhausted} pal={LIGHT} frame={f} />
     <Desk y={830} />
     <Laptop cx={930} deskY={830} frame={f} w={186} h={114} />
@@ -243,7 +234,7 @@ const S02: React.FC = () => {
   const f = useCurrentFrame();
   const boxes: React.ReactNode[] = [];
   for (let c = 0; c < 7; c++) for (let r = 0; r < 6; r++) {const x = 740 + c * 152, y = 230 + r * 112; boxes.push(<g key={c + '_' + r}><rect x={x} y={y} width={142} height={102} fill={COL.box} stroke={COL.boxLine} strokeWidth={4} /><line x1={x} y1={y + 34} x2={x + 142} y2={y + 34} stroke={COL.boxLine} strokeWidth={3} /><rect x={x + 50} y={y + 12} width={42} height={14} fill="#566a7e" /></g>);}
-  return (<Frame>{boxes}<Motes frame={f} n={20} />
+  return (<Frame>{boxes}
     <StickFigure pose={A.lookUp(f)} x={420} y={830} scale={1.35} facing={1} view="front" expr={FACES.worried} pal={LIGHT} frame={f} />
   </Frame>);
 };
@@ -253,8 +244,7 @@ const S03: React.FC = () => {
   return (<Frame>
     <polygon points="120,1080 380,120 520,120 520,1080" fill={PAPER} stroke={INK} strokeWidth={3} /><polygon points="1800,1080 1540,160 1400,160 1400,1080" fill={PAPER} stroke={INK} strokeWidth={3} /><polygon points="560,1080 720,80 980,80 1040,1080" fill={PAPER} stroke={INK} strokeWidth={3} />
     <rect x={812} y={150} width={120} height={90} fill={COL.warm} opacity={0.9} /><rect x={812} y={150} width={120} height={90} fill="none" stroke={INK} strokeWidth={6} />
-    <Skyline frame={f} baseY={1010} tint="#0a1119" o={0.7} />
-    <CarLights frame={f} y={1002} />
+    <Skyline baseY={1010} tint="#0a1119" o={0.7} />
     <line x1={0} y1={1010} x2={1920} y2={1010} stroke={INK} strokeWidth={8} />
     <StickFigure pose={A.walk(f, fps)} x={x} y={952} scale={0.62} facing={1} view="profile" expr={FACES.earnest} pal={LIGHT} frame={f} />
   </Frame>);
@@ -265,7 +255,7 @@ const Junior: React.FC<{x: number; s: number; f: number; fps: number}> = ({x, s,
 const S04: React.FC = () => {
   const f = useCurrentFrame(); const {fps} = useVideoConfig();
   return (<Frame>
-    <Skyline frame={f} baseY={460} tint="#0e1925" o={0.7} /><Rain frame={f} o={0.12} /><Mullions o={0.3} />
+    <Skyline baseY={460} tint="#0e1925" o={0.7} /><Rain o={0.12} /><Mullions o={0.3} />
     <polygon points="430,980 1490,980 1240,640 680,640" fill={PAPER} stroke={INK} strokeWidth={5} />
     <Junior x={560} s={0.6} f={f} fps={fps} /><Junior x={1360} s={0.6} f={f + 30} fps={fps} />
     <StickFigure pose={A.sign(f, fps)} x={960} y={836} scale={0.95} facing={1} view="profile" expr={FACES.focused} pal={LIGHT} frame={f} />
@@ -306,7 +296,7 @@ const S06: React.FC = () => {
   const t6 = interpolate(f, [d * 0.2, d * 0.6], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (<Frame>
     <rect x={0} y={0} width={1920} height={1080} fill={COL.floor} /><rect x={560} y={120} width={900} height={840} fill={PAPER} stroke={INK} strokeWidth={3} />
-    <Skyline frame={f} baseY={520} tint="#13202e" o={0.5} /><Rain frame={f} count={40} o={0.1} />
+    <Skyline baseY={520} tint="#13202e" o={0.5} /><Rain count={40} o={0.1} />
     <StickFigure pose={A.type_(f, fps)} x={790} y={742} scale={0.66} facing={1} view="profile" pal={DIM} showFace={false} frame={f} />
     <StickFigure pose={A.type_(f + 40, fps)} x={1170} y={742} scale={0.66} facing={-1} view="profile" pal={DIM} showFace={false} frame={f} />
     <rect x={690} y={760} width={236} height={120} fill={PAPER} stroke={INK} strokeWidth={2} /><rect x={1074} y={760} width={236} height={120} fill={PAPER} stroke={INK} strokeWidth={2} />
@@ -323,9 +313,9 @@ const S07: React.FC = () => {
   // The mullion cross is offset well clear of the figure's own x/head-height (both used to sit at
   // the window's exact center, so the bars drew straight across the face and torso in every frame).
   const f = useCurrentFrame();
-  return (<Frame bg="url(#teal)">
-    {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={780} /> : <Skyline frame={f} baseY={780} tint="#13202e" />}
-    <Rain frame={f} o={0.3} />
+  return (<Frame bg={BG_COOL}>
+    {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={780} /> : <Skyline baseY={780} tint="#13202e" />}
+    <Rain o={0.3} />
     <rect x={520} y={90} width={880} height={700} fill="none" stroke={INK} strokeWidth={9} />
     <line x1={720} y1={90} x2={720} y2={790} stroke={INK} strokeWidth={6} /><line x1={520} y1={230} x2={1400} y2={230} stroke={INK} strokeWidth={6} />
     <rect x={0} y={790} width={1920} height={290} fill={COL.floor} /><rect x={0} y={790} width={1920} height={8} fill={INK} />
@@ -337,7 +327,7 @@ const S08: React.FC = () => {
   const f = useCurrentFrame(); const {fps, durationInFrames: d} = useVideoConfig();
   const t8 = interpolate(f, [d * 0.25, d * 0.6], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (<Frame>
-    <Skyline frame={f} baseY={640} tint="#13202e" o={0.7} /><Rain frame={f} o={0.1} /><Mullions o={0.35} />
+    <Skyline baseY={640} tint="#13202e" o={0.7} /><Rain o={0.1} /><Mullions o={0.35} />
     <StickFigure pose={A.sign(f, fps)} x={820} y={836} scale={1.55} facing={1} view="profile" expr={blendExpr(FACES.neutral, FACES.smug, t8)} pal={LIGHT} frame={f} />
     <Desk y={830} />
     <Document x={965} y={814} handX={956} handY={786} />
@@ -351,7 +341,7 @@ const S09: React.FC = () => {
   // briefcase arm, reading as the plane emerging from his body (reviewer t25 defect). Moved well above
   // the walk line (cy 780 -> 570) and right (cx 1500 -> 1550) so there's a clear band of sky between
   // the character's head (top ~y662) and the jet's lowest point (~y616) — background, not attached.
-  return (<Frame bg="url(#dusk)">
+  return (<Frame bg={BG_WARM}>
     <g fill="#111b27" opacity={0.95}><ellipse cx={1550} cy={570} rx={340} ry={46} /><polygon points="1550,550 1410,480 1380,490 1520,565" /><polygon points="1810,550 1890,480 1905,495 1850,565" /><polygon points="1280,572 1230,572 1260,546 1295,552" /></g>
     <line x1={0} y1={900} x2={1920} y2={900} stroke="#1a2230" strokeWidth={10} /><rect x={0} y={900} width={1920} height={180} fill="#1b2430" opacity={0.6} />
     <StickFigure pose={A.walk(f, fps)} x={x} y={840} scale={1.0} facing={1} view="profile" expr={FACES.cold} pal={LIGHT} briefcase frame={f} />
@@ -361,7 +351,7 @@ const S09: React.FC = () => {
 // under SURVIVAL_TOPIC, an ordinary family table (a kid-scaled second figure, plates, no candle).
 const Dinner: React.FC<{f: number; mainExpr: any}> = ({f, mainExpr}) => (
   <>
-    {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={520} o={0.6} /> : <><Skyline frame={f} baseY={520} tint="#10202e" o={0.4} /><Mullions o={0.22} /></>}
+    {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={520} o={0.6} /> : <><Skyline baseY={520} tint="#10202e" o={0.4} /><Mullions o={0.22} /></>}
     {!SURVIVAL_TOPIC && <><ellipse cx={970} cy={700} rx={300} ry={170} fill="#f2c14e" opacity={0.1} />
     <ellipse cx={970} cy={700} rx={150} ry={90} fill="#f2c14e" opacity={0.1} /></>}
     <StickFigure pose={A.sit(f)} x={700} y={762} scale={1.2} facing={1} view="profile" expr={mainExpr} pal={LIGHT} frame={f} />
@@ -392,13 +382,13 @@ const Dinner: React.FC<{f: number; mainExpr: any}> = ({f, mainExpr}) => (
 const S10: React.FC = () => {  // Equity Partner — the dinner
   const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
   const t = interpolate(f, [d * 0.3, d * 0.65], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  return (<Frame bg="url(#amber)" haze="glowGold"><Dinner f={f} mainExpr={blendExpr(FACES.cold, FACES.smug, t)} /></Frame>);
+  return (<Frame bg={BG_WARM}><Dinner f={f} mainExpr={blendExpr(FACES.cold, FACES.smug, t)} /></Frame>);
 };
 
 const S11: React.FC = () => {  // book of business — boardroom power
   const f = useCurrentFrame(); const {fps} = useVideoConfig();
   return (<Frame>
-    <Skyline frame={f} baseY={440} tint="#0e1925" o={0.7} /><Mullions o={0.3} />
+    <Skyline baseY={440} tint="#0e1925" o={0.7} /><Mullions o={0.3} />
     <polygon points="380,980 1540,980 1300,610 620,610" fill={PAPER} stroke={INK} strokeWidth={5} />
     <StickFigure pose={A.type_(f, fps)} x={620} y={700} scale={0.58} facing={1} view="profile" pal={DIM} showFace={false} frame={f} />
     <StickFigure pose={A.type_(f + 33, fps)} x={1300} y={700} scale={0.58} facing={-1} view="profile" pal={DIM} showFace={false} frame={f} />
@@ -411,8 +401,8 @@ const S12: React.FC = () => {  // managing partner — the atrium / running the 
   const f = useCurrentFrame();
   const lines: React.ReactNode[] = [];
   for (let i = 0; i <= 10; i++) {const x = i * 192; lines.push(<line key={i} x1={x} y1={0} x2={960 + (x - 960) * 1.9} y2={900} stroke={COL.mullc} strokeWidth={4} opacity={0.4} />);}
-  return (<Frame bg="url(#indigo)">
-    <Skyline frame={f} baseY={600} tint="#1a2440" o={0.55} />
+  return (<Frame bg={BG_COOL}>
+    <Skyline baseY={600} tint="#1a2440" o={0.55} />
     {lines}
     <ellipse cx={960} cy={120} rx={520} ry={220} fill="url(#lightTop)" opacity={0.5} />
     <rect x={0} y={900} width={1920} height={180} fill={COL.floor} /><rect x={0} y={900} width={1920} height={8} fill={INK} />
@@ -426,8 +416,8 @@ const S13: React.FC = () => {  // layoffs — right-sizing; people leaving
     const x = x0 + ((f * 0.6) % 240); const s = 0.6 - i * 0.04;
     return <StickFigure key={i} pose={A.walk(f + i * 40, fps)} x={x} y={904} scale={s} facing={1} view="profile" pal={DIM} showFace={false} frame={f} />;
   });
-  return (<Frame bg="url(#crimson)" haze="glowGold">
-    <Skyline frame={f} baseY={520} tint="#2a1622" o={0.5} /><Mullions o={0.28} />
+  return (<Frame bg={BG_COOL}>
+    <Skyline baseY={520} tint="#2a1622" o={0.5} /><Mullions o={0.28} />
     <rect x={1760} y={300} width={150} height={620} fill={PAPER} stroke={INK} strokeWidth={3} /><rect x={1760} y={300} width={20} height={620} fill={INK} />
     {leavers}
     {/* color pop: red EXIT sign — pulled in from x1775 (right edge 1893, only 27px from the 1920
@@ -454,7 +444,7 @@ const S14: React.FC = () => {  // power broker — the revolving door (govt <-> 
         corner regardless of size. */}
     <polygon points="210,420 590,420 400,300" fill={PAPER} stroke={INK} strokeWidth={3} />{cols}
     {/* glass tower right */}
-    <rect x={1340} y={180} width={420} height={700} fill={PAPER} stroke={INK} strokeWidth={3} /><Skyline frame={f} baseY={880} tint="#0c1826" o={0.5} />
+    <rect x={1340} y={180} width={420} height={700} fill={PAPER} stroke={INK} strokeWidth={3} /><Skyline baseY={880} tint="#0c1826" o={0.5} />
     <line x1={0} y1={910} x2={1920} y2={910} stroke={INK} strokeWidth={8} />
     <StickFigure pose={A.walk(f, fps)} x={x} y={870} scale={0.9} facing={1} view="profile" expr={FACES.smug} pal={LIGHT} frame={f} />
   </Frame>);
@@ -462,7 +452,7 @@ const S14: React.FC = () => {  // power broker — the revolving door (govt <-> 
 
 const S15: React.FC = () => {  // the private dinner — Geneva
   const f = useCurrentFrame();
-  return (<Frame bg="url(#amber)" haze="glowGold"><Dinner f={f} mainExpr={FACES.cold} /></Frame>);
+  return (<Frame bg={BG_WARM}><Dinner f={f} mainExpr={FACES.cold} /></Frame>);
 };
 
 const S16: React.FC = () => {  // the Architect — war room / sovereign
@@ -472,7 +462,7 @@ const S16: React.FC = () => {  // the Architect — war room / sovereign
   const gx = 640, gy = 420;
   const cities = [[gx - 220, gy - 10], [gx + 200, gy - 60], [gx, gy + 80], [gx - 140, gy + 120], [gx + 260, gy + 100], [gx + 100, gy - 140]];
   const lit = (i: number) => i % 2 === 0;
-  return (<Frame bg="url(#teal)" haze="glowTeal">
+  return (<Frame bg={BG_COOL}>
     {/* side screens */}
     <rect x={60} y={300} width={260} height={420} fill={PAPER} stroke={INK} strokeWidth={3} /><ScreenLines x={84} y={320} w={210} frame={f} />
     <rect x={1600} y={300} width={260} height={420} fill={PAPER} stroke={INK} strokeWidth={3} /><ScreenLines x={1624} y={320} w={210} frame={f} />
@@ -494,7 +484,7 @@ const S17: React.FC = () => {  // the trust — no title; empty chair, others si
     // the communal table — Mara's folding chair sits empty, untouched plate; Dec eats alone and fast.
     // Deliberately ONE figure + a conspicuously empty seat (vs. Dinner's two-figures-facing pattern
     // used elsewhere in this episode) so the grief beat reads as an absence, not just another meal.
-    return (<Frame bg="url(#indigo)" haze="glowTeal">
+    return (<Frame bg={BG_COOL}>
       <SuburbRow frame={f} baseY={520} o={0.3} />
       <rect x={0} y={722} width={1920} height={358} fill={COL.floor} /><rect x={0} y={722} width={1920} height={8} fill={INK} />
       {/* the communal table */}
@@ -516,7 +506,7 @@ const S17: React.FC = () => {  // the trust — no title; empty chair, others si
     </Frame>);
   }
   return (<Frame>
-    <Skyline frame={f} baseY={820} tint="#13202e" /><Mullions o={0.45} />
+    <Skyline baseY={820} tint="#13202e" /><Mullions o={0.45} />
     {/* empty high-back executive chair, back to viewer */}
     <rect x={870} y={560} width={180} height={300} rx={28} fill={PAPER} stroke={INK} strokeWidth={4} />
     <rect x={900} y={840} width={120} height={70} fill={PAPER} stroke={INK} strokeWidth={2} />
@@ -536,8 +526,8 @@ const S18: React.FC = () => {  // the loop closes — a new young associate walk
   const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
   const x = interpolate(f, [0, durationInFrames], [520, 1040]);
   const tiles = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => <line key={i} x1={i * 192} y1={905} x2={i * 192} y2={1080} stroke={COL.line} strokeWidth={3} opacity={0.5} />);
-  return (<Frame bg="url(#dayg)" haze="glowTeal">
-    {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={760} /> : <Skyline frame={f} baseY={760} tint="#13202e" o={0.5} />}
+  return (<Frame bg={BG_SKY}>
+    {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={760} /> : <Skyline baseY={760} tint="#13202e" o={0.5} />}
     <ellipse cx={1500} cy={300} rx={300} ry={420} fill="url(#lightTop)" opacity={0.35} />
     <rect x={0} y={905} width={1920} height={175} fill={COL.floor} />{tiles}<rect x={0} y={905} width={1920} height={8} fill={INK} />
     {SURVIVAL_TOPIC ? (
@@ -580,7 +570,7 @@ const S19: React.FC = () => {
     </g>
   );
   return (<Frame>
-    <Skyline frame={f} baseY={760} tint="#0e1925" o={0.6} /><Mullions o={0.35} />
+    <Skyline baseY={760} tint="#0e1925" o={0.6} /><Mullions o={0.35} />
     <rect x={0} y={820} width={1920} height={260} fill={COL.floor} /><rect x={0} y={820} width={1920} height={8} fill={INK} />
     {/* the abandoned desk — a monitor nobody's unplugged yet, still glowing */}
     <rect x={1440} y={760} width={280} height={26} rx={4} fill={PAPER} stroke={INK} strokeWidth={4} />
