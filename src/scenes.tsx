@@ -3,8 +3,7 @@ import {useCurrentFrame, useVideoConfig, interpolate} from 'remotion';
 import {StickFigure, LIGHT, SIL, DIM, PAPER} from './figure';
 import {FACES, blendExpr} from './faces';
 import * as A from './actions';
-import {PACK_TEMPLATES} from './stage';
-import {SCENE_COLORS} from './crayonStyle';
+import {PACK_TEMPLATES, keyedTemplates, useSceneColors} from './stage';
 import meta from './episode_meta.json';
 
 // Some "universal" templates (window/dinner/deskSilhouette/lobby) default to a generic corporate
@@ -29,18 +28,16 @@ const CAPTION_SAFE_X = 760;
 
 const WIN_COLORS = ['#ffd98a', '#ffe7b4', '#ffcf72', '#ffdf9c']; // soft lit-window fills
 
-// FLAT FULL-FRAME GROUNDS (CRAYON_BIBLE §5), the same treatment stage.tsx got in WO-8a. The seven
+// PER-SCENE COLOUR KEYING (CRAYON_BIBLE §5), the same treatment stage.tsx got in WO-8c. The seven
 // `night`/`teal`/`amber`/`crimson`/`indigo`/`dusk`/`dayg` linear ramps that painted every Frame, and
-// the `vig` radial vignette laid over the top of every Frame at 0.12 alpha, are gone. The reason is
-// measurable, not aesthetic: Chromium DITHERS every gradient it paints, so adjacent pixels alternate
-// by ±1 even inside a purely vertical ramp. On a rendered still of t19 (layoffs) that held the
-// flat-fill metric — share of pixels exactly equal to their right neighbour — at 29.4% against the
-// reference's measured 74–92%.
-// Three flat keys stand in for the seven washes, taken from the per-scene colour tokens and matching
-// stage.tsx's BG_SKY/BG_COOL/BG_WARM so the two halves of an episode key the same way.
-const BG_SKY = SCENE_COLORS.daylight.bg;   // was #night / #dayg — daylight sky, bright atrium glass
-const BG_COOL = SCENE_COLORS.grey.bg;      // was #teal / #crimson / #indigo — cool, near-mono, corporate
-const BG_WARM = SCENE_COLORS.gold.bg;      // was #amber / #dusk — candlelit dinner, dusk tarmac
+// the `vig` radial vignette laid over the top of every Frame at 0.12 alpha, went in WO-8b: Chromium
+// DITHERS every gradient it paints, so adjacent pixels alternate by ±1 even inside a purely vertical
+// ramp, which held flat fill — share of pixels exactly equal to their right neighbour — at 29.4%
+// against the reference's measured 74–92%. Grounds stay flat solid fills for exactly that reason.
+// What changed here is WHICH flat colour: WO-8b collapsed the seven washes onto three shared
+// constants (BG_SKY/BG_COOL/BG_WARM), so an interior filing room sat on the same bright cyan as a
+// driveway. Every Frame now takes its ground from the template's own key in SCENE_KEY_BY_TEMPLATE,
+// bound by keyedTemplates() where TEMPLATES is built and read back through context by useSceneColors.
 
 const Defs: React.FC = () => (
   <defs>
@@ -194,10 +191,12 @@ const Document: React.FC<{x: number; y: number; handX: number; handY: number}> =
 // ellipses with no vehicle under them — parked on the road they read as unexplained glowing blobs,
 // and S03's street already reads from the skyline, the kerb line and the ink road line.
 
-const Frame: React.FC<{children: React.ReactNode; bg?: string}> = ({children, bg = BG_SKY}) => (
+// No `bg` prop any more: the ground is the template's colour key, not a per-scene choice out of three
+// shared constants. Overriding it here would put a scene's dominant hue in two places.
+const Frame: React.FC<{children: React.ReactNode}> = ({children}) => (
   <svg viewBox="0 0 1920 1080" width="100%" height="100%" style={{display: 'block'}}>
     <Defs />
-    <rect x={0} y={0} width={1920} height={1080} fill={bg} />
+    <rect x={0} y={0} width={1920} height={1080} fill={useSceneColors().bg} />
     {children}
   </svg>
 );
@@ -313,7 +312,7 @@ const S07: React.FC = () => {
   // The mullion cross is offset well clear of the figure's own x/head-height (both used to sit at
   // the window's exact center, so the bars drew straight across the face and torso in every frame).
   const f = useCurrentFrame();
-  return (<Frame bg={BG_COOL}>
+  return (<Frame>
     {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={780} /> : <Skyline baseY={780} tint="#13202e" />}
     <Rain o={0.3} />
     <rect x={520} y={90} width={880} height={700} fill="none" stroke={INK} strokeWidth={9} />
@@ -341,7 +340,7 @@ const S09: React.FC = () => {
   // briefcase arm, reading as the plane emerging from his body (reviewer t25 defect). Moved well above
   // the walk line (cy 780 -> 570) and right (cx 1500 -> 1550) so there's a clear band of sky between
   // the character's head (top ~y662) and the jet's lowest point (~y616) — background, not attached.
-  return (<Frame bg={BG_WARM}>
+  return (<Frame>
     <g fill="#111b27" opacity={0.95}><ellipse cx={1550} cy={570} rx={340} ry={46} /><polygon points="1550,550 1410,480 1380,490 1520,565" /><polygon points="1810,550 1890,480 1905,495 1850,565" /><polygon points="1280,572 1230,572 1260,546 1295,552" /></g>
     <line x1={0} y1={900} x2={1920} y2={900} stroke="#1a2230" strokeWidth={10} /><rect x={0} y={900} width={1920} height={180} fill="#1b2430" opacity={0.6} />
     <StickFigure pose={A.walk(f, fps)} x={x} y={840} scale={1.0} facing={1} view="profile" expr={FACES.cold} pal={LIGHT} briefcase frame={f} />
@@ -382,7 +381,7 @@ const Dinner: React.FC<{f: number; mainExpr: any}> = ({f, mainExpr}) => (
 const S10: React.FC = () => {  // Equity Partner — the dinner
   const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
   const t = interpolate(f, [d * 0.3, d * 0.65], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  return (<Frame bg={BG_WARM}><Dinner f={f} mainExpr={blendExpr(FACES.cold, FACES.smug, t)} /></Frame>);
+  return (<Frame><Dinner f={f} mainExpr={blendExpr(FACES.cold, FACES.smug, t)} /></Frame>);
 };
 
 const S11: React.FC = () => {  // book of business — boardroom power
@@ -401,7 +400,7 @@ const S12: React.FC = () => {  // managing partner — the atrium / running the 
   const f = useCurrentFrame();
   const lines: React.ReactNode[] = [];
   for (let i = 0; i <= 10; i++) {const x = i * 192; lines.push(<line key={i} x1={x} y1={0} x2={960 + (x - 960) * 1.9} y2={900} stroke={COL.mullc} strokeWidth={4} opacity={0.4} />);}
-  return (<Frame bg={BG_COOL}>
+  return (<Frame>
     <Skyline baseY={600} tint="#1a2440" o={0.55} />
     {lines}
     <ellipse cx={960} cy={120} rx={520} ry={220} fill="url(#lightTop)" opacity={0.5} />
@@ -416,7 +415,7 @@ const S13: React.FC = () => {  // layoffs — right-sizing; people leaving
     const x = x0 + ((f * 0.6) % 240); const s = 0.6 - i * 0.04;
     return <StickFigure key={i} pose={A.walk(f + i * 40, fps)} x={x} y={904} scale={s} facing={1} view="profile" pal={DIM} showFace={false} frame={f} />;
   });
-  return (<Frame bg={BG_COOL}>
+  return (<Frame>
     <Skyline baseY={520} tint="#2a1622" o={0.5} /><Mullions o={0.28} />
     <rect x={1760} y={300} width={150} height={620} fill={PAPER} stroke={INK} strokeWidth={3} /><rect x={1760} y={300} width={20} height={620} fill={INK} />
     {leavers}
@@ -452,7 +451,7 @@ const S14: React.FC = () => {  // power broker — the revolving door (govt <-> 
 
 const S15: React.FC = () => {  // the private dinner — Geneva
   const f = useCurrentFrame();
-  return (<Frame bg={BG_WARM}><Dinner f={f} mainExpr={FACES.cold} /></Frame>);
+  return (<Frame><Dinner f={f} mainExpr={FACES.cold} /></Frame>);
 };
 
 const S16: React.FC = () => {  // the Architect — war room / sovereign
@@ -462,7 +461,7 @@ const S16: React.FC = () => {  // the Architect — war room / sovereign
   const gx = 640, gy = 420;
   const cities = [[gx - 220, gy - 10], [gx + 200, gy - 60], [gx, gy + 80], [gx - 140, gy + 120], [gx + 260, gy + 100], [gx + 100, gy - 140]];
   const lit = (i: number) => i % 2 === 0;
-  return (<Frame bg={BG_COOL}>
+  return (<Frame>
     {/* side screens */}
     <rect x={60} y={300} width={260} height={420} fill={PAPER} stroke={INK} strokeWidth={3} /><ScreenLines x={84} y={320} w={210} frame={f} />
     <rect x={1600} y={300} width={260} height={420} fill={PAPER} stroke={INK} strokeWidth={3} /><ScreenLines x={1624} y={320} w={210} frame={f} />
@@ -484,7 +483,7 @@ const S17: React.FC = () => {  // the trust — no title; empty chair, others si
     // the communal table — Mara's folding chair sits empty, untouched plate; Dec eats alone and fast.
     // Deliberately ONE figure + a conspicuously empty seat (vs. Dinner's two-figures-facing pattern
     // used elsewhere in this episode) so the grief beat reads as an absence, not just another meal.
-    return (<Frame bg={BG_COOL}>
+    return (<Frame>
       <SuburbRow frame={f} baseY={520} o={0.3} />
       <rect x={0} y={722} width={1920} height={358} fill={COL.floor} /><rect x={0} y={722} width={1920} height={8} fill={INK} />
       {/* the communal table */}
@@ -526,7 +525,7 @@ const S18: React.FC = () => {  // the loop closes — a new young associate walk
   const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
   const x = interpolate(f, [0, durationInFrames], [520, 1040]);
   const tiles = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => <line key={i} x1={i * 192} y1={905} x2={i * 192} y2={1080} stroke={COL.line} strokeWidth={3} opacity={0.5} />);
-  return (<Frame bg={BG_SKY}>
+  return (<Frame>
     {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={760} /> : <Skyline baseY={760} tint="#13202e" o={0.5} />}
     <ellipse cx={1500} cy={300} rx={300} ry={420} fill="url(#lightTop)" opacity={0.35} />
     <rect x={0} y={905} width={1920} height={175} fill={COL.floor} />{tiles}<rect x={0} y={905} width={1920} height={8} fill={INK} />
@@ -590,10 +589,14 @@ const S19: React.FC = () => {
 // Reusable, TOPIC-AGNOSTIC visual archetypes. Any topic's script composes a video by picking
 // template names per scene (see content.py / docs/BIBLE.md). Adjacent scenes must differ.
 export const TEMPLATES: Record<string, React.FC> = {
-  deskSilhouette: S00, desk: S01, fileWall: S02, tower: S03, boardroomNotes: S04,
-  deskClose: S05, supervisor: S06, window: S07, signing: S08, jet: S09,
-  dinner: S10, boardroomHead: S11, atrium: S12, layoffs: S13, revolvingDoor: S14,
-  warRoom: S16, emptyChair: S17, lobby: S18, raidScene: S19,
+  // keyedTemplates() binds each name to its SCENE_KEY_BY_TEMPLATE colour key here, where the name is
+  // still known — <Frame> reads it back through context. PACK_TEMPLATES is already keyed by stage.tsx.
+  ...keyedTemplates({
+    deskSilhouette: S00, desk: S01, fileWall: S02, tower: S03, boardroomNotes: S04,
+    deskClose: S05, supervisor: S06, window: S07, signing: S08, jet: S09,
+    dinner: S10, boardroomHead: S11, atrium: S12, layoffs: S13, revolvingDoor: S14,
+    warRoom: S16, emptyChair: S17, lobby: S18, raidScene: S19,
+  }),
   // composable topic packs (src/stage.tsx): generic + medical + startup + military + sports
   ...PACK_TEMPLATES,
 };

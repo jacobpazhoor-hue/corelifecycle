@@ -94,27 +94,113 @@ export const SCENE_COLORS: Record<SceneKey, SceneColors> = {
 export const sceneColors = (key: SceneKey): SceneColors => SCENE_COLORS[key];
 
 /**
- * Explicit key per stage template. Anything absent falls to a deterministic rotation so a new
- * template still gets a committed hue rather than an accidental global palette.
+ * Explicit key per template — EVERY template in scenes.tsx (S00-S19) and every pack template in
+ * stage.tsx. Anything absent falls to a deterministic rotation so a new template still gets a
+ * committed hue rather than an accidental global palette, but the rotation is a safety net, not the
+ * design: an unmapped template lands on an editorially random hue, which is exactly what per-scene
+ * colour keying is supposed to replace.
+ *
+ * The rule applied, uniformly:
+ *   daylight — anything under open sky (or sky seen through a curtain wall)
+ *   gold     — ceremony, money, applause, the good years, golden hour
+ *   interior — enclosed, lamp-lit, wooden, dark: the "brown warehouse" key
+ *   alarm    — crisis, combat, panic, the reveal: the "saturated orange panel" key
+ *   grey     — institutional, clinical, bureaucratic, drained, loss
+ *
+ * NO interior template is keyed `daylight` — a filing room on a bright cyan sky was the defect this
+ * mapping exists to fix. Where a template's own backdrop already paints an opaque full-frame ground
+ * (the space, night-sea and night-alley packs paint #05060a/#20262e/#181418 themselves) the key is
+ * still recorded, but it governs `mid`/`accent`/`crowd` rather than a visible ground.
  */
 export const SCENE_KEY_BY_TEMPLATE: Record<string, SceneKey> = {
-  rafterRetirement: 'gold',
-  fileWall: 'interior',
-  drivewayHoop: 'daylight',
-  dinner: 'interior',
-  highSchoolGym: 'gold',
-  boardroomNotes: 'grey',
-  lectureHallScene: 'grey',
-  arenaCourt: 'gold',
-  window: 'daylight',
-  signing: 'gold',
-  gLeagueBus: 'grey',
-  iceBathRoom: 'interior',
-  tower: 'daylight',
-  erTrauma: 'alarm',
-  layoffs: 'grey',
-  podiumScene: 'alarm',
-  jet: 'daylight',
+  // --- core scenes (src/scenes.tsx S00-S19) ---
+  deskSilhouette: 'interior', desk: 'grey', fileWall: 'interior', tower: 'daylight',
+  boardroomNotes: 'grey', deskClose: 'interior', supervisor: 'grey', window: 'grey',
+  signing: 'gold', jet: 'gold', dinner: 'interior', boardroomHead: 'grey', atrium: 'gold',
+  layoffs: 'grey', revolvingDoor: 'daylight', warRoom: 'alarm', emptyChair: 'grey',
+  lobby: 'daylight', raidScene: 'alarm',
+  // --- generic pack ---
+  lectureHallScene: 'grey', podiumScene: 'gold', foundationScene: 'gold',
+  // --- medical: the near-monochrome clinical key, with the ER as its one alarm ---
+  scrubIn: 'grey', operatingRoom: 'grey', hospitalRounds: 'grey', scanReview: 'grey',
+  erTrauma: 'alarm', consult: 'grey',
+  // --- startup ---
+  garageStart: 'interior', startupGrow: 'grey', serverScale: 'grey', ipoBell: 'gold',
+  // --- military ---
+  bootcamp: 'daylight', barracksLife: 'interior', frontline: 'alarm', commandPost: 'grey',
+  decoration: 'gold',
+  // --- sports ---
+  training: 'grey', lockerRoomScene: 'interior', gameDay: 'daylight', victory: 'gold',
+  // --- hedge fund ---
+  tradingFloor: 'grey', pnlWall: 'alarm',
+  // --- real estate ---
+  openHouse: 'daylight', rentalUnits: 'daylight', constructionSite: 'daylight',
+  modelReview: 'grey', rooftopEmpire: 'gold',
+  // --- spy ---
+  tradecraft: 'daylight', surveillance: 'grey', deadDrop: 'daylight', safehouse: 'interior',
+  station: 'grey', debrief: 'interior',
+  // --- roman ---
+  triumph: 'gold', romanOath: 'daylight', legionDrill: 'daylight', legionCamp: 'daylight',
+  shieldWall: 'alarm', centurionVitis: 'daylight', firstSpear: 'gold', forumScene: 'daylight',
+  warCouncil: 'interior', throne: 'gold', senate: 'grey', praetorians: 'grey', banquet: 'gold',
+  // --- mafia: the pack commits hardest to the warm dark interior ---
+  mobTable: 'interior', streetCorner: 'daylight', socialClub: 'interior', cardGame: 'interior',
+  backAlley: 'interior', madeCeremony: 'interior', redSauce: 'interior', redSauceAlone: 'interior',
+  waterfront: 'daylight', donOffice: 'interior', commission: 'interior', countRoom: 'gold',
+  courtroom: 'grey', prisonCell: 'grey', wiretap: 'grey',
+  // --- dynasty ---
+  heirGates: 'gold', portraitHall: 'interior', portraitHallFilled: 'interior',
+  yachtDeck: 'daylight', galaBallroom: 'gold', familyVault: 'grey',
+  // --- samurai ---
+  riceField: 'daylight', dojo: 'interior', daisho: 'interior', sengokuField: 'alarm',
+  castleGate: 'daylight', teaCeremony: 'interior', lordAudience: 'gold', keepTop: 'daylight',
+  seppukuRite: 'grey', shogunCourt: 'gold', merchantHouse: 'interior',
+  // --- cartel ---
+  lookoutCorner: 'daylight', sierraRoute: 'daylight', narcoShrineRite: 'interior',
+  plazaTown: 'daylight', ranchCompound: 'gold',
+  // --- ocean survival: open water is daylight, weather is the grey key, landfall pays off gold ---
+  boatDeck: 'daylight', oceanCapsize: 'grey', raftDay: 'daylight', raftNight: 'grey',
+  glassCalm: 'gold', rainSquall: 'grey', horizonShip: 'daylight', finWater: 'grey',
+  driftPanga: 'daylight', openSwell: 'daylight', shipNight: 'grey', makeLandfall: 'gold',
+  // --- black market organs ---
+  hotelRoom: 'interior', basementOR: 'alarm', coldCase: 'grey', syndicateClinic: 'grey',
+  // --- north korea ---
+  borderWire: 'grey',
+  // --- zombie / outbreak ---
+  hordeStreet: 'alarm', suburbSiege: 'daylight', highwayJam: 'daylight', storeRaid: 'grey',
+  bunkerSiege: 'interior', checkpointTriage: 'alarm', campWall: 'daylight',
+  // --- waste / sanitation ---
+  graveside: 'grey', gravesideReturn: 'grey', dawnRoute: 'gold', truckYard: 'daylight',
+  landfillView: 'daylight', routeAftermath: 'grey',
+  // --- lottery ---
+  ticketCounter: 'interior', trailerPorch: 'daylight',
+  // --- yakuza ---
+  neonAlley: 'interior', shrineOathRite: 'interior', irezumiParlor: 'interior',
+  pachinkoFloor: 'alarm', oyabunOffice: 'interior', yubitsumeRite: 'grey',
+  teaCeremonySplit: 'interior',
+  // --- mongol ---
+  steppeCamp: 'daylight', horsebackDrill: 'daylight', steppeRaid: 'alarm', siegeWalls: 'alarm',
+  yamRelayStation: 'daylight', khanAudienceTent: 'gold', khaganThrone: 'gold',
+  // --- gladiator: arenaSand is shared art, keyed daylight for the fight and gold for the freedom rite ---
+  slaveMarket: 'daylight', ludusYard: 'daylight', arenaGate: 'interior', arenaSand: 'daylight',
+  rudisCeremony: 'gold', ludusOffice: 'interior', imperialBox: 'gold',
+  // --- bratva ---
+  courtyardBlock: 'grey', tattooCell: 'interior', banyaSitDown: 'interior', shopKrysha: 'grey',
+  koronatsiyaRite: 'interior', brightonPier: 'daylight', pakhanApex: 'gold',
+  // --- space ---
+  jetTrain: 'daylight', poolTrain: 'grey', launchSeat: 'alarm', cupolaView: 'grey',
+  evaWalk: 'grey', evaEmergency: 'alarm', controlRoom: 'grey', stationCommand: 'grey',
+  moonSurface: 'grey',
+  // --- ottoman: janissaryBarracks is shared art, keyed interior for the corps and alarm for the revolt ---
+  balkanVillage: 'daylight', janissaryBarracks: 'interior', cauldronRevolt: 'alarm',
+  divanChamber: 'gold', sultanAudience: 'gold',
+  // --- pirate ---
+  fishingCove: 'daylight', shipDeck: 'daylight', broadsideBattle: 'alarm',
+  nassauHarbor: 'daylight', captainsCabin: 'interior', marooned: 'daylight',
+  executionDock: 'grey',
+  // --- basketball ---
+  drivewayHoop: 'daylight', highSchoolGym: 'interior', gLeagueBus: 'grey', arenaCourt: 'gold',
+  iceBathRoom: 'grey', rafterRetirement: 'gold',
 };
 
 const KEY_ROTATION: SceneKey[] = ['daylight', 'gold', 'interior', 'alarm', 'grey'];
