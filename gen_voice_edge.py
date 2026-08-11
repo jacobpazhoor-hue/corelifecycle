@@ -9,16 +9,25 @@ import edge_tts
 import soundfile as sf
 from content import SCENES, FPS
 
-CACHE_VERSION = "v4"   # v4: clean master() chain (removed grainy harmonic exciter). Bump on DSP changes.
+CACHE_VERSION = "v5"   # v5: crayon narration rate (-13%) + varied gaps + wider BEAT_GAP. Bump on DSP changes.
 
 VOICE = "en-US-AndrewMultilingualNeural"  # most natural/human free voice; alts in voice_samples_v2/
 DIALOGUE_VOICE = "en-US-ChristopherNeural"  # 2nd voice for in-world dialogue (mentor/rival) — deeper, distinct from the narrator
-# Engagement tuning (2026-06-30, research-backed): faster delivery + far less dead air = the biggest
-# "feels fast" lever for short attention spans. +10% ≈ ~165 WPM (sweet spot; hard cliff ~+15%/180 WPM).
-RATE = "+8%"                   # ~190 WPM (Andrew's default is already ~174; +8% is faster-but-clear). Bump to +10% for ~195 if you want it hotter.
-GAP = 0.25                     # silence after each scene (was 0.5 — cut dead air); per-scene `gap` overrides
+# CRAYON pacing (docs/CRAYON_BIBLE.md §2, docs/research/crayon/MEASUREMENTS.md): the reference channel
+# narrates at 148.5 WPM aggregate (139.2–152.9 per video). MEASURED here by synthesising 5 real scenes
+# (348 words) per rate and timing the mastered+trimmed wav — the old "+8% ≈ 190 WPM" note was never
+# verified and the old "natural baseline ~174 WPM" is wrong for this voice:
+#   +8% -> 180.7   -8% -> 154.7   -10% -> 150.5   -11% -> 148.6   -12% -> 148.5   -13% -> 147.3
+#   -14% -> 143.6  -16% -> 142.8  -18% -> 138.5   -22% -> 130.6   (edge-tts quantises: -11/-12 tie)
+# Then confirmed on the WHOLE episode (which also carries per-scene breaths + in-world dialogue):
+#   -10% -> 154.0 WPM speech / 150.8 WPM runtime   (speech rate OUT of band, too fast)
+#   -13% -> 149.1 WPM speech / 145.7 WPM runtime   <- chosen; both metrics inside 145–152
+RATE = "-13%"                  # MEASURED 149.1 WPM speech / 145.7 runtime; re-measure if you change it
+# Inter-scene silence. The reference's gaps measure 0.18–1.0s and VARY; one fixed value is a tell.
+GAP_MIN, GAP_MAX = 0.25, 0.55           # ordinary scene-to-scene breath (deterministic per scene id)
+TURN_GAP_MIN, TURN_GAP_MAX = 0.60, 1.00  # longer hold before a chapter/LEVEL turn
 LEAD = 0.1                     # quiet before narration starts within a scene (was 0.2)
-BEAT_GAP = 0.7                 # longer hold for dramatic reveal/cliffhanger scenes (scene dict: gap=0.7)
+BEAT_GAP = 0.8                 # hold between narration and an in-world dialogue line (was 0.7)
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 AUDIO = os.path.join(ROOT, "public", "audio")
@@ -136,6 +145,17 @@ def breath(sr, dur=0.24, peak=0.085, seed=0):
     m = float(np.max(np.abs(b)))
     return (b / m * peak).astype(np.float32) if m > 1e-9 else b
 
+def scene_gap(sc, nxt):
+    """Deterministic VARIED silence after a scene, inside the reference's measured 0.18–1.0s band.
+    A writer's explicit `gap=` always wins — duck_music.py keys its silence beat off gaps >= 1.4,
+    so auto gaps are capped below that by construction. Hashed on the scene id => stable across runs."""
+    if sc.get("gap") is not None:
+        return float(sc["gap"])
+    turn = bool(nxt and nxt.get("level"))
+    lo, hi = (TURN_GAP_MIN, TURN_GAP_MAX) if turn else (GAP_MIN, GAP_MAX)
+    frac = int(hashlib.md5(sc["id"].encode()).hexdigest()[:8], 16) / 0xFFFFFFFF
+    return round(lo + (hi - lo) * frac, 3)
+
 async def main():
     scenes_out = []
     cursor = 0
@@ -189,7 +209,7 @@ async def main():
             cache[sc["id"]] = key
             json.dump(cache, open(cache_path, "w"))             # save INCREMENTALLY -> crash-resumable
         speech = len(y) / sr
-        gap = float(sc.get("gap", GAP))                           # per-scene override for dramatic holds
+        gap = scene_gap(sc, SCENES[i + 1] if i + 1 < len(SCENES) else None)
         total = LEAD + speech + gap
         nwords += nw
         speech_total += speech
@@ -210,7 +230,11 @@ async def main():
     out = os.path.join(ROOT, "src", "timeline.json")
     json.dump(timeline, open(out, "w"), indent=2)
     wpm = nwords / (speech_total / 60) if speech_total else 0
-    print(f"\nTOTAL: {cursor} frames = {cursor/FPS:.1f}s  ({nwords} words, ~{wpm:.0f} WPM, "
-          f"{reused}/{len(SCENES)} scenes reused from cache, voice={VOICE} rate={RATE}) -> {out}")
+    # runtime WPM is the metric the reference was measured with (transcript words / video minutes),
+    # so print both: speech-only WPM and words-per-minute-of-runtime. Target band: 145–152.
+    rt_wpm = nwords / (cursor / FPS / 60) if cursor else 0
+    print(f"\nTOTAL: {cursor} frames = {cursor/FPS:.1f}s  ({nwords} words, ~{wpm:.1f} WPM speech / "
+          f"{rt_wpm:.1f} WPM runtime, {reused}/{len(SCENES)} scenes reused from cache, "
+          f"voice={VOICE} rate={RATE}) -> {out}")
 
 asyncio.run(main())

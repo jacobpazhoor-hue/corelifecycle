@@ -26,11 +26,22 @@ MUSIC = os.path.join(ROOT, "public", "music")
 AMB = os.path.join(MUSIC, "ambient.wav")
 SFX = os.path.join(MUSIC, "sfx.wav")
 
-DUCK_FLOOR = 0.42       # music multiplier under VO (~ -7.5 dB)
+# Ducking depth is measured, not guessed: docs/CRAYON_BIBLE.md §8 gives duck-under-VO of 15.1 / 8.2 /
+# 13.7 dB across the three windows that carry a bed — an 8–15 dB band, mid ≈ 11.5 dB. The old 0.42
+# (-7.5 dB) sat shallower than every measured window.
+DUCK_FLOOR = 0.27       # music multiplier under VO (-11.4 dB — middle of the measured 8–15 dB band)
 SMOOTH_S = 0.18         # duck attack/release smoothing (s)
 SFX_DIP = 0.6           # extra music dip under a level SFX hit (~ -4.4 dB) so stamps punch
 SILENCE_S = 1.3         # pre-reversal silence window length
 SILENCE_FLOOR = 0.06    # music level during the silence beat
+
+# DRY PASSAGES — the reference's 240s window has a -75.2 dB gap floor: the bed is genuinely absent,
+# not merely low. Silence is used as a STRUCTURAL device (whole passages), not just one pre-midpoint
+# beat, so entire scenes are run music-free at intervals through the body of the episode.
+DRY_FLOOR = 2e-4        # ~ -74 dB: true silence, matching the measured music-free window
+DRY_FADE_S = 0.35       # fade the bed out/in at the edges of a dry passage (no click, reads deliberate)
+DRY_TARGETS = (0.24, 0.64)   # fractions of runtime to aim a dry passage at (240/993s in the reference)
+DRY_EVERY_MIN = 6.0     # one dry passage per ~6 min of runtime, capped by len(DRY_TARGETS)
 
 
 def _seeded_rng(salt):
@@ -41,6 +52,23 @@ def _seeded_rng(salt):
         pass
     seed = int(hashlib.md5((topic + "|" + salt).encode()).hexdigest(), 16) % (2**32)
     return np.random.default_rng(seed)
+
+
+def _pick_dry(scenes, total_f, fps, mid_i, level_idx):
+    """Whole scenes to run MUSIC-FREE. Skips the cold open (it needs its bed), every LEVEL cut (the
+    riser/stamp needs music to punch out of) and the midpoint silence-beat pair (no double-dipping),
+    then snaps each DRY_TARGETS fraction to the nearest surviving scene start."""
+    runtime = total_f / max(fps, 1)
+    want = max(1, min(len(DRY_TARGETS), int(round(runtime / 60.0 / DRY_EVERY_MIN))))
+    blocked = {0, len(scenes) - 1, mid_i, mid_i - 1} | set(level_idx)
+    chosen = []
+    for frac in DRY_TARGETS[:want]:
+        cands = [i for i in range(len(scenes)) if i not in blocked and i not in chosen]
+        if not cands:
+            break
+        target = frac * runtime
+        chosen.append(min(cands, key=lambda i: abs(scenes[i]["startFrame"] / fps - target)))
+    return sorted(chosen)
 
 
 def _add(buf, x, start):
@@ -150,6 +178,23 @@ def main():
             sfx[a:b] *= np.linspace(1.0, 0.0, b - a).astype(np.float32)       # kill SFX into silence
             print(f"  duck_music: silence beat {(b-a)/sr:.2f}s in the gap before {scenes[mid_i]['id']} "
                   f"(writer can widen with gap= for more drama)")
+
+    # 5) DRY PASSAGES — whole scenes with NO music bed at all (structural silence) ----------
+    if gain is not None and scenes:
+        dry = _pick_dry(scenes, total_f, fps, mid_i, level_idx)
+        f = int(DRY_FADE_S * sr)
+        for i in dry:
+            a = int(scenes[i]["startFrame"] / fps * sr)
+            b = min(N, int((scenes[i]["startFrame"] + scenes[i]["durationInFrames"]) / fps * sr))
+            if b - a <= 2 * f:
+                continue
+            seg = np.full(b - a, DRY_FLOOR, dtype=np.float32)
+            seg[:f] = np.linspace(1.0, DRY_FLOOR, f)                  # np.minimum below keeps the duck
+            seg[-f:] = np.linspace(DRY_FLOOR, 1.0, f)                 # bed returns on the next cut
+            gain[a:b] = np.minimum(gain[a:b], seg)
+        if dry:
+            print(f"  duck_music: {len(dry)} dry (music-free) passage(s) at "
+                  f"{[scenes[i]['id'] for i in dry]} — bed at {20*np.log10(DRY_FLOOR):.0f} dB")
 
     # apply duck + write
     if amb is not None:
