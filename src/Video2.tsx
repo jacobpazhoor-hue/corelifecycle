@@ -2,36 +2,20 @@ import React from 'react';
 import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame, Easing} from 'remotion';
 import timeline from './timeline.json';
 import {FramedScene, FOCUS, CountUp, splitMoney, isNegativeOverlay} from './director';
-import {shake, noise1, hash} from './anim';
 import {Move} from './photoStage';
 import PHOTO_RAW from './photo_manifest.json';
 
 const PHOTO = PHOTO_RAW as {mode: string; scenes: Record<string, {img: string; depth: string; move: Move}>; fallback: string[]};
 
-const seedOf = (id: string) => id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-
-// expo-out: fast in, slow settle — the entrance easing the count-up + camera already use, applied to text
+// expo-out: fast in, slow settle — the entrance easing the count-up already uses, applied to text
 const EXPO = Easing.bezier(0.16, 1, 0.3, 1);
 
-// ---- per-level COLOR DRAMATURGY (Phase 4): the palette escalates with the climb. One levelProgress
-// (0 = recruit/home -> 1 = apex) drives a CSS-ONLY grade (no SVG filters => render-safe): a mood TINT
-// that moves warm -> cool -> ember -> rich gold, a DARKENING that deepens as you rise, and a slight
-// saturation/contrast lift. Text sits on paper scrims so it stays legible through the grade.
-const GRADE_STOPS: Array<[number, [number, number, number]]> = [
-  [0.0, [232, 181, 75]],   // warm gold — recruit / home / naive
-  [0.4, [42, 91, 97]],     // cool teal — competent; the world turns colder
-  [0.75, [138, 42, 31]],   // ember red — danger / the cost
-  [1.0, [202, 162, 58]],   // rich gold — the apex / power
-];
-function gradeTint(p: number): string {
-  let a = GRADE_STOPS[0], b = GRADE_STOPS[GRADE_STOPS.length - 1];
-  for (let i = 0; i < GRADE_STOPS.length - 1; i++) {
-    if (p >= GRADE_STOPS[i][0] && p <= GRADE_STOPS[i + 1][0]) {a = GRADE_STOPS[i]; b = GRADE_STOPS[i + 1]; break;}
-  }
-  const span = b[0] - a[0]; const t = span > 0 ? (p - a[0]) / span : 0;
-  const c = a[1].map((v, k) => Math.round(v + (b[1][k] - v) * t));
-  return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
-}
+// NOTE (CRAYON_BIBLE §3 / §5, 2026-08-11): the per-level COLOR DRAMATURGY that used to live here —
+// GRADE_STOPS + gradeTint() driving a global warm->cool->ember->gold tint, a progressive darkening and
+// a saturation/contrast lift across the whole video — is GONE. The reference does not drift one palette
+// over a fixed art set; each scene commits to its own dominant hue (bright cyan beach, saturated orange
+// panel, brown warehouse, near-monochrome grey) and mood is carried by the palette swapping. Scenes now
+// render ungraded; per-scene colour keys are a separate work order. Do not reintroduce a global grade.
 
 // ============================================================================
 // VIDEO v2 — director-based renderer. Each scene/beat becomes 2-3 SHOTS
@@ -56,7 +40,11 @@ type Shot = {type: string; dur: number};
 // RETENTION pacing: something must visibly change every 5–8s, never hold a static frame past ~10s.
 const MAX_SHOT = 240; // 8s @30fps — any planned shot longer than this gets re-cut
 
-// split any over-long shot into equal sub-cuts (each restarts the camera push -> a visible change)
+// split any over-long shot into equal sub-cuts. This used to be a visible change because each sub-cut
+// restarted the camera push; with the camera locked, a sub-cut of the SAME shot type on the SAME focus
+// point is visually inert (only the ShotFade dip marks it). Kept for now because it preserves the shot
+// timing the rest of the pipeline assumes — giving these sub-cuts a real reason to exist (varying the
+// framing, or letting the template animate) belongs to the editing-rhythm work, not to this change.
 function capShots(shots: Shot[]): Shot[] {
   const out: Shot[] = [];
   for (const sh of shots) {
@@ -82,7 +70,7 @@ function planShots(s: SceneT): Shot[] {
                 : [{type: 'wide', dur: wide}, {type: 'medium', dur: D - wide}]);
 }
 
-const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({scene, from, prog}) => {
+const Beat: React.FC<{scene: SceneT; from: number | null}> = ({scene, from}) => {
   const f = useCurrentFrame();
   const D = scene.durationInFrames;
   // Scene-cut fade: previously ramped all the way to 0 opacity over 16 frames (~0.53s) on EACH side
@@ -94,27 +82,9 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
   const beatOp = interpolate(f, [0, fade, D - fade, D], [0.4, 1, 1, 0.4], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const focus = FOCUS[scene.template] ?? [0.5, 0.55];
   const shots = planShots(scene);
-  const seed = seedOf(scene.id);
-  const isLevel = !!scene.level;
-  // LEVEL-CUT IMPACT (synced to the stamp+thud+riser duck_music places on level cuts): a quick
-  // whip-in + decaying screen shake + a brief flash. Transform/opacity only -> render-cheap.
-  const shk = isLevel ? shake(f, 8, 8, seed) : {x: 0, y: 0, rot: 0};
-  const whip = isLevel ? interpolate(f, [0, 7], [70, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO}) : 0;
-  const flashOp = isLevel ? interpolate(f, [0, 2, 8], [0.5, 0.3, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 0;
-  // FOREGROUND OCCLUDER (parallax depth): a soft dark shape drifting past a bottom corner, faster
-  // than the camera. Kept to the edge + low opacity so it never covers the subject/text.
-  const occSide = hash(seed) > 0.5 ? 1 : -1;
-  const occX = 50 + occSide * 42 + noise1(f * 0.02, seed) * 6;   // hugs a side, slow drift
-  const occY = 96 + noise1(f * 0.017, seed + 3) * 4;
-  // per-level grade derived from levelProgress (CSS only)
-  const tint = gradeTint(prog);
-  // 2026-08-03: reviewer flagged Levels 2-5 (arenaSand reused across those climbs) as STILL reading as
-  // the same grey-tan grade even after the first deepening pass ([0.06,0.24]/[0,0.12]) -- the escalation
-  // read narratively but not visually across that mid-climb band. Deepened again, plus a stronger
-  // saturation/contrast lift, so the warm->cool->ember shift is legible scene-to-scene, not just at the apex.
-  const tintOp = interpolate(prog, [0, 1], [0.08, 0.32]);
-  const darkOp = interpolate(prog, [0, 1], [0.0, 0.16]);
-  const grade = `saturate(${(1 + 0.42 * prog).toFixed(3)}) contrast(${(1 + 0.18 * prog).toFixed(3)}) brightness(${(1 - 0.1 * prog).toFixed(3)})`;
+  // LOCKED CAMERA (CRAYON_BIBLE §3): the level-cut whip-in, the decaying screen shake and the cut
+  // flash are gone, as is the drifting foreground occluder (a parallax depth cue that only made sense
+  // under a moving camera). The level cut is now carried by the SFX and the level label alone.
   // Only animate a money count-up when the overlay is genuinely a dollar figure
   // (string starts with '$'). Otherwise — command counts ("~150 UNDER YOUR
   // COMMAND") and cost beats ("-1 KIA") — render the full string verbatim as
@@ -142,9 +112,9 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
   let t = 0;
   return (
     <AbsoluteFill style={{opacity: beatOp, backgroundColor: PAPER}}>
-      {/* shots cut together underneath — the saturation/contrast/brightness grade lifts with the climb.
-          On level cuts, a whip-in + decaying shake gives the transition a real 'hit' (synced to SFX). */}
-      <AbsoluteFill style={{filter: grade, transform: `translate(${shk.x + whip}px, ${shk.y}px) rotate(${shk.rot}deg)`}}>
+      {/* shots cut together underneath — ungraded, and with no transform of their own: the frame is
+          locked, so the only thing that ever moves is what the scene template animates internally. */}
+      <AbsoluteFill>
         {shots.map((sh, i) => {
           const seq = (
             <Sequence key={i} from={t} durationInFrames={sh.dur}>
@@ -157,22 +127,10 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
         })}
       </AbsoluteFill>
 
-      {/* FOREGROUND OCCLUDER: a soft out-of-focus shape drifting past a corner (parallax depth cue). */}
-      <AbsoluteFill style={{pointerEvents: 'none'}}>
-        <div style={{position: 'absolute', left: `${occX}%`, top: `${occY}%`, width: 620, height: 620, transform: 'translate(-50%,-50%)',
-          background: 'radial-gradient(closest-side, rgba(20,15,8,0.08), rgba(20,15,8,0) 72%)', filter: 'blur(2px)'}} />
-      </AbsoluteFill>
-
-      {/* PER-LEVEL MOOD GRADE (CSS only): tint warm->cool->ember->gold + darkening that deepens with
-          the climb + a faint warm bloom. Above the shots, below the text (which has paper scrims). */}
-      <AbsoluteFill style={{backgroundColor: tint, opacity: tintOp, mixBlendMode: 'soft-light', pointerEvents: 'none'}} />
-      <AbsoluteFill style={{backgroundColor: 'rgb(20,14,7)', opacity: darkOp, mixBlendMode: 'multiply', pointerEvents: 'none'}} />
-      <AbsoluteFill style={{background: 'radial-gradient(58% 48% at 50% 42%, rgba(255,226,170,0.10), rgba(255,226,170,0) 70%)', mixBlendMode: 'screen', pointerEvents: 'none'}} />
-
-      {/* Vignette, now LIGHT. It used to be inset 320px 24px @0.42 for a muted/atmospheric look; that
-          fought the bright direction and greyed every edge. Kept only enough to frame the shot. */}
-      <AbsoluteFill style={{boxShadow: 'inset 0 0 220px 10px rgba(22,16,9,0.13)', pointerEvents: 'none'}} />
-      <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(20,15,8,0.16) 0%, rgba(20,15,8,0) 22%, rgba(20,15,8,0) 74%, rgba(20,15,8,0.20) 100%)', pointerEvents: 'none'}} />
+      {/* No global overlays sit between the shots and the text any more: the mood grade, the warm
+          bloom, the inset vignette and the top/bottom darkening gradient were all whole-frame washes
+          over a flat-vector look that is supposed to read bright and per-scene keyed. The bible allows
+          a soft radial spotlight, but as part of a BACKGROUND, not as a composite layer over everything. */}
 
       {/* level label (persists across the cuts). Background was rgba(...,0.82) — translucent enough
           that a dark backdrop element (or the foreground occluder/vignette) drifting underneath it
@@ -201,9 +159,6 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
           </div>
         ))}
 
-      {/* level-cut FLASH (1-2 frames) — the visual 'hit' that lands with the stamp SFX */}
-      {flashOp > 0 && <AbsoluteFill style={{backgroundColor: 'rgba(255,244,222,1)', opacity: flashOp, pointerEvents: 'none'}} />}
-
       <Sequence from={scene.audioStartFrame ?? 0}><Audio src={staticFile(scene.audio)} /></Sequence>
     </AbsoluteFill>
   );
@@ -224,24 +179,19 @@ const ShotFade: React.FC<{dur: number; children: React.ReactNode}> = ({dur, chil
 
 export const Video2: React.FC = () => {
   const scenes = timeline.scenes as SceneT[];
-  // levelProgress is driven by the ORDINAL POSITION of each level-start scene (not by parsing "LEVEL
-  // N"), so the color grade escalates correctly for EVERY format — "LEVEL 05", "DAY 3", "HOUR 9",
-  // "RANK IV", "WEEK 2" — and stays monotonic even when a survival ladder mixes time units.
-  const totalLevels = scenes.filter((s) => s.level).length || 1;
+  // The levelProgress that used to be computed here drove the per-level colour grade only; with the
+  // grade removed (see the note at the top of this file) nothing consumes it, so it is gone too.
   // carry the previous figure into the next count-up ONLY when the unit suffix matches
   // ("$5M / YR" -> "$500M / YR" counts 5->500; "$200 / WK" -> "$250K / YR" restarts at 0
   // instead of counting across incompatible units)
   let last: {num: number; suffix: string} | null = null;
-  let lvlSeen = 0;
   const out: React.ReactNode[] = [];
   for (const s of scenes) {
-    if (s.level) lvlSeen++;
-    const prog = totalLevels > 1 ? Math.min(1, Math.max(0, (lvlSeen - 1) / (totalLevels - 1))) : 0;
     const money = splitMoney(s.overlay?.big);
     const from = money && last && last.suffix === money.suffix ? last.num : null;
     out.push(
       <Sequence key={s.id} from={s.startFrame} durationInFrames={s.durationInFrames}>
-        <Beat scene={s} from={from} prog={prog} />
+        <Beat scene={s} from={from} />
       </Sequence>);
     if (money !== null) last = money;
   }

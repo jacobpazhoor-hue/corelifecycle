@@ -1,7 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Sequence, interpolate, useCurrentFrame, useVideoConfig, spring, Easing} from 'remotion';
 import {TEMPLATES} from './scenes';
-import {noise1} from './anim';
 import slice from './slice.json';
 import {PhotoStage, Move} from './photoStage';
 
@@ -67,32 +66,28 @@ export const splitMoney = (s?: string | null): {num: number; suffix: string} | n
   return Number.isFinite(v) ? {num: v, suffix: m[2]} : null;
 };
 
-// ---- framed shot of a scene template (wide/medium/closeup focus on a point) ----
-const SCALE: Record<string, number> = {wide: 1.0, medium: 1.5, closeup: 2.2};
-// EXPO-OUT — the modern motion-graphics standard: fast start, slow cinematic settle (reads as a real
-// camera move, not a linear PowerPoint creep). Per-shot push amount: wides breathe more, closeups less.
+// EXPO-OUT — fast start, slow settle. Used by the count-up's bar wipe (an element animation, which
+// the reference DOES do); it is deliberately no longer applied to the frame itself.
 const EXPO = Easing.bezier(0.16, 1, 0.3, 1);
-const PUSH_TO: Record<string, number> = {wide: 1.075, medium: 1.05, closeup: 1.03};
+
+// ---- framed shot of a scene template (wide/medium/closeup crop onto a focus point) ----
+// LOCKED CAMERA (CRAYON_BIBLE §3). The shot type is a STATIC crop — scale + transformOrigin on the
+// focus point — and nothing else. No dolly push, no drift, no handheld sway. Motion-locality maps of
+// the reference channel measured 40 of 48 background cells at EXACTLY 0.0 inside a single shot, whole
+// rows at zero, and ~40% of sampled frames completely motionless. Motion is localised to characters
+// and props; the frame never moves. Re-adding a per-frame transform here re-breaks that.
+const SCALE: Record<string, number> = {wide: 1.0, medium: 1.5, closeup: 2.2};
 export const FramedScene: React.FC<{template: string; type: string; focus: [number, number]; dur: number; photo?: {img: string; depth: string; move: Move}}> =
 ({template, type, focus, dur, photo}) => {
   if (photo) {
     return <PhotoStage img={photo.img} depth={photo.depth} move={photo.move} dur={dur} />;
   }
-  const f = useCurrentFrame();
   const Art = TEMPLATES[template];
-  const base = SCALE[type] ?? 1.0;
-  // decelerating dolly push (ease-out) toward the focus point + a sub-pixel settle for life
-  const s = base * interpolate(f, [0, dur], [1.0, PUSH_TO[type] ?? 1.05],
-    {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
-  const driftY = interpolate(f, [0, dur], [0.5, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
-  // ORGANIC HANDHELD: gentle sine + value-noise so the frame is never static AND never a robotic
-  // metronome (a real operator drifts). Sub-pixel, transform-only, cheap.
-  const swayX = Math.sin(f * 0.03) * 0.20 + noise1(f * 0.045, 1) * 0.12;
-  const swayY = noise1(f * 0.05, 7) * 0.10;
+  const s = SCALE[type] ?? 1.0;
   const [fx, fy] = focus;
   return (
     <AbsoluteFill style={{backgroundColor: PAPER, overflow: 'hidden'}}>
-      <AbsoluteFill style={{transform: `scale(${s}) translate(${swayX}%, ${driftY + swayY}%)`, transformOrigin: `${fx * 100}% ${fy * 100}%`}}>
+      <AbsoluteFill style={{transform: `scale(${s})`, transformOrigin: `${fx * 100}% ${fy * 100}%`}}>
         {Art ? <Art /> : null}
       </AbsoluteFill>
     </AbsoluteFill>
