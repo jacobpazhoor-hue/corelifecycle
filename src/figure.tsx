@@ -43,14 +43,60 @@ const CROWD_FILL = '#c9c4bb';
 const CROWD_SKIN: CostumeSkin = {body: '#a8a49c', accent: '#8e8a82', collar: '#c9c4bb', hair: '#8e8a82', hairStyle: 'crop'};
 
 const D = Math.PI / 180;
-export const SEG = {spine: 94, neck: 12, head: 36, upperArm: 50, foreArm: 46, thigh: 56, shin: 54};
 
-// The DRAWN head is larger than SEG.head so the head reads as ~1 spine-length tall, the proportion
-// measured off the reference (head 195×244px against a same-height torso). SEG is untouched: growing
-// the drawing only pushes the chin down onto the shoulders, which is exactly the reference's
-// no-visible-neck silhouette.
-const HEAD_HW = 1.02;   // half-width  as a multiple of SEG.head
-const HEAD_HH = 1.26;   // half-height as a multiple of SEG.head
+// ---------------------------------------------------------------------------
+// PROPORTIONS (WO-2b). WO-2 fixed how the character is DRAWN; these numbers fix how it is BUILT.
+// The old rig (spine 94, head 36, upperArm 50, foreArm 46, thigh 56, shin 54) put 110 units of leg
+// against a 94-unit torso, so the figure read as spindly: legs longer than the whole torso, a small
+// head, and a body that occupied ~6% of frame width against the reference's ~14%.
+//
+// Measured off the reference (docs/research/crayon/frames/*, docs/research/crayon/HawmGu7oNrc/thumb.png).
+// The montage cells are 308×173 px each and each cell is one whole 16:9 frame, so 1 cell px = 6.234 px
+// at 1920; wolf_t0003.png is a native 1280×720 frame, so 1 px = 1.5 px at 1920.
+//
+//   ratio                      | 4:56 stairs | 2:08 boxes | t0003 | 10:10 couple | used here
+//   head height / figure height|    0.33     |    0.34    |   —   |      —       |   0.35
+//   head width / head height   |    0.93     |    0.85    | 1.04  |     0.88     |   0.92
+//   torso width / head width   |    1.00     |    0.85    | 0.95  |     1.28     |   1.03
+//   torso height / head height |    1.10     |    1.00    | 1.06  |     1.41     |   1.13
+//   leg length / torso height  |    0.73     |    0.75    |   —   |      —       |   0.69
+//   limb stroke / head width   |    0.054    |     —      | 0.040 |     0.058    |   0.075 (see below)
+//   figure width / frame width |    0.140    |    0.140   |   —   |      —       |  ~0.10 (see below)
+//
+// Three things are deliberately LEFT ALONE so the ~358 stage templates keep composing:
+//   - thigh + shin: unchanged, so a figure's feet land on exactly the pixel they landed on before.
+//     Call sites pass `y` as the HIP, so any change here would lift every figure off its ground.
+//   - the arm chain grows by the SAME factor as the spine (×1.40). The shoulder rises with a longer
+//     spine, which drags every hand with it; growing the arms in step puts the typing/signing hand
+//     back within ~15 units of where it was instead of ~40 above the prop it is meant to touch.
+//   - `scale`: the growth is baked into the segment lengths, so the ~28 call sites and the ~358
+//     template `fig={{scale: …}}` specs are untouched.
+export const SEG = {spine: 132, neck: 12, head: 52, upperArm: 70, foreArm: 64, thigh: 56, shin: 54};
+
+// The DRAWN head is larger than SEG.head so the chin sits on the shoulders (the reference's
+// no-visible-neck silhouette). The reference head is close to round — measured w/h 0.85–1.04, mean
+// 0.92 — where the old 1.02/1.26 pair drew it at 0.81, i.e. visibly egg-shaped and too narrow for
+// its height. 1.13/1.23 lands at 0.92.
+const HEAD_HW = 1.13;   // half-width  as a multiple of SEG.head
+const HEAD_HH = 1.23;   // half-height as a multiple of SEG.head
+/** Drawn head width in figure units — the yardstick every other proportion below is quoted against. */
+const HEAD_W = 2 * HEAD_HW * SEG.head;
+
+/**
+ * Limb stroke as a fraction of head width.
+ *
+ * MEASURED on the reference: 0.040 (t0003, a 7px arm against a 174px head at 1280) to 0.058
+ * (10:10, 2.5 cell px against a 43 cell px head). This is a DELIBERATE OVERSHOOT of that band.
+ * The reference's figures fill ~14% of frame width; ours fill ~10% even after this work order, so a
+ * strictly-scaled limb would render at 6–7 units — which at our in-frame size is the wire the owner
+ * review is complaining about. 0.075 keeps the limb marginally heavier than the silhouette outline
+ * (STROKE 8 vs 8.8) and reads stocky at the size we actually render at.
+ */
+const LIMB_W_RATIO = 0.075;
+
+/** How far below the hip the garment hem falls, as a multiple of SEG.head. The reference's jacket
+ *  hem covers the hip joint and the top of the thigh, which is most of what shortens the leg read. */
+const HEM_DROP = 0.22;
 
 type P = {x: number; y: number};
 const down = (p: P, deg: number, len: number, facing: number): P => ({x: p.x + Math.sin(deg * D) * len * facing, y: p.y + Math.cos(deg * D) * len});
@@ -161,8 +207,9 @@ export const StickFigure: React.FC<{
   const handF = down(elbowF, pose.armFarShoulder + pose.armFarElbow, SEG.foreArm, ffar);
   // hips sit a little apart (real stance width) instead of one point — otherwise a near/far leg
   // pair with matching hip+knee angles (the common standing pose, seen in profile) draws as one
-  // exact overlapping line instead of two legs.
-  const HIP_W = 11;
+  // exact overlapping line instead of two legs. Scaled with the head (i.e. with the whole figure),
+  // because 11 units of stance under a 121-unit-wide torso reads as one leg again.
+  const HIP_W = SEG.head * 0.31;
   const hipN: P = {x: hip.x + HIP_W * facing, y: hip.y};
   const hipF: P = {x: hip.x - HIP_W * facing, y: hip.y};
   const kneeN = down(hipN, pose.legNearHip, SEG.thigh, facing);
@@ -174,14 +221,19 @@ export const StickFigure: React.FC<{
   const crowd = pal === DIM;
   const skinFill = crowd ? CROWD_FILL : SKIN;
   const detailW = lineW * detailRatio;
+  // Limbs are stroked at a weight PROPORTIONAL to the figure (LIMB_W_RATIO of head width), not at the
+  // flat outline default — the reference scales its limb weight with the character, so a small
+  // background walker and a hero must not share one absolute stroke. `lineW` still governs: passing a
+  // heavier outline scales the limbs with it.
+  const limbW = HEAD_W * LIMB_W_RATIO * (lineW / STROKE);
 
   const bone = (a: P, b: P, w: number, c: string, key: string) =>
     <path key={key} d={`M ${a.x} ${a.y} L ${b.x} ${b.y}`} stroke={c} strokeWidth={w} strokeLinecap="round" fill="none" />;
-  const hand = (p: P, key: string) => <circle key={key} cx={p.x} cy={p.y} r={lineW * 1.0} fill={skinFill} stroke={ink} strokeWidth={detailW} />;
+  const hand = (p: P, key: string) => <circle key={key} cx={p.x} cy={p.y} r={limbW * 1.0} fill={skinFill} stroke={ink} strokeWidth={detailW} />;
   // Shoes are solid, not outlined-and-hollow: flat fill, no interior line (bible §5 "flat fills").
   const foot = (k: P, f: P, key: string) => {
     const ang = Math.atan2(f.y - k.y, f.x - k.x) * 180 / Math.PI;
-    return <ellipse key={key} cx={f.x} cy={f.y} rx={lineW * 2.0} ry={lineW * 1.0} fill={ink} transform={`rotate(${ang + 90} ${f.x} ${f.y})`} />;
+    return <ellipse key={key} cx={f.x} cy={f.y} rx={limbW * 2.0} ry={limbW * 1.0} fill={ink} transform={`rotate(${ang + 90} ${f.x} ${f.y})`} />;
   };
   const seed = Math.round(x);
   const lid = Math.min(1, expr.lid + idleBlink(frame, seed));
@@ -199,12 +251,14 @@ export const StickFigure: React.FC<{
     const len = Math.hypot(vx, vy) || 1;
     const ux = vx / len, uy = vy / len;          // along spine, hip -> shoulder
     const px = -uy, py = ux;                     // perpendicular
-    // The reference torso is as wide as the head at the shoulders and flares a little to the hem.
+    // The reference torso is about as wide as the head and flares a little to the hem: measured
+    // torso-width / head-width 0.85–1.28 across four frames, mean 1.02. These half-widths put the
+    // hem at 1.03 × head width and the shoulder line at 0.90 × head width.
     const sw = R * 1.02, hw = R * 1.16;          // half-widths at shoulder / hem
     // Shoulder line sits slightly above the joint and the hem slightly below the hip, so the head
     // meets the collar and the legs emerge from under the garment.
     const sx = shoulder.x + ux * R * 0.06, sy = shoulder.y + uy * R * 0.06;
-    const hx = hip.x - ux * R * 0.12, hy = hip.y - uy * R * 0.12;
+    const hx = hip.x - ux * R * HEM_DROP, hy = hip.y - uy * R * HEM_DROP;
     const A = [sx + px * sw, sy + py * sw], B = [hx + px * hw, hy + py * hw];
     const C = [hx - px * hw, hy - py * hw], Dp = [sx - px * sw, sy - py * sw];
     // top: a cubic with both controls pushed straight "up" the spine -> flat top, round corners
@@ -270,12 +324,12 @@ export const StickFigure: React.FC<{
   return (
     <g transform={`translate(${x} ${y}) scale(${scale})`}>
       {/* contact shadow: a flat fill, not a sketched outline */}
-      <ellipse cx={(footN.x + footF.x) / 2} cy={Math.max(footN.y, footF.y) + lineW * 1.2} rx={lineW * 4.5} ry={lineW * 1.1} fill={INK} opacity={0.10} />
+      <ellipse cx={(footN.x + footF.x) / 2} cy={Math.max(footN.y, footF.y) + limbW * 1.2} rx={limbW * 4.5} ry={limbW * 1.1} fill={INK} opacity={0.10} />
       {/* far limbs */}
-      {bone(hipF, kneeF, lineW, ink, 'fl1')}{bone(kneeF, footF, lineW, ink, 'fl2')}{foot(kneeF, footF, 'ff')}
-      {bone(shoulder, elbowF, lineW, ink, 'fa1')}{bone(elbowF, handF, lineW, ink, 'fa2')}{hand(handF, 'fh')}
+      {bone(hipF, kneeF, limbW, ink, 'fl1')}{bone(kneeF, footF, limbW, ink, 'fl2')}{foot(kneeF, footF, 'ff')}
+      {bone(shoulder, elbowF, limbW, ink, 'fa1')}{bone(elbowF, handF, limbW, ink, 'fa2')}{hand(handF, 'fh')}
       {/* spine + neck — the torso is painted OVER the spine so the body reads as one solid mass */}
-      {bone(hip, shoulder, lineW, ink, 'sp')}{bone(shoulder, headC, lineW, ink, 'nk')}
+      {bone(hip, shoulder, limbW, ink, 'sp')}{bone(shoulder, headC, limbW, ink, 'nk')}
       {torso}
       {/* head: a large rounded rect (not an ellipse) in flat skin, then the solid hair shape */}
       <rect x={headC.x - HW} y={headC.y - HH} width={HW * 2} height={HH * 2} rx={HW * 0.62} ry={HW * 0.62}
@@ -285,8 +339,8 @@ export const StickFigure: React.FC<{
         lookY={idleGaze(frame, seed + 5) * 0.3 + pose.headTilt * 0.02}
         expr={{...expr, look: expr.look + idleGaze(frame, seed) * 0.6}} />}
       {/* near limbs */}
-      {bone(hipN, kneeN, lineW, ink, 'nl1')}{bone(kneeN, footN, lineW, ink, 'nl2')}{foot(kneeN, footN, 'nf')}
-      {bone(shoulder, elbowN, lineW, ink, 'na1')}{bone(elbowN, handN, lineW, ink, 'na2')}{hand(handN, 'nh')}
+      {bone(hipN, kneeN, limbW, ink, 'nl1')}{bone(kneeN, footN, limbW, ink, 'nl2')}{foot(kneeN, footN, 'nf')}
+      {bone(shoulder, elbowN, limbW, ink, 'na1')}{bone(elbowN, handN, limbW, ink, 'na2')}{hand(handN, 'nh')}
       {briefcase && <rect x={handN.x - 26} y={handN.y + 4} width={52} height={38} rx={3} fill={skin ? skin.body : PAPER_WHITE} stroke={ink} strokeWidth={lineW} />}
     </g>
   );
