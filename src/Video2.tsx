@@ -5,6 +5,7 @@ import {FramedScene, FOCUS, CountUp, splitMoney, isNegativeOverlay} from './dire
 import {shake, noise1, hash} from './anim';
 import {Move} from './photoStage';
 import PHOTO_RAW from './photo_manifest.json';
+import {SceneVariantContext} from './sceneVariant';
 
 const PHOTO = PHOTO_RAW as {mode: string; scenes: Record<string, {img: string; depth: string; move: Move}>; fallback: string[]};
 
@@ -82,7 +83,7 @@ function planShots(s: SceneT): Shot[] {
                 : [{type: 'wide', dur: wide}, {type: 'medium', dur: D - wide}]);
 }
 
-const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({scene, from, prog}) => {
+const Beat: React.FC<{scene: SceneT; from: number | null; prog: number; variant: number}> = ({scene, from, prog, variant}) => {
   const f = useCurrentFrame();
   const D = scene.durationInFrames;
   // Scene-cut fade: previously ramped all the way to 0 opacity over 16 frames (~0.53s) on EACH side
@@ -145,16 +146,18 @@ const Beat: React.FC<{scene: SceneT; from: number | null; prog: number}> = ({sce
       {/* shots cut together underneath — the saturation/contrast/brightness grade lifts with the climb.
           On level cuts, a whip-in + decaying shake gives the transition a real 'hit' (synced to SFX). */}
       <AbsoluteFill style={{filter: grade, transform: `translate(${shk.x + whip}px, ${shk.y}px) rotate(${shk.rot}deg)`}}>
-        {shots.map((sh, i) => {
-          const seq = (
-            <Sequence key={i} from={t} durationInFrames={sh.dur}>
-              <ShotFade dur={sh.dur}>
-                <FramedScene template={scene.template} type={sh.type} focus={focus} dur={sh.dur} photo={photo} />
-              </ShotFade>
-            </Sequence>);
-          t += sh.dur;
-          return seq;
-        })}
+        <SceneVariantContext.Provider value={variant}>
+          {shots.map((sh, i) => {
+            const seq = (
+              <Sequence key={i} from={t} durationInFrames={sh.dur}>
+                <ShotFade dur={sh.dur}>
+                  <FramedScene template={scene.template} type={sh.type} focus={focus} dur={sh.dur} photo={photo} />
+                </ShotFade>
+              </Sequence>);
+            t += sh.dur;
+            return seq;
+          })}
+        </SceneVariantContext.Provider>
       </AbsoluteFill>
 
       {/* FOREGROUND OCCLUDER: a soft out-of-focus shape drifting past a corner (parallax depth cue). */}
@@ -233,15 +236,21 @@ export const Video2: React.FC = () => {
   // instead of counting across incompatible units)
   let last: {num: number; suffix: string} | null = null;
   let lvlSeen = 0;
+  // per-template occurrence counter: the Nth time a given template renders in this episode, so a
+  // template reused several times (boardroomNotes/signing/window/iceBathRoom...) can vary its own
+  // pose/prop/lighting per repeat instead of rendering the identical shot every time.
+  const templateSeen: Record<string, number> = {};
   const out: React.ReactNode[] = [];
   for (const s of scenes) {
     if (s.level) lvlSeen++;
     const prog = totalLevels > 1 ? Math.min(1, Math.max(0, (lvlSeen - 1) / (totalLevels - 1))) : 0;
     const money = splitMoney(s.overlay?.big);
     const from = money && last && last.suffix === money.suffix ? last.num : null;
+    const variant = templateSeen[s.template] ?? 0;
+    templateSeen[s.template] = variant + 1;
     out.push(
       <Sequence key={s.id} from={s.startFrame} durationInFrames={s.durationInFrames}>
-        <Beat scene={s} from={from} prog={prog} />
+        <Beat scene={s} from={from} prog={prog} variant={variant} />
       </Sequence>);
     if (money !== null) last = money;
   }

@@ -5,6 +5,7 @@ import {FACES, blendExpr} from './faces';
 import * as A from './actions';
 import {PACK_TEMPLATES} from './stage';
 import meta from './episode_meta.json';
+import {SceneVariantContext} from './sceneVariant';
 
 // Some "universal" templates (window/dinner/deskSilhouette/lobby) default to a generic corporate
 // skyline + office setting. For a survival/disaster topic that reads as an unrelated career episode
@@ -264,10 +265,24 @@ const Junior: React.FC<{x: number; s: number; f: number; fps: number}> = ({x, s,
 );
 const S04: React.FC = () => {
   const f = useCurrentFrame(); const {fps} = useVideoConfig();
+  // repeated-template fix (reviewer defect): this template renders 2-3x in a typical episode
+  // ladder (recruiter call, agent meeting, endorsement deal...) and used to be pixel-identical
+  // every time. Vary tint/rain/figure-side/prop by occurrence so repeats read as distinct beats.
+  const variant = React.useContext(SceneVariantContext) % 3;
+  const tint = variant === 1 ? '#16283a' : variant === 2 ? '#0a1420' : '#0e1925';
+  const rainO = variant === 2 ? 0.05 : 0.12;
+  const [juniorAx, juniorBx] = variant === 1 ? [1360, 560] : [560, 1360];
   return (<Frame>
-    <Skyline frame={f} baseY={460} tint="#0e1925" o={0.7} /><Rain frame={f} o={0.12} /><Mullions o={0.3} />
+    <Skyline frame={f} baseY={460} tint={tint} o={0.7} /><Rain frame={f} o={rainO} /><Mullions o={0.3} />
     <polygon points="430,980 1490,980 1240,640 680,640" fill={PAPER} stroke={INK} strokeWidth={5} />
-    <Junior x={560} s={0.6} f={f} fps={fps} /><Junior x={1360} s={0.6} f={f + 30} fps={fps} />
+    <Junior x={juniorAx} s={0.6} f={f} fps={fps} /><Junior x={juniorBx} s={0.6} f={f + 30} fps={fps} />
+    {variant === 2 && (
+      // a folder stack on the table edge — breaks the "blank card" read on the 3rd repeat
+      <g transform="translate(1180 858)">
+        <rect x={-46} y={-8} width={92} height={30} rx={3} fill={PAPER} stroke={INK} strokeWidth={3} />
+        <rect x={-40} y={-20} width={80} height={26} rx={3} fill={PAPER} stroke={INK} strokeWidth={3} />
+      </g>
+    )}
     <StickFigure pose={A.sign(f, fps)} x={960} y={836} scale={0.95} facing={1} view="profile" expr={FACES.focused} pal={LIGHT} frame={f} />
     <Document x={1050} y={818} handX={1043} handY={804} />
     <rect x={300} y={930} width={1320} height={150} fill={COL.floor} />
@@ -323,21 +338,37 @@ const S07: React.FC = () => {
   // The mullion cross is offset well clear of the figure's own x/head-height (both used to sit at
   // the window's exact center, so the bars drew straight across the face and torso in every frame).
   const f = useCurrentFrame();
+  // repeated-template fix (reviewer defect): vary tint/figure-side/prop by occurrence so a second
+  // or third use of "window" in the same episode doesn't read as the same shot as boardroomNotes/signing.
+  const variant = React.useContext(SceneVariantContext) % 3;
+  const tint = variant === 1 ? '#1c2f3a' : '#13202e';
+  const figX = variant === 2 ? 1120 : 960, figFacing = variant === 2 ? -1 : 1;
   return (<Frame bg="url(#teal)">
-    {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={780} /> : <Skyline frame={f} baseY={780} tint="#13202e" />}
+    {SURVIVAL_TOPIC ? <SuburbRow frame={f} baseY={780} /> : <Skyline frame={f} baseY={780} tint={tint} />}
     <Rain frame={f} o={0.3} />
     <rect x={520} y={90} width={880} height={700} fill="none" stroke={INK} strokeWidth={9} />
     <line x1={720} y1={90} x2={720} y2={790} stroke={INK} strokeWidth={6} /><line x1={520} y1={230} x2={1400} y2={230} stroke={INK} strokeWidth={6} />
     <rect x={0} y={790} width={1920} height={290} fill={COL.floor} /><rect x={0} y={790} width={1920} height={8} fill={INK} />
     <rect x={460} y={780} width={1000} height={22} fill={PAPER} stroke={INK} strokeWidth={4} />
-    <StickFigure pose={A.stand(f)} x={960} y={770} scale={1.6} facing={1} view="profile" expr={FACES.hollow} pal={LIGHT} frame={f} />
+    {variant === 2 && <Coffee x={600} y={764} frame={f} />}
+    <StickFigure pose={A.stand(f)} x={figX} y={770} scale={1.6} facing={figFacing} view="profile" expr={FACES.hollow} pal={LIGHT} frame={f} />
   </Frame>);
 };
 const S08: React.FC = () => {
   const f = useCurrentFrame(); const {fps, durationInFrames: d} = useVideoConfig();
   const t8 = interpolate(f, [d * 0.25, d * 0.6], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  // repeated-template fix (reviewer defect): "signing" often lands 2-3x per episode (undrafted deal,
+  // two-way contract, supermax...); vary tint/rain/a background witness figure by occurrence.
+  const variant = React.useContext(SceneVariantContext) % 3;
+  const tint = variant === 1 ? '#1a2e3f' : '#13202e';
+  const rainO = variant === 2 ? 0.03 : 0.1;
   return (<Frame>
-    <Skyline frame={f} baseY={640} tint="#13202e" o={0.7} /><Rain frame={f} o={0.1} /><Mullions o={0.35} />
+    <Skyline frame={f} baseY={640} tint={tint} o={0.7} /><Rain frame={f} o={rainO} /><Mullions o={0.35} />
+    {variant === 2 && (
+      // a witness/agent figure in the background — breaks the lone-figure-at-a-desk read shared
+      // with boardroomNotes on the 3rd repeat of this template
+      <StickFigure pose={A.stand(f + 12)} x={1520} y={860} scale={0.85} facing={-1} view="profile" showFace={false} pal={DIM} frame={f} />
+    )}
     <StickFigure pose={A.sign(f, fps)} x={820} y={836} scale={1.55} facing={1} view="profile" expr={blendExpr(FACES.neutral, FACES.smug, t8)} pal={LIGHT} frame={f} />
     <Desk y={830} />
     <Document x={965} y={814} handX={956} handY={786} />

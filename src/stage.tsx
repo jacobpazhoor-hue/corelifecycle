@@ -4,6 +4,7 @@ import {StickFigure, LIGHT, SIL, DIM, PAPER} from './figure';
 import {FACES, blendExpr} from './faces';
 import * as A from './actions';
 import meta from './episode_meta.json';
+import {SceneVariantContext} from './sceneVariant';
 
 // ============================================================================
 // COMPOSABLE DOODLE STAGE — topic-specific scene packs.
@@ -2429,8 +2430,14 @@ const BG: Record<string, React.FC<{frame: number}>> = {
     </g>
   ),
   // the ice tub / training room — THE sensory-anchor home base: a steel ice tub, rolled athletic
-  // tape, cold blue-white light, a wall clock counting the minutes of every recovery
-  iceBathRoom: ({frame}) => (
+  // tape, cold blue-white light, a wall clock counting the minutes of every recovery.
+  // The clock face used to always read "12" (reviewer defect: identical across all 4 uses despite
+  // the narration escalating from one knee to a full training-staff routine). It now reads the
+  // scene's own occurrence index — the minute count climbs each time this template repeats.
+  iceBathRoom: ({frame}) => {
+    const occ = React.useContext(SceneVariantContext);
+    const minutes = Math.min(8 + occ * 3, 20);
+    return (
     <g>
       <rect x={0} y={0} width={1920} height={1080} fill="url(#sclean)" />
       <rect x={0} y={760} width={1920} height={320} fill="#cfe0e6" /><line x1={0} y1={760} x2={1920} y2={760} stroke={INK} strokeWidth={5} />
@@ -2442,11 +2449,12 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       ))}
       <rect x={1360} y={480} width={26} height={170} fill="#c9c2ad" stroke={INK} strokeWidth={3} />
       <circle cx={1373} cy={470} r={30} fill={PAPERC} stroke={INK} strokeWidth={3} />
-      <text x={1373} y={480} textAnchor="middle" fontFamily={SANS} fontSize={22} fontWeight={700} fill={INK}>12</text>
+      <text x={1373} y={480} textAnchor="middle" fontFamily={SANS} fontSize={22} fontWeight={700} fill={INK}>{minutes}</text>
       {[300, 460].map((x) => <rect key={x} x={x} y={560} width={70} height={120} rx={10} fill={PAPERC} stroke={INK} strokeWidth={3.5} />)}
       <ellipse cx={1100} cy={560} rx={520} ry={180} fill="url(#sglow)" opacity={0.12} />
     </g>
-  ),
+    );
+  },
   // rafters retirement — an empty, dim arena; one spotlight on the bare court below; a jersey banner
   // hanging still in the rafters — the flash-forward cold open + its loop-close payoff
   rafterRetirement: ({frame}) => (

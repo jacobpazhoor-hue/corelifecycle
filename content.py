@@ -4,8 +4,9 @@ Grounded in docs/research/basketball_player.md (all comp figures web-verified Au
 documented NBA pathway and pay ladder — high school hopeful (VERIFIED: ~0.03% of HS players ever
 reach the NBA) -> Division I college roster (VERIFIED: ~1% of all NCAA players are ever drafted;
 NIL money is real but wildly uneven) -> undrafted / G League ($40,500/season, VERIFIED) / two-way
-contract ($578,577, VERIFIED: exactly half the 2025-26 rookie minimum) -> drafted rookie (VERIFIED:
-$1,361,969 2025-26 rookie minimum; VERIFIED: average NBA career is only 4.5 years) -> veteran
+contract ($578,577, VERIFIED: 2025-26 NBA two-way salary, its own separate pay scale) -> drafted
+rookie (VERIFIED: $1,361,969 2025-26 rookie minimum; VERIFIED: average NBA career is only 4.5
+years) -> veteran
 comeback on a real 10-day contract (VERIFIED CBA mechanic) -> All-Star -> supermax superstar
 (VERIFIED: Jayson Tatum's real 2025 5-year, $313,933,410 deal) -> the global-brand apex (referenced,
 not named, via the real scale of a $1B+ lifetime shoe deal) -> THE RECKONING, retirement, and the
@@ -139,12 +140,12 @@ SCENES = [
          overlay=None,
          dialogue=dict(text="Everybody on this bus was the best player in their gym once.")),
     dict(id="t13", level=None, template="signing",
-         narration=("Six weeks in, a two-way contract lands — half the rookie minimum, a locker in two "
+         narration=("Six weeks in, a two-way contract lands — its own separate pay scale, a locker in two "
                     "different buildings, a life split exactly down the middle between the league "
                     "you're chasing and the one that's actually paying you. You sign it in a hallway "
                     "between drills, no ceremony, no cameras. It's still the best number you've ever "
                     "seen with your own name attached to it."),
-         overlay=dict(big="$578,577", sub="HALF THE ROOKIE MINIMUM")),
+         overlay=dict(big="$578,577", sub="NBA TWO-WAY SALARY")),
     dict(id="t14", level=None, template="iceBathRoom",
          narration=("Ice, every night now, both ankles instead of one, a training-room tub that never "
                     "quite gets cold enough to stop hurting by the count of sixty. Ice fixes the "
