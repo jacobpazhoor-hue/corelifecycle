@@ -1,22 +1,18 @@
 {
   "thumb": {
-    "kicker": "EVERY LEVEL OF AN",
-    "line1": "NBA PLAYER",
+    "kicker": "158 YEARS OLD",
+    "line1": "DEAD IN A WEEKEND",
     "line2": "",
-    "tag": "SUPERMAX",
-    "archetype": "beforeafter",
-    "big": "$313.9M",
-    "before": "UNDRAFTED",
-    "after": "SUPERMAX",
+    "tag": "$613 BILLION",
+    "archetype": "crash",
+    "big": "$613 BILLION",
     "expr": "shock",
-    "povline": "YOU BECOME AN",
-    "keyword": "SUPERMAX",
-    "setting": "arenaCourt",
-    "question": "WHO STAYS RICH?",
     "mood": "money",
-    "costume": "uniform",
-    "word": "YOU",
-    "prop": "vault"
+    "keyword": "LEHMAN",
+    "question": "WHO PAID FOR IT?",
+    "word": "NO",
+    "before": "158 YEARS",
+    "after": "72 HOURS"
   },
-  "topic": "basketball_player"
+  "topic": "lehman_brothers"
 }

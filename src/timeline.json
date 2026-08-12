@@ -2,396 +2,622 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 22116,
+  "totalFrames": 25364,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t01",
       "level": null,
       "overlay": {
-        "big": "14 SEASONS",
-        "sub": "ONE BANNER"
+        "big": "$639 BILLION",
+        "sub": "THE LARGEST BANKRUPTCY IN U.S. HISTORY"
       },
-      "template": "rafterRetirement",
+      "template": "cityStreet",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 667,
-      "gap": 0.7
+      "durationInFrames": 753,
+      "gap": 0.407
     },
     {
       "id": "t02",
       "level": null,
       "overlay": null,
-      "template": "fileWall",
+      "template": "boardroom",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 667,
-      "durationInFrames": 545,
-      "gap": 0.25
+      "startFrame": 753,
+      "durationInFrames": 413,
+      "gap": 0.313,
+      "card": {
+        "kind": "narration",
+        "text": "Everyone saw it coming. Nobody would pay to stop it."
+      }
     },
     {
       "id": "t03",
-      "level": "LEVEL 01  \u00b7  THE DRIVEWAY",
+      "level": null,
       "overlay": null,
-      "template": "drivewayHoop",
+      "template": "exchangeFloor",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 1212,
-      "durationInFrames": 692,
-      "gap": 0.25
+      "startFrame": 1166,
+      "durationInFrames": 574,
+      "gap": 0.847
     },
     {
       "id": "t04",
-      "level": null,
-      "overlay": null,
-      "template": "dinner",
+      "level": "CH 1",
+      "overlay": {
+        "big": "1844",
+        "sub": "MONTGOMERY, ALABAMA"
+      },
+      "template": "cityStreet",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 1904,
-      "durationInFrames": 682,
-      "gap": 0.25
+      "startFrame": 1740,
+      "durationInFrames": 604,
+      "gap": 0.501,
+      "card": {
+        "kind": "chapter",
+        "title": "The Cotton Store",
+        "subtitle": "How a Dry Goods Shop Became a Wall Street Bank",
+        "hold": 2.8
+      }
     },
     {
       "id": "t05",
       "level": null,
-      "overlay": null,
-      "template": "highSchoolGym",
+      "overlay": {
+        "big": "1850",
+        "sub": "THE NAME OVER THE DOOR"
+      },
+      "template": "domesticInterior",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 2586,
-      "durationInFrames": 707,
-      "gap": 0.25
+      "startFrame": 2344,
+      "durationInFrames": 651,
+      "gap": 0.455
     },
     {
       "id": "t06",
       "level": null,
-      "overlay": {
-        "big": "0.03%",
-        "sub": "EVER REACH THE NBA"
-      },
-      "template": "boardroomNotes",
+      "overlay": null,
+      "template": "officeFloor",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 3293,
-      "durationInFrames": 649,
-      "gap": 0.25
+      "startFrame": 2995,
+      "durationInFrames": 669,
+      "gap": 0.333
     },
     {
       "id": "t07",
-      "level": "LEVEL 02  \u00b7  THE ROSTER",
-      "overlay": null,
-      "template": "lectureHallScene",
+      "level": null,
+      "overlay": {
+        "big": "158 YEARS",
+        "sub": "THROUGH EVERY CRASH BEFORE THIS ONE"
+      },
+      "template": "newsMontage",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 3942,
-      "durationInFrames": 674,
-      "gap": 0.25
+      "startFrame": 3664,
+      "durationInFrames": 809,
+      "gap": 0.547,
+      "panels": {
+        "variant": "grid4",
+        "cells": [
+          {
+            "template": "cityStreet"
+          },
+          {
+            "template": "boardroom"
+          },
+          {
+            "template": "newsMontage"
+          },
+          {
+            "template": "officeFloor",
+            "ground": "#e8541f"
+          }
+        ]
+      }
     },
     {
       "id": "t08",
       "level": null,
-      "overlay": null,
-      "template": "arenaCourt",
+      "overlay": {
+        "big": "14 YEARS",
+        "sub": "RICHARD FULD, CEO FROM 1994"
+      },
+      "template": "boardroom",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 4616,
-      "durationInFrames": 757,
-      "gap": 0.25
+      "startFrame": 4473,
+      "durationInFrames": 750,
+      "gap": 0.65
     },
     {
       "id": "t09",
-      "level": null,
-      "overlay": {
-        "big": "1%",
-        "sub": "OF NCAA PLAYERS GET DRAFTED"
-      },
-      "template": "window",
+      "level": "CH 2",
+      "overlay": null,
+      "template": "officeFloor",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 5373,
-      "durationInFrames": 610,
-      "gap": 0.25
+      "startFrame": 5223,
+      "durationInFrames": 291,
+      "gap": 0.344,
+      "card": {
+        "kind": "chapter",
+        "title": "The Machine",
+        "subtitle": "How Lehman Turned Houses Into Money",
+        "hold": 2.8
+      }
     },
     {
       "id": "t10",
       "level": null,
       "overlay": null,
-      "template": "boardroomNotes",
+      "template": "domesticInterior",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 5983,
-      "durationInFrames": 718,
-      "gap": 0.25
+      "startFrame": 5514,
+      "durationInFrames": 432,
+      "gap": 0.456,
+      "bubbles": [
+        {
+          "kind": "float",
+          "text": "The rate resets in two years.",
+          "x": 0.3,
+          "y": 0.2
+        },
+        {
+          "kind": "float",
+          "text": "We'll refinance before then.",
+          "x": 0.66,
+          "y": 0.72,
+          "at": 4.0
+        }
+      ]
     },
     {
       "id": "t11",
-      "level": "LEVEL 03  \u00b7  UNDRAFTED",
-      "overlay": {
-        "big": "$40,500",
-        "sub": "G LEAGUE, FIVE MONTHS"
-      },
-      "template": "signing",
+      "level": null,
+      "overlay": null,
+      "template": "exchangeFloor",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 6701,
-      "durationInFrames": 668,
-      "gap": 0.25
+      "startFrame": 5946,
+      "durationInFrames": 833,
+      "gap": 0.334
     },
     {
       "id": "t12",
       "level": null,
       "overlay": null,
-      "template": "gLeagueBus",
+      "template": "cityStreet",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 7369,
-      "durationInFrames": 805,
-      "gap": 0.25
+      "startFrame": 6779,
+      "durationInFrames": 620,
+      "gap": 0.443
     },
     {
       "id": "t13",
       "level": null,
       "overlay": {
-        "big": "$578,577",
-        "sub": "HALF THE ROOKIE MINIMUM"
+        "big": "30 TO 1",
+        "sub": "BORROWED AGAINST ITS OWN MONEY"
       },
-      "template": "signing",
+      "template": "officeFloor",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 8174,
-      "durationInFrames": 601,
-      "gap": 0.25
+      "startFrame": 7399,
+      "durationInFrames": 626,
+      "gap": 0.429
     },
     {
       "id": "t14",
       "level": null,
-      "overlay": null,
-      "template": "iceBathRoom",
+      "overlay": {
+        "big": "$86",
+        "sub": "A SHARE \u2014 FEBRUARY 2007"
+      },
+      "template": "newsMontage",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 8775,
-      "durationInFrames": 683,
-      "gap": 0.25
+      "startFrame": 8025,
+      "durationInFrames": 772,
+      "gap": 0.252
     },
     {
       "id": "t15",
-      "level": "LEVEL 04  \u00b7  THE CALL-UP",
-      "overlay": {
-        "big": "$1,361,969",
-        "sub": "NBA ROOKIE MINIMUM"
-      },
-      "template": "arenaCourt",
+      "level": null,
+      "overlay": null,
+      "template": "boardroom",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 9458,
-      "durationInFrames": 617,
-      "gap": 0.25
+      "startFrame": 8797,
+      "durationInFrames": 778,
+      "gap": 0.324,
+      "bubbles": [
+        {
+          "text": "If housing goes flat, we do not survive it.",
+          "x": 0.66,
+          "y": 0.19,
+          "tail": "down",
+          "tailAt": 0.35,
+          "tailSkew": -0.2,
+          "at": 13.0
+        }
+      ]
     },
     {
       "id": "t16",
       "level": null,
       "overlay": null,
-      "template": "tower",
+      "template": "exchangeFloor",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 10075,
-      "durationInFrames": 598,
-      "gap": 0.25
+      "startFrame": 9575,
+      "durationInFrames": 295,
+      "gap": 0.814,
+      "card": {
+        "kind": "word",
+        "word": "More"
+      }
     },
     {
       "id": "t17",
-      "level": null,
+      "level": "CH 3",
       "overlay": null,
-      "template": "arenaCourt",
+      "template": "newsMontage",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 10673,
-      "durationInFrames": 772,
-      "gap": 1.4
+      "startFrame": 9870,
+      "durationInFrames": 399,
+      "gap": 0.385,
+      "card": {
+        "kind": "chapter",
+        "title": "The Trick",
+        "subtitle": "The Accounting That Hid Fifty Billion Dollars",
+        "hold": 2.8
+      }
     },
     {
       "id": "t18",
       "level": null,
-      "overlay": {
-        "big": "ACL TORN",
-        "sub": "AVG CAREER: 4.5 YEARS"
-      },
-      "template": "erTrauma",
+      "overlay": null,
+      "template": "officeFloor",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 11445,
-      "durationInFrames": 717,
-      "gap": 0.7
+      "startFrame": 10269,
+      "durationInFrames": 630,
+      "gap": 0.398
     },
     {
       "id": "t19",
       "level": null,
-      "overlay": null,
-      "template": "layoffs",
+      "overlay": {
+        "big": "105%",
+        "sub": "THE LINE THAT TURNED A LOAN INTO A SALE"
+      },
+      "template": "boardroom",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 12162,
-      "durationInFrames": 838,
-      "gap": 0.25
+      "startFrame": 10899,
+      "durationInFrames": 655,
+      "gap": 0.546
     },
     {
       "id": "t20",
       "level": null,
-      "overlay": null,
-      "template": "iceBathRoom",
+      "overlay": {
+        "big": "$50B",
+        "sub": "MOVED OFF THE BOOKS EVERY QUARTER"
+      },
+      "template": "exchangeFloor",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 13000,
-      "durationInFrames": 685,
-      "gap": 0.25
+      "startFrame": 11554,
+      "durationInFrames": 776,
+      "gap": 0.359,
+      "panels": {
+        "variant": "v2",
+        "cells": [
+          {
+            "template": "officeFloor"
+          },
+          {
+            "template": "boardroom"
+          }
+        ]
+      }
     },
     {
       "id": "t21",
-      "level": "LEVEL 05  \u00b7  THE COMEBACK",
-      "overlay": null,
-      "template": "gLeagueBus",
+      "level": null,
+      "overlay": {
+        "big": "MAY 2008",
+        "sub": "EINHORN READ IT OUT LOUD, ON A STAGE"
+      },
+      "template": "officeFloor",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 13685,
-      "durationInFrames": 727,
-      "gap": 0.25
+      "startFrame": 12330,
+      "durationInFrames": 942,
+      "gap": 1.4,
+      "bubbles": [
+        {
+          "text": "The numbers do not add up.",
+          "x": 0.3,
+          "y": 0.18,
+          "tail": "down",
+          "tailAt": 0.55,
+          "at": 16.0
+        }
+      ]
     },
     {
       "id": "t22",
       "level": null,
-      "overlay": {
-        "big": "10-DAY DEAL",
-        "sub": "NO GUARANTEE PAST DAY 10"
-      },
-      "template": "arenaCourt",
+      "overlay": null,
+      "template": "newsMontage",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 14412,
-      "durationInFrames": 782,
-      "gap": 0.25
+      "startFrame": 13272,
+      "durationInFrames": 532,
+      "gap": 0.651,
+      "card": {
+        "kind": "narration",
+        "text": "The machine only ever ran in one direction."
+      }
     },
     {
       "id": "t23",
-      "level": null,
-      "overlay": null,
-      "template": "iceBathRoom",
+      "level": "CH 4",
+      "overlay": {
+        "big": "$2",
+        "sub": "A SHARE \u2014 BEAR STEARNS, MARCH 2008"
+      },
+      "template": "cityStreet",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 15194,
-      "durationInFrames": 622,
-      "gap": 0.25
+      "startFrame": 13804,
+      "durationInFrames": 612,
+      "gap": 0.42,
+      "card": {
+        "kind": "chapter",
+        "title": "The Weekend",
+        "subtitle": "Three Days at the Federal Reserve",
+        "hold": 2.8
+      }
     },
     {
       "id": "t24",
       "level": null,
-      "overlay": null,
-      "template": "dinner",
+      "overlay": {
+        "big": "$3.9B LOSS",
+        "sub": "THE THIRD QUARTER, ANNOUNCED SEPT 10"
+      },
+      "template": "boardroom",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 15816,
-      "durationInFrames": 587,
-      "gap": 0.25
+      "startFrame": 14416,
+      "durationInFrames": 747,
+      "gap": 0.401
     },
     {
       "id": "t25",
-      "level": "LEVEL 06  \u00b7  ALL-STAR",
+      "level": null,
       "overlay": null,
-      "template": "arenaCourt",
+      "template": "exchangeFloor",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 16403,
-      "durationInFrames": 600,
-      "gap": 0.25
+      "startFrame": 15163,
+      "durationInFrames": 771,
+      "gap": 0.456
     },
     {
       "id": "t26",
       "level": null,
-      "overlay": null,
-      "template": "boardroomNotes",
+      "overlay": {
+        "big": "$25-30B",
+        "sub": "WHAT THE ROOM WAS ASKED TO PUT IN"
+      },
+      "template": "boardroom",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 17003,
-      "durationInFrames": 785,
-      "gap": 0.25
+      "startFrame": 15934,
+      "durationInFrames": 834,
+      "gap": 0.422
     },
     {
       "id": "t27",
       "level": null,
-      "overlay": null,
-      "template": "podiumScene",
+      "overlay": {
+        "big": "$50 BILLION",
+        "sub": "BANK OF AMERICA BOUGHT MERRILL INSTEAD"
+      },
+      "template": "officeFloor",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 17788,
-      "durationInFrames": 646,
-      "gap": 0.25
+      "startFrame": 16768,
+      "durationInFrames": 578,
+      "gap": 0.306
     },
     {
       "id": "t28",
-      "level": "LEVEL 07  \u00b7  SUPERMAX",
-      "overlay": {
-        "big": "$313.9M",
-        "sub": "5-YEAR SUPERMAX DEAL"
-      },
-      "template": "signing",
+      "level": null,
+      "overlay": null,
+      "template": "boardroom",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 18434,
-      "durationInFrames": 594,
-      "gap": 0.25
+      "startFrame": 17346,
+      "durationInFrames": 592,
+      "gap": 0.254,
+      "bubbles": [
+        {
+          "kind": "float",
+          "text": "London will not approve it.",
+          "x": 0.34,
+          "y": 0.24,
+          "at": 14.0
+        }
+      ]
     },
     {
       "id": "t29",
       "level": null,
       "overlay": null,
-      "template": "jet",
+      "template": "cityStreet",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 19028,
-      "durationInFrames": 922,
-      "gap": 0.25
+      "startFrame": 17938,
+      "durationInFrames": 731,
+      "gap": 0.477
     },
     {
       "id": "t30",
-      "level": "LEVEL 08  \u00b7  THE RECKONING",
-      "overlay": {
-        "big": "14 SEASONS",
-        "sub": "3X THE AVG CAREER"
-      },
-      "template": "rafterRetirement",
+      "level": null,
+      "overlay": null,
+      "template": "newsMontage",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 19950,
-      "durationInFrames": 707,
-      "gap": 0.7
+      "startFrame": 18669,
+      "durationInFrames": 335,
+      "gap": 0.279,
+      "card": {
+        "kind": "word",
+        "word": "No"
+      }
     },
     {
       "id": "t31",
       "level": null,
       "overlay": {
-        "big": "60%",
-        "sub": "BROKE WITHIN 5 YEARS"
+        "big": "$613 BILLION",
+        "sub": "IN DEBT \u2014 FILED AT 1:45 A.M."
       },
-      "template": "iceBathRoom",
+      "template": "boardroom",
       "audio": "audio/t31.wav",
       "audioStartFrame": 3,
-      "startFrame": 20657,
-      "durationInFrames": 754,
-      "gap": 0.25
+      "startFrame": 19004,
+      "durationInFrames": 718,
+      "gap": 0.781
     },
     {
       "id": "t32",
-      "level": null,
+      "level": "CH 5",
       "overlay": {
-        "big": "RETIRED",
-        "sub": "THE ICE STOPS COMING"
+        "big": "504 POINTS",
+        "sub": "THE DOW'S WORST DAY SINCE 9/11"
       },
-      "template": "rafterRetirement",
+      "template": "exchangeFloor",
       "audio": "audio/t32.wav",
       "audioStartFrame": 3,
-      "startFrame": 21411,
-      "durationInFrames": 705,
-      "gap": 0.25
+      "startFrame": 19722,
+      "durationInFrames": 450,
+      "gap": 0.481,
+      "card": {
+        "kind": "chapter",
+        "title": "The Pavement",
+        "subtitle": "What Monday Morning Actually Cost",
+        "hold": 2.8
+      }
+    },
+    {
+      "id": "t33",
+      "level": null,
+      "overlay": null,
+      "template": "cityStreet",
+      "audio": "audio/t33.wav",
+      "audioStartFrame": 3,
+      "startFrame": 20172,
+      "durationInFrames": 645,
+      "gap": 0.471
+    },
+    {
+      "id": "t34",
+      "level": null,
+      "overlay": null,
+      "template": "officeFloor",
+      "audio": "audio/t34.wav",
+      "audioStartFrame": 3,
+      "startFrame": 20817,
+      "durationInFrames": 741,
+      "gap": 0.476,
+      "panels": {
+        "variant": "diagonal2",
+        "cells": [
+          {
+            "template": "officeFloor"
+          },
+          {
+            "template": "cityStreet"
+          }
+        ]
+      }
+    },
+    {
+      "id": "t35",
+      "level": null,
+      "overlay": null,
+      "template": "domesticInterior",
+      "audio": "audio/t35.wav",
+      "audioStartFrame": 3,
+      "startFrame": 21558,
+      "durationInFrames": 740,
+      "gap": 0.546
+    },
+    {
+      "id": "t36",
+      "level": null,
+      "overlay": {
+        "big": "2,200 PAGES",
+        "sub": "THE VALUKAS REPORT, 2010"
+      },
+      "template": "newsMontage",
+      "audio": "audio/t36.wav",
+      "audioStartFrame": 3,
+      "startFrame": 22298,
+      "durationInFrames": 732,
+      "gap": 0.317
+    },
+    {
+      "id": "t37",
+      "level": null,
+      "overlay": {
+        "big": "$485M",
+        "sub": "THE FIGURE FULD DISPUTED"
+      },
+      "template": "exchangeFloor",
+      "audio": "audio/t37.wav",
+      "audioStartFrame": 3,
+      "startFrame": 23030,
+      "durationInFrames": 692,
+      "gap": 0.435
+    },
+    {
+      "id": "t38",
+      "level": null,
+      "overlay": null,
+      "template": "cityStreet",
+      "audio": "audio/t38.wav",
+      "audioStartFrame": 3,
+      "startFrame": 23722,
+      "durationInFrames": 913,
+      "gap": 0.406
+    },
+    {
+      "id": "t39",
+      "level": null,
+      "overlay": null,
+      "template": "domesticInterior",
+      "audio": "audio/t39.wav",
+      "audioStartFrame": 3,
+      "startFrame": 24635,
+      "durationInFrames": 729,
+      "gap": 0.436
     }
   ]
 }

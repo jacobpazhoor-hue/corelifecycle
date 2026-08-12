@@ -1,305 +1,420 @@
 #!/usr/bin/env python3
-"""Your Life as a Pro Basketball Player at Every Level — POV doodle build, ~12 min.
-Grounded in docs/research/basketball_player.md (all comp figures web-verified Aug 2026): the real,
-documented NBA pathway and pay ladder — high school hopeful (VERIFIED: ~0.03% of HS players ever
-reach the NBA) -> Division I college roster (VERIFIED: ~1% of all NCAA players are ever drafted;
-NIL money is real but wildly uneven) -> undrafted / G League ($40,500/season, VERIFIED) / two-way
-contract ($578,577, VERIFIED: exactly half the 2025-26 rookie minimum) -> drafted rookie (VERIFIED:
-$1,361,969 2025-26 rookie minimum; VERIFIED: average NBA career is only 4.5 years) -> veteran
-comeback on a real 10-day contract (VERIFIED CBA mechanic) -> All-Star -> supermax superstar
-(VERIFIED: Jayson Tatum's real 2025 5-year, $313,933,410 deal) -> the global-brand apex (referenced,
-not named, via the real scale of a $1B+ lifetime shoe deal) -> THE RECKONING, retirement, and the
-episode's share-worthy coda fact: VERIFIED, an estimated 60% of former NBA players are broke within
-five years of retirement (Sports Illustrated's 2009 investigation, reconfirmed by later reporting).
-You, Denise, Coach Ellis, Marcus, and Priya Osei are a FICTIONAL COMPOSITE; no real, named NBA player
-is depicted as this episode's protagonist. New BASKETBALL template pack added to src/stage.tsx
-(drivewayHoop/highSchoolGym/gLeagueBus/arenaCourt/iceBathRoom/rafterRetirement) per docs/TEMPLATES.md
-— the existing generic SPORTS pack's stadiumField (soccer-coded) and medalPodium (Olympic-coded)
-don't fit an NBA ladder; the rest composes from universal signing/dinner/boardroomNotes/tower/jet/
-window/fileWall/layoffs and the MEDICAL pack's erTrauma (re-narrated: the on-court injury cart-off).
+"""The 158-Year-Old Bank That Died in a Weekend — CRAYON-format explainer, ~15 min.
 
-STRUCTURAL VARIATION vs the last 2 produced (ottoman_empire = MID-ACTION cold open / rise-then-
-fracture / cyclical-but-deliberately-unresolved ending; pirate = AFTERMATH cold open / rise-then-
-fall-then-rise with a DUAL crash / one-door-left-open ending): this cold open is FLASH-FORWARD — a
-jersey-retirement ceremony whose meaning (triumph or ending?) is deliberately ambiguous, cut away
-before it resolves. Act two's shape is a SINGLE clean rise, ONE catastrophic midpoint crash (a torn
-ACL, not a betrayal), and a harder-won rise past the old peak — distinct from pirate's two-crash
-spine. The ending is PURE CYCLICAL: the loop bends fully back to the opening ceremony, now completely
-understood, resolving (not leaving open) the cold-open loop — distinct from both of the last two.
+FORMAT: third-person past-tense explainer about a REAL subject (docs/BIBLE.md §1). Not the retired
+second-person POV ladder. Every date, figure and quote is verified in docs/research/lehman_brothers.md
+with a source; anything I could not verify to that standard is in that file's CUT list and is absent
+here. Register: straight and noirish, held throughout (§2) — the subject has 25,000 real victims, so
+the Depression episode's comic anachronism register would read as callous.
 
-PROMISE -> PAYOFF LEDGER (ids match the final t01-t32 sequence):
-  * t01 cold open (the banner, the empty arena, ambiguous meaning, cut before it's explained)   -> RESOLVED at t30-t32 (the same banner, now fully understood)
-  * t02 promise/cost-line ("you don't know yet what they take down to put a banner up")          -> paid across t16 (the house), t29 (four visits a year), t31/t32
-  * sensory anchor: ice (a bag of frozen peas -> a training tub, bigger/colder every level)       -> introduced t05 -> re-triggered t14/t17/t20/t23/t31 -> maximal payoff t32 ("ice waits in a tub nobody hands you anymore")
-  * Denise, the named person/want (an elevator that doesn't work)                                -> introduced t03 -> t04/t06/t12/t16 (the house, PAID OFF) -> her own cost (the limp, missed years) t24/t29 -> the dialogue line t31
-  * Coach Ellis, the named mentor                                                                -> introduced t12 (the dialogue warning) -> the comeback t21 -> no false redemption arc, just present
-  * Marcus, the named rival                                                                      -> introduced t10 -> drafted instead of you t11 -> the taunt/dialogue line t19 -> never resolved further (a deliberate loose thread — most rivalries don't get a final scene either)
-  * share-worthy fact #1: VERIFIED odds (0.03% HS-to-NBA, 1% NCAA-to-drafted)                     -> planted t06/t09
-  * share-worthy fact #2: VERIFIED average NBA career length (4.5 years)                          -> planted t18 (the injury), paid off again t22 ("outlasted the average career by six months")
-  * share-worthy fact #3: VERIFIED 60% of former players broke within 5 years of retirement       -> the coda, t31
-  * THE ONE DELIBERATE UNRESOLVED UNIVERSE THREAD: a second Apex Management card, a different name under Priya Osei's, an office in a city never visited -> planted t10, reappears t27, never explained
+TEMPLATE CONSTRAINT (WO-13, stated plainly). Only SIX restyled templates exist — officeFloor,
+boardroom, exchangeFloor, cityStreet, domesticInterior, newsMontage. Every other template in the
+registry is un-restyled legacy line-art and would look wrong next to them, so this episode uses those
+six and NOTHING else, including inside `panels` cells. Variety therefore has to come from the
+signature devices (§8): 5 chapter cards, 2 narration cards, 2 single-word cards, 3 multi-panel splits,
+6 bubble/float beats. The honest cost of that constraint is measured in
+docs/research/crayon/COMPARISON.md — it is the episode's weakest axis and is not papered over here.
+
+HOOK — the five steps (§4), in order:
+  1 shock stat            t01  "A hundred and fifty-eight-year-old bank died in seventy-two hours."
+  2 consequence fragments t01  "$639 billion in assets. $613 billion in debt. 25,000 employees."
+  3 the paradox turn      t02  "But it didn't fall because nobody saw it coming. It fell because everybody did."
+  4 thesis naming it      t03  "This is the story of Lehman Brothers…"
+  5 hard cut DATE + PLACE t04  "Montgomery, Alabama, 1844."
+
+CHAPTERS (§1, `Evocative Noun: Plain Explanation`, emitted as card=dict(kind="chapter", …) and used
+verbatim in the description timestamps).
+⚠ MEASURED DEFECT: a chapter SUBTITLE longer than ~36 characters wraps to two lines, and because
+TextCard size-locks title:subtitle at 0.75 the wrap shrinks the whole block — the chapter title then
+measures 0.425 of frame width against the reference's 0.565 (COMPARISON.md §2 §7). Subtitles 1 and 3
+below are 45 and 44 chars and do this. Keep future subtitles at or under ~36 characters.
+  1 The Cotton Store : How a Dry Goods Shop Became a Wall Street Bank   t04
+  2 The Machine      : How Lehman Turned Houses Into Money              t09
+  3 The Trick        : The Accounting That Hid Fifty Billion Dollars    t17
+  4 The Weekend      : Three Days at the Federal Reserve                t23
+  5 The Pavement     : What Monday Morning Actually Cost                t32
+
+PROMISE -> PAYOFF LEDGER (ids match the final t01-t39 sequence):
+  * t03 promise: "It starts with cotton. It ends with cardboard boxes on a New York sidewalk."
+        -> boxes PAID at t33/t34, cotton PAID at t39. Both halves land; neither is left hanging.
+  * t01 promise: "no war, no fire, no robbery — just a weekend"
+        -> PAID at t25-t31, which is literally three days in one room.
+  * MOTIF (the factual through-line replacing the old sensory anchor): **taking the thing the
+        customer cannot pay for, and selling it on.** Planted t05 (cotton instead of cash) ->
+        re-triggered t11 (the mortgage bond), t13 (leverage), t20 (Repo 105) -> maximal payoff t39.
+  * EPITHET: "the Gorilla" / "Lehman would never be small again" planted t08 -> re-triggered t14
+        ("The Gorilla was right") -> inverted t31.
+  * share-worthy beat #1: Repo 105 — 105% of the cash makes a loan a "sale"  -> t18/t19/t20
+  * share-worthy beat #2: Einhorn read the fraud out loud on a stage four months early -> t21, t38
+  * share-worthy beat #3: the Fuld pay hearing, where the ARGUMENT was over $175M -> t37
+  * MIDPOINT REVERSAL (§5): the machine runs backwards at the same leverage — t22, with gap=1.4 on
+        t21 so the sound engine drops to near-silence and the line lands raw. Spent once.
+
+STRUCTURAL VARIATION vs the last 2 produced (ops/produced_topics.json: bratva, astronaut — both old
+format): cold open is a DEATH-FIRST autopsy (the ending stated in sentence one, then a 158-year
+rewind), act two is a MECHANISM TEARDOWN in four numbered moves rather than a rise, and the ending is
+REFLECTION + COMPLICIT "WE" + CALLBACK TO THE OPENING IMAGE with no forward tease.
 """
 
 FPS = 30
 
+# NARRATION RATE — set here, per scene, and MEASURED. Read this before "fixing" it.
+#
+# `gen_voice_edge.RATE` is "-13%", chosen (and correctly measured) against the PREVIOUS episode, whose
+# sentences average ~15 words. This script obeys the canon's sentence targets instead — 8.47-word mean,
+# 56.3% of sentences under 8 words (docs/BIBLE.md §3) — and short fragments make edge-tts insert a
+# sentence-final pause far more often, so the SAME rate reads slower: measured 147.3 WPM speech here
+# against 149.1 on the legacy episode.
+#
+# That matters because runtime WPM can never exceed speech WPM, and roughly 97% of this episode's
+# runtime is speech. At -13% the whole episode measured **143.5 WPM runtime — outside gate.py's
+# 145-152 band** — and no amount of gap-trimming can fix it: zeroing every gap and lead in the episode
+# would only reach 147.3. Measured on this script's own prose, 5 scenes / 333 words per rate:
+#   -13% -> 148.8   -12% -> 149.2   -11% -> 150.7   -10% -> 153.8   -8% -> 156.3  (speech WPM)
+# -11% projects to 145.3 WPM runtime, inside the band but within 1.0 of its edge (gate.py WARNs there).
+# -10% projects to 148.2 — mid-band, and within 0.3 of the reference channel's own 148.5 aggregate.
+NARRATION_RATE = "-10%"
+
 SCENES = [
-    # ---- COLD OPEN — FLASH-FORWARD, ambiguous, cut before it resolves ----
-    dict(id="t01", level=None, template="rafterRetirement", gap=0.7,
-         narration=("One spotlight left on in an empty arena, aimed at a banner with your number "
-                    "stitched into it in gold nobody asked your opinion about. Twenty thousand seats, "
-                    "all empty. A suit, not a jersey. A voice behind you starts the word retirement and "
-                    "stops, unsure that's actually what this is. Don't check the exits. There isn't "
-                    "time to find one before the lights come up."),
-         overlay=dict(big="14 SEASONS", sub="ONE BANNER")),
+    # ================= HOOK — the five steps, first ~30s =================
+    dict(id="t01", level=None, template="cityStreet",
+         narration=("A hundred and fifty-eight-year-old bank died in seventy-two hours. Six hundred "
+                    "and thirty-nine billion dollars in assets. Six hundred and thirteen billion in "
+                    "debt. Twenty-five thousand employees on four continents. The fourth largest "
+                    "investment bank in America. All of it gone between a Friday night and a Monday "
+                    "morning. No war. No fire. No robbery. Just a weekend."),
+         overlay=dict(big="$639 BILLION", sub="THE LARGEST BANKRUPTCY IN U.S. HISTORY")),
 
-    # ---- PROMISE + COST-LINE ----
-    dict(id="t02", level=None, template="fileWall",
-         narration=("Rewind. None of it exists yet — not the banner, not the gold thread, not the "
-                    "suit. Somewhere your mother clocks out of a double shift nobody thanks her for by "
-                    "name. You want the banner. You want it bad enough to build a whole life around a "
-                    "hoop bolted to a garage. You don't know yet what they take down to put a banner "
-                    "up."),
-         overlay=None),
-
-    # ---- LEVEL 01 · THE DRIVEWAY ----
-    dict(id="t03", level="LEVEL 01  ·  THE DRIVEWAY", template="drivewayHoop",
-         narration=("Your mother is Denise, forty-one, on her feet ten hours at Prescott General before "
-                    "this shift even started. The hoop above the garage door sits two degrees off true; "
-                    "you've never once fixed it because you know exactly how it plays now. Cracked "
-                    "concrete. One good pair of shoes, resoled twice. Six hundred makes before dinner, "
-                    "every single night, whether anyone's watching or not."),
-         overlay=None),
-    dict(id="t04", level=None, template="dinner",
-         narration=("Supper is whatever's on sale, split without anyone saying so out loud. Denise asks "
-                    "about school first, basketball second, same order every night, like the order "
-                    "itself is a kind of prayer. She's saved four hundred dollars toward an elevator "
-                    "repair the landlord keeps promising and never starts. You tell her someday you'll "
-                    "just buy the building. She laughs like it's a joke. You don't."),
-         overlay=None),
-    dict(id="t05", level=None, template="highSchoolGym",
-         narration=("State semifinal, four seconds left, down one — the gym loud enough that the "
-                    "buzzer barely cuts through it. Catch. Turn. Release. The ball rolls the rim twice "
-                    "before it decides. A man in a windbreaker two rows up writes something down "
-                    "without clapping, which somehow says more than the whole gym screaming does. Your "
-                    "ankle rolls landing. Ice, for the first time, actually matters."),
-         overlay=None),
-    dict(id="t06", level=None, template="boardroomNotes",
-         narration=("Recruiters call the house phone before your ankle's even done swelling, offering "
-                    "trips, gear, promises that don't survive a signature. A guidance counselor pulls "
-                    "the odds up on a laptop, unprompted, like a warning label. But the man in the "
-                    "windbreaker calls back a second time. Denise takes the message on the back of an "
-                    "electric bill. Nobody offers to fix the elevator."),
-         overlay=dict(big="0.03%", sub="EVER REACH THE NBA")),
-
-    # ---- LEVEL 02 · THE ROSTER ----
-    dict(id="t07", level="LEVEL 02  ·  THE ROSTER", template="lectureHallScene",
-         narration=("Division I, a full ride, a jersey with your actual name across the back for the "
-                    "first time in your life. Class at eight, lift at eleven, film at two — the "
-                    "schedule owns you the way the driveway never did. NIL money is real now, "
-                    "technically; a teammate three lockers down signs a deal worth more than Denise "
-                    "makes in a year. Yours is worth a free sandwich."),
-         overlay=None),
-    dict(id="t08", level=None, template="arenaCourt",
-         narration=("Nationally televised, March, a shot clock winding down against the tournament's "
-                    "number-one seed. You pull up from twenty-six feet with a hand in your face — the "
-                    "kind of shot Coach would bench you for in practice — and it drops clean through a "
-                    "net gone silent for one full second before the building comes apart. Nine million "
-                    "replays rack up by morning, a season's worth of driveway reps compressed into six "
-                    "seconds of footage. Nobody can spell your name yet."),
-         overlay=None),
-    dict(id="t09", level=None, template="window",
-         narration=("A highlight doesn't pay an elevator repair. Your own shot loops on a phone screen "
-                    "at 2 a.m., counting shares like they're dollars, which they aren't. Draft boards "
-                    "rank you anywhere from the mid-first round to not ranked at all, depending which "
-                    "website gets checked that week. One percent of every college player in the "
-                    "country ever hears their name called on draft night."),
-         overlay=dict(big="1%", sub="OF NCAA PLAYERS GET DRAFTED")),
-    dict(id="t10", level=None, template="boardroomNotes",
-         narration=("An agent named Priya Osei leaves a card that says Apex Management and a number "
-                    "that answers on the first ring, always. So does Marcus's agent — Marcus, your "
-                    "best friend since fifth grade, same driveway, same six hundred makes a night for "
-                    "years. His mock-draft grade climbs every week. Yours holds steady, then quietly "
-                    "drops four spots the week of your ankle MRI."),
-         overlay=None),
-
-    # ---- LEVEL 03 · UNDRAFTED ----
-    dict(id="t11", level="LEVEL 03  ·  UNDRAFTED", template="signing",
-         narration=("Draft night, sixty names called across two rounds, and yours isn't one of them — "
-                    "Marcus goes twenty-second, hugging his mother live on national television while "
-                    "Denise sits with you in the next room, waiting on a phone that stays dark. Two "
-                    "hours later a G League team offers a deal so far under what you pictured your "
-                    "whole life that the number gets read twice before you sign it anyway."),
-         overlay=dict(big="$40,500", sub="G LEAGUE, FIVE MONTHS")),
-    dict(id="t12", level=None, template="gLeagueBus",
-         narration=("The bus leaves at 1 a.m. for a nine-hour drive nobody in the NBA ever has to "
-                    "make, engine rattling loud enough to drown out the radio. Coach Ellis, forty years "
-                    "in gyms nobody remembers the names of anymore, takes the seat across from you "
-                    "without asking permission. He's watched a hundred kids exactly this good disappear "
-                    "by twenty-five, quietly. Denise still has four hundred dollars saved."),
+    dict(id="t02", level=None, template="boardroom",
+         narration=("But it did not fall because nobody saw it coming. It fell because everybody "
+                    "did. The men who could have stopped it sat in one room for three days. They "
+                    "looked at the number. Then they decided it was somebody else's problem."),
          overlay=None,
-         dialogue=dict(text="Everybody on this bus was the best player in their gym once.")),
-    dict(id="t13", level=None, template="signing",
-         narration=("Six weeks in, a two-way contract lands — half the rookie minimum, a locker in two "
-                    "different buildings, a life split exactly down the middle between the league "
-                    "you're chasing and the one that's actually paying you. You sign it in a hallway "
-                    "between drills, no ceremony, no cameras. It's still the best number you've ever "
-                    "seen with your own name attached to it."),
-         overlay=dict(big="$578,577", sub="HALF THE ROOKIE MINIMUM")),
-    dict(id="t14", level=None, template="iceBathRoom",
-         narration=("Ice, every night now, both ankles instead of one, a training-room tub that never "
-                    "quite gets cold enough to stop hurting by the count of sixty. Ice fixes the "
-                    "swelling. Ice fixes tomorrow's practice. Ice does not fix the part of you that "
-                    "still checks a phone at 1 a.m. for a call-up that hasn't come, over and over, "
-                    "screen light the only thing awake in the room. The water numbs faster than the "
-                    "waiting does."),
+         card=dict(kind="narration", text="Everyone saw it coming. Nobody would pay to stop it.")),
+
+    dict(id="t03", level=None, template="exchangeFloor",
+         narration=("This is the story of Lehman Brothers, the bank that was too big to fail right "
+                    "up until the weekend somebody decided it was not. It is a story about leverage, "
+                    "which is a polite word for other people's money. It starts with cotton. It ends "
+                    "with cardboard boxes on a New York sidewalk."),
          overlay=None),
 
-    # ---- LEVEL 04 · THE CALL-UP ----
-    dict(id="t15", level="LEVEL 04  ·  THE CALL-UP", template="arenaCourt",
-         narration=("The call comes at 6 a.m. — a roster injury two states away, a flight booked "
-                    "already, a jersey with your name spelled right on the first try for once. "
-                    "Warmups under lights bright enough to erase the crowd behind them. The anthem. "
-                    "Your legs remember every driveway rep without being asked to. Somewhere in the "
-                    "stands, Denise is on a flight you paid for."),
-         overlay=dict(big="$1,361,969", sub="NBA ROOKIE MINIMUM")),
-    dict(id="t16", level=None, template="tower",
-         narration=("First paycheck bigger than anything either of you has ever seen on paper, and the "
-                    "first call isn't to a car dealership — it's to a realtor, for a one-story house "
-                    "with an elevator that isn't a metaphor because there isn't a second floor left to "
-                    "need one. Denise cries on the phone for a reason that has nothing to do with "
-                    "basketball. You did the thing you said you'd do."),
-         overlay=None),
-    dict(id="t17", level=None, template="arenaCourt", gap=1.4,
-         narration=("Twelve games into a real NBA rotation, minutes climbing every single week, a body "
-                    "that still does exactly what's asked of it without one word of complaint. Your "
-                    "legs are steady under you tonight, steadier than they've been in years, the crowd "
-                    "noise settling into something almost like comfort. That's the part that scares "
-                    "you. Nothing has gone wrong yet. Ice waits in the tub behind the tunnel, patient, "
-                    "right on schedule."),
+    # ================= CHAPTER 1 — The Cotton Store =================
+    dict(id="t04", level="CH 1", template="cityStreet",
+         narration=("Montgomery, Alabama, 1844. A German immigrant named Henry Lehman opened a shop "
+                    "and sold pots, cloth and farm tools to cotton growers. There was one problem "
+                    "with the customers. They had no money. Alabama in the 1840s ran on cotton, not "
+                    "cash."),
+         overlay=dict(big="1844", sub="MONTGOMERY, ALABAMA"),
+         card=dict(kind="chapter", title="The Cotton Store",
+                   subtitle="How a Dry Goods Shop Became a Wall Street Bank", hold=2.8)),
+
+    dict(id="t05", level=None, template="domesticInterior",
+         narration=("So Henry took cotton as payment. Then he did the thing that made his family "
+                    "rich for a century and a half. He sold the cotton. Not the pots. The cotton. By "
+                    "1850 both of his brothers had crossed the Atlantic to join him. Emanuel. Mayer. "
+                    "The sign over the door was repainted. Lehman Brothers."),
+         overlay=dict(big="1850", sub="THE NAME OVER THE DOOR")),
+
+    dict(id="t06", level=None, template="officeFloor",
+         narration=("Now look at what trading cotton actually meant. A bale that did not exist yet. "
+                    "Grown in Alabama. Sold to a buyer in New York. At a price agreed months before "
+                    "the crop came in. That is a derivative. Lehman was trading derivatives decades "
+                    "before Wall Street had a word for them. The store became a broker. The broker "
+                    "became a bank."),
          overlay=None),
 
-    # ---- MIDPOINT REVERSAL ----
-    dict(id="t18", level=None, template="erTrauma", gap=0.7,
-         narration=("Your knee buckles on a landing identical to six hundred others you've made this "
-                    "year, and the sound it makes carries over the crowd noise before the pain does. "
-                    "Carts, a tunnel, a doctor's face already decided on something it hasn't said out "
-                    "loud yet. An MRI confirms it before sunrise: the ACL, fully torn. Average NBA "
-                    "career, four and a half years. You're two seasons in."),
-         overlay=dict(big="ACL TORN", sub="AVG CAREER: 4.5 YEARS")),
-    dict(id="t19", level=None, template="layoffs",
-         narration=("The team's option on your contract expires quietly, no press conference, no "
-                    "ceremony — a locker cleared out by somebody else while you're still in a leg "
-                    "brace three states away, learning to walk on crutches nobody photographs. Marcus "
-                    "texts a highlight from his own breakout season instead of checking in on yours. "
-                    "You call him anyway, out of habit more than hope. He picks up mid-workout, already "
-                    "somewhere else entirely."),
+    dict(id="t07", level=None, template="newsMontage",
+         narration=("And then it simply kept not dying. The Civil War burned the cotton trade to the "
+                    "ground. Lehman survived. The Great Depression killed American banks by the "
+                    "thousand. Lehman survived. Two world wars. The oil shock. Black Monday, 1987. "
+                    "Survived, survived, survived. A hundred and fifty-eight years is long enough to "
+                    "start believing you cannot die."),
+         overlay=dict(big="158 YEARS", sub="THROUGH EVERY CRASH BEFORE THIS ONE"),
+         # §6.4 — four eras, four independently keyed cells. The orange block is an explicit ground
+         # override so the two `interior`-keyed cells cannot land on the same hue.
+         panels=dict(variant="grid4", cells=[dict(template="cityStreet"),
+                                             dict(template="boardroom"),
+                                             dict(template="newsMontage"),
+                                             dict(template="officeFloor", ground="#e8541f")])),
+
+    dict(id="t08", level=None, template="boardroom",
+         narration=("1994. Lehman is spun out on its own and a trader named Richard Fuld takes the "
+                    "top job. On the floor they called him the Gorilla. He kept the job for fourteen "
+                    "years, which in investment banking is about four lifetimes. Fuld's rule was "
+                    "simple. Lehman would never be small again. Everything after this follows from "
+                    "that one sentence."),
+         overlay=dict(big="14 YEARS", sub="RICHARD FULD, CEO FROM 1994")),
+
+    # ================= CHAPTER 2 — The Machine =================
+    dict(id="t09", level="CH 2", template="officeFloor",
+         narration=("So how does a bank make money out of a house it does not own? Slowly, and then "
+                    "all at once. Here is the machine, in four moves."),
          overlay=None,
-         dialogue=dict(text="Ice doesn't fix everything, man. Some of us just heal different.")),
-    dict(id="t20", level=None, template="iceBathRoom",
-         narration=("Rehab is six hours a day for a body that used to do this for free. The ice is "
-                    "colder now, or it just feels that way with nothing guaranteed on the other side of "
-                    "it. A therapist tracks your range of motion in a notebook like it's a stock chart "
-                    "trending the wrong direction, week over week, in handwriting too neat to argue "
-                    "with. Denise doesn't mention the house payment. You do the math anyway, every "
-                    "night."),
+         card=dict(kind="chapter", title="The Machine",
+                   subtitle="How Lehman Turned Houses Into Money", hold=2.8)),
+
+    dict(id="t10", level=None, template="domesticInterior",
+         narration=("Move one. Somebody borrows. A family signs a mortgage they can just about "
+                    "afford, at a rate that resets in two years to one they cannot. The lender does "
+                    "not care. The lender is not keeping the loan."),
+         overlay=None,
+         bubbles=[dict(kind="float", text="The rate resets in two years.", x=0.30, y=0.20),
+                  dict(kind="float", text="We'll refinance before then.", x=0.66, y=0.72, at=4.0)]),
+
+    dict(id="t11", level=None, template="exchangeFloor",
+         narration=("Move two. The loan gets sold. Thousands of them are bundled into one bond, and "
+                    "the bond is sliced into layers. The top layer is paid first and rated triple-A. "
+                    "The bottom layer is paid last and pays the most. Same houses. Different "
+                    "positions in the queue. That is the whole trick, and it is genuinely clever "
+                    "right up to the moment everybody in the queue stops paying at once."),
          overlay=None),
 
-    # ---- LEVEL 05 · THE COMEBACK ----
-    dict(id="t21", level="LEVEL 05  ·  THE COMEBACK", template="gLeagueBus",
-         narration=("Nine months of rehab earns you exactly one thing: a G League assignment again, "
-                    "the same bus, a different Coach Ellis quote every single week, the same worn seat "
-                    "across the aisle. He doesn't say I told you so. He doesn't have to — the silence "
-                    "does it for him. Your knee holds through a crossover for the first time since the "
-                    "tear, and something locked since the MRI finally, quietly, unclenches."),
-         overlay=None),
-    dict(id="t22", level=None, template="arenaCourt",
-         narration=("A ten-day contract lands — non-guaranteed past day ten, no security, no ceremony, "
-                    "the exact opposite of the deal you signed at twenty-two. You play the best "
-                    "basketball of your career anyway, out of something closer to fear than joy, "
-                    "sprinting back on defense on a knee that used to just do it automatically. Day "
-                    "nine, the team extends it for the rest of the season. You've now outlasted the "
-                    "average NBA career by six full months."),
-         overlay=dict(big="10-DAY DEAL", sub="NO GUARANTEE PAST DAY 10")),
-    dict(id="t23", level=None, template="iceBathRoom",
-         narration=("Both knees in the tub now instead of one, plus a shoulder that started clicking on "
-                    "cold mornings nobody warned you about at twenty-two. Ice fixes the swelling. Ice "
-                    "fixes whatever shows up clean on a scan. Ice does not fix the four years you can't "
-                    "get back, or the two full seasons Denise spent watching game film on a bad couch "
-                    "instead of seeing a doctor about her own knees."),
-         overlay=None),
-    dict(id="t24", level=None, template="dinner",
-         narration=("Denise is fifty-one now, still working, because retiring on your rookie money felt "
-                    "too much like admitting the injury won. The limp she's had a year without "
-                    "mentioning is there again tonight. She catches you staring and changes the subject "
-                    "to your next game instead. Some things get bought outright. Some things you just "
-                    "find out later you should've asked about sooner."),
+    dict(id="t12", level=None, template="cityStreet",
+         narration=("Move three, and this is where Lehman went further than anyone. Why buy "
+                    "mortgages from a lender when you can buy the lender? Lehman bought mortgage "
+                    "companies outright. Now it made the loan, packaged the loan, sold the bond, and "
+                    "kept a pile of the bonds it could not sell. Every step of the pipe, one owner."),
          overlay=None),
 
-    # ---- LEVEL 06 · ALL-STAR ----
-    dict(id="t25", level="LEVEL 06  ·  ALL-STAR", template="arenaCourt",
-         narration=("Three seasons after a torn ACL was supposed to end things quietly, your name gets "
-                    "read on national television as an All-Star reserve — the gym behind your eyes "
-                    "flashing back to a bent rim and six hundred makes a night before the broadcast "
-                    "even cuts to commercial. Denise is courtside this time, an actual ticket, not a "
-                    "flight you booked her on a hunch."),
-         overlay=None),
-    dict(id="t26", level=None, template="boardroomNotes",
-         narration=("A shoe company that wouldn't return your agent's calls three years ago now wants a "
-                    "signature line with your actual name stitched across the box. Priya Osei "
-                    "negotiates it across a conference table you couldn't have pictured from a G League "
-                    "bus seat at 1 a.m., every clause read aloud twice before either of you signs "
-                    "anything. Seven figures a year, guaranteed, the first money in your entire life "
-                    "that shows up whether you play one minute of it or not."),
-         overlay=None),
-    dict(id="t27", level=None, template="podiumScene",
-         narration=("All-Star weekend media day: forty reporters, a backdrop with your name on repeat, "
-                    "a question about the injury answered the same careful way every single time. "
-                    "Somewhere in the stack of interview requests is a second card from Apex "
-                    "Management — a different name under Priya's, an office address in a city you've "
-                    "never been to. Nobody explains it. You pocket it anyway."),
+    dict(id="t13", level=None, template="officeFloor",
+         narration=("Move four. Do all of it with borrowed money. For every dollar Lehman actually "
+                    "owned, it had borrowed more than thirty. That is what leverage means. It works "
+                    "beautifully in one direction. A three percent gain becomes a hundred percent "
+                    "gain. A three percent loss erases you completely."),
+         overlay=dict(big="30 TO 1", sub="BORROWED AGAINST ITS OWN MONEY")),
+
+    dict(id="t14", level=None, template="newsMontage",
+         narration=("And for a while it worked exactly the way the model said it would. February "
+                    "2007. Lehman stock touches eighty-six dollars a share. The firm is worth close "
+                    "to sixty billion dollars. It has just posted the best year in its history. Four "
+                    "point two billion in profit, on nineteen point three billion of revenue. The "
+                    "Gorilla was right. Lehman was never going to be small again."),
+         overlay=dict(big="$86", sub="A SHARE — FEBRUARY 2007")),
+
+    dict(id="t15", level=None, template="boardroom",
+         narration=("Inside the building, a few people had started doing the arithmetic backwards. "
+                    "What happens to a thirty-to-one bank if house prices simply stop going up? Not "
+                    "fall. Stop. The risk officers ran the number. The answer was bad enough that "
+                    "the risk officers stopped being invited to the meetings."),
+         overlay=None,
+         dialogue=dict(text="If housing goes flat, we do not survive it. Not down. Flat."),
+         bubbles=[dict(text="If housing goes flat, we do not survive it.", x=0.66, y=0.19,
+                       tail="down", tailAt=0.35, tailSkew=-0.2, at=13.0)]),
+
+    dict(id="t16", level=None, template="exchangeFloor",
+         narration=("The machine had one requirement, and it never once stopped asking for it. Not "
+                    "profit. Not customers. Something much simpler than that."),
+         overlay=None,
+         card=dict(kind="word", word="More")),
+
+    # ================= CHAPTER 3 — The Trick =================
+    dict(id="t17", level="CH 3", template="newsMontage",
+         narration=("By 2008 the bonds nobody wanted were sitting on Lehman's own books. And every "
+                    "quarter, the firm had to show those books to the world. So it found a way to "
+                    "make them look emptier than they were."),
+         overlay=None,
+         card=dict(kind="chapter", title="The Trick",
+                   subtitle="The Accounting That Hid Fifty Billion Dollars", hold=2.8)),
+
+    dict(id="t18", level=None, template="officeFloor",
+         narration=("It was called Repo 105, and it is beautiful the way a card trick is beautiful. "
+                    "A repo is a loan against an asset. You hand over a bond, take the cash, and buy "
+                    "the bond back a few days later. Because you are buying it back, it never leaves "
+                    "your balance sheet. It is a loan. And a loan is debt."),
          overlay=None),
 
-    # ---- LEVEL 07 · SUPERMAX ----
-    dict(id="t28", level="LEVEL 07  ·  SUPERMAX", template="signing",
-         narration=("The supermax offer arrives on your twenty-eighth birthday: five full years, every "
-                    "dollar guaranteed no matter what your knees decide to do next season or the one "
-                    "after. You sign it at a table with more cameras pointed at it than your entire "
-                    "rookie season combined — the largest number either you or Denise has ever seen "
-                    "written next to a human being's actual name."),
-         overlay=dict(big="$313.9M", sub="5-YEAR SUPERMAX DEAL")),
-    dict(id="t29", level=None, template="jet",
-         narration=("The private jet is real, the endorsement portfolio is real, a net worth with more "
-                    "zeros than the elevator repair ever needed, multiplied a thousand times over. "
-                    "Somewhere a bigger name than yours turned playing basketball into a billion actual "
-                    "dollars and a lifetime shoe deal nobody's grandchildren will outlive — the fantasy "
-                    "this entire ladder actually sells, one in a whole generation. All of it sits on "
-                    "paper, owned outright. Four visits to Denise, this whole year — that's the actual "
-                    "count."),
+    dict(id="t19", level=None, template="boardroom",
+         narration=("Unless. If the assets you hand over are worth at least a hundred and five "
+                    "percent of the cash you take, the accounting lets you call it a sale. Not a "
+                    "loan. A sale. And a sold asset leaves the books entirely. Same bond. Same cash. "
+                    "Same buy-back a few days later. Completely different picture."),
+         overlay=dict(big="105%", sub="THE LINE THAT TURNED A LOAN INTO A SALE")),
+
+    dict(id="t20", level=None, template="exchangeFloor",
+         narration=("So a few days before the end of every quarter, Lehman shipped up to fifty "
+                    "billion dollars of assets out of the door. The balance sheet was photographed. "
+                    "Then the assets came back. Reported leverage, twelve point one. Actual "
+                    "leverage, thirteen point nine. Nothing had been sold. Nothing had been fixed. A "
+                    "number had been photographed at the exact moment it looked best."),
+         overlay=dict(big="$50B", sub="MOVED OFF THE BOOKS EVERY QUARTER"),
+         # §6.4 — the two halves of the trick, side by side: the desk that books it, the room that
+         # signs it off. `officeFloor` is `interior`, `boardroom` is `grey`, so the cells key apart.
+         panels=dict(variant="v2", cells=[dict(template="officeFloor"),
+                                          dict(template="boardroom")])),
+
+    dict(id="t21", level=None, template="officeFloor", gap=1.4,
+         narration=("Outside the building, people were noticing. May 21st, 2008. A hedge fund "
+                    "manager named David Einhorn stands up at a New York conference and gives a talk "
+                    "called Accounting Ingenuity. He goes through Lehman's own public filings, line "
+                    "by line, and says, politely, that the numbers do not add up. Lehman called him "
+                    "a short seller talking his own book. Lehman was not wrong about that. It was "
+                    "wrong about the numbers."),
+         overlay=dict(big="MAY 2008", sub="EINHORN READ IT OUT LOUD, ON A STAGE"),
+         bubbles=[dict(text="The numbers do not add up.", x=0.30, y=0.18, tail="down",
+                       tailAt=0.55, at=16.0)]),
+
+    # ---- MIDPOINT REVERSAL — the machine turns on its owner. Spent once. ----
+    dict(id="t22", level=None, template="newsMontage",
+         narration=("Here is what the whole industry missed. The machine that turned houses into "
+                    "money only ran in one direction. When house prices fell, it ran backwards. At "
+                    "the same speed. With the same leverage. Thirty to one, pointed the other way."),
+         overlay=None,
+         card=dict(kind="narration", text="The machine only ever ran in one direction.")),
+
+    # ================= CHAPTER 4 — The Weekend =================
+    dict(id="t23", level="CH 4", template="cityStreet",
+         narration=("March 2008. Bear Stearns, the smallest of the big Wall Street banks, runs out "
+                    "of cash in three days. JPMorgan buys it for two dollars a share, raised a week "
+                    "later to ten. The Federal Reserve backstops the deal. Wall Street read that "
+                    "rescue as a promise. It was not a promise."),
+         overlay=dict(big="$2", sub="A SHARE — BEAR STEARNS, MARCH 2008"),
+         card=dict(kind="chapter", title="The Weekend",
+                   subtitle="Three Days at the Federal Reserve", hold=2.8)),
+
+    dict(id="t24", level=None, template="boardroom",
+         narration=("September 10th, 2008. Lehman pre-announces its third quarter. A loss of three "
+                    "point nine billion dollars, and seven point eight billion of writedowns on "
+                    "property nobody wanted. The stock had been eighty-six dollars. It was now under "
+                    "eight. Fuld had spent the whole summer hunting a buyer at a price he was "
+                    "willing to accept. There were no takers left."),
+         overlay=dict(big="$3.9B LOSS", sub="THE THIRD QUARTER, ANNOUNCED SEPT 10")),
+
+    dict(id="t25", level=None, template="exchangeFloor",
+         narration=("Friday, September 12th. Henry Paulson at the Treasury, Timothy Geithner at the "
+                    "New York Fed and Christopher Cox at the SEC summon the chief executives of Wall "
+                    "Street to the Federal Reserve Bank of New York. The instruction is blunt. "
+                    "Lehman is out of money. By Sunday night there is a buyer, or there is a "
+                    "bankruptcy. And the government is not paying for it."),
          overlay=None),
 
-    # ---- LEVEL 08 · THE RECKONING (apex cost, resolves the cold open) ----
-    dict(id="t30", level="LEVEL 08  ·  THE RECKONING", template="rafterRetirement", gap=0.7,
-         narration=("Fourteen seasons, two more knee surgeries, and a front office that finally says, "
-                    "gently, that this year should be the last one — not a cut, not a trade, just math "
-                    "nobody in the building argues with anymore. The team plans a ceremony. A banner. "
-                    "Your actual number, stitched in gold you never once asked anyone's opinion about. "
-                    "You already know exactly how this particular night ends before it starts."),
-         overlay=dict(big="14 SEASONS", sub="3X THE AVG CAREER")),
-    dict(id="t31", level=None, template="iceBathRoom",
-         narration=("Sixty percent of players who make it this far are broke within five years of "
-                    "their last game — a real number, the one nobody puts on a banner. You're not one "
-                    "of them, technically; the house is paid off, the shoe deal outlives the knees. "
-                    "Denise sits in the tunnel with you before the ceremony starts, quiet, the way she "
-                    "used to be at the kitchen table."),
-         overlay=dict(big="60%", sub="BROKE WITHIN 5 YEARS"),
-         dialogue=dict(text="The banner doesn't hand anybody back the years, baby. Just so you know that.")),
+    dict(id="t26", level=None, template="boardroom",
+         narration=("Saturday. The room builds a plan. The banks pool their own money into a bad "
+                    "bank, take Lehman's worst property off its hands, and let a buyer have the "
+                    "clean half. Paulson looks at it and says the private sector has to put in far "
+                    "more. Twenty-five, perhaps thirty billion dollars. Their own money. To rescue a "
+                    "competitor."),
+         overlay=dict(big="$25-30B", sub="WHAT THE ROOM WAS ASKED TO PUT IN"),
+         dialogue=dict(text="There is no federal money in this one. Whatever you build, you build with your own.")),
 
-    # ---- LOOP CLOSE — pure cyclical, fully resolved ----
-    dict(id="t32", level=None, template="rafterRetirement",
-         narration=("One spotlight left on in an arena about to fill with twenty thousand people who "
-                    "paid to watch this exact moment. The banner rises. Your number, gold thread, no "
-                    "longer a suit you're guessing at the meaning of — a jersey, retired, a whole "
-                    "life's worth of six-hundred-makes-a-night finally spelled out above a court you'll "
-                    "never play on again. Ice waits in a tub nobody hands you anymore."),
-         overlay=dict(big="RETIRED", sub="THE ICE STOPS COMING")),
+    dict(id="t27", level=None, template="officeFloor",
+         narration=("Then Bank of America walked. It had been the likeliest buyer all week. On "
+                    "Saturday afternoon it left the table, and by that evening it had bought Merrill "
+                    "Lynch instead, for fifty billion dollars in stock. One Wall Street firm was "
+                    "rescued that weekend. It was not Lehman."),
+         overlay=dict(big="$50 BILLION", sub="BANK OF AMERICA BOUGHT MERRILL INSTEAD")),
+
+    dict(id="t28", level=None, template="boardroom",
+         narration=("That left Barclays. All day Sunday the British bank worked the deal, and all "
+                    "day Sunday it looked done. Then John Varley and Bob Diamond told the room the "
+                    "truth. Their regulator in London would not approve it. Britain was not going to "
+                    "let a British bank swallow an American one's losses."),
+         overlay=None,
+         # ⚠ QA DEFECT, LEFT IN DELIBERATELY (docs/research/crayon/COMPARISON.md §3). This float has no
+         # `color`, so it renders in the default WHITE over `boardroom`'s pale window wall and is very
+         # nearly illegible at 10:30 in the render. The fix is `color="#000000"` — docs/BIBLE.md §8 says
+         # exactly that for a pale scene. It is NOT applied here on purpose: content.py, the measurements
+         # in COMPARISON.md and out/lehman_brothers.mp4 must all describe the same build. Apply it in the
+         # next pass, not by patching this file after the audit.
+         bubbles=[dict(kind="float", text="London will not approve it.", x=0.34, y=0.24, at=14.0)]),
+
+    dict(id="t29", level=None, template="cityStreet",
+         narration=("Sunday night, September 14th. There is no buyer. There is no federal money. "
+                    "There are lawyers in a conference room drafting a bankruptcy filing for a "
+                    "company that had been trading since before the Civil War. Inside Lehman's "
+                    "headquarters on Seventh Avenue, employees who had come in on a Sunday sat and "
+                    "watched the television to find out whether they still had jobs."),
+         overlay=None),
+
+    dict(id="t30", level=None, template="newsMontage",
+         narration=("Every door had been tried by now. The Treasury. The Fed. Two buyers. A room "
+                    "full of rivals. Every answer came back as the same single word."),
+         overlay=None,
+         card=dict(kind="word", word="No")),
+
+    dict(id="t31", level=None, template="boardroom",
+         narration=("A quarter to two in the morning, September 15th, 2008. Lehman Brothers Holdings "
+                    "filed for bankruptcy. Six hundred and thirty-nine billion dollars of assets. "
+                    "Six hundred and thirteen billion of debt. The firm that was never going to be "
+                    "small again had become the largest failure in American history, and nothing "
+                    "since has come close to it."),
+         overlay=dict(big="$613 BILLION", sub="IN DEBT — FILED AT 1:45 A.M.")),
+
+    # ================= CHAPTER 5 — The Pavement =================
+    dict(id="t32", level="CH 5", template="exchangeFloor",
+         narration=("Monday. The Dow closed down five hundred and four points, four point four "
+                    "percent, its worst single day since the markets reopened after September 11th. "
+                    "And that was only the part of it with a number attached."),
+         overlay=dict(big="504 POINTS", sub="THE DOW'S WORST DAY SINCE 9/11"),
+         card=dict(kind="chapter", title="The Pavement",
+                   subtitle="What Monday Morning Actually Cost", hold=2.8)),
+
+    dict(id="t33", level=None, template="cityStreet",
+         narration=("Outside the building on Seventh Avenue there were cameras. And in front of the "
+                    "cameras there were people in suits, carrying cardboard boxes. That picture went "
+                    "around the world inside a day. It is still the image people mean when they say "
+                    "two thousand and eight. Twenty-five thousand employees, and most of them found "
+                    "out from the news."),
+         overlay=None),
+
+    dict(id="t34", level=None, template="officeFloor",
+         narration=("What was inside the boxes was ordinary. Photographs. A mug. A pair of running "
+                    "shoes. Somebody's kid's drawing. The people carrying them had not sliced a "
+                    "mortgage bond or signed off a Repo 105 trade. They had answered phones, fixed "
+                    "servers and filed things. The machine was built at the top. It was carried out "
+                    "of the door by everybody else."),
+         overlay=None,
+         # §6.4 — the leaning gutter puts the desk that was emptied against the street it was
+         # emptied onto. `officeFloor` is `interior`, `cityStreet` is `daylight`.
+         panels=dict(variant="diagonal2", cells=[dict(template="officeFloor"),
+                                                 dict(template="cityStreet")])),
+
+    dict(id="t35", level=None, template="domesticInterior",
+         narration=("The wreckage kept spreading outward. Money market funds broke. Credit froze "
+                    "worldwide, because no lender could tell which bank was next. And within weeks "
+                    "the American government was doing for everybody else exactly what it had just "
+                    "refused to do for Lehman. The lesson Wall Street took from that weekend was not "
+                    "the one anyone intended to teach."),
+         overlay=None),
+
+    dict(id="t36", level=None, template="newsMontage",
+         narration=("Two years later a court-appointed examiner named Anton Valukas published his "
+                    "report. Two thousand two hundred pages. It laid out Repo 105 in detail. What it "
+                    "was. Who signed it. How a firm reporting leverage of twelve point one was "
+                    "actually running at thirteen point nine. No Lehman executive went to prison. "
+                    "Not one."),
+         overlay=dict(big="2,200 PAGES", sub="THE VALUKAS REPORT, 2010")),
+
+    dict(id="t37", level=None, template="exchangeFloor",
+         narration=("Richard Fuld was asked in Congress what he had been paid. A congressman's chart "
+                    "said four hundred and eighty-five million dollars since 2000. Fuld said the "
+                    "real figure was under three hundred and ten million. Read that argument again. "
+                    "The disagreement was a hundred and seventy-five million dollars, and both sides "
+                    "believed their own number was the reasonable one."),
+         overlay=dict(big="$485M", sub="THE FIGURE FULD DISPUTED")),
+
+    # ---- ENDING — reflection, complicit "we", callback to the opening image. No CTA. ----
+    dict(id="t38", level=None, template="cityStreet",
+         narration=("Here is the part that should bother us. Nothing Lehman did that weekend was a "
+                    "secret. The leverage was in the filings. The mortgages were in the newspapers. "
+                    "Einhorn read the whole thing out loud on a stage four months early. We had the "
+                    "numbers. We did not want them. A bank that had outlived the Civil War and the "
+                    "Depression and 1987 was not supposed to be capable of dying, and believing that "
+                    "was more comfortable than checking."),
+         overlay=None),
+
+    dict(id="t39", level=None, template="domesticInterior",
+         narration=("Henry Lehman opened a shop where the customers had no money. Only cotton. He "
+                    "took the cotton anyway, because he knew he could sell it on to somebody else. A "
+                    "hundred and fifty-eight years later, his firm was still doing precisely that. "
+                    "Taking the thing nobody could pay for. Selling it on. It worked every single "
+                    "time, right up until the Monday it did not."),
+         overlay=None),
 ]
+
+# Apply the measured narration rate to every scene. `gen_voice_edge.py` reads `sc.get("rate", RATE)`,
+# so this is the writer-side field the pipeline already documents (docs/BIBLE.md §8) — nothing in
+# gen_voice_edge.py is edited. A scene that wants its own prosody can still set `rate=` explicitly in
+# its own dict above; setdefault leaves that alone.
+for _s in SCENES:
+    _s.setdefault("rate", NARRATION_RATE)
