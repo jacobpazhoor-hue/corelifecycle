@@ -126,6 +126,32 @@ DO, in order:
        DEPICT. Map each one onto a name from the thirteen; do NOT camelCase an archetype into
        `template=`. Pick the environment the FACT happened in — except closeUpPortrait, which depicts
        nowhere and is therefore free to use as a cut-in on a reaction or a verdict.
+     • PERIOD — READ BIBLE.md §8 "PERIOD" BEFORE WRITING A HISTORICAL SCENE. All thirteen rooms are
+       drawn CONTEMPORARY and there is no period art and no era flag, so this is YOUR constraint, not
+       the renderer's. NEVER place an era-marked room under narration set before ~1900. It is the
+       defect QA scored hardest on the Lehman build (1844 narration over CRT monitors, a projector, a
+       parked car and a glass skyline) and most of the topic queue is historical (tulip_mania,
+       weimar_hyperinflation, carnegie, jp_morgan_1907, ford_five_dollar_day, de_beers).
+         ERA-FREE, safe under any century:  newsMontage, courtHearing
+         NEAR-NEUTRAL, safe pre-1900:       factoryFloor, domesticInterior
+         ERA-MARKED, never pre-1900:        officeFloor, exchangeFloor, broadcastDesk, chartBoard,
+                                            boardroom, cityStreet, crowdQueue, closeUpPortrait,
+                                            bankExterior
+       closeUpPortrait, bankExterior and crowdQueue sound neutral and are NOT: a modern office behind
+       the head, a car on the plaza, two bands of mid-rise behind the queue.
+       Where nothing fits, WRITE THE LINE ONTO A CARD: a `card=` with no `hold` renders no art at all,
+       so a black card carrying the sentence is always period-correct. Judge era per SCENE off its
+       own narration, never per chapter — a chapter that opens in 1844 and ends in 1994 crosses the
+       line inside itself. A pre-1900 chapter therefore has FOUR rooms, not thirteen: buy its extra
+       set-ups from era-free DEVICES (cards, an overShoulder silhouette, a panels split of two
+       neutral rooms), and budget one or two more devices into it than into a modern chapter.
+     • DO NOT LEAN ON ONE ROOM. A room used ~20 times in a ~196-scene episode reads as "the same
+       picture again" long before the adjacency rule breaks, because its contents never change
+       between placements (QA scored this on officeFloor at 20 uses, 12 of them a plain full frame).
+       Print the template histogram before you stop and keep it flat — no room much past ~1 use per
+       10 scenes. Fix an over-used room by PLACING IT LESS (there is usually a room that fits the
+       line better) and by VARYING WHAT SURROUNDS IT (a panels= split so it arrives as half a frame,
+       a foreground= silhouette, a card on the beat beside it).
    PROMISE -> PAYOFF LEDGER: at the top of content.py, comment every setup you plant and the scene id
    where it pays off. All must pay off. STRUCTURAL VARIATION: check the last ~2 entries in
    produced_topics.json and deliberately differ in hook variant, chapter shape, and ending flavour

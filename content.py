@@ -24,9 +24,30 @@ NOT docs/TEMPLATES.md, which still documents only the legacy library): officeFlo
 exchangeFloor · cityStreet · domesticInterior · newsMontage · bankExterior · courtHearing ·
 factoryFloor · broadcastDesk · crowdQueue · closeUpPortrait · chartBoard. At this cut rate the
 template list alone is not enough variety, so the devices carry their share: 5 chapter cards,
-6 narration cards, 4 word cards, 2 object cards, 3 panel splits, 3 over-the-shoulder foregrounds,
+6 narration cards, 4 word cards, 2 object cards, 4 panel splits, 4 over-the-shoulder foregrounds,
 5 bubble/float beats. Rule held throughout: at least two other set-ups between any two uses of one
 template (the bible's "never adjacent" is the floor, not the target).
+
+PERIOD (WO-26 — the defect COMPARISON.md §7 defect 4 scored, "period/anachronism mismatch through
+chapters 1-2"). Every one of the thirteen rooms is drawn CONTEMPORARY and none of them takes a period
+flag, so this is a WRITING constraint, not an art one: the fix is choosing rooms whose CONTENTS the
+narration's century does not contradict. The tiers are measured off the JSX in src/explainer.tsx and
+written down in docs/BIBLE.md §8 PERIOD. Chapter 1 runs 1844-1865 and the ending's callback returns
+there, so both are now built from the four rooms that carry no dated machine — newsMontage,
+courtHearing, factoryFloor, domesticInterior — plus the full-screen cards, which are era-free by
+construction because the art beneath them is never rendered. WHAT THIS COSTS, stated plainly: chapter
+1 has FOUR rooms available where the modern chapters have thirteen, so its rotation is tighter than
+theirs and it buys its fifth set-up from a device (the t007 over-the-shoulder silhouette — a black
+mass carries no century). All four of those rooms key `interior`, which is why the historical chapter
+now reads warm and enclosed and the 1994 cut to `cityStreet` at t019 opens out. That is a bonus, not
+the reason. The real fix is period art; until it exists, this is the rule.
+
+`officeFloor` REPETITION (WO-26, the second QA defect: "it looks the same every time"). It was the
+most-placed room at 20 uses, 12 of them a plain full-frame room with no device on it. Now 16, of
+which 8 are plain: t007b went to courtHearing on the period rule, t109 to courtHearing (the line is
+about lawyers), t118 to newsMontage (the line is "most of them found out from the news"), t133b to
+domesticInterior (the complicit "we" watching from a front room), and t085 became a v2 split so the
+room arrives as half a frame beside the queue rather than as itself again.
 
 HOOK — the five steps (§4), in order, all inside the first ~30s:
   1 shock stat            t001  "A hundred and fifty-eight-year-old bank died in seventy-two hours."
@@ -111,17 +132,17 @@ SCENES = [
          narration=("This is the story of Lehman Brothers."),
          overlay=None),
 
-    dict(id="t004b", level=None, template="factoryFloor",
+    dict(id="t004b", level=None, template="cityStreet",
          narration=("It starts with cotton. It ends with cardboard boxes on a New York sidewalk."),
          overlay=None),
 
     # ================= CHAPTER 1 — The Cotton Store =================
-    dict(id="t005", level="CH 1", template="cityStreet", breath=True,
+    dict(id="t005", level="CH 1", template="newsMontage", breath=True,
          narration=("Montgomery, Alabama, 1844. A German immigrant named Henry Lehman opened a shop."),
          overlay=dict(big="1844", sub="MONTGOMERY, ALABAMA"),
          card=dict(kind="chapter", title="The Cotton Store", subtitle="A Shop Where Nobody Had Cash", hold=2.4)),
 
-    dict(id="t005b", level=None, template="crowdQueue",
+    dict(id="t005b", level=None, template="factoryFloor",
          narration=("He sold pots, cloth and farm tools to cotton growers."),
          overlay=None),
 
@@ -129,38 +150,43 @@ SCENES = [
          narration=("There was one problem with the customers. They had no money."),
          overlay=None),
 
-    dict(id="t006b", level=None, template="chartBoard",
+    dict(id="t006b", level=None, template="newsMontage",
          narration=("Alabama in the eighteen forties ran on cotton, not cash. A crop was the only money "
                     "most of his customers ever had."),
          overlay=None),
 
-    dict(id="t007", level=None, template="closeUpPortrait",
+    dict(id="t007", level=None, template="factoryFloor",
          narration=("So Henry took cotton as payment."),
-         overlay=None),
+         overlay=None,
+         # §6.8 — the era-safe palette is only four rooms deep (§8 PERIOD), so chapter 1 buys its
+         # fifth set-up from a DEVICE rather than a fourteenth room: a silhouette is a black mass and
+         # carries no century. `factoryFloor` stages its colour hero at x 1260, so the near plane
+         # takes the RIGHT edge — the silhouette's shoulder line stops at 1360.
+         foreground=dict(kind="overShoulder", side="right")),
 
-    dict(id="t007b", level=None, template="officeFloor",
+    dict(id="t007b", level=None, template="courtHearing",
          narration=("Then he did the thing that would make his family rich for a century and a half, and it "
                     "had nothing to do with pots."),
          overlay=None),
 
-    dict(id="t008", level=None, template="factoryFloor",
+    dict(id="t008", level=None, template="domesticInterior",
          narration=("He sold the cotton. Not the pots. The cotton."),
          overlay=None,
          card=dict(kind="word", word="Cotton")),
 
-    dict(id="t009", level=None, template="bankExterior",
+    dict(id="t009", level=None, template="newsMontage",
          narration=("By 1850 both of his brothers had crossed the Atlantic to join him. Emanuel. Mayer."),
          overlay=dict(big="1850", sub="THE NAME OVER THE DOOR")),
 
-    dict(id="t009b", level=None, template="cityStreet",
+    dict(id="t009b", level=None, template="factoryFloor",
          narration=("The sign over the door was repainted, and the name on it outlived all three of them."),
          overlay=None),
 
-    dict(id="t010", level=None, template="exchangeFloor",
+    dict(id="t010", level=None, template="courtHearing",
          narration=("Lehman Brothers. Now look at what trading cotton actually meant."),
          overlay=None),
 
-    dict(id="t011", level=None, template="chartBoard",
+    dict(id="t011", level=None, template="newsMontage",
          narration=("A bale that did not exist yet. Grown in Alabama."),
          overlay=None),
 
@@ -168,11 +194,11 @@ SCENES = [
          narration=("Sold to a buyer in New York, months before anybody knew what the crop would be worth."),
          overlay=None),
 
-    dict(id="t012", level=None, template="boardroom",
+    dict(id="t012", level=None, template="courtHearing",
          narration=("At a price agreed before the crop came in."),
          overlay=None),
 
-    dict(id="t012b", level=None, template="chartBoard",
+    dict(id="t012b", level=None, template="domesticInterior",
          narration=("That is a derivative: a contract whose value depends on something that has not "
                     "happened yet."),
          overlay=None),
@@ -181,20 +207,20 @@ SCENES = [
          narration=("Lehman was trading derivatives decades before Wall Street had a word for them."),
          overlay=None),
 
-    dict(id="t013b", level=None, template="bankExterior",
+    dict(id="t013b", level=None, template="courtHearing",
          narration=("The store became a broker. The broker became a bank."),
          overlay=None),
 
-    dict(id="t014", level=None, template="broadcastDesk",
+    dict(id="t014", level=None, template="factoryFloor",
          narration=("And then it simply kept not dying."),
          overlay=None),
 
-    dict(id="t015", level=None, template="factoryFloor",
+    dict(id="t015", level=None, template="newsMontage",
          narration=("The Civil War burned the cotton trade to the ground and took the South's economy with "
                     "it."),
          overlay=None),
 
-    dict(id="t015b", level=None, template="closeUpPortrait",
+    dict(id="t015b", level=None, template="courtHearing",
          narration=("Lehman survived."),
          overlay=None),
 
@@ -622,7 +648,12 @@ SCENES = [
 
     dict(id="t085", level=None, template="officeFloor",
          narration=("A bank does not die when it runs out of value."),
-         overlay=None),
+         overlay=None,
+         # §6.4 — one of the four splits that break `officeFloor`'s repeat impression (WO-26): the
+         # room that holds the value beside the queue that wants the cash, which is the distinction
+         # the next line turns on. `officeFloor` is `interior` and `crowdQueue` is `grey`, so the two
+         # cells key apart without either naming a hex.
+         panels=dict(variant="v2", cells=[dict(template="officeFloor"), dict(template="crowdQueue")])),
 
     dict(id="t085b", level=None, template="closeUpPortrait",
          narration=("It dies when it runs out of cash, and the two can be weeks apart."),
@@ -770,7 +801,7 @@ SCENES = [
          narration=("Sunday night, September 14th. There is no buyer. There is no federal money."),
          overlay=None),
 
-    dict(id="t109", level=None, template="officeFloor",
+    dict(id="t109", level=None, template="courtHearing",
          narration=("There are lawyers in a conference room drafting a bankruptcy filing for a company that "
                     "had been trading since before the Civil War."),
          overlay=None),
@@ -825,11 +856,11 @@ SCENES = [
          narration=("That picture went around the world inside a day."),
          overlay=None),
 
-    dict(id="t117b", level=None, template="newsMontage",
+    dict(id="t117b", level=None, template="broadcastDesk",
          narration=("It is still the image people mean when they say two thousand and eight."),
          overlay=None),
 
-    dict(id="t118", level=None, template="officeFloor",
+    dict(id="t118", level=None, template="newsMontage",
          narration=("Twenty-five thousand employees. Most of them found out from the news."),
          overlay=None),
 
@@ -904,7 +935,7 @@ SCENES = [
          narration=("A congressman's chart said four hundred and eighty-five million dollars since 2000."),
          overlay=dict(big="$485M", sub="THE FIGURE FULD DISPUTED")),
 
-    dict(id="t130", level=None, template="closeUpPortrait",
+    dict(id="t130", level=None, template="broadcastDesk",
          narration=("Fuld said the real figure was under three hundred and ten million. Read that argument "
                     "again."),
          overlay=None),
@@ -913,7 +944,7 @@ SCENES = [
          narration=("The disagreement was a hundred and seventy-five million dollars."),
          overlay=None),
 
-    dict(id="t131b", level=None, template="courtHearing",
+    dict(id="t131b", level=None, template="closeUpPortrait",
          narration=("Both sides believed their own number was the reasonable one."),
          overlay=None),
 
@@ -926,7 +957,7 @@ SCENES = [
          narration=("The leverage was in the filings. The mortgages were in the newspapers."),
          overlay=None),
 
-    dict(id="t133b", level=None, template="officeFloor",
+    dict(id="t133b", level=None, template="domesticInterior",
          narration=("None of it was hidden from anybody who wanted to look."),
          overlay=None),
 
@@ -952,7 +983,7 @@ SCENES = [
          narration=("Henry Lehman opened a shop where the customers had no money. Only cotton."),
          overlay=None),
 
-    dict(id="t139", level=None, template="cityStreet",
+    dict(id="t139", level=None, template="newsMontage",
          narration=("He took the cotton anyway, because he knew he could sell it on to somebody else."),
          overlay=None),
 

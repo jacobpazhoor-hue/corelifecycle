@@ -382,6 +382,50 @@ Pick the environment the *fact* happened in, never the one that looks good. `clo
 exception to that rule: it depicts nowhere, so it is free to use as a **cut-in on a reaction, a verdict
 or a one-line judgement** (§3a), which is what makes it the most valuable name on the list.
 
+### PERIOD — never put a dated machine under narration from a century that had not invented it
+
+**All thirteen rooms are drawn CONTEMPORARY, and none of them takes a period flag.** There is no
+historical art and no `era=` switch to ask for. So this is a **writing** constraint: under narration
+set before roughly 1900 you may only place rooms whose *contents* that century does not contradict.
+
+The QA of the Lehman build scored this as a defect across two chapters — 1844 Alabama narration over
+CRT monitors, a projector, a parked car and a glass skyline (COMPARISON.md §7 defect 4). It is the
+most obviously "wrong" thing a viewer sees, it needs no expertise to notice, and the topic queue is
+full of historical subjects (`tulip_mania`, `weimar_hyperinflation`, `carnegie`, `jp_morgan_1907`,
+`ford_five_dollar_day`, `de_beers`). **Assume the next historical episode reproduces it unless you
+apply this section.**
+
+The tiers below are read off the JSX in `src/explainer.tsx`, not guessed. Re-check them if the art
+changes.
+
+| Tier | Rooms | What dates them |
+|---|---|---|
+| **ERA-FREE** — safe under any century | `newsMontage` · `courtHearing` | printed sheets; a panelled bench, gallery and wall clock. Nothing electrical, no vehicle, no skyline. |
+| **NEAR-NEUTRAL** — safe pre-1900 | `factoryFloor` · `domesticInterior` | belts, crates, trolley, safety cones; a television on a low stand and one small low-rise window band. Read as period at a glance. |
+| **ERA-MARKED** — never under pre-1900 narration | `officeFloor` · `exchangeFloor` · `broadcastDesk` · `chartBoard` · `boardroom` · `cityStreet` · `crowdQueue` · `closeUpPortrait` · `bankExterior` | 2–6 monitors, a quote board, desk phones, a projector and a laptop, studio mics, a full-wall glazed skyline, three cars (one driving across frame), traffic cones and rope barriers, a printer. |
+
+Note what is **not** on the neutral list. `closeUpPortrait` is a modern office behind the head — two
+monitors, a keyboard, a desk phone, a printer and a skyline in the bay — so the room that "depicts
+nowhere" still depicts *now*. `bankExterior` parks a car on its plaza. `crowdQueue` stands its queue
+under two bands of mid-rise. Those three read neutral in the name and do not render neutral.
+
+**And the fourth surface, which beats all of them: a full-screen `card=` with no `hold` carries no
+era at all**, because the art underneath is never rendered (§8 `card=`). Where nothing in the tiers
+fits the beat, **write the line onto a card rather than into a contradicting room.** A black card
+carrying the sentence is always period-correct.
+
+Two consequences to plan for, not to discover mid-script:
+
+* **A pre-1900 chapter has four rooms, not thirteen**, so its rotation is tighter than a modern
+  chapter's. Buy the extra set-ups from DEVICES, which are era-free: cards, an over-the-shoulder
+  silhouette (a black mass has no century), a `panels=` split of two neutral rooms. Budget one or two
+  more devices into a historical chapter than you would into a modern one.
+* **Set the era boundary off the NARRATION, scene by scene** — not off the chapter. A chapter that
+  opens in 1844 and closes in 1994 crosses the line inside itself. Monitors are wrong before ~1970;
+  a glazed skyline and a car are wrong before ~1900; print, a courtroom and a mill are never wrong.
+  A deliberately multi-era montage (`panels=` across four decades) is the one place a modern cell is
+  correct under old narration, because the cell *is* the later decade.
+
 ### The vocabulary is 13 rooms, not 13 shots
 The environment archetypes the old canon listed in plain English (office · boardroom · trading floor ·
 bank exterior · street · domestic interior · courtroom · factory · newspaper montage · broadcast ·
@@ -537,6 +581,17 @@ first line of a new movement.
 Never the same template on two adjacent scenes, and **at least two other set-ups between any two uses
 of one template** (§3a). Aim for **8 distinct set-ups in 8 evenly spaced samples** and measure it —
 that number, not cuts/min, is what a viewer experiences as variety.
+
+**Watch the most-placed room.** A template used ~20 times in a 196-scene episode reads as "the same
+picture again" long before the rotation rule is broken, because a room's contents do not change
+between placements — only the narration over it does (QA scored this on `officeFloor`). Two fixes,
+both writer-side: **place it less** (most over-use is a default, and there is usually a room that fits
+the line *better* — "lawyers drafting a filing" is `courtHearing`, "they found out from the news" is
+`newsMontage`), and **vary what surrounds it** — a `panels=` split so it arrives as half a frame, a
+`foreground=` silhouette, a card or an object showcase on the beat beside it. **Print the histogram
+before you stop** and keep it flat: no room much past **~1 use per 10 scenes** (this build measures
+20/196 at the top and 9/196 at the bottom, i.e. 1-in-9.8 to 1-in-21.8). `closeUpPortrait` is the one
+licensed to sit at that ceiling — it depicts nowhere, so it is a cut-in rather than a room repeating.
 
 ## 9. Packaging
 
