@@ -31,21 +31,22 @@
 // 111 x 15 cell px against the reference's 113 x 15, inside a balloon of 149 x 30 against 169 x 32.
 // The remaining 12% width gap is the deliberate PAD_X_EM compromise documented there.
 //
-// Presentational only: it renders a balloon / a line of dialogue and nothing else. Timeline integration
-// is a later work order — this file has no importers yet, exactly like textcard.tsx.
+// Presentational only: it renders a balloon / a line of dialogue and nothing else. `Video2.tsx` drives
+// both from a scene's optional `bubbles` array (WO-12a); neither device knows about the timeline.
 
-import React, {useEffect, useState} from 'react';
-import {
-  AbsoluteFill,
-  cancelRender,
-  continueRender,
-  delayRender,
-  interpolate,
-  useCurrentFrame,
-  useVideoConfig,
-} from 'remotion';
+import React from 'react';
+import {AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 
 import {CRAYON_FONT, CRAYON_TEXT_SLANT_DEG, INK, PAPER_WHITE, strokeAt} from './crayonStyle';
+// measure/wrap/fit + the delayRender font gate, shared with textcard.tsx (WO-12a). This module's
+// padding-aware fit is now the shared one, with textcard's zero-padding case falling out of it.
+import {
+  CRAYON_TEXT_WEIGHT,
+  LINE_HEIGHT,
+  faceMetrics,
+  fitText,
+  useCrayonFace,
+} from './crayonText';
 
 // ---------------------------------------------------------------------------
 // Entrance
@@ -97,9 +98,6 @@ const BUBBLE_MAX_H_FRAC = 0.5;
 const PAD_X_EM = 1.2;
 const PAD_Y_EM = 0.32;
 
-/** Line pitch / font size, matching textcard.tsx so both devices set the same script the same way. */
-const LINE_HEIGHT = 1.25;
-
 /** Corner radius as a fraction of the balloon's SHORT side. Reference ~7 cell px on a 32 cell px box. */
 const RADIUS_FRAC = 0.28;
 
@@ -141,193 +139,7 @@ const FLOAT_MAX_LINES = 5;
 const FLOAT_KEYLINE_EM = 0.045;
 
 // One weight for everything, as in textcard.tsx: the reference's hierarchy is size, never stroke weight.
-const WEIGHT = 400;
-
-/** skewX(-Ndeg): Caveat ships upright-only, so the reference's forward lean is synthetic (crayonStyle). */
-const SLANT_TAN = Math.tan((CRAYON_TEXT_SLANT_DEG * Math.PI) / 180);
-
-// ---------------------------------------------------------------------------
-// Measurement
-//
-// Deliberately duplicated from textcard.tsx rather than imported: that module exports a card and
-// nothing else, and this work order builds self-contained components. Same technique, same guarantees
-// — measure in the REAL vendored face via a 2D canvas, behind delayRender, cancelRender on failure,
-// never a silent fall back to a system sans.
-// ---------------------------------------------------------------------------
-
-const MEASURE_PX = 100;
-
-let measureCtx: CanvasRenderingContext2D | null = null;
-const measureCache = new Map<string, number>();
-
-const context2d = (): CanvasRenderingContext2D => {
-  if (!measureCtx) {
-    const ctx = document.createElement('canvas').getContext('2d');
-    if (!ctx) {
-      throw new Error('bubble: no 2D canvas context — cannot measure text for auto-fit');
-    }
-    measureCtx = ctx;
-  }
-  measureCtx.font = `${WEIGHT} ${MEASURE_PX}px "${CRAYON_FONT}"`;
-  return measureCtx;
-};
-
-/** Advance width of `text` in em, measured in the real vendored face. */
-const measureEm = (text: string): number => {
-  const hit = measureCache.get(text);
-  if (hit !== undefined) return hit;
-  const em = context2d().measureText(text).width / MEASURE_PX;
-  measureCache.set(text, em);
-  return em;
-};
-
-/**
- * Ascent/descent of the face, in em. Used to put each SVG baseline at the optical centre of its line
- * box; SVG's own `dominant-baseline` keywords are defined against x-height/ideographic boxes and put a
- * face with Caveat's very tall ascenders visibly high in a balloon.
- */
-let faceMetrics: {ascent: number; descent: number} | null = null;
-const metrics = (): {ascent: number; descent: number} => {
-  if (faceMetrics) return faceMetrics;
-  const m = context2d().measureText('Hgpqy');
-  if (m.fontBoundingBoxAscent === undefined || m.fontBoundingBoxDescent === undefined) {
-    throw new Error('bubble: TextMetrics has no fontBoundingBox* — cannot place baselines');
-  }
-  faceMetrics = {
-    ascent: m.fontBoundingBoxAscent / MEASURE_PX,
-    descent: m.fontBoundingBoxDescent / MEASURE_PX,
-  };
-  return faceMetrics;
-};
-
-/**
- * Width in em of a laid-out line: its advance width plus the horizontal excursion the skew adds
- * (skewX is applied about the block centre, so half the line box leans each way).
- */
-const lineEm = (text: string): number => measureEm(text) + SLANT_TAN * LINE_HEIGHT;
-
-// ---------------------------------------------------------------------------
-// Wrapping + fitting
-// ---------------------------------------------------------------------------
-
-/**
- * Break `words` into exactly `n` lines minimising the widest line (DP over break points), so a
- * two-line balloon reads as two balanced lines instead of one full line plus an orphan.
- * Returns null when there are fewer words than lines.
- */
-const balancedWrap = (words: string[], n: number): string[] | null => {
-  if (n > words.length) return null;
-  const W = words.length;
-  const span = (i: number, j: number): number => lineEm(words.slice(i, j).join(' '));
-
-  // best[k][i] = minimal achievable widest-line using k lines for words[0..i)
-  const best: number[][] = Array.from({length: n + 1}, () => new Array<number>(W + 1).fill(Infinity));
-  const cut: number[][] = Array.from({length: n + 1}, () => new Array<number>(W + 1).fill(-1));
-  best[0][0] = 0;
-  for (let k = 1; k <= n; k++) {
-    for (let i = k; i <= W; i++) {
-      for (let j = k - 1; j < i; j++) {
-        if (best[k - 1][j] === Infinity) continue;
-        const cand = Math.max(best[k - 1][j], span(j, i));
-        if (cand < best[k][i]) {
-          best[k][i] = cand;
-          cut[k][i] = j;
-        }
-      }
-    }
-  }
-  if (best[n][W] === Infinity) return null;
-  const out: string[] = [];
-  let i = W;
-  for (let k = n; k >= 1; k--) {
-    const j = cut[k][i];
-    out.unshift(words.slice(j, i).join(' '));
-    i = j;
-  }
-  return out;
-};
-
-type Fit = {lines: string[]; fontSize: number; widestEm: number};
-
-type FitOpts = {
-  maxLines: number;
-  maxFontSize: number;
-  /** Box the LINES must fit, in px. Balloon padding is added by the caller via `padEm`. */
-  boxWidth: number;
-  boxHeight: number;
-  /** Extra em added to the measured block on each axis before it is fitted (balloon padding). */
-  padXEm: number;
-  padYEm: number;
-  who: string;
-};
-
-/**
- * Largest font size (capped) at which `text` fits the box, choosing the line count that yields it.
- *
- * All the width arithmetic is in em, which is what makes a balloon that GROWS work: the balloon's
- * padding scales with the text, so "box width = (widest line + 2·padX) · fontSize" can be solved for
- * fontSize directly instead of iterating.
- */
-const fitText = (text: string, opts: FitOpts): Fit => {
-  const words = text.trim().split(/\s+/).filter(Boolean);
-  if (words.length === 0) {
-    throw new Error(`${opts.who}: refusing to render empty dialogue`);
-  }
-  let best: Fit | null = null;
-  for (let n = 1; n <= Math.min(opts.maxLines, words.length); n++) {
-    const lines = balancedWrap(words, n);
-    if (!lines) continue;
-    const widestEm = Math.max(...lines.map(lineEm));
-    const fontSize = Math.min(
-      opts.maxFontSize,
-      opts.boxWidth / (widestEm + 2 * opts.padXEm),
-      opts.boxHeight / (n * LINE_HEIGHT + 2 * opts.padYEm)
-    );
-    // strictly-greater keeps the fewest lines on a tie (a balloon prefers 1 line, then 2)
-    if (!best || fontSize > best.fontSize + 0.5) best = {lines, fontSize, widestEm};
-  }
-  if (!best) {
-    throw new Error(`${opts.who}: could not lay out ${JSON.stringify(text)} in ${opts.maxLines} line(s)`);
-  }
-  return best;
-};
-
-// ---------------------------------------------------------------------------
-// Font gate
-//
-// Auto-fit measures in the REAL face; measuring before the vendored woff2 is live would size the
-// balloon against a fallback. Hold the render open until the face is available (loadFont() in
-// crayonFont.ts already cancels the render outright if the file is missing).
-// ---------------------------------------------------------------------------
-
-const useCrayonFace = (who: string): boolean => {
-  const [ready, setReady] = useState(
-    () => typeof document !== 'undefined' && document.fonts.check(`${MEASURE_PX}px "${CRAYON_FONT}"`)
-  );
-  useEffect(() => {
-    if (ready) return;
-    const handle = delayRender(`${who}: waiting for the ${CRAYON_FONT} face`);
-    let settled = false;
-    const done = () => {
-      if (settled) return;
-      settled = true;
-      continueRender(handle);
-    };
-    document.fonts
-      .load(`${WEIGHT} ${MEASURE_PX}px "${CRAYON_FONT}"`)
-      .then((faces) => {
-        if (faces.length === 0) {
-          cancelRender(new Error(`${who}: the ${CRAYON_FONT} face never registered — cannot auto-fit text`));
-          return;
-        }
-        setReady(true);
-        done();
-      })
-      .catch((err) => cancelRender(err));
-    return done;
-  }, [ready, who]);
-  return ready;
-};
+const WEIGHT = CRAYON_TEXT_WEIGHT;
 
 // ---------------------------------------------------------------------------
 // Balloon outline
@@ -443,7 +255,7 @@ const TextBlock: React.FC<TextBlockProps> = ({
   keyline,
   keylineColor,
 }) => {
-  const {ascent, descent} = metrics();
+  const {ascent, descent} = faceMetrics(WEIGHT);
   const blockH = lines.length * LINE_HEIGHT * fontSize;
   const top = cy - blockH / 2;
   const baseline = (i: number) =>

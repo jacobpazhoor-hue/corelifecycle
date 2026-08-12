@@ -1,9 +1,14 @@
 import React from 'react';
-import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame, Easing} from 'remotion';
+import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import timeline from './timeline.json';
 import {FramedScene, FOCUS, CountUp, splitMoney, isNegativeOverlay} from './director';
 import {Move} from './photoStage';
 import PHOTO_RAW from './photo_manifest.json';
+// CRAYON signature devices (bible §6). Built in WO-5/6/7, wired to the timeline here in WO-12a.
+import {TextCard, TextCardProps} from './textcard';
+import {FloatingDialogue, SpeechBubble} from './bubble';
+import {Panel, Panels} from './panels';
+import {resolveSceneKey, sceneColors} from './crayonStyle';
 
 const PHOTO = PHOTO_RAW as {mode: string; scenes: Record<string, {img: string; depth: string; move: Move}>; fallback: string[]};
 
@@ -28,13 +33,86 @@ const INK = '#2a2620';
 // 2026-07-20: cream -> white. Owner direction is the bright reference look; the cream base plus
 // the heavy grade below is what read as dull/sepia. Figure fills keep their own cream (figure.tsx).
 const PAPER = '#ffffff';
-const GOLD = '#e8b54b';
 const NEG = '#c0392b';
 const NEG_SUB = '#a33a26';
 
 type Overlay = {big: string; sub: string | null} | null;
+
+// ============================================================================
+// SIGNATURE-DEVICE SCENE FIELDS (WO-12a) — CRAYON_BIBLE §6 devices 1–4.
+//
+// All three fields are OPTIONAL and additive: a timeline carrying none of them renders exactly as it
+// did before this work order (verified byte-identical on a still). They follow the same path `overlay`
+// and `level` already take — written by `content.py`, copied verbatim by `gen_voice_edge.py` into
+// `timeline.json`, consumed here — rather than a parallel mechanism. `docs/BIBLE.md` §8 documents the
+// exact key names for the writer.
+// ============================================================================
+
+/** Which ground a full-screen card sits on. Both are used by the reference (bible §6.1). */
+type CardGround = 'white' | 'black';
+
+/**
+ * A full-screen text card (`textcard.tsx`). It covers the scene from its first frame for `hold`
+ * seconds; omit `hold` and the card IS the scene, in which case the shot plan underneath is skipped
+ * entirely — a card scene renders no art, so there is nothing to render.
+ *
+ * The chapter card is the episode's chapter boundary marker: 3–5 per episode (bible §1), title and
+ * subtitle being the two halves of the reference's `Evocative Noun: Plain Explanation` chapter names.
+ */
+type CardT = (
+  | {kind: 'chapter'; title: string; subtitle: string}
+  | {kind: 'narration'; text: string}
+  | {kind: 'word'; word: string}
+) & {ground?: CardGround; hold?: number};
+
+/**
+ * One utterance over the scene (`bubble.tsx`): a tailed balloon pointing at its speaker, or the same
+ * handwritten script laid straight onto the frame with no balloon. Timing is in seconds from the
+ * scene's own start; omit both and the line holds for the rest of the scene.
+ */
+type BubbleT = {
+  /** 'bubble' (default) draws the balloon; 'float' is the bubble-less floating dialogue. */
+  kind?: 'bubble' | 'float';
+  text: string;
+  x?: number;
+  y?: number;
+  /**
+   * Seconds from the scene's own start. Named `at`, NOT `from`: `from` is a Python keyword, so
+   * `dict(from=3.0)` is a SyntaxError in content.py and the writer could never emit it.
+   */
+  at?: number;
+  dur?: number;
+  maxWidth?: number;
+  maxLines?: number;
+  /** balloon only — which edge the tail leaves from, i.e. roughly where the speaker stands */
+  tail?: 'left' | 'right' | 'down' | 'up' | 'none';
+  tailAt?: number;
+  tailLength?: number;
+  tailSkew?: number;
+  /** float only */
+  align?: 'center' | 'left';
+  color?: string;
+  keyline?: number;
+};
+
+/**
+ * One cell of a split. `template` renders that template as a centre crop inside the cell; a cell with
+ * no template is a flat colour block and must therefore name its own `ground`.
+ */
+type PanelCellT = {template?: string; ground?: string; scale?: number; offsetX?: number; offsetY?: number};
+
+/** A scene rendered as a multi-panel split (`panels.tsx`) INSTEAD of a cut shot plan. */
+type PanelsT = {
+  variant: 'v2' | 'diagonal2' | 'grid4';
+  cells: PanelCellT[];
+  split?: number;
+  splitY?: number;
+  lean?: number;
+};
+
 type SceneT = {id: string; level: string | null; overlay: Overlay; template: string;
-  audio: string; audioStartFrame?: number; startFrame: number; durationInFrames: number};
+  audio: string; audioStartFrame?: number; startFrame: number; durationInFrames: number;
+  card?: CardT; bubbles?: BubbleT[]; panels?: PanelsT};
 type Shot = {type: string; dur: number; focus: [number, number]};
 
 // ============================================================================
@@ -119,8 +197,95 @@ function planShots(s: SceneT, phase: number): Shot[] {
   return shots;
 }
 
+// ============================================================================
+// DEVICE BUILDERS — scene JSON -> the WO-5/6/7 components' own prop types.
+//
+// These are the ONLY place a raw timeline record is turned into device props, so every malformed
+// field is caught in one place and RAISED. Nothing here falls back silently: a split with the wrong
+// number of cells, a cell with neither a template nor a ground, or an unknown card kind all throw
+// with the scene id in the message, because a device that quietly renders nothing is a defect that
+// only shows up in the finished 15-minute file.
+// ============================================================================
+
+/** Reference grounds: the 4:05 chapter card and the 7:10 single-word beat are black, the 2:00 narration white. */
+const CARD_DEFAULT_GROUND: Record<string, CardGround> = {chapter: 'black', narration: 'white', word: 'black'};
+
+const cardProps = (card: CardT, sceneId: string): TextCardProps => {
+  const ground = card.ground ?? CARD_DEFAULT_GROUND[card.kind];
+  switch (card.kind) {
+    case 'chapter':
+      return {kind: 'chapter', title: card.title, subtitle: card.subtitle, ground};
+    case 'narration':
+      return {kind: 'narration', text: card.text, ground};
+    case 'word':
+      return {kind: 'word', word: card.word, ground};
+    default:
+      throw new Error(
+        `${sceneId}: unknown card kind ${JSON.stringify((card as {kind: unknown}).kind)} — ` +
+          `card.kind must be 'chapter', 'narration' or 'word'`
+      );
+  }
+};
+
+/** How long the card covers the scene, in frames. No `hold` = the whole scene (the card IS the scene). */
+const cardHoldFrames = (card: CardT, D: number, fps: number, sceneId: string): number => {
+  if (card.hold === undefined) return D;
+  if (!(card.hold > 0)) {
+    throw new Error(`${sceneId}: card.hold must be a positive number of seconds, got ${card.hold}`);
+  }
+  // clamped to the scene: a card outliving its own Sequence would be cut mid-hold anyway
+  return Math.min(D, Math.max(1, Math.round(card.hold * fps)));
+};
+
+const CELLS_PER_VARIANT: Record<PanelsT['variant'], number> = {v2: 2, diagonal2: 2, grid4: 4};
+
+const cellToPanel = (cell: PanelCellT, sceneId: string, dur: number): Panel => {
+  // A cell's flat ground defaults to the colour key its OWN template commits to, so a split is
+  // independently keyed (bible §6.4) without the writer picking hex. A cell with no template has no
+  // key to borrow — and defaulting it from the scene id would give every such cell in the scene the
+  // SAME ground, which is the one thing an independently-keyed split must not do — so it must say.
+  if (!cell.ground && !cell.template) {
+    throw new Error(`${sceneId}: a panel cell with no \`template\` must name its own flat \`ground\``);
+  }
+  const ground = cell.ground ?? sceneColors(resolveSceneKey(sceneId, cell.template)).bg;
+  return {
+    ground,
+    scale: cell.scale,
+    offsetX: cell.offsetX,
+    offsetY: cell.offsetY,
+    // 'wide' = the template at native scale, centre-cropped to the cell. The camera is locked, so a
+    // panel never re-frames; `scale`/`offsetX`/`offsetY` on the cell are the only crop controls.
+    children: cell.template ? (
+      <FramedScene template={cell.template} type="wide" focus={FOCUS[cell.template] ?? DEFAULT_FOCUS} dur={dur} />
+    ) : undefined,
+  };
+};
+
+const buildPanels = (spec: PanelsT, sceneId: string, dur: number): React.ReactNode => {
+  const want = CELLS_PER_VARIANT[spec.variant];
+  if (want === undefined) {
+    throw new Error(
+      `${sceneId}: unknown panel variant ${JSON.stringify(spec.variant)} — expected 'v2', 'diagonal2' or 'grid4'`
+    );
+  }
+  if (!Array.isArray(spec.cells) || spec.cells.length !== want) {
+    throw new Error(
+      `${sceneId}: panels.variant '${spec.variant}' needs exactly ${want} cells, got ${spec.cells?.length ?? 0}`
+    );
+  }
+  const p = spec.cells.map((c) => cellToPanel(c, sceneId, dur));
+  if (spec.variant === 'grid4') {
+    return <Panels variant="grid4" panels={[p[0], p[1], p[2], p[3]]} split={spec.split} splitY={spec.splitY} />;
+  }
+  if (spec.variant === 'diagonal2') {
+    return <Panels variant="diagonal2" panels={[p[0], p[1]]} split={spec.split} lean={spec.lean} />;
+  }
+  return <Panels variant="v2" panels={[p[0], p[1]]} split={spec.split} />;
+};
+
 const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({scene, from, shots}) => {
   const f = useCurrentFrame();
+  const {fps} = useVideoConfig();
   const D = scene.durationInFrames;
   // Scene-cut fade: previously ramped all the way to 0 opacity over 16 frames (~0.53s) on EACH side
   // of a cut, so any frame sampled inside that ~1s combined window at a scene boundary reads as a
@@ -142,8 +307,6 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
   // FULL label, never a truncated "$250".
   const money = splitMoney(scene.overlay?.big);
   const negOverlay = scene.overlay ? isNegativeOverlay(scene.overlay.big, scene.overlay.sub) : false;
-  const lvlX = interpolate(f, [20, 42], [-36, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
-  const lvlOp = interpolate(f, [20, 36, D - 18, D], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
   // static (non-numeric) overlay fallback, matches the count-up styling
   const big = scene.overlay?.big ?? '';
@@ -158,39 +321,62 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
   const staticRise = interpolate(f, [10, 28, D - 10, D], [18, 0, 0, -16], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
 
   const photo = PHOTO.mode === 'photo' && PHOTO.scenes[scene.id] ? PHOTO.scenes[scene.id] : undefined;
+
+  // A card with no `hold` covers the scene end to end, so there is no point cutting art underneath it
+  // (TextCard paints an opaque ground from its very first frame — only the TEXT fades in — so nothing
+  // below it is ever visible). A `hold` shorter than the scene keeps the shots: the art is already
+  // mid-shot when the card lifts, which reads as the reference's cut back out of a card.
+  const cardFrames = scene.card ? cardHoldFrames(scene.card, D, fps, scene.id) : 0;
+  const artHidden = cardFrames >= D;
+
   let t = 0;
   return (
     <AbsoluteFill style={{opacity: beatOp, backgroundColor: PAPER}}>
       {/* shots cut together underneath — ungraded, and with no transform of their own: the frame is
-          locked, so the only thing that ever moves is what the scene template animates internally. */}
-      <AbsoluteFill>
-        {shots.map((sh, i) => {
-          const seq = (
-            <Sequence key={i} from={t} durationInFrames={sh.dur}>
-              <ShotFade dur={sh.dur}>
-                <FramedScene template={scene.template} type={sh.type} focus={sh.focus} dur={sh.dur} photo={photo} />
-              </ShotFade>
-            </Sequence>);
-          t += sh.dur;
-          return seq;
-        })}
-      </AbsoluteFill>
+          locked, so the only thing that ever moves is what the scene template animates internally.
+          A `panels` scene (bible §6.4) replaces the whole shot plan with one static split: a split IS
+          a composition, so re-framing inside it would be a second camera on top of a locked one. */}
+      {!artHidden && (
+        <AbsoluteFill>
+          {scene.panels
+            ? buildPanels(scene.panels, scene.id, D)
+            : shots.map((sh, i) => {
+                const seq = (
+                  <Sequence key={i} from={t} durationInFrames={sh.dur}>
+                    <ShotFade dur={sh.dur}>
+                      <FramedScene template={scene.template} type={sh.type} focus={sh.focus} dur={sh.dur} photo={photo} />
+                    </ShotFade>
+                  </Sequence>);
+                t += sh.dur;
+                return seq;
+              })}
+        </AbsoluteFill>
+      )}
 
       {/* No global overlays sit between the shots and the text any more: the mood grade, the warm
           bloom, the inset vignette and the top/bottom darkening gradient were all whole-frame washes
           over a flat-vector look that is supposed to read bright and per-scene keyed. The bible allows
           a soft radial spotlight, but as part of a BACKGROUND, not as a composite layer over everything. */}
 
-      {/* level label (persists across the cuts). Background was rgba(...,0.82) — translucent enough
-          that a dark backdrop element (or the foreground occluder/vignette) drifting underneath it
-          could bleed through and wash out the text, especially on templates whose auto-zoom pushes
-          scenery toward this corner (reviewer t23/t24 defect: "DAY 460" read low-contrast under a
-          gray smudge). Solid fill guarantees the card's own contrast regardless of what's behind it. */}
-      {scene.level && (
-        <div style={{position: 'absolute', top: 70, left: 72, opacity: lvlOp, transform: `translateX(${lvlX}px)`, fontFamily: FONT}}>
-          <span style={{color: INK, fontSize: 33, fontWeight: 800, letterSpacing: 6, textTransform: 'uppercase', borderLeft: `5px solid ${GOLD}`, padding: '8px 16px 8px 18px', background: '#f6f2e9', borderRadius: 8, boxShadow: '0 4px 18px rgba(20,15,8,0.14)'}}>{scene.level}</span>
-        </div>
-      )}
+      {/* THE `level` CHIP IS GONE (WO-12a, 2026-08-11). It rendered `scene.level` force-uppercased in
+          a gold-bar-and-drop-shadow card set in Helvetica, top-left, persisting across every cut of a
+          chapter's first scene. Three independent reasons it had to go, in order of weight:
+            1. NOT IN THE REFERENCE. No measured frame carries a persistent corner label of any kind.
+               The chapter turn is marked by a full-screen chapter CARD (bible §6.2) — which, as of
+               this work order, finally exists as `scene.card` — so the chip was standing in for a
+               device we now have, and keeping both would announce every chapter twice.
+            2. WRONG TYPOGRAPHY, LOUDLY. Bible §7: ALL on-screen text is the handwritten script, and
+               "current CoreLifecycle uses Helvetica everywhere" is named there as a total mismatch.
+               This chip was the last piece of chrome still setting FONT, force-uppercasing (a caps
+               lock the writer cannot opt out of) and painting a `boxShadow` — a soft blur, i.e. a
+               gradient, which Chromium dithers (§5).
+            3. IT WAS FORMAT CHROME. `LEVEL 01 · THE DRIVEWAY` is the retired POV ladder's furniture;
+               the new canon's chapters are named `Evocative Noun: Plain Explanation`, which is a
+               title-over-subtitle shape — exactly what TextCard kind="chapter" sets, and what the chip
+               could not show at all.
+          The FIELD stays, and stays required: `level` is the pipeline's structural chapter marker.
+          `gen_voice_edge.scene_gap()` reads the NEXT scene's `level` to lengthen the pre-chapter
+          silence, and `duck_music.py` keys the chapter-start SFX off it. Only its rendering is gone. */}
 
       {/* money: animated count-up if numeric, else static styled text. COST/loss beats (debt, KIA,
           burned, sold, murdered...) get a red/amber accent instead of gain-gold so the moral-erosion
@@ -207,6 +393,39 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
             {scene.overlay.sub && <div style={{color: negOverlay ? NEG_SUB : '#9a7322', fontSize: 27, fontWeight: 800, letterSpacing: 5, marginTop: 14, textTransform: 'uppercase'}}>{scene.overlay.sub}</div>}
           </div>
         ))}
+
+      {/* speech balloons + floating dialogue (bible §6.3), over the art and over the money card.
+          Each line gets its own Sequence, which is what makes the component's entrance fire when the
+          LINE appears rather than when the scene does — and lets two speakers alternate in one scene,
+          as the 9:20 reference frame does with its two balloons. */}
+      {scene.bubbles?.map((b, i) => {
+        const bFrom = Math.max(0, Math.round((b.at ?? 0) * fps));
+        const bDur = b.dur === undefined ? Math.max(1, D - bFrom) : Math.max(1, Math.round(b.dur * fps));
+        return (
+          <Sequence key={`b${i}`} from={bFrom} durationInFrames={bDur}>
+            {b.kind === 'float' ? (
+              <FloatingDialogue
+                text={b.text} x={b.x} y={b.y} align={b.align} color={b.color}
+                maxWidth={b.maxWidth} maxLines={b.maxLines} keyline={b.keyline}
+              />
+            ) : (
+              <SpeechBubble
+                text={b.text} x={b.x} y={b.y} tail={b.tail} tailAt={b.tailAt}
+                tailLength={b.tailLength} tailSkew={b.tailSkew} maxWidth={b.maxWidth} maxLines={b.maxLines}
+              />
+            )}
+          </Sequence>
+        );
+      })}
+
+      {/* full-screen text card (bible §6.1/§6.2) — narration beat, single dramatic word, or the
+          chapter card. LAST in the stack because it is full-screen and opaque: it covers the art, the
+          money card and any balloon for exactly as long as it holds. */}
+      {scene.card && (
+        <Sequence from={0} durationInFrames={cardFrames}>
+          <TextCard {...cardProps(scene.card, scene.id)} />
+        </Sequence>
+      )}
 
       <Sequence from={scene.audioStartFrame ?? 0}><Audio src={staticFile(scene.audio)} /></Sequence>
     </AbsoluteFill>

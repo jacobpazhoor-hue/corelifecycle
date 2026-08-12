@@ -214,14 +214,24 @@ async def main():
         nwords += nw
         speech_total += speech
         dur_f = max(1, round(total * FPS))
-        scenes_out.append({
+        rec = {
             "id": sc["id"], "level": sc["level"], "overlay": sc["overlay"],
             "template": sc.get("template", sc["id"]),
             "audio": f"audio/{sc['id']}.wav", "audioStartFrame": round(LEAD * FPS),
             "startFrame": cursor, "durationInFrames": dur_f,
             "gap": gap,   # carry the writer's per-scene gap through to timeline.json so
                           # duck_music.py's silence-beat placement can honor it (not just LEAD/GAP math)
-        })
+        }
+        # CRAYON signature devices (WO-12a) — full-screen text card, speech balloons / floating
+        # dialogue, multi-panel split. Purely VISUAL: they change nothing about synthesis, timing or
+        # the VO cache key, so they are passed through verbatim and ONLY when the writer set them.
+        # A scene with none of them therefore emits byte-for-byte the record it emitted before.
+        # Field shapes are documented for the writer in docs/BIBLE.md §8; Video2.tsx validates them
+        # and RAISES on a malformed one rather than silently dropping the device.
+        for key in ("card", "bubbles", "panels"):
+            if sc.get(key) is not None:
+                rec[key] = sc[key]
+        scenes_out.append(rec)
         print(f"{sc['id']}: speech {speech:5.2f}s -> scene {total:5.2f}s ({dur_f}f)")
         cursor += dur_f
         await asyncio.sleep(0.25)                                 # gentle pacing -> fewer rate-limit blips

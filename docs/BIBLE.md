@@ -268,16 +268,90 @@ they are the reason the environment set is narrow enough to be built properly:
 registered. When WO-8f lands the real set, `docs/TEMPLATES.md` becomes the source of truth for their
 actual names, and this section gets rewritten to point at them.
 
-### Devices built but NOT yet wired to a scene field
-- `src/textcard.tsx` (WO-5) renders narration cards, chapter cards and single-word beats — but
-  **nothing imports it**; `Video2.tsx` has no `TextCard` reference. There is **no `chapter=` scene
-  key today.** The only existing carrier is the legacy `level` field on the first scene of a chapter,
-  which renders as a gold-bar label top-left, **force-uppercased** in the old paper styling
-  (`src/Video2.tsx:140`), and which also drives the chapter-start SFX. Put the **short half** there
-  ("THE MASK") and ship the full two-part name in the description timestamps. Do not emit a field the
-  pipeline will ignore.
-- Bubbles, panels and crowd components (WO-6/WO-7) are on the same footing — check the actual imports
-  in `src/Video2.tsx` before assuming any of them is reachable from `content.py`.
+### SIGNATURE DEVICES — AVAILABLE TODAY (WO-12a wired them to the renderer)
+
+The four devices below were built in WO-5/6/7 and were dead code until WO-12a. They are now live:
+`content.py` emits them, `gen_voice_edge.py` copies them verbatim into `timeline.json`, and
+`src/Video2.tsx` renders them. **All are optional** — a scene that sets none of them renders exactly
+as scenes always have.
+
+Malformed values **raise** and stop the build; they are never silently dropped. Spelling a key wrong
+is the one failure that stays silent, because an unknown key is simply ignored — copy the names below.
+
+#### `card=` — full-screen text card (bible §6.1–6.2)
+One dict. Covers the scene from its first frame; **omit `hold` and the card IS the scene** (no art is
+rendered underneath at all), or set `hold` in seconds to show the card and then cut to the scene's art.
+
+```python
+card=dict(kind="chapter", title="The Mask", subtitle="How Enron Hid the Truth in Plain Sight")
+card=dict(kind="narration", text="Nobody could explain how the money actually arrived.")
+card=dict(kind="word", word="It")
+card=dict(kind="chapter", title="The Trap", subtitle="Learning Not to Trust", hold=2.2)
+```
+
+| key | required | meaning |
+|---|---|---|
+| `kind` | yes | `"chapter"` · `"narration"` · `"word"` |
+| `title` / `subtitle` | chapter only | the two halves of the `Evocative Noun: Plain Explanation` chapter name |
+| `text` | narration only | 1–2 lines; line breaking is automatic, long text shrinks rather than wrapping to 3 |
+| `word` | word only | ONE short word, set small on a large empty ground — not a huge word |
+| `ground` | no | `"white"` or `"black"`. Defaults: chapter/word → black, narration → white |
+| `hold` | no | seconds the card covers the scene. Omitted = the whole scene |
+
+**The chapter card is how a chapter boundary is now marked. Emit 3–5 per episode** (§1), on the first
+scene of each chapter, with the chapter's own two-part name split across `title` and `subtitle` — the
+same names used in the description timestamps. Give that scene the chapter's opening narration: the
+card holds while the line plays, exactly as the reference does.
+
+#### `bubbles=` — speech balloons and floating dialogue (bible §6.3)
+A LIST, so two speakers can share one frame as the reference's 9:20 frame does. Timing is in seconds
+from the scene's own start; omit `at`/`dur` and the line holds for the whole scene. (The start key is
+`at`, not `from` — `from` is a Python keyword and `dict(from=…)` will not parse.)
+
+```python
+bubbles=[dict(text="Don't panic. It will rise again.", x=0.72, y=0.18, tail="down", tailSkew=-0.25),
+         dict(text="I want to complain!", x=0.30, y=0.62, tail="right", at=3.0, dur=2.5)]
+bubbles=[dict(kind="float", text="Three years of losses, moved off the books.", x=0.30, y=0.24)]
+```
+
+| key | default | meaning |
+|---|---|---|
+| `kind` | `"bubble"` | `"bubble"` draws the balloon; `"float"` is bubble-less script laid on the scene |
+| `text` | — | one utterance; the balloon grows to hold it |
+| `x` / `y` | 0.5 / 0.24 | balloon or block centre, as fractions of the frame |
+| `at` / `dur` | 0 / rest of scene | seconds from the scene's start, and how long the line holds |
+| `tail` | `"down"` | balloon only: `left` `right` `down` `up` `none` — roughly where the speaker is |
+| `tailAt` / `tailSkew` | 0.5 / 0 | where along that edge the tail sits, and how far its tip leans |
+| `align` / `color` | `"left"` / white | float only. Pass `color="#000000"` over a PALE scene |
+| `maxWidth` / `maxLines` | — | ceilings; past them the text shrinks instead of growing |
+
+#### `panels=` — multi-panel split (bible §6.4)
+Replaces the scene's whole shot plan with one static split — a split *is* a composition, so it never
+re-frames. Each cell renders a template as a centre crop; a cell with no `template` is a flat colour
+block and **must** then name its own `ground`.
+
+```python
+panels=dict(variant="v2", cells=[dict(template="fileWall"), dict(template="drivewayHoop")])
+panels=dict(variant="grid4", cells=[dict(template="fileWall"), dict(template="tradingFloor"),
+                                    dict(template="dinner"), dict(template="boardroomNotes")])
+panels=dict(variant="diagonal2", cells=[dict(template="courtroom"), dict(ground="#e8541f")])
+```
+
+`variant` is `"v2"` (2 cells, vertical gutter) · `"diagonal2"` (2 cells, leaning gutter) · `"grid4"`
+(4 cells, reading order). Cell count must match exactly or the build raises. Optional: `split`,
+`splitY`, `lean` on the split; `ground`, `scale`, `offsetX`, `offsetY` on a cell. A cell's ground
+defaults to the colour key its own template commits to, which is what keeps the panels
+independently keyed — **so choose templates on DIFFERENT keys**, or two cells land on one hue.
+
+#### `level=` — still required, no longer drawn
+`level` is the pipeline's **structural** chapter marker and must still be set on the first scene of
+each chapter. `gen_voice_edge.scene_gap()` reads it to lengthen the pre-chapter silence and
+`duck_music.py` keys the chapter-start SFX off it.
+
+**It no longer renders anything.** WO-12a deleted the gold-bar top-left chip: it was Helvetica in a
+handwritten-script canon (§7), force-uppercased, carried a `boxShadow`, showed no measured frame's
+behaviour, and announced a chapter the chapter *card* now announces properly. Do not write copy for
+it — nobody sees the string. The visible chapter name is `card=dict(kind="chapter", …)`.
 
 ### Still true regardless of which set is live
 Never the same template on two adjacent scenes; rotate the environment every ~30–45s; pick the
