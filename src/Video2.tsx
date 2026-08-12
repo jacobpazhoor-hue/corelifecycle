@@ -13,6 +13,8 @@ import {Panel, Panels} from './panels';
 import {ObjectCard, ShowcaseItem} from './objectcard';
 import {Foreground, ForegroundT} from './foreground';
 import {resolveSceneKey, sceneColors} from './crayonStyle';
+// WO-27: the per-scene period flag — the room drawn with its era-marking props substituted out.
+import {Era, PeriodProvider} from './setdressing';
 
 const PHOTO = PHOTO_RAW as {mode: string; scenes: Record<string, {img: string; depth: string; move: Move}>; fallback: string[]};
 
@@ -125,7 +127,7 @@ type PanelsT = {
 
 type SceneT = {id: string; level: string | null; overlay: Overlay; template: string;
   audio: string; audioStartFrame?: number; startFrame: number; durationInFrames: number;
-  card?: CardT; bubbles?: BubbleT[]; panels?: PanelsT; foreground?: ForegroundT};
+  card?: CardT; bubbles?: BubbleT[]; panels?: PanelsT; foreground?: ForegroundT; period?: string};
 type Shot = {type: string; dur: number; focus: [number, number]};
 
 // ============================================================================
@@ -332,6 +334,27 @@ const buildPanels = (spec: PanelsT, sceneId: string, dur: number): React.ReactNo
   return <Panels variant="v2" panels={[p[0], p[1]]} split={spec.split} />;
 };
 
+/**
+ * The scene's era, or null for the modern default (WO-27).
+ *
+ * `period` is an OPT-IN visual field on the same path as `card`/`panels`/`foreground`: written in
+ * `content.py`, copied verbatim by `gen_voice_edge.py`, consumed here. It changes what the room is
+ * DRESSED with, never which room it is — `template=` still names the environment.
+ *
+ * An unrecognised value RAISES, with the scene id, like every other device builder in this file. It
+ * would otherwise be the one failure that shows up as "the era flag did nothing", i.e. exactly the
+ * anachronism the flag exists to prevent, discovered in the finished 15-minute file.
+ */
+const ERAS: Era[] = ['pre1900'];
+const sceneEra = (scene: SceneT): Era | null => {
+  if (scene.period === undefined || scene.period === null) return null;
+  if ((ERAS as string[]).includes(scene.period)) return scene.period as Era;
+  throw new Error(
+    `${scene.id}: unknown period ${JSON.stringify(scene.period)} — period must be one of ` +
+    `${ERAS.map((e) => `'${e}'`).join(', ')} (docs/BIBLE.md §8 PERIOD lists what each room does with it)`
+  );
+};
+
 const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({scene, from, shots}) => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
@@ -407,6 +430,15 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
   const cardFrames = scene.card ? cardHoldFrames(scene.card, D, fps, scene.id) : 0;
   const artHidden = cardFrames >= D;
 
+  // WO-27: the era wraps the ART ONLY — the shot plan and every cell of a `panels` split, which is
+  // every path that mounts a template. The devices layered over it need no era: a card renders no
+  // art at all, a balloon and the number note are lettering on white paper, and the `foreground`
+  // silhouette is a black mass. Wrapping is a no-op when `period` is absent (the default), which is
+  // what keeps every existing scene byte-identical.
+  const era = sceneEra(scene);
+  const inEra = (art: React.ReactNode) =>
+    era ? <PeriodProvider era={era}>{art}</PeriodProvider> : art;
+
   let t = 0;
   return (
     <AbsoluteFill style={{opacity: beatOp, backgroundColor: PAPER}}>
@@ -416,7 +448,7 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
           a composition, so re-framing inside it would be a second camera on top of a locked one. */}
       {!artHidden && (
         <AbsoluteFill>
-          {scene.panels
+          {inEra(scene.panels
             ? buildPanels(scene.panels, scene.id, D)
             : shots.map((sh, i) => {
                 const seq = (
@@ -427,7 +459,7 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
                   </Sequence>);
                 t += sh.dur;
                 return seq;
-              })}
+              }))}
         </AbsoluteFill>
       )}
 

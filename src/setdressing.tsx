@@ -68,6 +68,50 @@ const rnd = (i: number): number => {
 export const useSceneTones = (): SceneTones => sceneTones(useSceneColors());
 
 // ---------------------------------------------------------------------------
+// PERIOD MODE (WO-27) — a scene renders its room with the era-marking props suppressed.
+//
+// WHY. WO-26 measured the defect (1844 narration over CRT monitors, a projector, a parked car and a
+// glass skyline) and fixed it by AVOIDING the nine era-marked rooms, which left a pre-1900 chapter
+// with four rooms where a modern one has thirteen — and the topic queue is mostly historical
+// subjects. The rooms themselves are the right rooms: a counting house, an exchange, a mill and a
+// street all existed in 1844. What dates them is a short list of PROPS, and props can be swapped.
+//
+// THE RULE, and it is the whole design: a period scene must never be EMPTIER than the modern one.
+// Flat fill is a density metric with a two-sided band (74-92% at native 1280), so deleting a monitor
+// and leaving a hole moves a template toward the empty end and out of the band. Every suppression
+// below is therefore a SUBSTITUTION at the same footprint — a monitor becomes a ledger board of the
+// same size, a keyboard an open ledger, a desk phone an inkstand, a traffic cone a barrel, a
+// recessed ceiling panel a pendant lamp, a curtain-walled skyline a masonry one. Nothing is simply
+// hidden except where the era-marked thing has no pre-1900 counterpart at all (painted floor hazard
+// markings, a zebra crossing, a tally lamp), and those are small.
+//
+// IT IS OPT-IN AND DEFAULT OFF. `usePeriod()` reads a context that is only ever provided by
+// `Video2.tsx` for a scene whose timeline record carries `period`, so a scene that does not ask for
+// it renders the byte-identical element tree it rendered before this work order (proved by render:
+// all thirteen templates, before and after, identical SHA-256).
+// ---------------------------------------------------------------------------
+
+/**
+ * The eras period mode knows how to draw. ONE for now, and adding a second means drawing art for it
+ * — the value is validated at the timeline boundary (`Video2.tsx`) and an unknown one RAISES rather
+ * than falling back to the modern room, which is exactly the silent failure this work order exists
+ * to remove.
+ */
+export type Era = 'pre1900';
+
+const PeriodContext = React.createContext<Era | null>(null);
+
+/** Render everything below in `era`. Mounted by `Video2.tsx` around a scene's art (and around each
+ *  cell of a `panels` split), never by a template — a template cannot know what century its
+ *  narration is set in. */
+export const PeriodProvider: React.FC<{era: Era; children: React.ReactNode}> = ({era, children}) => (
+  <PeriodContext.Provider value={era}>{children}</PeriodContext.Provider>
+);
+
+/** True inside a scene that opted into period mode. Anything era-marked must branch on this. */
+export const usePeriod = (): boolean => React.useContext(PeriodContext) !== null;
+
+// ---------------------------------------------------------------------------
 // GROUND
 // ---------------------------------------------------------------------------
 
@@ -202,7 +246,13 @@ export const BuildingBand: React.FC<{
   fill?: string; opacity?: number; minH?: number; maxH?: number; depth?: number;
 }> = ({baseY, x0, x1, n, seed = 0, fill, opacity = 1, minH = 90, maxH = 190, depth = 0}) => {
   const tn = useSceneTones();
-  const base = fill ?? tn.body;
+  const period = usePeriod();
+  // PERIOD (WO-27): a masonry band is STONE and it is DISTANT — both of which put it on WO-24's
+  // structural side of the palette, where a plane either carries the hue at real chroma or is grey.
+  // Keyed off `body` (the modern default) the same band measured +0.05 coloured coverage on the two
+  // templates that give it the most area, which is the regression this work order is forbidden to
+  // cause; keyed off the neutral `back` rung it reads as stone and costs nothing.
+  const base = fill ?? (period ? tn.back : tn.body);
   if (!Number.isInteger(depth) || Math.abs(depth) > TONE_MAX_STEP - 1) {
     throw new Error(
       `BuildingBand depth must be a whole rung within ±${TONE_MAX_STEP - 1} (it is combined with the ` +
@@ -218,7 +268,12 @@ export const BuildingBand: React.FC<{
     const s = seed * 977 + i * 13;
     const w = span * (0.72 + rnd(s) * 0.24);
     const bx = x0 + i * span + (span - w) / 2;
-    const h = minH + rnd(s + 3) * (maxH - minH);
+    // PERIOD (WO-27): heights are compressed toward the band's own floor, because a tower is the
+    // loudest era mark an exterior carries — but NOT flattened to a village roofline. A 19th-century
+    // mill or city block is five or six storeys, and cutting the band down to nothing would empty
+    // the sky it stands in, which flat fill punishes from the other side.
+    const hFull = minH + rnd(s + 3) * (maxH - minH);
+    const h = period ? minH + (hFull - minH) * 0.55 : hFull;
     const top = baseY - h;
     const shutter = rnd(s + 7) > 0.45;
     const step = depth + (rnd(s + 11) > 0.5 ? 1 : 0);
@@ -228,8 +283,65 @@ export const BuildingBand: React.FC<{
     const door = rung(step - 2);
     // A taller unit carries more storeys / more shutter ribs. Detail density tracks the drawn size
     // instead of a fixed count, so the same component reads correctly as a 90px shed and a 500px hangar.
-    const winRows = Math.max(1, Math.round(h / 190));
-    const doorH = Math.min(h * 0.62, 250);
+    const winRows = Math.max(1, Math.round(h / (period ? 120 : 190)));
+    const doorH = Math.min(h * (period ? 0.34 : 0.62), 250);
+    if (period) {
+      // A masonry block: pitched roof and chimney, an eaves cornice, ranks of small sash windows
+      // under stone lintels, and an arched doorway between two ground-floor openings. Same
+      // footprint, same tone ladder, MORE outlined shapes than the modern unit it replaces (5
+      // windows a storey at ~1.6 storeys per modern one) — the era changes, the density does not.
+      const roofH = Math.min(58, h * 0.17);
+      const rowH = (h - doorH) / (winRows + 1);
+      const winW = w * 0.12, winH = Math.max(10, Math.min(58, rowH * 0.6));
+      units.push(
+        <g key={i}>
+          <path d={`M ${bx - 14} ${top} L ${bx + w * 0.5} ${top - roofH} L ${bx + w + 14} ${top} Z`}
+            fill={rung(step - 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.8} strokeLinejoin="round" />
+          <rect x={bx + w * 0.66} y={top - roofH * 0.92} width={Math.max(10, w * 0.09)} height={roofH * 0.92}
+            fill={door} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          <rect x={bx + w * 0.64} y={top - roofH} width={Math.max(14, w * 0.13)} height={Math.max(6, roofH * 0.16)}
+            fill={parapet} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+          <rect x={bx} y={top} width={w} height={h} fill={wall} stroke={INK} strokeWidth={STROKE_THIN} />
+          {/* eaves cornice, then a string course under each storey — the horizontal articulation a
+              brick frontage has instead of a glazing band */}
+          <rect x={bx - 8} y={top} width={w + 16} height={12} fill={parapet} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+          {Array.from({length: winRows}, (_, r) => {
+            const wy = top + 22 + rowH * (r + 0.15);
+            return (
+              <g key={'p' + r}>
+                <rect x={bx} y={wy + winH + 12} width={w} height={7} fill={parapet} opacity={0.8} />
+                {Array.from({length: 5}, (_, k) => {
+                  const wx = bx + w * (0.08 + k * 0.194);
+                  return (
+                    <g key={k}>
+                      <rect x={wx - 3} y={wy - 8} width={winW + 6} height={8} fill={parapet} stroke={INK} strokeWidth={1.8} />
+                      <rect x={wx} y={wy} width={winW} height={winH} fill={glass} stroke={INK} strokeWidth={2} />
+                      <line x1={wx + winW * 0.5} y1={wy} x2={wx + winW * 0.5} y2={wy + winH} stroke={INK} strokeWidth={1.6} opacity={0.8} />
+                      <line x1={wx} y1={wy + winH * 0.46} x2={wx + winW} y2={wy + winH * 0.46} stroke={INK} strokeWidth={1.6} opacity={0.8} />
+                    </g>
+                  );
+                })}
+              </g>
+            );
+          })}
+          {/* ground floor: an arched door with a fanlight, a shuttered opening either side of it */}
+          <path d={`M ${bx + w * 0.41} ${baseY} L ${bx + w * 0.41} ${baseY - doorH * 0.72}
+                    Q ${bx + w * 0.5} ${baseY - doorH * 1.02} ${bx + w * 0.59} ${baseY - doorH * 0.72}
+                    L ${bx + w * 0.59} ${baseY} Z`}
+            fill={door} stroke={INK} strokeWidth={STROKE_THIN * 0.8} strokeLinejoin="round" />
+          <line x1={bx + w * 0.5} y1={baseY} x2={bx + w * 0.5} y2={baseY - doorH * 0.72} stroke={INK} strokeWidth={1.8} opacity={0.7} />
+          {[0.13, 0.68].map((t, k) => (
+            <g key={'g' + k}>
+              <rect x={bx + w * t} y={baseY - doorH * 0.78} width={w * 0.19} height={doorH * 0.78}
+                fill={glass} stroke={INK} strokeWidth={2.2} />
+              <line x1={bx + w * (t + 0.095)} y1={baseY - doorH * 0.78} x2={bx + w * (t + 0.095)} y2={baseY}
+                stroke={INK} strokeWidth={1.8} opacity={0.8} />
+            </g>
+          ))}
+        </g>
+      );
+      continue;
+    }
     units.push(
       <g key={i}>
         <rect x={bx} y={top} width={w} height={h} fill={wall} stroke={INK} strokeWidth={STROKE_THIN} />
@@ -266,6 +378,7 @@ export const BuildingBand: React.FC<{
  */
 export const Ceiling: React.FC<{y?: number; lights?: number; fill?: string}> = ({y = 200, lights = 4, fill}) => {
   const tn = useSceneTones();
+  const period = usePeriod();
   const panel = fill ?? tn.back;
   return (
     <g>
@@ -277,6 +390,26 @@ export const Ceiling: React.FC<{y?: number; lights?: number; fill?: string}> = (
       {Array.from({length: lights}, (_, i) => {
         const w = 1920 / (lights + 0.6);
         const cx = w * 0.55 + i * w;
+        // PERIOD (WO-27): a recessed fluorescent panel is the loudest thing on a modern ceiling, so
+        // it becomes a PENDANT on a drop rod — a shallow conical shade with a lit globe under it,
+        // which is what hangs over a counting house, a courtroom and an exchange floor alike. The
+        // white glass survives the swap deliberately: it is the one honest patch of light in a dark
+        // interior, and losing it would empty the top eighth of the frame.
+        if (period) {
+          const sw = w * 0.3;
+          return (
+            <g key={i}>
+              <rect x={cx - 5} y={y * 0.1} width={10} height={y * 0.34} fill={shade(panel, -2)}
+                stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+              <path d={`M ${cx - sw * 0.5} ${y * 0.62} L ${cx + sw * 0.5} ${y * 0.62}
+                        L ${cx + sw * 0.18} ${y * 0.42} L ${cx - sw * 0.18} ${y * 0.42} Z`}
+                fill={shade(panel, -2)} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+              <ellipse cx={cx} cy={y * 0.66} rx={sw * 0.34} ry={y * 0.09} fill={PAPER_WHITE}
+                stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+              <line x1={cx - sw * 0.5} y1={y * 0.62} x2={cx + sw * 0.5} y2={y * 0.62} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+            </g>
+          );
+        }
         return (
           <g key={i}>
             <rect x={cx - w * 0.3} y={y * 0.28} width={w * 0.6} height={y * 0.3} fill={shade(panel, -2)}
@@ -606,6 +739,25 @@ export const Trolley: React.FC<{x: number; y: number; w?: number; s?: number}> =
 export const Cone: React.FC<{x: number; y: number; s?: number}> = ({x, y, s = 1}) => {
   const c = useSceneColors();
   const tn = useSceneTones();
+  const period = usePeriod();
+  // PERIOD (WO-27): a BARREL — staves, two iron hoops, a lid — standing where the cone stood. It is
+  // the same 60-unit prop at the same foot of the same wall, it keeps the accent (a painted barrel
+  // end is as legitimate a saturated note as a cone is), and a barrel is the one object that is
+  // correct on a quayside, a plaza, a mill floor and a street in every century this format covers.
+  if (period) {
+    return (
+      <g>
+        <path d={`M ${x - 26 * s} ${y} L ${x - 21 * s} ${y - 66 * s} L ${x + 21 * s} ${y - 66 * s}
+                  L ${x + 26 * s} ${y} Z`}
+          fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+        <rect x={x - 25 * s} y={y - 52 * s} width={50 * s} height={9 * s} fill={tn.accentDeep} />
+        <rect x={x - 23 * s} y={y - 22 * s} width={46 * s} height={9 * s} fill={tn.accentDeep} />
+        <ellipse cx={x} cy={y - 66 * s} rx={21 * s} ry={7 * s} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+        <line x1={x - 8 * s} y1={y - 64 * s} x2={x - 8 * s} y2={y} stroke={INK} strokeWidth={1.8} opacity={0.5} />
+        <line x1={x + 8 * s} y1={y - 64 * s} x2={x + 8 * s} y2={y} stroke={INK} strokeWidth={1.8} opacity={0.5} />
+      </g>
+    );
+  }
   return (
     <g>
       <path d={`M ${x} ${y - 56 * s} L ${x + 26 * s} ${y} L ${x - 26 * s} ${y} Z`} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
@@ -738,9 +890,77 @@ export const Monitor: React.FC<{
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  const period = usePeriod();
   const glass = shade(tn.deep, -1);
   const pad = 14;
   const ix = x + pad, iy = y + pad, iw = w - pad * 2, ih = h - pad * 2;
+  // PERIOD (WO-27) — THE substitution the whole feature turns on, because a screen is the prop the
+  // explainer set carries most (two on the office desk, ten across the exchange's desk banks, four
+  // on the studio walls, three behind the close-up). It becomes a BOARD of the same size: a timber
+  // frame, a cream sheet, and the same three contents ruled by hand — a written page, a column
+  // ledger, a plotted chart. Nothing here reads `frame`: a sheet of paper does not reprint itself,
+  // so the substitute is static where the screen was live.
+  if (period) {
+    const frame = shade(tn.card, -2);
+    // the sheet is PAPER_WHITE, not the pale `card` rung: WO-24's CHROMA_FLOOR says a surface either
+    // carries the hue at real chroma or it is neutral, and a pale keyed rung this large (seven boards
+    // across `broadcastDesk`) pays full coloured coverage for a hue nobody can name. It is also what
+    // every other sheet of paper in the library is drawn in (`Papers`, the notice board, the placard).
+    const sheet = PAPER_WHITE;
+    return (
+      <g>
+        {stand && (
+          // an easel rather than a monitor post: two splayed legs off the board's own bottom corners
+          <g stroke={INK} strokeWidth={STROKE * 0.8} strokeLinecap="round">
+            <line x1={x + w * 0.3} y1={y + h} x2={x + w * 0.16} y2={y + h + 44} />
+            <line x1={x + w * 0.7} y1={y + h} x2={x + w * 0.84} y2={y + h + 44} />
+            <line x1={x + w * 0.24} y1={y + h + 26} x2={x + w * 0.76} y2={y + h + 26} />
+          </g>
+        )}
+        <rect x={x} y={y} width={w} height={h} fill={frame} stroke={INK} strokeWidth={STROKE * 0.75} />
+        <rect x={ix} y={iy} width={iw} height={ih} fill={sheet} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        {content === 'text' && (
+          <g>
+            <TextLines x={ix + 8} y={iy + 10} w={iw - 16} n={6} gap={Math.max(9, (ih - 20) / 6)} th={4} seed={seed * 31} opacity={0.7} />
+            {/* the ruled margin of a written page — and a vertical rule is what holds this prop's
+                contribution to flat fill, which counts right-neighbour equality */}
+            <line x1={ix + iw * 0.2} y1={iy + 4} x2={ix + iw * 0.2} y2={iy + ih - 4} stroke={INK} strokeWidth={2} opacity={0.5} />
+          </g>
+        )}
+        {content === 'grid' && (
+          <g>
+            {Array.from({length: 4}, (_, i) => (
+              <line key={'h' + i} x1={ix + 6} y1={iy + 8 + ((i + 1) * (ih - 16)) / 5} x2={ix + iw - 6}
+                y2={iy + 8 + ((i + 1) * (ih - 16)) / 5} stroke={INK} strokeWidth={1.8} opacity={0.45} />
+            ))}
+            {Array.from({length: 3}, (_, i) => (
+              <line key={'v' + i} x1={ix + 8 + ((i + 1) * (iw - 16)) / 4} y1={iy + 6} x2={ix + 8 + ((i + 1) * (iw - 16)) / 4}
+                y2={iy + ih - 6} stroke={INK} strokeWidth={2} opacity={0.5} />
+            ))}
+            {Array.from({length: 10}, (_, i) => (
+              <rect key={i} x={ix + 12 + (i % 4) * ((iw - 16) / 4)} y={iy + 12 + Math.floor(i / 4) * ((ih - 16) / 5)}
+                width={Math.max(6, (iw - 16) / 4 - 16)} height={Math.max(3, ih * 0.045)}
+                fill={rnd(seed * 53 + i) > 0.7 ? c.accent : INK} opacity={0.62} />
+            ))}
+          </g>
+        )}
+        {content === 'chart' && (
+          <g>
+            <polyline
+              points={Array.from({length: 9}, (_, i) =>
+                `${ix + 6 + (i * (iw - 12)) / 8},${iy + ih * (0.82 - 0.6 * rnd(seed * 17 + i))}`).join(' ')}
+              fill="none" stroke={c.accent} strokeWidth={STROKE_THIN * 0.9} strokeLinejoin="round" />
+            <line x1={ix + 4} y1={iy + ih * 0.9} x2={ix + iw - 4} y2={iy + ih * 0.9} stroke={INK} strokeWidth={2} opacity={0.6} />
+            <line x1={ix + 8} y1={iy + 6} x2={ix + 8} y2={iy + ih * 0.9} stroke={INK} strokeWidth={2} opacity={0.6} />
+            {Array.from({length: 5}, (_, i) => (
+              <line key={i} x1={ix + 8 + ((i + 1) * (iw - 16)) / 6} y1={iy + 8} x2={ix + 8 + ((i + 1) * (iw - 16)) / 6}
+                y2={iy + ih * 0.9} stroke={INK} strokeWidth={1.6} opacity={0.3} />
+            ))}
+          </g>
+        )}
+      </g>
+    );
+  }
   // The chart scrolls one SAMPLE per step, so the trace slides left a slot at a time and gains a new
   // right-hand point — a live trace, not a redraw. `text` and `grid` reprint a couple of cells.
   const k = live ? stepIndex(f, seed * 1.9 + 5, 110) : 0;
@@ -782,6 +1002,25 @@ export const Monitor: React.FC<{
 /** A keyboard slab with key rows — the small prop that turns a desk into a workstation. */
 export const Keyboard: React.FC<{x: number; y: number; w?: number}> = ({x, y, w = 178}) => {
   const tn = useSceneTones();
+  const period = usePeriod();
+  // PERIOD (WO-27): the same slab on the same desk, drawn as an OPEN LEDGER — two ruled pages either
+  // side of a spine, with the pen laid across the right-hand one.
+  if (period) {
+    return (
+      <g>
+        <rect x={x} y={y} width={w} height={26} rx={3} fill={PAPER_WHITE}
+          stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+        <line x1={x + w * 0.5} y1={y} x2={x + w * 0.5} y2={y + 26} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        {Array.from({length: 3}, (_, r) => (
+          <g key={r} stroke={INK} strokeWidth={1.6} opacity={0.45}>
+            <line x1={x + 8} y1={y + 7 + r * 6} x2={x + w * 0.44} y2={y + 7 + r * 6} />
+            <line x1={x + w * 0.56} y1={y + 7 + r * 6} x2={x + w - 8} y2={y + 7 + r * 6} />
+          </g>
+        ))}
+        <line x1={x + w * 0.6} y1={y + 22} x2={x + w * 0.9} y2={y + 6} stroke={INK} strokeWidth={STROKE_THIN * 0.8} strokeLinecap="round" />
+      </g>
+    );
+  }
   return (
     <g>
       <rect x={x} y={y} width={w} height={26} rx={5} fill={tn.card} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
@@ -801,7 +1040,37 @@ export const Keyboard: React.FC<{x: number; y: number; w?: number}> = ({x, y, w 
 export const Chair: React.FC<{x: number; y: number; s?: number; facing?: number; fill?: string}> =
 ({x, y, s = 1, facing = 1, fill}) => {
   const tn = useSceneTones();
+  const period = usePeriod();
   const skin = fill ?? shade(tn.body, -1);
+  // PERIOD (WO-27): the gas post and the five-star castor base are the giveaway — a swivel chair is
+  // 20th-century office furniture and it stands in five of the thirteen rooms. The substitute is a
+  // TURNED WOODEN CHAIR at the same footprint and the same seat height: a spindle back between two
+  // stiles, four splayed legs and a stretcher. More outlined shapes than the base it replaces.
+  if (period) {
+    return (
+      <g>
+        {/* legs and stretcher first, so the seat's outline crosses in front of them */}
+        <g stroke={INK} strokeWidth={STROKE * 0.8} strokeLinecap="round">
+          <line x1={x - 50 * s} y1={y - 92 * s} x2={x - 62 * s} y2={y} />
+          <line x1={x + 50 * s} y1={y - 92 * s} x2={x + 62 * s} y2={y} />
+          <line x1={x - 30 * s} y1={y - 92 * s} x2={x - 34 * s} y2={y - 14 * s} />
+          <line x1={x + 30 * s} y1={y - 92 * s} x2={x + 34 * s} y2={y - 14 * s} />
+          <line x1={x - 58 * s} y1={y - 34 * s} x2={x + 58 * s} y2={y - 34 * s} />
+        </g>
+        <rect x={x - 54 * s} y={y - 250 * s} width={14 * s} height={150 * s} fill={skin} stroke={INK} strokeWidth={STROKE * 0.7} />
+        <rect x={x + 40 * s} y={y - 250 * s} width={14 * s} height={150 * s} fill={skin} stroke={INK} strokeWidth={STROKE * 0.7} />
+        <rect x={x - 60 * s} y={y - 258 * s} width={120 * s} height={30 * s} rx={10 * s} fill={shade(skin, 1)}
+          stroke={INK} strokeWidth={STROKE * 0.8} />
+        <rect x={x - 44 * s} y={y - 200 * s} width={88 * s} height={20 * s} fill={shade(skin, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+        {[-1, 0, 1].map((k, i) => (
+          <rect key={i} x={x + k * 26 * s - 4 * s} y={y - 178 * s} width={8 * s} height={78 * s}
+            fill={shade(skin, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+        ))}
+        <rect x={x - 66 * s + facing * 12 * s} y={y - 106 * s} width={132 * s} height={26 * s} rx={6 * s}
+          fill={skin} stroke={INK} strokeWidth={STROKE * 0.7} />
+      </g>
+    );
+  }
   return (
     <g>
       <rect x={x - 58 * s} y={y - 250 * s} width={116 * s} height={150 * s} rx={22 * s} fill={skin}
@@ -854,7 +1123,37 @@ export const DeskPhone: React.FC<{
 }> = ({x, y, s = 1, facing = 1, seed = 0, live = true}) => {
   const f = useCurrentFrame();
   const c = useSceneColors();
+  const tn = useSceneTones();
+  const period = usePeriod();
   const lit = live && blinkOn(f, seed + x * 0.011, 150, 42);
+  // PERIOD (WO-27): an INKSTAND on the same corner of the same desk — a timber tray carrying two
+  // wells, a pen in its rest and a hand bell where the handset was. The message lamp goes with the
+  // phone: there is nothing on this prop that blinks, which costs the template one small animated
+  // element and is why period mode measures a HIGHER locked-cell count, never a lower one.
+  if (period) {
+    return (
+      <g>
+        <path d={`M ${x} ${y} L ${x + 128 * s} ${y} L ${x + 116 * s} ${y - 30 * s} L ${x + 10 * s} ${y - 30 * s} Z`}
+          fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+        {[26, 52].map((dx, i) => (
+          <g key={i}>
+            <rect x={x + dx * s} y={y - 52 * s} width={20 * s} height={24 * s} rx={4 * s}
+              fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+            <ellipse cx={x + (dx + 10) * s} cy={y - 52 * s} rx={11 * s} ry={4 * s} fill={INK} />
+          </g>
+        ))}
+        {/* the pen, slanted out of its rest */}
+        <line x1={x + 20 * s} y1={y - 30 * s} x2={x + 62 * s} y2={y - 74 * s} stroke={INK}
+          strokeWidth={STROKE_THIN * 0.8} strokeLinecap="round" />
+        {/* the hand bell */}
+        <path d={`M ${x + 86 * s} ${y - 30 * s} Q ${x + 86 * s} ${y - 74 * s} ${x + 108 * s} ${y - 74 * s}
+                  Q ${x + 130 * s} ${y - 74 * s} ${x + 130 * s} ${y - 30 * s} Z`}
+          fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.8} strokeLinejoin="round" />
+        <rect x={x + 103 * s} y={y - 92 * s} width={10 * s} height={20 * s} rx={4 * s} fill={INK} />
+        <circle cx={x + 108 * s} cy={y - 28 * s} r={5 * s} fill={INK} />
+      </g>
+    );
+  }
   return (
     <g>
       <path d={`M ${x} ${y} L ${x + 128 * s} ${y} L ${x + 116 * s} ${y - 44 * s} L ${x + 10 * s} ${y - 44 * s} Z`}

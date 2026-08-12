@@ -16,6 +16,8 @@ import {
   Colonnade, Steps, TrussRig, PipeRun, ChartPlot, Placard, CrowdColumn, RopeLine, Trolley,
   // WO-24's crossing figure — the motionless-share fix, see setdressing.tsx
   Passerby,
+  // WO-27 PERIOD MODE — see the block comment below and setdressing.tsx's own
+  usePeriod,
 } from './setdressing';
 
 // ============================================================================
@@ -112,6 +114,111 @@ const Dentils: React.FC<{x0: number; x1: number; y: number; n: number; h?: numbe
   );
 };
 
+// ===========================================================================
+// PERIOD MODE (WO-27) — how the thirteen rooms answer `usePeriod()`.
+//
+// THE DEFECT IT CLOSES. WO-26 found 1844 narration playing over CRT monitors, a projector, a parked
+// car and a glass skyline, and fixed it by BANNING nine of the thirteen rooms from pre-1900
+// narration. That left a historical chapter with four rooms where a modern one has thirteen, and
+// most of the topic queue is historical (tulip_mania, weimar_hyperinflation, carnegie,
+// jp_morgan_1907, ford_five_dollar_day, de_beers). The rooms were never the problem — a counting
+// house, an exchange, a mill, a court and a street all existed in 1844. A short list of PROPS was.
+//
+// WHAT A TEMPLATE DOES ABOUT IT. Most of the work is already done by the library: `Monitor`,
+// `Keyboard`, `DeskPhone`, `Ceiling`, `BuildingBand` and `Cone` each carry their own period form
+// (setdressing.tsx), so a template that only used those needs no branch at all. What is left here is
+// the era-marked art each template drew ITSELF — a quote board of electronic cells, a traffic
+// signal, a car, a studio camera, a projector, painted floor hazard chevrons.
+//
+// THE THREE RULES every branch below obeys:
+//   1. SUBSTITUTE, DO NOT DELETE. Flat fill is two-sided (74–92% at native 1280): a room with its
+//      screens deleted is EMPTIER than the modern one and falls out of the band at the top. Every
+//      swap keeps the footprint and, where it can, adds outlined shapes rather than removing them.
+//   2. THE MODERN PATH IS UNTOUCHED. Every branch is `period ? <new> : <exactly what was there>`, so
+//      a scene that does not opt in renders a byte-identical element tree (proved: all thirteen
+//      templates, before and after, identical SHA-256 at native 1280).
+//   3. NO ERA-MARKED PROP MAY REAPPEAR ELSEWHERE. A substitution that quietly re-adds a screen on
+//      another wall is cosmetic, not genuine; the point of the flag is that the finished frame
+//      contains no dated machine at all.
+// ===========================================================================
+
+/**
+ * A four-wheel dray / hand cart — the period substitute for `cityStreet`'s and `bankExterior`'s
+ * `Car`, drawn to the same ~380×114 unit footprint so it can stand or travel in the same lanes.
+ *
+ * Deliberately HORSELESS and shafted: a dray waiting at a kerb with its shafts down is what a
+ * nineteenth-century street actually has most of, and a stick-figure horse at this scale would be
+ * the one object in the set nobody could read. The load (barrels and a sack run) is what keeps the
+ * silhouette as tall as the car it replaces.
+ */
+const HandCart: React.FC<{x: number; y: number; s?: number; facing?: number; body?: string}> =
+({x, y, s = 1, facing = 1, body}) => {
+  const tn = useSceneTones();
+  const timber = body ?? shade(tn.card, -1);
+  return (
+    <g transform={`translate(${x} ${y}) scale(${s * facing} ${s})`}>
+      {/* shafts, down at the near end */}
+      <line x1={140} y1={-56} x2={198} y2={-8} stroke={INK} strokeWidth={STROKE} strokeLinecap="round" />
+      <line x1={140} y1={-38} x2={192} y2={2} stroke={INK} strokeWidth={STROKE_THIN} strokeLinecap="round" />
+      {/* bed and sideboards, planked */}
+      <rect x={-166} y={-56} width={318} height={26} fill={shade(timber, -1)} stroke={INK} strokeWidth={STROKE} />
+      <rect x={-166} y={-108} width={318} height={54} fill={timber} stroke={INK} strokeWidth={STROKE} />
+      <g stroke={INK} strokeWidth={STROKE_THIN * 0.7} opacity={0.55}>
+        {Array.from({length: 9}, (_, i) => (
+          <line key={i} x1={-150 + i * 34} y1={-106} x2={-150 + i * 34} y2={-56} />
+        ))}
+      </g>
+      {/* the load: two barrel ends and a run of sacks over the boards */}
+      {[-96, -18].map((bx, i) => (
+        <g key={i}>
+          <rect x={bx - 30} y={-160} width={60} height={54} fill={shade(timber, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
+          <ellipse cx={bx} cy={-160} rx={30} ry={9} fill={shade(timber, 2)} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+          <line x1={bx - 30} y1={-142} x2={bx + 30} y2={-142} stroke={INK} strokeWidth={2.4} opacity={0.6} />
+        </g>
+      ))}
+      <path d="M 30 -108 q 26 -46 62 -30 q 34 16 32 30 Z" fill={shade(timber, 2)} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+      {/* wheels: iron-tyred and spoked, the near one larger, which is what a cart looks like */}
+      {[[-104, 44], [108, 52]].map(([wx, wr], i) => (
+        <g key={i}>
+          <circle cx={wx} cy={-8} r={wr} fill="none" stroke={INK} strokeWidth={STROKE * 1.1} />
+          {Array.from({length: 8}, (_, k) => {
+            const a = (k * Math.PI) / 4;
+            return <line key={k} x1={wx} y1={-8} x2={wx + Math.cos(a) * wr * 0.86} y2={-8 + Math.sin(a) * wr * 0.86}
+              stroke={INK} strokeWidth={2.6} />;
+          })}
+          <circle cx={wx} cy={-8} r={wr * 0.17} fill={INK} />
+        </g>
+      ))}
+    </g>
+  );
+};
+
+/** A stack of bound ledgers — the period stand-in wherever a template drew a machine ON a surface
+ *  (a printer, a projector, a laptop base). Spines, boards and a marker ribbon: same block of
+ *  outlined shapes, no century. */
+const LedgerStack: React.FC<{x: number; y: number; w?: number; n?: number; seed?: number}> =
+({x, y, w = 170, n = 3, seed = 0}) => {
+  const c = useSceneColors();
+  const tn = useSceneTones();
+  return (
+    <g>
+      {Array.from({length: n}, (_, i) => {
+        const bh = 22 + rnd(seed * 17 + i) * 10;
+        const by = y - (i + 1) * (bh + 4);
+        const bw = w * (0.82 + rnd(seed * 7 + i) * 0.18);
+        const bx = x + (rnd(seed * 3 + i) - 0.5) * 16;
+        return (
+          <g key={i}>
+            <rect x={bx} y={by} width={bw} height={bh} fill={shade(tn.card, -(i % 3))} stroke={INK} strokeWidth={STROKE_THIN} />
+            <rect x={bx} y={by + bh * 0.2} width={bw} height={bh * 0.34} fill={PAPER_WHITE} opacity={0.8} />
+            <rect x={bx + bw * 0.14} y={by} width={10} height={bh} fill={i === 1 ? c.accent : shade(tn.body, -1)} />
+          </g>
+        );
+      })}
+    </g>
+  );
+};
+
 // ---------------------------------------------------------------------------
 // Frame
 // ---------------------------------------------------------------------------
@@ -149,6 +256,11 @@ const OfficeFloor: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // PERIOD (WO-27): a COUNTING HOUSE. The desks, the partitions, the filing wall, the notice board
+  // and the ring-binder shelving are all correct for 1844 as drawn; the monitors, keyboards and desk
+  // phone substitute themselves in the library. What is left here is the building services — a
+  // sprinklered duct, a lit exit sign, a water cooler, an extinguisher — none of which existed.
+  const period = usePeriod();
   // The colleague crossing the aisle (WO-14). Amplitude and leg speed are TIED, because a walk cycle
   // whose stride does not match its travel moonwalks: this rig's stride is ~103 units, i.e. ~74px at
   // this figure's 0.72 scale, and a step takes 15/speed frames, so the drift's peak speed AMP·RATE
@@ -160,12 +272,24 @@ const OfficeFloor: React.FC = () => {
     <Frame>
       <Ceiling y={190} lights={4} />
       {/* boxed service duct with hanger straps and sprinkler heads — a real office ceiling is not a
-          plane, and this band is what stops the top sixth of the frame reading as one colour */}
-      <rect x={0} y={190} width={1920} height={34} fill={tn.back} stroke={INK} strokeWidth={STROKE_THIN} />
-      {Array.from({length: 16}, (_, i) => (
-        <rect key={i} x={30 + i * 120} y={184} width={15} height={46} fill={tn.deep} stroke={INK} strokeWidth={2.4} />
-      ))}
-      {Array.from({length: 8}, (_, i) => (
+          plane, and this band is what stops the top sixth of the frame reading as one colour.
+          PERIOD: the same band as a TIMBER BEAM on iron brackets, with the sprinkler heads gone and
+          the hanger straps become the brackets — a beamed ceiling is the same density and the same
+          reason for being there. */}
+      <rect x={0} y={190} width={1920} height={period ? 42 : 34} fill={period ? shade(tn.card, -2) : tn.back}
+        stroke={INK} strokeWidth={STROKE_THIN} />
+      {period
+        ? Array.from({length: 16}, (_, i) => (
+            <g key={i}>
+              <path d={`M ${30 + i * 120} 232 L ${30 + i * 120} 268 L ${66 + i * 120} 232 Z`}
+                fill={tn.deep} stroke={INK} strokeWidth={2.4} strokeLinejoin="round" />
+              <rect x={24 + i * 120} y={226} width={48} height={10} fill={tn.deep} stroke={INK} strokeWidth={2.2} />
+            </g>
+          ))
+        : Array.from({length: 16}, (_, i) => (
+            <rect key={i} x={30 + i * 120} y={184} width={15} height={46} fill={tn.deep} stroke={INK} strokeWidth={2.4} />
+          ))}
+      {!period && Array.from({length: 8}, (_, i) => (
         <circle key={'s' + i} cx={140 + i * 232} cy={244} r={9} fill={tn.deep} stroke={INK} strokeWidth={2.6} />
       ))}
       {/* --- back wall: a demountable partition system, so it carries panel joints rather than being
@@ -201,8 +325,11 @@ const OfficeFloor: React.FC = () => {
       <RibbedPanel x={846} y={352} w={182} h={404} ribs={2} dir="v" />
       <rect x={886} y={392} width={102} height={128} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
       <circle cx={1004} cy={572} r={9} fill={INK} />
-      <rect x={874} y={294} width={126} height={44} rx={6} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
-      <SerifWords x={892} y={308} w={92} h={17} words={1} seed={2} fill={PAPER_WHITE} serif={false} />
+      {/* the lit exit sign over the door. PERIOD: a painted timber name board in its place — the
+          same 126×44 sign, hand-lettered, with no lamp behind it. */}
+      <rect x={874} y={294} width={126} height={44} rx={period ? 0 : 6}
+        fill={period ? shade(tn.card, -1) : c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
+      <SerifWords x={892} y={308} w={92} h={17} words={1} seed={2} fill={period ? INK : PAPER_WHITE} serif={period} />
       {/* window onto the block opposite — lit slabs behind the glass, then the mullions over them */}
       <rect x={1086} y={278} width={520} height={296} fill={shade(tn.deep, -1)} />
       {Array.from({length: 33}, (_, i) => (
@@ -212,8 +339,20 @@ const OfficeFloor: React.FC = () => {
       <Glazing x={1086} y={278} w={520} h={296} bays={4} rows={2} pane={null} />
       {/* radiator under the sill, and a fire extinguisher on the pier beside it */}
       <RibbedPanel x={1124} y={628} w={444} h={128} ribs={13} dir="v" />
-      <rect x={1624} y={624} width={40} height={96} rx={12} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
-      <rect x={1636} y={604} width={16} height={24} fill={INK} />
+      {/* extinguisher on the pier. PERIOD: a leather FIRE BUCKET on its bracket — the same red
+          object at the same height, and what actually hung on a wall before the cylinder existed. */}
+      {period ? (
+        <g>
+          <path d="M 1620 626 L 1668 626 L 1660 716 L 1628 716 Z" fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+          <path d="M 1622 634 q 22 -30 44 0" fill="none" stroke={INK} strokeWidth={STROKE_THIN * 0.9} />
+          <rect x={1612} y={618} width={64} height={12} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        </g>
+      ) : (
+        <g>
+          <rect x={1624} y={624} width={40} height={96} rx={12} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
+          <rect x={1636} y={604} width={16} height={24} fill={INK} />
+        </g>
+      )}
       {/* ring-binder shelving */}
       <UnitWall x={1690} y={344} w={206} h={412} cols={1} rows={4} handle={false} />
       {Array.from({length: 42}, (_, i) => {
@@ -253,9 +392,28 @@ const OfficeFloor: React.FC = () => {
       </g>
       <rect x={440} y={636} width={26} height={120} fill={tn.body} stroke={INK} strokeWidth={STROKE_THIN} />
       {/* the aisle between the banks: cooler, bin, archive boxes, a colleague crossing */}
-      <rect x={800} y={764} width={78} height={26} rx={6} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
-      <rect x={806} y={676} width={66} height={92} rx={10} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} opacity={0.85} />
-      <rect x={800} y={790} width={78} height={104} fill={tn.card} stroke={INK} strokeWidth={STROKE_THIN} />
+      {/* the water cooler between the banks. PERIOD: a CAST-IRON STOVE on the same spot — the same
+          body, a flue climbing to the beam instead of an inverted bottle, and a fire door with the
+          accent showing through it, which is where a counting house got its heat and its one warm
+          light at floor level. */}
+      {period ? (
+        <g>
+          <rect x={826} y={556} width={26} height={212} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
+          <rect x={814} y={548} width={50} height={16} fill={shade(tn.deep, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          <rect x={794} y={764} width={90} height={26} rx={4} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
+          <rect x={800} y={790} width={78} height={104} fill={shade(tn.body, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
+          <rect x={814} y={812} width={50} height={44} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+          {Array.from({length: 3}, (_, i) => (
+            <line key={i} x1={814} y1={824 + i * 12} x2={864} y2={824 + i * 12} stroke={INK} strokeWidth={2.4} />
+          ))}
+        </g>
+      ) : (
+        <g>
+          <rect x={800} y={764} width={78} height={26} rx={6} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
+          <rect x={806} y={676} width={66} height={92} rx={10} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} opacity={0.85} />
+          <rect x={800} y={790} width={78} height={104} fill={tn.card} stroke={INK} strokeWidth={STROKE_THIN} />
+        </g>
+      )}
       <BoxStack x={1076} baseY={880} n={3} s={0.6} seed={21} />
       <RibbedPanel x={912} y={794} w={82} h={100} ribs={6} dir="v" fill={tn.body} />
       {/* the colleague crossing the aisle actually crosses it — see `aisleX` above */}
@@ -327,6 +485,10 @@ const Boardroom: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // PERIOD (WO-27): the room is a panelled board room either way — a long table, chairs, a credenza,
+  // charts on the wall. Two things date it: the CURTAIN WALL (an unbroken 1364-unit run of glass is
+  // a 20th-century building) and the ceiling PROJECTOR.
+  const period = usePeriod();
   return (
     <Frame>
       <Ceiling y={172} lights={3} />
@@ -335,6 +497,36 @@ const Boardroom: React.FC = () => {
       <BuildingBand baseY={700} x0={560} x1={1930} n={9} seed={31} depth={2} minH={120} maxH={300} opacity={0.55} />
       <BuildingBand baseY={700} x0={540} x1={1940} n={6} seed={7} depth={1} minH={90} maxH={230} />
       <Glazing x={556} y={214} w={1364} h={486} bays={6} rows={3} pane={null} sill={false} />
+      {/* PERIOD: masonry piers, arched heads and a sill course laid OVER the glazing, which turns the
+          curtain wall into three tall round-headed sash windows in a stone wall without moving the
+          city behind it. Drawn after the glass so the piers occlude the mullions they replace. */}
+      {period && (
+        <g>
+          {/* the piers, the arches and the sill course are STONE — a structural plane, so they take a
+              neutral rung rather than the hue-carrying `card` (WO-24's coverage rule). Between them
+              they are ~14% of the frame. */}
+          {[[556, 96], [966, 92], [1376, 92], [1786, 134]].map(([px, pw], i) => (
+            <g key={i}>
+              <rect x={px} y={214} width={pw} height={486} fill={shade(tn.floor, 1)} stroke={INK} strokeWidth={STROKE} />
+              <g stroke={INK} strokeWidth={STROKE_THIN * 0.55} opacity={0.4}>
+                {Array.from({length: 9}, (_, k) => (
+                  <line key={k} x1={px} y1={214 + ((k + 1) * 486) / 10} x2={px + pw} y2={214 + ((k + 1) * 486) / 10} />
+                ))}
+              </g>
+            </g>
+          ))}
+          {[[652, 314], [1058, 318], [1468, 318]].map(([wx, ww], i) => (
+            <g key={'a' + i}>
+              <path d={`M ${wx} 330 Q ${wx + ww / 2} 196 ${wx + ww} 330 L ${wx + ww} 214 L ${wx} 214 Z`}
+                fill={shade(tn.floor, 1)} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+              <path d={`M ${wx - 10} 330 Q ${wx + ww / 2} 186 ${wx + ww + 10} 330`}
+                fill="none" stroke={INK} strokeWidth={STROKE_THIN} />
+              <rect x={wx - 14} y={676} width={ww + 28} height={24} fill={shade(tn.floor, 2)} stroke={INK} strokeWidth={STROKE_THIN} />
+            </g>
+          ))}
+          <rect x={540} y={186} width={1392} height={34} fill={shade(tn.floor, 2)} stroke={INK} strokeWidth={STROKE_THIN} />
+        </g>
+      )}
       {/* --- the left wall: presentation screen, charts, a credenza --- */}
       <rect x={0} y={172} width={560} height={528} fill={tn.panel} stroke={INK} strokeWidth={STROKE_THIN} />
       <WallFrame x={40} y={216} w={470} h={272} art="line" seed={5} />
@@ -355,10 +547,28 @@ const Boardroom: React.FC = () => {
       {Array.from({length: 5}, (_, i) => (
         <rect key={i} x={1534 + i * 74} y={566} width={26} height={42} rx={4} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
       ))}
-      {/* ceiling-mounted projector over the table */}
-      <rect x={886} y={172} width={112} height={62} rx={10} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
-      <rect x={936} y={140} width={14} height={34} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
-      <rect x={996} y={192} width={24} height={24} rx={6} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      {/* ceiling-mounted projector over the table. PERIOD: a GASOLIER on the same drop — a stem, a
+          ring and three burners with glass shades, which is the fitting that hung over a board table
+          before there was anything to project. */}
+      {period ? (
+        <g>
+          <rect x={936} y={140} width={14} height={54} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          <rect x={874} y={194} width={138} height={12} rx={5} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          {[886, 943, 1000].map((bx, i) => (
+            <g key={i}>
+              <path d={`M ${bx - 22} 240 L ${bx + 22} 240 L ${bx + 12} 206 L ${bx - 12} 206 Z`}
+                fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+              <rect x={bx - 4} y={198} width={8} height={12} fill={tn.deep} />
+            </g>
+          ))}
+        </g>
+      ) : (
+        <g>
+          <rect x={886} y={172} width={112} height={62} rx={10} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
+          <rect x={936} y={140} width={14} height={34} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          <rect x={996} y={192} width={24} height={24} rx={6} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        </g>
+      )}
 
       {/* --- the table and the people around it ---
           Chairs first, then the far-side figures over them, then the table slab over their laps:
@@ -420,8 +630,53 @@ const QuoteBoard: React.FC<{x: number; y: number; w: number; h: number; cols: nu
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  const period = usePeriod();
   const cw = w / cols, ch = h / rows;
   const cells: React.ReactNode[] = [];
+  // PERIOD (WO-27): the same board, in CHALK. An exchange before the electric board is a wall of
+  // slates a clerk writes on, so the electronic cell — a lit symbol block, a lit price block and a
+  // filled direction arrow — becomes a chalked symbol, a chalked figure and a chalked tick, ruled
+  // into columns. Same 60 cells, same footprint, and no lit surface anywhere in it. It is also
+  // STILL: chalk does not reprint itself on an 8-second clock, so the board stops animating.
+  if (period) {
+    for (let r = 0; r < rows; r++) {
+      for (let k = 0; k < cols; k++) {
+        const s = r * 37 + k * 11;
+        const cx = x + k * cw, cy = y + r * ch;
+        const up = rnd(s) > 0.42;
+        cells.push(
+          <g key={`${r}_${k}`} stroke={PAPER_WHITE} strokeLinecap="round">
+            <line x1={cx + 6} y1={cy + ch * 0.24} x2={cx + cw * 0.3} y2={cy + ch * 0.24} strokeWidth={5} opacity={0.85} />
+            <line x1={cx + cw * 0.38} y1={cy + ch * 0.24} x2={cx + cw * (0.38 + 0.3 * (0.5 + rnd(s + 5) * 0.5))}
+              y2={cy + ch * 0.24} strokeWidth={5} opacity={0.7} />
+            <line x1={cx + 6} y1={cy + ch * 0.4} x2={cx + cw * (0.2 + rnd(s + 9) * 0.4)} y2={cy + ch * 0.4}
+              strokeWidth={4} opacity={0.55} />
+            <path d={up
+              ? `M ${cx + cw * 0.84} ${cy + ch * 0.4} L ${cx + cw * 0.92} ${cy + ch * 0.1} L ${cx + cw} ${cy + ch * 0.4}`
+              : `M ${cx + cw * 0.84} ${cy + ch * 0.1} L ${cx + cw * 0.92} ${cy + ch * 0.4} L ${cx + cw} ${cy + ch * 0.1}`}
+              fill="none" strokeWidth={4} opacity={0.9} />
+          </g>
+        );
+      }
+    }
+    return (
+      <g>
+        <rect x={x - 18} y={y - 18} width={w + 36} height={h + 36} fill={shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE} />
+        {/* the timber frame the slate is set into, and the chalk rail under it */}
+        <rect x={x - 18} y={y - 18} width={w + 36} height={16} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
+        <rect x={x - 18} y={y + h + 2} width={w + 36} height={16} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
+        {cells}
+        {Array.from({length: rows - 1}, (_, i) => (
+          <line key={'h' + i} x1={x - 12} y1={y + (i + 1) * ch - 2} x2={x + w + 12} y2={y + (i + 1) * ch - 2}
+            stroke={PAPER_WHITE} strokeWidth={1.6} opacity={0.3} />
+        ))}
+        {Array.from({length: cols - 1}, (_, i) => (
+          <line key={'v' + i} x1={x + (i + 1) * cw - 4} y1={y - 6} x2={x + (i + 1) * cw - 4} y2={y + h + 6}
+            stroke={PAPER_WHITE} strokeWidth={1.6} opacity={0.3} />
+        ))}
+      </g>
+    );
+  }
   for (let r = 0; r < rows; r++) {
     for (let k = 0; k < cols; k++) {
       const s = r * 37 + k * 11;
@@ -486,6 +741,11 @@ const ExchangeFloor: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // PERIOD (WO-27): a nineteenth-century exchange — the pit, the gallery over it, the house clocks
+  // and the paper on the floor are all correct as drawn. The board goes to CHALK (see `QuoteBoard`),
+  // the desk screens and phones substitute in the library, and the running ticker strip becomes a
+  // bill board, which is the two era marks this room actually carries.
+  const period = usePeriod();
   return (
     <Frame>
       {/* --- ceiling, service run and the board wall --- */}
@@ -503,9 +763,25 @@ const ExchangeFloor: React.FC = () => {
         </g>
       ))}
       <QuoteBoard x={168} y={196} w={1584} h={244} cols={12} rows={5} />
-      {/* the running ticker strip under the board */}
-      <rect x={0} y={452} width={1920} height={56} fill={shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
-      <SerifWords x={40} y={466} w={1840} h={24} words={13} seed={5} fill={c.accent} serif={false} />
+      {/* the running ticker strip under the board. PERIOD: a BILL BOARD in the same band — a timber
+          ground with the day's notices pasted along it, hand-set, no lit surface. */}
+      {period ? (
+        <g>
+          <rect x={0} y={452} width={1920} height={56} fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
+          {Array.from({length: 8}, (_, i) => (
+            <g key={i} transform={`rotate(${(rnd(i * 7) - 0.5) * 3} ${100 + i * 236} 480)`}>
+              <rect x={40 + i * 236} y={458} width={206} height={44} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+              <SerifWords x={52 + i * 236} y={464} w={182} h={14} words={2} seed={5 + i * 3} />
+              <TextLines x={52 + i * 236} y={484} w={182} n={1} gap={10} th={3.4} seed={i * 11} opacity={0.6} />
+            </g>
+          ))}
+        </g>
+      ) : (
+        <g>
+          <rect x={0} y={452} width={1920} height={56} fill={shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
+          <SerifWords x={40} y={466} w={1840} h={24} words={13} seed={5} fill={c.accent} serif={false} />
+        </g>
+      )}
       {/* the public gallery over the pit: a panelled wall, a row of house clocks, spectators behind a
           rail. This band was the frame's largest empty region until it got a floor of its own — and
           an exchange gallery is what is actually there. */}
@@ -603,6 +879,7 @@ const Facade: React.FC<{x: number; w: number; topY: number; baseY: number; seed:
 ({x, w, topY, baseY, seed}) => {
   const c = useSceneColors();
   const tn = useSceneTones();
+  const period = usePeriod();
   const step = rnd(seed * 3) > 0.5 ? 0 : 1;
   const wall = shade(tn.body, step + 1);
   // Glass keys to `crowd`, darkened. A shopfront seen from OUTSIDE reads dark, and `crowd` is the
@@ -621,9 +898,36 @@ const Facade: React.FC<{x: number; w: number; topY: number; baseY: number; seed:
       {/* parapet + cornice */}
       <rect x={x - 14} y={topY - 26} width={w + 28} height={30} fill={shade(wall, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
       <rect x={x - 8} y={topY + 44} width={w + 16} height={16} fill={shade(wall, -2)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
-      {/* upper storeys: a grid of sash windows is literally a UnitWall with no handles */}
-      <UnitWall x={x + 22} y={winTop} w={w - 44} h={winH} cols={Math.max(3, Math.round(w / 62))} rows={storeys}
-        handle={false} fill={glass} carcass={wall} />
+      {/* upper storeys: a grid of sash windows is literally a UnitWall with no handles.
+          PERIOD: the same grid, but the openings are drawn SMALL with brickwork between them and a
+          stone lintel over each — a `UnitWall`'s cells butt up against each other with a 3-unit
+          margin, which at this size reads as a glazed curtain wall rather than as punched windows,
+          and that was the loudest thing left in the street. */}
+      {period ? (
+        <g>
+          {(() => {
+            const cols = Math.max(3, Math.round(w / 62));
+            const cw = (w - 44) / cols, chh = winH / storeys;
+            return Array.from({length: cols * storeys}, (_, i) => {
+              const col = i % cols, row = Math.floor(i / cols);
+              const wx = x + 22 + col * cw + cw * 0.22, wy = winTop + row * chh + chh * 0.2;
+              const ww = cw * 0.56, wh = chh * 0.58;
+              return (
+                <g key={i}>
+                  <rect x={wx - 4} y={wy - 9} width={ww + 8} height={9} fill={shade(wall, -2)} stroke={INK} strokeWidth={1.8} />
+                  <rect x={wx} y={wy} width={ww} height={wh} fill={glass} stroke={INK} strokeWidth={2.2} />
+                  <line x1={wx + ww * 0.5} y1={wy} x2={wx + ww * 0.5} y2={wy + wh} stroke={INK} strokeWidth={1.8} opacity={0.85} />
+                  <line x1={wx} y1={wy + wh * 0.46} x2={wx + ww} y2={wy + wh * 0.46} stroke={INK} strokeWidth={1.8} opacity={0.85} />
+                  <rect x={wx - 5} y={wy + wh} width={ww + 10} height={7} fill={shade(wall, -1)} stroke={INK} strokeWidth={1.8} />
+                </g>
+              );
+            });
+          })()}
+        </g>
+      ) : (
+        <UnitWall x={x + 22} y={winTop} w={w - 44} h={winH} cols={Math.max(3, Math.round(w / 62))} rows={storeys}
+          handle={false} fill={glass} carcass={wall} />
+      )}
       {/* string course between storeys, and a fire escape on one front in three */}
       {rnd(seed * 11) > 0.62 && (
         <g stroke={INK} strokeWidth={STROKE_THIN * 0.8} fill="none" opacity={0.85}>
@@ -681,6 +985,10 @@ const CityStreet: React.FC = () => {
   const {fps} = useVideoConfig();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // PERIOD (WO-27): the frontage survives intact — awnings, fascia signs, sash windows over a
+  // shopfront and a gas standard on the kerb are a Victorian high street already. The ROAD is what
+  // dates it: lane markings, a zebra crossing, a traffic signal, a news box and three cars.
+  const period = usePeriod();
   return (
     <Frame>
       {/* --- far: the block behind, lifted two rungs so it sits back without haze or a gradient.
@@ -703,12 +1011,34 @@ const CityStreet: React.FC = () => {
       <SlabFloor y={STREET_ROAD} cols={12} rows={6} fill={tn.deep} opacity={0.18} farBand={false} />
       {/* lane markings, a crossing and two manhole covers — the road was the emptiest region of the
           first render, and a road is not a plain slab */}
-      <g fill={PAPER_WHITE} opacity={0.75}>
-        {Array.from({length: 8}, (_, i) => <rect key={i} x={40 + i * 250} y={992 + i * 3} width={140} height={14} rx={7} />)}
-        {Array.from({length: 7}, (_, i) => (
-          <rect key={'z' + i} x={1300 + i * 88} y={STREET_ROAD + 6} width={52} height={74} />
-        ))}
-      </g>
+      {/* lane markings and a crossing. PERIOD: neither exists, so the road is laid in GRANITE SETTS
+          instead — courses of small stones, which is denser than the paint it replaces (flat fill
+          counts right-neighbour equality, and a sett course is nothing but vertical joints) and is
+          what a nineteenth-century carriageway is actually made of. */}
+      {period ? (
+        <g stroke={INK} strokeWidth={2} opacity={0.3}>
+          {Array.from({length: 6}, (_, r) => {
+            const ry = STREET_ROAD + 18 + r * r * 8 + r * 22;
+            const step = 46 + r * 12;
+            return (
+              <g key={r}>
+                <line x1={0} y1={ry} x2={1920} y2={ry} />
+                {Array.from({length: Math.ceil(1920 / step)}, (_, k) => (
+                  <line key={k} x1={k * step + (r % 2 ? step / 2 : 0)} y1={ry}
+                    x2={k * step + (r % 2 ? step / 2 : 0)} y2={ry + step * 0.5} />
+                ))}
+              </g>
+            );
+          })}
+        </g>
+      ) : (
+        <g fill={PAPER_WHITE} opacity={0.75}>
+          {Array.from({length: 8}, (_, i) => <rect key={i} x={40 + i * 250} y={992 + i * 3} width={140} height={14} rx={7} />)}
+          {Array.from({length: 7}, (_, i) => (
+            <rect key={'z' + i} x={1300 + i * 88} y={STREET_ROAD + 6} width={52} height={74} />
+          ))}
+        </g>
+      )}
       {[[300, 916], [1096, 950]].map(([mx, my], i) => (
         <g key={i}>
           <ellipse cx={mx} cy={my} rx={48} ry={16} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
@@ -735,21 +1065,61 @@ const CityStreet: React.FC = () => {
       ))}
       {/* traffic signal + a litter bin + a news box. The signal CHANGES — one of three 15px lamps
           lit at a time, on a ~4s cycle — which is a colour switch with no moving geometry at all. */}
-      <rect x={1470} y={STREET_KERB - 402} width={18} height={402} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
-      <rect x={1442} y={STREET_KERB - 470} width={74} height={132} rx={12} fill={shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
-      {[0, 1, 2].map((i) => {
-        const lit = [0, 2, 1][Math.floor(f / 118) % 3];
-        const off = shade(tn.deep, -1);
-        return (
-          <circle key={i} cx={1479} cy={STREET_KERB - 440 + i * 40} r={15}
-            fill={i !== lit ? off : i === 0 ? c.accent : i === 1 ? shade(c.accent, 2) : PAPER_WHITE} />
-        );
-      })}
+      {/* PERIOD: an advertising COLUMN where the signal stood — a drum of pasted bills on the same
+          kerb spot under a conical cap, which is the Victorian street's own version of a thing that
+          stands at head height and tells you something. The signal's colour switch is the one piece
+          of motion this swap costs the template; the car/cart and the crowd carry the rest. */}
+      {period ? (
+        <g>
+          <rect x={1440} y={STREET_KERB - 300} width={80} height={300} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE} />
+          {[0, 1].map((i) => (
+            <g key={i}>
+              <rect x={1448} y={STREET_KERB - 288 + i * 148} width={64} height={136} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+              <SerifWords x={1456} y={STREET_KERB - 276 + i * 148} w={48} h={16} words={1} seed={7 + i * 5} />
+              <TextLines x={1456} y={STREET_KERB - 246 + i * 148} w={48} n={5} gap={13} th={3.4} seed={9 + i * 7} opacity={0.6} />
+            </g>
+          ))}
+          <path d={`M 1428 ${STREET_KERB - 300} L 1532 ${STREET_KERB - 300} L 1480 ${STREET_KERB - 356} Z`}
+            fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+          <circle cx={1480} cy={STREET_KERB - 364} r={10} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        </g>
+      ) : (
+        <g>
+          <rect x={1470} y={STREET_KERB - 402} width={18} height={402} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+          <rect x={1442} y={STREET_KERB - 470} width={74} height={132} rx={12} fill={shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
+          {[0, 1, 2].map((i) => {
+            const lit = [0, 2, 1][Math.floor(f / 118) % 3];
+            const off = shade(tn.deep, -1);
+            return (
+              <circle key={i} cx={1479} cy={STREET_KERB - 440 + i * 40} r={15}
+                fill={i !== lit ? off : i === 0 ? c.accent : i === 1 ? shade(c.accent, 2) : PAPER_WHITE} />
+            );
+          })}
+        </g>
+      )}
       <RibbedPanel x={634} y={STREET_KERB - 96} w={78} h={96} ribs={5} dir="v" fill={tn.body} />
       <rect x={626} y={STREET_KERB - 106} width={94} height={14} rx={6} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
-      <rect x={1156} y={STREET_KERB - 124} width={92} height={124} rx={8} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
-      <rect x={1172} y={STREET_KERB - 108} width={60} height={44} fill={PAPER_WHITE} stroke={INK} strokeWidth={2.4} />
-      <TextLines x={1178} y={STREET_KERB - 100} w={48} n={3} gap={11} th={3} seed={4} opacity={0.6} />
+      {/* the news box. PERIOD: a NEWSVENDOR'S STAND on the same spot — a painted board on trestle
+          legs with the day's sheets weighted on it, and the accent stays on the board so the kerb
+          keeps its saturated note. */}
+      {period ? (
+        <g>
+          <rect x={1152} y={STREET_KERB - 96} width={100} height={22} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
+          <rect x={1160} y={STREET_KERB - 118} width={84} height={26} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+          <TextLines x={1168} y={STREET_KERB - 112} w={68} n={2} gap={10} th={3.2} seed={4} opacity={0.6} />
+          <g stroke={INK} strokeWidth={STROKE_THIN}>
+            <line x1={1160} y1={STREET_KERB - 74} x2={1150} y2={STREET_KERB} />
+            <line x1={1244} y1={STREET_KERB - 74} x2={1254} y2={STREET_KERB} />
+            <line x1={1156} y1={STREET_KERB - 40} x2={1248} y2={STREET_KERB - 40} />
+          </g>
+        </g>
+      ) : (
+        <g>
+          <rect x={1156} y={STREET_KERB - 124} width={92} height={124} rx={8} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
+          <rect x={1172} y={STREET_KERB - 108} width={60} height={44} fill={PAPER_WHITE} stroke={INK} strokeWidth={2.4} />
+          <TextLines x={1178} y={STREET_KERB - 100} w={48} n={3} gap={11} th={3} seed={4} opacity={0.6} />
+        </g>
+      )}
       <BoxStack x={890} baseY={STREET_KERB} n={2} s={0.5} seed={11} />
       <CaseStack x={1330} baseY={STREET_KERB} n={3} s={0.6} seed={13} />
 
@@ -761,9 +1131,22 @@ const CityStreet: React.FC = () => {
           parked cars occludes them, which is what a nearer lane should do. Any of the parked lanes
           would have driven one car straight THROUGH another. The wrap constant puts it at exactly
           its old x at frame 0, so the composition is unchanged in a still. --- */}
-      <Car x={430} y={946} s={0.62} facing={1} body={shade(tn.body, -1)} />
-      <Car x={1500} y={968} s={0.72} facing={-1} body={tn.card} />
-      <Car x={2200 - ((f * 13 + 1320) % 2600)} y={1064} s={1.0} facing={-1} body={c.accent} />
+      {/* PERIOD: the same three lanes, drawn as DRAYS. The near one keeps the identical wrap
+          arithmetic, so the travelling object — this template's whole camera-lock argument — is
+          unchanged in size, speed and phase; only what it is made of changes. */}
+      {period ? (
+        <g>
+          <HandCart x={430} y={946} s={0.62} facing={1} body={shade(tn.body, -1)} />
+          <HandCart x={1500} y={968} s={0.72} facing={-1} body={tn.card} />
+          <HandCart x={2200 - ((f * 13 + 1320) % 2600)} y={1064} s={1.0} facing={-1} body={shade(tn.card, -1)} />
+        </g>
+      ) : (
+        <g>
+          <Car x={430} y={946} s={0.62} facing={1} body={shade(tn.body, -1)} />
+          <Car x={1500} y={968} s={0.72} facing={-1} body={tn.card} />
+          <Car x={2200 - ((f * 13 + 1320) % 2600)} y={1064} s={1.0} facing={-1} body={c.accent} />
+        </g>
+      )}
       <Cone x={1698} y={1010} s={0.8} />
       <Cone x={1790} y={1024} s={0.8} />
 
@@ -837,6 +1220,10 @@ const DomesticInterior: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // PERIOD (WO-27): papered walls over a dado, a curtained sash window, framed pictures, a bookcase,
+  // a rug and a sofa are a parlour in any century after about 1830. ONE object dates the room — the
+  // television on its low stand — and the standard lamp, which becomes an oil lamp by daylight.
+  const period = usePeriod();
   return (
     <Frame>
       {/* --- wall: papered above a dado rail, panelled below.
@@ -909,7 +1296,23 @@ const DomesticInterior: React.FC = () => {
       {/* an armchair on the right, and the television it faces on its own low stand */}
       <Chair x={1620} y={962} s={1.0} facing={-1} fill={shade(tn.body, 1)} />
       <Desk x={168} y={916} w={330} h={24} legH={96} fill={shade(tn.card, -2)} />
-      <Monitor x={196} y={712} w={286} h={196} content="text" seed={17} />
+      {/* the television. PERIOD: the same low stand carries a framed picture propped against the
+          wall with a pair of candlesticks either side of it — a parlour's mantel arrangement, and
+          the same block of drawn shapes at the same place in the composition. */}
+      {period ? (
+        <g>
+          <WallFrame x={214} y={716} w={250} h={192} art="scape" seed={17} />
+          {[186, 480].map((cx, i) => (
+            <g key={i}>
+              <rect x={cx - 8} y={800} width={16} height={104} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+              <ellipse cx={cx} cy={904} rx={26} ry={9} fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+              <path d={`M ${cx} 800 q -10 -26 0 -40 q 10 14 0 40 Z`} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+            </g>
+          ))}
+        </g>
+      ) : (
+        <Monitor x={196} y={712} w={286} h={196} content="text" seed={17} />
+      )}
       {/* a dropped newspaper on the boards, and the day's post on the floor by the door */}
       <Papers x={1420} y={1046} n={2} s={1.0} seed={33} />
 
@@ -1221,6 +1624,11 @@ const BankExterior: React.FC = () => {
   const {fps} = useVideoConfig();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // PERIOD (WO-27): a stone portico, a civic flight, balustrades and a newel lantern are the most
+  // era-free exterior in the set — this frontage would be built the same way in 1844. Exactly two
+  // things dated it: the PARKED CAR on the plaza (WO-26's own finding) and the glazed skyline behind
+  // it, which the library's masonry band now handles.
+  const period = usePeriod();
   return (
     <Frame>
       {/* --- the street the bank stands in. The frontage deliberately stops short of both frame
@@ -1338,11 +1746,29 @@ const BankExterior: React.FC = () => {
           <rect x={124 + i * 196} y={998} width={34} height={12} rx={5} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
         </g>
       ))}
-      <rect x={1712} y={932} width={92} height={124} rx={8} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
-      <rect x={1728} y={950} width={60} height={44} fill={PAPER_WHITE} stroke={INK} strokeWidth={2.4} />
-      <TextLines x={1734} y={958} w={48} n={3} gap={11} th={3} seed={6} opacity={0.6} />
+      {/* the news box on the plaza. PERIOD: a PILLAR BOX — the same red object at the same spot,
+          with a domed cap, a posting slot and a plate, which is what stood on a civic pavement from
+          the 1850s and keeps the accent exactly where the composition had it. */}
+      {period ? (
+        <g>
+          <rect x={1716} y={926} width={84} height={130} rx={6} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
+          <path d="M 1708 926 q 50 -46 100 0 Z" fill={tn.accentDeep} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+          <rect x={1704} y={918} width={108} height={14} rx={5} fill={tn.accentDeep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          <rect x={1736} y={952} width={48} height={12} rx={4} fill={INK} />
+          <rect x={1734} y={986} width={52} height={34} fill={PAPER_WHITE} stroke={INK} strokeWidth={2.4} />
+          <TextLines x={1740} y={994} w={40} n={2} gap={11} th={3} seed={6} opacity={0.6} />
+        </g>
+      ) : (
+        <g>
+          <rect x={1712} y={932} width={92} height={124} rx={8} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
+          <rect x={1728} y={950} width={60} height={44} fill={PAPER_WHITE} stroke={INK} strokeWidth={2.4} />
+          <TextLines x={1734} y={958} w={48} n={3} gap={11} th={3} seed={6} opacity={0.6} />
+        </g>
+      )}
       <CaseStack x={286} baseY={1006} n={3} s={0.62} seed={23} />
-      <Car x={520} y={1074} s={0.86} facing={1} body={shade(tn.body, -1)} />
+      {period
+        ? <HandCart x={520} y={1074} s={0.86} facing={1} body={shade(tn.body, -1)} />
+        : <Car x={520} y={1074} s={0.86} facing={1} body={shade(tn.body, -1)} />}
       {/* someone crossing the plaza (WO-24) — this frame measured 100% motionless, its only moving
           things being the flag and a 0.14 crowd, neither of which reaches the |Δ| 1.0 threshold */}
       <Passerby y={1068} x0={2160} x1={-240} scale={0.96} seed={3} at={92} />
@@ -1434,9 +1860,28 @@ const CourtHearing: React.FC = () => {
       {/* --- the panelled back wall. Panelling is a UnitWall with the handles off, which is the
               library doing the work of a bespoke component: an upper run of tall fielded panels
               over a dado run of short ones, with a rail between them. --- */}
-      <UnitWall x={0} y={168} w={1920} h={318} cols={14} rows={1} handle={false} fill={tn.card} carcass={tn.deep} />
-      <rect x={0} y={476} width={1920} height={26} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
-      <UnitWall x={0} y={500} w={1920} h={206} cols={20} rows={1} handle={false} fill={shade(tn.card, -1)} carcass={tn.deep} />
+      {/* PANELLING KEYS TO A NEUTRAL, NOT TO `card` (WO-27, fixing the defect WO-24 recorded).
+          `card` is `shade(mid, 3)`, the LIGHT end of the ladder, and this run is the largest object
+          in the template — ~1920×540, a quarter of the frame — so on this template's navy it
+          lightened into a bright periwinkle and made `courtHearing` the worst-covered frame in the
+          set at 0.529 against the 0.30–0.40 target.
+
+          WO-24's own note proposed `body`. IT WAS TRIED FIRST AND MEASURED WORSE, so it is written
+          down here rather than repeated later: `body` is still the hue at full chroma over the same
+          quarter of the frame, so coverage does not move at all and the frame gets MORE saturated —
+          coverage 0.529 → 0.529, all-pixel saturation 0.263 → 0.300, coloured-pixel 0.497 → 0.567.
+          It fixes the brightness and not the defect.
+
+          A wall is STRUCTURAL, and WO-24's own rule for structural planes is that they take the
+          neutral `shell` ladder while the MATERIAL — here the bench, the stand, the counsel table,
+          the rails — keeps the committed hue. Keyed to `back` the room reads as a plastered and
+          panelled hall with navy furniture in it, and it lands almost exactly on the reference:
+          coverage 0.529 → 0.248 (reference 0.247), all-pixel saturation 0.263 → 0.120 (reference
+          0.137), coloured-pixel 0.497 → 0.483, flat fill 89.13% → 89.14%, camera lock 37/48
+          unchanged. */}
+      <UnitWall x={0} y={168} w={1920} h={318} cols={14} rows={1} handle={false} fill={tn.back} carcass={tn.deep} />
+      <rect x={0} y={476} width={1920} height={26} fill={shade(tn.back, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <UnitWall x={0} y={500} w={1920} h={206} cols={20} rows={1} handle={false} fill={shade(tn.back, -1)} carcass={tn.deep} />
       <rect x={0} y={COURT_WALL - 26} width={1920} height={26} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
       {/* the seal, flanked by two draped standards and two wall sconces */}
       <CourtSeal cx={962} cy={320} r={124} />
@@ -1630,6 +2075,10 @@ const FactoryFloor: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // PERIOD (WO-27): riveted machine casings, a flywheel, a belt, pipework, brick coursing and a
+  // clerestory are a mill as it was built. WO-26 tiered this room NEAR-NEUTRAL and it nearly is: the
+  // painted floor hazard chevrons and the electric beacon are the two things a mill did not have.
+  const period = usePeriod();
   return (
     <Frame>
       {/* --- roof: a dark deck, the truss rig under it, pendant lamps on the drop rods --- */}
@@ -1710,9 +2159,17 @@ const FactoryFloor: React.FC = () => {
 
       {/* --- floor, with a painted walkway edge --- */}
       <SlabFloor y={FACT_WALL} cols={34} rows={14} />
-      {Array.from({length: 26}, (_, i) => (
-        <path key={i} d={`M ${i * 78} 1010 l 44 0 l -30 40 l -44 0 Z`} fill={c.accent} opacity={0.5} />
-      ))}
+      {/* the painted walkway hazard chevrons. PERIOD: floor safety paint is a 20th-century thing, so
+          the walkway is edged in SETTS instead — the same band of the same floor, still articulated,
+          with the accent dropped from it. */}
+      {period
+        ? Array.from({length: 26}, (_, i) => (
+            <rect key={i} x={i * 78 + 6} y={1010} width={62} height={40}
+              fill={shade(tn.floor, 1)} stroke={INK} strokeWidth={2.2} opacity={0.6} />
+          ))
+        : Array.from({length: 26}, (_, i) => (
+            <path key={i} d={`M ${i * 78} 1010 l 44 0 l -30 40 l -44 0 Z`} fill={c.accent} opacity={0.5} />
+          ))}
       <line x1={0} y1={1004} x2={1920} y2={1004} stroke={INK} strokeWidth={STROKE_THIN} opacity={0.5} />
 
       {/* --- the plant. Far machines first, then the workers between them, then the belt over the
@@ -1740,9 +2197,22 @@ const FactoryFloor: React.FC = () => {
       {/* A beacon on a post beside the belt, blinking on its own clock. Placed at x=500, in the gap
           between the left machine and the first worker: at its first position (x=930) it landed
           directly over a worker's head, which neither metric can see. */}
+      {/* PERIOD: a shift BELL on the same post, with its pull rope — the mill's own signal, and the
+          one prop in this template that stops animating (a bell is rung by a hand nobody sees, where
+          a beacon flashes on its own). */}
       <rect x={492} y={FACT_BELT - 176} width={16} height={176} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
-      <circle cx={500} cy={FACT_BELT - 196} r={26}
-        fill={stepIndex(f, 3, 46) % 2 ? c.accent : shade(c.accent, -3)} stroke={INK} strokeWidth={STROKE} />
+      {period ? (
+        <g>
+          <path d={`M 474 ${FACT_BELT - 178} q 0 -48 26 -48 q 26 0 26 48 Z`}
+            fill={c.accent} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+          <circle cx={500} cy={FACT_BELT - 172} r={7} fill={INK} />
+          <line x1={500} y1={FACT_BELT - 226} x2={500} y2={FACT_BELT - 244} stroke={INK} strokeWidth={STROKE_THIN} />
+          <path d={`M 526 ${FACT_BELT - 200} q 34 40 20 96`} fill="none" stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+        </g>
+      ) : (
+        <circle cx={500} cy={FACT_BELT - 196} r={26}
+          fill={stepIndex(f, 3, 46) % 2 ? c.accent : shade(c.accent, -3)} stroke={INK} strokeWidth={STROKE} />
+      )}
       <rect x={470} y={FACT_BELT - 176} width={60} height={14} rx={5} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
 
       {/* --- near plane: pallets, a trolley, cones, and the coloured hero at the belt.
@@ -1808,6 +2278,25 @@ const STUDIO_FLOOR = 792;
 /** A hanging studio lamp: yoke, body, four barn doors, a white lens. */
 const StudioLamp: React.FC<{x: number; y: number; s?: number}> = ({x, y, s = 1}) => {
   const tn = useSceneTones();
+  const period = usePeriod();
+  // PERIOD (WO-27): a barn-doored studio lamp is unmistakably 20th century, so the rig carries
+  // HANGING OIL LAMPS instead — a rod, a reservoir, a glass chimney and a reflector — which is how a
+  // hall over a rostrum was lit, and the same drawn mass hanging off the same truss.
+  if (period) {
+    return (
+      <g>
+        <rect x={x - 5 * s} y={y} width={10 * s} height={30 * s} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+        <path d={`M ${x - 56 * s} ${y + 62 * s} L ${x + 56 * s} ${y + 62 * s} L ${x + 22 * s} ${y + 30 * s}
+                  L ${x - 22 * s} ${y + 30 * s} Z`}
+          fill={shade(tn.body, -1)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+        <rect x={x - 22 * s} y={y + 62 * s} width={44 * s} height={38 * s} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
+        <path d={`M ${x - 22 * s} ${y + 100 * s} q ${22 * s} ${22 * s} ${44 * s} 0 Z`}
+          fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+        <line x1={x - 12 * s} y1={y + 66 * s} x2={x - 12 * s} y2={y + 98 * s} stroke={INK} strokeWidth={STROKE_THIN * 0.6} opacity={0.6} />
+        <line x1={x + 12 * s} y1={y + 66 * s} x2={x + 12 * s} y2={y + 98 * s} stroke={INK} strokeWidth={STROKE_THIN * 0.6} opacity={0.6} />
+      </g>
+    );
+  }
   return (
     <g>
       <rect x={x - 5 * s} y={y} width={10 * s} height={34 * s} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
@@ -1830,6 +2319,12 @@ const BroadcastDesk: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // PERIOD (WO-27) — the hardest of the thirteen, and the one to be honest about. Broadcasting does
+  // not exist before 1920, so period mode does NOT pretend this is a studio: it draws the same
+  // composition as a PRESS ROSTRUM — two men at a long table, a great painted chart board behind
+  // them, oil lamps on the rig above, and a plate camera on a wooden tripod in the near plane
+  // photographing them. Everything lit becomes something painted, printed or burning.
+  const period = usePeriod();
   return (
     <Frame>
       {/* --- the studio box: dark panelled walls behind everything. Three rows of twenty rather
@@ -1852,30 +2347,38 @@ const BroadcastDesk: React.FC = () => {
       {/* --- the backdrop screen: a skyline behind a chart behind a masthead band. Drawn INSIDE the
               screen's own rectangle, then the bezel over the top, so nothing bleeds past the glass
               (there is no clip path anywhere in this file — a clip silently swallows art). --- */}
-      <rect x={306} y={296} width={1200} height={410} fill={shade(tn.deep, -2)} />
+      {/* PERIOD: the glass becomes a painted BOARD — a cream ground carrying the same panorama and
+          the same chart, with the lit stats panel replaced by a pinned bill of figures and both
+          straps repainted as hand-lettered boards. Same three layers, nothing emitting light. */}
+      {/* the board's ground is a NEUTRAL rung, not the hue-carrying `card`: WO-24's coverage budget
+          says a plane this size either carries the hue at real chroma or is grey, and 1200×410 of
+          keyed board is 24% of the frame — enough on its own to push this template's coloured
+          coverage back up, which is the regression this work order must not cause. */}
+      <rect x={306} y={296} width={1200} height={410} fill={period ? shade(tn.floor, 1) : shade(tn.deep, -2)} />
       <BuildingBand baseY={706} x0={306} x1={1506} n={8} seed={23} depth={1} minH={90} maxH={230} opacity={0.8} />
       {/* a stats panel on the left of the screen — the band between the masthead and the lower
           third was the emptiest region in the frame, and a news backdrop always carries figures */}
-      <rect x={344} y={382} width={556} height={214} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={344} y={382} width={556} height={214} fill={period ? PAPER_WHITE : shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
       {Array.from({length: 12}, (_, i) => {
         const col = i % 3, row = Math.floor(i / 3);
         return (
           <g key={i}>
             <rect x={358 + col * 184} y={396 + row * 52} width={116} height={20}
-              fill={rnd(i * 17) > 0.68 ? c.accent : PAPER_WHITE} opacity={0.88} />
-            <rect x={482 + col * 184} y={396 + row * 52} width={42} height={20} fill={PAPER_WHITE} opacity={0.55} />
+              fill={rnd(i * 17) > 0.68 ? c.accent : period ? INK : PAPER_WHITE} opacity={period ? 0.62 : 0.88} />
+            <rect x={482 + col * 184} y={396 + row * 52} width={42} height={20}
+              fill={period ? INK : PAPER_WHITE} opacity={period ? 0.4 : 0.55} />
           </g>
         );
       })}
       <ChartPlot x={950} y={330} w={506} h={330} kind="line" bars={9} seed={4} live crash
         ground={shade(tn.card, 1)} grid={4} />
       <rect x={306} y={296} width={1200} height={62} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
-      <SerifWords x={344} y={312} w={560} h={30} words={3} seed={7} fill={PAPER_WHITE} />
+      <SerifWords x={344} y={312} w={560} h={30} words={3} seed={7} fill={period ? INK : PAPER_WHITE} />
       <rect x={306} y={296} width={1200} height={410} fill="none" stroke={INK} strokeWidth={STROKE * 1.4} />
       {/* the lower-third strap, over the bottom of the screen */}
-      <rect x={306} y={620} width={780} height={86} fill={shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={306} y={620} width={780} height={86} fill={period ? shade(tn.floor, -1) : shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
       <rect x={306} y={620} width={22} height={86} fill={c.accent} />
-      <SerifWords x={352} y={634} w={420} h={22} words={3} seed={12} fill={PAPER_WHITE} serif={false} />
+      <SerifWords x={352} y={634} w={420} h={22} words={3} seed={12} fill={period ? INK : PAPER_WHITE} serif={period} />
       <TextLines x={352} y={672} w={380} n={2} gap={13} th={5} seed={16} opacity={0.7} />
       {/* flanking wall monitors, both live */}
       {[46, 1556].map((px, i) => (
@@ -1920,22 +2423,71 @@ const BroadcastDesk: React.FC = () => {
       {/* the desk's lit front graphic: a flat accent band with a logo panel, not a gradient */}
       <rect x={262} y={996} width={1400} height={58} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
       <rect x={286} y={1004} width={112} height={42} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
-      <SerifWords x={434} y={1010} w={800} h={26} words={4} seed={19} fill={PAPER_WHITE} />
+      {/* PERIOD: the desk front is a painted board, so its lettering is ink on the paint rather than
+          a lit strap */}
+      <SerifWords x={434} y={1010} w={800} h={26} words={4} seed={19} fill={period ? INK : PAPER_WHITE} />
       {/* what is on the desk: papers, a mug, a mic on a stand, a confidence monitor */}
       <Papers x={520} y={900} n={3} s={0.66} seed={9} />
       <Papers x={1364} y={904} n={2} s={0.6} seed={13} />
       <rect x={1204} y={866} width={44} height={40} rx={6} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
       <path d="M 1248 874 q 22 8 0 18" fill="none" stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
-      <g>
-        <ellipse cx={1010} cy={906} rx={40} ry={11} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
-        <path d="M 1010 902 L 1010 846 L 1074 812" fill="none" stroke={INK} strokeWidth={STROKE_THIN * 1.4} />
-        <ellipse cx={1082} cy={808} rx={20} ry={13} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN}
-          transform="rotate(-28 1082 808)" />
-      </g>
+      {/* the mic on its stand. PERIOD: a WATER CARAFE and a tumbler in its place — what stands on a
+          rostrum table when there is nothing to speak into. */}
+      {period ? (
+        <g>
+          <path d="M 984 906 L 984 856 Q 984 838 1000 826 L 1000 806 L 1030 806 L 1030 826
+                   Q 1046 838 1046 856 L 1046 906 Z"
+            fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+          <line x1={986} y1={868} x2={1044} y2={868} stroke={INK} strokeWidth={STROKE_THIN * 0.7} opacity={0.6} />
+          <rect x={1058} y={862} width={38} height={46} rx={4} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
+          <line x1={1058} y1={880} x2={1096} y2={880} stroke={INK} strokeWidth={STROKE_THIN * 0.6} opacity={0.5} />
+        </g>
+      ) : (
+        <g>
+          <ellipse cx={1010} cy={906} rx={40} ry={11} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          <path d="M 1010 902 L 1010 846 L 1074 812" fill="none" stroke={INK} strokeWidth={STROKE_THIN * 1.4} />
+          <ellipse cx={1082} cy={808} rx={20} ry={13} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN}
+            transform="rotate(-28 1082 808)" />
+        </g>
+      )}
       <Monitor x={356} y={806} w={168} h={104} content="text" stand={false} seed={26} />
 
       {/* --- near plane: the studio camera, bible §6.8's dark foreground mass. Drawn last so it
-              occludes the desk, which is the only way a near plane reads as near. --- */}
+              occludes the desk, which is the only way a near plane reads as near.
+              PERIOD: a PLATE CAMERA — a bellows box on a wooden tripod with a brass lens barrel and
+              the dark cloth over the back — which is the same near-plane mass at the same place, is
+              unambiguously the thing pointing at the table, and is the one substitution in this
+              work order that makes the frame MORE specific about its century rather than less. --- */}
+      {period ? (
+        <g>
+          {/* tripod: three splayed timber legs with a brace ring */}
+          {[-1, 0.1, 1].map((k, i) => (
+            <g key={i}>
+              <path d={`M ${1726 + k * 16} 900 L ${1726 + k * 176} 1072 l 22 -8 L ${1726 + k * 16 + 20} 900 Z`}
+                fill={shade(tn.floor, -2)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+            </g>
+          ))}
+          <path d="M 1610 984 L 1846 984" stroke={INK} strokeWidth={STROKE_THIN * 1.4} fill="none" />
+          {/* the bellows box: rear standard, tapered bellows, front standard, lens */}
+          <rect x={1690} y={846} width={200} height={62} fill={shade(tn.floor, -2)} stroke={INK} strokeWidth={STROKE} />
+          <rect x={1746} y={694} width={150} height={168} fill={shade(tn.floor, -2)} stroke={INK} strokeWidth={STROKE} />
+          <path d="M 1746 706 L 1610 748 L 1610 856 L 1746 850 Z" fill={shade(tn.floor, -3)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+          <g stroke={INK} strokeWidth={STROKE_THIN * 0.8} opacity={0.75}>
+            {Array.from({length: 6}, (_, i) => (
+              <line key={i} x1={1746 - i * 22} y1={706 + i * 7} x2={1746 - i * 22} y2={850 - i * 0} />
+            ))}
+          </g>
+          <rect x={1560} y={742} width={54} height={116} fill={shade(tn.floor, -2)} stroke={INK} strokeWidth={STROKE} />
+          <circle cx={1560} cy={800} r={44} fill={shade(tn.floor, -3)} stroke={INK} strokeWidth={STROKE} />
+          <circle cx={1560} cy={800} r={22} fill={INK} />
+          {/* the dark cloth thrown over the rear standard */}
+          <path d="M 1738 690 q 90 -34 166 12 q -14 96 -30 132 q -60 -46 -136 -30 Z"
+            fill="#1a1a1a" stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+          {/* the plate holders leaning against a leg */}
+          <rect x={1856} y={968} width={54} height={104} fill={shade(tn.floor, -1)} stroke={INK} strokeWidth={STROKE_THIN}
+            transform="rotate(8 1883 1020)" />
+        </g>
+      ) : (
       <g>
         {/* pedestal: column, splayed legs, castors */}
         <rect x={1704} y={840} width={44} height={190} fill={shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE} />
@@ -1961,6 +2513,7 @@ const BroadcastDesk: React.FC = () => {
         {/* the cable, taped down across the floor */}
         <path d="M 1726 1044 q -190 42 -360 6 q -180 -38 -330 22" fill="none" stroke={INK} strokeWidth={STROKE_THIN * 1.6} />
       </g>
+      )}
     </Frame>
   );
 };
@@ -2099,6 +2652,10 @@ const CloseUpPortrait: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // PERIOD (WO-27): this is the room WO-26 warned about — the template "depicts nowhere" and in fact
+  // depicts a modern office behind the head (two monitors, a keyboard, a desk phone, a printer and a
+  // skyline in the bay). All of those substitute in the library except the PRINTER, which is here.
+  const period = usePeriod();
   return (
     <Frame>
       <Ceiling y={128} lights={3} />
@@ -2161,13 +2718,25 @@ const CloseUpPortrait: React.FC = () => {
       <Desk x={1420} y={824} w={480} legH={150} fill={shade(tn.card, -1)} />
       <Papers x={1560} y={814} n={3} s={0.78} seed={23} />
       <BoxStack x={1830} baseY={816} n={2} s={0.6} seed={29} />
-      {/* a printer on the right desk: paper tray, output shelf, panel */}
-      <g>
-        <rect x={1690} y={730} width={172} height={86} rx={8} fill={shade(tn.body, 1)} stroke={INK} strokeWidth={STROKE} />
-        <rect x={1706} y={746} width={92} height={22} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
-        <rect x={1812} y={746} width={34} height={12} rx={4} fill={c.accent} />
-        <rect x={1706} y={784} width={140} height={16} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
-      </g>
+      {/* a printer on the right desk: paper tray, output shelf, panel.
+          PERIOD: a stack of bound LEDGERS with an oil lamp standing on them — the same mass on the
+          same desk, and the lamp keeps the small accent the printer's panel light was carrying. */}
+      {period ? (
+        <g>
+          <LedgerStack x={1690} y={816} w={172} n={3} seed={21} />
+          <rect x={1848} y={766} width={12} height={50} fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          <ellipse cx={1854} cy={816} rx={30} ry={10} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+          <path d="M 1830 766 q 24 -46 48 0 Z" fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+          <rect x={1836} y={742} width={36} height={12} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+        </g>
+      ) : (
+        <g>
+          <rect x={1690} y={730} width={172} height={86} rx={8} fill={shade(tn.body, 1)} stroke={INK} strokeWidth={STROKE} />
+          <rect x={1706} y={746} width={92} height={22} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          <rect x={1812} y={746} width={34} height={12} rx={4} fill={c.accent} />
+          <rect x={1706} y={784} width={140} height={16} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        </g>
+      )}
       <Plant x={1240} y={824} s={1.0} seed={5} />
       <Chair x={620} y={1060} s={1.35} facing={1} fill={shade(tn.body, -2)} />
 
@@ -2201,6 +2770,10 @@ const ChartBoard: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // PERIOD (WO-27): a chart on an EASEL with a presenter beside it and an audience in front is a
+  // nineteenth-century lecture exactly. The only dated objects are the laptop and the projector body
+  // on the side table.
+  const period = usePeriod();
   // The presenting arm. `A.stand` returns a plain Pose object, so the two joint angles that swing
   // the near arm toward the board are an override on it rather than a new action.
   //
@@ -2271,8 +2844,24 @@ const ChartBoard: React.FC = () => {
         view="front" expr={FACES.earnest} pal={LIGHT} frame={f} idle="gesture" />
       {/* a side table with a projector and a live laptop beside him */}
       <Desk x={1668} y={904} w={216} h={24} legH={104} fill={shade(tn.card, -1)} />
-      <Monitor x={1690} y={814} w={172} h={90} content="grid" seed={21} />
-      <rect x={1700} y={878} width={148} height={26} rx={6} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      {/* PERIOD: the laptop and its projector base become the presenter's own papers — a stack of
+          ledgers with rolled sheets leaning against them. */}
+      {period ? (
+        <g>
+          <LedgerStack x={1690} y={904} w={150} n={3} seed={21} />
+          {[1848, 1866].map((rx, i) => (
+            <g key={i}>
+              <rect x={rx} y={806} width={18} height={98} rx={8} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.8}
+                transform={`rotate(${9 + i * 5} ${rx + 9} 904)`} />
+            </g>
+          ))}
+        </g>
+      ) : (
+        <g>
+          <Monitor x={1690} y={814} w={172} h={90} content="grid" seed={21} />
+          <rect x={1700} y={878} width={148} height={26} rx={6} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        </g>
+      )}
       <Papers x={1880} y={896} n={2} s={0.6} seed={25} />
 
       {/* --- the audience: seated backs in the near plane, each with its own chair.

@@ -384,47 +384,77 @@ or a one-line judgement** (§3a), which is what makes it the most valuable name 
 
 ### PERIOD — never put a dated machine under narration from a century that had not invented it
 
-**All thirteen rooms are drawn CONTEMPORARY, and none of them takes a period flag.** There is no
-historical art and no `era=` switch to ask for. So this is a **writing** constraint: under narration
-set before roughly 1900 you may only place rooms whose *contents* that century does not contradict.
+**There IS a period flag now (WO-27): `period="pre1900"` on the scene.** It is opt-in, per scene, and
+default off — a scene that does not set it renders exactly what it always did (proved by render: all
+thirteen templates at native 1280, before and after, identical SHA-256). With it set, the template
+draws the same room with its era-marking props **substituted**, not deleted: ledgers and paper for
+monitors, an open ledger for a keyboard, an inkstand for a desk phone, a chalk board for the
+electronic quote board, pendant lamps for recessed panels, a wooden chair for a swivel chair, a
+masonry skyline for a glazed one, a dray for a car, a barrel for a traffic cone, a plate camera on a
+tripod for a studio camera.
 
-The QA of the Lehman build scored this as a defect across two chapters — 1844 Alabama narration over
-CRT monitors, a projector, a parked car and a glass skyline (COMPARISON.md §7 defect 4). It is the
-most obviously "wrong" thing a viewer sees, it needs no expertise to notice, and the topic queue is
-full of historical subjects (`tulip_mania`, `weimar_hyperinflation`, `carnegie`, `jp_morgan_1907`,
-`ford_five_dollar_day`, `de_beers`). **Assume the next historical episode reproduces it unless you
-apply this section.**
+WO-26 wrote the rule this section used to carry, and it was right for the art that existed then: the
+QA of the Lehman build scored 1844 Alabama narration over CRT monitors, a projector, a parked car and
+a glass skyline (COMPARISON.md §7 defect 4), and the only fix available was to AVOID nine of the
+thirteen rooms. **That cost was the reason for WO-27:** a pre-1900 chapter had four rooms where a
+modern one had thirteen, and the topic queue is mostly historical subjects (`tulip_mania`,
+`weimar_hyperinflation`, `carnegie`, `jp_morgan_1907`, `ford_five_dollar_day`, `de_beers`).
 
-The tiers below are read off the JSX in `src/explainer.tsx`, not guessed. Re-check them if the art
-changes.
+**The rooms were never the problem — a counting house, an exchange, a mill, a court and a street all
+existed in 1844.** A short list of props was, and props can be swapped.
 
-| Tier | Rooms | What dates them |
+#### The tiers WITH the flag on
+
+Read off the JSX in `src/explainer.tsx` and off rendered frames, both modes, one per template.
+Re-check them if the art changes.
+
+| Tier | Rooms | Note |
 |---|---|---|
-| **ERA-FREE** — safe under any century | `newsMontage` · `courtHearing` | printed sheets; a panelled bench, gallery and wall clock. Nothing electrical, no vehicle, no skyline. |
-| **NEAR-NEUTRAL** — safe pre-1900 | `factoryFloor` · `domesticInterior` | belts, crates, trolley, safety cones; a television on a low stand and one small low-rise window band. Read as period at a glance. |
-| **ERA-MARKED** — never under pre-1900 narration | `officeFloor` · `exchangeFloor` · `broadcastDesk` · `chartBoard` · `boardroom` · `cityStreet` · `crowdQueue` · `closeUpPortrait` · `bankExterior` | 2–6 monitors, a quote board, desk phones, a projector and a laptop, studio mics, a full-wall glazed skyline, three cars (one driving across frame), traffic cones and rope barriers, a printer. |
+| **ERA-FREE, no flag needed** | `newsMontage` · `courtHearing` | printed sheets; a panelled bench, gallery and wall clock. Setting `period` on `courtHearing` still helps a little (its ceiling panels become pendants) but nothing in it contradicts a century. |
+| **PERIOD-CLEAN with `period="pre1900"`** | `officeFloor` · `boardroom` · `exchangeFloor` · `cityStreet` · `domesticInterior` · `bankExterior` · `factoryFloor` · `crowdQueue` · `closeUpPortrait` · `chartBoard` | Ten rooms that read as 1844 with the flag and as 2008 without it. See the per-room table below for what actually changes. |
+| **PERIOD-PLAUSIBLE, use with judgement** | `broadcastDesk` | Broadcasting does not exist before 1920, so the flag does not pretend it does: it redraws the same composition as a **press rostrum** — two men at a long table, a painted chart board behind them, oil lamps overhead, a plate camera photographing them. Correct for a hearing, an inquiry or a public statement; wrong for anything the narration calls a broadcast. |
+| **ERA-MARKED, still, without the flag** | all eleven above | Nothing changed for a scene that does not set `period`. The old rule stands there in full. |
 
-Note what is **not** on the neutral list. `closeUpPortrait` is a modern office behind the head — two
-monitors, a keyboard, a desk phone, a printer and a skyline in the bay — so the room that "depicts
-nowhere" still depicts *now*. `bankExterior` parks a car on its plaza. `crowdQueue` stands its queue
-under two bands of mid-rise. Those three read neutral in the name and do not render neutral.
+That is **twelve of thirteen rooms available to a pre-1900 chapter**, against four before, plus the
+thirteenth with the caveat above.
 
-**And the fourth surface, which beats all of them: a full-screen `card=` with no `hold` carries no
-era at all**, because the art underneath is never rendered (§8 `card=`). Where nothing in the tiers
-fits the beat, **write the line onto a card rather than into a contradicting room.** A black card
-carrying the sentence is always period-correct.
+#### What each room does with the flag
 
-Two consequences to plan for, not to discover mid-script:
+| Room | With `period="pre1900"` |
+|---|---|
+| `officeFloor` | Monitors → framed ledger boards on easels; keyboards → open ledgers; desk phone → inkstand and hand bell; the sprinklered service duct → a timber beam on iron brackets; the lit exit sign → a painted name board; the water cooler → a cast-iron stove with a flue; the extinguisher → a fire bucket; swivel chairs → turned wooden chairs; ceiling panels → pendant lamps. |
+| `boardroom` | The curtain wall → three tall round-headed sash windows in a masonry wall (piers, arches, sill course laid over the glazing); the ceiling projector → a three-burner gasolier; table screen → ledger board; chairs and ceiling as above; the city outside → masonry. |
+| `exchangeFloor` | The electronic quote board → a **chalk slate** in a timber frame, ruled into columns, with chalked symbols, figures and ticks — and it stops reprinting itself; the running ticker → a bill board of pasted notices; every desk screen, keyboard and phone substitutes; cone → barrel. |
+| `cityStreet` | Cars → drays (the travelling one keeps the identical wrap arithmetic, so the motion is unchanged); traffic signal → an advertising column of pasted bills; lane markings and the zebra crossing → granite setts; the news box → a newsvendor's stand; the facade's storey-high glazing → punched sash windows with lintels and sills; the far skyline → masonry. |
+| `domesticInterior` | The television → a framed picture propped on the same stand between two candlesticks; armchair → wooden chair; the roofline through the window → masonry. |
+| `bankExterior` | The parked car → a dray; the news box → a pillar box; cone → barrel; the flanking blocks → masonry. |
+| `courtHearing` | Ceiling panels → pendant lamps. Nothing else needed. |
+| `factoryFloor` | Painted floor hazard chevrons → sett paving; the flashing beacon → a shift bell on the same post; cones → barrels. |
+| `broadcastDesk` | See the caveat above: studio lamps → hanging oil lamps; the backdrop screen → a painted board (neutral ground, hand-lettered straps, the same panorama and chart); the mic → a carafe and tumbler; wall and floor screens → framed charts and easel boards; the studio camera → a **plate camera on a wooden tripod** with the dark cloth over it. |
+| `crowdQueue` | Skyline bands → masonry; cone → barrel. Nothing bespoke — the queue, the placards, the shut door and the barriers were already period. |
+| `closeUpPortrait` | Both monitors, the keyboard and the desk phone substitute; the printer → a stack of ledgers with an oil lamp on it; the skyline in the bay → masonry; ceiling → pendants. |
+| `chartBoard` | The laptop and the projector body → a ledger stack with rolled sheets; the chart is on an easel already; ceiling → pendants; chairs → wooden. |
+| `newsMontage` | Nothing. It is paper. |
 
-* **A pre-1900 chapter has four rooms, not thirteen**, so its rotation is tighter than a modern
-  chapter's. Buy the extra set-ups from DEVICES, which are era-free: cards, an over-the-shoulder
-  silhouette (a black mass has no century), a `panels=` split of two neutral rooms. Budget one or two
-  more devices into a historical chapter than you would into a modern one.
-* **Set the era boundary off the NARRATION, scene by scene** — not off the chapter. A chapter that
-  opens in 1844 and closes in 1994 crosses the line inside itself. Monitors are wrong before ~1970;
-  a glazed skyline and a car are wrong before ~1900; print, a courtroom and a mill are never wrong.
-  A deliberately multi-era montage (`panels=` across four decades) is the one place a modern cell is
-  correct under old narration, because the cell *is* the later decade.
+#### The rules that did NOT change
+
+* **A full-screen `card=` with no `hold` still carries no era at all**, because the art underneath is
+  never rendered (§8 `card=`). It remains the cheapest period-correct surface in the format.
+* **Set the era off the NARRATION, scene by scene** — not off the chapter, and not off the topic. A
+  chapter that opens in 1844 and closes in 1994 crosses the line inside itself, and `period` is a
+  per-scene field precisely so it can. Monitors are wrong before ~1970; a glazed skyline and a car are
+  wrong before ~1900; print, a courtroom and a mill are never wrong.
+* **A `panels=` split takes the flag too** — it is applied to every cell — so a deliberately multi-era
+  montage should *not* set it; the modern cell is correct there, because the cell *is* the later decade.
+* **Do not set `period` on a modern scene to "make it look classic".** It is an accuracy switch, not a
+  mood one, and the number note, balloons and cards are unaffected by it either way.
+
+#### What the flag does NOT fix
+
+Named because a reviewer will see them: the **figures still wear modern suits and ties** (that is
+`figure.tsx`, not the templates); `crowdQueue`'s bank door keeps a horizontally-ribbed shutter panel
+that reads as a roller door if you look for it; and `broadcastDesk` remains a room whose *name* is an
+anachronism whatever is drawn in it. The flag removes dated MACHINES, which is what a viewer notices.
 
 ### The vocabulary is 13 rooms, not 13 shots
 The environment archetypes the old canon listed in plain English (office · boardroom · trading floor ·
@@ -597,6 +627,29 @@ foreground=dict(kind="overShoulder", side="right", scale=0.8, y=1010)
 right-side silhouette at `scale=1` on `boardroom` (whose hero stands at the right) blacks the hero out
 completely. It also costs a little density: the same scene measured 87.2% flat fill without it and
 87.8% with, so use it as an occasional depth beat, not on every scene.
+
+#### `period=` — draw the room without its dated machines (WO-27)
+
+One string, on the scene, beside `template=`. **`period="pre1900"` is the only accepted value**; any
+other string RAISES with the scene id at render time rather than silently doing nothing (which would
+be the anachronism the flag exists to prevent, discovered in the finished file).
+
+```python
+dict(id="t005", template="officeFloor", period="pre1900",
+     narration=("Montgomery, Alabama, 1844. A German immigrant named Henry Lehman opened a shop."))
+```
+
+| behaviour | detail |
+|---|---|
+| scope | The scene's ART — the room, and every cell of a `panels=` split. Cards, balloons, the number note and the `foreground=` silhouette are era-free already and are untouched. |
+| default | **Off.** A scene without it renders exactly as before; verified by rendering all thirteen templates at native 1280 before and after WO-27 for identical SHA-256. |
+| what it changes | Props, never the room. `template=` still names the environment, the composition is unchanged, and the hero, crowd and camera are where they were. |
+| what it costs | A little motion: a chalk board does not reprint, an inkstand has no message lamp, a bell does not flash. Measured, period mode's camera lock is equal or HIGHER, never lower. |
+| what it does not cost | Density or colour. Every suppression is a substitution at the same footprint; measured, flat fill stays inside the 74–92% band on all thirteen and coloured coverage is at or below the modern room's on twelve of thirteen. |
+
+The per-room effects are tabled in **§8 PERIOD** above. Read that before setting the flag: two rooms
+never need it, ten are clean with it, and `broadcastDesk` becomes a press rostrum, which is right for
+a hearing and wrong for anything the narration calls a broadcast.
 
 #### `overlay=` — the number note, and the one deliberate deviation from the reference
 

@@ -268,7 +268,11 @@ async def main():
         # A scene with none of them therefore emits byte-for-byte the record it emitted before.
         # Field shapes are documented for the writer in docs/BIBLE.md §8; Video2.tsx validates them
         # and RAISES on a malformed one rather than silently dropping the device.
-        for key in ("card", "bubbles", "panels", "foreground"):
+        # WO-27 adds `period` to the same list: the scene's era ("pre1900"), which makes the template
+        # draw its room with the era-marking props substituted out (ledgers for monitors, a chalk
+        # board for an electronic one, masonry for a glazed skyline). Same contract as the devices —
+        # visual only, passed through verbatim, absent unless the writer set it.
+        for key in ("card", "bubbles", "panels", "foreground", "period"):
             if sc.get(key) is not None:
                 rec[key] = sc[key]
         scenes_out.append(rec)
