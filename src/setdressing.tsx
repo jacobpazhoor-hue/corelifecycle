@@ -244,6 +244,73 @@ export const BuildingBand: React.FC<{
   return <g opacity={opacity}>{units}</g>;
 };
 
+/**
+ * A suspended ceiling with a tile grid and recessed light panels.
+ *
+ * Built by FLIPPING `SlabFloor`: a ceiling and a floor are the same receding plane seen from the
+ * other side, and `matrix(1 0 0 -1 0 y)` maps the region [0,y] onto [y,0], so the slab joints
+ * converge at the wall line and splay toward the frame edge exactly as they should. Reusing the
+ * component also means a ceiling picks up the same `farBand` depth rung the floor does, for free.
+ */
+export const Ceiling: React.FC<{y?: number; lights?: number; fill?: string}> = ({y = 200, lights = 4, fill}) => {
+  const tn = useSceneTones();
+  const panel = fill ?? tn.back;
+  return (
+    <g>
+      <g transform={`matrix(1 0 0 -1 0 ${y})`}>
+        <SlabFloor y={0} bottom={y} cols={19} rows={6} fill={panel} opacity={0.22} />
+      </g>
+      {/* recessed fittings: a white panel in a dark reveal. The one honest bit of white in a dark
+          interior, and what stops the top eighth of an interior frame reading as an empty band. */}
+      {Array.from({length: lights}, (_, i) => {
+        const w = 1920 / (lights + 0.6);
+        const cx = w * 0.55 + i * w;
+        return (
+          <g key={i}>
+            <rect x={cx - w * 0.3} y={y * 0.28} width={w * 0.6} height={y * 0.3} fill={shade(panel, -2)}
+              stroke={INK} strokeWidth={STROKE_THIN} />
+            <rect x={cx - w * 0.26} y={y * 0.33} width={w * 0.52} height={y * 0.2} fill={PAPER_WHITE} />
+            <line x1={cx} y1={y * 0.33} x2={cx} y2={y * 0.53} stroke={INK} strokeWidth={STROKE_THIN * 0.5} opacity={0.5} />
+          </g>
+        );
+      })}
+    </g>
+  );
+};
+
+/**
+ * A run of glazing — a curtain wall, an office window, a shopfront, a living-room window.
+ *
+ * `pane` fills the opening; pass `null` to leave it unpainted, which is how a caller puts something
+ * BEHIND the glass (draw the sky and the skyline first, then lay the mullions over the top). There
+ * is no clip path and no mask: the caller sizes its own content to the opening, because a clip is
+ * one more thing that can silently swallow art the metrics cannot see.
+ */
+export const Glazing: React.FC<{
+  x: number; y: number; w: number; h: number; bays?: number; rows?: number;
+  pane?: string | null; sill?: boolean;
+}> = ({x, y, w, h, bays = 3, rows = 1, pane, sill = true}) => {
+  const tn = useSceneTones();
+  const glass = pane === null ? null : (pane ?? tn.deep);
+  const bar = shade(tn.body, -2);
+  return (
+    <g>
+      {glass && <rect x={x} y={y} width={w} height={h} fill={glass} />}
+      {/* mullions: solid bars, not lines, so they read as frame members at 1920 */}
+      {Array.from({length: bays - 1}, (_, i) => (
+        <rect key={'m' + i} x={x + (w * (i + 1)) / bays - 7} y={y} width={14} height={h} fill={bar}
+          stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+      ))}
+      {Array.from({length: rows - 1}, (_, i) => (
+        <rect key={'t' + i} x={x} y={y + (h * (i + 1)) / rows - 7} width={w} height={14} fill={bar}
+          stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+      ))}
+      <rect x={x} y={y} width={w} height={h} fill="none" stroke={INK} strokeWidth={STROKE} />
+      {sill && <rect x={x - 16} y={y + h} width={w + 32} height={20} fill={tn.card} stroke={INK} strokeWidth={STROKE_THIN} />}
+    </g>
+  );
+};
+
 // ---------------------------------------------------------------------------
 // PROP CLUSTERS
 // ---------------------------------------------------------------------------
@@ -383,6 +450,333 @@ export const RopeLine: React.FC<{x0: number; x1: number; y: number; posts?: numb
 };
 
 // ---------------------------------------------------------------------------
+// INTERIOR KIT — desks, screens, seating, paperwork, wall art
+//
+// WO-8f authored these inside explainer.tsx as a private second tier, because the library above was
+// built for exteriors and yards and had nothing for a room. WO-8g promoted them here unchanged:
+// the explainer format is ~20-30 indoor-corporate-and-domestic archetypes, so templates 7-25 need
+// this kit as much as the first six did, and a second tier that only one module can import is a
+// fork of the library, not a layer on it.
+//
+// Same rules as everything above: flat vector only, static (nothing takes `frame`), and every
+// default drawn from `useSceneTones()`/`useSceneColors()` so a prop dropped into any template keys
+// itself correctly with no per-call palette work.
+// ---------------------------------------------------------------------------
+
+/**
+ * A desk / table / counter seen head-on: a light top slab over a darker apron, on square legs.
+ *
+ * Deliberately NOT drawn in perspective. The reference's desks are near-orthographic slabs
+ * (wolf_office_singleframe, the 3:34 office), and a foreshortened top is a large flat quadrilateral
+ * that buys nothing but flat-fill budget.
+ */
+export const Desk: React.FC<{
+  x: number; y: number; w: number; h?: number; legH?: number; fill?: string; drawers?: number;
+}> = ({x, y, w, h = 34, legH = 120, fill, drawers = 0}) => {
+  const tn = useSceneTones();
+  const top = fill ?? tn.card;
+  const apron = shade(top, -2);
+  return (
+    <g>
+      {/* legs first, so the apron's outline crosses in front of them */}
+      <rect x={x + 22} y={y + h} width={26} height={legH} fill={apron} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={x + w - 48} y={y + h} width={26} height={legH} fill={apron} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={x} y={y + h} width={w} height={h * 1.5} fill={apron} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={x - 10} y={y} width={w + 20} height={h} rx={6} fill={top} stroke={INK} strokeWidth={STROKE} />
+      {Array.from({length: drawers}, (_, i) => (
+        <g key={i}>
+          <rect x={x + w - 250 + i * 0} y={y + h + h * 1.5 + i * 62} width={230} height={54} fill={top}
+            stroke={INK} strokeWidth={STROKE_THIN} />
+          <rect x={x + w - 175} y={y + h + h * 1.5 + i * 62 + 24} width={80} height={9} rx={4} fill={INK} />
+        </g>
+      ))}
+    </g>
+  );
+};
+
+/**
+ * A monitor / CRT / wall display. `content` picks what is on the glass:
+ *   'text'  — ruled lines, a document or an order blotter
+ *   'chart' — a candle/step line over a baseline, the scene's accent
+ *   'grid'  — a quote grid, dense blocks of figures
+ * A screen is the densest cheap prop in an office frame and the one place a dark interior gets a
+ * legitimate patch of light, so every desk in the explainer set carries at least one.
+ */
+export const Monitor: React.FC<{
+  x: number; y: number; w?: number; h?: number; content?: 'text' | 'chart' | 'grid';
+  stand?: boolean; seed?: number;
+}> = ({x, y, w = 190, h = 132, content = 'text', stand = true, seed = 0}) => {
+  const c = useSceneColors();
+  const tn = useSceneTones();
+  const glass = shade(tn.deep, -1);
+  const pad = 14;
+  const ix = x + pad, iy = y + pad, iw = w - pad * 2, ih = h - pad * 2;
+  return (
+    <g>
+      {stand && (
+        <g>
+          <rect x={x + w / 2 - 14} y={y + h} width={28} height={26} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          <rect x={x + w / 2 - 52} y={y + h + 24} width={104} height={13} rx={5} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        </g>
+      )}
+      <rect x={x} y={y} width={w} height={h} rx={8} fill={tn.body} stroke={INK} strokeWidth={STROKE * 0.75} />
+      <rect x={ix} y={iy} width={iw} height={ih} fill={glass} />
+      {content === 'text' && Array.from({length: 6}, (_, i) => (
+        <rect key={i} x={ix + 8} y={iy + 10 + i * (ih - 16) / 6} width={iw * (0.4 + rnd(seed * 31 + i) * 0.5)}
+          height={Math.max(4, ih * 0.055)} fill={PAPER_WHITE} opacity={0.85} />
+      ))}
+      {content === 'chart' && (
+        <g>
+          <polyline
+            points={Array.from({length: 9}, (_, i) =>
+              `${ix + 6 + (i * (iw - 12)) / 8},${iy + ih * (0.82 - 0.6 * rnd(seed * 17 + i))}`).join(' ')}
+            fill="none" stroke={c.accent} strokeWidth={STROKE_THIN * 0.9} strokeLinejoin="round" />
+          <line x1={ix + 4} y1={iy + ih * 0.9} x2={ix + iw - 4} y2={iy + ih * 0.9} stroke={PAPER_WHITE} strokeWidth={2} opacity={0.6} />
+        </g>
+      )}
+      {content === 'grid' && Array.from({length: 12}, (_, i) => (
+        <rect key={i} x={ix + 7 + (i % 3) * (iw / 3)} y={iy + 8 + Math.floor(i / 3) * (ih / 4)}
+          width={iw / 3 - 14} height={Math.max(4, ih * 0.09)}
+          fill={rnd(seed * 53 + i) > 0.68 ? c.accent : PAPER_WHITE} opacity={0.85} />
+      ))}
+    </g>
+  );
+};
+
+/** A keyboard slab with key rows — the small prop that turns a desk into a workstation. */
+export const Keyboard: React.FC<{x: number; y: number; w?: number}> = ({x, y, w = 178}) => {
+  const tn = useSceneTones();
+  return (
+    <g>
+      <rect x={x} y={y} width={w} height={26} rx={5} fill={tn.card} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+      {Array.from({length: 3}, (_, r) => (
+        <line key={r} x1={x + 8} y1={y + 7 + r * 6} x2={x + w - 8} y2={y + 7 + r * 6}
+          stroke={INK} strokeWidth={1.6} opacity={0.5} />
+      ))}
+    </g>
+  );
+};
+
+/**
+ * A swivel chair in profile — back, seat, gas post, five-star base on castors.
+ * `back` draws it seen from behind (the reference's 3:34 office foreground), which is how an empty
+ * chair in the near plane buys depth without a large black silhouette mass.
+ */
+export const Chair: React.FC<{x: number; y: number; s?: number; facing?: number; fill?: string}> =
+({x, y, s = 1, facing = 1, fill}) => {
+  const tn = useSceneTones();
+  const skin = fill ?? shade(tn.body, -1);
+  return (
+    <g>
+      <rect x={x - 58 * s} y={y - 250 * s} width={116 * s} height={150 * s} rx={22 * s} fill={skin}
+        stroke={INK} strokeWidth={STROKE * 0.8} />
+      <line x1={x - 40 * s} y1={y - 178 * s} x2={x + 40 * s} y2={y - 178 * s} stroke={INK} strokeWidth={STROKE_THIN * 0.7} opacity={0.5} />
+      <rect x={x - 66 * s + facing * 12 * s} y={y - 106 * s} width={132 * s} height={26 * s} rx={10 * s}
+        fill={skin} stroke={INK} strokeWidth={STROKE * 0.7} />
+      <rect x={x - 8 * s} y={y - 82 * s} width={16 * s} height={54 * s} fill={INK} />
+      {[-1, -0.45, 0.45, 1].map((k, i) => (
+        <g key={i}>
+          <line x1={x} y1={y - 30 * s} x2={x + k * 62 * s} y2={y - 6 * s} stroke={INK} strokeWidth={STROKE_THIN * 1.1} strokeLinecap="round" />
+          <circle cx={x + k * 62 * s} cy={y} r={8 * s} fill={INK} />
+        </g>
+      ))}
+    </g>
+  );
+};
+
+/** A loose scatter of paper on a surface: overlapping ruled sheets, slightly rotated. */
+export const Papers: React.FC<{x: number; y: number; n?: number; s?: number; seed?: number}> =
+({x, y, n = 3, s = 1, seed = 0}) => (
+  <g>
+    {Array.from({length: n}, (_, i) => {
+      const r = seed * 211 + i * 9;
+      const px = x + (rnd(r) - 0.5) * 60 * s;
+      const py = y - i * 5 * s;
+      const rot = (rnd(r + 2) - 0.5) * 26;
+      return (
+        <g key={i} transform={`rotate(${rot} ${px} ${py})`}>
+          <rect x={px - 52 * s} y={py - 34 * s} width={104 * s} height={68 * s} fill={PAPER_WHITE}
+            stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+          {Array.from({length: 4}, (_, k) => (
+            <line key={k} x1={px - 40 * s} y1={py - 22 * s + k * 14 * s} x2={px + (k === 3 ? 12 : 40) * s}
+              y2={py - 22 * s + k * 14 * s} stroke={INK} strokeWidth={1.8 * s} opacity={0.55} />
+          ))}
+        </g>
+      );
+    })}
+  </g>
+);
+
+/** A desk telephone — base, keypad, cradled handset, coiled cord. The reference office's one
+ *  unmissable prop (wolf_office_singleframe, every cell). */
+export const DeskPhone: React.FC<{x: number; y: number; s?: number; facing?: number}> = ({x, y, s = 1, facing = 1}) => (
+  <g>
+    <path d={`M ${x} ${y} L ${x + 128 * s} ${y} L ${x + 116 * s} ${y - 44 * s} L ${x + 10 * s} ${y - 44 * s} Z`}
+      fill={INK} stroke={INK} strokeWidth={STROKE_THIN * 0.8} strokeLinejoin="round" />
+    {Array.from({length: 6}, (_, i) => (
+      <rect key={i} x={x + 22 * s + (i % 3) * 22 * s} y={y - 34 * s + Math.floor(i / 3) * 16 * s}
+        width={13 * s} height={9 * s} fill={PAPER_WHITE} opacity={0.75} />
+    ))}
+    <rect x={x + 4 * s} y={y - 62 * s} width={124 * s} height={24 * s} rx={11 * s} fill={INK} />
+    <path d={`M ${x + (facing > 0 ? 128 : 4) * s} ${y - 30 * s} q ${facing * 30 * s} ${16 * s} ${facing * 6 * s} ${30 * s}`}
+      fill="none" stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+  </g>
+);
+
+/** A potted plant — pot, soil line, five flat leaves. */
+export const Plant: React.FC<{x: number; y: number; s?: number; seed?: number}> = ({x, y, s = 1, seed = 0}) => {
+  const tn = useSceneTones();
+  return (
+    <g>
+      {Array.from({length: 6}, (_, i) => {
+        const a = -70 + i * 28 + (rnd(seed * 17 + i) - 0.5) * 12;
+        const len = (110 + rnd(seed * 7 + i) * 70) * s;
+        const rad = (a * Math.PI) / 180;
+        const tx = x + Math.sin(rad) * len, ty = y - 70 * s - Math.cos(rad) * len;
+        return <path key={i} d={`M ${x} ${y - 66 * s} Q ${(x + tx) / 2 + 30 * s} ${(y - 66 * s + ty) / 2} ${tx} ${ty}
+          Q ${(x + tx) / 2 - 26 * s} ${(y - 66 * s + ty) / 2} ${x} ${y - 66 * s} Z`}
+          fill={shade(tn.body, 2)} stroke={INK} strokeWidth={STROKE_THIN} />;
+      })}
+      <path d={`M ${x - 46 * s} ${y - 74 * s} L ${x + 46 * s} ${y - 74 * s} L ${x + 34 * s} ${y} L ${x - 34 * s} ${y} Z`}
+        fill={tn.card} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+      <rect x={x - 48 * s} y={y - 84 * s} width={96 * s} height={16 * s} rx={5 * s} fill={shade(tn.card, -1)}
+        stroke={INK} strokeWidth={STROKE_THIN} />
+    </g>
+  );
+};
+
+/**
+ * A head-and-shoulders portrait, flat: hair mass, face, collar, shoulders. Small enough to sit
+ * inside a picture frame or a newspaper's photo box, which are the two places the format needs one
+ * (a wall of directors, a front-page mugshot). Kept STROKE-heavy so it still reads at 90px.
+ */
+export const Portrait: React.FC<{cx: number; cy: number; r: number}> = ({cx, cy, r}) => {
+  const tn = useSceneTones();
+  return (
+    <g>
+      <path d={`M ${cx - r * 1.7} ${cy + r * 2.2} Q ${cx} ${cy + r * 0.3} ${cx + r * 1.7} ${cy + r * 2.2} Z`}
+        fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
+      <ellipse cx={cx} cy={cy} rx={r * 0.92} ry={r} fill={shade(tn.card, 2)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <path d={`M ${cx - r * 0.92} ${cy - r * 0.16} Q ${cx - r * 0.8} ${cy - r * 1.2} ${cx} ${cy - r * 1.06}
+                Q ${cx + r * 0.8} ${cy - r * 1.2} ${cx + r * 0.92} ${cy - r * 0.16}
+                Q ${cx + r * 0.5} ${cy - r * 0.62} ${cx} ${cy - r * 0.56}
+                Q ${cx - r * 0.5} ${cy - r * 0.62} ${cx - r * 0.92} ${cy - r * 0.16} Z`} fill={INK} />
+      <circle cx={cx - r * 0.32} cy={cy + r * 0.06} r={r * 0.11} fill={INK} />
+      <circle cx={cx + r * 0.32} cy={cy + r * 0.06} r={r * 0.11} fill={INK} />
+      <path d={`M ${cx - r * 0.26} ${cy + r * 0.54} q ${r * 0.26} ${r * 0.16} ${r * 0.52} 0`}
+        fill="none" stroke={INK} strokeWidth={Math.max(2, r * 0.09)} strokeLinecap="round" />
+      <rect x={cx - r * 0.22} y={cy + r * 1.0} width={r * 0.44} height={r * 1.0} fill={PAPER_WHITE}
+        stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+    </g>
+  );
+};
+
+/**
+ * A framed thing on a wall: a chart board, a picture, a certificate, a portrait.
+ * `art` selects the flat content — 'bars' (a chart), 'line' (a trend), 'scape' (a landscape),
+ * 'head' (a portrait). Used by the boardroom, the exchange floor, the office and the living room,
+ * which is most of what a wall between waist height and the ceiling is made of.
+ */
+export const WallFrame: React.FC<{
+  x: number; y: number; w: number; h: number; art?: 'bars' | 'line' | 'scape' | 'head' | 'blank';
+  seed?: number; ground?: string;
+}> = ({x, y, w, h, art = 'bars', seed = 0, ground}) => {
+  const c = useSceneColors();
+  const tn = useSceneTones();
+  const face = ground ?? PAPER_WHITE;
+  const ix = x + 16, iy = y + 16, iw = w - 32, ih = h - 32;
+  return (
+    <g>
+      <rect x={x} y={y} width={w} height={h} fill={shade(tn.body, -2)} stroke={INK} strokeWidth={STROKE * 0.9} />
+      <rect x={ix} y={iy} width={iw} height={ih} fill={face} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      {art === 'bars' && (
+        <g>
+          {Array.from({length: 7}, (_, i) => {
+            const bh = ih * (0.2 + rnd(seed * 41 + i) * 0.66);
+            return <rect key={i} x={ix + 14 + (i * (iw - 28)) / 7} y={iy + ih - 12 - bh}
+              width={(iw - 28) / 7 - 10} height={bh} fill={i === 6 ? c.accent : tn.body}
+              stroke={INK} strokeWidth={STROKE_THIN * 0.6} />;
+          })}
+          <line x1={ix + 8} y1={iy + ih - 12} x2={ix + iw - 8} y2={iy + ih - 12} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        </g>
+      )}
+      {art === 'line' && (
+        <g>
+          <polyline points={Array.from({length: 8}, (_, i) =>
+            `${ix + 10 + (i * (iw - 20)) / 7},${iy + ih * (0.85 - 0.68 * (i / 7) * (0.6 + rnd(seed * 23 + i) * 0.7))}`).join(' ')}
+            fill="none" stroke={c.accent} strokeWidth={STROKE_THIN * 1.2} strokeLinejoin="round" />
+          <line x1={ix + 8} y1={iy + ih - 12} x2={ix + iw - 8} y2={iy + ih - 12} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          <line x1={ix + 12} y1={iy + 8} x2={ix + 12} y2={iy + ih - 12} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        </g>
+      )}
+      {art === 'scape' && (
+        <g>
+          <rect x={ix} y={iy} width={iw} height={ih * 0.55} fill={shade(c.bg, 1)} />
+          <rect x={ix} y={iy + ih * 0.55} width={iw} height={ih * 0.45} fill={tn.floor} />
+          <path d={`M ${ix} ${iy + ih * 0.55} L ${ix + iw * 0.3} ${iy + ih * 0.2} L ${ix + iw * 0.56} ${iy + ih * 0.55} Z`} fill={tn.body} />
+          <path d={`M ${ix + iw * 0.44} ${iy + ih * 0.55} L ${ix + iw * 0.74} ${iy + ih * 0.28} L ${ix + iw} ${iy + ih * 0.55} Z`} fill={tn.deep} />
+          <circle cx={ix + iw * 0.82} cy={iy + ih * 0.2} r={ih * 0.1} fill={c.accent} />
+        </g>
+      )}
+      {art === 'head' && (
+        <Portrait cx={ix + iw / 2} cy={iy + ih * 0.5} r={Math.min(iw, ih) * 0.3} />
+      )}
+    </g>
+  );
+};
+
+/**
+ * Blocks of set type, drawn as geometry rather than as text.
+ *
+ * WHY NOT REAL TEXT. Templates are TOPIC-AGNOSTIC archetypes — the episode's actual words arrive
+ * from director.tsx as overlays, so a literal headline baked into the art would be wrong for every
+ * episode but one. What a headline contributes to a FRAME is its shape and weight, and that is what
+ * this draws: word-length runs with a serif slab at each end, which is what reads as a serif
+ * masthead at frame scale (bible §6.7).
+ */
+export const SerifWords: React.FC<{
+  x: number; y: number; w: number; h: number; words?: number; seed?: number; fill?: string; serif?: boolean;
+}> = ({x, y, w, h, words = 3, seed = 0, fill, serif = true}) => {
+  const ink = fill ?? INK;
+  const out: React.ReactNode[] = [];
+  const gap = Math.max(1.6, h * 0.16);
+  let cx = x;
+  for (let i = 0; i < words; i++) {
+    const r = seed * 401 + i * 13;
+    // A word is drawn LETTER BY LETTER. The first pass drew each word as one solid slab, and three
+    // stacked slabs read as a redacted document rather than as a headline. Per-letter blocks read as
+    // set type at frame scale — and they are also the cheapest density in the file, since a headline
+    // goes from 1 edge pair to ~5.
+    const letters = 3 + Math.floor(rnd(r) * 4);
+    const widths = Array.from({length: letters}, (_, k) => h * (0.4 + rnd(r + k * 3) * 0.3));
+    const ww = widths.reduce((a, b) => a + b, 0) + gap * (letters - 1);
+    if (cx + ww > x + w) break;      // never run past the box; a short line reads as ragged setting
+    let lx = cx;
+    for (let k = 0; k < letters; k++) {
+      out.push(<rect key={`${i}_${k}`} x={lx} y={y} width={widths[k]} height={h} fill={ink} />);
+      lx += widths[k] + gap;
+    }
+    // the serif: a foot rule under the whole word, which is what a slab face reads as at this size
+    if (serif) {
+      out.push(<rect key={'f' + i} x={cx} y={y + h} width={ww} height={Math.max(1.6, h * 0.14)} fill={ink} />);
+    }
+    cx += ww + h * 0.6;
+  }
+  return <g>{out}</g>;
+};
+
+/** Ruled body copy — a column of thin ink lines with a ragged last line. */
+export const TextLines: React.FC<{
+  x: number; y: number; w: number; n: number; gap?: number; th?: number; seed?: number; opacity?: number;
+}> = ({x, y, w, n, gap = 13, th = 4, seed = 0, opacity = 0.8}) => (
+  <g fill={INK} opacity={opacity}>
+    {Array.from({length: n}, (_, i) => (
+      <rect key={i} x={x} y={y + i * gap} width={w * (i === n - 1 ? 0.42 + rnd(seed + i) * 0.3 : 0.86 + rnd(seed * 7 + i) * 0.14)} height={th} />
+    ))}
+  </g>
+);
+
+// ---------------------------------------------------------------------------
 // PEOPLE
 // ---------------------------------------------------------------------------
 
@@ -412,6 +806,44 @@ export const CrowdRow: React.FC<{
             y={y + back * dz}
             scale={scale * (1 + back * 0.07)}
             facing={rnd(s + 2) > 0.5 ? facing : -facing}
+            view={view}
+            pal={DIM}
+            showFace={false}
+            frame={0}
+          />
+        );
+      })}
+    </g>
+  );
+};
+
+/**
+ * A seated row of grey anonymous workers.
+ *
+ * `CrowdRow` only STANDS, and every interior in the explainer format is full of people sitting — at
+ * desks, around tables, in a gallery — where a standing row behind a desk reads as a queue. Same
+ * contract as `CrowdRow` otherwise: DIM fills, no faces, and static at frame 0, so a crowd never
+ * costs camera-lock cells.
+ *
+ * `working` swaps the seated pose for a typing one, which is what a desk bank needs.
+ */
+export const SeatedRow: React.FC<{
+  y: number; x0: number; x1: number; n: number; scale?: number; seed?: number; facing?: number;
+  view?: 'front' | 'profile' | 'back'; working?: boolean;
+}> = ({y, x0, x1, n, scale = 0.8, seed = 0, facing = 1, view = 'front', working = false}) => {
+  const step = n > 1 ? (x1 - x0) / (n - 1) : 0;
+  return (
+    <g>
+      {Array.from({length: n}, (_, i) => {
+        const s = seed * 173 + i * 19;
+        return (
+          <StickFigure
+            key={i}
+            pose={working ? A.type_(0, 30) : A.sit(0)}
+            x={x0 + i * step + (rnd(s) - 0.5) * step * 0.18}
+            y={y + (rnd(s + 4) - 0.5) * 14}
+            scale={scale * (0.95 + rnd(s + 2) * 0.1)}
+            facing={view === 'front' ? (rnd(s + 6) > 0.5 ? facing : -facing) : facing}
             view={view}
             pal={DIM}
             showFace={false}

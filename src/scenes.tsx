@@ -807,6 +807,7 @@ export const TEMPLATES: Record<string, React.FC> = {
   // composable topic packs (src/stage.tsx): generic + medical + startup + military + sports
   ...PACK_TEMPLATES,
   // the explainer environment set (src/explainer.tsx, WO-8f) — already colour-keyed by that module.
-  // Spread LAST on purpose: its `tradingFloor` deliberately supersedes the legacy HEDGE pack one.
+  // Spread LAST, so a name it shares with a core scene or a pack template would silently supersede
+  // that template. It shares none: WO-8f's `tradingFloor` did, and WO-8g renamed it `exchangeFloor`.
   ...EXPLAINER_TEMPLATES,
 };

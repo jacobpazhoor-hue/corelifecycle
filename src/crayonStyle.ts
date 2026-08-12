@@ -272,8 +272,9 @@ export const sceneTones = (c: SceneColors): SceneTones => {
 };
 
 /**
- * Explicit key per template — EVERY template in scenes.tsx (S00-S19) and every pack template in
- * stage.tsx. Anything absent falls to a deterministic rotation so a new template still gets a
+ * Explicit key per template — EVERY template in scenes.tsx (S00-S19), every pack template in
+ * stage.tsx and every explainer template in explainer.tsx. Anything absent falls to a deterministic
+ * rotation so a new template still gets a
  * committed hue rather than an accidental global palette, but the rotation is a safety net, not the
  * design: an unmapped template lands on an editorially random hue, which is exactly what per-scene
  * colour keying is supposed to replace.
@@ -379,6 +380,23 @@ export const SCENE_KEY_BY_TEMPLATE: Record<string, SceneKey> = {
   // --- basketball ---
   drivewayHoop: 'daylight', highSchoolGym: 'interior', gLeagueBus: 'grey', arenaCourt: 'gold',
   iceBathRoom: 'grey', rafterRetirement: 'gold',
+  // --- explainer environment set (src/explainer.tsx) ---
+  // Four of the six are enclosed rooms, so NONE of them may reach the `daylight` key: the hash
+  // fallback keyed `officeFloor` and `domesticInterior` as `daylight` (a filing floor and a living
+  // room on a bright cyan sky) and `cityStreet` — the one scene actually under open sky — as
+  // `interior`. That inversion is exactly what an explicit entry exists to prevent.
+  //   officeFloor / domesticInterior — "enclosed, lamp-lit, wooden, dark": the reference's own office
+  //     is a brown/near-black key (frames/wolf_office_singleframe.jpg) and its domestic rooms are
+  //     lamp-lit interiors.
+  //   boardroom / exchangeFloor — institutional, consistent with the existing `boardroomNotes` /
+  //     `boardroomHead` and the legacy `tradingFloor` (grey floor, `alarm` pnlWall beside it).
+  //   newsMontage — `interior`, NOT `grey`: the reference lays its cuttings on a WARM dark ground
+  //     (frames/wolf_montage_verified.jpg, 15:02), and measured, `grey` put the template at 17 rich
+  //     colours because all four of that key's tokens are greys. `interior` gives it a brown ground,
+  //     a tan newsprint stock and an amber accent, and reads as archive/records.
+  //   cityStreet — the only one of the six under open sky, so the only one keyed `daylight`.
+  officeFloor: 'interior', boardroom: 'grey', exchangeFloor: 'grey', cityStreet: 'daylight',
+  domesticInterior: 'interior', newsMontage: 'interior',
 };
 
 const KEY_ROTATION: SceneKey[] = ['daylight', 'gold', 'interior', 'alarm', 'grey'];
