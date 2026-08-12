@@ -5,6 +5,7 @@ import * as A from './actions';
 import {TEMPLATES} from './scenes';
 import {BuildingBand, CrowdHeads, CrowdRow, SlabFloor} from './setdressing';
 import {INK, PAPER_WHITE, STROKE, STROKE_THIN, shade} from './crayonStyle';
+import {THUMB_FONT, THUMB_WEIGHT} from './thumbFont';
 import meta from './episode_meta.json';
 
 // ============================================================================
@@ -20,7 +21,7 @@ import meta from './episode_meta.json';
 //   2. A DESATURATED GREY crowd or environment behind it. Grey people carry the SAME pure-black
 //      outline as the hero (figure.tsx's DIM); only their fills are drained.
 //   3. A SINGLE saturated accent — the red crash line, or the amber bar. Never two.
-//   4. Two text treatments, both a heavy sans in ALL CAPS:
+//   4. Two text treatments, both a heavy GEOMETRIC sans in ALL CAPS:
 //        (a) a solid amber band across the top carrying black caps   -> BandTitle
 //        (b) white caps with a heavy black outline, top-positioned   -> Outline / TitleBlock
 //      Thumbnail text is the ONE place the channel does not use the handwritten face, so nothing
@@ -34,8 +35,11 @@ import meta from './episode_meta.json';
 //   crash red   #cb0000   (the Great Depression line, the single largest saturated region)
 //   crowd fill  ~#b4b4b4  (figure.tsx's CROWD_FILL #c9c4bb is the shared token and matches)
 //   grey field  #373737 / #575757 / #232323 across four of the seven references
-//   type        cap height 51px @1280 in the amber band; 104px @1280 for the ROCKEFELLER wordmark,
-//               i.e. an advance of 0.70em/char in Arial Black — which is CHARW below.
+//   type        cap height 51px @1280 in the amber band; 105px @1280 for the ROCKEFELLER wordmark.
+//               WO-21 re-measured that wordmark properly: 1119px of ink over a 105px cap is
+//               width/cap 10.66 with 26-27px stems (stem/cap 0.252), which is Montserrat's
+//               proportion, not a grotesque's — see src/thumbFont.ts for the full candidate table
+//               and why Montserrat ExtraBold is now vendored and set here.
 //
 // Everything is authored on a 1920x1080 viewBox, the same space as scenes.tsx/stage.tsx/
 // setdressing.tsx, so the shared set-dressing library and the episode's own scene art drop straight
@@ -45,9 +49,17 @@ import meta from './episode_meta.json';
 // Thumbnails are STILLS (one frame), so every figure is drawn at frame 0 and nothing animates.
 // ============================================================================
 
-// The reference's thumbnail face is a heavy geometric sans in caps. The repo vendors only Caveat
-// (the handwritten face, for the VIDEO), so this is the heaviest system sans available.
-const SANS = "'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif";
+/**
+ * The reference's thumbnail face: a heavy GEOMETRIC sans in caps. WO-11 had no such face vendored
+ * and used the system `Arial Black` — a grotesque, close in weight but a different letterform
+ * skeleton (tighter apertures, a different R/G/S/C), which at thumbnail size reads as a different
+ * brand. WO-21 vendored Montserrat ExtraBold (SIL OFL) and this is now it.
+ *
+ * DELIBERATELY NO FALLBACK CHAIN. `'Montserrat', sans-serif` would let a missing woff2 ship a
+ * thumbnail in the system sans silently; thumbFont.ts cancelRender()s instead, so by the time a
+ * frame is drawn this family is loaded or there is no frame.
+ */
+const SANS = THUMB_FONT;
 
 /** The amber bar (treatment a). Measured #fdb719. */
 const AMBER = '#fdb719';
@@ -149,33 +161,88 @@ const HEAD: string = [L1, L2].filter(Boolean).join(' ') || KICKER || KEYWORD;
 type Anchor = 'inherit' | 'middle' | 'start' | 'end';
 
 /**
- * Advance width per character, in em, for the caps this file sets.
+ * Advance width per character, in em, for the face this file sets.
  *
- * MEASURED off our own render, not assumed: "NBA PLAYER" set at fs=132 draws 922.5 units wide, so
- * 9 caps + 1 space = 6.99em. With a 0.30em space that puts a cap at 0.743em; 0.75 is that plus a
- * hair of margin. v2 used a single flat 0.70 for every character, which is right on average only
- * because a narrow space cancels a wide cap — an all-caps word with no spaces ran ~6% past its box,
- * which is what pushed "SUPERMAX" off the edge of its placard.
+ * These are the VENDORED FACE'S OWN NUMBERS, not a class heuristic. WO-11's table was five buckets
+ * calibrated for Arial Black (cap 0.743em, space 0.30em); Montserrat is a different face with a
+ * different width model, and a bucket is a bad model of it in any case — its caps run from I at
+ * 0.339em to W at 1.184em, so ONE flat cap width is up to 58% wrong on a single letter. "THE WOLF
+ * OF WALL STREET" is 3 W's; that error does not average out.
+ *
+ * Read straight off `public/fonts/montserrat-latin-800-normal.woff2` and cross-checked against the
+ * browser that actually renders it: a canvas `measureText` probe at 1000px inside the real Remotion
+ * render agreed to 4 decimal places on all 13 characters spot-checked (I .339, W 1.184, M .954,
+ * space .291, 0 .685, $ .647, . .283, ? .597, ' .242, - .388, J .557, L .610, 1 .405).
+ *
+ * KERNING is not modelled — this sums bare advances, and the browser then kerns. Measured on the
+ * strings this file sets, kerning only ever takes width AWAY (0 to -0.94%: "NBA PLAYER" 6.890 ->
+ * 6.825, "SUPERMAX" 6.059 -> 6.011, "ROCKEFELLER" 7.686 -> 7.686). So the estimate is high by under
+ * 1%, i.e. type under-fills its box by under 1% and can never overflow it on that account.
  *
  * Every overflow bug in this file's history came from sizing text without measuring it against the
  * box it has to live in, so the arithmetic lives in exactly one place.
  */
+const EM: Record<string, number> = {
+  A: 0.786, B: 0.769, C: 0.730, D: 0.826, E: 0.672, F: 0.642, G: 0.770, H: 0.806, I: 0.339,
+  J: 0.557, K: 0.752, L: 0.610, M: 0.954, N: 0.806, O: 0.846, P: 0.737, Q: 0.846, R: 0.740,
+  S: 0.647, T: 0.635, U: 0.786, V: 0.766, W: 1.184, X: 0.737, Y: 0.693, Z: 0.679,
+  '0': 0.685, '1': 0.405, '2': 0.599, '3': 0.603, '4': 0.700, '5': 0.607, '6': 0.649, '7': 0.632,
+  '8': 0.669, '9': 0.649,
+  ' ': 0.291, '!': 0.301, '"': 0.462, '#': 0.730, '$': 0.647, '%': 0.897, '&': 0.752, "'": 0.242,
+  '(': 0.369, ')': 0.369, '*': 0.453, '+': 0.609, ',': 0.283, '-': 0.388, '.': 0.283, '/': 0.415,
+  ':': 0.283, ';': 0.283, '<': 0.609, '=': 0.609, '>': 0.609, '?': 0.597, '@': 1.036,
+  '[': 0.389, ']': 0.389, '_': 0.500, '|': 0.314,
+};
+/**
+ * A character the table does not name is by definition one nobody planned for, so it is charged the
+ * face's WIDEST glyph (W). That can only make the fitted size too small, never too large — the safe
+ * direction, and a visibly short line is a defect you can see, where an overflow runs off the frame.
+ * It is not a fallback for a MISSING character: `advance()` throws for anything the vendored subset
+ * cannot set at all, before it ever gets here.
+ */
+const EM_UNKNOWN = 1.184;
+
+/**
+ * The unicode ranges the vendored woff2 covers — the `latin` subset, copied from
+ * @fontsource/montserrat@5.3.0's unicode.json. Everything this file sets is uppercased ASCII in
+ * practice, but `thumb.tag` is documented to accept "TIRO → CAESAR" style copy, and U+2192 is NOT
+ * in this subset: under Arial Black that arrow drew, under a latin-subset webfont it is a tofu box
+ * shipped to the feed. So it HALTS instead, the same way `thumb.setting`/`thumb.prop` halt on a name
+ * they cannot honour.
+ */
+const VENDORED_RANGES: Array<[number, number]> = [
+  [0x0000, 0x00ff], [0x0131, 0x0131], [0x0152, 0x0153], [0x02bb, 0x02bc], [0x02c6, 0x02c6],
+  [0x02da, 0x02da], [0x02dc, 0x02dc], [0x0304, 0x0304], [0x0308, 0x0308], [0x0329, 0x0329],
+  [0x2000, 0x206f], [0x20ac, 0x20ac], [0x2122, 0x2122], [0x2191, 0x2191], [0x2193, 0x2193],
+  [0x2212, 0x2212], [0x2215, 0x2215], [0xfeff, 0xfeff], [0xfffd, 0xfffd],
+];
+const covered = (c: string): boolean => {
+  const cp = c.codePointAt(0)!;
+  return VENDORED_RANGES.some(([lo, hi]) => cp >= lo && cp <= hi);
+};
+
 const advance = (text: string): number => {
   let w = 0;
   for (const c of text) {
-    if (c === ' ') w += 0.30;
-    else if (/[.,:;!|'`]/.test(c)) w += 0.34;
-    else if (/[Il]/.test(c)) w += 0.40;
-    else if (/[0-9$]/.test(c)) w += 0.60;
-    else w += 0.75;
+    if (!covered(c)) {
+      throw new Error(
+        `Thumbnail copy contains "${c}" (U+${c.codePointAt(0)!.toString(16).toUpperCase().padStart(4, '0')}) ` +
+        `in "${text}", which the vendored ${THUMB_FONT} latin subset cannot set — it would render as ` +
+        `a tofu box. Rewrite the copy in latin-1 characters (for an arrow, "->" sets fine).`,
+      );
+    }
+    w += EM[c] ?? EM_UNKNOWN;
   }
-  return Math.max(w, 0.75);
+  // Floor of one widest glyph so an empty string cannot divide fitFs() by zero.
+  return Math.max(w, EM_UNKNOWN);
 };
 const fitFs = (text: string, maxW: number, cap: number) =>
   Math.max(40, Math.min(cap, Math.floor(maxW / advance(text))));
 const textW = (text: string, fs: number) => advance(text) * fs;
-/** Arial Black caps are ~0.716em tall; a baseline this far below a box's centre centres them in it. */
-const CAP_MID = 0.358;
+/** Montserrat's caps are 0.700em tall (measured: `measureText('H').actualBoundingBoxAscent` at
+ *  1000px = 700.0); a baseline this far below a box's centre centres them in it. Arial Black's were
+ *  0.716em, so the old 0.358 now sits caps ~1% of the size low in the amber band. */
+const CAP_MID = 0.350;
 
 /** Greedy wrap to at most `max` characters a line, so a long line fits its column at a usable size. */
 const wrap = (text: string, max: number): string[] => {
@@ -193,7 +260,7 @@ const Outline: React.FC<{
   x: number; y: number; fs: number; children: React.ReactNode;
   anchor?: Anchor; fill?: string; sw?: number;
 }> = ({x, y, fs, children, anchor = 'start', fill = PAPER_WHITE, sw}) => (
-  <text x={x} y={y} textAnchor={anchor} fontFamily={SANS} fontSize={fs} fontWeight={900}
+  <text x={x} y={y} textAnchor={anchor} fontFamily={SANS} fontSize={fs} fontWeight={THUMB_WEIGHT}
     fill={fill} stroke={INK} strokeWidth={sw ?? fs * 0.11} paintOrder="stroke" strokeLinejoin="round">
     {children}
   </text>
@@ -223,9 +290,10 @@ const Kicker: React.FC<{
 }> = ({x, baseline, maxW, cap, anchor = 'start', over}) => {
   if (!KICKER || KICKER === over) return null;
   const fs = fitFs(KICKER, maxW, Math.round(cap * KICKER_FRAC));
-  // Drop = the kicker's own cap height (0.716em) plus a clear gap of 0.30 of the HEADLINE's size.
-  // Its own height alone put its caps 3px under the headline's baseline and the two blocks touched.
-  const drop = Math.round(fs * 0.78 + cap * 0.30);
+  // Drop = the kicker's own cap height (0.700em in Montserrat, was 0.716 in Arial Black) plus a
+  // little, plus a clear gap of 0.30 of the HEADLINE's size. Its own height alone put its caps 3px
+  // under the headline's baseline and the two blocks touched.
+  const drop = Math.round(fs * 0.76 + cap * 0.30);
   return <Outline x={x} y={baseline + drop} fs={fs} anchor={anchor}>{KICKER}</Outline>;
 };
 
@@ -262,7 +330,7 @@ const BandTitle: React.FC<{text: string}> = ({text}) => {
     <g>
       <rect x={BAND.x} y={BAND.y} width={BAND.w} height={BAND.h} fill={AMBER} stroke={INK} strokeWidth={STROKE} />
       <text x={BAND.x + BAND.w / 2} y={BAND.y + BAND.h / 2 + fs * CAP_MID} textAnchor="middle"
-        fontFamily={SANS} fontSize={fs} fontWeight={900} fill={INK}>{text}</text>
+        fontFamily={SANS} fontSize={fs} fontWeight={THUMB_WEIGHT} fill={INK}>{text}</text>
       {/* the kicker sits on the art just under the bar — there is nothing above it but frame edge */}
       <Kicker x={BAND.x + BAND.w / 2} baseline={BAND.y + BAND.h} maxW={BAND.w - 130} cap={fs}
         anchor="middle" over={text} />
@@ -407,7 +475,7 @@ const PushedFace: React.FC<{box: HeadBox; mood: Push; lw: number}> = ({box, mood
 /** Floating "!!" / "??" / "?!" — the reference draws them white with a heavy black outline. */
 const Marks: React.FC<{x: number; y: number; fs: number; text: string; angle?: number}> =
 ({x, y, fs, text, angle = 0}) => (
-  <text x={x} y={y} textAnchor="middle" fontFamily={SANS} fontSize={fs} fontWeight={900}
+  <text x={x} y={y} textAnchor="middle" fontFamily={SANS} fontSize={fs} fontWeight={THUMB_WEIGHT}
     fill={PAPER_WHITE} stroke={INK} strokeWidth={fs * 0.14} paintOrder="stroke" strokeLinejoin="round"
     transform={angle ? `rotate(${angle} ${x} ${y})` : undefined}>{text}</text>
 );
@@ -581,7 +649,7 @@ const ThumbCrash: React.FC = () => (
         <rect x={452} y={695} width={26} height={230} fill={E.floor} stroke={INK} strokeWidth={STROKE_THIN} />
         {wrap(TAG, 11).slice(0, 2).map((ln, i) => (
           <text key={i} x={472} y={600 + i * 60} textAnchor="middle" fontFamily={SANS}
-            fontSize={fitFs(ln, 320, 46)} fontWeight={900} fill={INK}>{ln}</text>
+            fontSize={fitFs(ln, 320, 46)} fontWeight={THUMB_WEIGHT} fill={INK}>{ln}</text>
         ))}
       </g>
     ) : null}
