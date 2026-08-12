@@ -19,12 +19,17 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 routine = json.load(open(os.path.join(ROOT, "ops", "routine.json")))
 MIN_MIN = routine.get("minMinutes", 10)
 MAX_MIN = routine.get("maxMinutes", 21)          # CRAYON canon runtime band is 13-21 min, two-sided
-# Narration rate (docs/CRAYON_BIBLE.md §2): reference aggregate 148.5 WPM, per-video 139.2-152.9;
-# the pipeline targets 145-152. THE METRIC IS RUNTIME-INCLUSIVE — transcript words / total video
-# minutes, counting pauses, gaps and dialogue beats — NOT speech-only WPM, which runs ~3 WPM higher
-# on the same audio. gen_voice_edge.py prints both ("~X WPM speech / Y WPM runtime"); this asserts Y,
-# recomputed here from the same two numbers it used (content narration words, timeline totalFrames).
-WPM_LO, WPM_HI = 145.0, 152.0
+# Narration rate (docs/CRAYON_BIBLE.md §2): reference AGGREGATE 148.5 WPM, which stays the target
+# the writer and gen_voice_edge.RATE are tuned to. THE GATE BAND IS WIDER THAN THE TARGET ON PURPOSE:
+# the reference's own PER-VIDEO spread is 139.2-152.9, so pinning the gate to the aggregate's 145-152
+# would make it stricter than the channel it copies, and a false HALT blocks publishing outright —
+# strictly worse than shipping an episode a couple of WPM off. 143-154 tolerates that spread while
+# still catching a real rate regression (the pre-crayon pipeline ran 180.7 WPM).
+# THE METRIC IS RUNTIME-INCLUSIVE — transcript words / total video minutes, counting pauses, gaps and
+# dialogue beats — NOT speech-only WPM, which runs ~3 WPM higher on the same audio. gen_voice_edge.py
+# prints both ("~X WPM speech / Y WPM runtime"); this asserts Y, recomputed here from the same two
+# numbers it used (content narration words, timeline totalFrames).
+WPM_LO, WPM_HI = 143.0, 154.0
 tl = json.load(open(os.path.join(ROOT, "src", "timeline.json")))
 _src = open(os.path.join(ROOT, "src", "scenes.tsx")).read()
 _m = re.search(r"export const TEMPLATES[^{]*\{(.*?)\};", _src, re.S)
