@@ -11,6 +11,7 @@ import {
   SlabFloor, BuildingBand, BoxStack, CaseStack, Trolley, Cone, RopeLine,
   CrowdRow, CrowdHeads, OverShoulder, UnitWall, Fence,
 } from './setdressing';
+import {EXPLAINER_TEMPLATES} from './explainer';
 import meta from './episode_meta.json';
 
 // Some "universal" templates (window/dinner/deskSilhouette/lobby) default to a generic corporate
@@ -805,4 +806,7 @@ export const TEMPLATES: Record<string, React.FC> = {
   }),
   // composable topic packs (src/stage.tsx): generic + medical + startup + military + sports
   ...PACK_TEMPLATES,
+  // the explainer environment set (src/explainer.tsx, WO-8f) — already colour-keyed by that module.
+  // Spread LAST on purpose: its `tradingFloor` deliberately supersedes the legacy HEDGE pack one.
+  ...EXPLAINER_TEMPLATES,
 };
