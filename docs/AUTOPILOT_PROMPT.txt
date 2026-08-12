@@ -128,13 +128,30 @@ DO, in order:
      context) and pick a DIFFERENT one that fits THIS episode. Cycle through the set so consecutive
      uploads never share a layout. `poster` stays a strong option in the rotation — just NEVER the
      automatic default.
-   Archetypes that exist in src/thumbs.tsx TODAY (verified 2026-08-11): poster, pov, scaleterror,
-   redacted, eyeline, ladder, beforeafter, number, face, setting, question, climb. WO-11 is rebuilding
-   these for the new style; when it lands, the NAMES may change but the ROTATION RULE ABOVE DOES NOT —
-   it survives the rebuild.
+   Archetypes that exist in src/thumbs.tsx TODAY (rebuilt + verified by WO-11, 2026-08-11). These
+   are the EXACT keys of ARCHES in src/thumbs.tsx — an archetype name that is not on this list is
+   ignored and the dispatcher silently falls back to a topic hash, which breaks the rotation:
+     band        amber bar of black caps over a colour hero in a packed grey crowd (the signature)
+     crash       red crash line across a drained street, panicking hero right, "!!" + squiggles
+     setting     the episode's OWN scene art, desaturated, colour hero in front (needs thumb.setting)
+     wordmark    one enormous white name across the top, hero's head into the letters, red web lines
+     beforeafter grey past | saturated present, split by a black gutter, hero on the seam
+     poster      big tilted object (thumb.prop: rocket|tower|vault), red line through it, hero right
+     number      the one colossal figure (thumb.big) over a grey crowd, red underline, hero reacting
+     question    thumb.question in outlined white caps left, worried hero right with "??"
+     ladder      grey climbers on rising steps, colour hero big in front, under the amber bar
+   The five v2-era names (pov, scaleterror, redacted, eyeline, climb) and `face` are GONE — they were
+   POV-format devices with no basis in the measured reference. The ROTATION RULE ABOVE survived the
+   rebuild unchanged.
    Also still provide kicker/line1/line2/tag/mood and the per-archetype fields the dispatcher reads
    (gen_packaging.py + the Thumbnail dispatcher read this JSON automatically). Vary `mood` too, so
-   the feed never looks monotone.
+   the feed never looks monotone; `mood` values are unchanged (danger, crime, epic, tactical,
+   electric, money, royal, survival) and now key the frame's desaturated environment.
+   thumb.expr still names a FACES key and drives the pushed thumbnail face: shock/awe -> shock,
+   worried/conflicted/earnest -> worried, hardened/focused -> angry, smug -> smug, cold/hollow/
+   tired/exhausted/neutral -> grim. Omit `expr` to take the archetype's own default.
+   thumb.setting and thumb.prop THROW on an unknown name rather than substituting a stand-in — use a
+   real scenes.tsx template name, or leave `setting` empty for the default grey city.
 
 5. BUILD + SELF-CHECK — run `python3 build.py`. It syntax-checks content.py + episode_meta.json,
    makes the VO + music, runs the gate, and does a 1-frame smoke render. Read the printed

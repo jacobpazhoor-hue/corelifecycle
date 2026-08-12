@@ -1,39 +1,90 @@
 import React from 'react';
 import {AbsoluteFill} from 'remotion';
-import {StickFigure, LIGHT, SIL, PAPER, Costume} from './figure';
-import {FACES} from './faces';
+import {StickFigure, DIM, SEG, Pose, Costume, episodeCostume} from './figure';
 import * as A from './actions';
 import {TEMPLATES} from './scenes';
+import {BuildingBand, CrowdHeads, CrowdRow, SlabFloor} from './setdressing';
+import {INK, PAPER_WHITE, STROKE, STROKE_THIN, shade} from './crayonStyle';
 import meta from './episode_meta.json';
 
 // ============================================================================
-// THUMBNAIL ENGINE v2 (2026 high-CTR redesign — see NEXT_LEVEL_PLAN research).
-// "Directed bright": a SATURATED radial burst that ends in a DARK vignette, a doodle hero
-// RIM-LIT + GLOWING so it pops off the color, <=3 energy layers (sunburst / spotlight / accent),
-// and HEAVY stroked ALL-CAPS text with ONE hot accent word. No more flat cream paper.
-// Thumbnails are STILLS (rendered once) so rich SVG filters (glow/blur) are fine here.
+// THUMBNAIL ENGINE v3 (WO-11) — rebuilt to the MEASURED reference spec, CRAYON_BIBLE §9 + §6.5.
+//
+// The v2 engine ("directed bright": white paper, radial mood blooms, glowing doodle hero, siren
+// pills, danger tape) was a generic high-CTR look invented before the reference channel was
+// measured. It is gone. What replaced it is what the seven reference thumbnails in
+// docs/research/crayon/*/thumb.png actually do, and nothing else:
+//
+//   1. ONE hero character in FULL COLOUR, centre or right, cropped as a BUST — head and shoulders,
+//      legs off the bottom edge. The head is the biggest thing in frame after the type.
+//   2. A DESATURATED GREY crowd or environment behind it. Grey people carry the SAME pure-black
+//      outline as the hero (figure.tsx's DIM); only their fills are drained.
+//   3. A SINGLE saturated accent — the red crash line, or the amber bar. Never two.
+//   4. Two text treatments, both a heavy sans in ALL CAPS:
+//        (a) a solid amber band across the top carrying black caps   -> BandTitle
+//        (b) white caps with a heavy black outline, top-positioned   -> Outline / TitleBlock
+//      Thumbnail text is the ONE place the channel does not use the handwritten face, so nothing
+//      here touches Caveat/crayonStyle's typography tokens.
+//   5. Faces PUSHED HARD: open mouths with visible teeth and tongue, gritted teeth, worry lines,
+//      "!!" / "??" / "?!" marks, stress squiggles. Emotion is the #1 CTR lever and there are no
+//      real faces to carry it.
+//
+// MEASURED TOKENS (sampled off the reference PNGs, not eyeballed):
+//   amber band  #fdb719   (43% of the band area in HawmGu7oNrc)
+//   crash red   #cb0000   (the Great Depression line, the single largest saturated region)
+//   crowd fill  ~#b4b4b4  (figure.tsx's CROWD_FILL #c9c4bb is the shared token and matches)
+//   grey field  #373737 / #575757 / #232323 across four of the seven references
+//   type        cap height 51px @1280 in the amber band; 104px @1280 for the ROCKEFELLER wordmark,
+//               i.e. an advance of 0.70em/char in Arial Black — which is CHARW below.
+//
+// Everything is authored on a 1920x1080 viewBox, the same space as scenes.tsx/stage.tsx/
+// setdressing.tsx, so the shared set-dressing library and the episode's own scene art drop straight
+// in and the thumbnail matches the video's look. The Thumbnail composition is 1280x720; the SVG
+// scales.
+//
+// Thumbnails are STILLS (one frame), so every figure is drawn at frame 0 and nothing animates.
 // ============================================================================
-const SANS = "'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif";
-const INK = '#0d0d0d';
 
-// mood palettes: core->mid->rim radial, two ray colors, hot accent (keyword), glow color
-type Mood = {core: string; mid: string; rim: string; ray: string; accent: string; glow: string; pill: string};
+// The reference's thumbnail face is a heavy geometric sans in caps. The repo vendors only Caveat
+// (the handwritten face, for the VIDEO), so this is the heaviest system sans available.
+const SANS = "'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif";
+
+/** The amber bar (treatment a). Measured #fdb719. */
+const AMBER = '#fdb719';
+/**
+ * The crash red. Measured #cb0000. Deliberately CONSTANT and never keyed to the mood: the red line
+ * against a drained frame IS the device, and letting it drift with the palette (a green "crash"
+ * line in `money` mood) throws the signal away. Same reason the v2 engine pinned its arrow red.
+ */
+const RED = '#cb0000';
+
+// ---------------------------------------------------------------------------
+// Mood -> environment
+// ---------------------------------------------------------------------------
+
+/**
+ * A mood is TWO colours now, not eight: the desaturated field the frame is built out of, and the
+ * one saturated note an archetype is allowed where it is not already spending it on RED or AMBER.
+ * Every other tone in a frame is a `shade()` rung off `field`, so a thumbnail lands on the same
+ * restricted flat palette as the video (crayonStyle's tone ladder) instead of its own gradient set.
+ *
+ * The eight NAMES are unchanged from v2 on purpose: `thumb.mood` values already written into
+ * ops/episode_meta.json and into docs/AUTOPILOT_PROMPT.txt keep resolving.
+ */
+type Mood = {field: string; accent: string};
 const MOODS: Record<string, Mood> = {
-  danger:   {core: '#3E6FA3', mid: '#22364a', rim: '#0a0f16', ray: '#5a86b5', accent: '#FFC21A', glow: '#6ea6de', pill: '#C81E1E'},
-  crime:    {core: '#8E2F6B', mid: '#2e0f28', rim: '#0d040b', ray: '#c04f9a', accent: '#FFC21A', glow: '#d15fa8', pill: '#C81E1E'},
-  epic:     {core: '#C8873A', mid: '#4f3218', rim: '#140b04', ray: '#e0a84f', accent: '#FFE08A', glow: '#e8a84f', pill: '#8C3E12'},
-  tactical: {core: '#FFB800', mid: '#FF6A00', rim: '#1A0F00', ray: '#FFCE3A', accent: '#FFE500', glow: '#FFB800', pill: '#C81E1E'},
-  electric: {core: '#00E5FF', mid: '#0057B8', rim: '#03060F', ray: '#38B6FF', accent: '#FFE500', glow: '#00E5FF', pill: '#0B4FA8'},
-  money:    {core: '#FFD54A', mid: '#1f7a4d', rim: '#06140b', ray: '#3fbf75', accent: '#FFE07A', glow: '#FFD54A', pill: '#0F7A3D'},
-  royal:    {core: '#B06CFF', mid: '#5a2a9e', rim: '#0c0518', ray: '#8f5cf0', accent: '#FFE500', glow: '#B06CFF', pill: '#5A2A9E'},
-  survival: {core: '#12C2C9', mid: '#0a4a6e', rim: '#020a12', ray: '#3fd9de', accent: '#FF7A00', glow: '#12C2C9', pill: '#0A4A6E'},
+  danger:   {field: '#4a4f55', accent: '#e0a13c'},  // cool institutional grey — the default
+  crime:    {field: '#3f3a44', accent: '#a8446f'},
+  epic:     {field: '#4e453a', accent: '#e0a13c'},
+  tactical: {field: '#4a4a42', accent: '#d4af37'},
+  electric: {field: '#3a444f', accent: '#2ec4d6'},
+  money:    {field: '#454a42', accent: '#e8b54b'},
+  royal:    {field: '#413c4c', accent: '#c9a227'},
+  survival: {field: '#3f4a4c', accent: '#e8541f'},
 };
-// topic -> mood hints (crime/military/war -> danger; wealth -> money; spy/tech -> electric; royalty -> royal)
+// topic -> mood hints (first match wins). Unchanged from v2 — these route topics correctly and the
+// only thing that changed underneath is what a mood RESOLVES to.
 const MOOD_HINTS: Array<[RegExp, string]> = [
-  // BUILDER/STARTUP lane first (2026-07-19): our #1 video is 'founder' (41% of all channel views)
-  // and the queue now leads with startup_unicorn. Without this, 'Every Level of a Startup — From
-  // Garage to $1B Unicorn' matched NOTHING and fell through to the steel-blue `danger` default.
-  // Routes to `money` (gold/green) — the right read for a build-wealth ladder.
   [/startup|founder|unicorn|venture|entrepreneur|\bipo\b|\bceo\b|garage|silicon.?valley|self.?made/i, 'money'],
   [/\b(spy|cia|fbi|nsa|mi6)\b|intellig|undercover|hacker|cyber/i, 'electric'],
   [/billion|wealth|money|heir|mogul|trillion|lottery|fortune|diamond/i, 'money'],
@@ -43,24 +94,6 @@ const MOOD_HINTS: Array<[RegExp, string]> = [
   [/survive|stranded|lost at sea|castaway|marooned|shipwreck|ocean|desert|jungle|wilderness|avalanche|blizzard|arctic|mountain|storm/i, 'survival'],
   [/special.?forces|soldier|military|\bwar\b|sniper|marine|commando|\barmy|\bnavy|spec.?ops|regime|dictator|north.?korea/i, 'danger'],
 ];
-// topic -> COSTUME (2026-07-19). A bare stick figure reads as generic; the reference channel's
-// character is instantly legible because it WEARS the job. Same first-match-wins rule as the moods.
-const COSTUME_HINTS: Array<[RegExp, Costume]> = [
-  [/surgeon|doctor|medic|hospital|nurse|\bmd\b/i, 'scrubs'],
-  [/king|emperor|empire|royal|dynasty|throne|monarch|pharaoh|sultan|ottoman|\brome\b|roman/i, 'royal'],
-  [/special.?forces|soldier|military|\bwar\b|sniper|marine|commando|\barmy|\bnavy|spec.?ops|regime|dictator|north.?korea|guard/i, 'uniform'],
-  [/cartel|mafia|\bmob\b|mobster|hitman|assassin|kingpin|bratva|yakuza|gang|narco|smuggl|prison|inmate|convict|street/i, 'street'],
-  [/survive|stranded|castaway|shipwreck|jungle|desert|wilderness|arctic|mountain|pirate|explorer|miner|farm/i, 'field'],
-  [/startup|founder|unicorn|venture|entrepreneur|\bipo\b|\bceo\b|banker|lawyer|trader|hedge|billion|trillion|mogul|heir|executive|corporate|spy|agent/i, 'suit'],
-];
-function costumeFor(): Costume {
-  const c = (meta as any).thumb?.costume;
-  if (c) return c as Costume;
-  const topic = ((meta as any).topic || '') + ' ' + ((meta as any).title || '');
-  for (const [re, name] of COSTUME_HINTS) if (re.test(topic)) return name;
-  return 'suit';  // the channel's centre of gravity is career ladders
-}
-const COSTUME: Costume = costumeFor();
 
 function moodFor(): Mood {
   const m = (meta as any).thumb?.mood;
@@ -71,508 +104,698 @@ function moodFor(): Mood {
 }
 const M = moodFor();
 
+/** The flat tone ladder a frame is built from — every rung derived from the mood's own field. */
+type Env = {field: string; far: string; back: string; floor: string; deep: string; accent: string};
+const E: Env = {
+  field: M.field,
+  far: shade(M.field, 2),     // distant structures, lifted toward the sky
+  back: shade(M.field, 1),    // second plane
+  floor: shade(M.field, -1),  // ground, one rung under what stands on it
+  deep: shade(M.field, -2),   // recesses, ceiling, window blocks
+  accent: M.accent,
+};
+
+// The episode's wardrobe comes from figure.tsx, which already owns the topic->costume table and is
+// what the VIDEO uses. v2 kept a second copy of that table here, so a topic could in principle
+// dress the hero differently in the thumbnail than in the episode.
+const COSTUME: Costume = episodeCostume();
+
+// ---------------------------------------------------------------------------
+// Copy
+// ---------------------------------------------------------------------------
+
 const t = (meta as any).thumb || {};
-const KICKER: string = (t.kicker || 'EVERY LEVEL OF A').toUpperCase();
+const KICKER: string = (t.kicker || '').toUpperCase();
 const L1: string = (t.line1 || '').toUpperCase();
 const L2: string = (t.line2 || '').toUpperCase();
 const TAG: string = (t.tag || '').toUpperCase();
 const BIG: string = (t.big || (TAG.includes('→') ? TAG.split('→').pop()!.trim() : TAG)).toUpperCase();
-const QUESTION: string = (t.question || 'WHO IS ABOVE THEM?').toUpperCase();
+const QUESTION: string = (t.question || 'WHO PAID FOR IT?').toUpperCase();
 const SETTING: string = t.setting || '';
-const POVLINE: string = (t.povline || 'YOU ARE').toUpperCase();
 const KEYWORD: string = (t.keyword || L1 || 'THE BOSS').toUpperCase();
-const BEFORE: string = (t.before || 'NOBODY').toUpperCase();
-const AFTER: string = (t.after || KEYWORD || 'THE TOP').toUpperCase();
+const BEFORE: string = (t.before || 'BEFORE').toUpperCase();
+const AFTER: string = (t.after || KEYWORD).toUpperCase();
+/** The headline every archetype falls back to when it needs one line of type. */
+const HEAD: string = [L1, L2].filter(Boolean).join(' ') || KICKER || KEYWORD;
 
-// ---------- shared defs: gradients, glow/rim, sunburst, tape ----------
-const Defs: React.FC = () => (
-  <defs>
-    <radialGradient id="bggrad" cx="50%" cy="44%" r="72%">
-      <stop offset="0%" stopColor={M.core} />
-      <stop offset="46%" stopColor={M.mid} />
-      <stop offset="100%" stopColor={M.rim} />
-    </radialGradient>
-    <radialGradient id="spot" cx="50%" cy="0%" r="80%">
-      <stop offset="0%" stopColor="#ffffff" stopOpacity="0.55" />
-      <stop offset="55%" stopColor="#ffffff" stopOpacity="0.06" />
-      <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
-    </radialGradient>
-    {/* LIGHT vignette: on a white base a heavy black edge turns the frame muddy/grey — the exact
-        "dull" look we're fixing. Just enough edge weight to contain the frame in the YT grid. */}
-    <radialGradient id="vig" cx="50%" cy="50%" r="74%">
-      <stop offset="62%" stopColor="#000" stopOpacity="0" />
-      <stop offset="100%" stopColor="#000" stopOpacity="0.14" />
-    </radialGradient>
-    {/* HERO POP: white rim + colored outer glow so a black doodle floats off the bright bg */}
-    <filter id="heroPop" x="-45%" y="-45%" width="190%" height="190%">
-      <feMorphology in="SourceAlpha" operator="dilate" radius="9" result="rimA" />
-      <feFlood floodColor="#ffffff" result="wht" />
-      <feComposite in="wht" in2="rimA" operator="in" result="rim" />
-      <feGaussianBlur in="rimA" stdDeviation="16" result="gb" />
-      <feFlood floodColor={M.glow} floodOpacity="0.95" result="gc" />
-      <feComposite in="gc" in2="gb" operator="in" result="glow" />
-      <feMerge><feMergeNode in="glow" /><feMergeNode in="rim" /><feMergeNode in="SourceGraphic" /></feMerge>
-    </filter>
-    <filter id="txtsh" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="5" stdDeviation="4" floodColor="#000" floodOpacity="0.85" />
-    </filter>
-    <filter id="rough" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="2" seed="4" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="3" /></filter>
-    {/* soft bloom for the cinematic backlight glow behind the hero */}
-    <filter id="softblur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="70" /></filter>
-  </defs>
-);
+// ---------------------------------------------------------------------------
+// Type
+// ---------------------------------------------------------------------------
 
-// radiating sunburst wedges behind the subject (cheap, huge energy)
-const Sunburst: React.FC<{cx?: number; cy?: number; n?: number}> = ({cx = 850, cy = 300, n = 26}) => {
-  const R = 1500;
-  const wedges = Array.from({length: n}, (_, i) => {
-    const a0 = (i / n) * Math.PI * 2, a1 = ((i + 0.5) / n) * Math.PI * 2;
-    const p = (a: number) => `${cx + Math.cos(a) * R} ${cy + Math.sin(a) * R}`;
-    return <polygon key={i} points={`${cx},${cy} ${p(a0)} ${p(a1)}`} fill={M.ray} opacity={0.18} />;
-  });
-  return <g>{wedges}</g>;
+/**
+ * SVG's textAnchor is a closed set. v2 typed this prop as `string` and passed it straight through,
+ * which was the repo's only tsc error (thumbs.tsx(168,21)); the fix is the real union, not a cast.
+ */
+type Anchor = 'inherit' | 'middle' | 'start' | 'end';
+
+/**
+ * Advance width per character, in em, for the caps this file sets.
+ *
+ * MEASURED off our own render, not assumed: "NBA PLAYER" set at fs=132 draws 922.5 units wide, so
+ * 9 caps + 1 space = 6.99em. With a 0.30em space that puts a cap at 0.743em; 0.75 is that plus a
+ * hair of margin. v2 used a single flat 0.70 for every character, which is right on average only
+ * because a narrow space cancels a wide cap — an all-caps word with no spaces ran ~6% past its box,
+ * which is what pushed "SUPERMAX" off the edge of its placard.
+ *
+ * Every overflow bug in this file's history came from sizing text without measuring it against the
+ * box it has to live in, so the arithmetic lives in exactly one place.
+ */
+const advance = (text: string): number => {
+  let w = 0;
+  for (const c of text) {
+    if (c === ' ') w += 0.30;
+    else if (/[.,:;!|'`]/.test(c)) w += 0.34;
+    else if (/[Il]/.test(c)) w += 0.40;
+    else if (/[0-9$]/.test(c)) w += 0.60;
+    else w += 0.75;
+  }
+  return Math.max(w, 0.75);
+};
+const fitFs = (text: string, maxW: number, cap: number) =>
+  Math.max(40, Math.min(cap, Math.floor(maxW / advance(text))));
+const textW = (text: string, fs: number) => advance(text) * fs;
+/** Arial Black caps are ~0.716em tall; a baseline this far below a box's centre centres them in it. */
+const CAP_MID = 0.358;
+
+/** Greedy wrap to at most `max` characters a line, so a long line fits its column at a usable size. */
+const wrap = (text: string, max: number): string[] => {
+  const out: string[] = [];
+  let cur = '';
+  for (const w of text.split(/\s+/).filter(Boolean)) {
+    if (cur && (cur + ' ' + w).length > max) { out.push(cur); cur = w; } else cur = cur ? cur + ' ' + w : w;
+  }
+  if (cur) out.push(cur);
+  return out;
 };
 
-// BRIGHT background (2026-07-19): a mainly-WHITE field with a soft mood-colored bloom behind the
-// hero. Owner's call — the dark cinematic look read as too dark. White is also the highest-contrast
-// backdrop for a BLACK doodle hero, which is the channel's whole visual identity.
-// Guard against the old failure mode: the ORIGINAL bland version was flat CREAM (#f6f2e9) with grey
-// text. This is pure #fff + saturated color + heavy black ink, which is bright, NOT washed out.
-// `sun` kept for signature compat but ignored.
-const EnergyBG: React.FC<{burstX?: number; sun?: boolean}> = ({burstX = 850}) => (
-  <>
-    <rect x={0} y={0} width={1280} height={720} fill="#ffffff" />
-    {/* mood color lives ONLY here — a soft saturated bloom behind the subject, plus a floor wash,
-        so the frame reads bright-white overall but never empty */}
-    <ellipse cx={burstX} cy={330} rx={340} ry={300} fill={M.core} opacity={0.20} filter="url(#softblur)" />
-    <ellipse cx={burstX} cy={315} rx={190} ry={170} fill={M.core} opacity={0.16} filter="url(#softblur)" />
-    <ellipse cx={640} cy={815} rx={820} ry={150} fill={M.mid} opacity={0.10} filter="url(#softblur)" />
-    <rect x={0} y={0} width={1280} height={720} fill="url(#vig)" />
-  </>
-);
-
-// Arial Black's average advance is ~0.62em. Every overflow bug in this file came from sizing text
-// without measuring it against the box it has to live in, so do the arithmetic in one place.
-const CHARW = 0.70;   // measured against rendered output; 0.62 under-estimated Arial Black caps
-                      // and let fitted lines run ~12% past their box (question text hit the silhouette)
-const fitFs = (text: string, maxW: number, cap: number) =>
-  Math.max(24, Math.min(cap, Math.floor(maxW / Math.max(text.length * CHARW, 1))));
-const textW = (text: string, fs: number) => text.length * fs * CHARW;
-
-// heavy stroked ALL-CAPS text (outlined + shadow) — legible on any bright bg
-// On the BRIGHT base the default flipped (2026-07-19): BLACK ink with a WHITE halo — max contrast
-// on white, and the halo keeps it legible where it crosses the hero or a color bloom. Hot accent
-// words pass st="#111" so they keep a dark outline and still punch.
-const Punch: React.FC<{x: number; y: number; fs: number; fill?: string; children: React.ReactNode; anchor?: string; angle?: number; sw?: number; st?: string}> =
-({x, y, fs, fill = INK, children, anchor = 'start', angle = 0, sw, st = '#ffffff'}) => (
+/** Treatment (b): white caps with a heavy black outline. Legible over art, crowd or sky. */
+const Outline: React.FC<{
+  x: number; y: number; fs: number; children: React.ReactNode;
+  anchor?: Anchor; fill?: string; sw?: number;
+}> = ({x, y, fs, children, anchor = 'start', fill = PAPER_WHITE, sw}) => (
   <text x={x} y={y} textAnchor={anchor} fontFamily={SANS} fontSize={fs} fontWeight={900}
-    fill={fill} stroke={st} strokeWidth={sw ?? Math.max(6, fs * 0.09)} paintOrder="stroke"
-    strokeLinejoin="round" filter="url(#txtsh)" transform={angle ? `rotate(${angle} ${x} ${y})` : undefined}>{children}</text>
+    fill={fill} stroke={INK} strokeWidth={sw ?? fs * 0.11} paintOrder="stroke" strokeLinejoin="round">
+    {children}
+  </text>
 );
 
-// hot-accent keyword on a siren pill (breaking-news pop), slight angle
-const KeyPill: React.FC<{x: number; y: number; fs: number; label: string; anchor?: string; angle?: number; maxW?: number}> =
-({x, y, fs, label, anchor = 'start', angle = -5, maxW = 660}) => {
-  const ff = Math.min(fs, Math.floor((maxW - 56) / Math.max(label.length * 0.6, 1)));  // auto-fit long labels
-  const w = label.length * ff * 0.62 + 52, h = ff * 1.36;
-  const px = anchor === 'middle' ? x - w / 2 : x;
+/** A wrapped, auto-fitted block of treatment-(b) type. Returns its own bottom edge via `onBottom`. */
+const TitleBlock: React.FC<{
+  text: string; x: number; y: number; maxW: number; cap?: number; anchor?: Anchor; perLine?: number;
+  hot?: number;   // index of a line drawn in the mood accent instead of white
+}> = ({text, x, y, maxW, cap = 150, anchor = 'start', perLine = 15, hot = -1}) => {
+  const lines = wrap(text, perLine);
+  const longest = lines.reduce((a, b) => (advance(a) >= advance(b) ? a : b), '');
+  const fs = fitFs(longest, maxW, cap);
+  const lh = Math.round(fs * 1.06);
   return (
-    <g transform={`rotate(${angle} ${x} ${y})`}>
-      <rect x={px} y={y - h * 0.8} width={w} height={h} rx={12} fill={M.pill} stroke="#000" strokeWidth={5} filter="url(#txtsh)" />
-      <text x={px + w / 2} y={y + ff * 0.06} textAnchor="middle" fontFamily={SANS} fontSize={ff} fontWeight={900}
-        fill={M.accent} stroke="#000" strokeWidth={Math.max(4, ff * 0.06)} paintOrder="stroke" strokeLinejoin="round">{label}</text>
+    <g>
+      {lines.map((ln, i) => (
+        <Outline key={i} x={x} y={y + i * lh} fs={fs} anchor={anchor} fill={i === hot ? E.accent : PAPER_WHITE}>
+          {ln}
+        </Outline>
+      ))}
     </g>
   );
 };
 
-// diagonal danger tape band with a keyword (on-brand for military/crime)
-const Tape: React.FC<{y: number; label: string}> = ({y, label}) => (
-  <g transform={`rotate(-6 640 ${y})`}>
-    <rect x={-40} y={y - 46} width={1360} height={92} fill={M.accent} stroke="#000" strokeWidth={5} />
-    <g clipPath="none">{Array.from({length: 40}, (_, i) => <rect key={i} x={-40 + i * 36} y={y - 46} width={16} height={92} fill="#000" opacity={0.16} transform={`skewX(-20)`} />)}</g>
-    <text x={640} y={y + 20} textAnchor="middle" fontFamily={SANS} fontSize={58} fontWeight={900} fill="#000">{label}</text>
+/**
+ * Treatment (a): the amber band. MEASURED off HawmGu7oNrc at 1280 and scaled x1.5 — the bar spans
+ * x 72..1199 and y 73..202 with a ~3px black border and its caps centred in it, which is the
+ * geometry below.
+ */
+const BAND = {x: 108, y: 110, w: 1692, h: 194};
+const BandTitle: React.FC<{text: string}> = ({text}) => {
+  const fs = fitFs(text, BAND.w - 130, 132);
+  return (
+    <g>
+      <rect x={BAND.x} y={BAND.y} width={BAND.w} height={BAND.h} fill={AMBER} stroke={INK} strokeWidth={STROKE} />
+      <text x={BAND.x + BAND.w / 2} y={BAND.y + BAND.h / 2 + fs * CAP_MID} textAnchor="middle"
+        fontFamily={SANS} fontSize={fs} fontWeight={900} fill={INK}>{text}</text>
+    </g>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// The pushed face
+// ---------------------------------------------------------------------------
+
+/**
+ * figure.tsx's shared Face() is deliberately subtle — dot eyes, a small mouth line — because it has
+ * to hold up across a whole episode. A thumbnail needs the opposite, and the reference agrees: every
+ * one of the seven hero faces is pushed past anything that appears in the video. So the hero is
+ * drawn with `showFace={false}` and this overlay lands on its head instead. Nothing in figure.tsx
+ * changes.
+ */
+type Push = 'panic' | 'shock' | 'angry' | 'smug' | 'grim' | 'worried';
+
+/** thumb.expr still names a FACES key; this maps the ones that make sense onto a pushed treatment. */
+const PUSH_BY_EXPR: Record<string, Push> = {
+  shock: 'shock', awe: 'shock',
+  worried: 'worried', conflicted: 'worried', earnest: 'worried',
+  exhausted: 'grim', tired: 'grim', hollow: 'grim', cold: 'grim', neutral: 'grim',
+  hardened: 'angry', focused: 'angry',
+  smug: 'smug',
+};
+/** The archetype's own default wins only when the episode did not name an expression. */
+const pushFor = (fallback: Push): Push => PUSH_BY_EXPR[t.expr as string] ?? fallback;
+
+// figure.tsx's drawn-head multipliers. They are module-private there, so they are restated (not
+// re-derived) here; the overlay has to land on the head the rig actually draws.
+const HEAD_HW = 1.13, HEAD_HH = 1.23;
+const D2R = Math.PI / 180;
+type HeadBox = {cx: number; cy: number; hw: number; hh: number};
+/** Where StickFigure will draw the head, for a figure placed at (x, hipY) — x/y are the HIP. */
+const headBox = (x: number, hipY: number, scale: number, facing: number, p: Pose): HeadBox => {
+  const shX = Math.sin(p.spineLean * D2R) * SEG.spine * facing;
+  const shY = -p.bob - Math.cos(p.spineLean * D2R) * SEG.spine;
+  const a = (p.spineLean + p.headTilt) * D2R;
+  return {
+    cx: x + scale * (shX + Math.sin(a) * (SEG.neck + SEG.head) * facing),
+    cy: hipY + scale * (shY - Math.cos(a) * (SEG.neck + SEG.head)),
+    hw: scale * SEG.head * HEAD_HW,
+    hh: scale * SEG.head * HEAD_HH,
+  };
+};
+
+/** Inner-brow tilt per mood: >0 raises the inner end (worry), <0 drops it (anger). */
+const BROW_TILT: Record<Push, number> = {panic: 0.95, shock: 0.75, worried: 0.85, angry: -1, smug: -0.7, grim: -0.15};
+const MOUTH_RED = '#7a2f2f';
+const TONGUE = '#b5544f';
+
+const PushedFace: React.FC<{box: HeadBox; mood: Push; lw: number}> = ({box, mood, lw}) => {
+  const {cx, cy, hw, hh} = box;
+  const uid = `t${Math.round(cx)}_${Math.round(cy)}`;
+  const eyeDX = hw * 0.31, eyeY = cy + hh * 0.05;
+  const browY = eyeY - hh * 0.30, bw = hw * 0.28;
+  const my = cy + hh * 0.45;
+  const open = mood === 'panic' || mood === 'shock';
+  const wideEye = open || mood === 'worried';
+  const tilt = BROW_TILT[mood];
+
+  const eyes = wideEye ? (
+    [-1, 1].map((s) => (
+      <g key={s}>
+        <ellipse cx={cx + s * eyeDX} cy={eyeY} rx={hw * 0.16} ry={hh * 0.185}
+          fill={PAPER_WHITE} stroke={INK} strokeWidth={lw * 0.6} />
+        <circle cx={cx + s * eyeDX} cy={eyeY + hh * 0.03} r={hw * 0.062} fill={INK} />
+      </g>
+    ))
+  ) : (
+    [-1, 1].map((s) => <circle key={s} cx={cx + s * eyeDX} cy={eyeY} r={hw * 0.115} fill={INK} />)
+  );
+
+  // grim is the reference's "unimpressed" read (y51JjcymEAY): one brow flat, the other cocked.
+  const brow = (s: number) => {
+    const lift = mood === 'grim' && s > 0 ? hh * 0.11 : 0;
+    // SVG y grows downward, so raising the inner end means SUBTRACTING: a positive tilt has to
+    // lower the y of the inner end. Getting this backwards drew the reference's angry V as a
+    // worried peak and vice versa — the two most-used faces in the set, both wrong.
+    const dy = -tilt * hh * 0.075;
+    const x0 = cx + s * eyeDX - s * bw, x1 = cx + s * eyeDX + s * bw;
+    return (
+      <line key={`b${s}`} x1={x0} y1={browY + dy - lift} x2={x1} y2={browY - dy - lift}
+        stroke={INK} strokeWidth={lw * 1.25} strokeLinecap="round" />
+    );
+  };
+
+  let mouth: React.ReactNode;
+  if (open) {
+    // The reference's panic mouth: a dark rounded cavity, a white upper-tooth strip with gaps, and
+    // a tongue sitting in the bottom of it. This is the single biggest emotion cue in the frame.
+    const mw = mood === 'shock' ? hw * 0.36 : hw * 0.46;
+    const mh = mood === 'shock' ? hh * 0.26 : hh * 0.21;
+    mouth = (
+      <g>
+        <defs><clipPath id={uid}><ellipse cx={cx} cy={my} rx={mw} ry={mh} /></clipPath></defs>
+        <ellipse cx={cx} cy={my} rx={mw} ry={mh} fill={MOUTH_RED} stroke={INK} strokeWidth={lw} />
+        <g clipPath={`url(#${uid})`}>
+          <ellipse cx={cx} cy={my + mh * 0.92} rx={mw * 0.66} ry={mh * 0.62} fill={TONGUE} stroke={INK} strokeWidth={lw * 0.55} />
+          <rect x={cx - mw * 0.62} y={my - mh * 1.06} width={mw * 1.24} height={mh * 0.62} fill={PAPER_WHITE} stroke={INK} strokeWidth={lw * 0.55} />
+          <line x1={cx} y1={my - mh * 1.06} x2={cx} y2={my - mh * 0.44} stroke={INK} strokeWidth={lw * 0.45} />
+        </g>
+      </g>
+    );
+  } else if (mood === 'angry') {
+    // gritted teeth (sMH8WchxQR8)
+    const mw = hw * 0.52, mh = hh * 0.11;
+    mouth = (
+      <g>
+        <rect x={cx - mw} y={my - mh} width={mw * 2} height={mh * 2} rx={mh * 0.5}
+          fill={PAPER_WHITE} stroke={INK} strokeWidth={lw * 0.85} />
+        <line x1={cx - mw} y1={my} x2={cx + mw} y2={my} stroke={INK} strokeWidth={lw * 0.6} />
+        {[-0.6, -0.2, 0.2, 0.6].map((f) => (
+          <line key={f} x1={cx + mw * f} y1={my - mh} x2={cx + mw * f} y2={my + mh} stroke={INK} strokeWidth={lw * 0.45} />
+        ))}
+      </g>
+    );
+  } else if (mood === 'smug') {
+    mouth = <path d={`M ${cx - hw * 0.42} ${my - hh * 0.05} Q ${cx} ${my + hh * 0.22} ${cx + hw * 0.42} ${my - hh * 0.05}`}
+      fill="none" stroke={INK} strokeWidth={lw * 1.35} strokeLinecap="round" />;
+  } else if (mood === 'worried') {
+    mouth = <path d={`M ${cx - hw * 0.30} ${my + hh * 0.05} Q ${cx} ${my - hh * 0.10} ${cx + hw * 0.30} ${my + hh * 0.05}`}
+      fill="none" stroke={INK} strokeWidth={lw * 1.25} strokeLinecap="round" />;
+  } else {
+    mouth = <line x1={cx - hw * 0.26} y1={my} x2={cx + hw * 0.26} y2={my} stroke={INK} strokeWidth={lw * 1.25} strokeLinecap="round" />;
+  }
+
+  // Worry creases over the brow — present on every stressed face in the reference set.
+  const creases = mood === 'panic' || mood === 'worried' || mood === 'angry' ? (
+    [-1, 1].map((s) => (
+      <path key={`c${s}`} d={`M ${cx + s * hw * 0.30} ${browY - hh * 0.20} q ${s * hw * 0.16} ${-hh * 0.06} ${s * hw * 0.30} ${hh * 0.01}`}
+        fill="none" stroke={INK} strokeWidth={lw * 0.7} strokeLinecap="round" />
+    ))
+  ) : null;
+
+  return <g>{eyes}{brow(-1)}{brow(1)}{creases}{mouth}</g>;
+};
+
+/** Floating "!!" / "??" / "?!" — the reference draws them white with a heavy black outline. */
+const Marks: React.FC<{x: number; y: number; fs: number; text: string; angle?: number}> =
+({x, y, fs, text, angle = 0}) => (
+  <text x={x} y={y} textAnchor="middle" fontFamily={SANS} fontSize={fs} fontWeight={900}
+    fill={PAPER_WHITE} stroke={INK} strokeWidth={fs * 0.14} paintOrder="stroke" strokeLinejoin="round"
+    transform={angle ? `rotate(${angle} ${x} ${y})` : undefined}>{text}</text>
+);
+
+/** Stress squiggles rising off the head (LuEcoqizj0o, KE-WJevx-7c). */
+const Squiggle: React.FC<{x: number; y: number; s?: number}> = ({x, y, s = 1}) => (
+  <g stroke={PAPER_WHITE} strokeWidth={7 * s} fill="none" strokeLinecap="round">
+    {[0, 1, 2].map((i) => (
+      <path key={i} d={`M ${x - 26 * s} ${y - i * 30 * s} q ${13 * s} ${-16 * s} ${26 * s} 0 q ${13 * s} ${16 * s} ${26 * s} 0`} />
+    ))}
   </g>
 );
 
-// StickFigure's shared Face() renders 'shock' at normal eye size (only brow angle + mouth shape
-// change) — right for subtler in-video reactions, but the reviewer flagged the thumbnail hero's
-// shock as reading as "a small open-mouth 'o' with dot eyes," not the pushed CTR treatment. Rather
-// than touching Face() (used by every in-episode expression), overlay genuinely oversized
-// eyes/brows/mouth/sweat at the figure's actual head position — thumbnail-only, opt-in via `shock`.
-const D2R = Math.PI / 180;
-const headCenter = (x: number, y: number, scale: number, facing: number, pose: any) => {
-  const p = pose ?? {spineLean: 2, headTilt: 0, bob: 0};
-  const shoulderX = Math.sin(p.spineLean * D2R) * 94 * facing, shoulderY = -Math.cos(p.spineLean * D2R) * 94 - p.bob;
-  const headA = p.spineLean + p.headTilt;
-  return {cx: x + scale * (shoulderX + Math.sin(headA * D2R) * 48 * facing), cy: y + scale * (shoulderY - Math.cos(headA * D2R) * 48)};
-};
-const ShockFace: React.FC<{cx: number; cy: number; r: number}> = ({cx, cy, r}) => {
-  const em = 1.7, ex = r * 0.34, eyeY = cy - r * 0.02, ew = r * 0.15 * em, eh = r * 0.21 * em;
-  const browY = cy - r * 0.34 - r * 0.22, bw = r * 0.34;
+/** The single saturated accent, in its commonest reference form: a red market-crash polyline. */
+const CrashLine: React.FC<{d: string; w?: number}> = ({d, w = 26}) => (
+  <path d={d} fill="none" stroke={RED} strokeWidth={w} strokeLinejoin="round" strokeLinecap="round" />
+);
+
+// ---------------------------------------------------------------------------
+// The hero bust
+// ---------------------------------------------------------------------------
+
+/**
+ * Six of the seven references frame the hero as a BUST: the head is 25–45% of frame height and the
+ * body runs off the bottom edge. That is what `hipY` past 1080 buys — the real rig, the real
+ * costume, cropped the way the reference crops it.
+ */
+const Hero: React.FC<{
+  x: number; hipY: number; scale: number; mood: Push; facing?: number; pose?: Pose; costume?: Costume;
+  /** "!!" / "??" / "?!" — placed off the drawn head, never at a hand-guessed coordinate. */
+  marks?: string;
+  /** Which side of the head the marks and squiggle sit on. */
+  markSide?: -1 | 1;
+  squiggle?: boolean;
+}> = ({x, hipY, scale, mood, facing = 1, pose, costume = COSTUME, marks, markSide = -1, squiggle}) => {
+  const p = pose ?? A.stand(0);
+  const box = headBox(x, hipY, scale, facing, p);
   return (
     <g>
-      <ellipse cx={cx - ex} cy={eyeY} rx={ew} ry={eh} fill="#fff" stroke={INK} strokeWidth={r * 0.05} />
-      <ellipse cx={cx + ex} cy={eyeY} rx={ew} ry={eh} fill="#fff" stroke={INK} strokeWidth={r * 0.05} />
-      <circle cx={cx - ex} cy={eyeY + eh * 0.15} r={ew * 0.4} fill={INK} />
-      <circle cx={cx + ex} cy={eyeY + eh * 0.15} r={ew * 0.4} fill={INK} />
-      <path d={`M ${cx - ex - bw / 2} ${browY + 10} Q ${cx - ex} ${browY - 14} ${cx - ex + bw / 2} ${browY + 4}`} fill="none" stroke={INK} strokeWidth={r * 0.075} strokeLinecap="round" />
-      <path d={`M ${cx + ex - bw / 2} ${browY + 4} Q ${cx + ex} ${browY - 14} ${cx + ex + bw / 2} ${browY + 10}`} fill="none" stroke={INK} strokeWidth={r * 0.075} strokeLinecap="round" />
-      <ellipse cx={cx} cy={cy + r * 0.46} rx={r * 0.18} ry={r * 0.24} fill={INK} />
-      <path d={`M ${cx + r * 0.74} ${cy - r * 0.2} q ${r * 0.12} ${r * 0.16} 0 ${r * 0.28} q ${-r * 0.12} ${-r * 0.12} 0 ${-r * 0.28}`} fill="#4FC3F7" stroke={INK} strokeWidth={r * 0.025} />
+      <StickFigure pose={p} x={x} y={hipY} scale={scale} facing={facing} view="front"
+        showFace={false} costume={costume} frame={0} />
+      <PushedFace box={box} mood={mood} lw={STROKE * scale} />
+      {marks ? (
+        <Marks x={box.cx + markSide * box.hw * 1.25} y={box.cy - box.hh * 1.15}
+          fs={box.hh * 0.95} text={marks} angle={markSide * 8} />
+      ) : null}
+      {squiggle ? <Squiggle x={box.cx - markSide * box.hw * 1.35} y={box.cy - box.hh * 0.9} s={scale * 0.42} /> : null}
     </g>
   );
 };
 
-const Hero: React.FC<{x: number; y: number; scale: number; facing?: number; expr?: any; pose?: any; pal?: any; costume?: Costume; shock?: boolean}> =
-({x, y, scale, facing = -1, expr, pose, pal = LIGHT, costume = COSTUME, shock = false}) => {
-  const p = pose ?? A.stand(0);
-  const head = shock ? headCenter(x, y, scale, facing, p) : null;
-  return (
-    <g filter="url(#heroPop)">
-      <StickFigure pose={p} x={x} y={y} scale={scale} facing={facing} view="front" expr={expr} pal={pal} rough frame={0} costume={costume} />
-      {head && <ShockFace cx={head.cx} cy={head.cy} r={36 * scale} />}
-    </g>
-  );
+/**
+ * Hands up beside the face — the reference's panic pose (KE-WJevx-7c, VSbO8vmZNm0). The shoulder
+ * angle has to swing the upper arm nearly HORIZONTAL before the elbow lifts, or the forearm runs
+ * diagonally across the face: figure.tsx draws the near arm after the head, and the character has no
+ * neck, so an arm raised straight from the shoulder passes through the chin.
+ */
+const HANDS_UP: Pose = {
+  ...A.stand(0),
+  armNearShoulder: 95, armNearElbow: 80, armFarShoulder: 95, armFarElbow: 80,
 };
 
-// `plain` skips EnergyBG so an archetype can paint its own full-bleed scene (see ThumbPoster).
-const Wrap: React.FC<{children: React.ReactNode; burstX?: number; sun?: boolean; plain?: boolean}> = ({children, burstX, sun, plain}) => (
-  <AbsoluteFill style={{backgroundColor: plain ? '#ffffff' : M.rim}}>
-    <svg viewBox="0 0 1280 720" width="100%" height="100%"><Defs />{plain ? null : <EnergyBG burstX={burstX} sun={sun} />}{children}</svg>
+// ---------------------------------------------------------------------------
+// Environments (all desaturated, all built off the mood's tone ladder)
+// ---------------------------------------------------------------------------
+
+const Wrap: React.FC<{children: React.ReactNode}> = ({children}) => (
+  <AbsoluteFill style={{backgroundColor: E.deep}}>
+    <svg viewBox="0 0 1920 1080" width="100%" height="100%">{children}</svg>
   </AbsoluteFill>
 );
 
-const face = (name: string, fb = 'cold') => (FACES as any)[t.expr || name] || (FACES as any)[fb] || FACES.cold;
-
-// big expressive head (shock = fear-of-God: huge eyes, O-mouth, sweat) for FACE/QUESTION
-const BigHead: React.FC<{cx: number; cy: number; r: number; mood?: string; sil?: boolean}> = ({cx, cy, r, mood = 'shock', sil = false}) => {
-  const shock = mood === 'shock' || mood === 'fear' || mood === 'worried';
-  const em = shock ? 1.6 : 1;
-  const ew = r * 0.17 * em, eh = r * 0.21 * em, ex = r * 0.4, ey = r * 0.16;
-  if (sil) return <g filter="url(#heroPop)"><circle cx={cx} cy={cy} r={r} fill={INK} /></g>;
-  return (
-    <g filter="url(#heroPop)">
-      <circle cx={cx} cy={cy} r={r} fill={PAPER} stroke={INK} strokeWidth={r * 0.07} />
-      {shock ? (<>
-        <path d={`M ${cx - ex - ew} ${cy - ey - eh - 26} q ${ew} ${-16} ${ew * 2} ${-2}`} fill="none" stroke={INK} strokeWidth={r * 0.055} strokeLinecap="round" />
-        <path d={`M ${cx + ex - ew} ${cy - ey - eh - 26} q ${ew} ${-2} ${ew * 2} ${-16}`} fill="none" stroke={INK} strokeWidth={r * 0.055} strokeLinecap="round" />
-      </>) : (<>
-        <path d={`M ${cx - ex - ew} ${cy - ey - eh - 14} q ${ew} ${mood === 'cold' ? 6 : -10} ${ew * 2} ${-2}`} fill="none" stroke={INK} strokeWidth={r * 0.05} strokeLinecap="round" />
-        <path d={`M ${cx + ex - ew} ${cy - ey - eh - 14} q ${ew} ${-2} ${ew * 2} ${mood === 'cold' ? 6 : -10}`} fill="none" stroke={INK} strokeWidth={r * 0.05} strokeLinecap="round" />
-      </>)}
-      <ellipse cx={cx - ex} cy={cy - ey} rx={ew} ry={eh} fill="#fff" stroke={INK} strokeWidth={r * 0.04} />
-      <ellipse cx={cx + ex} cy={cy - ey} rx={ew} ry={eh} fill="#fff" stroke={INK} strokeWidth={r * 0.04} />
-      <circle cx={cx - ex + 2} cy={cy - ey + 3} r={ew * (shock ? 0.32 : 0.5)} fill={INK} />
-      <circle cx={cx + ex + 2} cy={cy - ey + 3} r={ew * (shock ? 0.32 : 0.5)} fill={INK} />
-      {shock
-        ? <ellipse cx={cx} cy={cy + r * 0.48} rx={r * 0.19} ry={r * 0.26} fill={INK} />
-        : <path d={mood === 'cold' ? `M ${cx - r * 0.3} ${cy + r * 0.45} L ${cx + r * 0.3} ${cy + r * 0.45}` : `M ${cx - r * 0.3} ${cy + r * 0.42} q ${r * 0.32} ${r * 0.22} ${r * 0.62} ${-r * 0.04}`}
-            fill="none" stroke={INK} strokeWidth={r * 0.06} strokeLinecap="round" />}
-      <path d={`M ${cx - r * 0.5} ${cy - r * 0.82} q ${r * 0.2} ${-r * 0.3} ${r * 0.45} ${-r * 0.05} q ${r * 0.2} ${-r * 0.25} ${r * 0.4} ${r * 0.02}`} fill="none" stroke={INK} strokeWidth={r * 0.06} strokeLinecap="round" />
-      {shock && <>
-        <path d={`M ${cx + r * 0.78} ${cy - r * 0.16} q ${r * 0.12} ${r * 0.16} 0 ${r * 0.28} q ${-r * 0.12} ${-r * 0.12} 0 ${-r * 0.28}`} fill="#4FC3F7" stroke={INK} strokeWidth={r * 0.025} />
-        <path d={`M ${cx - r * 0.8} ${cy - r * 0.02} q ${r * 0.1} ${r * 0.14} 0 ${r * 0.24} q ${-r * 0.1} ${-r * 0.1} 0 ${-r * 0.24}`} fill="#4FC3F7" stroke={INK} strokeWidth={r * 0.022} />
-      </>}
-    </g>
-  );
-};
-
-// curved hand-drawn arrow (caption/eyeline -> subject)
-const Arrow: React.FC<{d: string; heads: string}> = ({d, heads}) => (
-  <g filter="url(#rough)" stroke={M.accent} strokeWidth={12} fill="none" strokeLinecap="round" paintOrder="stroke">
-    <path d={d} stroke="#000" strokeWidth={20} /><path d={d} />
-    <path d={heads} stroke="#000" strokeWidth={20} /><path d={heads} />
-  </g>
-);
-
-// ==================== ARCHETYPES ====================
-
-// POV (PRIMARY) — glowing hero + "YOU [VERB]" + KEYWORD pill + arrow, on the danger burst
-const ThumbPov: React.FC = () => {
-  const kw = Math.min(196, Math.floor(660 / Math.max(KEYWORD.length, 1)));
-  return (
-    <Wrap burstX={985}>
-      <Hero x={1030} y={724} scale={4.3} facing={-1} expr={face('worried', 'worried')} />
-      <Punch x={78} y={168} fs={86}>{POVLINE}</Punch>
-      <KeyPill x={100} y={168 + kw + 46} fs={kw} label={KEYWORD} angle={-5} maxW={640} />
-      <Arrow d="M 600 300 Q 780 210 905 305" heads="M 905 305 L 861 286 M 905 305 L 881 341" />
-    </Wrap>
-  );
-};
-
-// THE NUMBER — one colossal apex number, tiny dwarfed hero, siren underline
-const ThumbNumber: React.FC = () => {
-  // was 1300/len*1.6 anchored at x=600: "$8,000,000,000" rendered ~1285px wide and ran off BOTH
-  // edges (the leading $ and the final 0 were clipped). Fit it to the box and centre it properly.
-  const fs = fitFs(BIG, 1160, 300);
-  const bw = Math.min(1160, textW(BIG, fs));
-  return (
-    <Wrap burstX={600}>
-      {/* hero FIRST so the number layers on top of it — this archetype is about the figure, and
-          shrinking the number to dodge the hero made the headline element the smallest thing in
-          frame. Punch's white halo keeps it legible where the two cross. */}
-      <Hero x={1180} y={716} scale={2.7} facing={-1} expr={face('worried')} pose={A.lookUp(0)} />
-      <Punch x={640} y={170} fs={50} anchor="middle">{(KICKER + ' ' + L1).trim()}</Punch>
-      <Punch x={640} y={470} fs={fs} anchor="middle" sw={fs * 0.06}>{BIG}</Punch>
-      <rect x={640 - bw / 2} y={505} width={bw} height={34} rx={6} fill={M.accent} stroke="#000" strokeWidth={5} />
-      {TAG ? <KeyPill x={640} y={660} fs={58} label={TAG} anchor="middle" angle={-4} /> : null}
-    </Wrap>
-  );
-};
-
-// THE FACE — huge shock head + bold word
-const ThumbFace: React.FC = () => (
-  <Wrap burstX={1010}>
-    <Punch x={60} y={190} fs={64}>{L1 || KEYWORD}</Punch>
-    {L2 ? <Punch x={60} y={330} fs={120}>{L2}</Punch> : null}
-    {TAG ? <KeyPill x={70} y={L2 ? 470 : 320} fs={78} label={TAG} angle={-5} /> : null}
-    <BigHead cx={1000} cy={340} r={270} mood={t.expr || 'shock'} />
-  </Wrap>
-);
-
-// THE QUESTION — curiosity line + silhouette
-const ThumbQuestion: React.FC = () => {
-  const words = QUESTION.split(' '); const lines: string[] = []; let cur = '';
-  for (const w of words) { if ((cur + ' ' + w).trim().length > 12) { lines.push(cur.trim()); cur = w; } else cur = (cur + ' ' + w).trim(); }
-  if (cur) lines.push(cur);
-  // The silhouette starts at x=850 (cx 1080 - r 230). Text was fixed at fs=116 from x=70, so a
-  // 12-char line ran to ~933 and disappeared UNDER the head. Fit every line to the free column.
-  const longest = lines.reduce((a, b) => (a.length >= b.length ? a : b), '');
-  const qfs = fitFs(longest, 760, 116);
-  const lh = Math.round(qfs * 1.10);
-  const top = Math.max(190, 360 - ((lines.length - 1) * lh) / 2);
-  return (
-    <Wrap burstX={1060}>
-      {lines.map((ln, i) => <Punch key={i} x={70} y={top + i * lh} fs={qfs} fill={i === lines.length - 1 ? M.accent : INK} st={i === lines.length - 1 ? '#111' : '#ffffff'}>{ln}</Punch>)}
-      <BigHead cx={1080} cy={430} r={230} sil />
-    </Wrap>
-  );
-};
-
-// SCALE-TERROR — tiny hero dwarfed by a huge looming threat
-const ThumbScaleTerror: React.FC = () => {
-  const kw = Math.min(150, Math.floor(560 / Math.max(KEYWORD.length, 1)));  // fit pill in the left column (clear of silhouette)
-  const cap = (KICKER + ' ' + L1).trim();
-  const capFs = Math.min(56, Math.floor(1120 / Math.max(cap.length, 1)));   // caption fits above the pill on one line
-  return (
-    <Wrap burstX={940} sun={false}>
-      <g opacity={0.92} filter="url(#heroPop)"><circle cx={940} cy={300} r={260} fill={INK} /><path d="M 690 560 Q 940 470 1190 560 L 1260 1090 L 620 1090 Z" fill={INK} /></g>
-      <Hero x={300} y={706} scale={1.7} facing={1} expr={face('hollow')} pose={A.lookUp(0)} />
-      <Punch x={70} y={120} fs={capFs}>{cap}</Punch>
-      <KeyPill x={78} y={130 + capFs + kw} fs={kw} label={KEYWORD} angle={-4} maxW={600} />
-    </Wrap>
-  );
-};
-
-// REDACTED — withheld element (rough black box + red ?)
-const ThumbRedacted: React.FC = () => (
-  <Wrap burstX={1050}>
-    <Hero x={1055} y={724} scale={4.3} facing={-1} expr={face('cold')} />
-    <g filter="url(#rough)" transform="rotate(-3 340 430)">
-      <rect x={120} y={300} width={450} height={270} rx={12} fill={INK} stroke="#fff" strokeWidth={6} />
-      <text x={345} y={505} textAnchor="middle" fontFamily={SANS} fontSize={220} fontWeight={900} fill={M.accent} stroke="#000" strokeWidth={8} paintOrder="stroke">?</text>
-    </g>
-    <Punch x={120} y={650} fs={Math.min(120, Math.floor(900 / Math.max(KEYWORD.length, 1)))} fill={M.accent} st="#111">{KEYWORD}</Punch>
-  </Wrap>
-);
-
-// EYELINE — gaze + arrow at a partly-shown mystery
-const ThumbEyeline: React.FC = () => (
-  <Wrap burstX={360}>
-    <Hero x={345} y={724} scale={4.1} facing={1} expr={face('worried')} pose={A.lookUp(0)} />
-    <g filter="url(#rough)"><rect x={1090} y={300} width={280} height={440} rx={16} fill={INK} stroke="#fff" strokeWidth={7} /><text x={1190} y={585} textAnchor="middle" fontFamily={SANS} fontSize={240} fontWeight={900} fill={M.accent} stroke="#000" strokeWidth={9} paintOrder="stroke">?</text></g>
-    <Arrow d="M 560 360 Q 830 280 1075 430" heads="M 1075 430 L 1032 414 M 1075 430 L 1050 464" />
-    <Punch x={70} y={680} fs={Math.min(112, Math.floor(940 / Math.max(KEYWORD.length, 1)))} fill={M.accent} st="#111">{KEYWORD}</Punch>
-  </Wrap>
-);
-
-// LADDER — the "every level" promise: rising steps, tiny climber -> big apex hero
-const ThumbLadder: React.FC = () => {
-  const baseY = 694, sw = 150, sh = 80;
-  const steps = [0, 1, 2, 3].map((i) => ({x: 540 + i * sw, top: baseY - (i + 1) * sh}));
-  // L1 is auto-sized (short words hit the 140 cap), so a FIXED pill y collides with tall text —
-  // "REGIME" (6 chars -> fs 140) had the pill clipping the letters. Derive the pill's y from the
-  // actual L1 size: text baseline + its outline stroke + a gap + the pill's own box above its y.
-  const fs1 = Math.min(140, Math.floor(900 / Math.max(L1.length, 1)));
-  const pillFs = 72;
-  const pillY = 270 + fs1 * 0.09 + 26 + pillFs * 1.36 * 0.8;
-  return (
-    <Wrap burstX={steps[3].x} sun={false}>
-      {steps.map((s, i) => <rect key={i} x={s.x} y={s.top} width={sw} height={baseY - s.top} fill={INK} opacity={0.17} stroke={INK} strokeWidth={5} />)}
-      <Hero x={470} y={baseY} scale={1.2} facing={1} expr={FACES.earnest} />
-      <Hero x={steps[3].x + sw / 2} y={steps[3].top} scale={1.8} facing={-1} expr={face('smug')} />
-      <Punch x={64} y={150} fs={54}>{KICKER}</Punch>
-      <Punch x={62} y={270} fs={fs1}>{L1}</Punch>
-      {BIG ? <KeyPill x={72} y={pillY} fs={pillFs} label={BIG} angle={-4} /> : null}
-    </Wrap>
-  );
-};
-
-// BEFORE/AFTER — dim "nobody" vs blazing apex
-const ThumbBefore: React.FC = () => (
-  <Wrap burstX={968} sun={false}>
-    <line x1={640} y1={150} x2={640} y2={720} stroke={INK} strokeWidth={6} opacity={0.22} />
-    <g opacity={0.5}><StickFigure pose={A.stand(0)} x={320} y={716} scale={2.8} facing={1} view="front" expr={FACES.earnest} pal={SIL} rough frame={0} /></g>
-    <Punch x={320} y={180} fs={Math.min(92, Math.floor(640 / Math.max(BEFORE.length, 1)))} anchor="middle" fill="#6f6f6f">{BEFORE}</Punch>
-    <Hero x={968} y={716} scale={3.0} facing={-1} expr={face('smug')} />
-    <Punch x={968} y={180} fs={Math.min(104, Math.floor(760 / Math.max(AFTER.length, 1)))} anchor="middle" fill={M.accent} st="#111">{AFTER}</Punch>
-    <Arrow d="M 470 250 Q 640 160 800 235" heads="M 800 235 L 758 218 M 800 235 L 776 272" />
-  </Wrap>
-);
-
-// SETTING — the topic's own scene, darkened, under a bold reversed title. Extended (2026-07-22)
-// to also surface the KICKER line, the BIG stat, and a KEYWORD accent line — the 'setting'
-// archetype is otherwise the only one that shows the episode's actual scene art (e.g. a zombie
-// horde street), so it needs to carry the full thumb spec instead of just L1/L2/TAG.
-const ThumbSetting: React.FC = () => {
-  const Art = TEMPLATES[SETTING] || TEMPLATES['desk'];
-  const headFs = Math.min(112, Math.floor(1120 / (Math.max(L1.length, L2.length, 1) * 0.62)));
-  const kickerFs = Math.min(50, Math.floor(1000 / Math.max(KICKER.length, 1)));
-  const headY = 96 + kickerFs + headFs * 0.85;
-  return (
-    <AbsoluteFill style={{backgroundColor: M.rim}}>
-      <svg viewBox="0 0 1280 720" width="100%" height="100%">
-        <Defs />
-        {Art ? (
-          <svg viewBox="0 0 1920 1080" width="1280" height="720" style={{filter: 'saturate(1.2) contrast(1.1) brightness(0.9)'}}>
-            <Art />
-          </svg>
-        ) : null}
-        <rect x={0} y={0} width={1280} height={720} fill="url(#vig)" />
-        {KICKER ? <Punch x={60} y={92} fs={kickerFs}>{KICKER}</Punch> : null}
-        <Punch x={60} y={headY} fs={headFs}>{L1}</Punch>
-        {L2
-          ? <Punch x={60} y={headY + headFs} fs={headFs}>{L2}</Punch>
-          : (KEYWORD ? <Punch x={60} y={headY + headFs} fs={Math.min(headFs, 90)} fill={M.accent} st="#111">{KEYWORD}</Punch> : null)}
-        {/* right side, clear of the hero (who runs across the LEFT half of hordeStreet-style arts) */}
-        {BIG ? <KeyPill x={720} y={555} fs={62} label={BIG} angle={-4} maxW={520} /> : null}
-        {TAG ? <KeyPill x={720} y={650} fs={64} label={TAG} angle={-5} maxW={520} /> : null}
-      </svg>
-    </AbsoluteFill>
-  );
-};
-
-// CLIMB (legacy, rare) — reuse ladder look
-const ThumbClimb: React.FC = ThumbLadder;
-
-// ===========================================================================================
-// POSTER (2026-07-19) — the composition the owner asked us to match. Rules, in priority order:
-//   1. a big illustrated PROP fills the frame and sells the fantasy before any text is read
-//   2. exactly ONE word of copy (default "YOU")
-//   3. a red arrow pointing at the hero, so the eye lands on the character
-//   4. the hero is IN the scene, costumed, small-ish — the prop is the star, not the text
-// Deliberately our own artwork + character: the conventions are worth copying, the drawings
-// are not (and a look-alike of another channel is a bad long-term brand anyway).
-// ===========================================================================================
-const Sky: React.FC<{a: string; b: string}> = ({a, b}) => (
-  <>
-    <defs><linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={a} /><stop offset="100%" stopColor={b} /></linearGradient></defs>
-    <rect x={0} y={0} width={1280} height={720} fill="url(#skyg)" />
-  </>
-);
-// hand-drawn cloud puffs (the reference's backdrop is plain sky + soft clouds)
-const Clouds: React.FC = () => (
-  <g opacity={0.75} fill="#ffffff">
-    {[[150, 120, 1], [1080, 96, 0.8], [640, 74, 0.55]].map(([cx, cy, s], i) => (
-      <g key={i} transform={`translate(${cx} ${cy}) scale(${s})`}>
-        <ellipse cx={0} cy={0} rx={110} ry={38} /><ellipse cx={-52} cy={10} rx={62} ry={28} /><ellipse cx={48} cy={12} rx={70} ry={30} />
+/** Interior: a drained room with a dark ceiling — the Wolf of Wall Street backdrop. */
+const GreyRoom: React.FC = () => (
+  <g>
+    <rect x={0} y={0} width={1920} height={1080} fill={E.back} />
+    <rect x={0} y={0} width={1920} height={330} fill={E.deep} />
+    <line x1={0} y1={330} x2={1920} y2={330} stroke={INK} strokeWidth={STROKE} />
+    {/* strip lights: the reference's ceiling carries two, and they stop the top band reading empty */}
+    {/* Kept inside the amber band's own footprint (x 108..1800) so the `band` archetype hides them
+        cleanly instead of leaving a shade poking out from behind the bar. */}
+    {[350, 1570].map((lx) => (
+      <g key={lx}>
+        <path d={`M ${lx - 230} 250 L ${lx - 190} 206 L ${lx + 190} 206 L ${lx + 230} 250 Z`}
+          fill={shade(E.far, 2)} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+        <rect x={lx - 190} y={196} width={380} height={16} fill={E.floor} stroke={INK} strokeWidth={STROKE_THIN} />
       </g>
     ))}
   </g>
 );
+
+/** Exterior: a drained street of low buildings under a flat sky. */
+const GreyCity: React.FC<{horizon?: number}> = ({horizon = 700}) => (
+  <g>
+    <rect x={0} y={0} width={1920} height={1080} fill={E.far} />
+    <BuildingBand baseY={horizon} x0={-80} x1={2000} n={6} seed={3} fill={E.back} depth={1} minH={300} maxH={520} />
+    <BuildingBand baseY={horizon + 70} x0={-100} x1={2020} n={9} seed={11} fill={E.field} depth={0} minH={150} maxH={300} />
+    <SlabFloor y={horizon + 70} fill={E.floor} rows={5} cols={9} bottom={1080} />
+  </g>
+);
+
+/**
+ * The grey anonymous crowd (bible §6.5) — heads massed behind a row of full figures.
+ *
+ * The row scale is deliberately ~0.6x the hero's: measured on HawmGu7oNrc the hero's head is 215px
+ * wide at 1280 and the nearest crowd heads are ~150px. At parity the crowd competes with the hero
+ * for the eye, which is the exact opposite of what the device is for.
+ */
+const GreyCrowd: React.FC<{headY?: number; rowY?: number; scale?: number}> =
+({headY = 880, rowY = 1240, scale = 1.9}) => (
+  <g>
+    <CrowdHeads y={headY} x0={-40} x1={1960} n={10} rows={2} r={62} seed={5} fill={E.field} />
+    <CrowdRow y={rowY} x0={-60} x1={1980} n={8} scale={scale} seed={2} view="front" dz={34} />
+  </g>
+);
+
+// ==================== ARCHETYPES ====================
+// Every one names the reference frame it is built from. Nine, so the autopilot's
+// no-repeat-in-the-last-3 rotation always has a wide choice.
+
+/**
+ * BAND — docs/research/crayon/HawmGu7oNrc/thumb.png ("THE WOLF OF WALL STREET").
+ * The channel's signature: an amber bar of black caps over a colour hero standing in a packed grey
+ * crowd. The bar is this frame's single saturated accent, so there is no red anywhere in it.
+ */
+const ThumbBand: React.FC = () => (
+  <Wrap>
+    <GreyRoom />
+    <GreyCrowd headY={900} rowY={1250} scale={1.9} />
+    <Hero x={960} hipY={1200} scale={3.2} mood={pushFor('grim')} />
+    <BandTitle text={HEAD} />
+  </Wrap>
+);
+
+/**
+ * CRASH — docs/research/crayon/LuEcoqizj0o/thumb.png ("The Great Depression").
+ * A red crash polyline straight across a drained street, a panicking colour hero on the right with
+ * "!!" and stress squiggles, and a small grey protest group on the left.
+ */
+const ThumbCrash: React.FC = () => (
+  <Wrap>
+    <GreyCity horizon={640} />
+    <CrowdRow y={1180} x0={110} x1={520} n={3} scale={1.9} seed={7} view="front" dz={26} />
+    {TAG ? (
+      <g transform="rotate(-4 470 620)">
+        <rect x={280} y={545} width={384} height={150} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
+        <rect x={452} y={695} width={26} height={230} fill={E.floor} stroke={INK} strokeWidth={STROKE_THIN} />
+        {wrap(TAG, 11).slice(0, 2).map((ln, i) => (
+          <text key={i} x={472} y={600 + i * 60} textAnchor="middle" fontFamily={SANS}
+            fontSize={fitFs(ln, 320, 46)} fontWeight={900} fill={INK}>{ln}</text>
+        ))}
+      </g>
+    ) : null}
+    <CrashLine d="M -30 520 L 330 210 L 560 600 L 830 400 L 1090 780 L 1400 640 L 1960 1060" />
+    <Hero x={1430} hipY={1290} scale={3.3} mood={pushFor('panic')} pose={HANDS_UP} marks="!!" squiggle />
+    <TitleBlock text={HEAD} x={70} y={150} maxW={900} cap={140} perLine={13} />
+  </Wrap>
+);
+
+/**
+ * SETTING — docs/research/crayon/KE-WJevx-7c/thumb.png ("THE 2008 FINANCIAL CRISIS").
+ * The episode's OWN scene art, desaturated to a grey environment, with the colour hero in front of
+ * it. This is the archetype that ties the thumbnail to the actual video.
+ *
+ * `thumb.setting` names a real template. An unknown name is an ERROR, not a silent substitution —
+ * a thumbnail that quietly shipped a desk when the script asked for a trading floor is exactly the
+ * kind of mismatch that never gets caught. An ABSENT setting is a different thing: it is the
+ * documented default, and gets the grey city.
+ */
+const ThumbSetting: React.FC = () => {
+  if (SETTING && !TEMPLATES[SETTING]) {
+    throw new Error(
+      `thumb.setting "${SETTING}" is not a template in scenes.tsx TEMPLATES. Use a real template ` +
+      `name (see docs/TEMPLATES.md) or leave thumb.setting empty for the default grey city.`
+    );
+  }
+  const Art = SETTING ? TEMPLATES[SETTING] : null;
+  return (
+    <Wrap>
+      {Art ? (
+        <g>
+          {/* The scene art is authored in full colour for the VIDEO. Drained here, then washed with
+              the mood's own FIELD colour rather than with ink: the pack backdrops range from a bright
+              cyan sky to a near-black arena, and a wash toward mid-grey pulls both ends to the same
+              desaturated middle. An ink wash only worked on the bright ones and crushed the rest. */}
+          <g style={{filter: 'saturate(0.14) brightness(1.15) contrast(0.92)'}}><Art /></g>
+          <rect x={0} y={0} width={1920} height={1080} fill={E.field} opacity={0.46} />
+        </g>
+      ) : <GreyCity horizon={660} />}
+      <CrashLine d="M 1240 300 L 1390 560 L 1500 360 L 1610 690 L 1740 520 L 1900 1000" w={22} />
+      <Hero x={540} hipY={1310} scale={3.3} mood={pushFor('panic')} pose={HANDS_UP} marks="??" markSide={1} />
+      <TitleBlock text={HEAD} x={960} y={140} maxW={1500} cap={150} anchor="middle" perLine={17} />
+    </Wrap>
+  );
+};
+
+/**
+ * WORDMARK — docs/research/crayon/sMH8WchxQR8/thumb.png ("ROCKEFELLER") and
+ * rSgS4wNLLDM ("amazon"). One enormous name across the top, the hero's head overlapping the letters
+ * from below, and red lines webbing out of him to markers on the skyline.
+ */
+const ThumbWordmark: React.FC = () => {
+  const word = (L1 || KEYWORD).replace(/\s+/g, ' ').trim();
+  const fs = fitFs(word, 1780, 240);
+  const nodes = [[110, 690], [330, 800], [560, 730], [1380, 760], [1620, 690], [1840, 790]];
+  return (
+    <Wrap>
+      <rect x={0} y={0} width={1920} height={1080} fill={E.deep} />
+      <BuildingBand baseY={1080} x0={-80} x1={2000} n={8} seed={17} fill={E.field} depth={0} minH={360} maxH={640} />
+      <Outline x={960} y={250} fs={fs} anchor="middle" sw={fs * 0.06}>{word}</Outline>
+      <g stroke={RED} strokeWidth={10} fill="none" strokeLinecap="round">
+        {nodes.map(([nx, ny], i) => (
+          <path key={i} d={`M 960 560 Q ${(960 + nx) / 2} ${ny - 520} ${nx} ${ny}`} />
+        ))}
+      </g>
+      {nodes.map(([nx, ny], i) => <circle key={i} cx={nx} cy={ny} r={24} fill={RED} stroke={INK} strokeWidth={STROKE_THIN} />)}
+      {/* the head deliberately climbs into the letters — the reference lets the hat cover their feet */}
+      <Hero x={960} hipY={1130} scale={3.4} mood={pushFor('angry')} />
+    </Wrap>
+  );
+};
+
+/**
+ * BEFOREAFTER — docs/research/crayon/y51JjcymEAY/thumb.png ("1950s | TODAY").
+ * A hard black gutter down the middle: a fully drained past on the left, the same city carrying the
+ * mood's saturated accent on the right, and one unimpressed hero straddling the seam.
+ */
+const ThumbBefore: React.FC = () => (
+  <Wrap>
+    <g clipPath="url(#halfL)">
+      <defs><clipPath id="halfL"><rect x={0} y={0} width={960} height={1080} /></clipPath></defs>
+      <rect x={0} y={0} width={960} height={1080} fill={shade(E.field, 2)} />
+      <BuildingBand baseY={860} x0={-60} x1={1000} n={4} seed={21} fill={E.floor} depth={0} minH={260} maxH={430} />
+      <SlabFloor y={860} fill={E.deep} rows={4} cols={6} bottom={1080} />
+    </g>
+    <g clipPath="url(#halfR)">
+      <defs><clipPath id="halfR"><rect x={960} y={0} width={960} height={1080} /></clipPath></defs>
+      <rect x={960} y={0} width={960} height={1080} fill={shade(E.accent, 2)} />
+      <BuildingBand baseY={840} x0={940} x1={2000} n={4} seed={33} fill={E.accent} depth={0} minH={340} maxH={560} />
+      <SlabFloor y={840} fill={shade(E.accent, -1)} rows={4} cols={6} bottom={1080} />
+    </g>
+    <line x1={960} y1={0} x2={960} y2={1080} stroke={INK} strokeWidth={14} />
+    <Outline x={470} y={160} fs={fitFs(BEFORE, 780, 120)} anchor="middle">{BEFORE}</Outline>
+    <Outline x={1450} y={160} fs={fitFs(AFTER, 780, 120)} anchor="middle">{AFTER}</Outline>
+    <Hero x={960} hipY={1240} scale={3.4} mood={pushFor('grim')} />
+  </Wrap>
+);
+
+// ---------------------------------------------------------------------------
+// POSTER props — flat vector, keyed to the environment, one accent note each.
+// ---------------------------------------------------------------------------
 const Prop: Record<string, React.FC> = {
   // ROCKET — startup / launch / founder
   rocket: () => (
     <g>
-      <g transform="translate(690 30) rotate(9) scale(0.70)">
-        <path d="M 210 0 q 120 150 120 330 l 0 300 q -120 60 -240 0 l 0 -300 q 0 -180 120 -330 Z" fill="#f2f4f7" stroke={INK} strokeWidth={9} strokeLinejoin="round" />
-        <path d="M 210 0 q 76 96 102 216 q -102 -46 -204 0 q 26 -120 102 -216 Z" fill={M.pill} stroke={INK} strokeWidth={9} strokeLinejoin="round" />
-        <circle cx={210} cy={330} r={62} fill="#bfe6f5" stroke={INK} strokeWidth={9} />
-        <circle cx={192} cy={312} r={20} fill="#ffffff" opacity={0.85} />
-        <path d="M 90 400 q -96 96 -74 230 q 52 -44 74 -78 Z" fill={M.pill} stroke={INK} strokeWidth={9} strokeLinejoin="round" />
-        <path d="M 330 400 q 96 96 74 230 q -52 -44 -74 -78 Z" fill={M.pill} stroke={INK} strokeWidth={9} strokeLinejoin="round" />
-        <path d="M 108 630 q 102 44 204 0 l -18 66 q -84 30 -168 0 Z" fill="#cfd6de" stroke={INK} strokeWidth={9} strokeLinejoin="round" />
-        <g opacity={0.95}>
-          <path d="M 130 700 q 80 150 80 250 q 0 -100 80 -250 q -80 40 -160 0 Z" fill="#FF8A00" stroke={INK} strokeWidth={8} strokeLinejoin="round" />
-          <path d="M 160 706 q 50 110 50 180 q 0 -70 50 -180 q -50 26 -100 0 Z" fill="#FFD54A" />
-        </g>
-      </g>
+      <path d="M 210 0 q 120 150 120 330 l 0 300 q -120 60 -240 0 l 0 -300 q 0 -180 120 -330 Z"
+        fill={shade(E.far, 1)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+      <path d="M 210 0 q 76 96 102 216 q -102 -46 -204 0 q 26 -120 102 -216 Z"
+        fill={E.accent} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+      <circle cx={210} cy={330} r={62} fill={E.deep} stroke={INK} strokeWidth={STROKE} />
+      <path d="M 90 400 q -96 96 -74 230 q 52 -44 74 -78 Z" fill={E.accent} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+      <path d="M 330 400 q 96 96 74 230 q -52 -44 -74 -78 Z" fill={E.accent} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+      <path d="M 108 630 q 102 44 204 0 l -18 66 q -84 30 -168 0 Z" fill={E.floor} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
     </g>
   ),
   // SKYSCRAPER — corporate / empire / mogul
   tower: () => (
-    <g transform="translate(560 40)">
-      <path d="M 120 660 L 120 150 q 0 -40 40 -40 l 260 0 q 40 0 40 40 l 0 510 Z" fill="#e9edf2" stroke={INK} strokeWidth={9} strokeLinejoin="round" />
-      <path d="M 460 660 L 460 260 q 0 -32 34 -32 l 170 0 q 34 0 34 32 l 0 400 Z" fill="#dbe2ea" stroke={INK} strokeWidth={9} strokeLinejoin="round" />
+    <g>
+      <path d="M 60 700 L 60 120 q 0 -40 40 -40 l 240 0 q 40 0 40 40 l 0 580 Z"
+        fill={shade(E.far, 1)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+      <path d="M 380 700 L 380 250 q 0 -32 34 -32 l 160 0 q 34 0 34 32 l 0 450 Z"
+        fill={E.far} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
       {Array.from({length: 6}, (_, r) => Array.from({length: 4}, (_, c) => (
-        <rect key={`${r}-${c}`} x={158 + c * 70} y={190 + r * 74} width={44} height={50} rx={5} fill={M.core} opacity={0.75} stroke={INK} strokeWidth={5} />
+        <rect key={`${r}-${c}`} x={92 + c * 66} y={160 + r * 82} width={42} height={54} fill={E.deep} stroke={INK} strokeWidth={STROKE_THIN} />
       )))}
       {Array.from({length: 5}, (_, r) => Array.from({length: 2}, (_, c) => (
-        <rect key={`t${r}-${c}`} x={506 + c * 78} y={300 + r * 70} width={48} height={46} rx={5} fill={M.core} opacity={0.6} stroke={INK} strokeWidth={5} />
+        <rect key={`t${r}-${c}`} x={418 + c * 74} y={290 + r * 76} width={46} height={50} fill={E.deep} stroke={INK} strokeWidth={STROKE_THIN} />
       )))}
     </g>
   ),
-  // VAULT of cash — money / wealth
-  // Reviewer: the vault "dominates the composition" next to a hero occupying only ~1/3 of the frame.
-  // Scaled down 0.85x, anchored on its original bottom-left corner (640,630) so it shrinks toward the
-  // hero's side instead of just floating smaller in place — frees up space and reads as less dominant.
+  // VAULT — money / wealth
   vault: () => (
-    <g transform="translate(606 196.5) scale(0.85)">
-      <rect x={40} y={40} width={600} height={470} rx={26} fill="#d7dee6" stroke={INK} strokeWidth={10} />
-      <rect x={92} y={92} width={496} height={366} rx={16} fill="#eef2f6" stroke={INK} strokeWidth={8} />
-      <circle cx={340} cy={275} r={112} fill={M.pill} stroke={INK} strokeWidth={10} />
-      <circle cx={340} cy={275} r={54} fill="#eef2f6" stroke={INK} strokeWidth={8} />
+    <g>
+      <rect x={40} y={40} width={600} height={470} rx={26} fill={shade(E.far, 1)} stroke={INK} strokeWidth={STROKE} />
+      <rect x={92} y={92} width={496} height={366} rx={16} fill={E.far} stroke={INK} strokeWidth={STROKE} />
+      <circle cx={340} cy={275} r={112} fill={E.accent} stroke={INK} strokeWidth={STROKE} />
       {[0, 45, 90, 135].map((a) => (
-        <rect key={a} x={330} y={135} width={20} height={280} rx={8} fill="#eef2f6" stroke={INK} strokeWidth={7} transform={`rotate(${a} 340 275)`} />
+        <rect key={a} x={331} y={181} width={18} height={188} rx={9} fill={E.far} stroke={INK} strokeWidth={STROKE_THIN} transform={`rotate(${a} 340 275)`} />
       ))}
-      <text x={340} y={300} textAnchor="middle" fontFamily={SANS} fontSize={92} fontWeight={900} fill={M.accent} stroke={INK} strokeWidth={8} paintOrder="stroke">$</text>
+      <circle cx={340} cy={275} r={46} fill={E.far} stroke={INK} strokeWidth={STROKE} />
+      <circle cx={340} cy={275} r={16} fill={INK} />
+      {/* hinges — what stops a rounded rect with a wheel on it reading as a washing machine */}
+      {[130, 400].map((hy) => <rect key={hy} x={16} y={hy} width={40} height={64} rx={8} fill={E.deep} stroke={INK} strokeWidth={STROKE_THIN} />)}
     </g>
   ),
 };
 function propFor(): React.FC {
   const explicit = (meta as any).thumb?.prop;
-  if (explicit && Prop[explicit]) return Prop[explicit];
+  if (explicit) {
+    if (!Prop[explicit]) {
+      throw new Error(`thumb.prop "${explicit}" is not a poster prop. Use one of: ${Object.keys(Prop).join(', ')}.`);
+    }
+    return Prop[explicit];
+  }
   const s = ((meta as any).topic || '') + ' ' + ((meta as any).title || '');
   if (/startup|founder|unicorn|venture|launch|entrepreneur|\bipo\b/i.test(s)) return Prop.rocket;
   if (/billion|trillion|wealth|money|heir|lottery|fortune|bank|hedge|vault/i.test(s)) return Prop.vault;
   return Prop.tower;
 }
-// The word + arrow are ALWAYS red — that pairing is the whole CTR device and must not drift with
-// the mood palette (in `money` mood it came out green, which killed the signal).
-const HOT = '#E8202A';
+
+/**
+ * POSTER — docs/research/crayon/VSbO8vmZNm0/thumb.png ("The Enron Scandal").
+ * A big tilted object owning the middle of a near-black frame, a red crash line falling through it,
+ * the hero reacting on the right with "?!", and the title low-left. Kept in the rotation by the
+ * 2026-08-04 owner direction, which demoted it from house style to one option among many.
+ */
 const ThumbPoster: React.FC = () => {
   const Art = propFor();
-  const WORD = ((meta as any).thumb?.word || 'YOU').toUpperCase();
-  const ws = Math.min(176, Math.floor(560 / Math.max(WORD.length, 1)));
-  // Reviewer flagged the hero as well under the bible's "hero >=40% of frame" guidance with a flat
-  // expression. A full-body standing figure can't literally hit 40% of frame WIDTH without its head
-  // clipping the top of a 720-tall canvas (height:width ratio is ~4.4:1). Lowering the ground line
-  // (was 648) buys extra headroom above it, which is what actually lets the scale go up further
-  // without the head — or its heroPop glow — running into the top edge.
-  const HS = 2.25;                      // hero scale (was 2.15, before that 1.85)
-  const GY = 695;                       // ground line (was 648) — hero stands ON it, nothing gets cropped
   return (
-    <Wrap plain>
-      <Sky a="#bfe4f7" b="#eef8ff" />
-      <Clouds />
-      <rect x={0} y={GY} width={1280} height={720 - GY} fill="#cfd8c9" />
-      <path d={`M 0 ${GY} L 1280 ${GY}`} stroke={INK} strokeWidth={7} />
-      <Art />
-      {/* StickFigure's y is the HIP, not the feet — thigh+shin (110) must be subtracted or the
-          legs render off the bottom of the frame. `shock` overlays genuinely oversized eyes/brows/
-          mouth/sweat (reviewer: the plain FACES.shock read as only a mild "o"-mouth surprise). */}
-      <Hero x={300} y={GY - 110 * HS} scale={HS} facing={1} expr={face('shock')} shock />
-      <Punch x={556} y={150} fs={ws} anchor="middle" fill={HOT} st="#111" sw={Math.max(11, ws * 0.15)}>{WORD}</Punch>
-      {/* arrow swings OUT and back so it lands on the hero from the side — never across the face.
-          Shifted down ~27px to track the hero's collar after the GY/HS bump above moved it. */}
-      <path d="M 556 239 Q 452 295 352 241" stroke={HOT} strokeWidth={23} fill="none" strokeLinecap="round" />
-      <path d="M 306 223 l 58 -12 l -14 54 Z" fill={HOT} stroke={INK} strokeWidth={6} strokeLinejoin="round" />
+    <Wrap>
+      <rect x={0} y={0} width={1920} height={1080} fill={E.deep} />
+      <rect x={0} y={0} width={1920} height={1080} fill={E.field} opacity={0.35} />
+      <CrashLine d="M -20 60 L 250 230 L 380 140 L 620 430 L 900 300 L 1180 700 L 1360 600 L 1560 1100" />
+      <g transform="translate(400 170) rotate(-14) scale(0.95)"><Art /></g>
+      <Hero x={1520} hipY={1270} scale={3.1} mood={pushFor('shock')} pose={HANDS_UP} facing={-1}
+        marks="?!" markSide={1} />
+      <TitleBlock text={HEAD} x={70} y={830} maxW={840} cap={130} perLine={13} />
     </Wrap>
   );
 };
 
-const ARCHES: Record<string, React.FC> = {poster: ThumbPoster, pov: ThumbPov, scaleterror: ThumbScaleTerror, redacted: ThumbRedacted, eyeline: ThumbEyeline, ladder: ThumbLadder, beforeafter: ThumbBefore, number: ThumbNumber, face: ThumbFace, setting: ThumbSetting, question: ThumbQuestion, climb: ThumbClimb};
-const ORDER = ['pov', 'scaleterror', 'number', 'redacted', 'ladder', 'eyeline', 'beforeafter', 'question', 'scaleterror', 'pov', 'redacted', 'face', 'eyeline', 'number', 'setting', 'ladder'];
+/**
+ * NUMBER — the episode's one colossal figure. Not a single reference frame but the reference's own
+ * device (rSgS4wNLLDM sets the amazon wordmark at this size): giant type owning the frame, the hero
+ * small and reacting to it, everything behind it drained.
+ */
+const ThumbNumber: React.FC = () => {
+  const fs = fitFs(BIG, 1100, 270);
+  const bw = Math.min(1100, textW(BIG, fs));
+  return (
+    <Wrap>
+      <GreyRoom />
+      <GreyCrowd headY={1000} rowY={1330} scale={1.8} />
+      {KICKER ? <Outline x={720} y={250} fs={fitFs(KICKER, 1120, 84)} anchor="middle">{KICKER}</Outline> : null}
+      <Outline x={720} y={620} fs={fs} anchor="middle" sw={fs * 0.075}>{BIG}</Outline>
+      <rect x={720 - bw / 2} y={672} width={bw} height={30} fill={RED} stroke={INK} strokeWidth={STROKE_THIN} />
+      <Hero x={1590} hipY={1280} scale={2.7} mood={pushFor('shock')} facing={-1} marks="!!" markSide={1} />
+    </Wrap>
+  );
+};
+
+/**
+ * QUESTION — the curiosity-gap layout, dressed to spec: the question in outlined white caps down the
+ * left, a worried colour hero right with "??" over him, grey crowd behind both.
+ */
+const ThumbQuestion: React.FC = () => (
+  <Wrap>
+    <GreyRoom />
+    <GreyCrowd headY={840} rowY={1190} scale={1.8} />
+    <TitleBlock text={QUESTION} x={70} y={270} maxW={980} cap={150} perLine={12} hot={wrap(QUESTION, 12).length - 1} />
+    <Hero x={1500} hipY={1270} scale={3.1} mood={pushFor('worried')} facing={-1} marks="??" squiggle />
+  </Wrap>
+);
+
+/**
+ * LADDER — the grey-crowd/colour-hero focal device made literal: anonymous grey figures stranded on
+ * the lower steps, the colour hero big in the foreground at the top of the climb, under the amber
+ * bar. The second amber-band layout, so treatment (a) is not tied to one composition.
+ *
+ * The hero is NOT drawn standing on the apex step. It was, and it cannot be: at a head size that
+ * carries an expression (>=190 units of half-height) a figure whose hip sits on a fourth step is
+ * always behind the band. A bust in the near plane reads as "the one who made it" just as well and
+ * keeps the face.
+ */
+const ThumbLadder: React.FC = () => {
+  const baseY = 1000, sw = 250, sh = 88;
+  const steps = [0, 1, 2, 3].map((i) => ({x: 130 + i * sw, top: baseY - (i + 1) * sh}));
+  const GS = 1.05;  // grey climber scale
+  return (
+    <Wrap>
+      <rect x={0} y={0} width={1920} height={1080} fill={E.back} />
+      <SlabFloor y={baseY} fill={E.floor} rows={3} cols={8} bottom={1080} />
+      {steps.map((s, i) => (
+        <rect key={i} x={s.x} y={s.top} width={sw} height={baseY - s.top}
+          fill={i % 2 ? E.field : shade(E.field, 1)} stroke={INK} strokeWidth={STROKE} />
+      ))}
+      {/* StickFigure's y is the HIP; thigh+shin is 110 units, so a figure standing ON a surface has
+          to be lifted by 110*scale or its feet punch through it. */}
+      {/* Climbers on the lower three only: a figure on the apex step lands its head inside the amber
+          bar at any scale that still reads as a person. The empty top step is the point anyway. */}
+      {steps.slice(0, 3).map((s, i) => (
+        <StickFigure key={i} pose={A.stand(0)} x={s.x + sw / 2} y={s.top - 110 * GS} scale={GS}
+          facing={1} view="front" pal={DIM} showFace={false} frame={0} />
+      ))}
+      <Hero x={1460} hipY={1300} scale={3.0} mood={pushFor('smug')} facing={-1} />
+      <BandTitle text={HEAD} />
+    </Wrap>
+  );
+};
+
+// ==================== DISPATCH ====================
+//
+// ROTATION CONTRACT (docs/AUTOPILOT_PROMPT.txt, owner direction 2026-08-04). The creative agent
+// picks `thumb.archetype` and MUST NOT reuse one from the last 3 produced episodes. `pick()`
+// therefore resolves an explicit archetype first, and falls back to a TOPIC HASH only when the
+// episode did not name one — the fallback is deterministic, so the same topic always lands on the
+// same layout, and a missing/renamed archetype is visible rather than random per render.
+//
+// The keys below are the list docs/AUTOPILOT_PROMPT.txt tells the agent to rotate through. If a key
+// changes here, that file changes in the same commit or the rotation silently degrades to the hash.
+const ARCHES: Record<string, React.FC> = {
+  band: ThumbBand,
+  crash: ThumbCrash,
+  setting: ThumbSetting,
+  wordmark: ThumbWordmark,
+  beforeafter: ThumbBefore,
+  poster: ThumbPoster,
+  number: ThumbNumber,
+  question: ThumbQuestion,
+  ladder: ThumbLadder,
+};
+const ORDER = Object.keys(ARCHES);
 
 function pick(): React.FC {
   if (t.archetype && ARCHES[t.archetype]) return ARCHES[t.archetype];
