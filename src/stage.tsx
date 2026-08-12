@@ -5,6 +5,8 @@ import {FACES, blendExpr} from './faces';
 import * as A from './actions';
 import {SceneColors, resolveSceneKey, sceneColors} from './crayonStyle';
 import meta from './episode_meta.json';
+// WO-25's ramp guard, the one mechanism for the render-killer class. See "RAMP SAFETY" below.
+import {rising} from './director';
 
 // ============================================================================
 // COMPOSABLE DOODLE STAGE — topic-specific scene packs.
@@ -25,6 +27,44 @@ const FLOOR = '#eef2f6';   // bright pass 2026-07-20 (was tan #ece5d6)
 const LINE = '#c2ccd6';
 const GOLD = '#e8b54b';
 const rnd = (i: number) => {const x = Math.sin(i * 127.1 + 31.7) * 43758.5453; return x - Math.floor(x);};
+
+// ============================================================================
+// RAMP SAFETY (WO-25's guard, applied to the packs by WO-28).
+//
+// `interpolate` THROWS on an input range that is not strictly increasing, and all 111 ramps in this
+// file are derived from `useVideoConfig().durationInFrames` — which, inside the shot `Sequence`s
+// Video2 lays down, is the SHOT's length, not the composition's. That is the render-killer class
+// WO-25 named, and this file is where the last of it was reported to live.
+//
+// WHAT THE SWEEP ACTUALLY FOUND, because the honest answer is not the expected one: sweeping
+// D = 0..600 through Remotion's own `interpolate`, NOT ONE of these ranges throws at any D >= 1.
+// `[d*0.3, d*0.7]`, `[0, d]`, `[0, walkEnd]` and `[walkEnd, d]` (walkEnd = 0.6d) are all strictly
+// increasing for every positive duration; they collapse only at d = 0. And d = 0 cannot reach a
+// rendered frame: `Sequence` refuses a non-positive duration outright
+// ("durationInFrames must be positive", remotion/dist/cjs/Sequence.js) and a zero-length sequence
+// never mounts its children. So unlike Short.tsx/Video.tsx — which really did throw on the current
+// timeline — the packs were never reachable-broken.
+//
+// The guard is applied anyway, as construction rather than as a fix: `rising` (director.tsx) is the
+// ONE mechanism for this class and is imported, never re-implemented. It can only ever move a stop
+// LATER, so a range that already fits is returned UNCHANGED — measured, not assumed: all 66,600
+// (site, D) pairs over D = 1..600 produce stops identical to the unguarded arithmetic, and the
+// StageTest contact sheet of all 175 pack templates renders byte-identically (same SHA-256) before
+// and after. What it buys is that a future edit to any of these stops cannot reintroduce the class.
+//
+// NOTE ON THE IMPORT CYCLE (the `rising` import at the top of this file): director -> scenes ->
+// stage -> director. `rising` is only ever called from inside a component body, long after every
+// module in the cycle has finished evaluating, and director's own module body likewise only touches
+// `TEMPLATES` from inside a component. Proven on the frame, not assumed — StageTest renders.
+// ============================================================================
+
+/**
+ * The packs' shared mid-shot ramp: an action lands between 30% and 70% of the shot.
+ * Degenerate only at `d = 0`, where both stops collapse onto 0.
+ */
+const midRamp = (d: number) => rising('stage mid-shot', [d * 0.3, d * 0.7]);
+/** The packs' shared whole-shot ramp — a drift or a push that runs the full length of the shot. */
+const spanRamp = (d: number) => rising('stage whole-shot', [0, d]);
 
 // PER-SCENE COLOUR KEYING (CRAYON_BIBLE §5). WO-8a flattened every full-frame gradient onto three
 // constants — BG_SKY / BG_COOL / BG_WARM — because Chromium DITHERS every gradient it paints, so
@@ -3050,11 +3090,11 @@ const MED = {
     return <Stage backdrop="scanWall"
       fig={{pose: A.lookUp(f), x: 420, y: 850, scale: 1.4, view: 'front', expr: FACES.worried}} />;},
   erTrauma: () => {const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
-    const x = interpolate(f, [0, durationInFrames], [560, 1240]);
+    const x = interpolate(f, spanRamp(durationInFrames), [560, 1240]);
     return <Stage backdrop="hospitalWard" prop="operatingTable"
       fig={{pose: A.walk(f, fps), x, y: 856, scale: 1.0, view: 'profile', facing: 1, expr: FACES.hardened}} />;},
   consult: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="lab"
       fig={{pose: A.stand(f), x: 720, y: 892, scale: 1.4, view: 'front', expr: blendExpr(FACES.neutral, FACES.conflicted, t)}}
       extras={[{pose: A.sit(f), x: 1200, y: 900, scale: 1.2, view: 'profile', facing: -1, pal: DIM, expr: FACES.cold}]} />;},
@@ -3081,7 +3121,7 @@ const STARTUP = {
     return <Stage backdrop="serverRoom"
       fig={{pose: A.lookUp(f), x: 960, y: 880, scale: 1.4, view: 'front', expr: FACES.cold}} />;},
   ipoBell: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="ipoFloor" prop="ipoBell"
       fig={{pose: A.stand(f), x: 760, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.smug, t)}} />;},
 };
@@ -3089,14 +3129,14 @@ const STARTUP = {
 // Military pack (soldier)
 const MILITARY = {
   bootcamp: () => {const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
-    const x = interpolate(f, [0, durationInFrames], [620, 1180]);
+    const x = interpolate(f, spanRamp(durationInFrames), [620, 1180]);
     return <Stage backdrop="paradeGround"
       fig={{pose: A.walk(f, fps), x, y: 808, scale: 1.0, view: 'profile', facing: 1, expr: FACES.exhausted}} />;},
   barracksLife: () => {const f = useCurrentFrame();
     return <Stage backdrop="barracks"
       fig={{pose: A.sit(f), x: 560, y: 720, scale: 1.3, view: 'profile', facing: 1, expr: FACES.hollow}} />;},
   frontline: () => {const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
-    const x = interpolate(f, [0, durationInFrames], [520, 1160]);
+    const x = interpolate(f, spanRamp(durationInFrames), [520, 1160]);
     return <Stage backdrop="battlefield" figBehind
       fig={{pose: A.walk(f, fps), x, y: 748, scale: 0.95, view: 'profile', facing: 1, expr: FACES.hardened}} />;},
   commandPost: () => {const f = useCurrentFrame();
@@ -3114,11 +3154,11 @@ const SPORTS = {
     return <Stage backdrop="gym"
       fig={{pose: A.lookUp(f), x: 620, y: 878, scale: 1.45, view: 'front', expr: FACES.focused}} />;},
   lockerRoomScene: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="lockerRoom" prop="bench" figBehind
       fig={{pose: A.sit(f), x: 760, y: 700, scale: 1.25, view: 'profile', facing: 1, expr: blendExpr(FACES.exhausted, FACES.conflicted, t)}} />;},
   gameDay: () => {const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
-    const x = interpolate(f, [0, durationInFrames], [520, 1280]);
+    const x = interpolate(f, spanRamp(durationInFrames), [520, 1280]);
     return <Stage backdrop="stadiumField"
       fig={{pose: A.walk(f, fps), x, y: 980, scale: 1.0, view: 'profile', facing: 1, expr: FACES.earnest}} />;},
   victory: () => {const f = useCurrentFrame();
@@ -3151,7 +3191,7 @@ const REALESTATE = {
     return <Stage backdrop="blueprintWall" prop="scaleModel" figBehind
       fig={{pose: A.stand(f), x: 1100, y: 894, scale: 1.3, view: 'front', expr: FACES.cold}} />;},
   rooftopEmpire: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="cityRoof"
       fig={{pose: A.stand(f), x: 1100, y: 812, scale: 1.4, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
 };
@@ -3159,25 +3199,25 @@ const REALESTATE = {
 // Spy / espionage pack (spy, intelligence officer)
 const SPY = {
   tradecraft: () => {const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
-    const x = interpolate(f, [0, durationInFrames], [640, 1160]);
+    const x = interpolate(f, spanRamp(durationInFrames), [640, 1160]);
     return <Stage backdrop="farm"
       fig={{pose: A.walk(f, fps), x, y: 808, scale: 1.0, view: 'profile', facing: 1, expr: FACES.earnest}} />;},
   surveillance: () => {const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
-    const x = interpolate(f, [0, durationInFrames], [520, 1180]);
+    const x = interpolate(f, spanRamp(durationInFrames), [520, 1180]);
     return <Stage backdrop="nightStreet" figBehind
       fig={{pose: A.walk(f, fps), x, y: 868, scale: 1.05, view: 'profile', facing: 1, expr: FACES.focused}} />;},
   deadDrop: () => {const f = useCurrentFrame();
     return <Stage backdrop="parkDrop" prop="package" figBehind
       fig={{pose: A.stand(f), x: 1060, y: 884, scale: 1.3, view: 'profile', facing: -1, expr: FACES.worried}} />;},
   safehouse: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="safehouseWall"
       fig={{pose: A.stand(f), x: 340, y: 884, scale: 1.4, view: 'front', expr: blendExpr(FACES.focused, FACES.conflicted, t)}} />;},
   station: () => {const f = useCurrentFrame(); const {fps} = useVideoConfig();
     return <Stage backdrop="embassyOffice" prop="deskTerminals" figBehind
       fig={{pose: A.type_(f, fps), x: 960, y: 902, scale: 1.25, view: 'front', expr: FACES.cold}} />;},
   debrief: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="interrogRoom" prop="interrogTable" figBehind
       fig={{pose: A.stand(f), x: 720, y: 884, scale: 1.3, view: 'profile', facing: 1, expr: blendExpr(FACES.cold, FACES.hardened, t)}}
       extras={[{pose: A.sit(f), x: 1180, y: 884, scale: 1.2, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
@@ -3186,32 +3226,32 @@ const SPY = {
 // Roman empire pack (legionary -> centurion -> general -> Caesar -> the Guard)
 const ROMAN = {
   triumph: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="triumphStreet" prop="chariot" figBehind
       fig={{pose: A.stand(f), x: 900, y: 792, scale: 1.2, view: 'front', expr: blendExpr(FACES.awe, FACES.hollow, t)}} />;},
   romanOath: () => {const f = useCurrentFrame();
     return <Stage backdrop="romanForum" prop="altar" figBehind
       fig={{pose: A.lookUp(f), x: 700, y: 856, scale: 1.35, view: 'front', expr: FACES.earnest}} />;},
   legionDrill: () => {const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
-    const x = interpolate(f, [0, durationInFrames], [620, 1180]);
+    const x = interpolate(f, spanRamp(durationInFrames), [620, 1180]);
     return <Stage backdrop="marchCamp"
       fig={{pose: A.walk(f, fps), x, y: 800, scale: 1.0, view: 'profile', facing: 1, expr: FACES.exhausted}} />;},
   legionCamp: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="tentCamp"
       fig={{pose: A.sit(f), x: 600, y: 836, scale: 1.25, view: 'profile', facing: 1, expr: blendExpr(FACES.tired, FACES.hollow, t)}} />;},
   shieldWall: () => {const f = useCurrentFrame();
     return <Stage backdrop="battleLine" figBehind
       fig={{pose: A.stand(f), x: 760, y: 960, scale: 1.15, view: 'profile', facing: 1, expr: FACES.hardened}} />;},
   centurionVitis: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="formation"
       fig={{pose: A.armsCrossed(f), x: 960, y: 884, scale: 1.4, view: 'front', expr: blendExpr(FACES.focused, FACES.hardened, t)}} />;},
   firstSpear: () => {const f = useCurrentFrame();
     return <Stage backdrop="eagleField"
       fig={{pose: A.lookUp(f), x: 600, y: 884, scale: 1.4, view: 'front', expr: FACES.cold}} />;},
   forumScene: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="romanForum"
       fig={{pose: A.stand(f), x: 520, y: 868, scale: 1.4, view: 'front', expr: blendExpr(FACES.worried, FACES.conflicted, t)}} />;},
   // reviewer fix (t15): the mapTable prop's front face spans y720-840, which used to slice through
@@ -3222,20 +3262,20 @@ const ROMAN = {
       fig={{pose: A.stand(f), x: 800, y: 822, scale: 1.25, view: 'front', expr: FACES.cold}}
       extras={[{pose: A.stand(f), x: 1180, y: 812, scale: 1.1, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
   throne: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="throneHall"
       fig={{pose: A.stand(f), x: 960, y: 836, scale: 1.35, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
   senate: () => {const f = useCurrentFrame();
     return <Stage backdrop="curia"
       fig={{pose: A.stand(f), x: 960, y: 856, scale: 1.4, view: 'front', expr: FACES.cold}} />;},
   praetorians: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="praetorianCastra"
       fig={{pose: A.stand(f), x: 600, y: 884, scale: 1.4, view: 'front', expr: blendExpr(FACES.cold, FACES.smug, t)}} />;},
   // the banquet — two diners reclining over a low table by candlelight (replaces the anachronistic
   // modern-skyline 'dinner' template for the Roman feast scenes).
   banquet: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="banquetHall" prop="banquetTable" figBehind
       fig={{pose: A.sit(f), x: 700, y: 762, scale: 1.2, view: 'profile', facing: 1, expr: blendExpr(FACES.cold, FACES.smug, t)}}
       extras={[{pose: A.sit(f + 50), x: 1240, y: 762, scale: 1.2, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
@@ -3247,7 +3287,7 @@ const MAFIA = {
   // The boss STANDS behind the table: y=720 puts his feet (~y 855) below the table line, hidden by
   // the table front (754-874), so he presides over it — never perched ON the tabletop.
   mobTable: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="restaurant" prop="longTable" figBehind
       fig={{pose: A.stand(f), x: 960, y: 720, scale: 1.25, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}}
       extras={[{pose: A.sit(f + 30), x: 620, y: 748, scale: 1.05, view: 'profile', facing: 1, pal: DIM, face: false},
@@ -3258,7 +3298,7 @@ const MAFIA = {
       fig={{pose: A.stand(f), x: 560, y: 892, scale: 1.35, view: 'front', expr: FACES.earnest}} />;},
   // hanging out at the social club — the rules, omertà, the Dapper Don holding court
   socialClub: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="clubInterior"
       fig={{pose: A.stand(f), x: 620, y: 892, scale: 1.35, view: 'front', expr: blendExpr(FACES.focused, FACES.smug, t)}}
       extras={[{pose: A.sit(f + 40), x: 1180, y: 900, scale: 1.15, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
@@ -3269,7 +3309,7 @@ const MAFIA = {
       extras={[{pose: A.sit(f + 45), x: 1220, y: 762, scale: 1.2, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
   // the dark alley under a caged bulb — making your bones / going to the mattresses
   backAlley: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="alley"
       fig={{pose: A.stand(f), x: 700, y: 892, scale: 1.35, view: 'front', expr: blendExpr(FACES.worried, FACES.hardened, t)}} />;},
   // the making ceremony: the saint card to a flame, a ring of dim men behind — omertà sworn
@@ -3278,14 +3318,14 @@ const MAFIA = {
       fig={{pose: A.stand(f), x: 960, y: 800, scale: 1.3, view: 'front', expr: FACES.hardened}} />;},
   // the restaurant sit-down / the classic mob hit — two at the table by candlelight
   redSauce: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="restaurant" prop="dinerTable" figBehind
       fig={{pose: A.sit(f), x: 700, y: 762, scale: 1.2, view: 'profile', facing: 1, expr: blendExpr(FACES.cold, FACES.conflicted, t)}}
       extras={[{pose: A.sit(f + 50), x: 1220, y: 762, scale: 1.2, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
   // the restaurant table with the far chair EMPTY — the rat reveal (t25): no companion figure,
   // just the boss staring across at an unoccupied chair. "THE CHAIR IS EMPTY" is visually true.
   redSauceAlone: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="restaurant" prop="dinerTableEmptySeat" figBehind
       fig={{pose: A.sit(f), x: 700, y: 762, scale: 1.2, view: 'profile', facing: 1, expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
   // the docks: crane, containers, harbor — the rackets, the mob tax on the city
@@ -3294,12 +3334,12 @@ const MAFIA = {
       fig={{pose: A.stand(f), x: 1250, y: 884, scale: 1.4, view: 'front', expr: FACES.cold}} />;},
   // behind the boss's desk — the sit-down where you give the order / made underboss
   donOffice: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="donStudy" prop="bigDesk" figBehind
       fig={{pose: A.sit(f), x: 960, y: 700, scale: 1.2, view: 'front', expr: blendExpr(FACES.cold, FACES.hardened, t)}} />;},
   // the Commission: the round table of bosses in the dark — the board above the family
   commission: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="commissionRoom" prop="roundTable" figBehind
       fig={{pose: A.sit(f), x: 960, y: 720, scale: 1.15, view: 'front', expr: blendExpr(FACES.cold, FACES.smug, t)}} />;},
   // the count room: cash piled under a naked bulb — the skim
@@ -3308,7 +3348,7 @@ const MAFIA = {
       fig={{pose: A.stand(f), x: 545, y: 892, scale: 1.25, view: 'front', expr: FACES.smug}} />;},
   // the courtroom: the defendant before the bench, a witness in the stand — RICO / the rat
   courtroom: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="courtroomBg" prop="witnessStand"
       fig={{pose: A.stand(f), x: 820, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.worried, FACES.hollow, t)}}
       extras={[{pose: A.sit(f), x: 1470, y: 800, scale: 1.0, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
@@ -3330,18 +3370,18 @@ const DYNASTY = {
       fig={{pose: A.stand(f), x: 700, y: 888, scale: 1.15, view: 'front', expr: FACES.earnest}} />;},
   // the hall of ancestor portraits — four gilt frames and one EMPTY one, waiting
   portraitHall: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="portraitWall"
       fig={{pose: A.lookUp(f), x: 560, y: 892, scale: 1.4, view: 'front', expr: blendExpr(FACES.neutral, FACES.conflicted, t)}} />;},
   // the loop closes (t29 ONLY): the same hall, but the fifth frame is no longer empty —
   // your portrait hangs in it, exactly when the VO says so
   portraitHallFilled: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="portraitWallFilled"
       fig={{pose: A.lookUp(f), x: 560, y: 892, scale: 1.4, view: 'front', expr: blendExpr(FACES.neutral, FACES.hollow, t)}} />;},
   // the yacht deck at sea — the trust-fund years, the crowd that appears
   yachtDeck: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="seaDeck"
       fig={{pose: A.stand(f), x: 1180, y: 892, scale: 1.4, view: 'front', expr: blendExpr(FACES.smug, FACES.hollow, t)}} />;},
   // the foundation gala — chandelier, dim guests with flutes, you hold court
@@ -3350,7 +3390,7 @@ const DYNASTY = {
       fig={{pose: A.stand(f), x: 840, y: 900, scale: 1.42, view: 'front', expr: FACES.cold}} />;},
   // the family vault — a great trust-vault door in a wall of deed boxes; paper, not gold
   familyVault: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="vaultHall"
       fig={{pose: A.lookUp(f), x: 500, y: 888, scale: 1.4, view: 'front', expr: blendExpr(FACES.focused, FACES.hollow, t)}} />;},
 };
@@ -3363,7 +3403,7 @@ const SAMURAI = {
       fig={{pose: A.stand(f), x: 620, y: 900, scale: 1.4, view: 'front', expr: FACES.earnest}} />;},
   // the dojo: training under the mentor, the code — later, the empty dojo of grief
   dojo: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="dojo"
       fig={{pose: A.armsCrossed(f), x: 700, y: 900, scale: 1.4, view: 'front', expr: blendExpr(FACES.exhausted, FACES.focused, t)}} />;},
   // the daishō on the stand: getting your two swords — the want made real (figBehind → swords in front)
@@ -3372,12 +3412,12 @@ const SAMURAI = {
       fig={{pose: A.stand(f), x: 640, y: 900, scale: 1.35, view: 'front', expr: FACES.awe}} />;},
   // the battle: nobori banners, a burning castle, a hedge of spears — the war
   sengokuField: () => {const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
-    const x = interpolate(f, [0, durationInFrames], [560, 1180]);
+    const x = interpolate(f, spanRamp(durationInFrames), [560, 1180]);
     return <Stage backdrop="sengokuField" figBehind
       fig={{pose: A.walk(f, fps), x, y: 900, scale: 1.0, view: 'profile', facing: 1, expr: FACES.hardened}} />;},
   // the great castle gate: arrival, the sword hunt, the siege you hold, riding out to Edo
   castleGate: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="castleGate"
       fig={{pose: A.stand(f), x: 560, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.worried, FACES.cold, t)}} />;},
   // the tea room: the sit-down, the warning, the politics — a low table by the tokonoma. Reviewer
@@ -3385,23 +3425,23 @@ const SAMURAI = {
   // face:false, a blank oval, across every one of his named/dialogue scenes — give him the same
   // eyes/brows/mouth rig as the protagonist, smug/cold to match his written characterization.
   teaCeremony: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="teaRoom" prop="teaTable" figBehind
       fig={{pose: A.sit(f), x: 680, y: 800, scale: 1.2, view: 'profile', facing: 1, expr: blendExpr(FACES.focused, FACES.conflicted, t)}}
       extras={[{pose: A.sit(f + 40), x: 1240, y: 800, scale: 1.2, view: 'profile', facing: -1, pal: DIM, expr: FACES.smug}]} />;},
   // the lord's audience hall: presented, promoted, and later ruling from the dais yourself
   lordAudience: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="lordHall"
       fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.35, view: 'front', expr: blendExpr(FACES.focused, FACES.cold, t)}} />;},
   // the top of the keep: the domain below — the daimyō apex / the great lord surveying his koku
   keepTop: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="keepTop"
       fig={{pose: A.stand(f), x: 1120, y: 900, scale: 1.42, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
   // the seppuku garden: the ordered death — the cold open, the midpoint, and its payoff (a second behind)
   seppukuRite: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="seppukuGarden" figBehind
       fig={{pose: A.sit(f), x: 940, y: 906, scale: 1.25, view: 'front', expr: blendExpr(FACES.hardened, FACES.hollow, t)}}
       extras={[{pose: A.stand(f), x: 1300, y: 900, scale: 1.3, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
@@ -3411,7 +3451,7 @@ const SAMURAI = {
       fig={{pose: A.sit(f), x: 960, y: 890, scale: 1.15, view: 'front', expr: FACES.worried}} />;},
   // the rice broker's counting house: the merchant with no sword who owns your debt and the edict
   merchantHouse: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="merchantHouse"
       fig={{pose: A.stand(f), x: 620, y: 900, scale: 1.35, view: 'front', expr: blendExpr(FACES.worried, FACES.hollow, t)}} />;},
 };
@@ -3420,28 +3460,28 @@ const SAMURAI = {
 const CARTEL = {
   // the border desert: the halcón kid on the edge of town watching the road — L1 + the cyclical close
   lookoutCorner: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="borderDesert"
       fig={{pose: A.stand(f), x: 520, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.worried, t)}} />;},
   // la sierra: the mule route / moving up / the hunted run — a convoy pickup, the mountain track
   sierraRoute: () => {const f = useCurrentFrame(); const {fps, durationInFrames} = useVideoConfig();
-    const x = interpolate(f, [0, durationInFrames], [500, 1060]);
+    const x = interpolate(f, spanRamp(durationInFrames), [500, 1060]);
     return <Stage backdrop="sierraCamp" prop="narcoTruck" figBehind
       fig={{pose: A.walk(f, fps), x, y: 900, scale: 1.15, view: 'profile', facing: 1, expr: FACES.focused}} />;},
   // the roadside shrine: the vow, the medallion, protection — worried → hardened (cautionary)
   narcoShrineRite: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="narcoShrine"
       fig={{pose: A.lookUp(f), x: 560, y: 884, scale: 1.4, view: 'front', expr: blendExpr(FACES.worried, FACES.hardened, t)}} />;},
   // la plaza: the town square — the piso (turf tax), territory, the town under your thumb
   plazaTown: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="townPlaza"
       fig={{pose: A.stand(f), x: 620, y: 900, scale: 1.4, view: 'front', expr: blendExpr(FACES.focused, FACES.cold, t)}} />;},
   // the narco ranch: the walled compound — the jefe de plaza's finca AND the patrón's fortress
   // (the cold open + the apex). Figure offset LEFT off the centered gate (centered-landmark rule).
   ranchCompound: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="narcoRanch"
       fig={{pose: A.stand(f), x: 480, y: 900, scale: 1.4, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
 };
@@ -3452,7 +3492,7 @@ const OCEAN = {
   // the delivery boat still whole, the sea kind — a working sailor on deck (comfort + want, L1).
   // reuses the DYNASTY seaDeck backdrop but stages the figure content, not the heir's smug.
   boatDeck: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="seaDeck"
       fig={{pose: A.stand(f), x: 760, y: 892, scale: 1.35, view: 'front', expr: blendExpr(FACES.earnest, FACES.neutral, t)}} />;},
   // the capsize: the storm rolls the boat, the mast breaks — you go over the side into the dark water
@@ -3461,7 +3501,7 @@ const OCEAN = {
       fig={{pose: A.lookUp(f), x: 820, y: 980, scale: 1.4, view: 'front', expr: FACES.shock}} />;},
   // the life raft by day: the home base — hunched in the tube on the swell (reused across the drift)
   raftDay: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="oceanSwell" prop="raftHull" figBehind
       fig={{pose: A.sit(f), x: 960, y: 880, scale: 1.25, view: 'front', expr: blendExpr(FACES.worried, FACES.exhausted, t)}} />;},
   // the raft at night: stars, the moon path, the red flare-glow — the long dark, the first night
@@ -3470,12 +3510,12 @@ const OCEAN = {
       fig={{pose: A.armsCrossed(f), x: 960, y: 880, scale: 1.25, view: 'front', expr: FACES.worried}} />;},
   // dead calm, the huge sun, the mirror sea — thirst; slumped, cracked, rationing
   glassCalm: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="glassCalm" prop="raftHull" figBehind
       fig={{pose: A.sit(f), x: 960, y: 884, scale: 1.22, view: 'front', expr: blendExpr(FACES.exhausted, FACES.hollow, t)}} />;},
   // a warm squall — driving rain over the raft; face up, mouth open, catching fresh water (a mercy)
   rainSquall: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="stormSea" prop="raftHull" figBehind
       fig={{pose: A.lookUp(f), x: 960, y: 884, scale: 1.24, view: 'front', expr: blendExpr(FACES.exhausted, FACES.earnest, t)}} />;},
   // a ship on the horizon by day — up on your knees, reaching, screaming at a bridge that never looks
@@ -3492,7 +3532,7 @@ const OCEAN = {
       fig={{pose: A.stand(f), x: 480, y: 880, scale: 1.22, view: 'front', expr: FACES.conflicted}} />;},
   // the bare open swell, no raft in frame, the void at scale — truly alone, the hallucination
   openSwell: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="oceanSwell" prop="waveCrest" figBehind
       fig={{pose: A.stand(f), x: 960, y: 970, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.exhausted, t)}} />;},
   // the ship's lit hull sliding past close at night — the cold open + its payoff, the last flare
@@ -3501,7 +3541,7 @@ const OCEAN = {
       fig={{pose: A.lookUp(f), x: 640, y: 880, scale: 1.26, view: 'front', expr: FACES.shock}} />;},
   // land and a boat coming toward you at last — the rescue, at cost
   makeLandfall: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="landfall" prop="raftHull" figBehind
       fig={{pose: A.lookUp(f), x: 720, y: 880, scale: 1.24, view: 'front', expr: blendExpr(FACES.hollow, FACES.awe, t)}} />;},
 };
@@ -3527,7 +3567,7 @@ const BLACKMARKET = {
       extras={[{pose: A.stand(f + 20), x: 1300, y: 892, scale: 1.15, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
   // the syndicate's clean private clinic — the legit-looking OR again, but a guard stands in it now
   syndicateClinic: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="operatingRoom" prop="operatingTable" figBehind
       fig={{pose: A.stand(f), x: 860, y: 888, scale: 1.25, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}}
       extras={[{pose: A.stand(f), x: 1300, y: 860, scale: 1.3, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
@@ -3549,18 +3589,18 @@ const ZOMBIE = {
   // the horde filling a dark street — the cold open + its loop-close payoff. The crowd prop draws
   // BEHIND the figure (no figBehind) so the running hero stays the clear, legible foreground focal point.
   hordeStreet: () => {const f = useCurrentFrame(); const {fps, durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [0, d], [0, 1]);
-    const x = interpolate(f, [0, d], [420, 1220]);
+    const t = interpolate(f, spanRamp(d), [0, 1]);
+    const x = interpolate(f, spanRamp(d), [420, 1220]);
     return <Stage backdrop="hordeAvenue" prop="hordeCrowd"
       fig={{pose: A.walk(f, fps, 2.6), x, y: 916, scale: 1.15, view: 'profile', facing: 1, expr: blendExpr(FACES.shock, FACES.hardened, t)}} />;},
   // the ordinary house going dark — boarding the windows, the last normal hour (reuses suburbHouse)
   suburbSiege: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="suburbHouse"
       fig={{pose: A.stand(f), x: 1250, y: 884, scale: 1.4, view: 'front', expr: blendExpr(FACES.earnest, FACES.worried, t)}} />;},
   // the highway parking lot — gridlocked cars, smoke on the skyline, a helicopter that won't stop
   highwayJam: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="highwayGridlock"
       fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.35, view: 'front', expr: blendExpr(FACES.worried, FACES.exhausted, t)}} />;},
   // the looted grocery aisle — toppled shelves, spilled cans, what's left to take
@@ -3569,17 +3609,17 @@ const ZOMBIE = {
       fig={{pose: A.stand(f), x: 900, y: 940, scale: 1.35, view: 'front', expr: FACES.focused}} />;},
   // the boarded room — cross-nailed planks, furniture against the door, the siege
   bunkerSiege: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="bunkerRoom"
       fig={{pose: A.armsCrossed(f), x: 620, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.hardened, FACES.exhausted, t)}} />;},
   // the checkpoint — barriers, razor wire, the floodlight tower, martial-law triage
   checkpointTriage: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="checkpointBarrier"
       fig={{pose: A.stand(f), x: 760, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}} />;},
   // the walled camp — shipping containers, string lights, a watchtower — the new world, at cost
   campWall: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="campPerimeter"
       fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.4, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
 };
@@ -3591,7 +3631,7 @@ const ZOMBIE = {
 const WASTE = {
   // the graveside — the cold open, static at the edge of the plot (t01; "don't move yet")
   graveside: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="cemetery"
       fig={{pose: A.stand(f), x: 1200, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}}
       extras={[{pose: A.stand(f + 10), x: 820, y: 900, scale: 1.1, view: 'front', pal: DIM, face: false},
@@ -3608,9 +3648,9 @@ const WASTE = {
   // ends — a visibly different blocking from the cold open's static edge mark.
   gravesideReturn: () => {const f = useCurrentFrame(); const {fps, durationInFrames: d} = useVideoConfig();
     const walkEnd = d * 0.6;
-    const x = interpolate(f, [0, walkEnd], [1200, 1460], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const x = interpolate(f, rising('stage walk', [0, walkEnd]), [1200, 1460], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     const arrived = f > walkEnd;
-    const t = interpolate(f, [walkEnd, d], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, rising('stage arrival', [walkEnd, d]), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="cemetery"
       fig={{pose: arrived ? A.stand(f) : A.walk(f, fps), x, y: 900, scale: 1.3,
             view: 'profile', facing: 1, expr: blendExpr(FACES.cold, FACES.hollow, t)}}
@@ -3628,7 +3668,7 @@ const WASTE = {
       fig={{pose: A.stand(f), x: 860, y: 900, scale: 1.35, view: 'front', expr: FACES.focused}} />;},
   // the tipping face — owning disposal, not just collection, the biggest valuation lever
   landfillView: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="landfillFace"
       fig={{pose: A.lookUp(f), x: 1010, y: 940, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.focused, t)}} />;},
   // the route again, at night, the truck stopped — the reversal (reuses SPY's nightStreet backdrop).
@@ -3648,14 +3688,14 @@ const WASTE = {
 const LOTTERY = {
   // the counter, Dale behind it — the cold open + its loop-close payoff, the Friday ticket ritual
   ticketCounter: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="counterStore"
       fig={{pose: A.stand(f), x: 1300, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.worried, t)}}
       extras={[{pose: A.stand(f + 10), x: 1700, y: 880, scale: 1.05, view: 'front', pal: DIM, face: false}]} />;},
   // the modest home at dusk — comfort + the named want, before any of this existed. Figure kept well
   // clear of CAPTION_SAFE_X (this scene's long sub-caption widens the money card past the usual ~700px)
   trailerPorch: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="trailerHome"
       fig={{pose: A.stand(f), x: 1220, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.exhausted, t)}} />;},
 };
@@ -3667,7 +3707,7 @@ const LOTTERY = {
 const YAKUZA = {
   // the neon alley — the cold open (AFTERMATH) + its torch-passing loop-close payoff
   neonAlley: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="kabukichoAlley"
       fig={{pose: A.stand(f), x: 1220, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
   // the shrine altar — the sakazuki cup, poured three times across the arc (joining / made / kumichō).
@@ -3676,13 +3716,13 @@ const YAKUZA = {
   // in named, dialogue-bearing scenes. Giving him a face here reuses the same eyes/brows/mouth rig
   // as the protagonist, just dimmed/hardened to read as the elder presiding.
   shrineOathRite: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="shrineAltar"
       fig={{pose: A.sit(f), x: 700, y: 800, scale: 1.2, view: 'front', expr: blendExpr(FACES.earnest, FACES.focused, t)}}
       extras={[{pose: A.sit(f + 30), x: 1220, y: 800, scale: 1.15, view: 'front', pal: DIM, expr: FACES.hardened}]} />;},
   // the tattoo parlor — the irezumi, body debt made real
   irezumiParlor: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="tattooStudio" figBehind
       fig={{pose: A.sit(f), x: 640, y: 800, scale: 1.2, view: 'profile', facing: 1, expr: blendExpr(FACES.worried, FACES.hardened, t)}} />;},
   // the pachinko floor — the front business, the earn, rows of chrome and noise
@@ -3691,7 +3731,7 @@ const YAKUZA = {
       fig={{pose: A.stand(f), x: 880, y: 900, scale: 1.3, view: 'front', expr: FACES.focused}} />;},
   // the oyabun's study — the kamidana + the mounted sword, giving the order
   oyabunOffice: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="oyabunStudy"
       fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.hardened, t)}} />;},
   // the atonement room — yubitsume, the debt paid in a joint instead of yen
@@ -3706,7 +3746,7 @@ const YAKUZA = {
   // still rendered face:false (a blank oval) here despite the sibling shrineOathRite/teaCeremony fix
   // — give him the same eyes/brows/mouth rig, worried reading as the math running before his mouth does.
   teaCeremonySplit: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="teaRoom" prop="swordStand" figBehind
       fig={{pose: A.sit(f), x: 620, y: 800, scale: 1.25, view: 'front', expr: blendExpr(FACES.worried, FACES.hardened, t)}}
       extras={[{pose: A.stand(f), x: 1280, y: 900, scale: 1.2, view: 'profile', facing: -1, pal: DIM, expr: FACES.worried}]} />;},
@@ -3719,7 +3759,7 @@ const YAKUZA = {
 const MONGOL = {
   // the ger camp — comfort + the named want, before any of this existed; also the loop-close callback
   steppeCamp: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="steppeCamp"
       fig={{pose: A.stand(f), x: 900, y: 940, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.worried, t)}} />;},
   // the drill ground — mounted-archery training, the arban recruit
@@ -3728,12 +3768,12 @@ const MONGOL = {
       fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: FACES.focused}} />;},
   // the night raid — torches, burning tents — the first khubi, jaghun command
   steppeRaid: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="steppeRaid"
       fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.focused, FACES.hardened, t)}} />;},
   // the siege — the Khwarazmian campaign, minghan/tumen command, the moral-cost beat
   siegeWalls: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="siegeWalls"
       fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.hardened, FACES.hollow, t)}} />;},
   // the Yam relay post — the empire's speed, the share-worthy 200mi/day beat
@@ -3742,12 +3782,12 @@ const MONGOL = {
       fig={{pose: A.lookUp(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: FACES.focused}} />;},
   // the audience tent — the governor's investiture, the paiza, tax/tribute authority
   khanAudienceTent: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="khanAudienceTent"
       fig={{pose: A.stand(f), x: 900, y: 906, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.focused, t)}} />;},
   // the Khagan's throne hall — the flash-forward cold open + the apex + its loop-close payoff
   khaganThrone: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="khaganThrone"
       fig={{pose: A.stand(f), x: 960, y: 892, scale: 1.35, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}} />;},
 };
@@ -3758,7 +3798,7 @@ const MONGOL = {
 const GLADIATOR = {
   // the slave market — the auction block, the awning, the market town — Level 1, "you are property"
   slaveMarket: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="slaveMarket"
       fig={{pose: A.stand(f), x: 940, y: 896, scale: 1.3, view: 'front', expr: blendExpr(FACES.worried, FACES.hollow, t)}} />;},
   // the ludus training yard — the recurring home base. Reused ~8x across very different emotional
@@ -3767,19 +3807,19 @@ const GLADIATOR = {
   // scene. Following raftDay/teaCeremony's pattern for a reused template — pick one neutral-ish
   // blended pair and let the surrounding, DISTINCT templates carry the sharper emotional beats.
   ludusYard: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="ludusYard" prop="palusPost" figBehind
       fig={{pose: A.stand(f), x: 940, y: 900, scale: 1.3, view: 'profile', facing: 1, expr: blendExpr(FACES.earnest, FACES.hardened, t)}} />;},
   // the porta — the dark tunnel beneath the stands, torches, the bright shaft of sand-daylight ahead
   // — waiting to fight
   arenaGate: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="arenaGate"
       fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.worried, FACES.focused, t)}} />;},
   // the amphitheater sand — THE master reused backdrop: the cold open, every fight beat, the
   // midpoint reversal
   arenaSand: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="arenaSand"
       fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.38, view: 'front', expr: blendExpr(FACES.focused, FACES.hardened, t)}} />;},
   // the rudis — the wooden sword of freedom offered on the same sand, a dim figure extending it.
@@ -3789,20 +3829,20 @@ const GLADIATOR = {
   // the episode's central emotional beat — while the protagonist beside him had full facial detail.
   // Give him the same eyes/brows/mouth rig, cold/formal to match a magistrate presiding over the rite.
   rudisCeremony: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="arenaSand"
       fig={{pose: A.sit(f), x: 900, y: 906, scale: 1.25, view: 'front', expr: blendExpr(FACES.hollow, FACES.hardened, t)}}
       extras={[{pose: A.stand(f), x: 1300, y: 900, scale: 1.2, view: 'profile', facing: -1, pal: DIM, expr: FACES.cold}]} />;},
   // the lanista's office — the roster board, scrolls and a wax tablet on the desk — ownership, the
   // games-business ladder (Levels 3-4 roster tracking, later Level 7 as lanista)
   ludusOffice: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="ludusOffice"
       fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.focused, FACES.cold, t)}} />;},
   // the imperial box — the editor's/emperor's pulvinar looking down over the sand — richer/cooler
   // than arenaSand, the apex above even the editor
   imperialBox: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="imperialBox"
       fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
 };
@@ -3815,18 +3855,18 @@ const GLADIATOR = {
 const BRATVA = {
   // the courtyard — Level 1 origin, the named want, before any of this
   courtyardBlock: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="courtyardBg"
       fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.worried, t)}} />;},
   // the tattoo cell — the recurring sensory anchor, a needle earning a mark. figBehind so the coil
   // rig table reads in front of the seated figure.
   tattooCell: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="tattooCellBg" figBehind
       fig={{pose: A.sit(f), x: 900, y: 800, scale: 1.2, view: 'profile', facing: 1, expr: blendExpr(FACES.worried, FACES.hardened, t)}} />;},
   // the banya — the cold open (MID-ACTION) + every skhodka sit-down after it
   banyaSitDown: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="banyaRoom"
       fig={{pose: A.sit(f), x: 820, y: 820, scale: 1.2, view: 'front', expr: blendExpr(FACES.cold, FACES.hardened, t)}}
       extras={[{pose: A.sit(f + 20), x: 1300, y: 820, scale: 1.15, view: 'front', pal: DIM, expr: FACES.hollow}]} />;},
@@ -3837,18 +3877,18 @@ const BRATVA = {
       extras={[{pose: A.stand(f), x: 1620, y: 900, scale: 0.95, view: 'front', pal: DIM, expr: FACES.worried}]} />;},
   // the koronatsiya circle — the crowning; a ring of dim elders, the code made literal
   koronatsiyaRite: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="koronatsiyaCircle"
       fig={{pose: A.sit(f), x: 960, y: 900, scale: 1.25, view: 'front', expr: blendExpr(FACES.hollow, FACES.hardened, t)}} />;},
   // the Brighton boardwalk — the network reaching abroad (Solntsevskaya's real 1992 export, grounding
   // texture, not a literal claim of identity)
   brightonPier: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="brightonBoardwalk"
       fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.focused, FACES.cold, t)}} />;},
   // the pakhan's office — the apex, the samovar and the wall map, the money still not yours
   pakhanApex: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="pakhanOffice"
       fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}} />;},
 };
@@ -3861,29 +3901,29 @@ const BRATVA = {
 const SPACE = {
   // the T-38 supersonic jet cockpit — ASCAN flight training, a named instructor in the back seat
   jetTrain: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="t38Cockpit"
       fig={{pose: A.sit(f), x: 900, y: 860, scale: 1.2, view: 'front', expr: blendExpr(FACES.earnest, FACES.focused, t)}}
       extras={[{pose: A.sit(f + 15), x: 1320, y: 800, scale: 1.0, view: 'front', pal: DIM, expr: FACES.cold}]} />;},
   // the Neutral Buoyancy Lab — spacewalk training in the world's largest indoor pool, a submerged
   // ISS mockup, rising bubbles
   poolTrain: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="nbl" figBehind
       fig={{pose: A.stand(f), x: 960, y: 760, scale: 1.15, view: 'front', expr: blendExpr(FACES.focused, FACES.hardened, t)}} />;},
   // the launch capsule — strapped into the seat, the porthole flame, the danger beat
   launchSeat: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="capsuleLaunch"
       fig={{pose: A.sit(f), x: 960, y: 840, scale: 1.25, view: 'front', expr: blendExpr(FACES.worried, FACES.hardened, t)}} />;},
   // the ISS Cupola — the recurring master anchor: first sight of Earth, re-triggered every level-up
   cupolaView: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="cupolaEarth"
       fig={{pose: A.stand(f), x: 960, y: 800, scale: 1.2, view: 'front', expr: blendExpr(FACES.awe, FACES.hollow, t)}} />;},
   // outside the station on tether — the calm before the midpoint reversal
   evaWalk: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="evaSpacewalk"
       fig={{pose: A.stand(f), x: 960, y: 760, scale: 1.2, view: 'front', expr: blendExpr(FACES.focused, FACES.worried, t)}} />;},
   // the midpoint reversal itself — the real 2013 helmet water-intrusion type of emergency. Shares
@@ -3891,24 +3931,24 @@ const SPACE = {
   // gradient) so it never reads as the same picture as the calm EVA beat, per the
   // arenaSand/rudisCeremony shared-backdrop-distinct-staging pattern.
   evaEmergency: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="evaSpacewalk"
       fig={{pose: A.stand(f), x: 960, y: 820, scale: 1.55, view: 'front', expr: blendExpr(FACES.worried, FACES.hollow, t)}} />;},
   // Mission Control — the ground side, the institutional-math beat (grounding who flies, who's cut)
   controlRoom: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="missionControl"
       fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.25, view: 'front', expr: blendExpr(FACES.cold, FACES.hardened, t)}}
       extras={[{pose: A.sit(f), x: 1400, y: 900, scale: 0.9, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
   // inside the ISS — commanding the station, a crewmate nearby, Level 06 day-to-day
   stationCommand: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="stationOps"
       fig={{pose: A.stand(f), x: 900, y: 840, scale: 1.25, view: 'front', expr: blendExpr(FACES.hardened, FACES.cold, t)}}
       extras={[{pose: A.stand(f + 10), x: 1340, y: 850, scale: 1.0, view: 'profile', facing: -1, pal: DIM, expr: FACES.exhausted}]} />;},
   // the lunar surface — the flash-forward cold open, the Artemis-era apex, its loop-close payoff
   moonSurface: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="lunarSurface"
       fig={{pose: A.stand(f), x: 960, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.awe, FACES.hollow, t)}} />;},
 };
@@ -3924,13 +3964,13 @@ const SPACE = {
 const OTTOMAN = {
   // the Balkan hill village — Level 1's named want, the devshirme-collection restage, the loop callback
   balkanVillage: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="balkanVillage"
       fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.worried, t)}} />;},
   // the barracks courtyard — THE recurring sensory anchor (the regimental cauldron), training through
   // corbaci command
   janissaryBarracks: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="janissaryBarracks"
       fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.hardened, t)}} />;},
   // the cauldron overturned — the MIDPOINT REVERSAL (the VERIFIED 1622 mutiny that deposed and killed
@@ -3943,13 +3983,13 @@ const OTTOMAN = {
                {pose: A.stand(f + 24), x: 1480, y: 906, scale: 1.0, view: 'profile', facing: -1, pal: DIM, face: false}]} />;},
   // the Divan chamber — the Tower of Justice grille, Level 07's share-worthy "someone may be watching" beat
   divanChamber: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="divanChamber"
       fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.focused, FACES.cold, t)}} />;},
   // the sultan's audience hall — the MID-ACTION cold open, the Grand Vizier apex, and the loop-close
   // payoff (the same silk-cord case, a different name on it)
   sultanAudience: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="sultanAudience"
       fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}} />;},
 };
@@ -3965,28 +4005,28 @@ const OTTOMAN = {
 const PIRATE = {
   // the fishing cove — Level 1's named want, the origin, the loop-close callback (older, same cove)
   fishingCove: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="fishingCove"
       fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.worried, t)}} />;},
   // the working deck — THE recurring master/home-base beat, every rank still stands on this deck
   shipDeck: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="shipDeck"
       fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.hardened, t)}} />;},
   // the broadside — a prize taken by force, the danger escalation, powder smoke and a damaged enemy hull
   broadsideBattle: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="broadsideBattle"
       fig={{pose: A.stand(f), x: 900, y: 906, scale: 1.35, view: 'front', expr: blendExpr(FACES.focused, FACES.hardened, t)}} />;},
   // Nassau harbor — the Republic of Pirates, the haven, the pardon offered, the loot spent fast
   nassauHarbor: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="nassauHarbor"
       fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.exhausted, FACES.smug, t)}} />;},
   // the captain's great cabin — the chart table, the chest, the stern windows — command's private
   // authority, the apex: you can command a fortune and still not own a shilling of it
   captainsCabin: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="captainsCabin"
       fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.hardened, FACES.hollow, t)}} />;},
   // marooned — the real, verified Articles punishment: a bare sandbar, an empty horizon, alone
@@ -3995,7 +4035,7 @@ const PIRATE = {
       fig={{pose: A.sit(f), x: 900, y: 900, scale: 1.3, view: 'front', expr: FACES.hollow}} />;},
   // Execution Dock — the cold open + its loop-close payoff, the reckoning above every rank
   executionDock: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="executionDock"
       fig={{pose: A.stand(f), x: 900, y: 1000, scale: 1.3, view: 'front', expr: blendExpr(FACES.cold, FACES.hollow, t)}} />;},
 };
@@ -4011,7 +4051,7 @@ const PIRATE = {
 const BASKETBALL = {
   // the driveway hoop — Level 1's named want, the origin, the loop-close callback (older, same hoop)
   drivewayHoop: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="drivewayHoop"
       fig={{pose: A.stand(f), x: 900, y: 892, scale: 1.3, view: 'front', expr: blendExpr(FACES.earnest, FACES.worried, t)}} />;},
   // the high school gym — the first spectacle, the scout in the stands, the scoreboard climbing
@@ -4027,18 +4067,18 @@ const BASKETBALL = {
   // grind, the All-Star run, and the supermax apex — relit differently (light/warm -> dark/gold) each
   // time per the ludusYard/arenaSand shared-backdrop-distinct-staging pattern
   arenaCourt: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="arenaCourt"
       fig={{pose: A.stand(f), x: 900, y: 900, scale: 1.35, view: 'front', expr: blendExpr(FACES.focused, FACES.hardened, t)}} />;},
   // the ice tub — THE sensory anchor home base, re-triggered every level-up, bigger and colder each time
   iceBathRoom: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="iceBathRoom"
       fig={{pose: A.sit(f), x: 900, y: 860, scale: 1.3, view: 'front', expr: blendExpr(FACES.hardened, FACES.hollow, t)}} />;},
   // rafters retirement — the flash-forward cold open + its loop-close payoff: the empty arena, the
   // jersey banner already hanging, cut away before the reason why is ever said out loud
   rafterRetirement: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
-    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const t = interpolate(f, midRamp(d), [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     return <Stage backdrop="rafterRetirement"
       fig={{pose: A.stand(f), x: 900, y: 990, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}} />;},
 };

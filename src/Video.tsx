@@ -2,6 +2,11 @@ import React from 'react';
 import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import timeline from './timeline.json';
 import {TEMPLATES} from './scenes';
+// RAMP SAFETY (WO-25, extended here by WO-28) — see the "RAMP SAFETY" block in director.tsx.
+// `interpolate` THROWS on a non-increasing input range and every ramp below is derived from the
+// scene's own length, so a short scene kills the whole render. `fadeRamp`/`rising` are that one
+// mechanism, imported rather than re-implemented.
+import {fadeRamp, rising} from './director';
 
 const FONT = "'Helvetica Neue', Helvetica, Arial, sans-serif";
 
@@ -27,11 +32,21 @@ const Scene: React.FC<{scene: SceneT}> = ({scene}) => {
   const frame = useCurrentFrame();
   const d = scene.durationInFrames;
   const fade = 16;
-  const opacity = interpolate(frame, [0, fade, d - fade, d], [0, 1, 1, 0], {
+  // folded over on any scene of 32 frames or fewer; `fadeRamp` caps the ramp at d/4, so every scene
+  // of 64 frames or more keeps exactly the stops it had.
+  const opacity = interpolate(frame, fadeRamp('v1 scene fade', d, fade), [0, 1, 1, 0], {
     extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
   });
   const tIn = 20, tOut = d - 26;
-  const textOp = interpolate(frame, [tIn, tIn + 16, tOut, tOut + 18], [0, 1, 1, 0], {
+  // THE WORST ONE IN THIS FILE, and it was not in the WO's list: `tOut = d - 26` crosses back over
+  // `tIn + 16` on any scene of 62 frames or fewer, and SEVEN scenes of the current timeline.json are
+  // (35, 42, 45, 45, 47, 56, 61) — so this composition does not render the episode it is registered
+  // against today. Guarded with `rising` alone rather than a scaled ramp: the overlay's stops are
+  // measured from BOTH ends (in at 20, out at d-26), so there is no single pattern to compress, and
+  // `rising` returns a range that already fits completely unchanged — every scene of 63 frames or
+  // more is bit-identical. On a shorter scene the overlay now enters and lifts in one beat instead
+  // of taking the render down.
+  const textOp = interpolate(frame, rising('v1 overlay text', [tIn, tIn + 16, tOut, tOut + 18]), [0, 1, 1, 0], {
     extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
   });
   const rise = interpolate(frame, [tIn, tIn + 22], [22, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -39,9 +54,9 @@ const Scene: React.FC<{scene: SceneT}> = ({scene}) => {
   const bigSize = big.length > 12 ? 78 : big.length > 8 ? 104 : 128;
   const SceneArt = TEMPLATES[scene.template as string];
   // dynamic camera: push-in + quick settle-punch at scene start + slight parallax drift
-  const z = interpolate(frame, [0, d], [1.06, 1.18]);
+  const z = interpolate(frame, rising('v1 push-in', [0, d]), [1.06, 1.18]);
   const punch = interpolate(frame, [0, 11], [1.05, 1], {extrapolateRight: 'clamp'});
-  const camX = interpolate(frame, [0, d], [0, d % 2 ? 1.4 : -1.4]);
+  const camX = interpolate(frame, rising('v1 parallax', [0, d]), [0, d % 2 ? 1.4 : -1.4]);
   // overlay punch-in
   const numScale = interpolate(frame, [tIn, tIn + 9, tIn + 17], [0.72, 1.07, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const barW = interpolate(frame, [tIn + 3, tIn + 22], [0, 340], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
