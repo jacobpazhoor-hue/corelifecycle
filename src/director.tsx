@@ -32,8 +32,19 @@ export const isNegativeOverlay = (big?: string | null, sub?: string | null): boo
   return NEGATIVE_WORDS.test(`${b} ${sub ?? ''}`);
 };
 
-// Per-template FACE focus points (nx,ny in 0-1) for auto close-ups. Only templates with a clearly
-// front-facing, locatable face are listed; others fall back to 'medium' (always safe).
+// Per-template FACE focus points (nx,ny in 0-1). Only templates with a clearly front-facing,
+// locatable face are listed.
+//
+// THE EXPLAINER TEMPLATES (src/explainer.tsx) ARE DELIBERATELY ABSENT, and adding them is not a
+// pending chore (WO-17, 2026-08-12). The owner's defect on the sample episode was "there's so many
+// random zooms and stuff" — Video2's planner re-cropping one piece of artwork to manufacture cuts.
+// A FOCUS entry does not fix that: it only aims the crop better. A closeup is still `scale(2.2)` on
+// the SAME art under a locked camera, which is a zoom, not a cut. So Video2 now renders one framing
+// per scene and never re-crops, and wiring FOCUS for the thirteen explainer templates would put the
+// zoom back — this time on 31 of 39 scenes, since "has a face and runs long" is not a rare condition.
+// The close-up survives as `closeUpPortrait`, a TEMPLATE whose subject is a face large in frame:
+// cutting to it changes the artwork, so it is a real cut between set-ups, and the writer places it on
+// the beat that earns it. Faces here still serve `panels` cells and the `Slice` composition below.
 export const FOCUS: Record<string, [number, number]> = {
   hospitalRounds: [0.30, 0.66], consult: [0.39, 0.62], training: [0.33, 0.62],
   decoration: [0.50, 0.60], serverScale: [0.50, 0.60], victory: [0.50, 0.56],

@@ -9,7 +9,8 @@ import edge_tts
 import soundfile as sf
 from content import SCENES, FPS
 
-CACHE_VERSION = "v6"   # v6: narration rate retuned to -10% for canon-length sentences (see RATE).
+CACHE_VERSION = "v7"   # v7: OWNER retune, -10% -> -7% ("the voice needs to be slightly sped up").
+                       # v6: narration rate retuned to -10% for canon-length sentences (see RATE).
                        # v5: crayon narration rate (-13%) + varied gaps + wider BEAT_GAP.
                        # MUST be bumped whenever RATE or the DSP chain changes: the per-scene cache key
                        # is hashed over it, and without a bump every scene reuses its old wav and the
@@ -31,21 +32,36 @@ DIALOGUE_VOICE = "en-US-ChristopherNeural"  # 2nd voice for in-world dialogue (m
 # Nothing downstream can recover that — runtime WPM can never exceed speech WPM, and ~97% of runtime
 # is speech, so zeroing every lead and gap in the episode would still only reach the speech rate.
 #
-# RE-MEASURED (WO-16) on the WHOLE of the committed canon-compliant content.py — all 39 scenes, 2,091
-# words, through the real synth + master() + trim_silence() chain and gen_voice_edge's own per-scene
-# timing arithmetic, including breaths and the two in-world dialogue lines:
+# RE-MEASURED (WO-16, extended WO-17) on the WHOLE of the committed canon-compliant content.py — all
+# 39 scenes, 2,091 words, through the real synth + master() + trim_silence() chain and
+# gen_voice_edge's own per-scene timing arithmetic, including breaths and the two in-world dialogue
+# lines:
 #   RATE     speech WPM   runtime WPM   runtime
-#   -13%       147.1        143.4       14.59 min   <- old value; 0.4 off the band floor
+#   -13%       147.1        143.4       14.59 min   0.4 off the band floor
 #   -12%       149.1        145.2       14.40 min
 #   -11%       150.6        146.7       14.26 min
-#   -10%       152.5        148.4       14.09 min   <- chosen; 0.1 off the reference's 148.5 aggregate
+#   -10%       152.5        148.4       14.09 min   <- WO-16 value; 0.1 off the reference's aggregate
 #    -9%       153.0        148.9       14.04 min   (edge-tts quantises: only +0.5 speech WPM for 1%)
-# -10% sits 5.4 above the band floor and 5.6 below its ceiling — the widest margin available, and the
-# closest to the target. The -10% row reproduces src/timeline.json frame for frame (25,364), which is
-# what makes these numbers the same quantity gate.py recomputes rather than a parallel estimate.
+#    -8%       155.0        150.8       13.86 min
+#    -7%       156.8        152.5       13.71 min   <- CHOSEN (WO-17)
+#    -6%       159.2        154.8       13.50 min   OVER the 154.0 ceiling — gate.py HALTS here
+#    -5%       160.8        156.3       13.38 min   OVER the ceiling
+# The -10% row reproduces the WO-16 src/timeline.json frame for frame (25,364), which is what makes
+# every row the same quantity gate.py recomputes rather than a parallel estimate.
+#
+# WHY -7% AND NOT -10% (WO-17, 2026-08-12): the OWNER, watching the sample episode, asked for the
+# voice to be "slightly sped up". -10% was tuned to the reference's 148.5 AGGREGATE, and the ear that
+# has to live with the channel outranks that aggregate. -7% is the fastest rate that still leaves the
+# gate real margin: 152.5 is 9.5 above the 143.0 floor and 1.5 below the 154.0 ceiling, i.e. outside
+# the 1.0 band-edge WARN, while -6% is already a HALT. It also stays inside the reference's OWN
+# per-video spread of 139.2-152.9 (152.5 sits at the top of it, which is the point), so this is the
+# channel's fast end rather than a departure from it.
 #
 # If you change this, BUMP CACHE_VERSION in the same edit or every scene reuses its cached wav.
-RATE = "-10%"                  # MEASURED 152.5 WPM speech / 148.4 runtime; re-measure if you change it
+# content.py ALSO carries the rate: it does `_s.setdefault("rate", NARRATION_RATE)` on every scene,
+# and a per-scene `rate` WINS over this constant (`sc.get("rate", RATE)` below). Changing this value
+# alone does nothing to an episode whose content.py sets its own — change both.
+RATE = "-7%"                   # MEASURED 156.8 WPM speech / 152.5 runtime; re-measure if you change it
 # Inter-scene silence. The reference's gaps measure 0.18–1.0s and VARY; one fixed value is a tell.
 GAP_MIN, GAP_MAX = 0.25, 0.55           # ordinary scene-to-scene breath (deterministic per scene id)
 TURN_GAP_MIN, TURN_GAP_MAX = 0.60, 1.00  # longer hold before a chapter/LEVEL turn

@@ -2,7 +2,7 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 25364,
+  "totalFrames": 24677,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
@@ -27,7 +27,7 @@
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
       "startFrame": 753,
-      "durationInFrames": 413,
+      "durationInFrames": 389,
       "gap": 0.313,
       "card": {
         "kind": "narration",
@@ -41,8 +41,8 @@
       "template": "exchangeFloor",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 1166,
-      "durationInFrames": 574,
+      "startFrame": 1142,
+      "durationInFrames": 544,
       "gap": 0.847
     },
     {
@@ -55,8 +55,8 @@
       "template": "cityStreet",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 1740,
-      "durationInFrames": 604,
+      "startFrame": 1686,
+      "durationInFrames": 597,
       "gap": 0.501,
       "card": {
         "kind": "chapter",
@@ -75,8 +75,8 @@
       "template": "domesticInterior",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 2344,
-      "durationInFrames": 651,
+      "startFrame": 2283,
+      "durationInFrames": 657,
       "gap": 0.455
     },
     {
@@ -86,8 +86,8 @@
       "template": "officeFloor",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 2995,
-      "durationInFrames": 669,
+      "startFrame": 2940,
+      "durationInFrames": 659,
       "gap": 0.333
     },
     {
@@ -100,8 +100,8 @@
       "template": "newsMontage",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 3664,
-      "durationInFrames": 809,
+      "startFrame": 3599,
+      "durationInFrames": 790,
       "gap": 0.547,
       "panels": {
         "variant": "grid4",
@@ -132,8 +132,8 @@
       "template": "boardroom",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 4473,
-      "durationInFrames": 750,
+      "startFrame": 4389,
+      "durationInFrames": 713,
       "gap": 0.65
     },
     {
@@ -143,8 +143,8 @@
       "template": "officeFloor",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 5223,
-      "durationInFrames": 291,
+      "startFrame": 5102,
+      "durationInFrames": 297,
       "gap": 0.344,
       "card": {
         "kind": "chapter",
@@ -160,8 +160,8 @@
       "template": "domesticInterior",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 5514,
-      "durationInFrames": 432,
+      "startFrame": 5399,
+      "durationInFrames": 442,
       "gap": 0.456,
       "bubbles": [
         {
@@ -186,8 +186,8 @@
       "template": "exchangeFloor",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 5946,
-      "durationInFrames": 833,
+      "startFrame": 5841,
+      "durationInFrames": 803,
       "gap": 0.334
     },
     {
@@ -197,8 +197,8 @@
       "template": "cityStreet",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 6779,
-      "durationInFrames": 620,
+      "startFrame": 6644,
+      "durationInFrames": 589,
       "gap": 0.443
     },
     {
@@ -211,8 +211,8 @@
       "template": "officeFloor",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 7399,
-      "durationInFrames": 626,
+      "startFrame": 7233,
+      "durationInFrames": 607,
       "gap": 0.429
     },
     {
@@ -225,8 +225,8 @@
       "template": "newsMontage",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 8025,
-      "durationInFrames": 772,
+      "startFrame": 7840,
+      "durationInFrames": 756,
       "gap": 0.252
     },
     {
@@ -236,8 +236,8 @@
       "template": "boardroom",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 8797,
-      "durationInFrames": 778,
+      "startFrame": 8596,
+      "durationInFrames": 766,
       "gap": 0.324,
       "bubbles": [
         {
@@ -258,8 +258,8 @@
       "template": "exchangeFloor",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 9575,
-      "durationInFrames": 295,
+      "startFrame": 9362,
+      "durationInFrames": 288,
       "gap": 0.814,
       "card": {
         "kind": "word",
@@ -273,8 +273,8 @@
       "template": "newsMontage",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 9870,
-      "durationInFrames": 399,
+      "startFrame": 9650,
+      "durationInFrames": 377,
       "gap": 0.385,
       "card": {
         "kind": "chapter",
@@ -290,8 +290,8 @@
       "template": "officeFloor",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 10269,
-      "durationInFrames": 630,
+      "startFrame": 10027,
+      "durationInFrames": 623,
       "gap": 0.398
     },
     {
@@ -304,8 +304,8 @@
       "template": "boardroom",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 10899,
-      "durationInFrames": 655,
+      "startFrame": 10650,
+      "durationInFrames": 633,
       "gap": 0.546
     },
     {
@@ -318,8 +318,8 @@
       "template": "exchangeFloor",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 11554,
-      "durationInFrames": 776,
+      "startFrame": 11283,
+      "durationInFrames": 737,
       "gap": 0.359,
       "panels": {
         "variant": "v2",
@@ -343,8 +343,8 @@
       "template": "officeFloor",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 12330,
-      "durationInFrames": 942,
+      "startFrame": 12020,
+      "durationInFrames": 906,
       "gap": 1.4,
       "bubbles": [
         {
@@ -364,8 +364,8 @@
       "template": "newsMontage",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 13272,
-      "durationInFrames": 532,
+      "startFrame": 12926,
+      "durationInFrames": 518,
       "gap": 0.651,
       "card": {
         "kind": "narration",
@@ -382,8 +382,8 @@
       "template": "cityStreet",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 13804,
-      "durationInFrames": 612,
+      "startFrame": 13444,
+      "durationInFrames": 611,
       "gap": 0.42,
       "card": {
         "kind": "chapter",
@@ -402,8 +402,8 @@
       "template": "boardroom",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 14416,
-      "durationInFrames": 747,
+      "startFrame": 14055,
+      "durationInFrames": 724,
       "gap": 0.401
     },
     {
@@ -413,8 +413,8 @@
       "template": "exchangeFloor",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 15163,
-      "durationInFrames": 771,
+      "startFrame": 14779,
+      "durationInFrames": 755,
       "gap": 0.456
     },
     {
@@ -427,8 +427,8 @@
       "template": "boardroom",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 15934,
-      "durationInFrames": 834,
+      "startFrame": 15534,
+      "durationInFrames": 820,
       "gap": 0.422
     },
     {
@@ -441,8 +441,8 @@
       "template": "officeFloor",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 16768,
-      "durationInFrames": 578,
+      "startFrame": 16354,
+      "durationInFrames": 550,
       "gap": 0.306
     },
     {
@@ -452,8 +452,8 @@
       "template": "boardroom",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 17346,
-      "durationInFrames": 592,
+      "startFrame": 16904,
+      "durationInFrames": 572,
       "gap": 0.254,
       "bubbles": [
         {
@@ -472,8 +472,8 @@
       "template": "cityStreet",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 17938,
-      "durationInFrames": 731,
+      "startFrame": 17476,
+      "durationInFrames": 711,
       "gap": 0.477
     },
     {
@@ -483,8 +483,8 @@
       "template": "newsMontage",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 18669,
-      "durationInFrames": 335,
+      "startFrame": 18187,
+      "durationInFrames": 325,
       "gap": 0.279,
       "card": {
         "kind": "word",
@@ -501,8 +501,8 @@
       "template": "boardroom",
       "audio": "audio/t31.wav",
       "audioStartFrame": 3,
-      "startFrame": 19004,
-      "durationInFrames": 718,
+      "startFrame": 18512,
+      "durationInFrames": 699,
       "gap": 0.781
     },
     {
@@ -515,8 +515,8 @@
       "template": "exchangeFloor",
       "audio": "audio/t32.wav",
       "audioStartFrame": 3,
-      "startFrame": 19722,
-      "durationInFrames": 450,
+      "startFrame": 19211,
+      "durationInFrames": 439,
       "gap": 0.481,
       "card": {
         "kind": "chapter",
@@ -532,8 +532,8 @@
       "template": "cityStreet",
       "audio": "audio/t33.wav",
       "audioStartFrame": 3,
-      "startFrame": 20172,
-      "durationInFrames": 645,
+      "startFrame": 19650,
+      "durationInFrames": 626,
       "gap": 0.471
     },
     {
@@ -543,8 +543,8 @@
       "template": "officeFloor",
       "audio": "audio/t34.wav",
       "audioStartFrame": 3,
-      "startFrame": 20817,
-      "durationInFrames": 741,
+      "startFrame": 20276,
+      "durationInFrames": 716,
       "gap": 0.476,
       "panels": {
         "variant": "diagonal2",
@@ -565,8 +565,8 @@
       "template": "domesticInterior",
       "audio": "audio/t35.wav",
       "audioStartFrame": 3,
-      "startFrame": 21558,
-      "durationInFrames": 740,
+      "startFrame": 20992,
+      "durationInFrames": 707,
       "gap": 0.546
     },
     {
@@ -579,8 +579,8 @@
       "template": "newsMontage",
       "audio": "audio/t36.wav",
       "audioStartFrame": 3,
-      "startFrame": 22298,
-      "durationInFrames": 732,
+      "startFrame": 21699,
+      "durationInFrames": 729,
       "gap": 0.317
     },
     {
@@ -593,8 +593,8 @@
       "template": "exchangeFloor",
       "audio": "audio/t37.wav",
       "audioStartFrame": 3,
-      "startFrame": 23030,
-      "durationInFrames": 692,
+      "startFrame": 22428,
+      "durationInFrames": 664,
       "gap": 0.435
     },
     {
@@ -604,8 +604,8 @@
       "template": "cityStreet",
       "audio": "audio/t38.wav",
       "audioStartFrame": 3,
-      "startFrame": 23722,
-      "durationInFrames": 913,
+      "startFrame": 23092,
+      "durationInFrames": 890,
       "gap": 0.406
     },
     {
@@ -615,8 +615,8 @@
       "template": "domesticInterior",
       "audio": "audio/t39.wav",
       "audioStartFrame": 3,
-      "startFrame": 24635,
-      "durationInFrames": 729,
+      "startFrame": 23982,
+      "durationInFrames": 695,
       "gap": 0.436
     }
   ]

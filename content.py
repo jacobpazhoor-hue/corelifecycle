@@ -73,7 +73,17 @@ FPS = 30
 #   -13% -> 148.8   -12% -> 149.2   -11% -> 150.7   -10% -> 153.8   -8% -> 156.3  (speech WPM)
 # -11% projects to 145.3 WPM runtime, inside the band but within 1.0 of its edge (gate.py WARNs there).
 # -10% projects to 148.2 — mid-band, and within 0.3 of the reference channel's own 148.5 aggregate.
-NARRATION_RATE = "-10%"
+#
+# RETUNED TO -7% (WO-17, 2026-08-12) — OWNER, on the sample episode: "the voice needs to be slightly
+# sped up." The 148.5 aggregate above is what -10% was tuned to; the owner's ear outranks it. -7%
+# MEASURES 156.8 WPM speech / 152.5 runtime over this whole script (all 39 scenes, through the real
+# synth chain) — top of the reference's own per-video spread (139.2-152.9) and 1.5 clear of gate.py's
+# 154.0 ceiling, where -6% (154.8) would HALT. The full rate table lives in gen_voice_edge.RATE.
+#
+# THIS LINE, NOT JUST gen_voice_edge.RATE, is what sets the rate for this episode: the setdefault at
+# the bottom of this file stamps it onto every scene, and a per-scene `rate` WINS over the module
+# default. Changing one without the other is a silent no-op.
+NARRATION_RATE = "-7%"
 
 SCENES = [
     # ================= HOOK — the five steps, first ~30s =================

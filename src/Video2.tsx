@@ -23,10 +23,10 @@ const EXPO = Easing.bezier(0.16, 1, 0.3, 1);
 // render ungraded; per-scene colour keys are a separate work order. Do not reintroduce a global grade.
 
 // ============================================================================
-// VIDEO v2 — director-based renderer. Each scene/beat becomes 2-3 SHOTS
-// (wide -> medium -> short closeup) cut together, with the money number COUNTING
-// UP over the cuts. Shot durations sum to the scene's VO duration, so audio stays
-// perfectly synced. Reads the SAME timeline.json as the old Video (drop-in).
+// VIDEO v2 — director-based renderer. ONE FRAMING PER SCENE (WO-17): a scene is normally a single
+// locked shot, so a visible cut happens when the SCENE — and therefore the artwork — changes. The
+// money number counts up over the scene. Shot durations sum to the scene's VO duration, so audio
+// stays perfectly synced. Reads the SAME timeline.json as the old Video (drop-in).
 // ============================================================================
 // 2026-07-20: cream -> white. Owner direction is the bright reference look; the cream base plus
 // the heavy grade below is what read as dull/sepia. Figure fills keep their own cream (figure.tsx).
@@ -121,80 +121,95 @@ type Shot = {type: string; dur: number; focus: [number, number]};
 // median shot 2.67–6.81s · range 0.61–16.46s · ~40% of sampled frames completely
 // motionless. "Hold still, then change" — the reference does NOT fill dead air with drift.
 // ============================================================================
-const TARGET_SHOT = 144; // 4.79s @30fps — the measured mean shot length; drives the shot COUNT
-// The reference's LONGEST measured shot, 16.46s. This replaces the old 240f/8s "retention" ceiling,
-// which was a CoreLifecycle doctrine number with nothing behind it: the reference happily holds a
-// locked frame for 16s. It is now an INVARIANT, not a re-cutter — the planner is duration-driven, so
-// a shot this long is arithmetically unreachable, and if one ever appears the weight table below is
-// broken and we want to hear about it rather than paper over it with an invisible sub-cut.
-const MAX_SHOT = 494;
+// WHY THE RE-CROPPING SHOT PLANNER IS GONE (WO-17, 2026-08-12) — OWNER DEFECT, watching
+// out/lehman_brothers.mp4: "there's so many random zooms and stuff."
+//
+// The planner used to split every scene into round(D / 144) shots off a weighted cycle of framings,
+// manufacturing the reference's 12.5 cuts/min out of a six-template episode whose scenes run ~21s.
+// But a "framing" is a STATIC CROP of the same artwork at scale 1.0 / 1.5 / 2.2 (director.tsx SCALE),
+// and the camera is locked (CRAYON_BIBLE §3), so cutting wide -> medium on one template does not
+// produce a cut: it produces the SAME ROOM at a different zoom level, with nothing in it having
+// moved or changed. WO-13's own comparison already recorded the symptom without chasing it — "soft
+// cuts (8.94/min detected vs 12.5 — wide<->medium on identical art isn't a visible cut, because none
+// of the six templates is in FOCUS)". MEASURED on out/lehman_brothers.mp4, the exact file the owner
+// watched (whole-frame luma diff, isolated peaks at >=3x local prominence AND an absolute 5.0/255
+// floor): 160 cuts in 14.09 min = 11.35 cuts/min, mean shot 5.25s — of which only 38 were scene
+// changes. The other 122, three quarters of them, were re-crops of art the viewer was already looking
+// at. That is what reads as a random zoom.
+//
+// The reference cuts between DIFFERENT SET-UPS. So does this now: one framing per scene, and a cut
+// happens when the scene — and therefore the artwork — changes. Re-rendered and re-measured over a
+// four-scene window, EVERY detected cut is a scene boundary and no cut occurs inside a scene (two
+// stills 4.3s apart inside one scene are 98.2% bit-identical). Whole episode: 38 cuts in 13.71 min =
+// 2.77 cuts/min, mean shot 21.1s — the scene length itself.
+//
+// That is 4.5x under the reference's 12.5 cuts/min, and every scene now out-holds the reference's
+// longest measured shot (16.46s). Both facts are ACCEPTED and neither is fixable here: gate.py
+// deliberately does not assert cuts/min, and the route back to the reference's rhythm is MORE,
+// SHORTER SCENES ON MORE TEMPLATES (a concurrent work order takes the set from 6 to 13), not more
+// crops of six. A crop cannot buy editing rhythm — that was the whole defect.
+//
+// DO NOT "restore editing rhythm" by re-adding a cycle here. It is not editing rhythm; it is a zoom.
 
-// WHY THE SUB-CUTTER (`capShots`) IS GONE, 2026-08-11.
-// It split any shot over MAX_SHOT into equal sub-cuts of the SAME shot type on the SAME focus point.
-// Under the old moving camera each sub-cut restarted the dolly push, so it read as a change; with the
-// camera locked (CRAYON_BIBLE §3) it produces NO visible change at all — an invisible "cut" that is
-// only a ShotFade dip. That is worse than useless: it inflates the cut count in any plan-based
-// accounting while the viewer sees nothing, so it corrupts the exact metric this file is tuned
-// against. Making it vary the framing was the alternative, but then a scene's rhythm would come from
-// two uncoordinated places — planShots' proportional split AND an equal-division cap — and the mean
-// shot length could not be tuned. Instead the rhythm is planned ONCE, from the target shot length, so
-// every emitted cut is a genuine re-frame and no shot ever needs rescuing. The bible backs the holds:
-// 40% of reference frames are motionless and shots run to 16.46s.
+// THE EXCEPTION THAT IS *NOT* HERE: an intra-scene "cut-in" onto a face.
+//
+// The obvious concession — let a very long scene on a template with a locatable face (director.tsx
+// FOCUS) cut once from its establishing framing to a 2.2x closeup — was built, measured and then
+// removed, for three reasons:
+//   1. IT CANNOT BE SEEN TO WORK. No template this episode renders has a FOCUS entry, and WO-8h's
+//      thirteen explainer templates have none either, so the branch would ship having never put a
+//      frame on screen. Shipping an unverified re-frame path is exactly how this defect arrived.
+//   2. THE GATE WOULD NOT BE RARE. Every eligible scene is a long scene: 31 of this episode's 39
+//      scenes already run past the reference's longest measured shot. "Face + long" is therefore a
+//      condition that fires on almost every scene of a face-template episode — one re-crop per scene,
+//      which is the same machine at a quarter speed, not an exception.
+//   3. THERE IS ALREADY AN HONEST CLOSE-UP. WO-8h added `closeUpPortrait`, a template whose whole
+//      subject is a face large in frame. Cutting to it is a real cut between SET-UPS — different
+//      artwork, chosen by the writer at the beat that earns it — instead of a renderer heuristic
+//      inferring an emotional beat from frame arithmetic, which nothing in timeline.json marks.
+// The corollary, and the answer to "should FOCUS be wired for the explainer templates": no. A FOCUS
+// entry does not turn a re-crop into a cut, it only aims it better; the close-up belongs to
+// `closeUpPortrait` at the scene level. See director.tsx's note on the FOCUS map.
 
-// A framing = a static crop (see director.tsx SCALE / FramedScene) plus a horizontal shift of the
-// focus point, plus that shot's share of the scene. Every entry differs in SCALE from both of its
-// neighbours INCLUDING ACROSS THE WRAP, so consecutive shots can never be the same crop — that is
-// what makes the cut visible with the camera locked. `dx` moves the crop off the focus point so two
-// mediums in one scene are not the same composition (any focus in 0–1 is safe: scaling about the
-// focus point can never expose an edge). `w` sums to exactly the cycle length, so the mean shot in a
-// scene is TARGET_SHOT regardless of where in the cycle it starts. Wides carry the long holds,
-// closeups are the shortest — punctuation, as in the old plan's 64f closeup cap.
-type Framing = {type: string; dx: number; w: number};
-const FRAMINGS_FACE: Framing[] = [ // templates with a locatable face (FOCUS) — closeups allowed
-  {type: 'wide', dx: 0, w: 1.30},
-  {type: 'medium', dx: -0.20, w: 0.95},
-  {type: 'wide', dx: 0, w: 1.35},
-  {type: 'closeup', dx: 0, w: 0.55},
-  {type: 'wide', dx: 0, w: 1.10},
-  {type: 'medium', dx: 0.20, w: 0.75},
-];
-const FRAMINGS_FLAT: Framing[] = [ // no locatable face: a 2.2x closeup would frame nothing, so wide/medium only
-  {type: 'wide', dx: 0, w: 1.45},
-  {type: 'medium', dx: -0.18, w: 0.70},
-  {type: 'wide', dx: 0, w: 1.05},
-  {type: 'medium', dx: 0.18, w: 0.80},
-];
+// A framing = a static crop (director.tsx SCALE / FramedScene) plus a horizontal shift of the focus
+// point. At `wide` the scale is 1.0, so the crop is the identity and `dx` does nothing — the scene
+// renders its artwork untouched, which is what every scene now gets. `medium` exists for ONE case:
+// two consecutive scenes on the SAME template, where identical art at an identical scale would make
+// the scene cut invisible. gate.py only WARNs on that (it is a content-variety defect, not a render
+// defect), so the renderer must still put something on screen when it happens — a visible re-crop
+// beats no cut at all. It does not fire on this episode: no two adjacent scenes share a template.
+type Framing = {type: string; dx: number};
+const ESTABLISH: Framing = {type: 'wide', dx: 0};
+const REFRAME: Framing = {type: 'medium', dx: -0.18};
 const DEFAULT_FOCUS: [number, number] = [0.5, 0.55];
 
-// Distribute a scene's duration across shots (always sums to D — the audio is one continuous file
-// per scene, so a shot plan that does not sum to D desyncs it). `phase` is a RUNNING shot index
-// across the whole video, so a scene starts its cycle where the previous scene stopped: adjacent
-// entries always differ in scale, which means the first shot of a scene can never repeat the framing
-// of the last shot of the one before it (two consecutive scenes on the same template would otherwise
-// cut to an identical frame).
-function planShots(s: SceneT, phase: number): Shot[] {
+type Plan = {shots: Shot[]; framing: Framing};
+
+/**
+ * Plan one scene: exactly ONE shot, spanning the whole scene. `prev` is the previous scene's template
+ * and framing, and is used only to break a same-template repeat across a scene boundary.
+ *
+ * The plan sums to D — the audio is one continuous file per scene, so a plan that does not sum to D
+ * desyncs it. The shot list is kept as a list rather than collapsed to a single shot because `Beat`
+ * lays shots out in Sequences and a future device (a genuine second set-up, not a crop) would slot in
+ * here; nothing about the current plan needs more than one entry.
+ */
+function planShots(s: SceneT, prev: {template: string; framing: Framing} | null): Plan {
   const D = s.durationInFrames;
-  const face = FOCUS[s.template];
-  const cycle = face ? FRAMINGS_FACE : FRAMINGS_FLAT;
-  const focus = face ?? DEFAULT_FOCUS;
-  const n = Math.max(1, Math.round(D / TARGET_SHOT));
-  const picks = Array.from({length: n}, (_, i) => cycle[(phase + i) % cycle.length]);
-  const wsum = picks.reduce((a, p) => a + p.w, 0);
-  const shots: Shot[] = [];
-  let used = 0;
-  for (let i = 0; i < n; i++) {
-    // last shot absorbs the rounding remainder so the plan sums to D exactly
-    const dur = i === n - 1 ? D - used : Math.round((D * picks[i].w) / wsum);
-    used += dur;
-    const fx = Math.min(0.98, Math.max(0.02, focus[0] + picks[i].dx));
-    shots.push({type: picks[i].type, dur, focus: [fx, focus[1]]});
+  const focus = FOCUS[s.template] ?? DEFAULT_FOCUS;
+  // Same template two scenes running: take the other framing so the cut is visible. Otherwise the
+  // artwork itself changes at the cut and the scene establishes untouched.
+  const framing = prev && prev.template === s.template
+    ? (prev.framing === ESTABLISH ? REFRAME : ESTABLISH)
+    : ESTABLISH;
+  const fx = Math.min(0.98, Math.max(0.02, focus[0] + framing.dx));
+  const shots: Shot[] = [{type: framing.type, dur: D, focus: [fx, focus[1]]}];
+  const total = shots.reduce((a, sh) => a + sh.dur, 0);
+  if (total !== D || shots.some((sh) => sh.dur < 1)) {
+    throw new Error(`planShots(${s.id}): plan [${shots.map((sh) => sh.dur).join(', ')}] does not ` +
+      `partition the scene's ${D} frames — the audio would desync`);
   }
-  for (const sh of shots) {
-    if (sh.dur < 1 || sh.dur > MAX_SHOT) {
-      throw new Error(`planShots(${s.id}): ${sh.dur}f shot is outside 1..${MAX_SHOT} — the framing weight table is broken`);
-    }
-  }
-  return shots;
+  return {shots, framing};
 }
 
 // ============================================================================
@@ -294,8 +309,9 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
   // less of the runtime is ever in the dim zone at all.
   const fade = 8;
   const beatOp = interpolate(f, [0, fade, D - fade, D], [0.4, 1, 1, 0.4], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  // shots (and their per-shot focus points) are planned once in Video2 so the framing cycle can run
-  // continuously across scene boundaries — see planShots' `phase`.
+  // The shot plan is made once in Video2, which is the only place that can see the PREVIOUS scene's
+  // framing — the state planShots needs to keep two consecutive scenes on one template from opening
+  // on the same frame. Normally the plan is a single shot spanning the whole scene (WO-17).
   // LOCKED CAMERA (CRAYON_BIBLE §3): the level-cut whip-in, the decaying screen shake and the cut
   // flash are gone, as is the drifting foreground occluder (a parallax depth cue that only made sense
   // under a moving camera). The level cut is now carried by the SFX and the level label alone.
@@ -467,14 +483,15 @@ export const Video2: React.FC = () => {
   // instead of counting across incompatible units)
   let last: {num: number; suffix: string} | null = null;
   const out: React.ReactNode[] = [];
-  // running shot index across the whole video — keeps the framing cycle continuous through scene
-  // cuts so no scene ever opens on the framing the previous one closed with (see planShots).
-  let phase = 0;
+  // The previous scene's template and framing — the ONLY cross-scene state the planner needs now that
+  // a scene is one framing: it exists so two consecutive scenes on the same template do not open on
+  // an identical frame (see planShots).
+  let prev: {template: string; framing: Framing} | null = null;
   for (const s of scenes) {
     const money = splitMoney(s.overlay?.big);
     const from = money && last && last.suffix === money.suffix ? last.num : null;
-    const shots = planShots(s, phase);
-    phase += shots.length;
+    const {shots, framing} = planShots(s, prev);
+    prev = {template: s.template, framing};
     out.push(
       <Sequence key={s.id} from={s.startFrame} durationInFrames={s.durationInFrames}>
         <Beat scene={s} from={from} shots={shots} />
