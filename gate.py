@@ -31,14 +31,129 @@ MAX_MIN = routine.get("maxMinutes", 21)          # CRAYON canon runtime band is 
 # numbers it used (content narration words, timeline totalFrames).
 WPM_LO, WPM_HI = 143.0, 154.0
 tl = json.load(open(os.path.join(ROOT, "src", "timeline.json")))
-_src = open(os.path.join(ROOT, "src", "scenes.tsx")).read()
-_m = re.search(r"export const TEMPLATES[^{]*\{(.*?)\};", _src, re.S)
-tmpl_keys = set(re.findall(r"(\w+):\s*S\d", _m.group(1))) if _m else set()
-# composable packs are spread into TEMPLATES via ...PACK; collect their keys from stage.tsx
-# (template FCs are zero-arg `name: () =>`; backdrops/props are `name: ({frame}) =>`, excluded)
-_stage = os.path.join(ROOT, "src", "stage.tsx")
-if os.path.exists(_stage):
-    tmpl_keys |= set(re.findall(r"(\w+):\s*\(\)\s*=>", open(_stage).read()))
+
+# ============================================================================
+# TEMPLATE REGISTRY — derived by FOLLOWING THE SPREADS out of src/scenes.tsx's `TEMPLATES`, which is
+# the object director.tsx/Video2.tsx actually index into.
+#
+# It used to be a pair of hardcoded file scans (scenes.tsx `name: S<digit>` + stage.tsx `name: () =>`).
+# That silently stopped describing the registry the moment a THIRD module started contributing to it:
+# WO-8f put the six restyled explainer templates in src/explainer.tsx and spread them in at
+# scenes.tsx's `...EXPLAINER_TEMPLATES`, and because nothing here read that file, every scene of the
+# WO-13 sample episode failed `template not in registry` — 39 false HALTs on templates the very same
+# gate run then rendered successfully in step 4. Adding explainer.tsx as a third hardcoded path would
+# only move the trap one file along, so the file list is no longer written down at all: it is read off
+# the spreads, and an unresolvable spread HALTs instead of quietly shrinking the registry.
+#
+# Deliberately NOT a whole-file scan of the contributing modules. stage.tsx's backdrop and prop maps
+# use the same `name: () =>` shape as its templates, so the old heuristic also admitted `plain`,
+# `none` and `wasteTruck` — three backdrops/props that are not templates and would not have rendered.
+# Only the object literals reachable from TEMPLATES are read, so the registry is exactly the map.
+# ============================================================================
+_BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.S)
+_LINE_COMMENT = re.compile(r"(?<![:\w])//[^\n]*")
+
+def _strip_comments(s):
+    return _LINE_COMMENT.sub("", _BLOCK_COMMENT.sub("", s))
+
+def _match_brackets(s, i, open_c, close_c):
+    """Index of the bracket closing the one at `i`, or -1."""
+    depth = 0
+    while i < len(s):
+        if s[i] == open_c:
+            depth += 1
+        elif s[i] == close_c:
+            depth -= 1
+            if depth == 0:
+                return i
+        i += 1
+    return -1
+
+def _object_body(src, name, path):
+    """The text inside `const NAME ... = ... { ... }`."""
+    m = re.search(r"\bconst\s+" + re.escape(name) + r"\b", src)
+    if not m:
+        raise SystemExit(f"GATE: HALT ❌ — template map `{name}` is spread into TEMPLATES but there is "
+                         f"no `const {name}` in {os.path.relpath(path, ROOT)}")
+    i = src.find("{", m.end())
+    j = _match_brackets(src, i, "{", "}") if i >= 0 else -1
+    if j < 0:
+        raise SystemExit(f"GATE: HALT ❌ — `const {name}` in {os.path.relpath(path, ROOT)} has no "
+                         f"balanced object literal, so its template names cannot be read")
+    return src[i + 1:j]
+
+def _unwrap_calls(body):
+    """`...keyedTemplates({a: A})` contributes its argument's keys directly to the map, so drop the
+    wrapper call and keep the literal — which lifts those keys to the map's own top level."""
+    while True:
+        m = re.search(r"\.\.\.\s*\w+\s*\(", body)
+        if not m:
+            return body
+        j = _match_brackets(body, m.end() - 1, "(", ")")
+        if j < 0:
+            raise SystemExit("GATE: HALT ❌ — unbalanced call inside a template map")
+        inner = body[m.end():j].strip()
+        if inner.startswith("{") and _match_brackets(inner, 0, "{", "}") == len(inner) - 1:
+            inner = inner[1:-1]
+        body = body[:m.start()] + inner + body[j + 1:]
+
+_MAP_TOKEN = re.compile(r"[{\[(]|[}\])]|\.\.\.\s*(\w+)|(\w+)\s*:")
+
+def _top_level(body):
+    """(keys, spreads) at depth 0 of an object literal — anything nested is a prop of a template's
+    own JSX, not a template name."""
+    keys, spreads, depth = [], [], 0
+    for m in _MAP_TOKEN.finditer(body):
+        if m.group(1) is not None:
+            if depth == 0:
+                spreads.append(m.group(1))
+        elif m.group(2) is not None:
+            if depth == 0:
+                keys.append(m.group(2))
+        elif m.group(0)[0] in "{[(":
+            depth += 1
+        else:
+            depth -= 1
+    return keys, spreads
+
+def _imported_from(src):
+    out = {}
+    for m in re.finditer(r"import\s*\{([^}]*)\}\s*from\s*['\"]([^'\"]+)['\"]", src):
+        for part in m.group(1).split(","):
+            nm = part.strip().split(" as ")[-1].strip()
+            if nm:
+                out[nm] = m.group(2)
+    return out
+
+def _collect_templates(path, name, seen, keys):
+    if (path, name) in seen:
+        return
+    seen.add((path, name))
+    src = _strip_comments(open(path).read())
+    body = _unwrap_calls(_object_body(src, name, path))
+    ks, spreads = _top_level(body)
+    keys.update(ks)
+    imports = _imported_from(src)
+    for ident in spreads:
+        if ident in imports:
+            spec = imports[ident]
+            if not spec.startswith("."):
+                raise SystemExit(f"GATE: HALT ❌ — TEMPLATES spreads `{ident}` from the non-relative "
+                                 f"module '{spec}'; the gate can only follow project source files")
+            base = os.path.normpath(os.path.join(os.path.dirname(path), spec))
+            target = next((base + e for e in (".tsx", ".ts") if os.path.exists(base + e)), None)
+            if not target:
+                raise SystemExit(f"GATE: HALT ❌ — cannot resolve '{spec}' (spread as `{ident}` from "
+                                 f"{os.path.relpath(path, ROOT)}) to a source file")
+            _collect_templates(target, ident, seen, keys)
+        else:
+            _collect_templates(path, ident, seen, keys)   # a map local to the same module
+
+tmpl_keys = set()
+_collect_templates(os.path.join(ROOT, "src", "scenes.tsx"), "TEMPLATES", set(), tmpl_keys)
+if not tmpl_keys:
+    raise SystemExit("GATE: HALT ❌ — the template registry derived from src/scenes.tsx is EMPTY; "
+                     "every scene would fail below, so this is a gate bug, not an episode defect")
 # variety: collect templates in order to flag adjacent repeats
 prev_tmpl = None
 

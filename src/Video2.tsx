@@ -415,6 +415,10 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
             {b.kind === 'float' ? (
               <FloatingDialogue
                 text={b.text} x={b.x} y={b.y} align={b.align} color={b.color}
+                // Unballooned script takes its colour from the ground it lands on, so a line over a
+                // pale scene sets in INK instead of the reference's white (which a `grey`-keyed
+                // boardroom at #cccccc all but swallowed). The writer's `color` still overrides.
+                ground={sceneColors(resolveSceneKey(scene.id, scene.template)).bg}
                 maxWidth={b.maxWidth} maxLines={b.maxLines} keyline={b.keyline}
               />
             ) : (

@@ -1,6 +1,6 @@
 import React from 'react';
 import {useCurrentFrame} from 'remotion';
-import {StickFigure, DIM} from './figure';
+import {StickFigure, DIM, Expr} from './figure';
 import * as A from './actions';
 import {blinkOn, stepIndex} from './anim';
 import {
@@ -848,7 +848,18 @@ const crowdAlive = (s: number, frac = CROWD_ALIVE): boolean => rnd(s + 13) < fra
 export const CrowdRow: React.FC<{
   y: number; x0: number; x1: number; n: number; scale?: number; seed?: number;
   facing?: number; view?: 'front' | 'profile' | 'back'; dz?: number; alive?: number;
-}> = ({y, x0, x1, n, scale = 0.6, seed = 0, facing = 1, view = 'front', dz = 26, alive: aliveFrac}) => {
+  /**
+   * Draw faces on the row. OFF by default, which is right at episode scale — a background walker is
+   * ~0.6 of the hero and its face would be noise competing with the one character the shot is about.
+   * A THUMBNAIL is the other case: there the crowd is drawn near hero size, and a featureless head
+   * over a same-width torso reads as a headless pill rather than a person (the reference's own crowd
+   * carry eyes, brows and mouths at that size). So it is a switch, not a new default.
+   */
+  showFace?: boolean;
+  /** Expression for the faces, when `showFace` is on. Defaults to StickFigure's neutral. */
+  expr?: Expr;
+}> = ({y, x0, x1, n, scale = 0.6, seed = 0, facing = 1, view = 'front', dz = 26, alive: aliveFrac,
+       showFace = false, expr}) => {
   const f = useCurrentFrame();
   const step = n > 1 ? (x1 - x0) / (n - 1) : 0;
   return (
@@ -867,7 +878,8 @@ export const CrowdRow: React.FC<{
             facing={rnd(s + 2) > 0.5 ? facing : -facing}
             view={view}
             pal={DIM}
-            showFace={false}
+            showFace={showFace}
+            expr={expr}
             frame={alive ? f : 0}
             idle={alive ? 'subtle' : 'none'}
           />

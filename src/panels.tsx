@@ -35,6 +35,7 @@ import React from 'react';
 import {AbsoluteFill, useVideoConfig} from 'remotion';
 
 import {INK} from './crayonStyle';
+import {SceneGroundOverride} from './stage';
 
 // ---------------------------------------------------------------------------
 // Geometry
@@ -64,6 +65,12 @@ export type Panel = {
    * The panel's own flat ground. Each cell in the reference commits to its own colour key, so this is
    * required, not defaulted: an unset ground would let two cells share a hue by accident, which is the
    * one thing an independently-keyed split must not do.
+   *
+   * AUTHORITATIVE OVER `children`. A template child paints its own full-frame ground from its colour
+   * key, which used to land on top of this one and discard it — a cell asking for the reference's
+   * saturated orange got its template's brown instead, silently. `Cell` now publishes this colour as
+   * the scene ground for the child's whole subtree, so the cell's ground is the ground whatever it
+   * contains. The caller is not overruled and is not ignored.
    */
   ground: string;
   /**
@@ -121,7 +128,10 @@ const Cell: React.FC<{
           transform: scale === 1 ? undefined : `scale(${scale})`,
         }}
       >
-        {children}
+        {/* the cell's ground wins over the child template's keyed ground — see `Panel.ground`.
+            With no template this is a no-op, and with a template whose key already resolves to this
+            colour (the writer-facing default) it is the identity, so only an explicit override moves. */}
+        <SceneGroundOverride ground={ground}>{children}</SceneGroundOverride>
       </div>
     </div>
   );

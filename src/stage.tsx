@@ -40,8 +40,32 @@ const rnd = (i: number) => {const x = Math.sin(i * 127.1 + 31.7) * 43758.5453; r
 // backdrop that paints its own ground.
 const SceneKeyContext = React.createContext<SceneKey>('daylight');
 
+/**
+ * An explicit ground colour that REPLACES the keyed `bg` for everything below it.
+ *
+ * A template paints its own full-frame ground from its key (`<Frame>`, `<SceneGround>`), which is
+ * correct for a whole scene and wrong inside a multi-panel split: a cell that names its own `ground`
+ * used to have it painted first and then covered by the template's, so the caller's colour was
+ * silently discarded (panels.tsx). This is the one hook every ground in the project already goes
+ * through, so overriding here is what makes a cell's ground actually win — and it carries to the
+ * shades derived from it (`shade(c.bg, n)`) rather than leaving one repainted rect out of key.
+ *
+ * `null` = no override, i.e. the template's own key decides, which is every path outside a split.
+ */
+const SceneBgContext = React.createContext<string | null>(null);
+
+/** Force `useSceneColors().bg` to `ground` for the whole subtree. See `SceneBgContext`. */
+export const SceneGroundOverride: React.FC<{ground: string; children: React.ReactNode}> =
+({ground, children}) => (
+  <SceneBgContext.Provider value={ground}>{children}</SceneBgContext.Provider>
+);
+
 /** The active scene's colour tokens. Valid inside any template wrapped by `keyedTemplates()`. */
-export const useSceneColors = (): SceneColors => sceneColors(React.useContext(SceneKeyContext));
+export const useSceneColors = (): SceneColors => {
+  const c = sceneColors(React.useContext(SceneKeyContext));
+  const ground = React.useContext(SceneBgContext);
+  return ground === null ? c : {...c, bg: ground};
+};
 
 /**
  * The scene's flat full-frame ground. Backdrops that used to paint their own `BG_SKY`/`BG_COOL`/

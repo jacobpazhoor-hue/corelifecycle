@@ -9,20 +9,43 @@ import edge_tts
 import soundfile as sf
 from content import SCENES, FPS
 
-CACHE_VERSION = "v5"   # v5: crayon narration rate (-13%) + varied gaps + wider BEAT_GAP. Bump on DSP changes.
+CACHE_VERSION = "v6"   # v6: narration rate retuned to -10% for canon-length sentences (see RATE).
+                       # v5: crayon narration rate (-13%) + varied gaps + wider BEAT_GAP.
+                       # MUST be bumped whenever RATE or the DSP chain changes: the per-scene cache key
+                       # is hashed over it, and without a bump every scene reuses its old wav and the
+                       # change is a silent no-op.
 
 VOICE = "en-US-AndrewMultilingualNeural"  # most natural/human free voice; alts in voice_samples_v2/
 DIALOGUE_VOICE = "en-US-ChristopherNeural"  # 2nd voice for in-world dialogue (mentor/rival) — deeper, distinct from the narrator
 # CRAYON pacing (docs/CRAYON_BIBLE.md §2, docs/research/crayon/MEASUREMENTS.md): the reference channel
-# narrates at 148.5 WPM aggregate (139.2–152.9 per video). MEASURED here by synthesising 5 real scenes
-# (348 words) per rate and timing the mastered+trimmed wav — the old "+8% ≈ 190 WPM" note was never
-# verified and the old "natural baseline ~174 WPM" is wrong for this voice:
-#   +8% -> 180.7   -8% -> 154.7   -10% -> 150.5   -11% -> 148.6   -12% -> 148.5   -13% -> 147.3
-#   -14% -> 143.6  -16% -> 142.8  -18% -> 138.5   -22% -> 130.6   (edge-tts quantises: -11/-12 tie)
-# Then confirmed on the WHOLE episode (which also carries per-scene breaths + in-world dialogue):
-#   -10% -> 154.0 WPM speech / 150.8 WPM runtime   (speech rate OUT of band, too fast)
-#   -13% -> 149.1 WPM speech / 145.7 WPM runtime   <- chosen; both metrics inside 145–152
-RATE = "-13%"                  # MEASURED 149.1 WPM speech / 145.7 runtime; re-measure if you change it
+# narrates at 148.5 WPM aggregate (139.2–152.9 per video), and the metric is RUNTIME-INCLUSIVE —
+# transcript words / total video minutes, counting the leads, gaps and dialogue beats. gate.py asserts
+# that number against a 143–154 band.
+#
+# THE RATE IS A FUNCTION OF SENTENCE LENGTH, NOT JUST OF THE VOICE. -13% was measured correctly, but
+# against the PREVIOUS episode, whose sentences average ~15 words. The crayon canon writes short
+# fragments instead (8.47-word mean, 56.3% under 8 words — docs/BIBLE.md §3) and edge-tts inserts a
+# sentence-final pause at every full stop, so the same rate reads materially slower on a canon script.
+# At -13% the WO-13 sample episode landed at 143.4 WPM runtime: inside the current band by 0.4, close
+# enough to trip gate.py's band-edge WARN, and outright REJECTED by the 145–152 band that preceded it.
+# Nothing downstream can recover that — runtime WPM can never exceed speech WPM, and ~97% of runtime
+# is speech, so zeroing every lead and gap in the episode would still only reach the speech rate.
+#
+# RE-MEASURED (WO-16) on the WHOLE of the committed canon-compliant content.py — all 39 scenes, 2,091
+# words, through the real synth + master() + trim_silence() chain and gen_voice_edge's own per-scene
+# timing arithmetic, including breaths and the two in-world dialogue lines:
+#   RATE     speech WPM   runtime WPM   runtime
+#   -13%       147.1        143.4       14.59 min   <- old value; 0.4 off the band floor
+#   -12%       149.1        145.2       14.40 min
+#   -11%       150.6        146.7       14.26 min
+#   -10%       152.5        148.4       14.09 min   <- chosen; 0.1 off the reference's 148.5 aggregate
+#    -9%       153.0        148.9       14.04 min   (edge-tts quantises: only +0.5 speech WPM for 1%)
+# -10% sits 5.4 above the band floor and 5.6 below its ceiling — the widest margin available, and the
+# closest to the target. The -10% row reproduces src/timeline.json frame for frame (25,364), which is
+# what makes these numbers the same quantity gate.py recomputes rather than a parallel estimate.
+#
+# If you change this, BUMP CACHE_VERSION in the same edit or every scene reuses its cached wav.
+RATE = "-10%"                  # MEASURED 152.5 WPM speech / 148.4 runtime; re-measure if you change it
 # Inter-scene silence. The reference's gaps measure 0.18–1.0s and VARY; one fixed value is a tell.
 GAP_MIN, GAP_MAX = 0.25, 0.55           # ordinary scene-to-scene breath (deterministic per scene id)
 TURN_GAP_MIN, TURN_GAP_MAX = 0.60, 1.00  # longer hold before a chapter/LEVEL turn
@@ -241,7 +264,8 @@ async def main():
     json.dump(timeline, open(out, "w"), indent=2)
     wpm = nwords / (speech_total / 60) if speech_total else 0
     # runtime WPM is the metric the reference was measured with (transcript words / video minutes),
-    # so print both: speech-only WPM and words-per-minute-of-runtime. Target band: 145–152.
+    # so print both: speech-only WPM and words-per-minute-of-runtime. gate.py asserts 143–154 on the
+    # runtime figure; the writing target is the reference's 148.5 aggregate.
     rt_wpm = nwords / (cursor / FPS / 60) if cursor else 0
     print(f"\nTOTAL: {cursor} frames = {cursor/FPS:.1f}s  ({nwords} words, ~{wpm:.1f} WPM speech / "
           f"{rt_wpm:.1f} WPM runtime, {reused}/{len(SCENES)} scenes reused from cache, "

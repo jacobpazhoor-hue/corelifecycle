@@ -425,7 +425,21 @@ export type FloatingDialogueProps = {
   y?: number;
   /** 3:34 sets its three lines flush left; centred is offered for a one-liner over a symmetric scene. */
   align?: 'center' | 'left';
-  /** Glyph colour. White is the reference (over a mid-grey wall); INK reads on a pale ground. */
+  /**
+   * The flat ground this line lands on — the scene's keyed `bg`. Used ONLY to choose the glyph
+   * colour when `color` is not given; it is never painted.
+   *
+   * REQUIRED UNLESS `color` IS GIVEN. There is no safe default glyph colour: the old one was a flat
+   * PAPER_WHITE, which is the reference's own choice over its ~#696969 wall but is close to invisible
+   * on a pale one — a `boardroom` scene is keyed grey at #cccccc, and the sample episode's t28 line
+   * rendered white-on-pale with only a 0.045em keyline holding it together. Guessing white again
+   * would just re-file the bug, so an unkeyed caller has to say which of the two it wants.
+   */
+  ground?: string;
+  /**
+   * Glyph colour. Overrides the choice made from `ground`. White is the reference (over a mid-grey
+   * wall); INK reads on a pale ground.
+   */
   color?: string;
   /** Width ceiling as a fraction of frame width. */
   maxWidth?: number;
@@ -451,12 +465,21 @@ const isLight = (hex: string): boolean => {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.5;
 };
 
+/**
+ * The glyph colour for a line landing on `ground`: the reference's white over anything mid-tone or
+ * darker, INK over anything lighter. `isLight` splits at 0.5 relative luminance, which puts the six
+ * keyed grounds either side exactly as the eye does — #cccccc (grey) and #88ccee (daylight) light,
+ * #5a4230 (interior), #e8541f (alarm) and #e8b54b (gold) dark.
+ */
+const glyphOn = (ground: string): string => (isLight(ground) ? INK : PAPER_WHITE);
+
 export const FloatingDialogue: React.FC<FloatingDialogueProps> = ({
   text,
   x = 0.5,
   y = 0.22,
   align = 'left',
-  color = PAPER_WHITE,
+  ground,
+  color,
   maxWidth = FLOAT_MAX_W_FRAC,
   maxLines = FLOAT_MAX_LINES,
   keyline = FLOAT_KEYLINE_EM,
@@ -465,6 +488,16 @@ export const FloatingDialogue: React.FC<FloatingDialogueProps> = ({
   const {width, height} = useVideoConfig();
   const ready = useCrayonFace('floating dialogue');
   const {opacity, scale} = useEntrance(animate);
+
+  if (color === undefined && ground === undefined) {
+    throw new Error(
+      `bubble: FloatingDialogue ${JSON.stringify(text.slice(0, 40))} needs either \`ground\` (the ` +
+      `scene's flat #rrggbb ground, from which the glyph colour is chosen) or an explicit \`color\`. ` +
+      `Unballooned script has no white balloon behind it, so a fixed default is illegible on half the ` +
+      `keyed grounds — the renderer passes sceneColors(resolveSceneKey(...)).bg.`
+    );
+  }
+  const ink = color ?? glyphOn(ground!);
 
   if (!ready) return null;
 
@@ -498,9 +531,9 @@ export const FloatingDialogue: React.FC<FloatingDialogueProps> = ({
           pivotX={cx}
           cy={cy}
           align={align}
-          fill={color}
+          fill={ink}
           keyline={keyline * fit.fontSize}
-          keylineColor={isLight(color) ? INK : PAPER_WHITE}
+          keylineColor={isLight(ink) ? INK : PAPER_WHITE}
         />
       </svg>
     </AbsoluteFill>

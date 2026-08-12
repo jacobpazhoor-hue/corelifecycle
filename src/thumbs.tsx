@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill} from 'remotion';
-import {StickFigure, DIM, SEG, Pose, Costume, episodeCostume} from './figure';
+import {StickFigure, DIM, SEG, Expr, Pose, Costume, episodeCostume} from './figure';
 import * as A from './actions';
 import {TEMPLATES} from './scenes';
 import {BuildingBand, CrowdHeads, CrowdRow, SlabFloor} from './setdressing';
@@ -199,6 +199,36 @@ const Outline: React.FC<{
   </text>
 );
 
+/**
+ * `thumb.kicker` — the small line that sets the headline up ("158 YEARS OLD" over "DEAD IN A
+ * WEEKEND"). It carries the hook's number, so losing it costs the thumbnail its whole setup.
+ *
+ * It USED to be lost: `HEAD` takes the kicker only as a THIRD fallback (`line1 line2 || kicker ||
+ * keyword`), so on every episode that fills `line1` — i.e. every normal one — the kicker was read
+ * out of `episode_meta.json`, uppercased, and then referenced by exactly one of the nine archetypes.
+ * Eight silently dropped it. It is now drawn by the two shared type components, which between them
+ * cover seven of the nine, and `Thumbnail` REFUSES to render on the other two rather than dropping
+ * it again (see KICKERLESS_ARCHES).
+ *
+ * Set at ~0.42 of the headline and placed UNDER the block rather than over it: at `crash`'s cap of
+ * 140 the headline's own caps already reach y=50 from a baseline of 150, and a kicker above that
+ * would be clipped off the top edge.
+ */
+const KICKER_FRAC = 0.42;
+const Kicker: React.FC<{
+  x: number; baseline: number; maxW: number; cap: number; anchor?: Anchor;
+  /** The headline this kicker sits under, so an episode whose HEAD *is* the kicker (no `line1`,
+   *  no `line2` — `HEAD`'s own second fallback) does not set the same words twice. */
+  over: string;
+}> = ({x, baseline, maxW, cap, anchor = 'start', over}) => {
+  if (!KICKER || KICKER === over) return null;
+  const fs = fitFs(KICKER, maxW, Math.round(cap * KICKER_FRAC));
+  // Drop = the kicker's own cap height (0.716em) plus a clear gap of 0.30 of the HEADLINE's size.
+  // Its own height alone put its caps 3px under the headline's baseline and the two blocks touched.
+  const drop = Math.round(fs * 0.78 + cap * 0.30);
+  return <Outline x={x} y={baseline + drop} fs={fs} anchor={anchor}>{KICKER}</Outline>;
+};
+
 /** A wrapped, auto-fitted block of treatment-(b) type. Returns its own bottom edge via `onBottom`. */
 const TitleBlock: React.FC<{
   text: string; x: number; y: number; maxW: number; cap?: number; anchor?: Anchor; perLine?: number;
@@ -215,6 +245,7 @@ const TitleBlock: React.FC<{
           {ln}
         </Outline>
       ))}
+      <Kicker x={x} baseline={y + (lines.length - 1) * lh} maxW={maxW} cap={fs} anchor={anchor} over={text} />
     </g>
   );
 };
@@ -232,6 +263,9 @@ const BandTitle: React.FC<{text: string}> = ({text}) => {
       <rect x={BAND.x} y={BAND.y} width={BAND.w} height={BAND.h} fill={AMBER} stroke={INK} strokeWidth={STROKE} />
       <text x={BAND.x + BAND.w / 2} y={BAND.y + BAND.h / 2 + fs * CAP_MID} textAnchor="middle"
         fontFamily={SANS} fontSize={fs} fontWeight={900} fill={INK}>{text}</text>
+      {/* the kicker sits on the art just under the bar — there is nothing above it but frame edge */}
+      <Kicker x={BAND.x + BAND.w / 2} baseline={BAND.y + BAND.h} maxW={BAND.w - 130} cap={fs}
+        anchor="middle" over={text} />
     </g>
   );
 };
@@ -476,6 +510,24 @@ const GreyCity: React.FC<{horizon?: number}> = ({horizon = 700}) => (
 );
 
 /**
+ * THE CROWD'S FACE.
+ *
+ * A thumbnail crowd figure is drawn at scale ~1.9, where its head is ~220 units across — big enough
+ * that a blank head is not read as a head at all. `CrowdRow`'s episode-scale default of `showFace=false`
+ * put a featureless rounded rect directly on top of a torso of almost exactly the same width (head
+ * half-width R*1.13 against torso half-width R*1.02), so the two silhouettes fused and the row
+ * rendered as a rank of headless pills — measured on the WO-13 `crash` thumbnail, where the head
+ * occupies y 686..929 and carries nothing at all.
+ *
+ * The reference does the opposite: every grey figure in `LuEcoqizj0o/thumb.png` has eyes, brows and
+ * a mouth, and the two nearest are visibly ANGRY — the crowd's mood is part of what the thumbnail
+ * says. So the thumbnail crowd is drawn with faces, set to a flat scowl: brows down, mouth flat, no
+ * blink (these are stills). It stays grey, uncostumed and smaller than the hero, so the colour-hero
+ * focal device is untouched.
+ */
+const CROWD_EXPR: Expr = {brow: -0.55, browRaise: 0, lid: 0.18, mouth: 'flat', look: 0};
+
+/**
  * The grey anonymous crowd (bible §6.5) — heads massed behind a row of full figures.
  *
  * The row scale is deliberately ~0.6x the hero's: measured on HawmGu7oNrc the hero's head is 215px
@@ -486,7 +538,8 @@ const GreyCrowd: React.FC<{headY?: number; rowY?: number; scale?: number}> =
 ({headY = 880, rowY = 1240, scale = 1.9}) => (
   <g>
     <CrowdHeads y={headY} x0={-40} x1={1960} n={10} rows={2} r={62} seed={5} fill={E.field} />
-    <CrowdRow y={rowY} x0={-60} x1={1980} n={8} scale={scale} seed={2} view="front" dz={34} />
+    <CrowdRow y={rowY} x0={-60} x1={1980} n={8} scale={scale} seed={2} view="front" dz={34}
+      showFace expr={CROWD_EXPR} />
   </g>
 );
 
@@ -516,7 +569,12 @@ const ThumbBand: React.FC = () => (
 const ThumbCrash: React.FC = () => (
   <Wrap>
     <GreyCity horizon={640} />
-    <CrowdRow y={1180} x0={110} x1={520} n={3} scale={1.9} seed={7} view="front" dz={26} />
+    {/* the reference's protest group stands on the street with its heads and shoulders clear of the
+        placard — hips at 1180 pushed the hem off the bottom edge and left three blank heads stacked
+        on three torsos of the same width. Faces on (see CROWD_EXPR) and the row lifted so the whole
+        figure is in frame. */}
+    <CrowdRow y={1060} x0={110} x1={520} n={3} scale={1.75} seed={7} view="front" dz={26}
+      showFace expr={CROWD_EXPR} />
     {TAG ? (
       <g transform="rotate(-4 470 620)">
         <rect x={280} y={545} width={384} height={150} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
@@ -766,7 +824,7 @@ const ThumbLadder: React.FC = () => {
           bar at any scale that still reads as a person. The empty top step is the point anyway. */}
       {steps.slice(0, 3).map((s, i) => (
         <StickFigure key={i} pose={A.stand(0)} x={s.x + sw / 2} y={s.top - 110 * GS} scale={GS}
-          facing={1} view="front" pal={DIM} showFace={false} frame={0} />
+          facing={1} view="front" pal={DIM} showFace expr={CROWD_EXPR} frame={0} />
       ))}
       <Hero x={1460} hipY={1300} scale={3.0} mood={pushFor('smug')} facing={-1} />
       <BandTitle text={HEAD} />
@@ -797,15 +855,34 @@ const ARCHES: Record<string, React.FC> = {
 };
 const ORDER = Object.keys(ARCHES);
 
-function pick(): React.FC {
-  if (t.archetype && ARCHES[t.archetype]) return ARCHES[t.archetype];
+/**
+ * The two layouts with nowhere to put `thumb.kicker`. `wordmark` gives the whole top of the frame to
+ * one enormous word with the hero's head climbing into it, and `beforeafter` fills both top corners
+ * with its own pair of labels; a third line in either is not a layout tweak, it is a different
+ * archetype. Every other layout draws the kicker through `TitleBlock`/`BandTitle`, and `number` has
+ * always drawn its own.
+ */
+const KICKERLESS_ARCHES = new Set(['wordmark', 'beforeafter']);
+
+function pickName(): string {
+  if (t.archetype && ARCHES[t.archetype]) return t.archetype;
   const topic = (meta as any).topic || L1 || 'x';
   let h = 0; for (const c of topic) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-  return ARCHES[ORDER[h % ORDER.length]];
+  return ORDER[h % ORDER.length];
 }
 
 export const Thumbnail: React.FC = () => {
-  const C = pick();
+  const name = pickName();
+  // Dropping copy the writer supplied is a silent content loss, and this one carries the hook's
+  // number, so it HALTs the build the way a bad `thumb.prop` does rather than rendering short.
+  if (KICKER && KICKERLESS_ARCHES.has(name)) {
+    throw new Error(
+      `thumb.kicker "${KICKER}" cannot be drawn by the "${name}" archetype — its layout has no ` +
+      `kicker slot. Either clear thumb.kicker, or pick an archetype that carries one: ` +
+      `${ORDER.filter((k) => !KICKERLESS_ARCHES.has(k)).join(', ')}.`
+    );
+  }
+  const C = ARCHES[name];
   return <C />;
 };
 
