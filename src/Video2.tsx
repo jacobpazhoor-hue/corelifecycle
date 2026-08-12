@@ -35,42 +35,91 @@ const NEG_SUB = '#a33a26';
 type Overlay = {big: string; sub: string | null} | null;
 type SceneT = {id: string; level: string | null; overlay: Overlay; template: string;
   audio: string; audioStartFrame?: number; startFrame: number; durationInFrames: number};
-type Shot = {type: string; dur: number};
+type Shot = {type: string; dur: number; focus: [number, number]};
 
-// RETENTION pacing: something must visibly change every 5–8s, never hold a static frame past ~10s.
-const MAX_SHOT = 240; // 8s @30fps — any planned shot longer than this gets re-cut
+// ============================================================================
+// EDITING RHYTHM (CRAYON_BIBLE §4, measured in docs/research/crayon/MEASUREMENTS.md).
+// Reference: 12.5 cuts/min · mean shot 4.79s · per-window means 3.87–6.36s ·
+// median shot 2.67–6.81s · range 0.61–16.46s · ~40% of sampled frames completely
+// motionless. "Hold still, then change" — the reference does NOT fill dead air with drift.
+// ============================================================================
+const TARGET_SHOT = 144; // 4.79s @30fps — the measured mean shot length; drives the shot COUNT
+// The reference's LONGEST measured shot, 16.46s. This replaces the old 240f/8s "retention" ceiling,
+// which was a CoreLifecycle doctrine number with nothing behind it: the reference happily holds a
+// locked frame for 16s. It is now an INVARIANT, not a re-cutter — the planner is duration-driven, so
+// a shot this long is arithmetically unreachable, and if one ever appears the weight table below is
+// broken and we want to hear about it rather than paper over it with an invisible sub-cut.
+const MAX_SHOT = 494;
 
-// split any over-long shot into equal sub-cuts. This used to be a visible change because each sub-cut
-// restarted the camera push; with the camera locked, a sub-cut of the SAME shot type on the SAME focus
-// point is visually inert (only the ShotFade dip marks it). Kept for now because it preserves the shot
-// timing the rest of the pipeline assumes — giving these sub-cuts a real reason to exist (varying the
-// framing, or letting the template animate) belongs to the editing-rhythm work, not to this change.
-function capShots(shots: Shot[]): Shot[] {
-  const out: Shot[] = [];
-  for (const sh of shots) {
-    if (sh.dur <= MAX_SHOT) {out.push(sh); continue;}
-    const n = Math.ceil(sh.dur / MAX_SHOT);
-    const base = Math.floor(sh.dur / n);
-    for (let i = 0; i < n; i++) out.push({type: sh.type, dur: i === n - 1 ? sh.dur - base * (n - 1) : base});
-  }
-  return out;
-}
+// WHY THE SUB-CUTTER (`capShots`) IS GONE, 2026-08-11.
+// It split any shot over MAX_SHOT into equal sub-cuts of the SAME shot type on the SAME focus point.
+// Under the old moving camera each sub-cut restarted the dolly push, so it read as a change; with the
+// camera locked (CRAYON_BIBLE §3) it produces NO visible change at all — an invisible "cut" that is
+// only a ShotFade dip. That is worse than useless: it inflates the cut count in any plan-based
+// accounting while the viewer sees nothing, so it corrupts the exact metric this file is tuned
+// against. Making it vary the framing was the alternative, but then a scene's rhythm would come from
+// two uncoordinated places — planShots' proportional split AND an equal-division cap — and the mean
+// shot length could not be tuned. Instead the rhythm is planned ONCE, from the target shot length, so
+// every emitted cut is a genuine re-frame and no shot ever needs rescuing. The bible backs the holds:
+// 40% of reference frames are motionless and shots run to 16.46s.
 
-// distribute a scene's duration across shots (always sums to D) for editing rhythm
-function planShots(s: SceneT): Shot[] {
+// A framing = a static crop (see director.tsx SCALE / FramedScene) plus a horizontal shift of the
+// focus point, plus that shot's share of the scene. Every entry differs in SCALE from both of its
+// neighbours INCLUDING ACROSS THE WRAP, so consecutive shots can never be the same crop — that is
+// what makes the cut visible with the camera locked. `dx` moves the crop off the focus point so two
+// mediums in one scene are not the same composition (any focus in 0–1 is safe: scaling about the
+// focus point can never expose an edge). `w` sums to exactly the cycle length, so the mean shot in a
+// scene is TARGET_SHOT regardless of where in the cycle it starts. Wides carry the long holds,
+// closeups are the shortest — punctuation, as in the old plan's 64f closeup cap.
+type Framing = {type: string; dx: number; w: number};
+const FRAMINGS_FACE: Framing[] = [ // templates with a locatable face (FOCUS) — closeups allowed
+  {type: 'wide', dx: 0, w: 1.30},
+  {type: 'medium', dx: -0.20, w: 0.95},
+  {type: 'wide', dx: 0, w: 1.35},
+  {type: 'closeup', dx: 0, w: 0.55},
+  {type: 'wide', dx: 0, w: 1.10},
+  {type: 'medium', dx: 0.20, w: 0.75},
+];
+const FRAMINGS_FLAT: Framing[] = [ // no locatable face: a 2.2x closeup would frame nothing, so wide/medium only
+  {type: 'wide', dx: 0, w: 1.45},
+  {type: 'medium', dx: -0.18, w: 0.70},
+  {type: 'wide', dx: 0, w: 1.05},
+  {type: 'medium', dx: 0.18, w: 0.80},
+];
+const DEFAULT_FOCUS: [number, number] = [0.5, 0.55];
+
+// Distribute a scene's duration across shots (always sums to D — the audio is one continuous file
+// per scene, so a shot plan that does not sum to D desyncs it). `phase` is a RUNNING shot index
+// across the whole video, so a scene starts its cycle where the previous scene stopped: adjacent
+// entries always differ in scale, which means the first shot of a scene can never repeat the framing
+// of the last shot of the one before it (two consecutive scenes on the same template would otherwise
+// cut to an identical frame).
+function planShots(s: SceneT, phase: number): Shot[] {
   const D = s.durationInFrames;
-  const hasFace = !!FOCUS[s.template];
-  if (D < 95) return [{type: hasFace ? 'closeup' : 'medium', dur: D}];
-  if (D < 200) {const a = Math.round(D * 0.55); return capShots([{type: 'wide', dur: a}, {type: hasFace ? 'closeup' : 'medium', dur: D - a}]);}
-  // long scene: wide -> medium -> short closeup (closeup only if the face is locatable)
-  const cu = hasFace ? Math.min(64, Math.round(D * 0.22)) : 0;
-  const wide = Math.round((D - cu) * 0.55);
-  const med = D - cu - wide;
-  return capShots(cu > 0 ? [{type: 'wide', dur: wide}, {type: 'medium', dur: med}, {type: 'closeup', dur: cu}]
-                : [{type: 'wide', dur: wide}, {type: 'medium', dur: D - wide}]);
+  const face = FOCUS[s.template];
+  const cycle = face ? FRAMINGS_FACE : FRAMINGS_FLAT;
+  const focus = face ?? DEFAULT_FOCUS;
+  const n = Math.max(1, Math.round(D / TARGET_SHOT));
+  const picks = Array.from({length: n}, (_, i) => cycle[(phase + i) % cycle.length]);
+  const wsum = picks.reduce((a, p) => a + p.w, 0);
+  const shots: Shot[] = [];
+  let used = 0;
+  for (let i = 0; i < n; i++) {
+    // last shot absorbs the rounding remainder so the plan sums to D exactly
+    const dur = i === n - 1 ? D - used : Math.round((D * picks[i].w) / wsum);
+    used += dur;
+    const fx = Math.min(0.98, Math.max(0.02, focus[0] + picks[i].dx));
+    shots.push({type: picks[i].type, dur, focus: [fx, focus[1]]});
+  }
+  for (const sh of shots) {
+    if (sh.dur < 1 || sh.dur > MAX_SHOT) {
+      throw new Error(`planShots(${s.id}): ${sh.dur}f shot is outside 1..${MAX_SHOT} — the framing weight table is broken`);
+    }
+  }
+  return shots;
 }
 
-const Beat: React.FC<{scene: SceneT; from: number | null}> = ({scene, from}) => {
+const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({scene, from, shots}) => {
   const f = useCurrentFrame();
   const D = scene.durationInFrames;
   // Scene-cut fade: previously ramped all the way to 0 opacity over 16 frames (~0.53s) on EACH side
@@ -80,8 +129,8 @@ const Beat: React.FC<{scene: SceneT; from: number | null}> = ({scene, from}) => 
   // less of the runtime is ever in the dim zone at all.
   const fade = 8;
   const beatOp = interpolate(f, [0, fade, D - fade, D], [0.4, 1, 1, 0.4], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const focus = FOCUS[scene.template] ?? [0.5, 0.55];
-  const shots = planShots(scene);
+  // shots (and their per-shot focus points) are planned once in Video2 so the framing cycle can run
+  // continuously across scene boundaries — see planShots' `phase`.
   // LOCKED CAMERA (CRAYON_BIBLE §3): the level-cut whip-in, the decaying screen shake and the cut
   // flash are gone, as is the drifting foreground occluder (a parallax depth cue that only made sense
   // under a moving camera). The level cut is now carried by the SFX and the level label alone.
@@ -119,7 +168,7 @@ const Beat: React.FC<{scene: SceneT; from: number | null}> = ({scene, from}) => 
           const seq = (
             <Sequence key={i} from={t} durationInFrames={sh.dur}>
               <ShotFade dur={sh.dur}>
-                <FramedScene template={scene.template} type={sh.type} focus={focus} dur={sh.dur} photo={photo} />
+                <FramedScene template={scene.template} type={sh.type} focus={sh.focus} dur={sh.dur} photo={photo} />
               </ShotFade>
             </Sequence>);
           t += sh.dur;
@@ -186,12 +235,17 @@ export const Video2: React.FC = () => {
   // instead of counting across incompatible units)
   let last: {num: number; suffix: string} | null = null;
   const out: React.ReactNode[] = [];
+  // running shot index across the whole video — keeps the framing cycle continuous through scene
+  // cuts so no scene ever opens on the framing the previous one closed with (see planShots).
+  let phase = 0;
   for (const s of scenes) {
     const money = splitMoney(s.overlay?.big);
     const from = money && last && last.suffix === money.suffix ? last.num : null;
+    const shots = planShots(s, phase);
+    phase += shots.length;
     out.push(
       <Sequence key={s.id} from={s.startFrame} durationInFrames={s.durationInFrames}>
-        <Beat scene={s} from={from} />
+        <Beat scene={s} from={from} shots={shots} />
       </Sequence>);
     if (money !== null) last = money;
   }
