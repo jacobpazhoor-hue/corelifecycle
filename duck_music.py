@@ -56,6 +56,12 @@ DRY_FLOOR = 2e-4        # ~ -74 dB: true silence, matching the measured music-fr
 DRY_FADE_S = 0.35       # fade the bed out/in at the edges of a dry passage (no click, reads deliberate)
 DRY_TARGETS = (0.24, 0.64)   # fractions of runtime to aim a dry passage at (240/993s in the reference)
 DRY_EVERY_MIN = 6.0     # one dry passage per ~6 min of runtime, capped by len(DRY_TARGETS)
+# LENGTH of a music-free passage, in SECONDS — the thing that must stay constant when the edit changes.
+# A passage used to be "one scene", which is a length only by accident: at the WO-13 granularity
+# (21.1s mean scene) two passages came to 54s = 6.3% of runtime and measured CLOSE against the
+# reference, and the WO-22 re-cut (4.95s mean scene) silently took the same two passages to 8.6s =
+# 0.9% without anything in this file changing. 22s x 2 restores the WO-13 share at the new granularity.
+DRY_LEN_S = 22.0
 
 
 def _seeded_rng(salt):
@@ -69,20 +75,38 @@ def _seeded_rng(salt):
 
 
 def _pick_dry(scenes, total_f, fps, mid_i, level_idx):
-    """Whole scenes to run MUSIC-FREE. Skips the cold open (it needs its bed), every LEVEL cut (the
-    riser/stamp needs music to punch out of) and the midpoint silence-beat pair (no double-dipping),
-    then snaps each DRY_TARGETS fraction to the nearest surviving scene start."""
+    """SPANS of consecutive scenes to run MUSIC-FREE, each about DRY_LEN_S long.
+
+    Returns (first_index, last_index) pairs, inclusive. Skips the cold open (it needs its bed), every
+    LEVEL cut (the riser/stamp needs music to punch out of) and the midpoint silence-beat pair (no
+    double-dipping), snaps each DRY_TARGETS fraction to the nearest surviving scene start, then
+    EXTENDS forward over consecutive unblocked scenes until the passage reaches DRY_LEN_S.
+
+    It used to return single scene indices, i.e. a passage was exactly one scene long. That is a
+    length only by accident, and the accident broke: silence is a STRUCTURAL device in the reference
+    (a whole window measured at -75.2 dB), so a passage has to be specified in seconds. Measured on
+    this episode, one-scene passages gave 8.6s of music-free runtime (0.9%) where the 39-scene build
+    had given 54s (6.3%) from the very same code.
+    """
     runtime = total_f / max(fps, 1)
     want = max(1, min(len(DRY_TARGETS), int(round(runtime / 60.0 / DRY_EVERY_MIN))))
     blocked = {0, len(scenes) - 1, mid_i, mid_i - 1} | set(level_idx)
-    chosen = []
+    spans, used = [], set()
     for frac in DRY_TARGETS[:want]:
-        cands = [i for i in range(len(scenes)) if i not in blocked and i not in chosen]
+        cands = [i for i in range(len(scenes)) if i not in blocked and i not in used]
         if not cands:
             break
         target = frac * runtime
-        chosen.append(min(cands, key=lambda i: abs(scenes[i]["startFrame"] / fps - target)))
-    return sorted(chosen)
+        i0 = min(cands, key=lambda i: abs(scenes[i]["startFrame"] / fps - target))
+        i1 = i0
+        acc = scenes[i0]["durationInFrames"] / fps
+        while (acc < DRY_LEN_S and i1 + 1 < len(scenes)
+               and (i1 + 1) not in blocked and (i1 + 1) not in used):
+            i1 += 1
+            acc += scenes[i1]["durationInFrames"] / fps
+        spans.append((i0, i1))
+        used |= set(range(i0, i1 + 1))
+    return sorted(spans)
 
 
 def _speech_flags(path):
@@ -267,18 +291,20 @@ def main():
     if gain is not None and scenes:
         dry = _pick_dry(scenes, total_f, fps, mid_i, level_idx)
         f = int(DRY_FADE_S * sr)
-        for i in dry:
-            a = int(scenes[i]["startFrame"] / fps * sr)
-            b = min(N, int((scenes[i]["startFrame"] + scenes[i]["durationInFrames"]) / fps * sr))
+        spans = []
+        for i0, i1 in dry:
+            a = int(scenes[i0]["startFrame"] / fps * sr)
+            b = min(N, int((scenes[i1]["startFrame"] + scenes[i1]["durationInFrames"]) / fps * sr))
             if b - a <= 2 * f:
                 continue
             seg = np.full(b - a, DRY_FLOOR, dtype=np.float32)
             seg[:f] = np.linspace(1.0, DRY_FLOOR, f)                  # np.minimum below keeps the duck
             seg[-f:] = np.linspace(DRY_FLOOR, 1.0, f)                 # bed returns on the next cut
             gain[a:b] = np.minimum(gain[a:b], seg)
-        if dry:
-            print(f"  duck_music: {len(dry)} dry (music-free) passage(s) at "
-                  f"{[scenes[i]['id'] for i in dry]} — bed at {20*np.log10(DRY_FLOOR):.0f} dB")
+            spans.append(f"{scenes[i0]['id']}-{scenes[i1]['id']} {(b-a)/sr:.1f}s")
+        if spans:
+            print(f"  duck_music: {len(spans)} dry (music-free) passage(s) — {', '.join(spans)} — "
+                  f"bed at {20*np.log10(DRY_FLOOR):.0f} dB")
 
     # apply duck + write
     if amb is not None:

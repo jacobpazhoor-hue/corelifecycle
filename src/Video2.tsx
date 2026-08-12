@@ -374,8 +374,18 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
   // window grid) the old long linear fade spent many frames at mid-opacity, letting the art bleed
   // through the card and read as a double-exposed ghost (reviewer defect, t23 "SEC WELLS NOTICE").
   // Paired with an exit LIFT below so the card reads as a quick slide-away, not a lingering blend.
-  const staticOp = interpolate(f, [10, 20, D - 10, D], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const staticRise = interpolate(f, [10, 28, D - 10, D], [18, 0, 0, -16], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
+  //
+  // THE RAMPS MUST FIT THE SCENE. `interpolate` requires a strictly increasing input range and THROWS
+  // otherwise, and these two ranges are built from D, so a short scene makes the range go backwards
+  // and kills the whole render — not the overlay, the render. Since WO-17 a scene is a shot and since
+  // WO-22 the writer is licensed to write one-word punches (bible §3a: "a one-word scene measured
+  // 1.17s"), so D=35 frames is a SUPPORTED input: [10, 28, D-10, D] evaluated to [10, 28, 25, 35] and
+  // frame 13298 (t065 "Unless.") failed the whole episode. These ramps are unconditional — they are
+  // computed even for a scene with no overlay at all — so the crash did not need an overlay either.
+  // Compress the ramp into whatever room the scene has rather than dropping the card or the frame.
+  const cardOut = Math.min(Math.max(D - 10, 12), D - 1);   // the exit ramp starts here
+  const staticOp = interpolate(f, [10, Math.min(20, cardOut - 1), cardOut, D], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const staticRise = interpolate(f, [10, Math.min(28, cardOut - 1), cardOut, D], [18, 0, 0, -16], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
 
   const photo = PHOTO.mode === 'photo' && PHOTO.scenes[scene.id] ? PHOTO.scenes[scene.id] : undefined;
 
