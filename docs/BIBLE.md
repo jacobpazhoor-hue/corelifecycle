@@ -270,15 +270,16 @@ actual names, and this section gets rewritten to point at them.
 
 ### SIGNATURE DEVICES — AVAILABLE TODAY (WO-12a wired them to the renderer)
 
-The four devices below were built in WO-5/6/7 and were dead code until WO-12a. They are now live:
+The devices below were built in WO-5/6/7 and were dead code until WO-12a. They are now live:
 `content.py` emits them, `gen_voice_edge.py` copies them verbatim into `timeline.json`, and
 `src/Video2.tsx` renders them. **All are optional** — a scene that sets none of them renders exactly
-as scenes always have.
+as scenes always have. WO-19 added the last two of the bible's eight: the **object showcase card**
+(a fourth `card` kind) and the **over-the-shoulder foreground** (`foreground=`).
 
 Malformed values **raise** and stop the build; they are never silently dropped. Spelling a key wrong
 is the one failure that stays silent, because an unknown key is simply ignored — copy the names below.
 
-#### `card=` — full-screen text card (bible §6.1–6.2)
+#### `card=` — full-screen card (bible §6.1–6.2, §6.6)
 One dict. Covers the scene from its first frame; **omit `hold` and the card IS the scene** (no art is
 rendered underneath at all), or set `hold` in seconds to show the card and then cut to the scene's art.
 
@@ -287,21 +288,50 @@ card=dict(kind="chapter", title="The Mask", subtitle="How Enron Hid the Truth in
 card=dict(kind="narration", text="Nobody could explain how the money actually arrived.")
 card=dict(kind="word", word="It")
 card=dict(kind="chapter", title="The Trap", subtitle="Learning Not to Trust", hold=2.2)
+card=dict(kind="objects", items=["briefcase", "cashStack", "safe"])
 ```
 
 | key | required | meaning |
 |---|---|---|
-| `kind` | yes | `"chapter"` · `"narration"` · `"word"` |
+| `kind` | yes | `"chapter"` · `"narration"` · `"word"` · `"objects"` |
 | `title` / `subtitle` | chapter only | the two halves of the `Evocative Noun: Plain Explanation` chapter name |
 | `text` | narration only | 1–2 lines; line breaking is automatic, long text shrinks rather than wrapping to 3 |
 | `word` | word only | ONE short word, set small on a large empty ground — not a huge word |
-| `ground` | no | `"white"` or `"black"`. Defaults: chapter/word → black, narration → white |
+| `items` | objects only | 1–5 objects; see the object card below |
+| `ground` | no | `"white"` or `"black"`. Defaults: chapter/word → black, narration/objects → white |
 | `hold` | no | seconds the card covers the scene. Omitted = the whole scene |
 
 **The chapter card is how a chapter boundary is now marked. Emit 3–5 per episode** (§1), on the first
 scene of each chapter, with the chapter's own two-part name split across `title` and `subtitle` — the
 same names used in the description timestamps. Give that scene the chapter's opening narration: the
 card holds while the line plays, exactly as the reference does.
+
+**Chapter title sizing (WO-19).** The title is set to the reference's measured measure — 0.565 of frame
+width — instead of to a fixed type size, so titles of different lengths read at one confident weight.
+Titles of ~16 characters and up land on the anchor exactly; shorter ones ("The Trap") are held at a
+size ceiling and set narrower, which is fine and intended. A title long enough that one line would set
+smaller than its own subtitle breaks to two lines. **A subtitle much past ~45 characters still costs
+you**: title and subtitle are size-locked at 0.75, so a very wide subtitle pulls the pair down. Keep
+subtitles inside about 45 characters and the title lands on the anchor.
+
+#### `card=dict(kind="objects", …)` — object showcase card (bible §6.6)
+Isometric flat products floating on pure white — the reference's 0:35 frame (a toaster, a vacuum, a
+refrigerator). Use it for the "here is the thing" beat: the product, the collateral, the paperwork.
+
+```python
+card=dict(kind="objects", items=["houseModel", "coinStack"])
+card=dict(kind="objects", items=[dict(kind="safe", color="#c8663f"), "filingCabinet"], hold=3.0)
+```
+
+`items` is a list of 1–5 entries, each either an object name or a dict with `kind` plus optional
+`color` (a hex flat fill, shaded automatically into its three faces) and `scale` (relative size; the
+default puts every object at the same height, which is what the reference does — its toaster is drawn
+as tall as its refrigerator).
+
+The library today is **`briefcase` · `cashStack` · `coinStack` · `filingCabinet` · `houseModel` ·
+`laptop` · `phone` · `refrigerator` · `safe`**. An unknown name raises and the message lists the
+library. Adding one is a single entry in `OBJECTS` in `src/objectcard.tsx` — its extents, its colour
+and its drawing — and nothing else changes.
 
 #### `bubbles=` — speech balloons and floating dialogue (bible §6.3)
 A LIST, so two speakers can share one frame as the reference's 9:20 frame does. Timing is in seconds
@@ -342,6 +372,29 @@ panels=dict(variant="diagonal2", cells=[dict(template="courtroom"), dict(ground=
 `splitY`, `lean` on the split; `ground`, `scale`, `offsetX`, `offsetY` on a cell. A cell's ground
 defaults to the colour key its own template commits to, which is what keeps the panels
 independently keyed — **so choose templates on DIFFERENT keys**, or two cells land on one hue.
+
+#### `foreground=` — over-the-shoulder silhouette (bible §6.8)
+One dict. Paints a near-black head-and-shoulder mass against one frame edge, over the scene's art, so
+the scene reads as being watched from behind someone — the reference's main depth cue
+(`wolf_montage_verified.jpg` @3:34: an ordinary office, framed past a dark chair-back and head). Works
+with **any** template, including a `panels` scene.
+
+```python
+foreground=dict(kind="overShoulder", side="left")
+foreground=dict(kind="overShoulder", side="right", scale=0.8, y=1010)
+```
+
+| key | required | meaning |
+|---|---|---|
+| `kind` | yes | `"overShoulder"` — the only foreground device |
+| `side` | **yes** | `"left"` or `"right"`: which edge the figure stands at |
+| `scale` | no | 0.4–1.6, default 1. Outside that band it raises |
+| `y` | no | baseline in the 1920×1080 frame, default 1080 (the bottom edge) |
+
+⚠ **`side` is required on purpose. Pick the edge AWAY from the scene's colour hero** — measured: a
+right-side silhouette at `scale=1` on `boardroom` (whose hero stands at the right) blacks the hero out
+completely. It also costs a little density: the same scene measured 87.2% flat fill without it and
+87.8% with, so use it as an occasional depth beat, not on every scene.
 
 #### `level=` — still required, no longer drawn
 `level` is the pipeline's **structural** chapter marker and must still be set on the first scene of

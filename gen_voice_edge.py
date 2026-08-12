@@ -261,13 +261,14 @@ async def main():
             "gap": gap,   # carry the writer's per-scene gap through to timeline.json so
                           # duck_music.py's silence-beat placement can honor it (not just LEAD/GAP math)
         }
-        # CRAYON signature devices (WO-12a) — full-screen text card, speech balloons / floating
-        # dialogue, multi-panel split. Purely VISUAL: they change nothing about synthesis, timing or
+        # CRAYON signature devices (WO-12a) — full-screen card (text OR the WO-19 object showcase),
+        # speech balloons / floating dialogue, multi-panel split, and the WO-19 over-the-shoulder
+        # foreground silhouette. Purely VISUAL: they change nothing about synthesis, timing or
         # the VO cache key, so they are passed through verbatim and ONLY when the writer set them.
         # A scene with none of them therefore emits byte-for-byte the record it emitted before.
         # Field shapes are documented for the writer in docs/BIBLE.md §8; Video2.tsx validates them
         # and RAISES on a malformed one rather than silently dropping the device.
-        for key in ("card", "bubbles", "panels"):
+        for key in ("card", "bubbles", "panels", "foreground"):
             if sc.get(key) is not None:
                 rec[key] = sc[key]
         scenes_out.append(rec)

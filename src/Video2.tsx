@@ -8,6 +8,10 @@ import PHOTO_RAW from './photo_manifest.json';
 import {TextCard, TextCardProps} from './textcard';
 import {FloatingDialogue, SpeechBubble} from './bubble';
 import {Panel, Panels} from './panels';
+// WO-19: the two devices COMPARISON scored as MISSING — the object showcase card (§6.6) and the
+// over-the-shoulder foreground silhouette (§6.8).
+import {ObjectCard, ShowcaseItem} from './objectcard';
+import {Foreground, ForegroundT} from './foreground';
 import {resolveSceneKey, sceneColors} from './crayonStyle';
 
 const PHOTO = PHOTO_RAW as {mode: string; scenes: Record<string, {img: string; depth: string; move: Move}>; fallback: string[]};
@@ -52,17 +56,26 @@ type Overlay = {big: string; sub: string | null} | null;
 type CardGround = 'white' | 'black';
 
 /**
- * A full-screen text card (`textcard.tsx`). It covers the scene from its first frame for `hold`
- * seconds; omit `hold` and the card IS the scene, in which case the shot plan underneath is skipped
- * entirely — a card scene renders no art, so there is nothing to render.
+ * A full-screen card. It covers the scene from its first frame for `hold` seconds; omit `hold` and the
+ * card IS the scene, in which case the shot plan underneath is skipped entirely — a card scene renders
+ * no art, so there is nothing to render.
  *
  * The chapter card is the episode's chapter boundary marker: 3–5 per episode (bible §1), title and
  * subtitle being the two halves of the reference's `Evocative Noun: Plain Explanation` chapter names.
+ *
+ * `objects` (WO-19) is the fourth kind and the only one that is not text: the §6.6 object showcase,
+ * isometric flat products on pure white. It rides the SAME field as the text cards deliberately —
+ * it is a full-screen device with the same hold/cover semantics, `gate.py` already excludes `card`
+ * scenes from its flat-fill sampling (a card is not art and measures ~100% flat), and a parallel
+ * `objects=` scene field would have needed that exclusion added to a file this work order must not
+ * touch.
  */
 type CardT = (
   | {kind: 'chapter'; title: string; subtitle: string}
   | {kind: 'narration'; text: string}
   | {kind: 'word'; word: string}
+  // a bare string is the object's name; the dict form adds `color` / `scale`
+  | {kind: 'objects'; items: (string | ShowcaseItem)[]}
 ) & {ground?: CardGround; hold?: number};
 
 /**
@@ -112,7 +125,7 @@ type PanelsT = {
 
 type SceneT = {id: string; level: string | null; overlay: Overlay; template: string;
   audio: string; audioStartFrame?: number; startFrame: number; durationInFrames: number;
-  card?: CardT; bubbles?: BubbleT[]; panels?: PanelsT};
+  card?: CardT; bubbles?: BubbleT[]; panels?: PanelsT; foreground?: ForegroundT};
 type Shot = {type: string; dur: number; focus: [number, number]};
 
 // ============================================================================
@@ -222,11 +235,32 @@ function planShots(s: SceneT, prev: {template: string; framing: Framing} | null)
 // only shows up in the finished 15-minute file.
 // ============================================================================
 
-/** Reference grounds: the 4:05 chapter card and the 7:10 single-word beat are black, the 2:00 narration white. */
-const CARD_DEFAULT_GROUND: Record<string, CardGround> = {chapter: 'black', narration: 'white', word: 'black'};
+/**
+ * Reference grounds: the 4:05 chapter card and the 7:10 single-word beat are black, the 2:00 narration
+ * white, and the 0:35 object showcase is white ("floating on pure white", bible §6.6).
+ */
+const CARD_DEFAULT_GROUND: Record<string, CardGround> = {
+  chapter: 'black', narration: 'white', word: 'black', objects: 'white',
+};
 
-const cardProps = (card: CardT, sceneId: string): TextCardProps => {
+/** The card element itself — text cards go to `textcard.tsx`, the object showcase to `objectcard.tsx`. */
+const cardElement = (card: CardT, sceneId: string): React.ReactNode => {
   const ground = card.ground ?? CARD_DEFAULT_GROUND[card.kind];
+  if (card.kind === 'objects') {
+    if (!Array.isArray(card.items)) {
+      throw new Error(`${sceneId}: card.kind 'objects' needs an \`items\` list of object names`);
+    }
+    // `items=["safe", "laptop"]` and `items=[dict(kind="safe", color="#c8663f")]` are both writable;
+    // the string form is the common case and normalises here, in the one place raw records are read
+    const items: ShowcaseItem[] = card.items.map((it) =>
+      typeof it === 'string' ? {kind: it} : it
+    );
+    return <ObjectCard items={items} ground={ground} />;
+  }
+  return <TextCard {...textCardProps(card, ground, sceneId)} />;
+};
+
+const textCardProps = (card: CardT, ground: CardGround, sceneId: string): TextCardProps => {
   switch (card.kind) {
     case 'chapter':
       return {kind: 'chapter', title: card.title, subtitle: card.subtitle, ground};
@@ -237,7 +271,7 @@ const cardProps = (card: CardT, sceneId: string): TextCardProps => {
     default:
       throw new Error(
         `${sceneId}: unknown card kind ${JSON.stringify((card as {kind: unknown}).kind)} — ` +
-          `card.kind must be 'chapter', 'narration' or 'word'`
+          `card.kind must be 'chapter', 'narration', 'word' or 'objects'`
       );
   }
 };
@@ -376,6 +410,12 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
         </AbsoluteFill>
       )}
 
+      {/* over-the-shoulder foreground silhouette (bible §6.8), painted over the cut art at native
+          frame scale — see `foreground.tsx` for why it does not scale with the shot. Under the money
+          card and the dialogue: it is scenery, and a balloon must never end up behind it. Suppressed
+          while a full-screen card covers the scene, for the same reason the shots are. */}
+      {!artHidden && scene.foreground && <Foreground spec={scene.foreground} sceneId={scene.id} />}
+
       {/* No global overlays sit between the shots and the text any more: the mood grade, the warm
           bloom, the inset vignette and the top/bottom darkening gradient were all whole-frame washes
           over a flat-vector look that is supposed to read bright and per-scene keyed. The bible allows
@@ -447,12 +487,12 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
         );
       })}
 
-      {/* full-screen text card (bible §6.1/§6.2) — narration beat, single dramatic word, or the
-          chapter card. LAST in the stack because it is full-screen and opaque: it covers the art, the
-          money card and any balloon for exactly as long as it holds. */}
+      {/* full-screen card (bible §6.1/§6.2/§6.6) — narration beat, single dramatic word, the chapter
+          card, or the object showcase. LAST in the stack because it is full-screen and opaque: it
+          covers the art, the money card and any balloon for exactly as long as it holds. */}
       {scene.card && (
         <Sequence from={0} durationInFrames={cardFrames}>
-          <TextCard {...cardProps(scene.card, scene.id)} />
+          {cardElement(scene.card, scene.id)}
         </Sequence>
       )}
 

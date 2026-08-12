@@ -26,7 +26,7 @@ import {AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig} from 'remoti
 import {CRAYON_FONT, CRAYON_SUBTITLE_RATIO, CRAYON_TEXT_SLANT_DEG, INK, PAPER_WHITE} from './crayonStyle';
 // measure/wrap/fit + the delayRender font gate, shared with bubble.tsx (WO-12a). The arithmetic is
 // unchanged — it was tuned here against measured reference dimensions and simply moved out.
-import {CRAYON_TEXT_WEIGHT, LINE_HEIGHT, fitText, useCrayonFace} from './crayonText';
+import {CRAYON_TEXT_WEIGHT, Fit, LINE_HEIGHT, balancedWrap, fitText, lineEm, useCrayonFace} from './crayonText';
 
 // ---------------------------------------------------------------------------
 // Entrance
@@ -53,10 +53,53 @@ const BOX_W_FRAC = 0.82;
 /** …nor this fraction of the frame height. Generous: the reference blocks are far shorter. */
 const BOX_H_FRAC = 0.62;
 
-/** Cap sizes, as a fraction of frame height. Reference: narration ≈0.12, chapter title ≈0.13, "It" ≈0.13. */
+/** Cap sizes, as a fraction of frame height. Reference: narration ≈0.12, "It" ≈0.13. */
 const NARRATION_MAX_FRAC = 0.12;
-const CHAPTER_TITLE_MAX_FRAC = 0.13;
 const WORD_MAX_FRAC = 0.13;
+
+// ---------------------------------------------------------------------------
+// Chapter title size — WO-19.
+//
+// WHY THIS IS NOT A PLAIN `maxFontSize` ANY MORE. The chapter title used to be fitted exactly like
+// the narration line: "as large as the box allows, capped at 0.13 of frame height". Re-measuring the
+// 4:05 reference cell directly (`depression_montage_verified.jpg`, x 616–924 / y 152–326, ink =
+// luma > 110) gives title ink 0.5649 w × 0.1322 h over subtitle ink 0.7662 w × 0.0977 h — and our
+// card, set on the reference's OWN string, measured 0.5245 w × 0.1204 h. i.e. the same shapes, ~7%
+// small, because 0.13 h was the only thing setting the size and Caveat's advance width at that size
+// simply does not reach the anchor.
+//
+// The height cap ALSO makes the title length-dependent in the wrong direction: it hands every title
+// the same type size, so a short one ("The Cotton Store", the string COMPARISON measured at
+// **0.425 w**) sets far narrower than the anchor while a long one runs past it. §7's anchor is a
+// WIDTH — "chapter title ≈ 0.565 w" — so the title is now set TO that measure and the height follows,
+// which is what makes titles of different lengths read at one confident weight on the frame.
+//
+// (COMPARISON §3 fix #9 blamed the subtitle: "our 45-character subtitle wraps to two lines, and
+// because title and subtitle are size-locked at 0.75, the wrap scales the whole block down". That is
+// NOT what happens. Measured: `fitText` sizes that subtitle at 2 lines × 0.75 of a 140.4 px title,
+// which fits its box with room to spare, so the pair-scaling below never fires and the title lands at
+// exactly the cap either way. The cap was the whole miss; the subtitle was a bystander.)
+// ---------------------------------------------------------------------------
+
+/** The measured anchor (bible §7): the reference's chapter title fills 0.565 of frame width. */
+const CHAPTER_TITLE_W_FRAC = 0.565;
+
+/**
+ * Ceiling on the title's type size, as a fraction of frame height. It is a GUARD, not the size: it
+ * exists only so a two-word title ("The Trap") cannot inflate to poster scale chasing the width
+ * anchor. 0.166 h is the size at which a 16-character title — the length of this pipeline's own
+ * chapter names, and the shortest that still reaches the anchor — sets at exactly 0.565 w, so every
+ * title from there up hits the anchor and only shorter ones are held back by this.
+ */
+const CHAPTER_TITLE_MAX_FRAC = 0.166;
+
+/**
+ * Floor below which a ONE-line title is judged too small to be a title, and the wrap goes to two
+ * lines instead. 0.105 h is where the title's own type size falls to the reference subtitle's
+ * (0.0977 h of ink ≈ 0.105 h set) — a title that sets smaller than a subtitle is a broken hierarchy,
+ * which is the only reason to spend a second line.
+ */
+const CHAPTER_TITLE_MIN_FRAC = 0.105;
 
 /** Gap between the chapter title block and its subtitle, in title-em. Reference pitch 27 cell px. */
 const CHAPTER_GAP_EM = 0.18;
@@ -131,7 +174,7 @@ export const TextCard: React.FC<TextCardProps> = (props) => {
     : 0;
 
   // Not laid out yet: the delayRender above guarantees no frame is captured in this state.
-  const body = fontReady ? renderBody(props, boxWidth, boxHeight, height) : null;
+  const body = fontReady ? renderBody(props, boxWidth, boxHeight, width, height) : null;
 
   return (
     <AbsoluteFill
@@ -149,10 +192,46 @@ export const TextCard: React.FC<TextCardProps> = (props) => {
   );
 };
 
+/**
+ * Set a chapter title TO the measured width anchor rather than to a box.
+ *
+ * Differs from `fitText` in the one way that matters: `fitText` maximises the type size and takes
+ * whichever line count gets it there, which — once the size is driven by a target width instead of a
+ * cap — would break every title onto two lines (halve the widest line and the size doubles). The
+ * reference sets its title on ONE line, so this takes the FEWEST lines that still set at title scale
+ * and only spends a second line when one would fall under `CHAPTER_TITLE_MIN_FRAC`.
+ *
+ * `boxWidth` never binds: the anchor (0.565 w) is inside BOX_W_FRAC (0.82 w) by construction, so the
+ * measure is always the narrower constraint. `boxHeight` still does, for a two-line title.
+ */
+const fitChapterTitle = (text: string, boxHeight: number, width: number, height: number): Fit => {
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  if (words.length === 0) {
+    throw new Error('textcard: refusing to lay out an empty chapter title');
+  }
+  const measure = width * CHAPTER_TITLE_W_FRAC;
+  const ceiling = height * CHAPTER_TITLE_MAX_FRAC;
+  const floor = height * CHAPTER_TITLE_MIN_FRAC;
+  let fit: Fit | null = null;
+  for (let n = 1; n <= Math.min(CHAPTER_TITLE_MAX_LINES, words.length); n++) {
+    const lines = balancedWrap(words, n, WEIGHT);
+    if (!lines) continue;
+    const widestEm = Math.max(...lines.map((l) => lineEm(l, WEIGHT)));
+    const fontSize = Math.min(ceiling, measure / widestEm, boxHeight / (n * LINE_HEIGHT));
+    fit = {lines, fontSize, widestEm};
+    if (fontSize >= floor) break; // fewest lines that still set at title scale
+  }
+  if (!fit) {
+    throw new Error(`textcard: could not lay out chapter title ${JSON.stringify(text)}`);
+  }
+  return fit;
+};
+
 const renderBody = (
   props: TextCardProps,
   boxWidth: number,
   boxHeight: number,
+  width: number,
   height: number
 ): React.ReactNode => {
   if (props.kind === 'narration' || props.kind === 'word') {
@@ -174,21 +253,21 @@ const renderBody = (
   // 23 cell px / 0.565 frame wide vs subtitle 17 cell px / 0.766 frame wide for 36 chars), not the
   // 0.5 the bible states. This file deliberately obeys the shared token rather than forking it —
   // if the token is retuned in crayonStyle.ts, this card follows automatically.
-  const title = fitText(props.title, {
-    who: 'textcard',
-    maxLines: CHAPTER_TITLE_MAX_LINES,
-    maxFontSize: height * CHAPTER_TITLE_MAX_FRAC,
-    boxWidth,
-    boxHeight: boxHeight * 0.6,
-    weight: WEIGHT,
-  });
+  //
+  // WO-19: both halves are fitted against the WHOLE box height, not a 0.6 / 0.4 pre-partition of it.
+  // The partition was a second, blunter copy of the joint clamp a few lines below — and a harmful one:
+  // a two-line subtitle allowed 0.4 of the box came out at 107 px where the ratio wanted 134 px, so the
+  // pair-scaling dragged the title down with it and "The Cotton Store" set at 0.432 w instead of the
+  // 0.565 anchor. Vertical fit is `blockHeight()`'s job, once, on the assembled block; each half only
+  // needs its own line count and the ratio.
+  const title = fitChapterTitle(props.title, boxHeight, width, height);
   const subWrap = fitText(props.subtitle, {
     who: 'textcard',
     maxLines: CHAPTER_SUB_MAX_LINES,
     // fit at the ratio first; the shared scale below is what actually enforces the box
     maxFontSize: title.fontSize * CRAYON_SUBTITLE_RATIO,
     boxWidth,
-    boxHeight: boxHeight * 0.4,
+    boxHeight,
     weight: WEIGHT,
   });
 
