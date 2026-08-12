@@ -291,6 +291,187 @@ export const Ceiling: React.FC<{y?: number; lights?: number; fill?: string}> = (
 };
 
 /**
+ * A classical colonnade — the institutional front (bank, courthouse, exchange, treasury).
+ *
+ * The single most repeated exterior in a finance explainer, and the reference's own
+ * (`LuEcoqizj0o/thumb.png` is a stone frontage of regular bays). Drawn as a DARK RECESS with columns
+ * standing in front of it, which is what makes a portico read as a covered space rather than as
+ * stripes painted on a wall — and the recess is also where a doorway, a queue or a shadowed figure
+ * can be laid without inventing another plane.
+ *
+ * TONE: stone is the scene's LIGHT material (`card`), not its ground colour, because a portico is
+ * lighter than everything around it in every reference frame that has one. The recess is the deep
+ * rung, the flutes are ink lines rather than a second fill.
+ */
+export const Colonnade: React.FC<{
+  x: number; y: number; w: number; h: number; n: number;
+  fill?: string; recess?: string; flutes?: number;
+}> = ({x, y, w, h, n, fill, recess, flutes = 4}) => {
+  const tn = useSceneTones();
+  const stone = fill ?? tn.card;
+  const dark = recess ?? shade(tn.deep, -1);
+  const bay = w / n;
+  const colW = bay * 0.46;
+  const capH = Math.max(14, h * 0.07);
+  const baseH = Math.max(12, h * 0.055);
+  return (
+    <g>
+      <rect x={x} y={y} width={w} height={h} fill={dark} stroke={INK} strokeWidth={STROKE} />
+      {/* the stylobate the columns stand on — without it the shafts float on the recess */}
+      <rect x={x - 10} y={y + h - baseH * 0.5} width={w + 20} height={baseH * 0.9} fill={shade(stone, -1)}
+        stroke={INK} strokeWidth={STROKE_THIN} />
+      {Array.from({length: n}, (_, i) => {
+        const cx = x + (i + 0.5) * bay;
+        const sx = cx - colW / 2;
+        const shaftTop = y + capH, shaftBot = y + h - baseH;
+        return (
+          <g key={i}>
+            {/* shaft */}
+            <rect x={sx} y={shaftTop} width={colW} height={shaftBot - shaftTop} fill={stone}
+              stroke={INK} strokeWidth={STROKE_THIN} />
+            {/* flutes: ink lines, never a second fill — a fluted shaft with painted stripes reads as
+                a barber's pole at frame scale */}
+            <g stroke={INK} strokeWidth={STROKE_THIN * 0.5} opacity={0.4}>
+              {Array.from({length: flutes}, (_, k) => (
+                <line key={k} x1={sx + (colW * (k + 1)) / (flutes + 1)} y1={shaftTop + 8}
+                  x2={sx + (colW * (k + 1)) / (flutes + 1)} y2={shaftBot - 8} />
+              ))}
+            </g>
+            {/* capital: echinus + abacus, both wider than the shaft */}
+            <rect x={sx - colW * 0.13} y={y + capH * 0.42} width={colW * 1.26} height={capH * 0.6}
+              fill={shade(stone, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
+            <rect x={sx - colW * 0.2} y={y} width={colW * 1.4} height={capH * 0.46}
+              fill={stone} stroke={INK} strokeWidth={STROKE_THIN} />
+            {/* base */}
+            <rect x={sx - colW * 0.16} y={shaftBot} width={colW * 1.32} height={baseH}
+              fill={shade(stone, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
+          </g>
+        );
+      })}
+    </g>
+  );
+};
+
+/**
+ * A flight of steps seen head-on, narrowing with height so the flight reads as receding.
+ *
+ * `inset` is how much narrower the TOP tread is than the bottom one; 0 gives a plain stair, and a
+ * positive value gives the splayed civic flight every institutional frontage sits on. Drawn top
+ * tread first so each nearer (wider) step overlaps the one behind it, which is the only reason a
+ * flat stair reads as a stair rather than as a stack of bars.
+ */
+export const Steps: React.FC<{
+  x0: number; x1: number; yTop: number; yBottom: number; n?: number; inset?: number; fill?: string;
+}> = ({x0, x1, yTop, yBottom, n = 6, inset = 0, fill}) => {
+  const tn = useSceneTones();
+  const tread = fill ?? tn.card;
+  const midX = (x0 + x1) / 2;
+  const hwBot = (x1 - x0) / 2;
+  const hwTop = hwBot - inset;
+  if (hwTop <= 0) {
+    throw new Error(`Steps inset ${inset} is wider than the flight (${hwBot} half-width): the top ` +
+      `tread would have negative width`);
+  }
+  const out: React.ReactNode[] = [];
+  for (let i = n - 1; i >= 0; i--) {
+    const kT = (i + 1) / n, kB = i / n;                       // 0 at the bottom step
+    const yT = yBottom + (yTop - yBottom) * kT;
+    const yB = yBottom + (yTop - yBottom) * kB;
+    const hwT = hwBot + (hwTop - hwBot) * kT;
+    const hwB = hwBot + (hwTop - hwBot) * kB;
+    // alternate a rung so a deep flight has treads instead of one wedge of colour
+    const face = i % 2 ? tread : shade(tread, -1);
+    out.push(
+      <g key={i}>
+        <path d={`M ${midX - hwT} ${yT} L ${midX + hwT} ${yT} L ${midX + hwB} ${yB} L ${midX - hwB} ${yB} Z`}
+          fill={face} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+        {/* the nosing: the one line that separates a tread from its riser */}
+        <line x1={midX - hwT} y1={yT} x2={midX + hwT} y2={yT} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+      </g>
+    );
+  }
+  return <g>{out}</g>;
+};
+
+/**
+ * An overhead truss / gantry — a factory roof rig, a studio lighting grid, a stage bar.
+ *
+ * Two chords with a zigzag web between them, plus drop rods at intervals for whatever the template
+ * hangs off it. Structure, so it never animates: only the things a caller hangs on it do.
+ */
+export const TrussRig: React.FC<{
+  x0: number; x1: number; y: number; h?: number; bays?: number; drops?: number; dropH?: number;
+  fill?: string;
+}> = ({x0, x1, y, h = 56, bays = 14, drops = 0, dropH = 60, fill}) => {
+  const tn = useSceneTones();
+  const steel = fill ?? tn.deep;
+  const step = (x1 - x0) / bays;
+  return (
+    <g>
+      <rect x={x0} y={y} width={x1 - x0} height={h * 0.22} fill={steel} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+      <rect x={x0} y={y + h * 0.78} width={x1 - x0} height={h * 0.22} fill={steel} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+      <g stroke={INK} strokeWidth={STROKE_THIN * 0.9} fill="none" opacity={0.9}>
+        {Array.from({length: bays}, (_, i) => (
+          <path key={i} d={`M ${x0 + i * step} ${y + h * 0.22} L ${x0 + (i + 0.5) * step} ${y + h * 0.78}
+                            L ${x0 + (i + 1) * step} ${y + h * 0.22}`} />
+        ))}
+      </g>
+      {Array.from({length: drops}, (_, i) => {
+        const dx = x0 + ((i + 0.5) * (x1 - x0)) / drops;
+        return <rect key={'d' + i} x={dx - 5} y={y + h} width={10} height={dropH} fill={steel}
+          stroke={INK} strokeWidth={STROKE_THIN * 0.6} />;
+      })}
+    </g>
+  );
+};
+
+/**
+ * A run of parallel pipework with periodic flanges — factory wall, plant room, utility basement,
+ * ship's engine room.
+ *
+ * `x0`/`x1` are always ALONG the run and `y` is always the cross-axis position of the first pipe,
+ * so a riser (`dir="v"`) takes `x0`/`x1` as its TOP and BOTTOM and `y` as its x. Stated because it
+ * reads wrong at the call site otherwise.
+ *
+ * Pipes alternate a tone rung so a bank of them reads as several services rather than as one striped
+ * slab, and each pipe carries its own ink outline so the run keeps its edge count up at 1280.
+ */
+export const PipeRun: React.FC<{
+  x0: number; x1: number; y: number; n?: number; gap?: number; th?: number; flanges?: number;
+  fill?: string; dir?: 'h' | 'v';
+}> = ({x0, x1, y, n = 3, gap = 30, th = 22, flanges = 6, fill, dir = 'h'}) => {
+  const tn = useSceneTones();
+  const metal = fill ?? tn.body;
+  const len = x1 - x0;
+  return (
+    <g>
+      {Array.from({length: n}, (_, i) => {
+        const off = i * gap;
+        const skin = shade(metal, (i % 3) - 1);
+        const px = dir === 'h' ? x0 : y + off;
+        const py = dir === 'h' ? y + off : x0;
+        const w = dir === 'h' ? len : th;
+        const hh = dir === 'h' ? th : len;
+        return (
+          <g key={i}>
+            <rect x={dir === 'h' ? px : px} y={dir === 'h' ? py : py} width={w} height={hh}
+              rx={th * 0.28} fill={skin} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+            {Array.from({length: flanges}, (_, k) => {
+              const t = (k + 0.5) / flanges;
+              return dir === 'h'
+                ? <rect key={k} x={x0 + len * t - th * 0.22} y={py - th * 0.16} width={th * 0.44}
+                    height={th * 1.32} fill={shade(skin, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+                : <rect key={k} x={px - th * 0.16} y={x0 + len * t - th * 0.22} width={th * 1.32}
+                    height={th * 0.44} fill={shade(skin, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />;
+            })}
+          </g>
+        );
+      })}
+    </g>
+  );
+};
+
+/**
  * A run of glazing — a curtain wall, an office window, a shopfront, a living-room window.
  *
  * `pane` fills the opening; pass `null` to leave it unpainted, which is how a caller puts something
@@ -430,6 +611,34 @@ export const Cone: React.FC<{x: number; y: number; s?: number}> = ({x, y, s = 1}
       <path d={`M ${x} ${y - 56 * s} L ${x + 26 * s} ${y} L ${x - 26 * s} ${y} Z`} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
       <rect x={x - 20 * s} y={y - 34 * s} width={40 * s} height={10 * s} fill={PAPER_WHITE} />
       <rect x={x - 34 * s} y={y - 6 * s} width={68 * s} height={12 * s} rx={3 * s} fill={tn.accentDeep} stroke={INK} strokeWidth={STROKE_THIN} />
+    </g>
+  );
+};
+
+/**
+ * A hand-held placard on a stick — picket line, breadline, protest, bank run.
+ *
+ * The reference uses one in BOTH captured thumbnails (`LuEcoqizj0o` "GIVE US WORK, NOT HUNGER",
+ * `KE-WJevx-7c` "WE GOT SOLD OUT"): a pale board tilted a few degrees above a grey crowd, carrying
+ * two short lines. The lettering is `SerifWords` geometry rather than real text for the same reason
+ * everything else here is — a template is topic-agnostic and the episode's words arrive as overlays.
+ *
+ * `y` is where the holder's HANDS are, not the board: a placard whose pole stops in mid-air is the
+ * commonest way this prop goes wrong.
+ */
+export const Placard: React.FC<{
+  x: number; y: number; w?: number; h?: number; tilt?: number; poleH?: number; seed?: number;
+  fill?: string;
+}> = ({x, y, w = 190, h = 120, tilt = -7, poleH = 150, seed = 0, fill}) => {
+  const tn = useSceneTones();
+  const board = fill ?? PAPER_WHITE;
+  const topY = y - poleH;
+  return (
+    <g transform={`rotate(${tilt} ${x} ${y})`}>
+      <rect x={x - 7} y={topY} width={14} height={poleH} fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      <rect x={x - w / 2} y={topY - h} width={w} height={h} fill={board} stroke={INK} strokeWidth={STROKE} />
+      <SerifWords x={x - w / 2 + w * 0.1} y={topY - h + h * 0.22} w={w * 0.8} h={h * 0.17} words={2} seed={seed * 7} />
+      <SerifWords x={x - w / 2 + w * 0.1} y={topY - h + h * 0.58} w={w * 0.8} h={h * 0.17} words={2} seed={seed * 11} />
     </g>
   );
 };
@@ -766,6 +975,107 @@ export const WallFrame: React.FC<{
 };
 
 /**
+ * A large flat chart — the subject of a frame rather than a prop on a wall.
+ *
+ * `WallFrame`'s `bars`/`line` art is a 150px picture; this is the whole board: axes with ticks,
+ * ruled gridlines, a labelled title block and a series big enough to be what the shot is ABOUT
+ * (bible §6 — the format's most repeated single-subject frame after the text card). It is also the
+ * content a studio backdrop screen carries, which is why it lives here rather than in one template.
+ *
+ * `crash` overlays the reference's signature red down-leg (`LuEcoqizj0o/thumb.png`,
+ * `KE-WJevx-7c/thumb.png` — a saturated polyline collapsing across a desaturated field), which is
+ * the one saturated note a `grey`-keyed chart scene gets.
+ *
+ * ANIMATION: `live` re-derives ONLY the newest column from a seeded step counter, exactly as
+ * `Monitor` does. One bar of ten changing on an ~4s clock is a single motion-locality cell, where
+ * re-deriving the whole series would repaint the frame's largest object.
+ */
+export const ChartPlot: React.FC<{
+  x: number; y: number; w: number; h: number; bars?: number; kind?: 'bars' | 'line' | 'area';
+  seed?: number; live?: boolean; ground?: string; crash?: boolean; grid?: number;
+}> = ({x, y, w, h, bars = 9, kind = 'bars', seed = 0, live = false, ground, crash = false, grid = 4}) => {
+  const f = useCurrentFrame();
+  const c = useSceneColors();
+  const tn = useSceneTones();
+  const face = ground ?? PAPER_WHITE;
+  const padL = w * 0.09, padB = h * 0.13, padT = h * 0.16, padR = w * 0.05;
+  const px = x + padL, py = y + padT;
+  const pw = w - padL - padR, ph = h - padT - padB;
+  const k = live ? stepIndex(f, seed * 2.3 + 7, 120) : 0;
+  // the newest column is the only one that re-derives; everything left of it is fixed by its seed
+  const val = (i: number) => 0.18 + rnd(seed * 61 + i * 5 + (i === bars - 1 ? k : 0)) * 0.74;
+  const bw = pw / bars;
+  return (
+    <g>
+      <rect x={x} y={y} width={w} height={h} fill={face} stroke={INK} strokeWidth={STROKE} />
+      {/* title block — a chart with no heading reads as a window with bars in it */}
+      <SerifWords x={x + padL} y={y + h * 0.045} w={pw * 0.62} h={h * 0.062} words={2} seed={seed * 3} />
+      <line x1={x + padL} y1={y + padT * 0.78} x2={x + w - padR} y2={y + padT * 0.78}
+        stroke={INK} strokeWidth={STROKE_THIN * 0.7} opacity={0.5} />
+      {/* Ruled gridlines + their value ticks down the left axis, and a VERTICAL rule per category.
+          The vertical ones are not decoration: flat fill counts pixels equal to their RIGHT
+          neighbour, so a horizontal rule contributes almost nothing to it while a vertical rule
+          breaks every row it crosses. A plot ruled only horizontally measured 99.3% flat over its
+          upper half — the emptiest cell in any template in this file — with the ruling in place. */}
+      <g opacity={0.32}>
+        {Array.from({length: grid}, (_, i) => {
+          const gy = py + (ph * (i + 1)) / (grid + 1);
+          return (
+            <g key={i}>
+              <line x1={px} y1={gy} x2={px + pw} y2={gy} stroke={INK} strokeWidth={STROKE_THIN * 0.5} />
+              <rect x={x + padL * 0.24} y={gy - 3} width={padL * 0.5} height={6} fill={INK} />
+            </g>
+          );
+        })}
+        {Array.from({length: bars - 1}, (_, i) => {
+          const gx = px + (pw * (i + 1)) / bars;
+          return (
+            <g key={'v' + i}>
+              <line x1={gx} y1={py} x2={gx} y2={py + ph} stroke={INK} strokeWidth={STROKE_THIN * 0.5} />
+              <rect x={gx - 3} y={py + ph} width={6} height={padB * 0.24} fill={INK} />
+            </g>
+          );
+        })}
+      </g>
+      {kind === 'bars' && Array.from({length: bars}, (_, i) => {
+        const bh = ph * val(i);
+        return <rect key={i} x={px + i * bw + bw * 0.16} y={py + ph - bh} width={bw * 0.68} height={bh}
+          fill={i === bars - 1 ? c.accent : shade(tn.body, i % 2)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />;
+      })}
+      {kind !== 'bars' && (() => {
+        const pts = Array.from({length: bars}, (_, i) =>
+          [px + i * (pw / (bars - 1)), py + ph - ph * val(i)] as [number, number]);
+        const line = pts.map((p) => `${p[0]},${p[1]}`).join(' ');
+        return (
+          <g>
+            {kind === 'area' && (
+              <path d={`M ${px} ${py + ph} L ${pts.map((p) => `${p[0]} ${p[1]}`).join(' L ')} L ${px + pw} ${py + ph} Z`}
+                fill={shade(tn.body, 1)} stroke="none" />
+            )}
+            <polyline points={line} fill="none" stroke={INK} strokeWidth={STROKE * 0.7} strokeLinejoin="round" />
+            {pts.map((p, i) => <circle key={i} cx={p[0]} cy={p[1]} r={STROKE * 0.7} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />)}
+          </g>
+        );
+      })()}
+      {/* axes last, so a series never paints over its own baseline */}
+      <line x1={px} y1={py} x2={px} y2={py + ph} stroke={INK} strokeWidth={STROKE * 0.8} />
+      <line x1={px} y1={py + ph} x2={px + pw} y2={py + ph} stroke={INK} strokeWidth={STROKE * 0.8} />
+      {/* category labels under the baseline */}
+      <TextLines x={px + bw * 0.2} y={py + ph + padB * 0.3} w={pw * 0.9} n={1} gap={9} th={5} seed={seed * 9} opacity={0.55} />
+      {crash && (
+        <polyline
+          points={Array.from({length: 6}, (_, i) => {
+            const t = i / 5;
+            const jag = i % 2 ? 0.1 : 0;
+            return `${px + pw * t},${py + ph * (0.14 + 0.72 * t - jag)}`;
+          }).join(' ')}
+          fill="none" stroke={c.accent} strokeWidth={STROKE * 1.5} strokeLinejoin="round" strokeLinecap="round" />
+      )}
+    </g>
+  );
+};
+
+/**
  * Blocks of set type, drawn as geometry rather than as text.
  *
  * WHY NOT REAL TEXT. Templates are TOPIC-AGNOSTIC archetypes — the episode's actual words arrive
@@ -928,6 +1238,69 @@ export const SeatedRow: React.FC<{
             view={view}
             pal={DIM}
             showFace={false}
+            frame={alive ? f : 0}
+            idle={alive ? 'subtle' : 'none'}
+          />
+        );
+      })}
+    </g>
+  );
+};
+
+/**
+ * A QUEUE — a line of grey figures receding along a diagonal, near-large to far-small.
+ *
+ * `CrowdRow` places a row at ONE depth, which is a chorus line; a queue is the format's other crowd
+ * shape entirely (the breadline, the bank run, the line at the door — bible §6.5 and the reference's
+ * depression montage) and it is the one that carries real depth in a flat frame, because the scale
+ * ramp does the work a perspective transform is not allowed to do.
+ *
+ * Drawn FAR-TO-NEAR so each nearer figure occludes the one behind it, which is the whole reason a
+ * line of overlapping bodies reads as a queue and not as a scatter. Scale falls on a mild curve
+ * rather than linearly, so the far end compresses the way a real line does.
+ *
+ * Motion: the same seeded minority as every other crowd here (`crowdAlive`), and only the NEAR half
+ * is eligible — a 0.3-scale body at the far end moves too few pixels to register as anything except
+ * an extra active cell on the lock grid.
+ *
+ * `faceScale` is the fix for a defect this project has now shipped twice: a `DIM` figure drawn near
+ * hero size with no face reads as a headless grey pill, not as a person (COMPARISON's thumbnail MISS
+ * #13, and `cityStreet`'s own "two grey boulders" note). A queue is the one crowd whose scale RANGE
+ * crosses that threshold inside a single call, so it cannot be a boolean the way `CrowdRow`'s is:
+ * every figure drawn at or above this scale gets a face, everything smaller stays featureless.
+ */
+export const CrowdColumn: React.FC<{
+  xNear: number; yNear: number; xFar: number; yFar: number; n: number;
+  scaleNear?: number; scaleFar?: number; seed?: number; facing?: number;
+  view?: 'front' | 'profile' | 'back'; alive?: number; faceScale?: number; expr?: Expr;
+}> = ({xNear, yNear, xFar, yFar, n, scaleNear = 1, scaleFar = 0.34, seed = 0, facing = 1,
+       view = 'profile', alive: aliveFrac, faceScale = 0.82, expr}) => {
+  const f = useCurrentFrame();
+  return (
+    <g>
+      {Array.from({length: n}, (_, i) => {
+        // t: 0 at the far end, 1 at the near end. i counts from the far end so the draw order is
+        // back-to-front and React's key order IS the paint order.
+        const t = n > 1 ? i / (n - 1) : 1;
+        const s = seed * 311 + i * 23;
+        const ease = Math.pow(t, 1.6);                 // the far end compresses, as a real line does
+        const scale = scaleFar + (scaleNear - scaleFar) * ease;
+        const jitter = (rnd(s) - 0.5) * 0.5;           // ±half a slot, so the line is not a comb
+        const x = xFar + (xNear - xFar) * (ease + jitter * (1 / n));
+        const y = yFar + (yNear - yFar) * ease;
+        const alive = t > 0.5 && crowdAlive(s, aliveFrac);
+        return (
+          <StickFigure
+            key={i}
+            pose={A.stand(0)}
+            x={x}
+            y={y}
+            scale={scale}
+            facing={facing}
+            view={view}
+            pal={DIM}
+            showFace={scale >= faceScale}
+            expr={expr}
             frame={alive ? f : 0}
             idle={alive ? 'subtle' : 'none'}
           />

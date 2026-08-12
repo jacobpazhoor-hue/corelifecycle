@@ -3,7 +3,7 @@ import {useCurrentFrame, useVideoConfig} from 'remotion';
 import {StickFigure, LIGHT, DIM} from './figure';
 import {FACES} from './faces';
 import * as A from './actions';
-import {stepIndex} from './anim';
+import {blinkOn, stepIndex} from './anim';
 import {keyedTemplates, useSceneColors} from './stage';
 import {INK, PAPER_WHITE, STROKE, STROKE_THIN, shade} from './crayonStyle';
 import {
@@ -12,6 +12,8 @@ import {
   // the interior kit — authored here by WO-8f, promoted into the shared library by WO-8g
   Ceiling, Glazing, Desk, Monitor, Keyboard, Chair, Papers, DeskPhone, Portrait, WallFrame,
   SerifWords, TextLines, SeatedRow, Plant,
+  // the civic / industrial / presentation tier (WO-8h)
+  Colonnade, Steps, TrussRig, PipeRun, ChartPlot, Placard, CrowdColumn, RopeLine, Trolley,
 } from './setdressing';
 
 // ============================================================================
@@ -79,6 +81,33 @@ const ClockHand: React.FC<{cx: number; cy: number; r: number; f: number}> = ({cx
   const a = ((Math.floor(f / 30) % 60) * 6 - 90) * (Math.PI / 180);
   return <line x1={cx} y1={cy} x2={cx + Math.cos(a) * r} y2={cy + Math.sin(a) * r}
     stroke={INK} strokeWidth={STROKE_THIN} strokeLinecap="round" />;
+};
+
+/**
+ * A dentil cornice — a moulded band with a run of small blocks under it (WO-8h).
+ *
+ * Used by three of the WO-8h interiors, all for the same measured reason. Flat fill counts pixels
+ * equal to their RIGHT neighbour, so a wall/ceiling junction drawn as horizontal mouldings costs
+ * nothing and buys nothing: per-cell maps of `courtHearing`, `chartBoard` and `closeUpPortrait` all
+ * put their EMPTIEST band across the top of the frame, at 91-97% flat, because everything up there
+ * was horizontal. A row of forty small blocks is forty vertical edge pairs, and it is also just
+ * what the top of a panelled room looks like.
+ */
+const Dentils: React.FC<{x0: number; x1: number; y: number; n: number; h?: number; fill?: string}> =
+({x0, x1, y, n, h = 22, fill}) => {
+  const tn = useSceneTones();
+  const stone = fill ?? tn.card;
+  const step = (x1 - x0) / n;
+  return (
+    <g>
+      <rect x={x0} y={y - h * 0.7} width={x1 - x0} height={h * 0.7} fill={shade(stone, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+      {Array.from({length: n}, (_, i) => (
+        <rect key={i} x={x0 + i * step + step * 0.22} y={y} width={step * 0.56} height={h}
+          fill={shade(stone, -2)} stroke={INK} strokeWidth={2.2} />
+      ))}
+      <rect x={x0} y={y + h} width={x1 - x0} height={h * 0.5} fill={stone} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+    </g>
+  );
 };
 
 // ---------------------------------------------------------------------------
@@ -1023,6 +1052,1188 @@ const NewsMontage: React.FC = () => {
   );
 };
 
+// ===========================================================================
+// WO-8h — SEVEN MORE ENVIRONMENTS.
+//
+// WHY. WO-13 built a full sample episode and compared it frame-by-frame against the reference
+// (docs/research/crayon/COMPARISON.md). Writing, typography, camera, sound and per-frame art all
+// reached reference standard; SCENE VARIETY did not, and it is the one a viewer experiences:
+// "at the reference montages' own sampling density we show 4 distinct set-ups in 8 samples; both
+// their montages show 8 of 8", and 69% of our 30-second samples repeat a room already seen. Six
+// templates over 39 scenes is ~6 reuses each. These seven take the set to thirteen.
+//
+// COLOUR KEYS ARE PART OF THE FIX. COMPARISON MISS #7 is that the first six share only THREE keys,
+// and MISS #5 that the set measures 0.209 mean saturation against the reference's 0.308-0.646. The
+// first six never reach `gold` or `alarm` at all. These seven use both, so the thirteen now cover
+// all five keys — see the SCENE_KEY_BY_TEMPLATE block in crayonStyle.ts for the per-template reason.
+//
+// Same rules as the first six, restated because each one has already been broken once in this
+// project: flat vector with NO gradient anywhere (Chromium dithers every gradient it paints);
+// nothing takes `frame` for whole-frame motion; localised element animation IS wanted, on a seeded
+// MINORITY of a crowd and a few props, never a whole row across the frame; reuse setdressing.tsx
+// before inventing; grey anonymous crowd + colour hero.
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// 7. bankExterior — institutional facade at street level: columns, stone, steps, signage, passers-by
+//
+// Keyed `gold`, and it is the first explainer template to reach that key. The reference's own
+// institutional frontage (LuEcoqizj0o/thumb.png) is a stone block of regular bays, and the format
+// hits this environment in two opposite moods — the institution at its height and the institution
+// with a queue outside it. `gold` ("ceremony, money, applause, the good years") is the first; the
+// second is what `crowdQueue` below is for, keyed `grey`. Splitting the moods across two templates
+// rather than one desaturating template is what the reference does with its own facades.
+//
+// Composition: a portico between two solid wings, a splayed civic flight down to the plaza, and a
+// skyline showing over the parapet. The colonnade is a DARK RECESS with columns in front of it, so
+// the doors and the small queue on the steps sit inside a covered space rather than on a flat wall.
+// ---------------------------------------------------------------------------
+const BANK_STYLO = 762;   // top of the steps / bottom of the columns
+const BANK_PLAZA = 902;   // plaza paving line
+
+/** The bank's flag. The one animated thing in the frame's top third: a 150×62 unit cloth whose two
+ *  free corners run on a slow sine, which can only ever touch the single motion-locality cell it
+ *  sits in. Nothing else up there moves, and the mast does not. */
+const Flag: React.FC<{x: number; y: number; f: number}> = ({x, y, f}) => {
+  const c = useSceneColors();
+  const tn = useSceneTones();
+  const w1 = Math.sin(f * 0.075) * 9;
+  const w2 = Math.sin(f * 0.075 + 1.9) * 9;
+  return (
+    <g>
+      <rect x={x - 5} y={y} width={10} height={190} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      <circle cx={x} cy={y - 8} r={9} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      <path d={`M ${x + 4} ${y + 6} L ${x + 154} ${y + 10 + w1} L ${x + 154} ${y + 70 + w2} L ${x + 4} ${y + 66} Z`}
+        fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+      <path d={`M ${x + 4} ${y + 26} L ${x + 154} ${y + 30 + w1 * 0.8}`} fill="none" stroke={PAPER_WHITE} strokeWidth={7} />
+      <path d={`M ${x + 4} ${y + 46} L ${x + 154} ${y + 50 + w2 * 0.8}`} fill="none" stroke={PAPER_WHITE} strokeWidth={7} />
+    </g>
+  );
+};
+
+/** A run of stone balusters under a rail — the parapet of a civic building, and the cheapest honest
+ *  density available on a skyline edge: forty small outlined shapes across the top of the frame. */
+const Balustrade: React.FC<{x0: number; x1: number; y: number; h: number; n: number}> =
+({x0, x1, y, h, n}) => {
+  const tn = useSceneTones();
+  const step = (x1 - x0) / n;
+  return (
+    <g>
+      <rect x={x0 - 10} y={y + h} width={x1 - x0 + 20} height={16} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+      {Array.from({length: n}, (_, i) => (
+        <path key={i} d={`M ${x0 + i * step + step * 0.18} ${y}
+                          L ${x0 + i * step + step * 0.82} ${y}
+                          L ${x0 + i * step + step * 0.66} ${y + h * 0.5}
+                          L ${x0 + i * step + step * 0.82} ${y + h}
+                          L ${x0 + i * step + step * 0.18} ${y + h}
+                          L ${x0 + i * step + step * 0.34} ${y + h * 0.5} Z`}
+          fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.6} strokeLinejoin="round" />
+      ))}
+      <rect x={x0 - 10} y={y - 14} width={x1 - x0 + 20} height={16} fill={tn.card} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+    </g>
+  );
+};
+
+/** One solid stone wing beside the portico: rusticated base, a grid of tall windows, a string course. */
+const BankWing: React.FC<{x: number; w: number; topY: number; seed: number}> = ({x, w, topY, seed}) => {
+  const tn = useSceneTones();
+  const stone = shade(tn.card, rnd(seed) > 0.5 ? 0 : -1);
+  return (
+    <g>
+      <rect x={x} y={topY} width={w} height={BANK_STYLO - topY} fill={stone} stroke={INK} strokeWidth={STROKE} />
+      {/* rustication: the horizontal joints that stop a stone wall reading as a colour field */}
+      <g stroke={INK} strokeWidth={STROKE_THIN * 0.55} opacity={0.35}>
+        {Array.from({length: 11}, (_, i) => (
+          <line key={i} x1={x} y1={topY + ((i + 1) * (BANK_STYLO - topY)) / 12}
+            x2={x + w} y2={topY + ((i + 1) * (BANK_STYLO - topY)) / 12} />
+        ))}
+      </g>
+      {/* Tall windows set into the stone as recesses, each with SASH BARS over it and a sill under
+          it. Without the bars each opening is one 130×270 void and a wing reads as three holes
+          punched in a wall — the same "too few, too large" failure `cityStreet`'s Facade logged
+          against storey-high shopfront panes. */}
+      <UnitWall x={x + 34} y={topY + 78} w={w - 68} h={272} cols={3} rows={1}
+        handle={false} fill={shade(tn.deep, -1)} carcass={shade(stone, -1)} />
+      {Array.from({length: 3}, (_, i) => {
+        const ow = (w - 68) / 3;
+        const ox = x + 34 + i * ow;
+        return (
+          <g key={i}>
+            <Glazing x={ox + 6} y={topY + 84} w={ow - 12} h={260} bays={2} rows={4} pane={null} sill={false} />
+            <rect x={ox + 8} y={topY + 356} width={ow - 16} height={16}
+              fill={shade(stone, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          </g>
+        );
+      })}
+      <rect x={x - 6} y={topY + 400} width={w + 12} height={20} fill={shade(stone, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      {/* a bronze plaque on the pier, which is the only signage a bank wing actually carries */}
+      <rect x={x + w * 0.5 - 62} y={topY + 470} width={124} height={78} fill={shade(tn.body, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <TextLines x={x + w * 0.5 - 46} y={topY + 492} w={92} n={4} gap={13} th={4} seed={seed * 3} opacity={0.65} />
+    </g>
+  );
+};
+
+const BankExterior: React.FC = () => {
+  const f = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const c = useSceneColors();
+  const tn = useSceneTones();
+  return (
+    <Frame>
+      {/* --- the street the bank stands in. The frontage deliberately stops short of both frame
+              edges: the first render ran the wings out to x=120/1800 and the only thing visible in
+              the gutters was a sliver of the band behind, which read as horizontal stripes rather
+              than as buildings. Two hundred units of gutter at each edge is enough for the flanking
+              blocks to read, and it is what puts the building IN a street. Both near bands stand on
+              the plaza line, so nothing floats above the paving. --- */}
+      <BuildingBand baseY={846} x0={-80} x1={2000} n={10} seed={53} depth={2} minH={220} maxH={470} opacity={0.55} />
+      <BuildingBand baseY={BANK_PLAZA} x0={-190} x1={230} n={2} seed={17} depth={1} minH={400} maxH={620} />
+      <BuildingBand baseY={BANK_PLAZA} x0={1690} x1={2110} n={2} seed={29} depth={1} minH={420} maxH={640} />
+
+      {/* --- the wings --- */}
+      <BankWing x={196} w={440} topY={286} seed={3} />
+      <BankWing x={1284} w={440} topY={286} seed={8} />
+
+      {/* --- the portico. Recess and columns first, then the doors inside it, then the entablature
+              and pediment over the top, so the roof always occludes the shafts. --- */}
+      <Colonnade x={652} y={300} w={616} h={BANK_STYLO - 300} n={6} flutes={4} />
+      {/* the doors, standing in the recess between the middle pair of columns */}
+      <rect x={874} y={470} width={176} height={292} fill={shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE} />
+      <rect x={890} y={496} width={68} height={266} fill={shade(tn.body, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={966} y={496} width={68} height={266} fill={shade(tn.body, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      {[906, 982].map((dx, i) => (
+        <g key={i}>
+          <rect x={dx} y={516} width={36} height={92} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+          <rect x={dx} y={624} width={36} height={92} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+        </g>
+      ))}
+      <circle cx={952} cy={636} r={8} fill={c.accent} />
+      <circle cx={972} cy={636} r={8} fill={c.accent} />
+      {/* a fanlight over the doors */}
+      <path d="M 874 470 Q 962 408 1050 470 Z" fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      {[-1, 0, 1].map((k, i) => (
+        <line key={i} x1={962} y1={470} x2={962 + k * 74} y2={470 - (k === 0 ? 58 : 28)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      ))}
+
+      {/* --- entablature across the whole frontage: architrave, lettered frieze, projecting cornice --- */}
+      <rect x={180} y={286} width={1560} height={22} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={180} y={232} width={1560} height={56} fill={tn.card} stroke={INK} strokeWidth={STROKE_THIN} />
+      <SerifWords x={244} y={244} w={470} h={32} words={3} seed={11} />
+      <SerifWords x={1210} y={244} w={470} h={32} words={2} seed={13} />
+      <rect x={164} y={198} width={1592} height={40} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE} />
+      {/* dentils under the cornice — small blocks, the classic detail and cheap density */}
+      {Array.from({length: 38}, (_, i) => (
+        <rect key={i} x={180 + i * 41} y={238} width={22} height={16} fill={shade(tn.card, -2)} stroke={INK} strokeWidth={2.2} />
+      ))}
+
+      {/* --- pediment over the portico, with a carved roundel in the tympanum --- */}
+      <path d="M 566 198 L 960 62 L 1356 198 Z" fill={tn.card} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+      <path d="M 620 190 L 960 74 L 1300 190 Z" fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+      <circle cx={960} cy={152} r={38} fill={shade(tn.body, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      {Array.from({length: 12}, (_, i) => {
+        const a = (i * Math.PI) / 6;
+        return <line key={i} x1={960 + Math.cos(a) * 22} y1={152 + Math.sin(a) * 22}
+          x2={960 + Math.cos(a) * 36} y2={152 + Math.sin(a) * 36} stroke={INK} strokeWidth={2.6} />;
+      })}
+      {/* parapet balustrades over the wings, and the flag standing on the right one. The mast base
+          is deliberately BELOW the balustrade rail (it rises from behind the parapet) and the whole
+          cloth is inside the frame: the first render put the mast top at y=-46 and the flag rendered
+          as a cropped red smear against the top edge. */}
+      <Balustrade x0={204} x1={628} y={148} h={44} n={12} />
+      <Balustrade x0={1292} x1={1716} y={148} h={44} n={12} />
+      <Flag x={1584} y={30} f={f} />
+
+      {/* --- the flight, and the plaza it lands on --- */}
+      <Steps x0={498} x1={1424} yTop={BANK_STYLO} yBottom={BANK_PLAZA} n={7} inset={132} />
+      <SlabFloor y={BANK_PLAZA} cols={22} rows={7} />
+      {/* Cheek walls either side of the flight, each carrying a NEWEL LANTERN rather than a street
+          standard. The first render put a 320-unit lamp post on each: the head landed at y≈516,
+          which is halfway up the wing's windows, so the frame read as two red lampshades hanging
+          inside the banking hall. A squat newel lamp is what a civic flight actually has, and it
+          stays entirely against the stonework it stands on. */}
+      {[[452, 1], [1470, -1]].map(([px, dir], i) => (
+        <g key={i}>
+          <path d={`M ${px} ${BANK_PLAZA} L ${px} ${BANK_PLAZA - 44} L ${px + dir * 56} ${BANK_STYLO - 6}
+                    L ${px + dir * 56} ${BANK_PLAZA} Z`}
+            fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+          {/* a BOX lantern — glazed body, astragals, pyramid cap, finial — standing on a plinth on
+              the cheek wall. The intermediate version used a conical shade in the scene accent and,
+              against a facade that fills the whole frame, it read as a red table lamp hovering in
+              the middle of the banking hall. A lit white body with black bars cannot be read as
+              anything but a lamp. */}
+          <rect x={px + dir * 44 - 34} y={BANK_STYLO - 8} width={68} height={30} fill={tn.card} stroke={INK} strokeWidth={STROKE_THIN} />
+          <rect x={px + dir * 44 - 11} y={BANK_STYLO - 48} width={22} height={44} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+          <rect x={px + dir * 44 - 27} y={BANK_STYLO - 110} width={54} height={64} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
+          <g stroke={INK} strokeWidth={STROKE_THIN * 0.7}>
+            <line x1={px + dir * 44 - 9} y1={BANK_STYLO - 110} x2={px + dir * 44 - 9} y2={BANK_STYLO - 46} />
+            <line x1={px + dir * 44 + 9} y1={BANK_STYLO - 110} x2={px + dir * 44 + 9} y2={BANK_STYLO - 46} />
+            <line x1={px + dir * 44 - 27} y1={BANK_STYLO - 80} x2={px + dir * 44 + 27} y2={BANK_STYLO - 80} />
+          </g>
+          <path d={`M ${px + dir * 44 - 36} ${BANK_STYLO - 110} L ${px + dir * 44 + 36} ${BANK_STYLO - 110}
+                    L ${px + dir * 44} ${BANK_STYLO - 148} Z`}
+            fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+          <circle cx={px + dir * 44} cy={BANK_STYLO - 156} r={8} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        </g>
+      ))}
+
+      {/* --- people. A short queue climbing to the doors (far, small), passers-by on the plaza, and
+              the coloured hero on the pavement right of the caption card. --- */}
+      {/* The hero's walk cycle is the frame's largest moving object, so everything else is dialled
+          back: he carries `idle="none"` (the stride is motion enough) and the crowds run well under
+          the library default, which is what keeps this template's camera lock in band. */}
+      <CrowdColumn xFar={962} yFar={790} xNear={1160} yNear={880} n={5}
+        scaleNear={0.5} scaleFar={0.3} seed={7} facing={-1} view="profile" alive={0} />
+      <CrowdRow y={958} x0={110} x1={860} n={7} scale={0.62} seed={19} dz={14} alive={0.14} />
+      <CrowdRow y={996} x0={1500} x1={1880} n={3} scale={0.74} seed={31} dz={10} view="profile" facing={-1} alive={0} />
+      <StickFigure pose={A.walk(f, fps)} x={CAPTION_SAFE_X + 520} y={1004} scale={1.06} facing={-1}
+        view="profile" expr={FACES.cold} pal={LIGHT} briefcase frame={f} idle="none" />
+
+      {/* --- plaza furniture: bollards, a news box, cases by the kerb, a parked car --- */}
+      {Array.from({length: 9}, (_, i) => (
+        <g key={i}>
+          <rect x={128 + i * 196} y={1006} width={26} height={62} rx={9} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+          <rect x={124 + i * 196} y={998} width={34} height={12} rx={5} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+        </g>
+      ))}
+      <rect x={1712} y={932} width={92} height={124} rx={8} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={1728} y={950} width={60} height={44} fill={PAPER_WHITE} stroke={INK} strokeWidth={2.4} />
+      <TextLines x={1734} y={958} w={48} n={3} gap={11} th={3} seed={6} opacity={0.6} />
+      <CaseStack x={286} baseY={1006} n={3} s={0.62} seed={23} />
+      <Car x={520} y={1074} s={0.86} facing={1} body={shade(tn.body, -1)} />
+      <Cone x={1636} y={1052} s={0.7} />
+    </Frame>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// 8. courtHearing — bench, witness stand, gallery of seated figures, panelling
+//
+// NAMED `courtHearing`, NOT `courtroom`, and that is not a preference. EXPLAINER_TEMPLATES is spread
+// LAST into scenes.tsx's `TEMPLATES`, so a name shared with a legacy template silently supersedes it
+// — WO-8f's `tradingFloor` did exactly that to the HEDGE pack and WO-8g had to rename it
+// `exchangeFloor`. stage.tsx already owns `courtroom` (the MAFIA pack's RICO trial, keyed `grey` in
+// SCENE_KEY_BY_TEMPLATE), so registering another `courtroom` here would quietly change what every
+// legacy mafia/pirate/bratva episode renders, decided by map ordering rather than by anyone.
+//
+// Keyed `interior` — the bible's own gloss on that key is "enclosed, lamp-lit, wooden, dark", which
+// is a panelled courtroom verbatim, and it gives the frame an amber accent (the seal, the bench
+// lamp) instead of the near-monochrome the legacy `grey` courtroom would produce.
+//
+// Draw order is the whole composition: gallery figures BEFORE their pew backs, the judge BEFORE the
+// bench slab, the witness BEFORE the stand's front panel. Every one of those, drawn the other way
+// round, floats a person on top of the furniture they are sitting behind.
+// ---------------------------------------------------------------------------
+const COURT_WALL = 706;
+
+/** The great seal on the wall behind the bench: two rings, a ring of radial ticks, a starburst.
+ *  Deliberately NOT a portrait — WO-8f's boardroom found that framed heads at seated-head height on
+ *  the wall behind a table read as people standing in lit doorways. */
+const CourtSeal: React.FC<{cx: number; cy: number; r: number}> = ({cx, cy, r}) => {
+  const c = useSceneColors();
+  const tn = useSceneTones();
+  return (
+    <g>
+      <circle cx={cx} cy={cy} r={r} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE} />
+      <circle cx={cx} cy={cy} r={r * 0.82} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
+      <circle cx={cx} cy={cy} r={r * 0.56} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      {Array.from({length: 24}, (_, i) => {
+        const a = (i * Math.PI) / 12;
+        return <line key={i} x1={cx + Math.cos(a) * r * 0.6} y1={cy + Math.sin(a) * r * 0.6}
+          x2={cx + Math.cos(a) * r * 0.78} y2={cy + Math.sin(a) * r * 0.78}
+          stroke={INK} strokeWidth={2.8} />;
+      })}
+      {Array.from({length: 8}, (_, i) => {
+        const a = (i * Math.PI) / 4 - Math.PI / 2;
+        return <path key={i} d={`M ${cx + Math.cos(a) * r * 0.5} ${cy + Math.sin(a) * r * 0.5}
+          L ${cx + Math.cos(a + 0.36) * r * 0.2} ${cy + Math.sin(a + 0.36) * r * 0.2}
+          L ${cx + Math.cos(a - 0.36) * r * 0.2} ${cy + Math.sin(a - 0.36) * r * 0.2} Z`}
+          fill={tn.deep} stroke={INK} strokeWidth={2.2} />;
+      })}
+    </g>
+  );
+};
+
+/** A turned-baluster rail — the bar of the court, and the gallery pew fronts. Forty small outlined
+ *  shapes for one line of code at the call site, which is what a courtroom frame is mostly made of. */
+const Balusters: React.FC<{x0: number; x1: number; y: number; h: number; n: number; fill?: string}> =
+({x0, x1, y, h, n, fill}) => {
+  const tn = useSceneTones();
+  const wood = fill ?? tn.card;
+  const step = (x1 - x0) / n;
+  return (
+    <g>
+      {Array.from({length: n}, (_, i) => (
+        <path key={i} d={`M ${x0 + i * step + step * 0.22} ${y}
+                          L ${x0 + i * step + step * 0.78} ${y}
+                          L ${x0 + i * step + step * 0.6} ${y + h * 0.42}
+                          L ${x0 + i * step + step * 0.72} ${y + h}
+                          L ${x0 + i * step + step * 0.28} ${y + h}
+                          L ${x0 + i * step + step * 0.4} ${y + h * 0.42} Z`}
+          fill={shade(wood, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.55} strokeLinejoin="round" />
+      ))}
+      <rect x={x0 - 12} y={y - 20} width={x1 - x0 + 24} height={24} rx={8} fill={wood} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={x0 - 12} y={y + h} width={x1 - x0 + 24} height={18} fill={shade(wood, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
+    </g>
+  );
+};
+
+const CourtHearing: React.FC = () => {
+  const f = useCurrentFrame();
+  const c = useSceneColors();
+  const tn = useSceneTones();
+  return (
+    <Frame>
+      <Ceiling y={158} lights={3} />
+      <Dentils x0={0} x1={1920} y={140} n={44} h={24} />
+      {/* --- the panelled back wall. Panelling is a UnitWall with the handles off, which is the
+              library doing the work of a bespoke component: an upper run of tall fielded panels
+              over a dado run of short ones, with a rail between them. --- */}
+      <UnitWall x={0} y={168} w={1920} h={318} cols={14} rows={1} handle={false} fill={tn.card} carcass={tn.deep} />
+      <rect x={0} y={476} width={1920} height={26} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <UnitWall x={0} y={500} w={1920} h={206} cols={20} rows={1} handle={false} fill={shade(tn.card, -1)} carcass={tn.deep} />
+      <rect x={0} y={COURT_WALL - 26} width={1920} height={26} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
+      {/* the seal, flanked by two draped standards and two wall sconces */}
+      <CourtSeal cx={962} cy={320} r={124} />
+      {[724, 1200].map((px, i) => (
+        <g key={i}>
+          <rect x={px - 7} y={196} width={14} height={310} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          <path d={`M ${px + (i ? -6 : 6)} 214 L ${px + (i ? -150 : 150)} 232 L ${px + (i ? -150 : 150)} 396 L ${px + (i ? -6 : 6)} 386 Z`}
+            fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+          <path d={`M ${px + (i ? -6 : 6)} 268 L ${px + (i ? -150 : 150)} 286`} fill="none" stroke={PAPER_WHITE} strokeWidth={8} />
+          <path d={`M ${px + (i ? -6 : 6)} 320 L ${px + (i ? -150 : 150)} 338`} fill="none" stroke={PAPER_WHITE} strokeWidth={8} />
+        </g>
+      ))}
+      {[214, 1706].map((px, i) => (
+        <g key={i}>
+          <WallFrame x={px} y={216} w={224} h={172} art={i ? 'head' : 'scape'} seed={4 + i * 5} />
+          <rect x={px + 76} y={430} width={72} height={54} rx={10} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
+          <rect x={px + 96} y={484} width={32} height={38} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        </g>
+      ))}
+      {/* the court clock over the door on the right, ticking */}
+      <circle cx={1560} cy={300} r={48} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
+      <line x1={1560} y1={300} x2={1584} y2={314} stroke={INK} strokeWidth={STROKE_THIN} strokeLinecap="round" />
+      <ClockHand cx={1560} cy={300} r={34} f={f} />
+      {/* the door counsel come through, on the left */}
+      <RibbedPanel x={296} y={438} w={186} h={268} ribs={2} dir="v" fill={shade(tn.card, -2)} />
+
+      {/* --- floor --- */}
+      <SlabFloor y={COURT_WALL} cols={32} rows={13} />
+
+      {/* --- the bench. Judge goes down FIRST; the slab and its front panels occlude him from the
+              hip down, which is what puts him behind it instead of on it.
+              THE VERTICAL BUDGET IS THE WHOLE PROBLEM in this template. The first build staged the
+              gallery as two rows of full seated figures at y=1006 and y=1078; `SeatedRow` takes the
+              HIP, and a seated head sits ~320 units above it, so both rows put their heads at
+              y≈715 — exactly where the bench is — and the entire lower two-thirds of the frame
+              became a wall of grey backs with the bench, the witness stand, the counsel table and
+              the bar all invisible behind it. The gallery is now `CrowdHeads`, which is heads and
+              shoulders only and occupies the bottom ~150 units, which is also what the reference's
+              own packed-gallery frame is made of (depression_montage_verified.jpg, 15:00). --- */}
+      <rect x={560} y={636} width={800} height={40} fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <StickFigure pose={A.stand(f)} x={962} y={760} scale={1.1} facing={1} view="front"
+        expr={FACES.hardened} pal={LIGHT} frame={f} idle="idle" />
+      <path d="M 520 772 L 1400 772 L 1470 818 L 460 818 Z" fill={tn.card} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+      <rect x={460} y={818} width={1010} height={142} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE} />
+      <UnitWall x={486} y={836} w={958} h={106} cols={7} rows={1} handle={false} fill={shade(tn.card, -2)} carcass={shade(tn.deep, -1)} />
+      <rect x={438} y={960} width={1054} height={30} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      {/* what is ON the bench: the gavel and its block, a bench lamp, files, a water glass */}
+      <rect x={586} y={736} width={96} height={38} rx={6} fill={shade(tn.body, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={602} y={714} width={64} height={16} rx={7} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      <rect x={660} y={702} width={12} height={40} fill={tn.deep} />
+      <Papers x={1258} y={762} n={3} s={0.68} seed={21} />
+      <rect x={1126} y={730} width={30} height={46} rx={4} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+      <g>
+        <rect x={1348} y={698} width={12} height={76} fill={tn.deep} />
+        <path d="M 1318 698 L 1390 698 L 1376 654 L 1332 654 Z" fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+      </g>
+
+      {/* --- the witness stand, right of the bench. The occupant takes `idle="none"`: a witness
+              holding still is right for the picture and it is one fewer active lock cell. --- */}
+      <StickFigure pose={A.sit(0)} x={1666} y={776} scale={0.92} facing={-1} view="front"
+        expr={FACES.worried} pal={DIM} frame={0} idle="none" />
+      <path d="M 1534 800 L 1842 800 L 1882 842 L 1494 842 Z" fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+      <rect x={1494} y={842} width={388} height={148} fill={tn.card} stroke={INK} strokeWidth={STROKE} />
+      <UnitWall x={1516} y={860} w={344} h={112} cols={3} rows={1} handle={false} fill={shade(tn.card, -2)} carcass={shade(tn.deep, -1)} />
+      <rect x={1548} y={764} width={64} height={12} rx={5} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+
+      {/* --- counsel's table, left of the bench: the clerk typing beside a second seat, papers,
+              exhibit boxes; and an advocate on his feet at the bench, addressing it. He stands at
+              x=560 rather than tucked in beside the table, where he was drawn straight through the
+              two seated figures. --- */}
+      <SeatedRow y={856} x0={150} x1={150} n={1} scale={0.86} seed={9} working view="front" alive={1} />
+      <SeatedRow y={856} x0={360} x1={360} n={1} scale={0.86} seed={12} view="front" alive={0} />
+      <Desk x={56} y={884} w={396} h={30} legH={112} fill={shade(tn.card, -1)} />
+      <Papers x={150} y={876} n={3} s={0.7} seed={27} />
+      <Papers x={356} y={880} n={2} s={0.64} seed={33} />
+      <BoxStack x={72} baseY={1006} n={2} s={0.72} seed={15} />
+      <CaseStack x={330} baseY={1006} n={3} s={0.6} seed={45} />
+      {/* the lectern in the well, and a runner of carpet up to it */}
+      <path d="M 620 1002 L 1300 1002 L 1360 962 L 560 962 Z" fill={shade(tn.floor, 2)} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+      <g>
+        <path d="M 1360 1004 L 1470 1004 L 1452 900 L 1378 900 Z" fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+        <path d="M 1366 900 L 1464 900 L 1470 872 L 1360 872 Z" fill={tn.card} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+        <TextLines x={1382} y={912} w={64} n={5} gap={15} th={4} seed={51} opacity={0.5} />
+      </g>
+      {/* held still. The judge's idle, the clerk's typing hands and the wall clock are this
+          template's whole motion budget; a fourth animated body at near-hero scale in the well put
+          it under the 35/48 camera-lock floor. */}
+      <StickFigure pose={A.stand(0)} x={560} y={990} scale={0.98} facing={1} view="profile"
+        expr={FACES.neutral} pal={DIM} frame={0} idle="none" />
+
+      {/* --- the bar of the court, then the public gallery in front of it. Camera-side order is
+              bench → bar → gallery, so the heads are drawn last and occlude the rail.
+              THE ROW SITS AT 1012, NOT 1074. `CrowdHeads` draws its shoulders from cy + 2.4r, so at
+              y=1074 with r=52 the head ellipses ran to 1131 and the shoulders never appeared at
+              all: the gallery rendered as a line of brown eggs along the frame edge. At 1012/r=46
+              the heads are whole and the shoulders reach the bottom, which is what makes the mass
+              read as people in pews. --- */}
+      <Balusters x0={20} x1={1900} y={984} h={54} n={36} />
+      <CrowdHeads y={1012} x0={-20} x1={1940} n={12} rows={2} r={46} seed={5} alive={0.04} />
+      <Plant x={1884} y={980} s={0.8} seed={7} />
+    </Frame>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// 9. factoryFloor — machines, conveyor, pipes, overhead rig, workers
+//
+// Keyed `interior`. The bible names that key's exemplar as the "brown warehouse", which is this
+// room exactly; and a plant floor lit by clerestory glazing and machine lamps is the same "enclosed,
+// lamp-lit, wooden, dark" reading the office and the courtroom take.
+//
+// The only element that moves is ONE flywheel, turning in place. A conveyor whose load actually
+// travelled would slide a line of crates the width of the frame, which is the "whole element
+// spanning most of the frame" failure the camera lock exists to catch — a rotating 90-unit wheel
+// cannot leave the single cell it sits in.
+// ---------------------------------------------------------------------------
+const FACT_WALL = 664;
+const FACT_BELT = 872;
+
+/** One machine: plinth, body, control panel with dials, hopper, vent stack, and (optionally) a
+ *  spoked flywheel on its flank. Bespoke — a machine is the one thing in this frame that is not
+ *  furniture, structure or a crowd, so it is the only part the library cannot supply. */
+const Machine: React.FC<{
+  x: number; y: number; w: number; h: number; seed: number; spin?: boolean; f?: number;
+}> = ({x, y, w, h, seed, spin = false, f = 0}) => {
+  const c = useSceneColors();
+  const tn = useSceneTones();
+  const body = shade(tn.body, (seed % 2) - 1);
+  const wheelR = Math.min(w, h) * 0.2;
+  const wx = x + w * 0.82, wy = y - h * 0.36;
+  return (
+    <g>
+      {/* plinth first, so the body's outline crosses in front of it */}
+      <rect x={x - 14} y={y - 34} width={w + 28} height={34} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={x} y={y - h} width={w} height={h - 34} fill={body} stroke={INK} strokeWidth={STROKE} />
+      {/* vertical panel seams with rivets down each one. Vertical on purpose: a machine casing is
+          the largest flat mass in this frame and only vertical edges move the flat-fill metric. */}
+      {Array.from({length: 5}, (_, i) => {
+        const sx = x + (w * (i + 1)) / 6;
+        return (
+          <g key={'s' + i}>
+            <line x1={sx} y1={y - h + 8} x2={sx} y2={y - 42} stroke={INK} strokeWidth={STROKE_THIN * 0.6} opacity={0.45} />
+            {Array.from({length: 5}, (_, k) => (
+              <circle key={k} cx={sx} cy={y - h + 24 + ((k + 0.5) * (h - 74)) / 5} r={4}
+                fill={shade(body, 1)} stroke={INK} strokeWidth={1.8} />
+            ))}
+          </g>
+        );
+      })}
+      {/* hopper on the roof, and the vent stack out of it */}
+      <path d={`M ${x + w * 0.16} ${y - h} L ${x + w * 0.62} ${y - h} L ${x + w * 0.52} ${y - h - 78} L ${x + w * 0.26} ${y - h - 78} Z`}
+        fill={shade(body, 1)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+      <rect x={x + w * 0.72} y={y - h - 120} width={30} height={120} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={x + w * 0.68} y={y - h - 138} width={46} height={22} rx={6} fill={shade(tn.deep, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      {/* control panel: a lighter face carrying dials, a readout and a row of buttons */}
+      <rect x={x + w * 0.08} y={y - h * 0.78} width={w * 0.44} height={h * 0.34} fill={shade(tn.card, -1)}
+        stroke={INK} strokeWidth={STROKE_THIN} />
+      {Array.from({length: 3}, (_, i) => (
+        <g key={i}>
+          <circle cx={x + w * (0.15 + i * 0.13)} cy={y - h * 0.66} r={h * 0.052} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          <line x1={x + w * (0.15 + i * 0.13)} y1={y - h * 0.66}
+            x2={x + w * (0.15 + i * 0.13) + Math.cos(seed + i * 2) * h * 0.036}
+            y2={y - h * 0.66 + Math.sin(seed + i * 2) * h * 0.036} stroke={INK} strokeWidth={2.6} strokeLinecap="round" />
+        </g>
+      ))}
+      <rect x={x + w * 0.11} y={y - h * 0.55} width={w * 0.38} height={h * 0.1} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      <TextLines x={x + w * 0.13} y={y - h * 0.52} w={w * 0.32} n={2} gap={h * 0.04} th={4} seed={seed * 3} opacity={0.7} />
+      {Array.from({length: 5}, (_, i) => (
+        <rect key={'b' + i} x={x + w * (0.11 + i * 0.08)} y={y - h * 0.42} width={w * 0.05} height={h * 0.05}
+          rx={4} fill={i === 2 ? c.accent : shade(tn.body, 1)} stroke={INK} strokeWidth={2.2} />
+      ))}
+      {/* access hatch and its ribs, low on the body */}
+      <RibbedPanel x={x + w * 0.1} y={y - h * 0.3} w={w * 0.5} h={h * 0.22} ribs={5} fill={shade(body, -1)} />
+      {/* the flywheel. `spin` turns it in place — a rotate about its own centre, so it can never
+          leave the cell it sits in, unlike anything that travels. */}
+      <g transform={spin ? `rotate(${(f * 1.7) % 360} ${wx} ${wy})` : undefined}>
+        <circle cx={wx} cy={wy} r={wheelR} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE} />
+        <circle cx={wx} cy={wy} r={wheelR * 0.72} fill={shade(tn.body, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
+        {Array.from({length: 6}, (_, i) => {
+          const a = (i * Math.PI) / 3;
+          return <line key={i} x1={wx} y1={wy} x2={wx + Math.cos(a) * wheelR * 0.7} y2={wy + Math.sin(a) * wheelR * 0.7}
+            stroke={INK} strokeWidth={STROKE_THIN * 1.1} />;
+        })}
+        <circle cx={wx} cy={wy} r={wheelR * 0.16} fill={INK} />
+      </g>
+    </g>
+  );
+};
+
+const FactoryFloor: React.FC = () => {
+  const f = useCurrentFrame();
+  const c = useSceneColors();
+  const tn = useSceneTones();
+  return (
+    <Frame>
+      {/* --- roof: a dark deck, the truss rig under it, pendant lamps on the drop rods --- */}
+      <rect x={0} y={0} width={1920} height={104} fill={shade(tn.deep, -1)} />
+      {/* purlins across the roof deck. Twenty-five rather than thirteen, and VERTICAL: flat fill
+          counts right-neighbour equality, so a horizontal member costs nothing to add and buys
+          nothing either — the roof band measured 92-95% flat with the coarser run. */}
+      {Array.from({length: 25}, (_, i) => (
+        <rect key={i} x={i * 78} y={0} width={18} height={104} fill={tn.deep} stroke={INK} strokeWidth={2.4} />
+      ))}
+      <TrussRig x0={-20} x1={1940} y={104} h={62} bays={17} drops={5} dropH={44} />
+      {Array.from({length: 5}, (_, i) => {
+        const lx = 1920 * ((i + 0.5) / 5);
+        return (
+          <g key={i}>
+            <path d={`M ${lx - 58} ${254} L ${lx + 58} ${254} L ${lx + 30} ${210} L ${lx - 30} ${210} Z`}
+              fill={shade(tn.body, -1)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+            <ellipse cx={lx} cy={254} rx={54} ry={12} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
+          </g>
+        );
+      })}
+      {/* --- back wall: clerestory glazing, service pipework, a roller shutter --- */}
+      <rect x={0} y={166} width={1920} height={FACT_WALL - 166} fill={tn.back} stroke={INK} strokeWidth={STROKE_THIN} />
+      {/* clerestory glazing. The right light is narrower than the left ON PURPOSE: it leaves the
+          pier at x 1200-1460 clear for the extract fan and the plant clock, which in the first
+          build were drawn straight over the glass. */}
+      {[[70, 490], [1490, 360]].map(([px, pw], i) => (
+        <g key={i}>
+          <rect x={px} y={288} width={pw} height={168} fill={shade(c.bg, 3)} />
+          <Glazing x={px} y={288} w={pw} h={168} bays={i ? 4 : 5} rows={2} pane={null} />
+        </g>
+      ))}
+      {/* brick coursing across the whole wall. A plant wall is the single largest flat region in
+          this frame and the joints are what stop it reading as a colour field — the same argument
+          `SlabFloor` makes for a ground plane. */}
+      <g stroke={INK} strokeWidth={STROKE_THIN * 0.5} opacity={0.28}>
+        {Array.from({length: 11}, (_, i) => (
+          <line key={'c' + i} x1={0} y1={186 + i * 44} x2={1920} y2={186 + i * 44} />
+        ))}
+        {Array.from({length: 132}, (_, i) => {
+          const row = Math.floor(i / 12), col = i % 12;
+          return <line key={'p' + i} x1={col * 160 + (row % 2 ? 80 : 0)} y1={186 + row * 44}
+            x2={col * 160 + (row % 2 ? 80 : 0)} y2={230 + row * 44} />;
+        })}
+      </g>
+      <PipeRun x0={0} x1={1920} y={190} n={3} gap={34} th={26} flanges={11} />
+      <PipeRun x0={196} x1={470} y={1494} n={2} gap={40} th={24} flanges={4} dir="v" />
+      {/* the shutter's ribs run VERTICALLY. Drawn `dir="h"` this panel measured 98.7% flat — the
+          emptiest cell in the template — because horizontal ribs never break a row. */}
+      <RibbedPanel x={716} y={330} w={470} h={334} ribs={21} dir="v" fill={shade(tn.body, -1)} />
+      <rect x={700} y={306} width={502} height={32} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
+      <SerifWords x={744} y={314} w={410} h={18} words={3} seed={9} fill={c.accent} serif={false} />
+      {/* a wall-mounted control cabinet, a pegboard of tools, an extract fan and the plant clock */}
+      <rect x={1244} y={520} width={94} height={144} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE} />
+      {Array.from({length: 4}, (_, i) => (
+        <rect key={i} x={1258} y={536 + i * 34} width={66} height={22} fill={i === 1 ? c.accent : tn.deep} stroke={INK} strokeWidth={2.4} />
+      ))}
+      <rect x={584} y={452} width={110} height={210} fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE} />
+      {Array.from({length: 12}, (_, i) => {
+        const col = i % 3, row = Math.floor(i / 3);
+        return <rect key={i} x={598 + col * 30} y={466 + row * 50} width={18} height={30 + rnd(i * 7) * 12}
+          fill={shade(tn.body, (i % 3) - 1)} stroke={INK} strokeWidth={2.2} />;
+      })}
+      <g>
+        <circle cx={1270} cy={372} r={62} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE} />
+        {Array.from({length: 6}, (_, i) => {
+          const a = (i * Math.PI) / 3;
+          return <path key={i} d={`M 1270 372 L ${1270 + Math.cos(a) * 54} ${372 + Math.sin(a) * 54}
+            L ${1270 + Math.cos(a + 0.5) * 50} ${372 + Math.sin(a + 0.5) * 50} Z`}
+            fill={shade(tn.body, 1)} stroke={INK} strokeWidth={2.4} />;
+        })}
+        <circle cx={1270} cy={372} r={13} fill={INK} />
+      </g>
+      <circle cx={1400} cy={372} r={40} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
+      <line x1={1400} y1={372} x2={1422} y2={384} stroke={INK} strokeWidth={STROKE_THIN} strokeLinecap="round" />
+      <ClockHand cx={1400} cy={372} r={28} f={f} />
+      <rect x={0} y={FACT_WALL - 28} width={1920} height={28} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
+
+      {/* --- floor, with a painted walkway edge --- */}
+      <SlabFloor y={FACT_WALL} cols={34} rows={14} />
+      {Array.from({length: 26}, (_, i) => (
+        <path key={i} d={`M ${i * 78} 1010 l 44 0 l -30 40 l -44 0 Z`} fill={c.accent} opacity={0.5} />
+      ))}
+      <line x1={0} y1={1004} x2={1920} y2={1004} stroke={INK} strokeWidth={STROKE_THIN} opacity={0.5} />
+
+      {/* --- the plant. Far machines first, then the workers between them, then the belt over the
+              lot: the belt's slab is what puts the standing figures behind it. --- */}
+      <Machine x={48} y={FACT_WALL + 168} w={410} h={318} seed={3} spin f={f} />
+      <Machine x={1454} y={FACT_WALL + 156} w={396} h={300} seed={6} />
+      <Machine x={790} y={FACT_WALL + 120} w={300} h={214} seed={9} />
+      <CrowdRow y={790} x0={600} x1={1400} n={4} scale={0.56} seed={13} dz={10} alive={0.15} />
+      {/* the conveyor: rails on trestles over a run of rollers, carrying crates */}
+      <g>
+        {Array.from({length: 26}, (_, i) => (
+          <circle key={i} cx={34 + i * 76} cy={FACT_BELT + 34} r={17} fill={shade(tn.body, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+        ))}
+        <rect x={-30} y={FACT_BELT} width={1980} height={30} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE} />
+        <rect x={-30} y={FACT_BELT + 48} width={1980} height={20} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
+        {Array.from({length: 7}, (_, i) => (
+          <path key={'t' + i} d={`M ${140 + i * 276} ${FACT_BELT + 68} l -34 ${1004 - FACT_BELT - 68}
+                                  m 34 ${-(1004 - FACT_BELT - 68)} l 34 ${1004 - FACT_BELT - 68}`}
+            fill="none" stroke={INK} strokeWidth={STROKE_THIN * 1.3} />
+        ))}
+      </g>
+      {[120, 386, 640, 1180, 1470, 1730].map((bx, i) => (
+        <BoxStack key={i} x={bx} baseY={FACT_BELT} n={i % 2 ? 2 : 1} s={0.62} seed={i * 7 + 2} />
+      ))}
+      {/* A beacon on a post beside the belt, blinking on its own clock. Placed at x=500, in the gap
+          between the left machine and the first worker: at its first position (x=930) it landed
+          directly over a worker's head, which neither metric can see. */}
+      <rect x={492} y={FACT_BELT - 176} width={16} height={176} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      <circle cx={500} cy={FACT_BELT - 196} r={26}
+        fill={stepIndex(f, 3, 46) % 2 ? c.accent : shade(c.accent, -3)} stroke={INK} strokeWidth={STROKE} />
+      <rect x={470} y={FACT_BELT - 176} width={60} height={14} rx={5} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+
+      {/* --- near plane: pallets, a trolley, cones, and the coloured hero at the belt.
+              The hero STANDS: the first build gave him `A.type_`, a seated pose (thighs forward,
+              shins down), on a figure with nothing under him, so he read as sitting on air with his
+              legs cut off by the frame edge. The grey worker beside him is drawn small and WITH A
+              FACE — a `DIM` figure at near-hero scale with no face is the headless-pill defect
+              COMPARISON logged against the thumbnail, and it was back here at scale 1.06. --- */}
+      <StickFigure pose={A.stand(f)} x={CAPTION_SAFE_X + 500} y={FACT_BELT + 128} scale={1.12}
+        facing={-1} view="front" expr={FACES.focused} pal={LIGHT} frame={f} idle="idle" />
+      {/* held still: the spinning flywheel, the beacon, the clock and the hero are this template's
+          whole motion budget, and a second animated near-plane body pushed it out of camera lock */}
+      <StickFigure pose={A.stand(0)} x={676} y={FACT_BELT + 78} scale={0.82} facing={1}
+        view="profile" expr={FACES.neutral} pal={DIM} frame={0} idle="none" />
+      <Trolley x={1560} y={FACT_BELT + 96} w={280} s={1.0} />
+      <CaseStack x={1700} baseY={FACT_BELT + 96} n={3} s={0.8} seed={19} />
+      <BoxStack x={214} baseY={1074} n={3} s={0.94} seed={23} />
+      {/* A rank of steel drums, in the NEAR plane. They were first staged against the far wall at
+          floor level, which is exactly the band the workers stand in: they rendered across four
+          torsos at waist height and read as men standing inside barrels. Nothing about either
+          metric could see it. Down here they occlude only the floor. */}
+      {Array.from({length: 4}, (_, i) => {
+        const dx = 342 + i * 66;
+        return (
+          <g key={i}>
+            <rect x={dx} y={968} width={62} height={112} rx={7}
+              fill={shade(tn.card, -(i % 3))} stroke={INK} strokeWidth={STROKE} />
+            <line x1={dx} y1={1002} x2={dx + 62} y2={1002} stroke={INK} strokeWidth={2.6} opacity={0.55} />
+            <line x1={dx} y1={1046} x2={dx + 62} y2={1046} stroke={INK} strokeWidth={2.6} opacity={0.55} />
+            <ellipse cx={dx + 31} cy={968} rx={31} ry={10} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
+            <circle cx={dx + 31} cy={968} r={9} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          </g>
+        );
+      })}
+      <Cone x={1010} y={1058} s={0.9} />
+      <Cone x={1096} y={1070} s={0.9} />
+      <Papers x={1330} y={1050} n={2} s={0.8} seed={31} />
+    </Frame>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// 10. broadcastDesk — news studio: anchor desk, backdrop screen, lighting rig, foreground camera
+//
+// Keyed `alarm`, the second key the first six never reached. The reference's own broadcast/panel
+// frames are the SATURATED cell of the montage (wolf_montage_verified.jpg, 9:20 — an orange ground
+// carrying speech balloons and pushed faces), and COMPARISON MISS #5 is that our set measures 0.209
+// mean saturation against the reference's 0.308-0.646 floor. This is one of the two templates that
+// exists to carry that range.
+//
+// The foreground camera is bible §6.8 — the dark near-plane mass the reference uses for depth,
+// which COMPARISON scored as a MISS ("not built"). It is a camera rather than `OverShoulder`'s
+// head-and-shoulders silhouette because a studio frame with an anonymous head in the corner reads
+// as an audience, and because a camera is unambiguously the thing pointing at the desk.
+// ---------------------------------------------------------------------------
+const STUDIO_FLOOR = 792;
+
+/** A hanging studio lamp: yoke, body, four barn doors, a white lens. */
+const StudioLamp: React.FC<{x: number; y: number; s?: number}> = ({x, y, s = 1}) => {
+  const tn = useSceneTones();
+  return (
+    <g>
+      <rect x={x - 5 * s} y={y} width={10 * s} height={34 * s} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+      <path d={`M ${x - 46 * s} ${y + 34 * s} L ${x + 46 * s} ${y + 34 * s} L ${x + 36 * s} ${y + 96 * s}
+                L ${x - 36 * s} ${y + 96 * s} Z`}
+        fill={shade(tn.body, -1)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+      {/* barn doors, splayed */}
+      <path d={`M ${x - 46 * s} ${y + 34 * s} L ${x - 78 * s} ${y + 6 * s}`} stroke={INK} strokeWidth={STROKE_THIN * 1.2} fill="none" />
+      <path d={`M ${x + 46 * s} ${y + 34 * s} L ${x + 78 * s} ${y + 6 * s}`} stroke={INK} strokeWidth={STROKE_THIN * 1.2} fill="none" />
+      <path d={`M ${x - 78 * s} ${y + 6 * s} L ${x - 78 * s} ${y + 52 * s} L ${x - 46 * s} ${y + 62 * s} Z`}
+        fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.8} strokeLinejoin="round" />
+      <path d={`M ${x + 78 * s} ${y + 6 * s} L ${x + 78 * s} ${y + 52 * s} L ${x + 46 * s} ${y + 62 * s} Z`}
+        fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.8} strokeLinejoin="round" />
+      <rect x={x - 34 * s} y={y + 92 * s} width={68 * s} height={16 * s} rx={6 * s} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
+    </g>
+  );
+};
+
+const BroadcastDesk: React.FC = () => {
+  const f = useCurrentFrame();
+  const c = useSceneColors();
+  const tn = useSceneTones();
+  return (
+    <Frame>
+      {/* --- the studio box: dark panelled walls behind everything. Three rows of twenty rather
+              than two of twelve — the coarser grid left the walls as the frame's largest flat
+              regions and the template measured 91.7% flat fill, i.e. near the empty end of the
+              band. --- */}
+      <UnitWall x={0} y={148} w={1920} h={644} cols={20} rows={3} handle={false}
+        fill={shade(tn.body, -1)} carcass={tn.deep} />
+      {/* a run of set flats standing proud of the wall, which is what a studio cyclorama is made of */}
+      {[0, 1, 2, 3].map((i) => (
+        <rect key={i} x={-20 + i * 660} y={148} width={44} height={644} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
+      ))}
+      {/* --- lighting rig across the top --- */}
+      <rect x={0} y={0} width={1920} height={62} fill={shade(tn.deep, -1)} />
+      <TrussRig x0={-20} x1={1940} y={62} h={58} bays={26} drops={0} />
+      {[210, 560, 960, 1360, 1712].map((lx, i) => <StudioLamp key={i} x={lx} y={120} s={1} />)}
+      {/* a cable tray under the rig, which is what a real grid is hung off */}
+      <PipeRun x0={-20} x1={1940} y={244} n={2} gap={26} th={18} flanges={13} fill={tn.deep} />
+
+      {/* --- the backdrop screen: a skyline behind a chart behind a masthead band. Drawn INSIDE the
+              screen's own rectangle, then the bezel over the top, so nothing bleeds past the glass
+              (there is no clip path anywhere in this file — a clip silently swallows art). --- */}
+      <rect x={306} y={296} width={1200} height={410} fill={shade(tn.deep, -2)} />
+      <BuildingBand baseY={706} x0={306} x1={1506} n={8} seed={23} depth={1} minH={90} maxH={230} opacity={0.8} />
+      {/* a stats panel on the left of the screen — the band between the masthead and the lower
+          third was the emptiest region in the frame, and a news backdrop always carries figures */}
+      <rect x={344} y={382} width={556} height={214} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      {Array.from({length: 12}, (_, i) => {
+        const col = i % 3, row = Math.floor(i / 3);
+        return (
+          <g key={i}>
+            <rect x={358 + col * 184} y={396 + row * 52} width={116} height={20}
+              fill={rnd(i * 17) > 0.68 ? c.accent : PAPER_WHITE} opacity={0.88} />
+            <rect x={482 + col * 184} y={396 + row * 52} width={42} height={20} fill={PAPER_WHITE} opacity={0.55} />
+          </g>
+        );
+      })}
+      <ChartPlot x={950} y={330} w={506} h={330} kind="line" bars={9} seed={4} live crash
+        ground={shade(tn.card, 1)} grid={4} />
+      <rect x={306} y={296} width={1200} height={62} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
+      <SerifWords x={344} y={312} w={560} h={30} words={3} seed={7} fill={PAPER_WHITE} />
+      <rect x={306} y={296} width={1200} height={410} fill="none" stroke={INK} strokeWidth={STROKE * 1.4} />
+      {/* the lower-third strap, over the bottom of the screen */}
+      <rect x={306} y={620} width={780} height={86} fill={shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={306} y={620} width={22} height={86} fill={c.accent} />
+      <SerifWords x={352} y={634} w={420} h={22} words={3} seed={12} fill={PAPER_WHITE} serif={false} />
+      <TextLines x={352} y={672} w={380} n={2} gap={13} th={5} seed={16} opacity={0.7} />
+      {/* flanking wall monitors, both live */}
+      {[46, 1556].map((px, i) => (
+        <g key={i}>
+          <Monitor x={px} y={352} w={314} h={210} content={i ? 'chart' : 'grid'} stand={false} seed={30 + i * 4} />
+          <rect x={px + 20} y={584} width={274} height={30} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          <TextLines x={px + 34} y={592} w={244} n={1} gap={12} th={6} seed={20 + i} opacity={0.75} />
+        </g>
+      ))}
+
+      {/* --- floor, with the floor monitors and cable ramps a studio actually carries --- */}
+      <rect x={0} y={STUDIO_FLOOR - 26} width={1920} height={26} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
+      <SlabFloor y={STUDIO_FLOOR} cols={30} rows={12} />
+      {[86, 1774].map((px, i) => (
+        <g key={i}>
+          <Monitor x={px} y={784} w={146} h={100} content={i ? 'text' : 'chart'} seed={50 + i} />
+          <rect x={px - 14} y={906} width={174} height={16} rx={6} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        </g>
+      ))}
+      {Array.from({length: 5}, (_, i) => (
+        <rect key={i} x={260 + i * 320} y={824} width={124} height={18} rx={8} fill={shade(tn.body, -2)}
+          stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      ))}
+
+      {/* --- the desk. Anchors first, then the slab and its front panel over their laps.
+              The co-anchor gets a FACE. `DIM` desaturates fills only, so a grey figure at this
+              scale with `showFace={false}` is a blank head over a same-width torso — the headless
+              pill COMPARISON logged against the thumbnail crowd, and it was back here at 1.12. --- */}
+      <StickFigure pose={A.sit(f)} x={CAPTION_SAFE_X + 400} y={866} scale={1.2} facing={-1} view="front"
+        expr={FACES.earnest} pal={LIGHT} frame={f} idle="gesture" />
+      <StickFigure pose={A.sit(f + 53)} x={790} y={870} scale={1.12} facing={1} view="front"
+        expr={FACES.neutral} pal={DIM} frame={f} idle="subtle" />
+      <path d="M 340 908 L 1580 908 L 1700 972 L 224 972 Z" fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+      <rect x={224} y={972} width={1476} height={108} fill={tn.card} stroke={INK} strokeWidth={STROKE} />
+      {/* the desk face is built of jointed panels, not one slab: eleven joints across 1476 units is
+          the difference between a lit desk front and the frame's largest flat region */}
+      <g stroke={INK} strokeWidth={STROKE_THIN * 0.6} opacity={0.4}>
+        {Array.from({length: 11}, (_, i) => (
+          <line key={i} x1={224 + ((i + 1) * 1476) / 12} y1={972} x2={224 + ((i + 1) * 1476) / 12} y2={1080} />
+        ))}
+      </g>
+      {/* the desk's lit front graphic: a flat accent band with a logo panel, not a gradient */}
+      <rect x={262} y={996} width={1400} height={58} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={286} y={1004} width={112} height={42} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      <SerifWords x={434} y={1010} w={800} h={26} words={4} seed={19} fill={PAPER_WHITE} />
+      {/* what is on the desk: papers, a mug, a mic on a stand, a confidence monitor */}
+      <Papers x={520} y={900} n={3} s={0.66} seed={9} />
+      <Papers x={1364} y={904} n={2} s={0.6} seed={13} />
+      <rect x={1204} y={866} width={44} height={40} rx={6} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
+      <path d="M 1248 874 q 22 8 0 18" fill="none" stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+      <g>
+        <ellipse cx={1010} cy={906} rx={40} ry={11} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        <path d="M 1010 902 L 1010 846 L 1074 812" fill="none" stroke={INK} strokeWidth={STROKE_THIN * 1.4} />
+        <ellipse cx={1082} cy={808} rx={20} ry={13} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN}
+          transform="rotate(-28 1082 808)" />
+      </g>
+      <Monitor x={356} y={806} w={168} h={104} content="text" stand={false} seed={26} />
+
+      {/* --- near plane: the studio camera, bible §6.8's dark foreground mass. Drawn last so it
+              occludes the desk, which is the only way a near plane reads as near. --- */}
+      <g>
+        {/* pedestal: column, splayed legs, castors */}
+        <rect x={1704} y={840} width={44} height={190} fill={shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE} />
+        {[-1, 0.15, 1].map((k, i) => (
+          <g key={i}>
+            <line x1={1726} y1={1006} x2={1726 + k * 168} y2={1064} stroke={INK} strokeWidth={STROKE * 1.5} strokeLinecap="round" />
+            <circle cx={1726 + k * 168} cy={1068} r={19} fill={INK} />
+            <circle cx={1726 + k * 168} cy={1068} r={7} fill={shade(tn.body, 1)} />
+          </g>
+        ))}
+        {/* body, hood, lens, viewfinder */}
+        <rect x={1580} y={694} width={306} height={158} rx={10} fill="#151515" stroke={INK} strokeWidth={STROKE} />
+        <rect x={1608} y={716} width={104} height={62} fill={shade(tn.body, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
+        <TextLines x={1620} y={730} w={80} n={3} gap={13} th={4} seed={5} opacity={0.55} />
+        <path d="M 1540 716 L 1580 700 L 1580 846 L 1540 830 Z" fill="#101010" stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+        <circle cx={1524} cy={773} r={54} fill="#0d0d0d" stroke={INK} strokeWidth={STROKE} />
+        <circle cx={1524} cy={773} r={30} fill={shade(tn.body, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
+        <rect x={1746} y={636} width={130} height={72} rx={8} fill="#151515" stroke={INK} strokeWidth={STROKE} />
+        <rect x={1762} y={652} width={98} height={44} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        {/* the tally lamp: one 22px fill switching on its own clock — no geometry moves at all */}
+        <circle cx={1552} cy={676} r={17}
+          fill={blinkOn(f, 2.5, 96, 54) ? c.accent : shade(tn.body, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
+        {/* the cable, taped down across the floor */}
+        <path d="M 1726 1044 q -190 42 -360 6 q -180 -38 -330 22" fill="none" stroke={INK} strokeWidth={STROKE_THIN * 1.6} />
+      </g>
+    </Frame>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// 11. crowdQueue — the reference's breadline / bank-run device: many figures, depth, a building line
+//
+// Keyed `grey` — "institutional, clinical, bureaucratic, drained, loss", and the reference's own
+// version of this frame (depression_montage_verified.jpg, 15:00) is a packed mass of grey heads with
+// exactly one coloured figure in it. It is `bankExterior`'s opposite number: the same institution,
+// the other mood, on a different key so the two never read as one set redressed.
+//
+// The queue is `CrowdColumn`, which is why that component exists: a queue is a scale ramp along a
+// diagonal, drawn far-to-near so each nearer body occludes the one behind it. `CrowdRow` would give
+// a chorus line at one depth, which is what the first render of `cityStreet` learned the hard way.
+// ---------------------------------------------------------------------------
+const QUEUE_KERB = 786;
+
+const CrowdQueue: React.FC = () => {
+  const f = useCurrentFrame();
+  const c = useSceneColors();
+  const tn = useSceneTones();
+  return (
+    <Frame>
+      {/* --- the building line behind: two bands, the far one lifted two rungs --- */}
+      <BuildingBand baseY={470} x0={-80} x1={2000} n={10} seed={61} depth={2} minH={180} maxH={400} opacity={0.55} />
+      <BuildingBand baseY={628} x0={620} x1={2000} n={5} seed={37} depth={1} minH={230} maxH={430} />
+
+      {/* --- the institution the queue is for, at the far end of the line on the left --- */}
+      <rect x={-40} y={196} width={700} height={QUEUE_KERB - 196} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE} />
+      <g stroke={INK} strokeWidth={STROKE_THIN * 0.55} opacity={0.32}>
+        {Array.from({length: 13}, (_, i) => (
+          <line key={i} x1={-40} y1={196 + ((i + 1) * (QUEUE_KERB - 196)) / 14} x2={660} y2={196 + ((i + 1) * (QUEUE_KERB - 196)) / 14} />
+        ))}
+      </g>
+      <UnitWall x={-20} y={236} w={660} h={210} cols={5} rows={1} handle={false}
+        fill={shade(tn.deep, -1)} carcass={shade(tn.card, -2)} />
+      <rect x={-40} y={462} width={700} height={26} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <SerifWords x={40} y={506} w={560} h={40} words={3} seed={5} />
+      {/* the door, shut, with a shutter half down and a notice pasted on it */}
+      <rect x={214} y={568} width={244} height={198} fill={shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE} />
+      <RibbedPanel x={214} y={568} w={244} h={96} ribs={7} dir="h" fill={shade(tn.body, -1)} />
+      <rect x={258} y={674} width={96} height={72} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
+      <TextLines x={272} y={690} w={70} n={4} gap={14} th={4} seed={11} opacity={0.7} />
+      <Steps x0={158} x1={520} yTop={766} yBottom={QUEUE_KERB + 32} n={3} inset={44} />
+      {/* a lamp bracket and a hanging sign on the frontage */}
+      <rect x={548} y={520} width={16} height={132} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      <rect x={504} y={652} width={104} height={68} fill={shade(tn.body, -1)} stroke={INK} strokeWidth={STROKE} />
+      <TextLines x={518} y={668} w={76} n={3} gap={14} th={4} seed={17} opacity={0.75} />
+
+      {/* --- pavement --- */}
+      <SlabFloor y={QUEUE_KERB} cols={22} rows={9} />
+      <rect x={0} y={QUEUE_KERB - 12} width={1920} height={16} fill={shade(tn.floor, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+
+      {/* --- the crowd, in three layers: heads packed against the frontage, a milling row in front
+              of them, then the queue itself running out of the door toward the camera. --- */}
+      <CrowdHeads y={760} x0={80} x1={1320} n={13} rows={3} r={18} seed={9} alive={0.05} />
+      <CrowdRow y={798} x0={140} x1={1120} n={9} scale={0.48} seed={21} dz={12} alive={0.12} />
+      {/* `faceScale` is doing real work here: the near end of this queue is drawn at 1.02, and a
+          featureless grey head at that size reads as a pill rather than a person. Everything under
+          0.82 stays anonymous, which is the §6.5 hierarchy the crowd exists for. */}
+      <CrowdColumn xFar={470} yFar={812} xNear={1420} yNear={1026} n={13}
+        scaleNear={1.02} scaleFar={0.36} seed={4} facing={-1} view="profile" alive={0.15}
+        expr={FACES.tired} />
+      {/* placards over the crowd — the reference carries one in BOTH captured thumbnails */}
+      <Placard x={352} y={806} w={158} h={104} tilt={-9} poleH={168} seed={3} />
+      <Placard x={846} y={862} w={190} h={122} tilt={7} poleH={196} seed={8} />
+      <Placard x={1258} y={946} w={224} h={140} tilt={-5} poleH={214} seed={14} />
+
+      {/* --- barriers between the queue and the kerb --- */}
+      <Fence x0={40} x1={780} y={840} h={62} posts={11} opacity={0.55} />
+      <RopeLine x0={1500} x1={1880} y={1002} posts={3} s={1.0} />
+
+      {/* --- near plane: the coloured hero at the head of the near end of the line --- */}
+      <StickFigure pose={A.stand(f)} x={CAPTION_SAFE_X + 460} y={1010} scale={1.16} facing={-1}
+        view="front" expr={FACES.worried} pal={LIGHT} frame={f} idle="gesture" />
+
+      {/* --- street furniture: a lamp standard, a bin, crates, a dropped paper --- */}
+      <g>
+        <rect x={1616} y={QUEUE_KERB - 402} width={20} height={402} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+        <path d={`M 1626 ${QUEUE_KERB - 402} q 0 -38 46 -38`} fill="none" stroke={INK} strokeWidth={STROKE_THIN * 1.4} />
+        <rect x={1650} y={QUEUE_KERB - 458} width={58} height={22} rx={9} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+      </g>
+      <RibbedPanel x={1758} y={936} w={92} h={112} ribs={6} dir="v" fill={tn.body} />
+      <rect x={1748} y={922} width={112} height={16} rx={6} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      <CaseStack x={92} baseY={1042} n={3} s={0.78} seed={27} />
+      <BoxStack x={1560} baseY={1076} n={2} s={0.72} seed={33} />
+      {[[300, 1050], [980, 1064]].map(([px, py], i) => (
+        <g key={i} transform={`rotate(${(rnd(i * 13) - 0.5) * 44} ${px} ${py})`}>
+          <rect x={px - 52} y={py - 34} width={104} height={68} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+          <TextLines x={px - 40} y={py - 20} w={80} n={4} gap={13} th={3.6} seed={i * 9} opacity={0.55} />
+        </g>
+      ))}
+      <Cone x={1892} y={1046} s={0.72} />
+      {/* One saturated note on a drained key: a shopfront at the right edge under a coloured awning
+          (bible §5, and COMPARISON fix #5 — a `grey`-keyed frame must still carry a saturated
+          object). It gets a window and a fascia under the awning: the first build hung the awning
+          on nothing, so it read as a red banner floating against a building line. */}
+      <rect x={1648} y={606} width={286} height={QUEUE_KERB - 606} fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE} />
+      <rect x={1656} y={622} width={270} height={44} fill={shade(tn.body, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <SerifWords x={1678} y={632} w={226} h={20} words={2} seed={43} fill={PAPER_WHITE} />
+      <RibbedPanel x={1656} y={666} w={270} h={40} ribs={8} dir="v" fill={c.accent} />
+      <Glazing x={1668} y={716} w={246} h={QUEUE_KERB - 716} bays={3} rows={1} pane={shade(tn.deep, -2)} sill={false} />
+    </Frame>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// 12. closeUpPortrait — one character large in frame for the emotional beats
+//
+// Keyed `alarm`. COMPARISON fix #2 is that our detected cut rate is 8.94/min against the reference's
+// 12.5 because "wide↔medium on identical artwork is not a visible cut" — none of the six is in
+// director.tsx's FOCUS map, so no scene ever gets a closeup framing. This template is the other half
+// of that fix: a scene that IS a close-up at wide framing, so the cut into and out of it is a real
+// change of picture whatever the shot planner does with it.
+//
+// THE DENSITY PROBLEM, stated because it is the whole difficulty of this template. A head drawn at
+// this size is a single flat skin region covering ~23% of the frame, and flat fill is a DENSITY
+// metric — a big flat mass drives it toward the empty end of the band. So the room behind the figure
+// is drawn at full density (glazed wall with a skyline through it, panelling, a chart, a bookcase, a
+// working desk) rather than as the "simple background" a close-up would normally get. Everything
+// back there is at NORMAL scale, which is also what sells the head as close: the depth cue is the
+// size ratio, not a blur we are not allowed to paint.
+//
+// The hero takes `idle="none"`. At scale 5.6 the idle system's few units of hip translation become
+// ~40px of a 660px-wide head, which moves the frame's largest mass across a third of the lock grid.
+// The motion in this frame is the blink and gaze (which run off `frame` regardless of idle level and
+// move two 38px discs), the clock, and one background figure.
+// ---------------------------------------------------------------------------
+const PORTRAIT_SCALE = 5.6;
+const PORTRAIT_WALL = 636;
+
+const CloseUpPortrait: React.FC = () => {
+  const f = useCurrentFrame();
+  const c = useSceneColors();
+  const tn = useSceneTones();
+  return (
+    <Frame>
+      <Ceiling y={128} lights={3} />
+      <Dentils x0={0} x1={1920} y={112} n={46} h={22} />
+      {/* --- the room behind: panelled wall over a dado, a glazed bay with the city through it --- */}
+      {/* The panel runs are deliberately FINE (24 and 34 bays). A head drawn at 5.6× is one flat
+          skin region covering ~23% of the frame, so every visible part of the room has to carry
+          more edges than it otherwise would just to hold the template inside the flat-fill band. */}
+      <UnitWall x={0} y={140} w={1920} h={300} cols={24} rows={1} handle={false} fill={tn.card} carcass={tn.deep} />
+      <rect x={0} y={432} width={1920} height={22} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <UnitWall x={0} y={452} w={1920} h={184} cols={34} rows={1} handle={false} fill={shade(tn.card, -1)} carcass={tn.deep} />
+      <rect x={0} y={PORTRAIT_WALL - 22} width={1920} height={22} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
+      {/* The window, with a DISTANT skyline behind the glass. The first build put four 110-220 unit
+          buildings in a 296-unit opening: at that size `BuildingBand`'s shutters and doors are
+          legible, so the view read as a wall of garage doors rather than as somewhere further off.
+          Small units, lifted two rungs, read as distance without haze or a gradient. */}
+      <rect x={72} y={168} width={560} height={296} fill={shade(c.bg, 3)} />
+      <BuildingBand baseY={464} x0={64} x1={640} n={7} seed={13} depth={2} minH={56} maxH={132} opacity={0.75} />
+      <Glazing x={72} y={168} w={560} h={296} bays={4} rows={2} pane={null} />
+      {/* charts and a clock on the wall, and a bookcase under them */}
+      <WallFrame x={700} y={180} w={306} h={216} art="line" seed={7} />
+      <WallFrame x={1046} y={180} w={220} h={216} art="bars" seed={11} />
+      <circle cx={1420} cy={252} r={56} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
+      <line x1={1420} y1={252} x2={1448} y2={266} stroke={INK} strokeWidth={STROKE_THIN} strokeLinecap="round" />
+      <ClockHand cx={1420} cy={252} r={40} f={f} />
+      <UnitWall x={1546} y={176} w={352} h={300} cols={1} rows={3} handle={false} />
+      {Array.from({length: 30}, (_, i) => {
+        const col = i % 10, row = Math.floor(i / 10);
+        return <rect key={i} x={1566 + col * 32} y={196 + row * 100} width={24} height={56 + rnd(i * 5) * 12}
+          fill={rnd(i * 3) > 0.76 ? c.accent : shade(tn.card, -(i % 3))} stroke={INK} strokeWidth={2.6} />;
+      })}
+      <RibbedPanel x={716} y={456} w={470} h={176} ribs={13} dir="v" />
+
+      {/* --- floor and the working desk across the mid-ground. Both are BEHIND the head, and both
+              are what stop the picture reading as a portrait on a plain wall. --- */}
+      <SlabFloor y={PORTRAIT_WALL} cols={30} rows={12} />
+      <SeatedRow y={718} x0={210} x1={470} n={2} scale={0.66} seed={9} working view="front" alive={0.5} />
+      <StickFigure pose={A.stand(f + 41)} x={1660} y={772} scale={0.78} facing={-1} view="profile"
+        pal={DIM} showFace={false} frame={f} idle="subtle" />
+      {/* a radiator under the window and a pinned run beside the bookcase — both are on the parts
+          of the wall the head does NOT cover, which is the only place added density pays */}
+      <RibbedPanel x={96} y={486} w={520} h={140} ribs={15} dir="v" />
+      {Array.from({length: 4}, (_, i) => {
+        const px = 1512 + (i % 2) * 214, py = 496 + Math.floor(i / 2) * 76;
+        return (
+          <g key={i} transform={`rotate(${(rnd(i * 11) - 0.5) * 9} ${px + 92} ${py + 30})`}>
+            <rect x={px} y={py} width={184} height={60} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
+            <TextLines x={px + 14} y={py + 12} w={152} n={3} gap={14} th={4} seed={i * 7} opacity={0.6} />
+            <circle cx={px + 92} cy={py + 6} r={6} fill={c.accent} />
+          </g>
+        );
+      })}
+      <Desk x={40} y={796} w={720} legH={132} />
+      <Monitor x={96} y={648} w={190} h={140} content="chart" seed={3} />
+      <Monitor x={310} y={664} w={162} h={124} content="text" seed={7} />
+      <Keyboard x={330} y={792} w={160} />
+      <DeskPhone x={548} y={794} s={0.9} />
+      <Papers x={690} y={784} n={2} s={0.7} seed={19} />
+      <CaseStack x={140} baseY={1024} n={3} s={0.7} seed={37} />
+      <Desk x={1420} y={824} w={480} legH={150} fill={shade(tn.card, -1)} />
+      <Papers x={1560} y={814} n={3} s={0.78} seed={23} />
+      <BoxStack x={1830} baseY={816} n={2} s={0.6} seed={29} />
+      {/* a printer on the right desk: paper tray, output shelf, panel */}
+      <g>
+        <rect x={1690} y={730} width={172} height={86} rx={8} fill={shade(tn.body, 1)} stroke={INK} strokeWidth={STROKE} />
+        <rect x={1706} y={746} width={92} height={22} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        <rect x={1812} y={746} width={34} height={12} rx={4} fill={c.accent} />
+        <rect x={1706} y={784} width={140} height={16} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      </g>
+      <Plant x={1240} y={824} s={1.0} seed={5} />
+      <Chair x={620} y={1060} s={1.35} facing={1} fill={shade(tn.body, -2)} />
+
+      {/* --- the subject. Drawn last, at 5.6× a staged figure, with the outline weight divided by
+              the same factor so the linework stays at the canon's ~8px at 1920 instead of 45px. --- */}
+      <StickFigure pose={A.stand(0)} x={1180} y={1720} scale={PORTRAIT_SCALE} facing={-1} view="front"
+        expr={FACES.shock} pal={LIGHT} frame={f} idle="none" lineW={STROKE / PORTRAIT_SCALE} />
+    </Frame>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// 13. chartBoard — a large flat chart as the SUBJECT, with a figure presenting to it
+//
+// Keyed `gold`: the pitch, the growth curve, the good years — the beat this frame serves in a
+// finance explainer, and the second use of a key the first six never reached.
+//
+// The chart is `ChartPlot` from the library rather than a bespoke drawing, because a studio backdrop
+// needs the same object (see `broadcastDesk` above) and two hand-built charts would drift apart.
+// `crash` puts the reference's red down-leg across it, which is this frame's single saturated note.
+// ---------------------------------------------------------------------------
+const BOARD_FLOOR = 700;
+
+const ChartBoard: React.FC = () => {
+  const f = useCurrentFrame();
+  const c = useSceneColors();
+  const tn = useSceneTones();
+  // The presenting arm. `A.stand` returns a plain Pose object, so the two joint angles that swing
+  // the near arm toward the board are an override on it rather than a new action.
+  //
+  // 104°, NOT the 130° the first build used. In a front view the head sits directly above the
+  // shoulder joint, so an arm raised STEEPLY pivots its elbow inside the head box and the upper arm
+  // — drawn after the head, as all near limbs are — is painted straight across the face. 104° puts
+  // the elbow outboard of the head's half-width first and only then lifts the forearm, which is the
+  // gesture reading as pointing rather than as scratching an ear.
+  const presenting = {...A.stand(f), armNearShoulder: 104, armNearElbow: 34};
+  return (
+    <Frame>
+      <Ceiling y={150} lights={3} />
+      <Dentils x0={0} x1={1920} y={134} n={44} h={22} />
+      {/* --- the room: a panel band under the ceiling, a picture rail, a papered wall --- */}
+      <UnitWall x={0} y={162} w={1920} h={132} cols={18} rows={1} handle={false} fill={tn.card} carcass={tn.deep} />
+      <rect x={0} y={290} width={1920} height={18} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={0} y={306} width={1920} height={BOARD_FLOOR - 306} fill={tn.panel} />
+      <g stroke={INK} strokeWidth={2} opacity={0.14}>
+        {Array.from({length: 38}, (_, i) => <line key={i} x1={i * 52} y1={306} x2={i * 52} y2={BOARD_FLOOR} />)}
+      </g>
+      <rect x={0} y={BOARD_FLOOR - 34} width={1920} height={34} fill={tn.card} stroke={INK} strokeWidth={STROKE_THIN} />
+
+      {/* --- floor first, THEN the board. The first build drew the board before `SlabFloor`, and the
+              floor's full-width rect painted straight over the marker tray and both easel legs —
+              the board appeared to end at the horizon line with nothing holding it up. --- */}
+      <SlabFloor y={BOARD_FLOOR} cols={32} rows={12} />
+      <path d="M 300 940 L 1720 940 L 1880 1080 L 140 1080 Z" fill={shade(tn.floor, 2)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+      <path d="M 348 968 L 1672 968 L 1802 1064 L 218 1064 Z" fill="none" stroke={INK} strokeWidth={STROKE_THIN} opacity={0.55} />
+
+      {/* --- the board itself: an easel frame, the plot in it, a tray of markers under it --- */}
+      <rect x={210} y={196} width={912} height={534} fill={shade(tn.body, -2)} stroke={INK} strokeWidth={STROKE} />
+      {/* 16 bars and 9 gridlines. The plot's pale ground is ~20% of the frame, so the SERIES is what
+          has to carry its density: at 12 bars / 6 gridlines the template measured 91.1% flat fill,
+          i.e. against the empty end of the band with the board doing the emptying. */}
+      <ChartPlot x={234} y={220} w={864} h={486} kind="bars" bars={16} seed={6} live crash grid={9} />
+      {/* the two easel legs, splaying to the floor, with a stretcher across them */}
+      {[[276, -1], [1046, 1]].map(([px, dir], i) => (
+        <g key={i}>
+          <path d={`M ${px} 730 L ${px + dir * 82} 1012 l 34 0 L ${px + 34} 730 Z`}
+            fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+        </g>
+      ))}
+      <rect x={228} y={862} width={880} height={22} fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={234} y={730} width={864} height={30} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE} />
+      {[300, 380, 460, 540].map((mx, i) => (
+        <rect key={i} x={mx} y={736} width={62} height={16} rx={7}
+          fill={i === 1 ? c.accent : shade(tn.body, i % 2)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      ))}
+
+      {/* --- the wall right of the board: a second chart, a pinned sheet run, a flip pad --- */}
+      <WallFrame x={1298} y={196} w={288} h={230} art="line" seed={9} />
+      <WallFrame x={1622} y={196} w={244} h={230} art="scape" seed={15} />
+      {Array.from({length: 6}, (_, i) => {
+        const px = 1310 + (i % 3) * 190, py = 470 + Math.floor(i / 3) * 118;
+        return (
+          <g key={i} transform={`rotate(${(rnd(i * 7) - 0.5) * 10} ${px + 74} ${py + 46})`}>
+            <rect x={px} y={py} width={148} height={92} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
+            <TextLines x={px + 14} y={py + 18} w={120} n={4} gap={16} th={4} seed={i * 5} opacity={0.6} />
+            <circle cx={px + 74} cy={py + 8} r={7} fill={c.accent} />
+          </g>
+        );
+      })}
+
+      {/* --- the presenter, right of the board and right of the caption card, arm to the chart.
+              He stands at 1490, clear of the audience: the first build put him at 1420, which was
+              also an audience chair's x, so the chair back painted straight across his chest. --- */}
+      <StickFigure pose={presenting} x={1490} y={950} scale={1.14} facing={-1}
+        view="front" expr={FACES.earnest} pal={LIGHT} frame={f} idle="gesture" />
+      {/* a side table with a projector and a live laptop beside him */}
+      <Desk x={1668} y={904} w={216} h={24} legH={104} fill={shade(tn.card, -1)} />
+      <Monitor x={1690} y={814} w={172} h={90} content="grid" seed={21} />
+      <rect x={1700} y={878} width={148} height={26} rx={6} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      <Papers x={1880} y={896} n={2} s={0.6} seed={25} />
+
+      {/* --- the audience: seated backs in the near plane, each with its own chair.
+              ONE SEAT PER `SeatedRow` CALL, deliberately. A row of n>1 jitters each figure by up to
+              ±0.18 of the step to break the comb, so a chair drawn at the row's own x0/x1 lands
+              beside its occupant rather than under him — which is what the first build looked
+              like. With x0 === x1 and n === 1 the step is 0 and the jitter with it. --- */}
+      {[[250, 1044, 1.06, 31], [560, 1052, 1.1, 34], [900, 1070, 1.18, 37], [1210, 1076, 1.22, 40]]
+        .map(([cx, cy, s, seed], i) => (
+          <g key={i}>
+            <SeatedRow y={cy} x0={cx} x1={cx} n={1} scale={s} seed={seed} view="back" alive={i % 2} />
+            <Chair x={cx} y={1080} s={s * 1.04} facing={1} fill={shade(tn.body, i % 2 ? -1 : -2)} />
+          </g>
+        ))}
+      <Plant x={92} y={1058} s={1.0} seed={3} />
+      <BoxStack x={1892} baseY={1074} n={2} s={0.7} seed={41} />
+    </Frame>
+  );
+};
+
 // ---------------------------------------------------------------------------
 // Registration
 // ---------------------------------------------------------------------------
@@ -1039,7 +2250,9 @@ const NewsMontage: React.FC = () => {
  * NO NAME HERE MAY COLLIDE with a template in scenes.tsx or stage.tsx: this record is spread LAST
  * into `TEMPLATES`, so a shared name silently supersedes the older template and changes what a
  * legacy episode renders. `tradingFloor` did exactly that until WO-8g renamed it `exchangeFloor`.
- * Checked against the whole registry at that point: it was the only one.
+ * Checked against the whole registry at that point: it was the only one. Re-checked for the WO-8h
+ * seven: `courtroom` collides (stage.tsx's MAFIA RICO trial), so this file's courtroom is registered
+ * as `courtHearing`; the other six names are free.
  */
 export const EXPLAINER_TEMPLATES: Record<string, React.FC> = keyedTemplates({
   officeFloor: OfficeFloor,
@@ -1048,4 +2261,12 @@ export const EXPLAINER_TEMPLATES: Record<string, React.FC> = keyedTemplates({
   cityStreet: CityStreet,
   domesticInterior: DomesticInterior,
   newsMontage: NewsMontage,
+  // --- WO-8h ---
+  bankExterior: BankExterior,
+  courtHearing: CourtHearing,
+  factoryFloor: FactoryFloor,
+  broadcastDesk: BroadcastDesk,
+  crowdQueue: CrowdQueue,
+  closeUpPortrait: CloseUpPortrait,
+  chartBoard: ChartBoard,
 });

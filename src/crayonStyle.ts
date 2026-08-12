@@ -397,6 +397,28 @@ export const SCENE_KEY_BY_TEMPLATE: Record<string, SceneKey> = {
   //   cityStreet — the only one of the six under open sky, so the only one keyed `daylight`.
   officeFloor: 'interior', boardroom: 'grey', exchangeFloor: 'grey', cityStreet: 'daylight',
   domesticInterior: 'interior', newsMontage: 'interior',
+  // WO-8h's seven. The six above reach only THREE of the five keys and never `gold` or `alarm` at
+  // all, which is COMPARISON MISS #7 ("the reference commits a NEW hue per scene") and half of
+  // MISS #5 (our 0.209 mean saturation against the reference's 0.308-0.646 range). These seven put
+  // both unused keys into the explainer set, so the thirteen now cover all five. Three of them are
+  // enclosed rooms and NONE of those may reach `daylight` — the same inversion the block above
+  // exists to prevent.
+  //   bankExterior — `gold`: "ceremony, money, applause, the good years". An institutional stone
+  //     frontage at its height; its opposite mood is `crowdQueue`, keyed `grey`, so the two never
+  //     read as one set redressed.
+  //   courtHearing — `interior`: the key's own gloss is "enclosed, lamp-lit, wooden, dark", which
+  //     is a panelled courtroom verbatim, and the amber accent gives the seal and the bench lamp a
+  //     saturated note the legacy `grey` courtroom cannot carry. (Registered as `courtHearing`, not
+  //     `courtroom`, because stage.tsx's MAFIA pack already owns that name — see explainer.tsx.)
+  //   factoryFloor — `interior`: this key's stated exemplar is the "brown warehouse".
+  //   broadcastDesk / closeUpPortrait — `alarm`: the reference's own saturated panel
+  //     (wolf_montage_verified.jpg, 9:20) is a news/reaction frame with pushed faces on an orange
+  //     ground. These are the two templates carrying the top of the saturation range.
+  //   crowdQueue — `grey`: "bureaucratic, drained, loss" — the breadline/bank-run mass
+  //     (depression_montage_verified.jpg, 15:00 is a grey crowd with one coloured figure in it).
+  //   chartBoard — `gold`: the pitch and the growth curve, the beat this frame serves.
+  bankExterior: 'gold', courtHearing: 'interior', factoryFloor: 'interior',
+  broadcastDesk: 'alarm', crowdQueue: 'grey', closeUpPortrait: 'alarm', chartBoard: 'gold',
 };
 
 const KEY_ROTATION: SceneKey[] = ['daylight', 'gold', 'interior', 'alarm', 'grey'];
