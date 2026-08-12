@@ -24,13 +24,29 @@ export type Pose = {
   bob: number;
 };
 export type Expr = {brow: number; browRaise: number; lid: number; mouth: 'neutral' | 'flat' | 'frown' | 'open' | 'smirk' | 'tight'; look: number};
-export type Palette = {limb: string};
+/**
+ * A palette separates the two things a figure is made of (WO-2c):
+ *   - `limb`  — the LINEWORK colour. Every stroke on the figure: silhouette outline, limb sticks,
+ *               head outline, face dots, collar/tie detail, shoes. Pure black in the reference,
+ *               background crowd figures included.
+ *   - `tone`  — the BODY-FILL treatment. `'grey'` swaps skin/costume/hair fills for the anonymous
+ *               crowd greys and leaves the linework alone. Absent (the default) = full colour.
+ *
+ * The field is optional, so the existing `{limb: …}` literal form still type-checks.
+ */
+export type Palette = {limb: string; tone?: 'colour' | 'grey'};
 
 export const PAPER = '#f6f2e9';
 export const INKPAL: Palette = {limb: INK};
 export const LIGHT: Palette = INKPAL;
 export const DARK: Palette = INKPAL;
-export const DIM: Palette = {limb: '#9a948a'};
+// DIM = the grey anonymous crowd (bible §6.5). It desaturates FILLS ONLY. It used to set `limb` to a
+// grey, which greyed the outline too, and the crowd read as faded/washed-out — a rendering weakness
+// rather than the deliberate focal device. Measured on the reference (4:56 stairs cell of
+// docs/research/crayon/frames/wolf_montage_verified.jpg, and HawmGu7oNrc/thumb.png): the grey crowd
+// carries the SAME pure-black uniform-weight outline and the same black stick limbs as the hero;
+// only the skin/body fills are desaturated.
+export const DIM: Palette = {limb: INK, tone: 'grey'};
 export const SIL: Palette = INKPAL;
 
 // Flat character fills, sampled off the reference thumbnail (docs/research/crayon/HawmGu7oNrc/thumb.png):
@@ -38,7 +54,8 @@ export const SIL: Palette = INKPAL;
 const SKIN = '#efd0ab';
 // Background people are featureless grey, never coloured — the "grey crowd + colour hero" focal
 // device (bible §6.5). Callers opt in by passing pal={DIM}, and the costume is desaturated to these
-// greys rather than skipped, so a crowd figure still has a torso silhouette.
+// greys rather than skipped, so a crowd figure still has a torso silhouette. These are FILLS only:
+// the outline around them stays INK (see the DIM note above).
 const CROWD_FILL = '#c9c4bb';
 const CROWD_SKIN: CostumeSkin = {body: '#a8a49c', accent: '#8e8a82', collar: '#c9c4bb', hair: '#8e8a82', hairStyle: 'crop'};
 
@@ -194,6 +211,8 @@ export const StickFigure: React.FC<{
   showFace = true, briefcase = false, lineW = STROKE, costume = episodeCostume(),
 }) => {
   const front = view === 'front';
+  // ALL linework — outlines, limb sticks, face, costume detail, and the solid shoe, which the
+  // reference draws in the same black as the limb it terminates. Never desaturated; only fills are.
   const ink = pal.limb;
   const hip: P = {x: 0, y: -pose.bob};
   const shoulder: P = {x: hip.x + Math.sin(pose.spineLean * D) * SEG.spine * facing, y: hip.y - Math.cos(pose.spineLean * D) * SEG.spine};
@@ -217,8 +236,10 @@ export const StickFigure: React.FC<{
   const kneeF = down(hipF, pose.legFarHip, SEG.thigh, ffar);
   const footF = down(kneeF, pose.legFarHip + pose.legFarKnee, SEG.shin, ffar);
 
-  // Background people are flat grey with no costume colour; the hero keeps full colour.
-  const crowd = pal === DIM;
+  // Background people are flat grey with no costume colour; the hero keeps full colour. Driven by the
+  // palette's declared `tone`, not by object identity against DIM, so the fill/outline split is one
+  // rule rather than a special case at the DIM call sites.
+  const crowd = pal.tone === 'grey';
   const skinFill = crowd ? CROWD_FILL : SKIN;
   const detailW = lineW * detailRatio;
   // Limbs are stroked at a weight PROPORTIONAL to the figure (LIMB_W_RATIO of head width), not at the
