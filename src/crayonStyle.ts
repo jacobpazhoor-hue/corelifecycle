@@ -108,9 +108,43 @@ const hslToRgb = (h: number, s: number, l: number): [number, number, number] => 
   return [ch(h + 1 / 3), ch(h), ch(h - 1 / 3)];
 };
 
+/** HSV saturation of an sRGB triple in 0..1 — the statistic every art measurement in this project
+ *  is quoted in (COMPARISON §0(a)), and the one a colour has to clear to be worth its area. */
+const hsvS = (r: number, g: number, b: number): number => {
+  const mx = Math.max(r, g, b);
+  return mx > 0 ? (mx - Math.min(r, g, b)) / mx : 0;
+};
+
+/**
+ * THE COVERAGE RULE (WO-24). A surface either carries the scene's committed hue at real chroma, or
+ * it is grey. Nothing in between: any flat colour this module would emit under `CHROMA_FLOOR` HSV
+ * saturation is emitted as the pure neutral of the same lightness instead.
+ *
+ * It is a measurement rule as much as an art rule, and it is the whole answer to WO-23's §5 MISS.
+ * "Coloured" is counted at HSV S > 0.02, which a half-tint clears trivially: measured on that build,
+ * 15–30% of every explainer frame sat between S 0.02 and 0.35 — the pale end of the tone ladder,
+ * mostly, where lightening a fill drains it anyway (a `card` at HSL L 0.88 cannot hold HSV S above
+ * ~0.11 whatever hue it is authored on). That band paid its FULL area in coverage and returned a
+ * hue no viewer can name. The reference does not carry it: its plaster, paper and cardboard are
+ * white, its walls and floors are `#242424`/`#3c3c3c`/`#6c6c6c`, and the colour it does spend is
+ * spent hard — coloured-pixel saturation 0.552 over a quarter of the frame.
+ *
+ * 0.24 is where the two statistics balance. Lower and the half-tints come back with the coverage
+ * they cost; higher and the interior `card` (the tan box, the newsprint stock, HSV S 0.49 → drained
+ * to nothing) stops being a material and the rooms lose the second tone that separates them.
+ */
+const CHROMA_FLOOR = 0.24;
+
+/** A flat hex, put through `CHROMA_FLOOR`. Every colour this module emits goes through here. */
+const flat = (r: number, g: number, b: number): string => {
+  if (hsvS(r, g, b) >= CHROMA_FLOOR) return rgbToHex(r, g, b);
+  const l = rgbToHsl(r, g, b)[2];
+  return rgbToHex(l, l, l);
+};
+
 /** A flat hex from HSL with hue in DEGREES (wrapped), saturation and lightness in 0..1. */
 const hsl = (hDeg: number, s: number, l: number): string =>
-  rgbToHex(...hslToRgb((((hDeg % 360) + 360) % 360) / 360, s, l));
+  flat(...hslToRgb((((hDeg % 360) + 360) % 360) / 360, s, l));
 
 // ---------------------------------------------------------------------------
 // Per-scene colour keys
@@ -136,6 +170,23 @@ export type SceneColors = {
   accent: string;
   /** Featureless background people — the grey anonymous crowd behind the colour hero (bible §6.5). */
   crowd: string;
+  /**
+   * The room's NEUTRAL shell — the structural planes a scene is built out of rather than the things
+   * standing in it: ceilings, back walls, floors, recesses, distant architecture. Always a pure grey.
+   *
+   * WHY IT EXISTS (WO-24). WO-20 keyed every plane in the frame to the scene's committed hue and
+   * WO-23 measured the cost: all-pixel HSV saturation **0.445 against the reference's 0.137**, with
+   * **79.9%** of the frame carrying chroma against the reference's **25%**. The chroma INTENSITY was
+   * already right — coloured-pixel saturation 0.561 vs 0.552 — so the defect was never which hues we
+   * chose, it was how much of the picture we spent them on.
+   *
+   * Measured on the reference's own environment cells (`frames/wolf_montage_verified.jpg`), the five
+   * largest colour areas of the 3:34 office are `#6c6c6c #242424 #3c3c3c #b4b4b4 #545454` — 62% of
+   * the frame, every one of them a PURE NEUTRAL — and the 2:08 warehouse is 58% neutral grey with
+   * its committed brown `#6c543c` on 9%. Their rooms are grey; the things in the room carry the hue.
+   * `shell` is that grey, and `sceneTones()` routes the structural roles onto it.
+   */
+  shell: string;
 };
 
 /**
@@ -197,6 +248,8 @@ type MoodSpec = {
   mid: MoodTok;
   accent: MoodTok;
   crowd: MoodTok;
+  /** HSL lightness of the mood's neutral `shell` (see `SceneColors.shell`). Never carries chroma. */
+  shellL: number;
 };
 
 /**
@@ -224,26 +277,45 @@ const MOOD_L_FLOOR = 0.2;
  *                       reference's own drained frames (3:34 office, 12:22 ops room) are blue-greys
  *                       and teals, not neutrals, and its LEAST saturated measured frame reads 0.308.
  */
+//
+// WO-24 RE-TUNED EVERY `s` IN THIS TABLE DOWNWARD, and the reason is coverage, not taste. See
+// `SceneColors.shell`: WO-20 tuned these against the all-pixel mean while believing the bible's
+// 0.308–0.646 band applied to it, and overshot the reference 3.25×. What each mood is allowed to
+// key is now stated per mood, because "where the colour goes" is the whole mechanism:
+//   daylight — the SKY is the committed hue (the reference's cyan beach). Ground keyed, shell grey.
+//   gold     — the frontage/ground is the committed hue. Shell grey.
+//   interior — the ROOM IS GREY and the FURNITURE carries the hue, which is the reference's own
+//              office and warehouse exactly. `bg` is therefore neutral: it is the full-frame ground,
+//              the single largest area in the picture, and keying it was most of the 3.25× overshoot.
+//   alarm    — the reference's saturated panel, its one genuinely hot frame. `bg` stays keyed; the
+//              floor and recesses come off the shell, which is what drains `broadcastDesk`'s 19%
+//              of frame at HSV S 0.86 — the single most lurid area WO-23's QA named.
+//   grey     — institutional and drained: ground neutral, a low tint left on the furniture only so
+//              the three grey-keyed rooms still differ from each other, and the crash-red accent.
 const MOODS: Record<SceneKey, MoodSpec> = {
   daylight: {
     hue0: 168, span: 60,
-    bg: {h: 0, s: 0.75, l: 0.70},        // the sky itself — bright, high-chroma, high-lightness
+    shellL: 0.66,                        // paving, kerbs, distant blocks — grey, not keyed sand
+    bg: {h: 0, s: 0.72, l: 0.70},        // the sky itself — bright, high-chroma, high-lightness
     // Ground: the sky's opposite, which is how sand and paving read warm under a cyan sky. Held
     // LIGHT (0.64) as well as warm — dropped to 0.60 it stopped being tan and became a brick-red
     // road, which is a different scene, not a richer one.
     mid: {h: 178, s: 0.555, l: 0.65},
     accent: {h: 174, s: 0.80, l: 0.51},  // the one vermilion note (a car, a hydrant, a jacket)
-    crowd: {h: 6, s: 0.10, l: 0.66},     // §6.5's featureless grey crowd, barely keyed to the scene
+    // §6.5 is literal — "background people are featureless GREY ovals" — and WO-20's 0.10 tint was
+    // 15% of `cityStreet`'s frame paying full coverage for a hue nobody can name. Snapped to grey.
+    crowd: {h: 6, s: 0.0, l: 0.66},
   },
   gold: {
     // The narrowest arc in the set, and deliberately so: two golds 40° apart are an orange scene and
     // a yellow scene, not two golds. 20° buys visible separation between the two gold templates while
     // both stay the measured #e8b54b family; the arc centre (42°) is 1.5° off that measured hue.
     hue0: 32, span: 20,
-    bg: {h: 0, s: 0.774, l: 0.602},
-    mid: {h: -6, s: 0.62, l: 0.48},
+    shellL: 0.50,
+    bg: {h: 0, s: 0.72, l: 0.602},
+    mid: {h: -6, s: 0.60, l: 0.48},
     accent: {h: -34, s: 0.64, l: 0.33},  // the deep red note gold has always carried
-    crowd: {h: 0, s: 0.16, l: 0.53},
+    crowd: {h: 0, s: 0.0, l: 0.53},
   },
   interior: {
     hue0: 195, span: 200,
@@ -254,17 +326,21 @@ const MOODS: Record<SceneKey, MoodSpec> = {
     // against 80-142 for every other mood). At L 0.30 the ladder has six separated rungs under and
     // over it. It also fixes COMPARISON's other §5 miss in passing: `officeFloor` ran 71-79% ink
     // against the reference's 10-70%, because at L 0.17 most of the room counted as ink.
-    bg: {h: 0, s: 0.40, l: 0.33},
+    shellL: 0.31,
+    // `bg` is NEUTRAL — the room, not the furniture. It is the full-frame ground `Frame` paints, so
+    // on a keyed value it alone carried 10–23% of the picture at HSV S ~0.58 in five templates.
+    bg: {h: 0, s: 0.0, l: 0.33},
     mid: {h: 2, s: 0.46, l: 0.30},
     accent: {h: 38, absolute: true, s: 0.72, l: 0.55},  // lamp amber, on every room hue
-    crowd: {h: 0, s: 0.10, l: 0.44},
+    crowd: {h: 0, s: 0.0, l: 0.44},
   },
   alarm: {
     hue0: 348, span: 50,
+    shellL: 0.42,
     bg: {h: 0, s: 0.70, l: 0.53},        // pulled down from the old #e8541f: broadcastDesk measured
-    mid: {h: -10, s: 0.72, l: 0.40},     // 0.688, ABOVE the reference's 0.646 ceiling
+    mid: {h: -10, s: 0.66, l: 0.40},     // 0.688, ABOVE the reference's 0.646 ceiling
     accent: {h: 45, absolute: true, s: 0.85, l: 0.60},  // the warning yellow
-    crowd: {h: 0, s: 0.15, l: 0.50},
+    crowd: {h: 0, s: 0.0, l: 0.50},
   },
   grey: {
     // Arc held to 195-240° — steel-cyan, slate, cold blue. Both ends are load-bearing and both were
@@ -273,17 +349,19 @@ const MOODS: Record<SceneKey, MoodSpec> = {
     // other end went periwinkle-violet, which is nothing at all. 45° is enough for three separated
     // hues because the mood's own chroma is low.
     hue0: 195, span: 45,
-    // The drained mood is the one that has to be argued for, because "drained" invited NEUTRAL and a
-    // neutral scores 0.012. These land the three grey-keyed explainer templates at 0.33-0.40 mean
-    // saturation — the BOTTOM of the reference band, whose own least saturated frame is 0.308 — so
-    // the mood still reads as the coldest, least colourful thing in the episode without being a
-    // measurement hole. Anything lower than this measured under the reference's entire range.
-    // `bg` is kept DARK for its chroma (L 0.58, not 0.64): the same saturation carried at a high
-    // lightness reads as bright weather rather than as overcast.
-    bg: {h: 0, s: 0.44, l: 0.58},
-    mid: {h: 10, s: 0.38, l: 0.46},
+    shellL: 0.56,
+    // WO-20 argued this mood back UP to 0.33–0.40 all-pixel saturation because "its least saturated
+    // frame reads 0.308". That number is the COLOURED-PIXEL statistic and WO-23 proved it was being
+    // read against the all-pixel meter (COMPARISON §0(a)). Measured properly, the reference's
+    // drained frames are 0.000 (the 15:00 breadline — a genuinely neutral picture), 0.026 (12:40),
+    // 0.052 (15:02) and 0.108 (the 3:34 office): four of eleven art cells under 0.11, and WO-23's
+    // build had NOTHING under 0.321. So the drained mood is drained again — a neutral ground and
+    // shell, with the tint left only on the furniture, which is what still separates the boardroom
+    // from the exchange floor from the queue. This mood is where the missing low tail comes from.
+    bg: {h: 0, s: 0.0, l: 0.58},
+    mid: {h: 10, s: 0.44, l: 0.46},
     accent: {h: 5.6, absolute: true, s: 0.542, l: 0.461},  // = #c0392b, director.tsx's LOSS
-    crowd: {h: 0, s: 0.07, l: 0.50},
+    crowd: {h: 0, s: 0.0, l: 0.50},
   },
 };
 
@@ -291,7 +369,9 @@ const MOODS: Record<SceneKey, MoodSpec> = {
 // collapse its own tone ladder against `TONE_FLOOR`. Checked at module load rather than reviewed,
 // because both failures are invisible until something is rendered and measured.
 for (const [key, m] of Object.entries(MOODS)) {
-  for (const [role, t] of Object.entries({bg: m.bg, mid: m.mid, accent: m.accent, crowd: m.crowd})) {
+  for (const [role, t] of Object.entries({
+    bg: m.bg, mid: m.mid, accent: m.accent, crowd: m.crowd, shell: {h: 0, s: 0, l: m.shellL},
+  })) {
     if (t.l < MOOD_L_FLOOR) {
       throw new Error(
         `MOODS.${key}.${role} sits at lightness ${t.l}, under MOOD_L_FLOOR ${MOOD_L_FLOOR}: pure-black ` +
@@ -311,8 +391,12 @@ export const HUE_RUNGS = 12;
 const paletteAt = (key: SceneKey, rung: number): SceneColors => {
   const m = MOODS[key];
   const h = m.hue0 + (m.span * rung) / (HUE_RUNGS - 1);
+  // Every token goes through `hsl()`, so `CHROMA_FLOOR` decides here whether it is a hue or a grey.
   const tok = (t: MoodTok) => hsl(t.absolute ? t.h : h + t.h, t.s, t.l);
-  return {bg: tok(m.bg), mid: tok(m.mid), accent: tok(m.accent), crowd: tok(m.crowd)};
+  return {
+    bg: tok(m.bg), mid: tok(m.mid), accent: tok(m.accent), crowd: tok(m.crowd),
+    shell: hsl(0, 0, m.shellL),
+  };
 };
 
 const PALETTE_CACHE = new Map<string, SceneColors>();
@@ -453,7 +537,13 @@ export const shade = (color: string, step: number): string => {
       l2 = Math.min(l, l2 + 0.005);
     }
   }
-  return rgbToHex(...hslToRgb(h, s2, l2));
+  // `flat`, not `rgbToHex`: the ladder is where half-tints were actually being made. Lightening a
+  // fill drains it (`TONE_DESAT`) on top of raising its lightness, and HSV saturation collapses at
+  // the light end regardless of hue — so `card`, `far` and `+2`/`+3` rungs were landing at HSV S
+  // 0.11–0.30 across every mood. Under `CHROMA_FLOOR` they now come back as the neutral of the same
+  // lightness, which is what pale plaster, cardboard and newsprint are on the reference anyway.
+  // This is the one thing in `shade()` that can change a hue, and it can only ever remove it.
+  return flat(...hslToRgb(h, s2, l2));
 };
 
 /**
@@ -463,15 +553,17 @@ export const shade = (color: string, step: number): string => {
  * produces a frame with several materials in it instead of one hue everywhere.
  */
 export type SceneTones = {
-  /** Distant structures — lifted toward the sky, which is how flat art does aerial perspective. */
+  /** Distant structures — lifted toward the sky, which is how flat art does aerial perspective.
+   *  STRUCTURAL: neutral (WO-24, see `sceneTones`). */
   far: string;
-  /** Second plane: back walls, the band behind the main mass. */
+  /** Second plane: back walls, the band behind the main mass. STRUCTURAL: neutral. */
   back: string;
-  /** The mid-ground mass itself. Identical to `SceneColors.mid`. */
+  /** The mid-ground mass itself. Identical to `SceneColors.mid` — MATERIAL, carries the hue. */
   body: string;
-  /** The ground plane — one rung under the things standing on it, so they separate from it. */
+  /** The ground plane — one rung under the things standing on it, so they separate from it.
+   *  STRUCTURAL: neutral. */
   floor: string;
-  /** Recesses, window blocks, shutter shadow, the dark face of a solid. */
+  /** Recesses, window blocks, shutter shadow, the dark face of a solid. STRUCTURAL: neutral. */
   deep: string;
   /**
    * The light material: cardboard, paper, plaster, luggage — the tan box against a dark wall in the
@@ -491,17 +583,30 @@ export type SceneTones = {
 
 const TONE_CACHE = new Map<string, SceneTones>();
 
-/** Derive (and cache) a scene's flat tone set from its four colour keys. */
+/**
+ * Derive (and cache) a scene's flat tone set from its colour keys.
+ *
+ * WHERE THE CHROMA GOES (WO-24). The STRUCTURAL roles — `far`, `back`, `floor`, `deep`, the planes
+ * a room is made of — now ladder off `c.shell`, which is always a pure grey; the MATERIAL roles —
+ * `body` (the mid mass) and `card` (the light material) — still ladder off `c.mid` and carry the
+ * scene's committed hue. Their LIGHTNESS relationships are unchanged, because `shell` is authored
+ * at each mood's own `mid` lightness: a floor is still one rung under the things standing on it.
+ *
+ * This is the single change that moves the coverage number. Measured per token area on WO-23's
+ * build, the four structural roles were 30–45% of every explainer frame at HSV S 0.47–0.90 —
+ * `factoryFloor` spent 39% of its picture on `floor`+`back`+`deep` alone, and `broadcastDesk` 19%
+ * on `floor` at S 0.86. On the reference those same planes are pure `#242424`/`#3c3c3c`/`#6c6c6c`.
+ */
 export const sceneTones = (c: SceneColors): SceneTones => {
-  const k = `${c.bg}|${c.mid}|${c.accent}|${c.crowd}`;
+  const k = `${c.bg}|${c.mid}|${c.accent}|${c.crowd}|${c.shell}`;
   const hit = TONE_CACHE.get(k);
   if (hit) return hit;
   const t: SceneTones = {
-    far: shade(c.mid, 2),
-    back: shade(c.mid, 1),
+    far: shade(c.shell, 2),
+    back: shade(c.shell, 1),
     body: c.mid,
-    floor: shade(c.mid, -1),
-    deep: shade(c.mid, -2),
+    floor: shade(c.shell, -1),
+    deep: shade(c.shell, -2),
     card: shade(c.mid, TONE_MAX_STEP),
     panel: shade(c.bg, -1),
     crowdFar: shade(c.crowd, 1),

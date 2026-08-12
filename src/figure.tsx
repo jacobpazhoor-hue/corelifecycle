@@ -226,8 +226,8 @@ const IDLE_SCALE = 1.7;
 
 type IdleShift = {pose: Pose; dx: number; dy: number};
 
-const idleFigure = (p: Pose, f: number, seed: number, level: IdleLevel): IdleShift => {
-  const g = IDLE_GAIN[level] * IDLE_SCALE;
+const idleFigure = (p: Pose, f: number, seed: number, level: IdleLevel, gain: number): IdleShift => {
+  const g = IDLE_GAIN[level] * IDLE_SCALE * gain;
   // f === 0 is the codebase's existing idiom for "this figure is frozen" (thumbs.tsx, and every
   // crowd call site before this work order), and the ramp keeps that literally true: at frame 0 the
   // figure is EXACTLY the pose the template staged. It also means the idle eases in over 8 frames
@@ -242,9 +242,14 @@ const idleFigure = (p: Pose, f: number, seed: number, level: IdleLevel): IdleShi
   const brLag = idleBreath(f - 4 + ph, 30, bpm);          // head follows the chest, ~4 frames late
   const sway = wander(f, seed, 30, 0.26);
   const swayLag = wander(f - 5, seed, 30, 0.26);
-  // ~one gesture every 3.5s, held for 0.8s. `pulse` jitters both period and phase off the seed.
-  const act = pulse(f, seed + 4, 104, 24);
-  const actLag = pulse(f - 5, seed + 4, 104, 24);
+  // ~one gesture every 2.8s, held for 1.0s. `pulse` jitters both period and phase off the seed.
+  // WO-24 raised the DUTY CYCLE (104/24 -> 84/30, 23% -> 36% of frames) rather than the amplitude:
+  // the gesture already clears the bible's |Δ| 1.0 motionless threshold comfortably when it fires
+  // (measured peaks of 9.9-15.7 on the hero-carrying templates), so what was leaving 68% of samples
+  // motionless was how OFTEN it fires, not how far it moves. Amplitude is unchanged, which is why
+  // no figure got looser-limbed to buy the number.
+  const act = pulse(f, seed + 4, 84, 30);
+  const actLag = pulse(f - 5, seed + 4, 84, 30);
 
   return {
     pose: {
@@ -273,18 +278,31 @@ export const StickFigure: React.FC<{
   /** How much localised idle motion this figure carries (WO-14). Defaults to `idle`; every existing
    *  call site keeps compiling and a figure given `frame={0}` still renders exactly as before. */
   idle?: IdleLevel;
+  /**
+   * Multiplier on this ONE figure's idle (WO-24). Default 1; nothing else in the codebase passes it.
+   *
+   * It exists because the idle is authored in POSE SPACE, so its on-screen amplitude scales with the
+   * figure. That is right almost everywhere and wrong at `closeUpPortrait`'s 5.6x: the same `subtle`
+   * idle that moves a background body a few pixels swung that head about 70px a second — a reaction
+   * shot lurching, not breathing. Turning IDLE_SCALE down instead would have taken the motion out of
+   * every crowd in the episode to fix one figure, so the compensation lives at the one call site
+   * that needs it, next to the `lineW={STROKE / PORTRAIT_SCALE}` that compensates for the same thing
+   * in the linework.
+   */
+  idleGain?: number;
   /** Accepted and ignored — the sketch filter is gone (see the header note). Kept so call sites compile. */
   rough?: boolean;
 }> = ({
   pose: basePose, x, y, scale = 1, facing = 1, pal = INKPAL, view = 'profile',
   expr = {brow: 0, browRaise: 0, lid: 0, mouth: 'neutral', look: 0}, frame = 0,
   showFace = true, briefcase = false, lineW = STROKE, costume = episodeCostume(), idle = 'idle',
+  idleGain = 1,
 }) => {
   const front = view === 'front';
   // Seeded off the figure's own staged position, so two figures in one row are never in phase and
   // the same figure animates identically on every machine and every re-render.
   const idleSeed = x * 0.0173 + y * 0.0071 + scale * 3.1;
-  const {pose, dx: idleDX, dy: idleDY} = idleFigure(basePose, frame, idleSeed, idle);
+  const {pose, dx: idleDX, dy: idleDY} = idleFigure(basePose, frame, idleSeed, idle, idleGain);
   // ALL linework — outlines, limb sticks, face, costume detail, and the solid shoe, which the
   // reference draws in the same black as the limb it terminates. Never desaturated; only fills are.
   const ink = pal.limb;

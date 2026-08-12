@@ -3,7 +3,7 @@ import {useCurrentFrame, useVideoConfig} from 'remotion';
 import {StickFigure, LIGHT, DIM} from './figure';
 import {FACES} from './faces';
 import * as A from './actions';
-import {blinkOn, stepIndex} from './anim';
+import {blinkOn, pulse, stepIndex} from './anim';
 import {keyedTemplates, useSceneColors} from './stage';
 import {INK, PAPER_WHITE, STROKE, STROKE_THIN, TONE_MAX_STEP, shade} from './crayonStyle';
 import {
@@ -14,6 +14,8 @@ import {
   SerifWords, TextLines, SeatedRow, Plant,
   // the civic / industrial / presentation tier (WO-8h)
   Colonnade, Steps, TrussRig, PipeRun, ChartPlot, Placard, CrowdColumn, RopeLine, Trolley,
+  // WO-24's crossing figure — the motionless-share fix, see setdressing.tsx
+  Passerby,
 } from './setdressing';
 
 // ============================================================================
@@ -296,6 +298,11 @@ const OfficeFloor: React.FC = () => {
       <BoxStack x={1618} baseY={OFFICE_DESK - 2} n={1} s={0.72} seed={14} />
       {/* the near, empty chair — foreground depth without a large black mass */}
       <Chair x={430} y={1080} s={1.5} facing={1} fill={shade(tn.body, -2)} />
+      {/* Someone carrying a box run across the front of the floor (WO-24). This template measured
+          100% motionless at 5 Hz on WO-23 — the aisle walker above drifts at 1.7 units/frame, which
+          is a real walk but only ever a mean |Δ| of 0.57 against the bible's 1.0 threshold. A
+          near-plane crossing clears it, and it is what an office floor during a move-out looks like. */}
+      <Passerby y={1078} x0={-240} x1={2160} scale={1.06} seed={5} at={84} carry="boxes" />
       <Papers x={1636} y={1050} n={2} s={0.9} seed={17} />
       <Plant x={1844} y={1080} s={1.05} seed={12} />
       <BoxStack x={132} baseY={1074} n={2} s={0.9} seed={19} />
@@ -462,7 +469,7 @@ const DeskBank: React.FC<{y: number; s: number; seats: number; seed: number}> = 
           x={x0 + (Math.floor(i / 2) + 0.5) * seatW - seatW * 0.42 + (i % 2) * seatW * 0.44}
           y={y - 128 * s}
           w={seatW * 0.4} h={124 * s}
-          content={rnd(seed * 13 + i) > 0.5 ? 'chart' : 'grid'} stand={false} seed={seed * 3 + i} live={false} />
+          content={rnd(seed * 13 + i) > 0.5 ? 'chart' : 'grid'} stand={false} seed={seed * 3 + i} />
       ))}
       <Desk x={x0} y={y} w={w} h={30 * s} legH={150 * s} />
       {Array.from({length: seats}, (_, i) => (
@@ -519,7 +526,7 @@ const ExchangeFloor: React.FC = () => {
       <SlabFloor y={EXCHANGE_WALL} cols={26} rows={11} />
 
       {/* --- far bank: seated rows, then the desk slab over their laps --- */}
-      <SeatedRow y={706} x0={330} x1={1600} n={7} scale={0.6} seed={3} working view="front" alive={0} />
+      <SeatedRow y={706} x0={330} x1={1600} n={7} scale={0.6} seed={3} working view="front" alive={0.3} />
       <DeskBank y={742} s={0.62} seats={5} seed={2} />
       {/* standing figures between the banks — the floor's characteristic gesture, arms up. `climb`
           at frame 0 is a raised-arms pose; the crowd stays static so the camera lock is untouched. */}
@@ -529,7 +536,7 @@ const ExchangeFloor: React.FC = () => {
       ))}
 
       {/* --- mid bank --- */}
-      <SeatedRow y={846} x0={240} x1={1700} n={6} scale={0.82} seed={9} working view="front" alive={0} />
+      <SeatedRow y={846} x0={240} x1={1700} n={6} scale={0.82} seed={9} working view="front" alive={0.3} />
       <DeskBank y={898} s={0.84} seats={4} seed={6} />
       <Papers x={300} y={1010} n={3} s={0.9} seed={12} />
       <Papers x={1660} y={1002} n={2} s={0.85} seed={16} />
@@ -553,6 +560,8 @@ const ExchangeFloor: React.FC = () => {
       {/* --- near plane: the coloured hero on the phone, over the near desk edge --- */}
       <StickFigure pose={A.stand(f)} x={1180} y={962} scale={1.24} facing={-1} view="front"
         expr={FACES.shock} pal={LIGHT} frame={f} idle="gesture" />
+      {/* a runner crossing the pit, cut off at the waist by the near desk drawn over him (WO-24) */}
+      <Passerby y={1000} x0={2140} x1={-220} scale={0.98} seed={11} at={72} />
       <Desk x={-40} y={1016} w={2000} h={38} legH={70} />
       <Monitor x={230} y={882} w={230} h={166} content="chart" seed={21} />
       <Monitor x={506} y={888} w={214} h={160} content="grid" seed={23} />
@@ -1015,6 +1024,29 @@ const NewsSheet: React.FC<{
   );
 };
 
+/**
+ * One cutting being nudged and settling back (WO-24).
+ *
+ * `newsMontage` was the only explainer template that took no `frame` at all, and it measured a mean
+ * |Δ| of EXACTLY 0.00 across every 5 Hz sample — a still photograph inside a 16-minute video. There
+ * is no crowd here and no machinery, so the only objects big enough to cross the bible's whole-frame
+ * |Δ| 1.0 threshold are the cuttings themselves.
+ *
+ * `pulse`, not `crossing`: it returns to 0 at BOTH ends, so the sheet drifts and settles back into
+ * the staged composition instead of jumping back to a start position when the cycle restarts. The
+ * amplitude is a couple of dozen units and a degree and a half — a hand pushing a paper aside, not
+ * a sheet flying across the table, and it stays inside the cutting's own motion-locality cells.
+ */
+const Nudge: React.FC<{seed: number; cx: number; cy: number; children: React.ReactNode}> =
+({seed, cx, cy, children}) => {
+  const f = useCurrentFrame();
+  const t = pulse(f, seed, 96, 34);
+  if (t === 0) return <>{children}</>;
+  return (
+    <g transform={`translate(${t * 30} ${t * -19}) rotate(${t * 1.6} ${cx} ${cy})`}>{children}</g>
+  );
+};
+
 const NewsMontage: React.FC = () => {
   const c = useSceneColors();
   const tn = useSceneTones();
@@ -1040,8 +1072,12 @@ const NewsMontage: React.FC = () => {
       <NewsSheet x={1340} y={128} w={512} h={628} rot={13} seed={9} photo="head" />
       <NewsSheet x={706} y={72} w={470} h={556} rot={-4} seed={17} photo="none" stock={tn.card} />
       <NewsSheet x={1176} y={330} w={470} h={556} rot={20} seed={19} photo="none" stock={shade(tn.card, 1)} />
-      <NewsSheet x={430} y={402} w={560} h={660} rot={7} seed={5} photo="head" stock={PAPER_WHITE} flash />
-      <NewsSheet x={1000} y={368} w={600} h={700} rot={-6} seed={11} photo="chart" flash />
+      <Nudge seed={5} cx={710} cy={732}>
+        <NewsSheet x={430} y={402} w={560} h={660} rot={7} seed={5} photo="head" stock={PAPER_WHITE} flash />
+      </Nudge>
+      <Nudge seed={44} cx={1300} cy={718}>
+        <NewsSheet x={1000} y={368} w={600} h={700} rot={-6} seed={11} photo="chart" flash />
+      </Nudge>
       {/* a torn strip and a clipped document, the two things a montage always has one of */}
       <g transform="rotate(21 1780 660)">
         <rect x={1636} y={556} width={290} height={208} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
@@ -1307,6 +1343,9 @@ const BankExterior: React.FC = () => {
       <TextLines x={1734} y={958} w={48} n={3} gap={11} th={3} seed={6} opacity={0.6} />
       <CaseStack x={286} baseY={1006} n={3} s={0.62} seed={23} />
       <Car x={520} y={1074} s={0.86} facing={1} body={shade(tn.body, -1)} />
+      {/* someone crossing the plaza (WO-24) — this frame measured 100% motionless, its only moving
+          things being the flag and a 0.14 crowd, neither of which reaches the |Δ| 1.0 threshold */}
+      <Passerby y={1068} x0={2160} x1={-240} scale={0.96} seed={3} at={92} />
       <Cone x={1636} y={1052} s={0.7} />
     </Frame>
   );
@@ -1718,6 +1757,11 @@ const FactoryFloor: React.FC = () => {
           whole motion budget, and a second animated near-plane body pushed it out of camera lock */}
       <StickFigure pose={A.stand(0)} x={676} y={FACT_BELT + 78} scale={0.82} facing={1}
         view="profile" expr={FACES.neutral} pal={DIM} frame={0} idle="none" />
+      {/* stock wheeled down the floor (WO-24). The note above still holds — a second animated body
+          STANDING in the near plane cost this template its camera lock — but a crossing object does
+          not: it touches two or three cells of the 8x6 grid at any one 10-frame gap, wherever it is,
+          which is why `cityStreet`'s car still measures 40/48 while moving continuously. */}
+      <Passerby y={1062} x0={-260} x1={2180} scale={1.0} seed={17} at={78} carry="trolley" />
       <Trolley x={1560} y={FACT_BELT + 96} w={280} s={1.0} />
       <CaseStack x={1700} baseY={FACT_BELT + 96} n={3} s={0.8} seed={19} />
       <BoxStack x={214} baseY={1074} n={3} s={0.94} seed={23} />
@@ -1993,6 +2037,8 @@ const CrowdQueue: React.FC = () => {
       {/* --- near plane: the coloured hero at the head of the near end of the line --- */}
       <StickFigure pose={A.stand(f)} x={CAPTION_SAFE_X + 460} y={1010} scale={1.16} facing={-1}
         view="front" expr={FACES.worried} pal={LIGHT} frame={f} idle="gesture" />
+      {/* someone walking past the head of the queue (WO-24) */}
+      <Passerby y={1076} x0={-240} x1={2160} scale={1.04} seed={23} at={96} />
 
       {/* --- street furniture: a lamp standard, a bin, crates, a dropped paper --- */}
       <g>
@@ -2127,8 +2173,14 @@ const CloseUpPortrait: React.FC = () => {
 
       {/* --- the subject. Drawn last, at 5.6× a staged figure, with the outline weight divided by
               the same factor so the linework stays at the canon's ~8px at 1920 instead of 45px. --- */}
+      {/* `subtle`, not `none` (WO-24). At 5.6x a normal idle would swing a head covering 23% of
+          the frame; at `subtle` the same rig moves it a few units, which on THIS figure is the only
+          motion in the template big enough to cross the bible's |Δ| 1.0 threshold — held at `none`
+          it measured 100% motionless with a mean |Δ| of 0.24. A reaction shot that breathes is also
+          what the reference's own pushed-face frames do. */}
       <StickFigure pose={A.stand(0)} x={1180} y={1720} scale={PORTRAIT_SCALE} facing={-1} view="front"
-        expr={FACES.shock} pal={LIGHT} frame={f} idle="none" lineW={STROKE / PORTRAIT_SCALE} />
+        expr={FACES.shock} pal={LIGHT} frame={f} idle="subtle" idleGain={0.3}
+        lineW={STROKE / PORTRAIT_SCALE} />
     </Frame>
   );
 };
@@ -2228,6 +2280,10 @@ const ChartBoard: React.FC = () => {
               ±0.18 of the step to break the comb, so a chair drawn at the row's own x0/x1 lands
               beside its occupant rather than under him — which is what the first build looked
               like. With x0 === x1 and n === 1 the step is 0 and the jitter with it. --- */}
+      {/* someone crossing behind the audience (WO-24). Kept BEHIND the seated backs and at 0.84
+          rather than in the near plane: at hero scale in the front lane this walker passed straight
+          over the presenter, who is the one thing this template is a shot of. */}
+      <Passerby y={1016} x0={2180} x1={-260} scale={0.84} seed={29} at={80} />
       {[[250, 1044, 1.06, 31], [560, 1052, 1.1, 34], [900, 1070, 1.18, 37], [1210, 1076, 1.22, 40]]
         .map(([cx, cy, s, seed], i) => (
           <g key={i}>

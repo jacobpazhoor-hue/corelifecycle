@@ -2,7 +2,7 @@ import React from 'react';
 import {useCurrentFrame} from 'remotion';
 import {StickFigure, DIM, Expr} from './figure';
 import * as A from './actions';
-import {blinkOn, stepIndex} from './anim';
+import {blinkOn, crossing, stepIndex} from './anim';
 import {
   INK, PAPER_WHITE, STROKE, STROKE_THIN, TONE_MAX_STEP, shade, sceneTones, SceneTones,
 } from './crayonStyle';
@@ -1195,6 +1195,89 @@ export const CrowdRow: React.FC<{
           />
         );
       })}
+    </g>
+  );
+};
+
+/**
+ * Units of travel one full step covers, for a figure at scale 1. Measured off this rig by WO-14 to
+ * stop the aisle walker moonwalking: `A.walk` takes `15 / speed` frames per step, so a figure that
+ * is also being translated must travel `STRIDE * scale * speed / 15` units per frame or its feet
+ * slide. `Passerby` derives its walk speed FROM its travel rather than asking a caller to match the
+ * two by hand, which is the mistake this constant exists to make impossible.
+ */
+const STRIDE = 103;
+
+/**
+ * A grey background figure who WALKS ACROSS the frame and then is gone (WO-24).
+ *
+ * This is the motion device COMPARISON asked for by name: "add a second and third animated element
+ * per template in the lower half of the frame, where the zero-cells cluster — a drifting figure, a
+ * ticker, a turning fan, paper settling. Cheap because the camera stays locked."
+ *
+ * WHY A CROSSING FIGURE RATHER THAN A BIGGER IDLE. The bible's motionless detector is a WHOLE-FRAME
+ * mean |Δ| of 1.0/255, which takes roughly a 135×135-unit object fully displacing between two 5 Hz
+ * samples. A breath, a weight shift, even a full arm gesture on a background figure does not reach
+ * it — five templates measured 100% motionless on WO-23 while every one of them was, in fact,
+ * animating something. A figure at scale ~0.9 travelling at a walking pace does reach it, and
+ * `cityStreet`'s car proves the locality half: continuous crossing motion there still measured
+ * 40/48 cells at exactly 0.0, because a single object only ever touches two or three cells at a time.
+ *
+ * `x0`/`x1` should sit OFF-FRAME at both ends. Between crossings the component renders nothing at
+ * all, so the walker enters and leaves out of shot rather than popping, and — because `crossing`
+ * always draws its phase from inside the rest window — frame 0 renders nothing, which keeps the
+ * thumbnail/still invariant every other animated component here holds.
+ */
+export const Passerby: React.FC<{
+  /** Baseline the figure's feet stand on. */
+  y: number;
+  /** Start and end x. Put both outside 0..1920 so entrances and exits happen off-frame. */
+  x0: number; x1: number;
+  scale?: number;
+  seed?: number;
+  /** Frames between crossings, jittered ±15% off `seed`. */
+  period?: number;
+  /**
+   * Frames one crossing takes. Together with |x1-x0| this fixes the walking pace, so it is not a
+   * free dial: 2400 units in 210 frames is 11.4 units a frame, which comes out at `A.walk`'s own
+   * default speed. Buying motion by shortening it makes the figure run.
+   */
+  run?: number;
+  /**
+   * The frame OF THE SCENE the crossing starts at. What actually sets this template's share of
+   * motionless frames, because a scene averages 148 frames and a crossing at a natural pace takes
+   * 210: the walker enters part-way through and is usually still walking when the cut comes, so
+   * the scene holds still first and then something moves through it (bible §4).
+   */
+  at?: number;
+  view?: 'front' | 'profile' | 'back';
+  /** Something pushed along in front — more moving area for the same one object. */
+  carry?: 'none' | 'trolley' | 'boxes';
+}> = ({y, x0, x1, scale = 0.9, seed = 0, period = 460, run = 210, at = 88, view = 'profile',
+       carry = 'none'}) => {
+  const f = useCurrentFrame();
+  const tn = useSceneTones();
+  const t = crossing(f, seed, period, run, at);
+  if (t >= 1) return null;                       // resting off-stage: nothing drawn, nothing to diff
+  const x = x0 + (x1 - x0) * t;
+  const dir = x1 >= x0 ? 1 : -1;
+  // Stride matched to travel — see STRIDE. |x1-x0| units over `run` frames is the travel rate.
+  const speed = (Math.abs(x1 - x0) / run) * 15 / (STRIDE * scale);
+  return (
+    <g>
+      {carry === 'trolley' && (
+        <Trolley x={x + dir * 40 * scale} y={y - 62 * scale} w={190 * scale} s={0.8 * scale} />
+      )}
+      {carry === 'boxes' && (
+        <g>
+          <rect x={x + dir * 44 * scale - 46 * scale} y={y - 168 * scale} width={92 * scale} height={78 * scale}
+            fill={tn.card} stroke={INK} strokeWidth={STROKE_THIN} />
+          <rect x={x + dir * 44 * scale - 38 * scale} y={y - 232 * scale} width={76 * scale} height={64 * scale}
+            fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
+        </g>
+      )}
+      <StickFigure pose={A.walk(f, 30, speed)} x={x} y={y} scale={scale} facing={dir}
+        view={view} pal={DIM} showFace={false} frame={f} idle="subtle" />
     </g>
   );
 };

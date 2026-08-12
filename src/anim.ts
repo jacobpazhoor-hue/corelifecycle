@@ -138,6 +138,50 @@ export const stepIndex = (f: number, seed: number, period: number): number => {
   return Math.floor((f + Math.floor(seedPhase(seed * 1.31) * per)) / per);
 };
 
+/**
+ * An element that CROSSES and then rests (WO-24). Returns travel in [0,1] over the `run` frames of
+ * every (seed-jittered) `period`, and exactly 1 the rest of the time.
+ *
+ * WHY THIS EXISTS, and why it is not `wander` or `pulse`. WO-23 measured 68% of 5 Hz samples
+ * completely motionless against the reference's ~40%, WORSE than WO-13's 55.5%, because WO-17 gave
+ * each scene one framing: between cuts nothing re-crops, so the only thing left moving is whatever
+ * the template animates. Re-measured per template on that build, the detector the bible actually
+ * specifies — whole-frame mean |Δ| < 1.0/255 — puts five of the thirteen explainer templates at
+ * **100% motionless**: their idles are real but too small to register (`officeFloor` sat at a mean Δ
+ * of 0.57 every single sample, `newsMontage` at 0.00). Threshold-crossing needs roughly a
+ * 135×135-unit object fully displacing between samples, which no breath or weight-shift can do.
+ *
+ * A crossing object does it and costs almost nothing where it matters: `cityStreet`'s driving car
+ * moves the whole picture past the detector (Δ 2.4) and still measures 40/48 cells at exactly 0.0,
+ * because at any one 10-frame gap it only touches two or three cells of the motion-locality grid.
+ *
+ * Two properties this signature exists to hold:
+ *  1. **It rests.** Bible §4 is "hold still, then change. Do not fill dead air with drift" — the
+ *     target is 40–55% motionless, NOT 0%, so the duty cycle `run / period` is the dial and a
+ *     continuously-moving element would overshoot the reference as badly as a frozen one undershoots.
+ *  2. **Frame 0 is always a rest frame.** `at` is clamped to at least 1, so a caller parking its
+ *     element off-stage at travel 1 renders EXACTLY what it rendered before at f = 0 — the invariant
+ *     thumbs.tsx depends on, the same one the figure idle's ramp keeps.
+ *
+ * `at` IS THE PHASE, AND IT IS EXPLICIT ON PURPOSE. `useCurrentFrame` is Sequence-local, so `f` is
+ * the frame within the SCENE and a scene now averages 148 frames (WO-22's re-cut). A hash-derived
+ * phase therefore does not average out over a long video the way a per-figure phase does: it is the
+ * SAME phase in every scene that uses the template, so a badly-drawn one hides the whole crossing
+ * behind the cut. Measured on the first attempt at this: four of six call sites had their run
+ * beginning at frame 94–144 of a 148-frame scene, i.e. the walker was essentially never on screen.
+ * With `at` written down, a template says when in its own scene the thing happens — which is also
+ * the bible's §4 rhythm, "hold still, THEN change", rather than a drift running under every cut.
+ */
+export const crossing = (f: number, seed: number, period: number, run: number, at = 1): number => {
+  if (run < 1) {
+    throw new Error(`crossing() needs a run of at least 1 frame, got ${run}`);
+  }
+  const start = Math.max(1, Math.round(at));
+  const per = Math.max(start + run + 2, Math.round(period * (0.85 + hash(seed * 2.7) * 0.3)));
+  const t = ((((f % per) + per) % per)) - start;
+  return t >= 0 && t < run ? t / run : 1;
+};
+
 /** A blinking indicator (a phone message light, a signal lamp): 1 for `on` frames of every
  *  `period`, seeded phase. Cheap — the caller switches a fill, nothing moves. */
 export const blinkOn = (f: number, seed: number, period: number, on: number): boolean => {
