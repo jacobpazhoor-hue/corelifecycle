@@ -37,7 +37,10 @@ This replaces CoreLifecycle's second-person present-tense fictional POV ladder e
   in earlier notes, and the voice's natural baseline is **~167 WPM**, not the ~174 claimed in a code comment.
   Both were measured by synthesising real scenes through the pipeline's own `master()` + `trim_silence()`.
 - **Sentences average 7.5–10.6 words**, median 6–9. **40–59% of all sentences are under 8 words.**
-- **29–68 explicit numbers per video** (~2–3.5 per minute).
+- **29–68 explicit numbers per video** (~2–3.5 per minute). **This is a TRANSCRIPT count — numbers the
+  narrator says — not an on-screen count.** No captured reference frame carries a persistent numeric
+  overlay card. On-screen numbers appear only as lettering on an in-scene prop, inside a full-screen text
+  card, or in a speech balloon, always in the handwritten face.
 - Second person appears but is a *seasoning*, not the frame: 2.6–13.4 "you" per 1000 words.
 - Questions: 3–27 per video; the highest-question video (Singapore, 27) is also rhetorically driven.
 
@@ -78,6 +81,13 @@ motion, not a cut), 287.2s sampled across five windows:
 - median shot 2.67–6.81s; range 0.61s–16.46s
 - **~40% of sampled frames are completely motionless** (whole-frame diff < 1.0/255)
 
+> ⚠ **This figure is biased against us and is sampling-rate sensitive.** It was captured from a canvas
+> grab of a *lossy YouTube stream*, where any real motion re-encodes the whole picture and inflates the
+> diff. Our own PNG renders have no such noise floor, so matching 40% costs us genuinely larger on-screen
+> motion than the reference actually carries. It is also rate-dependent: the reference was sampled at
+> ~5.5 source Hz ("16.5 samples/sec during 3× playback"), so **compare at ~5 Hz**. The same post-WO-14
+> render measures 49.7% @5Hz, 67.1% @15Hz and 77.4% @30Hz — one render, three different verdicts.
+
 Hold still, then change. Do not fill dead air with drift.
 
 ## 5. Art
@@ -90,7 +100,18 @@ Per-pixel measurement across three verified-distinct frames (1280×720 source):
 
 | ink % (luma<70) | 10.0 | 70.0 | 27.3 | heavy black linework; varies with scene darkness |
 | mean saturation | 0.482 | 0.646 | 0.308 | **highly variable by scene — not uniformly desaturated** |
-| distinct quantised colours | 419 | 216 | 444 | restricted palette (5–11% of a 4096 space) |
+| distinct quantised colours | 419 | 216 | 444 | restricted palette — **but see caveat below** |
+
+> ⚠ **Rich-colour count is PALETTE-BOUND, not density-bound — never gate on it.** A scene keyed `grey`
+> has only four grey tokens and cannot approach 113 by construction, however dense it is. Measured across
+> the six explainer templates: `cityStreet` (`daylight`) 153, `domesticInterior` 59, `newsMontage` 49,
+> `officeFloor` 47, trading floor 44, `boardroom` 36 — all six sit inside the flat-fill band. Use it to
+> compare scenes on the *same* key, never as a pass/fail threshold.
+>
+> ⚠ **Raw distinct-colour count is a WEAK metric.** It is saturated by antialias fringe along every ink
+> outline, so it lands mid-band whether a frame is richly varied or entirely monochrome. Use instead the
+> count of quantised buckets carrying **>0.02% of pixels**. Reference frame `wolf_t0003.png` scores
+> **113** on that measure; our densest frame moved 96 → 113 once local tones were added.
 | median stroke px | 7 | (n/a) | 4 | **≈6–10px at 1920** |
 
 > ⚠ **The flat-fill band is RESOLUTION-DEPENDENT — quote a resolution or the number is meaningless.**
@@ -100,6 +121,10 @@ Per-pixel measurement across three verified-distinct frames (1280×720 source):
 > compared against roughly **80–98%**, not 74–92%. Earlier work orders in this project reported 1920
 > numbers against the 1280 band and therefore *understated* how empty our frames were. Any `gate.py`
 > assertion (WO-12) must name the resolution it measures at.
+>
+> **Measure 1280 by NATIVE RENDER (`--scale=0.6666667`), never by downscaling a 1920 frame.**
+> LANCZOS / BILINEAR / BOX downscales of the same frame give 76% / 84% / 89% — wildly divergent and none
+> of them reproduce the documented pair. Only a native 1280 render does.
 >
 > **Flat fill is also a DENSITY metric, not only a texture one.** Too *high* means the frame is empty.
 > A solid ground with one prop measured 99.6% at 1920; the same template rebuilt to reference density
