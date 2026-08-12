@@ -1,7 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import timeline from './timeline.json';
-import {FramedScene, FOCUS, CountUp, splitMoney, isNegativeOverlay} from './director';
+import {FramedScene, FOCUS, CountUp, NumberCard, splitMoney, isNegativeOverlay} from './director';
 import {Move} from './photoStage';
 import PHOTO_RAW from './photo_manifest.json';
 // CRAYON signature devices (bible §6). Built in WO-5/6/7, wired to the timeline here in WO-12a.
@@ -28,13 +28,13 @@ const EXPO = Easing.bezier(0.16, 1, 0.3, 1);
 // UP over the cuts. Shot durations sum to the scene's VO duration, so audio stays
 // perfectly synced. Reads the SAME timeline.json as the old Video (drop-in).
 // ============================================================================
-const FONT = "'Helvetica Neue', Helvetica, Arial, sans-serif";
-const INK = '#2a2620';
 // 2026-07-20: cream -> white. Owner direction is the bright reference look; the cream base plus
 // the heavy grade below is what read as dull/sepia. Figure fills keep their own cream (figure.tsx).
 const PAPER = '#ffffff';
-const NEG = '#c0392b';
-const NEG_SUB = '#a33a26';
+// The FONT / INK / NEG / NEG_SUB constants that used to sit here are gone with the money card's legacy
+// styling (WO-15). It was the last chrome in this file set in `'Helvetica Neue', Helvetica, Arial` —
+// named in bible §7 as a total mismatch — and the accents now come from the palette tokens in
+// crayonStyle via `NumberCard`, not from four private hex values.
 
 type Overlay = {big: string; sub: string | null} | null;
 
@@ -307,6 +307,13 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
   // FULL label, never a truncated "$250".
   const money = splitMoney(scene.overlay?.big);
   const negOverlay = scene.overlay ? isNegativeOverlay(scene.overlay.big, scene.overlay.sub) : false;
+  // The note lays its figure out with the shared text engine, which refuses empty input (crayonText's
+  // `fitText`). Catch it HERE, where the scene id is in hand, rather than letting the render die with
+  // a message that cannot say which scene wrote the bad overlay — the same rule the device builders
+  // above follow. An overlay whose figure is blank is malformed content, not a case to render around.
+  if (scene.overlay && !scene.overlay.big?.trim()) {
+    throw new Error(`${scene.id}: overlay.big is empty — an overlay must carry a figure to show`);
+  }
 
   // static (non-numeric) overlay fallback, matches the count-up styling
   const big = scene.overlay?.big ?? '';
@@ -384,13 +391,15 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
       {scene.overlay && (money !== null
         ? <CountUp from={from ?? 0} to={money.num} suffix={money.suffix} sub={scene.overlay.sub} dur={D} negative={negOverlay} />
         : (
+          // Non-numeric overlays ("1 IN 3", "-1 KIA", "10-DAY DEAL", "0.03%") render VERBATIM as one
+          // static line — no count-up, no re-formatting as a dollar amount, and no forced uppercase:
+          // the note sets whatever `content.py` wrote (WO-15; the retired `level` chip's caps-lock the
+          // writer could not opt out of was one of the three reasons it went).
           // reviewer fix (t15 "4,000 BALISH"): the warCouncil mapTable prop's edge sat under this
           // card's default left:72 corner -- nudged left so the card clears the table.
-          <div style={{position: 'absolute', bottom: 96, left: scene.id === 't15' ? 34 : 72, opacity: staticOp, fontFamily: FONT, transform: `translateY(${staticRise}px)`,
-            background: '#f6f2e9', padding: '18px 24px 20px', borderRadius: 16, boxShadow: '0 6px 30px rgba(20,15,8,0.18)'}}>
-            <div style={{display: 'inline-block', color: INK, fontSize: big.length > 12 ? 78 : 112, fontWeight: 800, letterSpacing: -2, lineHeight: 1.05,
-              background: `linear-gradient(transparent 58%, ${negOverlay ? 'rgba(192,57,43,0.42)' : 'rgba(232,181,75,0.55)'} 58%)`, padding: '0 8px'}}>{big}</div>
-            {scene.overlay.sub && <div style={{color: negOverlay ? NEG_SUB : '#9a7322', fontSize: 27, fontWeight: 800, letterSpacing: 5, marginTop: 14, textTransform: 'uppercase'}}>{scene.overlay.sub}</div>}
+          <div style={{position: 'absolute', bottom: 96, left: scene.id === 't15' ? 34 : 72, opacity: staticOp,
+            transform: `translateY(${staticRise}px)`}}>
+            <NumberCard figure={big} sub={scene.overlay.sub} negative={negOverlay} />
           </div>
         ))}
 
