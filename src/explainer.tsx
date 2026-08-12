@@ -5,7 +5,7 @@ import {FACES} from './faces';
 import * as A from './actions';
 import {blinkOn, stepIndex} from './anim';
 import {keyedTemplates, useSceneColors} from './stage';
-import {INK, PAPER_WHITE, STROKE, STROKE_THIN, shade} from './crayonStyle';
+import {INK, PAPER_WHITE, STROKE, STROKE_THIN, TONE_MAX_STEP, shade} from './crayonStyle';
 import {
   SlabFloor, UnitWall, RibbedPanel, BuildingBand, BoxStack, CaseStack, Cone,
   CrowdRow, CrowdHeads, Fence, useSceneTones,
@@ -947,7 +947,13 @@ const NewsSheet: React.FC<{
 }> = ({x, y, w, h, rot, seed, photo = 'head', stock, flash = false}) => {
   const c = useSceneColors();
   const tn = useSceneTones();
-  const paper = stock ?? PAPER_WHITE;
+  // Newsprint is CREAM, not white (WO-20). The default was PAPER_WHITE, and because three of the six
+  // cuttings took it, roughly a quarter of the frame was a colour with no saturation at all — which
+  // is most of why `newsMontage` measured 0.219 mean saturation on a fully-keyed brown ground while
+  // the reference's own cuttings frame (frames/wolf_montage_verified.jpg, 15:02) is cream on dark.
+  // The white anchor the bible's office frame calls for is kept, but as ONE hero cutting that asks
+  // for it by name rather than as the default every sheet falls into.
+  const paper = stock ?? shade(tn.card, TONE_MAX_STEP);
   const pad = w * 0.06;
   const iw = w - pad * 2;
   const photoH = photo === 'none' ? 0 : h * 0.3;
@@ -1027,13 +1033,14 @@ const NewsMontage: React.FC = () => {
       ))}
 
       {/* --- the cuttings, laid back-to-front so the hero cutting sits on top.
-          Stocks alternate between white and two rungs of newsprint tan, because a pile of identical
-          white rectangles reads as one object however many outlines it carries. --- */}
+          Stocks run across four rungs of newsprint tan plus ONE white hero sheet, because a pile of
+          identical rectangles reads as one object however many outlines it carries — and because a
+          pile of identical WHITE ones also has no colour in it (WO-20). --- */}
       <NewsSheet x={60} y={150} w={512} h={628} rot={-15} seed={3} photo="chart" stock={shade(tn.card, 2)} />
       <NewsSheet x={1340} y={128} w={512} h={628} rot={13} seed={9} photo="head" />
-      <NewsSheet x={706} y={72} w={470} h={556} rot={-4} seed={17} photo="none" stock={shade(tn.card, 3)} />
+      <NewsSheet x={706} y={72} w={470} h={556} rot={-4} seed={17} photo="none" stock={tn.card} />
       <NewsSheet x={1176} y={330} w={470} h={556} rot={20} seed={19} photo="none" stock={shade(tn.card, 1)} />
-      <NewsSheet x={430} y={402} w={560} h={660} rot={7} seed={5} photo="head" flash />
+      <NewsSheet x={430} y={402} w={560} h={660} rot={7} seed={5} photo="head" stock={PAPER_WHITE} flash />
       <NewsSheet x={1000} y={368} w={600} h={700} rot={-6} seed={11} photo="chart" flash />
       {/* a torn strip and a clipped document, the two things a montage always has one of */}
       <g transform="rotate(21 1780 660)">

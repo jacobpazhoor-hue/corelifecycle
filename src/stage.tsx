@@ -3,7 +3,7 @@ import {useCurrentFrame, useVideoConfig, interpolate} from 'remotion';
 import {StickFigure, LIGHT, SIL, DIM, PAPER} from './figure';
 import {FACES, blendExpr} from './faces';
 import * as A from './actions';
-import {SceneColors, SceneKey, resolveSceneKey, sceneColors} from './crayonStyle';
+import {SceneColors, resolveSceneKey, sceneColors} from './crayonStyle';
 import meta from './episode_meta.json';
 
 // ============================================================================
@@ -38,7 +38,12 @@ const rnd = (i: number) => {const x = Math.sin(i * 127.1 + 31.7) * 43758.5453; r
 // TEMPLATES and calls it with nothing), so the key is bound once, where the name is still known —
 // when the template map is built — and read back through context by <Stage>, <SceneGround> and any
 // backdrop that paints its own ground.
-const SceneKeyContext = React.createContext<SceneKey>('daylight');
+//
+// WO-20 binds the resolved PALETTE rather than the key. A scene's colours are now (mood × hue): the
+// key fixes the mood and the template name picks the scene's own committed hue off that mood's arc
+// (crayonStyle's `SCENE_HUE_BY_TEMPLATE`), so the key alone no longer determines the palette and the
+// template name — which is only in scope here — has to be resolved at bind time too.
+const ScenePaletteContext = React.createContext<SceneColors>(sceneColors('daylight'));
 
 /**
  * An explicit ground colour that REPLACES the keyed `bg` for everything below it.
@@ -62,7 +67,7 @@ export const SceneGroundOverride: React.FC<{ground: string; children: React.Reac
 
 /** The active scene's colour tokens. Valid inside any template wrapped by `keyedTemplates()`. */
 export const useSceneColors = (): SceneColors => {
-  const c = sceneColors(React.useContext(SceneKeyContext));
+  const c = React.useContext(ScenePaletteContext);
   const ground = React.useContext(SceneBgContext);
   return ground === null ? c : {...c, bg: ground};
 };
@@ -77,16 +82,21 @@ export const SceneGround: React.FC<{opacity?: number}> = ({opacity}) => (
 );
 
 /**
- * Bind each template in a pack to its colour key. `resolveSceneKey` takes (sceneId, template); the
- * template name is the only identity available at map-build time, so it is passed as both — a mapped
- * template takes its explicit key, an unmapped one still hashes deterministically.
+ * Bind each template in a pack to its own flat palette. `resolveSceneKey` takes (sceneId, template);
+ * the template name is the only identity available at map-build time, so it is passed as both — a
+ * mapped template takes its explicit key, an unmapped one still hashes deterministically. The name is
+ * then passed on to `sceneColors` as well, which is what gives the template its committed HUE inside
+ * that key's mood (WO-20).
+ *
+ * Resolved ONCE per template, here, not per frame: the palette is a pure function of the name, so a
+ * scene's colours cannot drift between frames, and the object identity stays stable across renders.
  */
 export const keyedTemplates = (pack: Record<string, React.FC>): Record<string, React.FC> => {
   const out: Record<string, React.FC> = {};
   for (const [name, C] of Object.entries(pack)) {
-    const key = resolveSceneKey(name, name);
+    const palette = sceneColors(resolveSceneKey(name, name), name);
     const Keyed: React.FC = () => (
-      <SceneKeyContext.Provider value={key}><C /></SceneKeyContext.Provider>
+      <ScenePaletteContext.Provider value={palette}><C /></ScenePaletteContext.Provider>
     );
     Keyed.displayName = `Keyed(${name})`;
     out[name] = Keyed;
