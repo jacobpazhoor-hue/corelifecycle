@@ -75,12 +75,31 @@ export type Panel = {
   ground: string;
   /**
    * Anything: a scene, a figure, a prop cluster. Children are laid out on a FULL-FRAME canvas which is
-   * then centred on this panel and clipped to it — so a full-frame composition passed straight in
-   * arrives as a centre crop at its native scale, which is what the 10:10 split does with its interior.
-   * Use `scale` to pull the whole frame back inside a smaller cell instead.
+   * then centred on this panel, scaled to COVER it (see `scale`) and clipped to it.
    */
   children?: React.ReactNode;
-  /** Uniform scale of the child canvas about its own centre. 1 = native (a crop). */
+  /**
+   * Uniform scale of the child canvas about its own centre. 1 = native, i.e. a centre crop.
+   *
+   * Defaults to COVER — the smallest scale at which the frame still fills the cell in both axes,
+   * capped at 1 so a cell never magnifies its child:
+   *
+   *     scale = min(1, max(cellW / frameW, cellH / frameH))
+   *
+   * WHY (WO-25, QA defect 5: "in the `grid4` split a grey figure's head is cut by the bottom-left cell
+   * edge"). The default used to be a flat 1, so every cell showed a native-scale centre crop of a
+   * full-frame composition. On `v2` and `diagonal2` that is right and is what the 10:10 reference
+   * does: those cells are TALLER than 16:9, so covering them costs nothing and cropping the sides is
+   * the intended framing. A `grid4` cell is exactly half the frame's width AND half its height —
+   * the SAME 16:9 aspect — so covering it is `scale = 0.5`, and at that scale the whole composition
+   * is inside the cell with nothing cropped at all. The old native crop threw away three quarters of
+   * each cell's picture and cut whatever happened to straddle the boundary, which on `newsMontage`
+   * was a figure's head.
+   *
+   * Stated as `cover` rather than as "0.5 on grid4" because it is the general rule: a cell shows as
+   * much of the composition as its own aspect allows, and only crops what it must. It is the identity
+   * on both two-panel variants, so those are byte-for-byte unchanged.
+   */
   scale?: number;
   /** Shift of the child canvas inside the panel, as fractions of the FRAME. Re-centres the crop. */
   offsetX?: number;
@@ -103,7 +122,10 @@ const Cell: React.FC<{
   frameHeight: number;
   clipPath?: string;
 }> = ({panel, left, top, width, height, frameWidth, frameHeight, clipPath}) => {
-  const {ground, children, scale = 1, offsetX = 0, offsetY = 0} = panel;
+  const {ground, children, offsetX = 0, offsetY = 0} = panel;
+  // COVER, capped at native: fill the cell in both axes, never magnify. See `Panel.scale`.
+  const cover = Math.min(1, Math.max(width / frameWidth, height / frameHeight));
+  const scale = panel.scale ?? cover;
   return (
     <div
       style={{

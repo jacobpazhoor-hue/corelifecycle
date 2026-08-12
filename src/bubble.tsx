@@ -135,8 +135,14 @@ const FLOAT_MAX_LINES = 5;
  * ~105, which is consistent with a keyline and larger than the surrounding JPEG ringing — but the
  * montage cell is 308 px wide, far too coarse to measure a keyline's width. This is a stroke, never a
  * blur: a soft shadow would be a gradient, and Chromium dithers gradients.
+ *
+ * 0.045 → 0.07 em (WO-25). The keyline is no longer decoration on a colour choice that was expected to
+ * be right; it is now the ONLY thing guaranteeing legibility when the glyphs land on a plane the
+ * renderer cannot see (see `FloatingDialogueProps.color`), so it is sized to do that job. Measured on
+ * the two failing scenes at 1920: 0.07 em is ~6 px around an 88 px glyph — the same order as the
+ * canon's own 8 px linework, i.e. it reads as the drawing's outline weight rather than as a halo.
  */
-const FLOAT_KEYLINE_EM = 0.045;
+const FLOAT_KEYLINE_EM = 0.07;
 
 // One weight for everything, as in textcard.tsx: the reference's hierarchy is size, never stroke weight.
 const WEIGHT = CRAYON_TEXT_WEIGHT;
@@ -291,7 +297,23 @@ const TextBlock: React.FC<TextBlockProps> = ({
   );
 };
 
-/** Restrained entrance: opacity plus a scale about the element's own centre. The camera never moves. */
+/**
+ * Restrained entrance: a scale about the element's own centre, and NOTHING ELSE. The camera never
+ * moves and the element is never transparent.
+ *
+ * THE OPACITY RAMP IS GONE (WO-25), and this is the whole of QA's "translucent, keyline-less speech
+ * balloon" defect. It was not a fill or a stroke bug: the balloon's fill is `PAPER_WHITE` and its
+ * stroke `INK` at `strokeAt(width)`, both opaque, both correct. What the reviewer caught at t051 was
+ * frame 2 of a 5-frame fade from opacity 0 — the balloon at ~40% over a window grid, its "missing"
+ * keyline just the same 40% of a black line. A device that is see-through for a sixth of a second is
+ * see-through: five frames is a real, samplable, publishable state, and a reference balloon is flat
+ * opaque white with a uniform black keyline in every frame it exists.
+ *
+ * A balloon appearing is a CUT in the reference as far as anyone has measured (see
+ * BUBBLE_ENTRANCE_FRAMES), so cutting it in at full opacity is also the closer match. The small scale
+ * settle stays: it is a shape animation, which the reference's element animations are, and it can
+ * never make the balloon translucent.
+ */
 const useEntrance = (animate: boolean): {opacity: number; scale: number} => {
   const frame = useCurrentFrame();
   if (!animate) return {opacity: 1, scale: 1};
@@ -299,7 +321,7 @@ const useEntrance = (animate: boolean): {opacity: number; scale: number} => {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
-  return {opacity: t, scale: ENTRANCE_SCALE_FROM + (1 - ENTRANCE_SCALE_FROM) * t};
+  return {opacity: 1, scale: ENTRANCE_SCALE_FROM + (1 - ENTRANCE_SCALE_FROM) * t};
 };
 
 // ---------------------------------------------------------------------------
@@ -426,19 +448,34 @@ export type FloatingDialogueProps = {
   /** 3:34 sets its three lines flush left; centred is offered for a one-liner over a symmetric scene. */
   align?: 'center' | 'left';
   /**
-   * The flat ground this line lands on — the scene's keyed `bg`. Used ONLY to choose the glyph
-   * colour when `color` is not given; it is never painted.
+   * Glyph colour. Defaults to INK.
    *
-   * REQUIRED UNLESS `color` IS GIVEN. There is no safe default glyph colour: the old one was a flat
-   * PAPER_WHITE, which is the reference's own choice over its ~#696969 wall but is close to invisible
-   * on a pale one — a `boardroom` scene is keyed grey at #cccccc, and the sample episode's t28 line
-   * rendered white-on-pale with only a 0.045em keyline holding it together. Guessing white again
-   * would just re-file the bug, so an unkeyed caller has to say which of the two it wants.
-   */
-  ground?: string;
-  /**
-   * Glyph colour. Overrides the choice made from `ground`. White is the reference (over a mid-grey
-   * wall); INK reads on a pale ground.
+   * WHY THERE IS NO `ground` PARAMETER ANY MORE, AND WHY THE DEFAULT IS A CONSTANT (WO-25).
+   *
+   * This device has now produced the SAME defect — white script, illegible, on a pale ground — in two
+   * consecutive QA passes, at t28 and then at t022. The first fix took a `ground` colour from the
+   * caller and picked white or INK off its luminance. It did not work, and it could not have: the
+   * colour the renderer had to give was `sceneColors(resolveSceneKey(...)).bg`, the scene KEY's ground
+   * — and the key's `bg` is not the colour behind the glyphs. It is the colour of the base rect a
+   * template paints FIRST and then covers. What is actually behind a line of floating dialogue is
+   * whatever plane the template drew there, and those come off the TONE LADDER (`crayonStyle.shade`),
+   * whose light rungs are by design the large-area tones — "the paper, plaster, cardboard and
+   * newsprint that covers half of some frames". Measured on the failing frame: `closeUpPortrait` is
+   * keyed `alarm`, whose `bg` is a dark saturated orange (relative luminance well under 0.5, so the
+   * old rule chose white), while the wall the line lands on is `tn.card` and the window beside it is
+   * `shade(c.bg, 3)` — both pale. The rule read the right value of the wrong quantity, so it was
+   * always going to be right on some scenes and wrong on others, and "fixing" it per scene (t105 in
+   * this very episode carries a hand-written `color="#000000"`) is how it kept coming back.
+   *
+   * A frame is not one colour, so no single sampled ground can be the answer either. What IS true for
+   * every keyed tone the system can produce: `TONE_CEIL` (0.93) and `TONE_LUM_FLOOR` bound the ladder
+   * away from both white and black, so INK glyphs carry real contrast against every plane in the
+   * palette — most of them strongly — and the flat `FLOAT_KEYLINE_EM` keyline, drawn in the opposite
+   * polarity, covers the dark end where that contrast is thinnest. That is a guarantee by
+   * construction rather than a guess about art the renderer cannot see.
+   *
+   * The reference's own white-over-mid-grey-wall look (wolf 3:34) is still available, and is now an
+   * explicit editorial choice: pass `color="#ffffff"` on a scene whose plane is genuinely mid-tone.
    */
   color?: string;
   /** Width ceiling as a fraction of frame width. */
@@ -465,21 +502,12 @@ const isLight = (hex: string): boolean => {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.5;
 };
 
-/**
- * The glyph colour for a line landing on `ground`: the reference's white over anything mid-tone or
- * darker, INK over anything lighter. `isLight` splits at 0.5 relative luminance, which puts the six
- * keyed grounds either side exactly as the eye does — #cccccc (grey) and #88ccee (daylight) light,
- * #5a4230 (interior), #e8541f (alarm) and #e8b54b (gold) dark.
- */
-const glyphOn = (ground: string): string => (isLight(ground) ? INK : PAPER_WHITE);
-
 export const FloatingDialogue: React.FC<FloatingDialogueProps> = ({
   text,
   x = 0.5,
   y = 0.22,
   align = 'left',
-  ground,
-  color,
+  color = INK,
   maxWidth = FLOAT_MAX_W_FRAC,
   maxLines = FLOAT_MAX_LINES,
   keyline = FLOAT_KEYLINE_EM,
@@ -489,15 +517,10 @@ export const FloatingDialogue: React.FC<FloatingDialogueProps> = ({
   const ready = useCrayonFace('floating dialogue');
   const {opacity, scale} = useEntrance(animate);
 
-  if (color === undefined && ground === undefined) {
-    throw new Error(
-      `bubble: FloatingDialogue ${JSON.stringify(text.slice(0, 40))} needs either \`ground\` (the ` +
-      `scene's flat #rrggbb ground, from which the glyph colour is chosen) or an explicit \`color\`. ` +
-      `Unballooned script has no white balloon behind it, so a fixed default is illegible on half the ` +
-      `keyed grounds — the renderer passes sceneColors(resolveSceneKey(...)).bg.`
-    );
-  }
-  const ink = color ?? glyphOn(ground!);
+  // `isLight` validates the hex, so a malformed writer-supplied colour still raises here rather than
+  // rendering as a browser-default black.
+  const ink = color;
+  const keylineColor = isLight(ink) ? INK : PAPER_WHITE;
 
   if (!ready) return null;
 
@@ -533,7 +556,7 @@ export const FloatingDialogue: React.FC<FloatingDialogueProps> = ({
           align={align}
           fill={ink}
           keyline={keyline * fit.fontSize}
-          keylineColor={isLight(ink) ? INK : PAPER_WHITE}
+          keylineColor={keylineColor}
         />
       </svg>
     </AbsoluteFill>

@@ -81,6 +81,111 @@ export const splitMoney = (s?: string | null): {num: number; suffix: string} | n
 // the reference DOES do); it is deliberately no longer applied to the frame itself.
 const EXPO = Easing.bezier(0.16, 1, 0.3, 1);
 
+// ============================================================================
+// RAMP SAFETY (WO-25) — the render-killer class, made impossible by construction.
+//
+// `interpolate` requires a STRICTLY INCREASING input range and THROWS otherwise ("inputRange must be
+// strictly monotonically increasing", remotion/dist/cjs/interpolate.js). Every ramp in this renderer
+// is built out of the scene's own length, so a short scene can fold a range back on itself and kill
+// the WHOLE render at one arbitrary frame. It has happened once for real — `Video2`'s
+// `[10, 28, D - 10, D]` evaluated to `[10, 28, 25, 35]` at `t065` ("Unless.", 35 frames) and took the
+// entire 29,085-frame episode with it — and `docs/BIBLE.md` §3a explicitly licenses one-word scenes,
+// so a short scene is a SUPPORTED input, not an edge case. The gate's eight sampled stills cannot see
+// this and neither can a two-frame smoke render.
+//
+// Two rules, applied at every site that derives a stop from a duration:
+//   1. SCALE the stop pattern to the scene, so a short scene gets the same animation compressed
+//      rather than a clipped or dropped one;
+//   2. pass the result through `rising()`, which is the explicit clamp: it can only ever move a stop
+//      LATER, never earlier, so a range that already fits is returned unchanged and one that does not
+//      is nudged into strict order instead of throwing.
+// Rule 2 alone is enough to make the crash impossible; rule 1 is what keeps the animation looking
+// right while it does.
+// ============================================================================
+
+/**
+ * Smallest gap `rising` leaves between two stops. A fraction of a frame: large enough that the
+ * float arithmetic is unambiguous, far smaller than the 1-frame grid anything is ever sampled on, so
+ * a collapsed segment reads as an instantaneous step rather than as a visible ramp.
+ */
+export const RAMP_EPS = 1 / 256;
+
+/**
+ * A strictly-increasing copy of `stops`, for `interpolate`'s input range.
+ *
+ * Non-finite input RAISES: a NaN stop means the caller's arithmetic is wrong, and silently ordering
+ * NaN would hide that. Anything else is clamped forward, never backward.
+ */
+export const rising = (who: string, stops: number[]): number[] => {
+  if (stops.length < 2) {
+    throw new Error(`${who}: an interpolate input range needs at least 2 stops, got ${stops.length}`);
+  }
+  const out: number[] = [];
+  for (let i = 0; i < stops.length; i++) {
+    const s = stops[i];
+    if (!Number.isFinite(s)) {
+      throw new Error(`${who}: ramp stop ${i} is ${s} — a ramp built from a duration must be finite`);
+    }
+    out.push(i === 0 ? s : Math.max(s, out[i - 1] + RAMP_EPS));
+  }
+  return out;
+};
+
+// ---- the number note's own timing, in frames of a scene long enough to hold all of it ------------
+/** Beats after the cut before the note starts, so it lands ON the scene rather than with it. */
+const NOTE_LEAD = 8;
+/** Entrance: opacity + the spring pop. */
+const NOTE_ENTER = 6;
+/** How long the figure counts (a `CountUp`) or simply sits legible (a static figure). */
+const NOTE_COUNT = 54;
+/** Settled and readable, after the count lands. */
+const NOTE_HOLD = 30;
+/** Exit. */
+const NOTE_EXIT = 8;
+/** The device's whole life, ~3.5s. See `noteRamp` for why it is a life and not a scene-long hold. */
+export const NOTE_SPAN = NOTE_LEAD + NOTE_ENTER + NOTE_COUNT + NOTE_HOLD + NOTE_EXIT;
+
+/**
+ * The number note's stops, fitted to a scene of `dur` frames.
+ *
+ * THE NOTE IS A REVEAL, NOT A LABEL (WO-25). `CRAYON_BIBLE.md` §2's finding is specifically that **no
+ * captured reference frame carries a PERSISTENT numeric overlay card**; the note used to hold from
+ * frame 10 to `dur - 18`, i.e. essentially the whole scene, which is exactly the persistent card the
+ * evidence rules out. It now enters, counts, settles, holds long enough to read, and lifts — so the
+ * figure is delivered on its beat and the frame goes back to being a picture. Measured against this
+ * episode that takes the device from ~11.7% of all frames to ~4%.
+ *
+ * Every stop is a fraction of the scene when the scene is shorter than `NOTE_SPAN`, so the whole
+ * pattern compresses instead of running off the end, and the result is `rising()`-clamped so no
+ * duration can produce a non-monotonic range.
+ */
+export const noteRamp = (dur: number): {op: number[]; count: number[]; rule: number[]} => {
+  if (!(dur > 0)) {
+    throw new Error(`noteRamp: a scene duration must be positive, got ${dur}`);
+  }
+  const k = Math.min(1, dur / NOTE_SPAN);
+  const t0 = NOTE_LEAD * k;                 // start of the entrance
+  const t1 = t0 + NOTE_ENTER * k;           // settled in
+  const tCount = t1 + NOTE_COUNT * k;       // the figure has landed
+  const t2 = tCount + NOTE_HOLD * k;        // start of the exit
+  const t3 = t2 + NOTE_EXIT * k;            // gone
+  return {
+    op: rising('number note opacity', [t0, t1, t2, t3]),
+    count: rising('number note count', [t1, tCount]),
+    // the accent rule wipes across during the entrance and the first third of the count
+    rule: rising('number note rule', [t0, t1 + NOTE_COUNT * 0.35 * k]),
+  };
+};
+
+/**
+ * Symmetric in/out fade stops for a clip of `dur` frames, holding at full for the middle.
+ * `fade` is the intended ramp length and is itself compressed on a clip too short to hold two of them.
+ */
+export const fadeRamp = (who: string, dur: number, fade: number): number[] => {
+  const f = Math.max(RAMP_EPS, Math.min(fade, dur / 4));
+  return rising(who, [0, f, dur - f, dur]);
+};
+
 // ---- framed shot of a scene template (wide/medium/closeup crop onto a focus point) ----
 // LOCKED CAMERA (CRAYON_BIBLE §3). The shot type is a STATIC crop — scale + transformOrigin on the
 // focus point — and nothing else. No dolly push, no drift, no handheld sway. Motion-locality maps of
@@ -131,6 +236,32 @@ export const FramedScene: React.FC<{template: string; type: string; focus: [numb
 // three things the reference's balloons and cutouts are made of — flat white paper, one uniform pure
 // black keyline, and handwritten script — instead of a cream Helvetica chip with a gradient
 // highlighter and a drop shadow.
+//
+// ---------------------------------------------------------------------------------------------
+// WO-25 RE-DECIDED THIS, AND NARROWED IT. QA on the rendered episode counted **18 numeric overlay
+// cards** and called it a house style the reference does not have. The re-decision, in full:
+//
+// KEPT, because the alternative is worse. "Route every figure to a full-screen text card" is the
+// obvious removal path — the card device now exists and is wired (`scene.card`) — but this episode
+// already spends 10 full-screen cards in 16 minutes, and adding 18 more would put one every ~35
+// seconds and blank the picture at every single number, which is a bigger deviation from the
+// reference's own rhythm than the note is. Text cards are also opaque and full-frame, so they would
+// have started colliding with `gate.py`'s flat-fill sampling (a card measures ~100% flat and the
+// gate excludes `card` scenes by reading the timeline, which cannot see a card the renderer invents).
+//
+// NARROWED, three ways, all of them things the evidence actually objects to:
+//   1. NOT PERSISTENT. The bible's finding is precisely that no reference frame carries a *persistent*
+//      numeric overlay card. The note is now a REVEAL with a life of ~3.5s (`noteRamp`) instead of a
+//      label that holds for the whole scene: on this episode that is ~4% of frames, down from ~11.7%.
+//   2. NEVER WHERE A REFERENCE CARRIER IS ALREADY ON THE SCENE. A scene carrying a `card`, a balloon
+//      or a `panels` split already has somewhere the reference itself puts a number, so `Video2`
+//      suppresses the note there (it also fixes QA's t017 defect: the split IS the composition, and
+//      the note was covering a quarter of it).
+//   3. SAME MATERIAL AS A BALLOON, unchanged from WO-15 — flat white paper, one uniform pure-black
+//      keyline, handwritten script, one FLAT accent rule, red on a loss beat.
+// The deviation that remains is written down in `docs/BIBLE.md` §8 rather than left implicit, and the
+// writer-facing instruction is there too: prefer `card=`/`bubbles=`, and let `overlay=` be the beat
+// where a figure has to land on a picture.
 //
 // Flat fills only. The old card painted a `linear-gradient` highlighter behind the figure and a
 // `boxShadow` under the card; Chromium dithers every gradient it paints, and a shadow IS a gradient
@@ -309,15 +440,20 @@ export const CountUp: React.FC<{from: number; to: number; suffix?: string; sub?:
 ({from, to, suffix = '', sub, dur, negative = false}) => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const p = interpolate(f, [16, Math.min(dur - 12, 84)], [0, 1], {
+  // One timing for the whole device, fitted to the scene and monotonic by construction (`noteRamp`).
+  // The old stops were literals against `dur` — `[16, min(dur-12, 84)]` and `[10, 24, dur-18, dur]` —
+  // and the second of those is the render-killer this work order was opened on: it went backwards for
+  // any scene under 43 frames.
+  const ramp = noteRamp(dur);
+  const p = interpolate(f, ramp.count, [0, 1], {
     extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
   const val = from + (to - from) * p;
-  const op = interpolate(f, [10, 24, dur - 18, dur], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const op = interpolate(f, ramp.op, [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   // spring-driven pop on the reveal (overshoots then settles -> reads "earned", not scripted)
-  const sp = spring({frame: Math.max(0, f - 8), fps, config: {damping: 11, mass: 0.6, stiffness: 170}});
+  const sp = spring({frame: Math.max(0, f - ramp.op[0]), fps, config: {damping: 11, mass: 0.6, stiffness: 170}});
   const pop = interpolate(sp, [0, 1], [0.8, 1]);
   // the rule wipes in as a FRACTION of the note's own width now, not a hardcoded 340px
-  const rule = interpolate(f, [18, 40], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
+  const rule = interpolate(f, ramp.rule, [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
   const dp = decimalsOf(to);
   // Only the leading digits animate; `suffix` is rendered verbatim, so the note reads the FULL label
   // ("$250K / YR", never a truncated "$250"). Both ENDPOINTS are handed to the note to size against —
@@ -342,12 +478,17 @@ export const NumberReveal: React.FC<{from: number; to: number; label: string; du
   const f = useCurrentFrame();
   const {width, height} = useVideoConfig();
   const ready = useCrayonFace('number reveal');
-  const p = interpolate(f, [10, Math.min(dur - 14, 78)], [0, 1], {
+  // Same class of bug as `CountUp`'s: `[10, min(dur - 14, 78)]` goes backwards for any insert under
+  // 25 frames. Clamped, not left to the caller to keep long enough.
+  const p = interpolate(f, rising('number reveal count', [10, Math.min(dur - 14, 78)]), [0, 1], {
     extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
   const val = from + (to - from) * p;
   const dp = decimalsOf(to);
   const pop = interpolate(f, [6, 16, 24], [0.8, 1.06, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const labelOp = interpolate(f, [Math.min(dur - 10, 70), Math.min(dur - 2, 80)], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  // (this pair is monotonic for every dur — both stops clamp at the same time and the unclamped
+  // difference is a constant 8 — but it is built from `dur`, so it goes through the same guard.)
+  const labelOp = interpolate(f, rising('number reveal label', [Math.min(dur - 10, 70), Math.min(dur - 2, 80)]),
+    [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   // Not laid out yet — as in NumberCard, the font gate guarantees no frame is captured here.
   if (!ready) return <AbsoluteFill style={{backgroundColor: PAPER}} />;
 
@@ -388,8 +529,9 @@ type Beat = {id: string; template: string; focus?: [number, number]; shots: Shot
 
 const ShotView: React.FC<{beat: Beat; shot: Shot}> = ({beat, shot}) => {
   const f = useCurrentFrame();
-  // quick crossfade in/out for a clean cut
-  const op = interpolate(f, [0, 5, shot.dur - 5, shot.dur], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  // quick crossfade in/out for a clean cut. `fadeRamp` compresses the 5-frame ramp on a shot shorter
+  // than 10 frames, where the literal range used to fold back on itself and throw.
+  const op = interpolate(f, fadeRamp('slice shot', shot.dur, 5), [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (
     <AbsoluteFill style={{opacity: op}}>
       {shot.type === 'insert' && shot.numberFx

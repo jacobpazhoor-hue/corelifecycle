@@ -58,6 +58,38 @@ const NARRATION_MAX_FRAC = 0.12;
 const WORD_MAX_FRAC = 0.13;
 
 // ---------------------------------------------------------------------------
+// Narration line width — WO-25.
+//
+// The narration card had the SAME defect the chapter title had before WO-19, and it is worth stating
+// as one fact: a height cap alone does not set type, it only stops type. §7's narration anchor is a
+// WIDTH — "narration line ≈0.53 w" — and with `NARRATION_MAX_FRAC` as the only real constraint the
+// card simply ran the line out to whatever `BOX_W_FRAC` (0.82) allowed. Measured on the WO-23 build,
+// six cards ran 0.499–0.797 w, mean **0.622** against the reference cell's 0.536: t023 set
+// "Lehman would never be small again." as ONE line 0.80 of the frame wide. That is not a copy bug
+// dressed as a layout bug — the copy makes it worse, but the layout had no width target at all.
+//
+// So narration is set TO the measure, exactly as the chapter title is (`fitToMeasure` below is now
+// shared by both): the size follows from the width the line has to fill, and the height cap goes back
+// to being what it was always meant to be, a ceiling.
+// ---------------------------------------------------------------------------
+
+/** The measured anchor (bible §7): the reference's narration line fills ≈0.53 of frame width. */
+const NARRATION_W_FRAC = 0.53;
+
+/**
+ * Floor below which a narration block spends another line rather than shrinking further, as a
+ * fraction of frame height.
+ *
+ * The trade is arithmetic and cannot be wished away: at the reference's own type size a line reaches
+ * 0.53 w at about 22 characters, so copy longer than that either sets smaller on one line (hitting
+ * the width anchor) or wraps to two and comes in UNDER it (hitting the size anchor). 0.07 h is where
+ * this episode's six cards split: the two shortest reach the anchor on one line at 0.079 h, the four
+ * longest wrap to two and land 0.48–0.53 w at full 0.10–0.12 h size. Lower this and every card
+ * becomes one small thin line; raise it and every card wraps and undershoots the anchor.
+ */
+const NARRATION_MIN_FRAC = 0.07;
+
+// ---------------------------------------------------------------------------
 // Chapter title size — WO-19.
 //
 // WHY THIS IS NOT A PLAIN `maxFontSize` ANY MORE. The chapter title used to be fitted exactly like
@@ -193,36 +225,38 @@ export const TextCard: React.FC<TextCardProps> = (props) => {
 };
 
 /**
- * Set a chapter title TO the measured width anchor rather than to a box.
+ * Set a block TO a measured width anchor rather than to a box. Used by BOTH the chapter title
+ * (0.565 w) and the narration line (0.53 w) — §7 states both as widths.
  *
  * Differs from `fitText` in the one way that matters: `fitText` maximises the type size and takes
  * whichever line count gets it there, which — once the size is driven by a target width instead of a
- * cap — would break every title onto two lines (halve the widest line and the size doubles). The
- * reference sets its title on ONE line, so this takes the FEWEST lines that still set at title scale
- * and only spends a second line when one would fall under `CHAPTER_TITLE_MIN_FRAC`.
+ * cap — would break every block onto two lines (halve the widest line and the size doubles). So this
+ * takes the FEWEST lines that still set at or above `floor`, which is what puts the widest line ON the
+ * measure whenever the copy is long enough to reach it, and only spends another line when reaching it
+ * would set the type below floor.
  *
- * `boxWidth` never binds: the anchor (0.565 w) is inside BOX_W_FRAC (0.82 w) by construction, so the
- * measure is always the narrower constraint. `boxHeight` still does, for a two-line title.
+ * `boxWidth` never binds: both anchors are inside BOX_W_FRAC (0.82 w) by construction, so the measure
+ * is always the narrower constraint. `boxHeight` still does, for a two-line block.
  */
-const fitChapterTitle = (text: string, boxHeight: number, width: number, height: number): Fit => {
+const fitToMeasure = (
+  text: string,
+  opts: {who: string; measure: number; ceiling: number; floor: number; maxLines: number; boxHeight: number}
+): Fit => {
   const words = text.trim().split(/\s+/).filter(Boolean);
   if (words.length === 0) {
-    throw new Error('textcard: refusing to lay out an empty chapter title');
+    throw new Error(`textcard: refusing to lay out an empty ${opts.who}`);
   }
-  const measure = width * CHAPTER_TITLE_W_FRAC;
-  const ceiling = height * CHAPTER_TITLE_MAX_FRAC;
-  const floor = height * CHAPTER_TITLE_MIN_FRAC;
   let fit: Fit | null = null;
-  for (let n = 1; n <= Math.min(CHAPTER_TITLE_MAX_LINES, words.length); n++) {
+  for (let n = 1; n <= Math.min(opts.maxLines, words.length); n++) {
     const lines = balancedWrap(words, n, WEIGHT);
     if (!lines) continue;
     const widestEm = Math.max(...lines.map((l) => lineEm(l, WEIGHT)));
-    const fontSize = Math.min(ceiling, measure / widestEm, boxHeight / (n * LINE_HEIGHT));
+    const fontSize = Math.min(opts.ceiling, opts.measure / widestEm, opts.boxHeight / (n * LINE_HEIGHT));
     fit = {lines, fontSize, widestEm};
-    if (fontSize >= floor) break; // fewest lines that still set at title scale
+    if (fontSize >= opts.floor) break; // fewest lines that still set at the device's own scale
   }
   if (!fit) {
-    throw new Error(`textcard: could not lay out chapter title ${JSON.stringify(text)}`);
+    throw new Error(`textcard: could not lay out ${opts.who} ${JSON.stringify(text)}`);
   }
   return fit;
 };
@@ -234,16 +268,28 @@ const renderBody = (
   width: number,
   height: number
 ): React.ReactNode => {
-  if (props.kind === 'narration' || props.kind === 'word') {
-    const isWord = props.kind === 'word';
-    const text = isWord ? props.word : props.text;
-    const fit = fitText(text, {
+  if (props.kind === 'word') {
+    // The single-word beat is one word alone on the frame: there is no line to set to a measure, and
+    // its anchor is stated as an INK HEIGHT (0.092 h), which the 0.13 h cap already lands. Unchanged.
+    const fit = fitText(props.word, {
       who: 'textcard',
-      maxLines: isWord ? 1 : NARRATION_MAX_LINES,
-      maxFontSize: height * (isWord ? WORD_MAX_FRAC : NARRATION_MAX_FRAC),
+      maxLines: 1,
+      maxFontSize: height * WORD_MAX_FRAC,
       boxWidth,
       boxHeight,
       weight: WEIGHT,
+    });
+    return fit.lines.map((l, i) => <Line key={i} text={l} fontSize={fit.fontSize} weight={WEIGHT} />);
+  }
+
+  if (props.kind === 'narration') {
+    const fit = fitToMeasure(props.text, {
+      who: 'narration line',
+      measure: width * NARRATION_W_FRAC,
+      ceiling: height * NARRATION_MAX_FRAC,
+      floor: height * NARRATION_MIN_FRAC,
+      maxLines: NARRATION_MAX_LINES,
+      boxHeight,
     });
     return fit.lines.map((l, i) => <Line key={i} text={l} fontSize={fit.fontSize} weight={WEIGHT} />);
   }
@@ -260,7 +306,14 @@ const renderBody = (
   // pair-scaling dragged the title down with it and "The Cotton Store" set at 0.432 w instead of the
   // 0.565 anchor. Vertical fit is `blockHeight()`'s job, once, on the assembled block; each half only
   // needs its own line count and the ratio.
-  const title = fitChapterTitle(props.title, boxHeight, width, height);
+  const title = fitToMeasure(props.title, {
+    who: 'chapter title',
+    measure: width * CHAPTER_TITLE_W_FRAC,
+    ceiling: height * CHAPTER_TITLE_MAX_FRAC,
+    floor: height * CHAPTER_TITLE_MIN_FRAC,
+    maxLines: CHAPTER_TITLE_MAX_LINES,
+    boxHeight,
+  });
   const subWrap = fitText(props.subtitle, {
     who: 'textcard',
     maxLines: CHAPTER_SUB_MAX_LINES,

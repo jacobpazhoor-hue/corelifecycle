@@ -460,7 +460,7 @@ card=dict(kind="objects", items=["briefcase", "cashStack", "safe"])
 |---|---|---|
 | `kind` | yes | `"chapter"` · `"narration"` · `"word"` · `"objects"` |
 | `title` / `subtitle` | chapter only | the two halves of the `Evocative Noun: Plain Explanation` chapter name |
-| `text` | narration only | 1–2 lines; line breaking is automatic, long text shrinks rather than wrapping to 3 |
+| `text` | narration only | 1–2 lines; line breaking is automatic, long text shrinks rather than wrapping to 3. **Keep it inside ~30 characters per line** — see the sizing note below |
 | `word` | word only | ONE short word, set small on a large empty ground — not a huge word |
 | `items` | objects only | 1–5 objects; see the object card below |
 | `ground` | no | `"white"` or `"black"`. Defaults: chapter/word → black, narration/objects → white |
@@ -470,6 +470,18 @@ card=dict(kind="objects", items=["briefcase", "cashStack", "safe"])
 scene of each chapter, with the chapter's own two-part name split across `title` and `subtitle` — the
 same names used in the description timestamps. Give that scene the chapter's opening narration: the
 card holds while the line plays, exactly as the reference does.
+
+**Narration sizing (WO-25).** The narration line is set the same way the chapter title is: to §7's
+measured **0.53 of frame width**, with the old 0.12 h type size demoted to a ceiling. Before this it had
+no width target at all and simply ran out to the 0.82 w box — the WO-23 build measured six cards at
+0.499–0.797 w, mean **0.622**, against the reference's 0.536, with one 34-character sentence set as a
+single line 0.80 of the frame wide. Measured after: 0.499–0.527 w, **mean 0.514**.
+
+The trade the engine cannot make for you: at the reference's own type size a line reaches 0.53 w at
+about **22 characters**, so copy longer than that either sets smaller on one line or wraps to two and
+comes in under the anchor. The card picks whichever keeps the type above 0.07 h. **Write narration
+cards at ~22–30 characters per line, two lines at most** and both anchors land together — that is what
+the reference's own cards do, and it is the only half of this that is not the renderer's job.
 
 **Chapter title sizing (WO-19).** The title is set to the reference's measured measure — 0.565 of frame
 width — instead of to a fixed type size, so titles of different lengths read at one confident weight.
@@ -517,13 +529,38 @@ bubbles=[dict(kind="float", text="Three years of losses, moved off the books.", 
 | `at` / `dur` | 0 / rest of scene | seconds from the scene's start, and how long the line holds |
 | `tail` | `"down"` | balloon only: `left` `right` `down` `up` `none` — roughly where the speaker is |
 | `tailAt` / `tailSkew` | 0.5 / 0 | where along that edge the tail sits, and how far its tip leans |
-| `align` / `color` | `"left"` / white | float only. Pass `color="#000000"` over a PALE scene |
+| `align` / `color` | `"left"` / **black** | float only. See the colour note below before overriding |
 | `maxWidth` / `maxLines` | — | ceilings; past them the text shrinks instead of growing |
+
+**Floating dialogue is BLACK by default, and you should almost never override it (WO-25).** This
+device produced the same defect — white script, illegible, on a pale ground — in two consecutive QA
+passes, at t28 and then at t022, because the renderer chose the colour from the scene's colour KEY. A
+key's ground is the flat colour a template paints *first and then covers*; what a line actually lands
+on is a wall, a card, a window or a prop off the tone ladder, and the ladder's light rungs are by
+design the large-area tones. So the rule read the right value of the wrong quantity and could only
+ever be right on some scenes. Unballooned script now sets in black with a flat white keyline, which
+separates against every tone the palette can produce, and per-scene `color=` patches (t105 carried one)
+are no longer needed. Pass `color="#ffffff"` only for the reference's deliberate white-over-mid-grey-
+wall look, and only when you have looked at the frame. **If a line has to survive anything at all, use
+a balloon** — it brings its own white ground.
+
+**Balloons are opaque, always.** They cut in at full opacity with a small scale settle; there is no
+fade. A balloon that is see-through for even a few frames is a publishable frame with a translucent
+balloon in it (QA caught exactly that at t051), and the reference's balloons are flat opaque white
+with a uniform black keyline in every frame they exist.
 
 #### `panels=` — multi-panel split (bible §6.4)
 Replaces the scene's whole shot plan with one static split — a split *is* a composition, so it never
-re-frames. Each cell renders a template as a centre crop; a cell with no `template` is a flat colour
-block and **must** then name its own `ground`.
+re-frames. A cell with no `template` is a flat colour block and **must** then name its own `ground`.
+
+A cell shows its template scaled to **cover** the cell and cropped to it, so it only ever crops what
+the cell's own shape forces. A `grid4` cell is exactly half the frame in both axes — the same 16:9
+shape — so a grid cell now shows the **whole** composition with nothing cut; `v2` and `diagonal2` cells
+are taller than 16:9 and still take a native-scale centre crop, exactly as before. WO-25 changed this
+because the old flat native crop cut a figure's head on the `grid4` bottom-left cell (QA, t017) and
+threw away three quarters of every cell's picture. A grid cell is denser as a result — t017 measured
+82.8% flat fill before and **75.4%** after, still inside the 74–92% band, but a grid4 split of four
+already-dense rooms is now the closest this pipeline gets to the low edge.
 
 ```python
 panels=dict(variant="v2", cells=[dict(template="fileWall"), dict(template="drivewayHoop")])
@@ -560,6 +597,55 @@ foreground=dict(kind="overShoulder", side="right", scale=0.8, y=1010)
 right-side silhouette at `scale=1` on `boardroom` (whose hero stands at the right) blacks the hero out
 completely. It also costs a little density: the same scene measured 87.2% flat fill without it and
 87.8% with, so use it as an occasional depth beat, not on every scene.
+
+#### `overlay=` — the number note, and the one deliberate deviation from the reference
+
+One dict, `big` plus `sub`. It draws a small flat note low-left over the scene's art: the figure in
+handwritten script on white paper with a uniform black keyline and one flat accent rule, its caption
+under it. A figure that starts with `$` **counts up** to its value; anything else is set verbatim.
+
+```python
+overlay=dict(big="$613 BILLION", sub="IN DEBT — FILED AT 1:45 A.M.")
+overlay=dict(big="-$3.9B", sub="THE THIRD QUARTER")      # a loss beat: the accent turns red
+overlay=dict(big="30 TO 1", sub="BORROWED AGAINST ITS OWN MONEY")   # non-$: static, verbatim
+```
+
+**Read this before you use it. THE REFERENCE DOES NOT DO THIS.** `docs/CRAYON_BIBLE.md` §2 is explicit:
+across every captured frame, montage and thumbnail, **no reference frame carries a numeric overlay
+card**. Every on-screen number there is one of three things — lettering on a prop inside the scene, a
+full-screen text card, or a balloon. The "29–68 numbers per video" figure in §2 is a count of numbers
+in the **transcript**, i.e. numbers the narrator *says*, not numbers drawn on the frame.
+
+The note is kept anyway, and WO-25 re-argued it rather than inheriting it: figures reach the renderer
+as a scene field with no prop to letter, the count-up is this channel's own signature reveal, and the
+alternative — routing every figure to a full-screen card — would put a card every ~35 seconds and
+blank the picture at each one, which is a *larger* deviation from the reference's rhythm than the note
+is. What WO-25 did change is the scope:
+
+* **The note is a reveal, not a label.** It enters, counts, holds long enough to read, and lifts, over
+  about 3.5 seconds — it no longer sits on the frame for the whole scene. Measured on the sample
+  episode that is ~4% of all frames, down from ~11.7%. The bible's finding is about a *persistent*
+  card, and this is the half of it the renderer can honestly answer.
+* **It is dropped, by design, on any scene that already carries `card=`, `bubbles=` or `panels=`.**
+  Those are the reference's own carriers for a number; a note on top of one is a second device saying
+  the same thing, and on `panels` it covered a quarter of the split (QA, t017). This is documented,
+  not silent: if you write both, the note is the one that goes.
+
+**So: prefer the reference's carriers.** Put the figure in the narration and let a `card=` or a
+`bubbles=` line carry it on screen where the beat deserves a full frame, and keep `overlay=` for the
+beat where a figure genuinely has to land on a picture. Budget **well under one per ten scenes**;
+eighteen in a 196-scene episode is the count QA flagged, and about half of those were dates and plain
+counts that the narration was already saying out loud.
+
+| key | required | meaning |
+|---|---|---|
+| `big` | yes | the figure. Must be non-empty or the build raises. Leading `$` = count-up |
+| `sub` | no | the caption under it — the unit, the date, the source |
+
+A `$` figure keeps everything after its leading digits **verbatim**, so `"$250K / YR"` shows in full
+and never truncates to `"$250"`. A figure that reads as a cost or loss — a leading `-`, a negative
+amount, or a word like DEBT / SOLD / BANKRUPT / LOSS in either half — switches the accent from
+gain-gold to the loss red automatically; do not try to set a colour.
 
 #### `level=` — still required, no longer drawn
 `level` is the pipeline's **structural** chapter marker and must still be set on the first scene of

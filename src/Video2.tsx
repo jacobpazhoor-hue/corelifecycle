@@ -1,7 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import timeline from './timeline.json';
-import {FramedScene, FOCUS, CountUp, NumberCard, splitMoney, isNegativeOverlay} from './director';
+import {FramedScene, FOCUS, CountUp, NumberCard, splitMoney, isNegativeOverlay, fadeRamp, noteRamp} from './director';
 import {Move} from './photoStage';
 import PHOTO_RAW from './photo_manifest.json';
 // CRAYON signature devices (bible §6). Built in WO-5/6/7, wired to the timeline here in WO-12a.
@@ -341,8 +341,11 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
   // near-blank white flash (mistaken for a compositing bug in QA — commandPost's t21/t25 samples
   // landed exactly there). Floor keeps SOME content visible through the cut; shorter window means
   // less of the runtime is ever in the dim zone at all.
-  const fade = 8;
-  const beatOp = interpolate(f, [0, fade, D - fade, D], [0.4, 1, 1, 0.4], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  // ...and the 8-frame ramp is COMPRESSED on a scene too short to hold two of them: `[0, 8, D-8, D]`
+  // is non-monotonic for any scene of 16 frames or fewer, which is the same render-killer class as the
+  // overlay ramp below (see director.tsx's RAMP SAFETY note). The 0.4 floor is unchanged — it is the
+  // white-flash guard, not a fade length.
+  const beatOp = interpolate(f, fadeRamp('scene cut', D, 8), [0.4, 1, 1, 0.4], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   // The shot plan is made once in Video2, which is the only place that can see the PREVIOUS scene's
   // framing — the state planShots needs to keep two consecutive scenes on one template from opening
   // on the same frame. Normally the plan is a single shot spanning the whole scene (WO-17).
@@ -367,25 +370,33 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
 
   // static (non-numeric) overlay fallback, matches the count-up styling
   const big = scene.overlay?.big ?? '';
-  // was [20, 36, ...]: a 16-frame ramp left the card at low opacity/contrast for a long,
-  // clearly-visible beat (e.g. the "2011" fileWall share-beat) before settling. Matches
-  // CountUp's snappier onset so text reads at full contrast almost as soon as it appears.
-  // EXIT window shortened from 18->10 frames (was D-18,D): over a busy backdrop (e.g. revolvingDoor's
-  // window grid) the old long linear fade spent many frames at mid-opacity, letting the art bleed
-  // through the card and read as a double-exposed ghost (reviewer defect, t23 "SEC WELLS NOTICE").
-  // Paired with an exit LIFT below so the card reads as a quick slide-away, not a lingering blend.
+  // ONE TIMING FOR BOTH FLAVOURS OF NOTE (WO-25). The static figure used to run its own pair of ramps
+  // built from D by hand — `[10, min(20, cardOut-1), cardOut, D]` — and that hand-built arithmetic is
+  // exactly what killed the WO-23 render: `interpolate` needs a strictly increasing input range, and
+  // `[10, 28, D-10, D]` evaluated to `[10, 28, 25, 35]` at t065 ("Unless.", 35 frames) and took the
+  // whole 29,085-frame episode down with it. Even after that patch the range still went backwards for
+  // any scene of 11 frames or fewer. It is now `noteRamp`, which the count-up shares: the pattern
+  // scales to the scene AND is clamped monotonic, so no duration can produce a bad range.
   //
-  // THE RAMPS MUST FIT THE SCENE. `interpolate` requires a strictly increasing input range and THROWS
-  // otherwise, and these two ranges are built from D, so a short scene makes the range go backwards
-  // and kills the whole render — not the overlay, the render. Since WO-17 a scene is a shot and since
-  // WO-22 the writer is licensed to write one-word punches (bible §3a: "a one-word scene measured
-  // 1.17s"), so D=35 frames is a SUPPORTED input: [10, 28, D-10, D] evaluated to [10, 28, 25, 35] and
-  // frame 13298 (t065 "Unless.") failed the whole episode. These ramps are unconditional — they are
-  // computed even for a scene with no overlay at all — so the crash did not need an overlay either.
-  // Compress the ramp into whatever room the scene has rather than dropping the card or the frame.
-  const cardOut = Math.min(Math.max(D - 10, 12), D - 1);   // the exit ramp starts here
-  const staticOp = interpolate(f, [10, Math.min(20, cardOut - 1), cardOut, D], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const staticRise = interpolate(f, [10, Math.min(28, cardOut - 1), cardOut, D], [18, 0, 0, -16], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
+  // It is also a REVEAL now rather than a hold — see director.tsx's number-note block for the whole
+  // argument. The exit LIFT stays: the note reads as a quick slide-away, not a lingering blend that
+  // lets the art ghost through it (reviewer defect, t23 "SEC WELLS NOTICE").
+  const noteOp = noteRamp(D).op;
+  const staticOp = interpolate(f, noteOp, [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const staticRise = interpolate(f, noteOp, [18, 0, 0, -16], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
+
+  // WHERE THE NUMBER NOTE IS NOT DRAWN (WO-25). `CRAYON_BIBLE.md` §2: every on-screen number in the
+  // captured reference is lettering on a prop, a full-screen text card, or a balloon — never a
+  // persistent corner card. The note survives as a narrow deviation (director.tsx argues it in full),
+  // and the first half of the narrowing is this: a scene that ALREADY carries one of the reference's
+  // own carriers does not get one.
+  //   * `card`  — a full-screen card covers the frame anyway, so the note under it was invisible work
+  //               (t005 and t114 in the sample episode drew a note nothing ever saw);
+  //   * `bubbles` — the balloon is where the reference puts a spoken figure;
+  //   * `panels`  — QA defect 5: on `grid4` t017 the note covered a quarter of the split. The split IS
+  //                 the composition; a card laid over one of its cells is a second one.
+  // This is a documented, deliberate drop, not a silent one — `docs/BIBLE.md` §8 tells the writer.
+  const noteSuppressed = Boolean(scene.card || scene.bubbles?.length || scene.panels);
 
   const photo = PHOTO.mode === 'photo' && PHOTO.scenes[scene.id] ? PHOTO.scenes[scene.id] : undefined;
 
@@ -454,7 +465,7 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
       {/* money: animated count-up if numeric, else static styled text. COST/loss beats (debt, KIA,
           burned, sold, murdered...) get a red/amber accent instead of gain-gold so the moral-erosion
           beats read as losses, not more income. */}
-      {scene.overlay && (money !== null
+      {scene.overlay && !noteSuppressed && (money !== null
         ? <CountUp from={from ?? 0} to={money.num} suffix={money.suffix} sub={scene.overlay.sub} dur={D} negative={negOverlay} />
         : (
           // Non-numeric overlays ("1 IN 3", "-1 KIA", "10-DAY DEAL", "0.03%") render VERBATIM as one
@@ -481,10 +492,12 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
             {b.kind === 'float' ? (
               <FloatingDialogue
                 text={b.text} x={b.x} y={b.y} align={b.align} color={b.color}
-                // Unballooned script takes its colour from the ground it lands on, so a line over a
-                // pale scene sets in INK instead of the reference's white (which a `grey`-keyed
-                // boardroom at #cccccc all but swallowed). The writer's `color` still overrides.
-                ground={sceneColors(resolveSceneKey(scene.id, scene.template)).bg}
+                // NO `ground` (WO-25). The renderer used to hand the scene key's flat `bg` over and let
+                // the device pick white or INK off its luminance; the key's `bg` is the colour a
+                // template paints FIRST and then covers, not the colour behind the glyphs, so the rule
+                // was right on some scenes and wrong on others — white-on-pale at t28, "fixed", then
+                // white-on-pale again at t022. The device now defaults to INK and guarantees the rest
+                // with its keyline; `bubble.tsx` has the full argument.
                 maxWidth={b.maxWidth} maxLines={b.maxLines} keyline={b.keyline}
               />
             ) : (
@@ -520,7 +533,10 @@ const ShotFade: React.FC<{dur: number; children: React.ReactNode}> = ({dur, chil
   // min-luma 148 mid-scene). This is the same bug class the scene-level `beatOp` already fixed by
   // flooring at 0.4; intra-scene cuts should be subtler, so floor high (0.85) — a barely-perceptible
   // softening that can never reveal enough white to blank the frame. 2026-07-22.
-  const op = interpolate(f, [0, 4, dur - 4, dur], [0.85, 1, 1, 0.85], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  // The RANGE is compressed on a short shot (`fadeRamp`): `[0, 4, dur-4, dur]` folds back on itself
+  // for any shot of 8 frames or fewer, and since WO-17 a shot IS a whole scene — the same one-word-
+  // scene path that killed the WO-23 render. The 0.85 floor itself is untouched.
+  const op = interpolate(f, fadeRamp('shot cut', dur, 4), [0.85, 1, 1, 0.85], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return <AbsoluteFill style={{opacity: op}}>{children}</AbsoluteFill>;
 };
 
