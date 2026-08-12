@@ -3,7 +3,7 @@
   "publishMode": "public",
   "visualMode": "doodle",
   "autoUpload": true,
-  "minMinutes": 11,
+  "minMinutes": 13,
   "improvementsPerRun": 2,
   "topics": "auto-generate",
   "channel": "@corelifecycle",
