@@ -10,8 +10,9 @@ READ FIRST:
                           must hit. Obey it literally; it is measured, not opinion.
   docs/CRAYON_BIBLE.md  — the measured STYLE spec (art, camera, editing, type, sound, packaging).
                           READ-ONLY. Never edit it to make an episode fit.
-  docs/TEMPLATES.md     — the scene-template catalog. A `template=` value NOT in here does not exist
-                          and will not render.
+  docs/TEMPLATES.md     — the LEGACY scene-template catalog. It does NOT list the thirteen restyled
+                          explainer environments this format uses; those live in BIBLE.md §8 and in
+                          EXPLAINER_TEMPLATES in src/explainer.tsx. Do not emit a legacy name.
   ops/topic_queue.json, ops/produced_topics.json, ops/improvements.json, ops/analytics.json
                           (analytics are from the OLD POV format — they say nothing about which
                           explainer subjects work. Ignore their topic guidance until this format has
@@ -34,7 +35,30 @@ DO, in order:
 3. WRITE — overwrite content.py per docs/BIBLE.md, grounded in that research.
    THIRD PERSON, PAST TENSE, about the real subject. ~2,000–3,100 words. TARGET RUNTIME 13–21 min.
    Each scene dict: id, level (see below), narration, overlay ({big,sub} or None), `template`, and
-   optional `dialogue=dict(text=...)` / `gap=`.
+   optional `card=` / `bubbles=` / `panels=` / `foreground=` / `dialogue=dict(text=...)` / `breath=` /
+   `gap=` (all documented in BIBLE.md §8).
+
+   SCENE GRANULARITY — READ BIBLE.md §3a BEFORE WRITING. This is the rule that most changes what the
+   episode looks like, and it is the one the WO-13 sample episode failed.
+     • ONE set-up per 1–2 SENTENCES. 10–16 narration words per scene. A scene carrying three or more
+       sentences should have been two or three scenes.
+     • ~180–210 SCENES for a 15–17 min episode -> mean scene 4.5–6.0s, 10–13 cuts/min. (The reference
+       runs 4.79s / 12.5 cuts/min. §3a has the measurements and says why we sit at its cut rate but do
+       not go past it — do not "fix" this by writing 39 long scenes.)
+     • Since WO-17 there is exactly ONE framing per scene, so a scene IS a shot. The renderer cannot
+       add a cut. The cut rate is YOUR number and nobody else's.
+     • VARY THE SET-UP, not just the template: full-screen `card=` beats (chapter/narration/word/
+       objects), `panels=` splits, `foreground=dict(kind="overShoulder", side=...)`, and
+       `closeUpPortrait` as a genuine cut-in on a reaction. Budget per episode: 5 chapter cards,
+       4–6 narration cards, 3–4 word cards, 1–3 object cards, 3–4 panel splits, 3–5 foregrounds,
+       5–10 bubble/float beats.
+     • Set `breath=True` by hand on ~10–15 scenes. The automatic breath only fires above 48 words and
+       no scene at this length reaches it, so without this the whole episode never breathes.
+     • Do NOT set `gap=` per scene (except the one `gap=1.4` before the midpoint reversal). The
+       engine's hashed gaps are what score the measured MATCH on varied inter-scene silence.
+     • MEASURE variety before you stop: sample the timeline at 8 evenly spaced points, resolve what is
+       on screen at each (card kind / panel split / template), and count DISTINCT values. Target 8/8.
+       The reference scores 8/8; the 39-scene WO-13 build scored 4/8.
 
    THE HOOK (first ~30s, five steps, in order — worked examples in BIBLE.md §4):
      1) shock stat or paradox, ONE sentence
@@ -47,11 +71,12 @@ DO, in order:
    NO logo, NO "in this video", NO channel name, NO subscribe — ever, anywhere in narration.
 
    BODY: 3–5 chapters, chronological, each named in the two-part `Evocative Noun: Plain Explanation`
-   form ("The Mask: How Enron Hid the Truth in Plain Sight"). There is NO `chapter=` key. The only
-   existing carrier is the `level` field on the first scene of each chapter — but be warned: today it
-   renders as the LEGACY gold-bar label, top-left, FORCE-UPPERCASED and in the old paper styling
-   (src/Video2.tsx:140), and it also drives the chapter-start SFX. So put the SHORT half there (the
-   evocative noun, e.g. "THE MASK") and keep the full two-part name for the description timestamps.
+   form ("The Mask: How Enron Hid the Truth in Plain Sight"). The chapter name is DRAWN by
+   `card=dict(kind="chapter", title=..., subtitle=..., hold=2.4)` on the first scene of the chapter —
+   keep the SUBTITLE inside ~36 characters or it wraps to two lines and shrinks the whole block
+   (measured defect, COMPARISON.md §2 §7). `level="CH n"` is still REQUIRED on that same scene — it no
+   longer draws anything, but gen_voice_edge lengthens the pre-chapter silence off it and duck_music
+   keys the chapter SFX off it. Use the same two-part names in the description timestamps.
    Every chapter ends on a forward hook that is a question the next
    chapter answers. EXPLAIN THE MECHANISM — name it, define it in one short sentence, then show it
    working. That is the whole promise of the format.
@@ -76,7 +101,8 @@ DO, in order:
    CAUSALITY — but/therefore, never "and then." SPECIFICITY over abstraction ("exactly 39 drops of
    solder", not "he was frugal"). ONE recurring factual motif re-triggered at each escalation
    (Rockefeller: "ledger A", and the epithet "the bookkeeper"). ONE share-worthy "wait — that's real?"
-   fact. Pattern interrupt every ~30–45s. Never the same template on two adjacent scenes.
+   fact. Never the same template on two adjacent scenes, and at least two other set-ups between any
+   two uses of one template.
 
    REGISTER: pick ONE and hold it. Villain biographies play straight and noirish. Systemic crises
    play comic and anachronistic ("Jazz music becomes the Wi-Fi of the 20s"). A biography that jokes
@@ -87,18 +113,19 @@ DO, in order:
    dialogue=dict(text="…"). Exchanges, not conversations.
 
    TEMPLATES — read this before emitting a single `template=`:
-     • ONLY names catalogued in docs/TEMPLATES.md exist. Anything else will not render.
-     • The interim safe set for explainers (all exist today): deskSilhouette, desk, deskClose,
-       fileWall, tower, window, signing, boardroomNotes, boardroomHead, atrium, dinner, layoffs,
-       revolvingDoor, warRoom, emptyChair, lobby, tradingFloor, pnlWall, courtroom, podiumScene,
-       streetCorner, prisonCell.
-     • CAVEAT: most of those are still in the OLD line-art-on-paper style. A build on them is a
-       SCRIPT TEST, not a publishable episode, until the new explainer template set (WO-8f/8g) lands.
-     • The topic's `environments` field and BIBLE.md §8 list ENVIRONMENT ARCHETYPES in plain English
-       (office / boardroom / trading floor / street / domestic interior / courtroom / factory /
-       newspaper montage / broadcast / crowd / close-up / chart / multi-panel / text card). Those are
-       what a scene should DEPICT. They are NOT registered names — do NOT camelCase one into
-       `template=`. When WO-8f lands, docs/TEMPLATES.md gains the real names.
+     • THIRTEEN restyled explainer environments exist, and an episode uses THESE AND NOTHING ELSE:
+       officeFloor, boardroom, exchangeFloor, cityStreet, domesticInterior, newsMontage,
+       bankExterior, courtHearing, factoryFloor, broadcastDesk, crowdQueue, closeUpPortrait,
+       chartBoard.
+     • Source of truth is EXPLAINER_TEMPLATES in src/explainer.tsx (spread into TEMPLATES in
+       src/scenes.tsx). gate.py derives the registry from those spreads and HALTs on a name it cannot
+       find. docs/TEMPLATES.md documents only the LEGACY library and does not list these thirteen.
+     • Do NOT emit a legacy name from docs/TEMPLATES.md. Those render, but in the old
+       line-art-on-warm-paper style, and they look wrong next to the thirteen.
+     • The topic's `environments` field is plain-English ARCHETYPES describing what a scene should
+       DEPICT. Map each one onto a name from the thirteen; do NOT camelCase an archetype into
+       `template=`. Pick the environment the FACT happened in — except closeUpPortrait, which depicts
+       nowhere and is therefore free to use as a cut-in on a reaction or a verdict.
    PROMISE -> PAYOFF LEDGER: at the top of content.py, comment every setup you plant and the scene id
    where it pays off. All must pay off. STRUCTURAL VARIATION: check the last ~2 entries in
    produced_topics.json and deliberately differ in hook variant, chapter shape, and ending flavour
@@ -119,6 +146,10 @@ DO, in order:
    EMOTION is the #1 CTR lever and there are no real faces — push the expression hard (open mouth,
    visible teeth, worry lines, stress squiggles). Keep caption text ≤3 words, mobile-readable at 120px.
    SYNERGY RULE: the thumbnail SHOWS, the title TELLS — never the same words.
+   ASCII ONLY IN THUMBNAIL COPY: the thumbnail is set in a vendored Montserrat ExtraBold LATIN SUBSET
+   (WO-21), and a character the subset cannot set HALTS the render rather than substituting — same
+   posture as thumb.setting / thumb.prop. The real case is the arrow: write `->`, never `→`, in
+   thumb.tag and every other thumbnail string (kicker/line1/line2/question/big).
    ARCHETYPE ROTATION — PRESERVED VERBATIM FROM THE 2026-08-04 OWNER DIRECTION, which REVERSES the
    2026-07-20 "poster is house style, do NOT rotate" rule (shipping the identical poster layout every
    day made the thumbnails blur together in the feed):
@@ -156,13 +187,21 @@ DO, in order:
 5. BUILD + SELF-CHECK — run `python3 build.py`. It syntax-checks content.py + episode_meta.json,
    makes the VO + music, runs the gate, and does a 1-frame smoke render. Read the printed
    "~X WPM speech / Y WPM runtime" line and confirm the RUNTIME figure is 145–152; if it is out of
-   band, the fix is the SCRIPT LENGTH, not the synth rate (RATE is measured and calibrated — do not
-   change it). If build HALTs on runtime, ADD scenes and rerun until it prints "BUILD OK". Do NOT edit
+   band, the fix is the SCRIPT, not the synth rate (RATE is measured and calibrated — do not change
+   it). Which part of the script depends on which way it is out:
+     • RUNTIME too SHORT -> add scenes (and the words to fill them).
+     • WPM too HIGH -> SPLIT MORE SCENES. This is counter-intuitive and it is measured (BIBLE.md
+       §3a): a split adds 0.52s of lead+gap but removes a sentence-final pause from inside the
+       utterance, and past ~7s mean scene the second effect wins. Same script, same rate: 141 scenes
+       (6.81s mean) = 154.2 WPM and a HALT; 196 scenes (4.95s mean) = 152.7 WPM and a PASS.
+     • WPM too LOW -> add WORDS. Never lengthen scenes to fix WPM.
+   Rerun until it prints "BUILD OK". Do NOT edit
    Brand.tsx, gen_packaging.py, build.py, gen_voice_edge.py, or docs/CRAYON_BIBLE.md — only
    content.py, ops/episode_meta.json, and docs/research/<slug>.md.
    SELF-CHECK the script against BIBLE.md §3 before you build: mean and median sentence length, the
    share under 8 words, the number count, and the "you"-per-1000 rate. If any is out of band, rewrite
-   — those bands ARE the format.
+   — those bands ARE the format. Then self-check §3a on the built timeline: scene count, mean scene
+   seconds, cuts/min, and DISTINCT SET-UPS IN 8 EVENLY SPACED SAMPLES (target 8/8).
 
 6. LEARN — do NOT touch ops/produced_topics.json (the shell appends the topic there ONLY after a
    successful publish, so a failed render never orphans it). Move any shipped backlog items in

@@ -47,7 +47,8 @@ in the reference transcripts:
   into her bra."*
 - **Anaphora at theme moments.** *"Turned 22 months into a book deal. Turned fraud into fame."*
 - **Sentence-length variation with short punches at peaks** (now with a *lower* target — see §3).
-- **Pattern interrupt every ~30–45s** and **never the same template on two adjacent scenes.**
+- **Never the same template on two adjacent scenes.** (The old "pattern interrupt every ~30–45s" is
+  superseded: §3a moves the set-up every **1–2 sentences**, which makes a 30–45s interrupt a slow one.)
 - **Promise → payoff ledger** as a comment at the top of `content.py`. An unpaid setup is the
   mid-video cliff the algorithm punishes, in an explainer exactly as in a story.
 - **Structural variation across consecutive episodes** — check the last ~2 entries in
@@ -133,6 +134,124 @@ averages fifteen words a sentence, it is the old canon's rhythm, not this one.
 Dates, dollar figures, percentages, counts, ages. *"22 of the 26 refineries in Cleveland had
 surrendered"* is worth more than "almost all of them".
 
+> The words in this table are the whole script's. **How they are cut into scenes is a separate number
+> and it is just as measured — see §3a.** Hitting every band above and still writing 39 scenes produces
+> the WO-13 defect: a script that reads right and edits like a slideshow.
+
+## 3a. Scene granularity — the edit is a WRITING job
+
+**Since WO-17 there is exactly one framing per scene.** `planShots` no longer re-crops the same artwork
+to manufacture rhythm (of 160 detected cuts in the WO-13 build, 122 were re-crops of a picture that had
+not changed — the owner saw them as "so many random zooms"). A scene is now a *shot*. Nothing in the
+renderer can add a cut. **The cut rate is the writer's number, and it is set by how many scenes you
+write.**
+
+The WO-13 build is what one framing per scene looks like on the old scene budget: 39 scenes over
+13.7 min = a **21.1s mean scene** against the reference's **4.79s mean shot**, and at 8 evenly spaced
+samples it showed **4 distinct set-ups out of 8** where both reference montages show **8 of 8**.
+
+### The target
+
+| | reference | **write to this** | WO-13 build | WO-22 rewrite |
+|---|---|---|---|---|
+| narration words per scene | ~12 (at its rate) | **10–16** | 54 | 12.6 |
+| mean scene | 4.79s | **4.5–6.0s** | 21.1s | **4.95s** |
+| cuts/min | 12.5 | **10–13** | 2.8 | **12.4** |
+| scenes per episode | — | **180–210** (15–17 min) | 39 | 196 |
+| distinct set-ups in 8 evenly spaced samples | 8/8 | **8/8** | 4/8 | **8/8** |
+| same template within | never repeats | **≥ 3 scenes apart** | adjacent-only rule | ≥ 3 |
+
+**One set-up per 1–2 sentences.** That is the reference's own rhythm: 7.5–10.6-word sentences and a
+4.79s mean shot means it changes the picture roughly every sentence and a half. A scene carrying three
+or more sentences should have been two or three scenes.
+
+Scenes may be very short. A one-word scene (`"Unless."`) measured **1.17s** in the WO-22 build and sits
+inside the reference's own shot range (0.61–16.46s). Use them as punches, not as a habit.
+
+### The WPM arithmetic is NOT what it looks like — measure, and read this before "fixing" a HALT
+
+Splitting a scene does two opposite things at once, and the second one is easy to miss:
+
+- it **adds** `LEAD` (0.1s) + an inter-scene gap — **measured 0.516s per scene boundary** across the
+  WO-22 build — which pushes runtime WPM *down*; and
+- it **removes one sentence-final pause from inside the synthesised utterance** (`trim_silence()` cuts
+  the tail of every scene's audio), which pushes **speech** WPM *up*.
+
+Measured on this same script and subject, at `RATE = "-7%"`:
+
+| scenes | mean scene | speech WPM | **runtime WPM** | verdict |
+|---|---|---|---|---|
+| 39 | 21.1s | 156.8 | 152.5 | PASS |
+| 141 | 6.81s | 167.1 | **154.2** | **HALT** — over `gate.py`'s 154.0 ceiling |
+| 196 | 4.95s | 170.5 | 152.7 | PASS |
+
+So runtime WPM is **not** monotonic in scene count: the speech-rate gain outruns the gap cost until
+roughly 7s and then falls behind it. There is a **dead zone around a 6.5–7.5s mean scene** where the
+number climbs through the ceiling. Both the 21s edit and the 5s edit clear the gate; the 6.8s draft in
+between did not.
+
+**The actionable rule that follows:** if `gate.py` reports runtime WPM *above* the band, **split more
+scenes** — do not lengthen them, and never touch `gen_voice_edge.RATE`. If it reports *below* the band,
+add words. The floor is only reachable by extrapolation somewhere under a ~3s mean scene, which no
+other rule here would let you write anyway.
+
+### Why 10–13 cuts/min and not more, when the gate would allow it
+
+The measured band leaves room to cut faster still. Four reasons not to, and none of them is taste:
+
+1. **Inventory. This is the one axis where copying the reference makes the copy worse.** The reference
+   hand-draws every set-up and *never repeats one*. We have 13 environments and reuse all of them. At
+   the WO-22 cut rate the same room already comes back after a measured **minimum of 12s and a mean of
+   59s**. Cutting twice as fast halves both. The reference's 12.5 cuts/min is affordable *for it*
+   because it never pays the repetition price; we pay it on every cut.
+2. **We cannot cut mid-sentence; the reference can.** One scene is one synthesised utterance, so every
+   cut lands on a full stop with a silence in it. The reference cuts underneath continuous narration.
+   Past ~13 cuts/min our scenes fall below one sentence each and we would be fragmenting sentences
+   purely to make a cut, which reads as a stutter, not a rhythm.
+3. **Ten words is not an explanation.** A 4.95s scene is ~13 words. The format's promise is "explained
+   like you're 5", and the mechanism beats (what a repo *is*, what a tranche *is*) need two or three
+   sentences standing in one place. Below ~10 words a scene, the teaching stops.
+4. **Gate headroom.** 152.7 sits 1.3 under the ceiling. That is margin for the next script's prose, not
+   spare capacity to spend on cuts.
+
+### Vary the SET-UP, not just the template
+
+At this cut rate the 13-name template list is not enough on its own. What counts as a set-up change:
+
+- a different `template=` — the base move;
+- a full-screen `card=` (`chapter` / `narration` / `word` / `objects`) — the card *is* the picture;
+- a `panels=` split — a new composition even when the cells reuse rooms already seen;
+- `foreground=dict(kind="overShoulder", …)` — the same room, watched from behind someone;
+- **`closeUpPortrait` used as a genuine cut-in** — one face, after a wide, is the cheapest real cut we
+  have. Spend it on reactions and verdicts.
+
+Budget per episode, roughly: 5 chapter cards · 4–6 narration cards · 3–4 word cards · 1–3 object cards ·
+3–4 panel splits · 3–5 over-the-shoulder foregrounds · 5–10 bubble/float beats.
+
+### Two mechanical consequences of short scenes
+
+- **`gen_voice_edge.py` only auto-inserts a breath on scenes over 48 words**, and at this granularity no
+  scene comes close to 48. Set **`breath=True`** by hand on ~10–15 scenes (chapter openings, the beat
+  after a silence) or the whole episode synthesises without one — brains flag impossible breathlessness.
+- **Leave `gap=` alone.** The engine's per-scene hashed gaps are what score the §8 MATCH on varied
+  inter-scene silence (37 distinct values across 39 gaps). Clamping every gap toward the bottom of the
+  reference's 0.18–1.0s band would buy a little more cut rate and would trade a measured MATCH for it.
+  The one licensed exception is still `gap=1.4` on the scene before the midpoint reversal.
+- A chapter card holds 2.4s, so **give a chapter's opening scene at least ~12 words** or the card covers
+  the whole scene and the chapter opens on a card cutting to nothing.
+
+### Measure it, do not estimate it
+
+After `gen_voice_edge.py`, sample the timeline at **8 evenly spaced points** (the density of the
+reference's own montage sheets), resolve what is on screen at each — card kind, panel split, or template
+— and count the distinct values. **Report it as x/8.** Reference 8/8, WO-13 4/8, WO-22 8/8.
+
+> **The 30s-sample repeat share is inventory-bound, not cadence-bound — do not chase it.** Sampling
+> every 30s across a 16-min episode takes 33 samples from a vocabulary of 13 rooms, so at least
+> 20 of them must repeat: **61% is the floor**, and the WO-22 build measures exactly 61% — the same
+> figure the 39-scene build measured, because cutting faster does not add rooms. That number only moves
+> when the template set grows.
+
 ## 4. The hook — five steps, first ~30 seconds
 
 Identical structure in all seven autopsied videos. Reproduce it in order.
@@ -208,6 +327,12 @@ Rules: **exchanges, not conversations** (2–4 lines, then back to narration); e
 lines carry characterisation the narrator then declines to spell out. Emit them with the existing
 `dialogue=dict(text=...)` scene field (optional `voice=`, `rate=`); `BEAT_GAP` is 0.8s.
 
+> **Prefer `bubbles=` to voiced `dialogue=`, and keep the voiced kind to 2–4 lines an episode.** A
+> voiced line costs `BEAT_GAP` plus its own speech time — 4s of runtime carrying **zero narration
+> words** — and runtime WPM is `words / runtime`. Four voiced lines cost roughly 2.5 WPM off the gate's
+> figure. A speech balloon or a floating line costs nothing and, unlike the reference's own dialogue,
+> is what the reference actually *shows*: its exchanges are drawn on screen, not always spoken.
+
 ## 7. The ending
 
 **Thematic reflection → a direct quote or a callback to the opening → often a forward tease.**
@@ -239,34 +364,30 @@ Pick one of the three shapes per episode and vary it against the last two produc
 
 The writer emits a `template=` per scene. **Read this section before writing a single one.**
 
-### AVAILABLE TODAY (safe to emit)
-Only the templates catalogued in **`docs/TEMPLATES.md`** exist in the registry
-(`src/scenes.tsx` `TEMPLATES`, packs in `src/stage.tsx`). A `template=` value not in that catalogue
-will not render. Of the catalogue, these documented entries map onto explainer environments and are
-the interim safe set: `deskSilhouette` · `desk` · `deskClose` · `fileWall` · `tower` · `window` ·
-`signing` · `boardroomNotes` · `boardroomHead` · `atrium` · `dinner` · `layoffs` · `revolvingDoor` ·
-`warRoom` · `emptyChair` · `lobby` · `tradingFloor` · `pnlWall` · `courtroom` · `podiumScene` ·
-`streetCorner` · `prisonCell`.
+### AVAILABLE TODAY (safe to emit) — the THIRTEEN explainer environments
+WO-8f built six of them and WO-8h added seven more. They are the restyled, reference-density set, and
+an episode in this format uses **these and nothing else**:
 
-> ⚠ **Caveat, stated plainly:** those templates *render*, but most are still in the old
-> line-art-on-warm-paper style. Only the handful touched by WO-8a–8d are at reference density. An
-> episode built on this interim set is a **script test, not a publishable episode.**
+> `officeFloor` · `boardroom` · `exchangeFloor` · `cityStreet` · `domesticInterior` · `newsMontage` ·
+> `bankExterior` · `courtHearing` · `factoryFloor` · `broadcastDesk` · `crowdQueue` ·
+> `closeUpPortrait` · `chartBoard`
 
-### ASPIRATIONAL — the environment vocabulary to write toward (DOES NOT EXIST YET)
-`docs/research/crayon/TEMPLATE_STRATEGY.md` retired the plan to restyle the 358-template library.
-It is being replaced by a **new set of ~20–30 dense explainer templates**, which **a later work order
-(WO-8f / WO-8g) has not yet built**. Until it does, the following are **environment archetypes in
-plain English, deliberately NOT template identifiers** — they are what a scene should *depict*, and
-they are the reason the environment set is narrow enough to be built properly:
+**Source of truth is `EXPLAINER_TEMPLATES` in `src/explainer.tsx`**, spread into `TEMPLATES` in
+`src/scenes.tsx`; `gate.py` derives the registry by following those spreads and HALTs on a `template=`
+it cannot find. `docs/TEMPLATES.md` still documents only the **legacy** 358-template library and does
+**not** list the thirteen — do not go looking for them there, and do not emit a legacy name from there
+either. Those render, but in the old line-art-on-warm-paper style, and they look wrong beside these.
 
-> office / cubicle floor · boardroom · trading floor · bank or institutional exterior · street ·
-> domestic interior · courtroom or hearing · factory / industrial · newspaper & document montage ·
-> broadcast or news frame · crowd or queue · character close-up · chart & diagram ·
-> multi-panel split · full-screen text card
+Pick the environment the *fact* happened in, never the one that looks good. `closeUpPortrait` is the
+exception to that rule: it depicts nowhere, so it is free to use as a **cut-in on a reaction, a verdict
+or a one-line judgement** (§3a), which is what makes it the most valuable name on the list.
 
-**Do not invent a camelCase name from that list and put it in `template=`.** None of them are
-registered. When WO-8f lands the real set, `docs/TEMPLATES.md` becomes the source of truth for their
-actual names, and this section gets rewritten to point at them.
+### The vocabulary is 13 rooms, not 13 shots
+The environment archetypes the old canon listed in plain English (office · boardroom · trading floor ·
+bank exterior · street · domestic interior · courtroom · factory · newspaper montage · broadcast ·
+crowd · close-up · chart) now all exist as real names above. The three that never became rooms —
+**multi-panel split**, **full-screen text card** and the **over-the-shoulder foreground** — are the
+devices below, and at the §3a cut rate they carry as much of the variety as the rooms do.
 
 ### SIGNATURE DEVICES — AVAILABLE TODAY (WO-12a wired them to the renderer)
 
@@ -406,9 +527,16 @@ handwritten-script canon (§7), force-uppercased, carried a `boxShadow`, showed 
 behaviour, and announced a chapter the chapter *card* now announces properly. Do not write copy for
 it — nobody sees the string. The visible chapter name is `card=dict(kind="chapter", …)`.
 
-### Still true regardless of which set is live
-Never the same template on two adjacent scenes; rotate the environment every ~30–45s; pick the
-environment the *fact* happened in, not the one that looks good.
+#### `breath=` — ask for an inhale
+`gen_voice_edge.py` prepends a soft synthetic inhale to any scene over **48 words**. At §3a scene
+lengths nothing reaches 48, so the automatic breath never fires and the episode synthesises without
+one. Set `breath=True` on ~10–15 scenes by hand — chapter openings, the scene after a silence beat, the
+first line of a new movement.
+
+### Rotation rules
+Never the same template on two adjacent scenes, and **at least two other set-ups between any two uses
+of one template** (§3a). Aim for **8 distinct set-ups in 8 evenly spaced samples** and measure it —
+that number, not cuts/min, is what a viewer experiences as variety.
 
 ## 9. Packaging
 
@@ -445,9 +573,10 @@ Not specified here — see `docs/CRAYON_BIBLE.md`: §3 camera (locked, no dolly/
 §6 signature devices, §7 typography (handwritten italic everywhere), §8 sound (bed ducked 8–15 dB,
 deliberate silent passages, inter-sentence gaps 0.18–1.0s).
 
-What a *writer* needs from those sections: scenes are short and still. Mean shot 4.79s and a locked
-camera mean a scene's narration must be interesting standing still — there is no push-in to carry a
-flat line.
+What a *writer* needs from those sections: scenes are short and still. A locked camera and one framing
+per scene mean a scene's narration must be interesting standing still — there is no push-in to carry a
+flat line, and since WO-17 there is no re-crop either. The reference's 4.79s mean shot is a **writing**
+instruction, not a rendering one; §3a is where it turns into a scene budget.
 
 ## 11. Build discipline
 
