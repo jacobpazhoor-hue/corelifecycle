@@ -30,6 +30,12 @@ This replaces CoreLifecycle's second-person present-tense fictional POV ladder e
 ## 2. Narration
 
 - **148.5 WPM aggregate** (per-video range 139.2–152.9). Measured across 17,269 words / 116.3 min.
+  **Metric definition (matters):** this is *transcript words ÷ total video minutes* — i.e. **runtime-inclusive**,
+  counting pauses, music beats and dialogue. It is NOT speech-only WPM. Anything re-measuring this must
+  compare like for like; the pipeline's own summary prints both, and speech-only runs ~3 WPM higher.
+- Correction 2026-08-11: the pre-existing pipeline was **180.7 WPM at `RATE "+8%"`**, not the ~190 stated
+  in earlier notes, and the voice's natural baseline is **~167 WPM**, not the ~174 claimed in a code comment.
+  Both were measured by synthesising real scenes through the pipeline's own `master()` + `trim_silence()`.
 - **Sentences average 7.5–10.6 words**, median 6–9. **40–59% of all sentences are under 8 words.**
 - **29–68 explicit numbers per video** (~2–3.5 per minute).
 - Second person appears but is a *seasoning*, not the frame: 2.6–13.4 "you" per 1000 words.
@@ -81,10 +87,23 @@ Per-pixel measurement across three verified-distinct frames (1280×720 source):
 | Metric | f@140 | f@505 | f@870 | Reading |
 |---|---|---|---|---|
 | flat-fill % | 84.4 | 92.2 | 74.4 | **~84% mean — flat vector, zero texture** |
+
 | ink % (luma<70) | 10.0 | 70.0 | 27.3 | heavy black linework; varies with scene darkness |
 | mean saturation | 0.482 | 0.646 | 0.308 | **highly variable by scene — not uniformly desaturated** |
 | distinct quantised colours | 419 | 216 | 444 | restricted palette (5–11% of a 4096 space) |
 | median stroke px | 7 | (n/a) | 4 | **≈6–10px at 1920** |
+
+> ⚠ **The flat-fill band is RESOLUTION-DEPENDENT — quote a resolution or the number is meaningless.**
+> Flat fill counts pixels equal to their right neighbour, so it is dominated by total edge length per row.
+> The *same artwork* reads **~6.5 points higher at 1920 than at 1280**. All reference numbers above were
+> measured on **native 1280×720** frames. CoreLifecycle renders at **1920**, so a 1920 reading must be
+> compared against roughly **80–98%**, not 74–92%. Earlier work orders in this project reported 1920
+> numbers against the 1280 band and therefore *understated* how empty our frames were. Any `gate.py`
+> assertion (WO-12) must name the resolution it measures at.
+>
+> **Flat fill is also a DENSITY metric, not only a texture one.** Too *high* means the frame is empty.
+> A solid ground with one prop measured 99.6% at 1920; the same template rebuilt to reference density
+> measured 92.5% at 1920 / 85.7% at 1280 — mid-band against the reference's ~84% mean.
 
 - **Outline:** uniform-weight pure black, smooth vector curves. No wobble, no taper, no displacement filter.
 - **Fill:** flat, no gradients on characters. Backgrounds may carry a soft radial vignette/spotlight.
@@ -115,7 +134,20 @@ Per-pixel measurement across three verified-distinct frames (1280×720 source):
 ## 7. Typography
 
 All on-screen text uses a **handwritten italic script**. This is the channel's entire "hand-drawn"
-signature and is non-negotiable for a match. Titles set large and centred; subtitles ~50% of title size.
+signature and is non-negotiable for a match. Titles set large and centred.
+
+**Subtitle ratio ≈ 0.75** (corrected 2026-08-11). An initial eyeball estimate of ~0.5 was wrong; measuring
+the 4:05 chapter card two ways — cell-pixel height (23 px title vs 17 px subtitle) and width-per-character
+(0.565 frame / 20 chars vs 0.766 frame / 36 chars) — both land at **0.72–0.77**.
+
+**Hierarchy is size alone, not weight.** Title and subtitle both read at a regular weight in the reference;
+setting the title bolder overshoots anything visible in the frames.
+
+Measured size anchors, as a fraction of frame width/height: narration line ≈ 0.53 w · chapter title ≈ 0.565 w ·
+single-word beat ink height ≈ 0.092 h. The single-word beat is deliberately **small on a large empty ground** —
+not a huge word. One reference single-word beat sits ~14% from the left rather than centred; treat off-axis
+placement as permitted, not required (n=1).
+
 Thumbnail text is the exception: heavy geometric sans, ALL CAPS.
 
 **Current CoreLifecycle uses `'Helvetica Neue', Helvetica, Arial` everywhere — a total mismatch.**
