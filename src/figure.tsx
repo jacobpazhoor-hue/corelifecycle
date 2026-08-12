@@ -1,6 +1,6 @@
 import React from 'react';
 import meta from './episode_meta.json';
-import {blink as idleBlink, gaze as idleGaze} from './anim';
+import {blink as idleBlink, gaze as idleGaze, idleBreath, pulse, wander, clamp01, hash} from './anim';
 import {INK, PAPER_WHITE, STROKE, STROKE_THIN} from './crayonStyle';
 
 // CRAYON character (bible §5 "Character construction"): large rounded head, plain black dot eyes,
@@ -199,18 +199,92 @@ export const COSTUMES: Record<Exclude<Costume, 'none'>, CostumeSkin> = {
   field:   {body: '#6b5433', accent: '#2f4a2a', collar: '#cbbb95', hair: '#2a1c10', hairStyle: 'tuft'},  // explorer/worker
 };
 
+// ---------------------------------------------------------------------------
+// LOCALISED IDLE (WO-14). CRAYON_BIBLE §3 locks the camera; it does NOT freeze the picture — the
+// reference holds the frame still while its characters keep moving, and only ~40% of its sampled
+// frames are completely motionless. WO-3 took our camera motion away and WO-4 measured what was
+// left: 80–90% motionless, twice as still as the reference. The gap is here, in the figure.
+//
+// So every figure carries a small idle of its own, in POSE SPACE (angles + a hip shift), which means
+// it costs one transform per figure and no extra geometry — this renders a ~27,000-frame episode.
+// Three layers, deliberately different in rate so they never beat against each other:
+//   - breath  — continuous, tiny. Stops a held figure reading as a cut-out. Below the frame-diff
+//               threshold on its own; it is there for the eye, not for the metric.
+//   - sway    — a slow weight shift, noise-driven, ~0.25 Hz.
+//   - act     — an occasional GESTURE: the near arm lifts, the head follows a few frames late, the
+//               body leans into it. This is the layer that actually moves pixels.
+// Every layer's phase AND rate come from the figure's own seed (see anim.ts), so a crowd desynchs
+// itself — a row driven off one clock pulses in unison, which reads worse than stillness.
+export type IdleLevel = 'none' | 'subtle' | 'idle' | 'gesture';
+/** `subtle` = a body in a background crowd, `idle` = a staged figure holding the frame, `gesture` =
+ *  a figure that is speaking or acting. `none` freezes it (thumbnails, deliberate tableaux). */
+const IDLE_GAIN: Record<IdleLevel, number> = {none: 0, subtle: 0.5, idle: 1, gesture: 1.55};
+
+/** Calibration handle for the whole idle system. Raising this raises every figure's motion together;
+ *  it is the one number to turn when the measured motionless-frame share moves out of band. */
+const IDLE_SCALE = 1.7;
+
+type IdleShift = {pose: Pose; dx: number; dy: number};
+
+const idleFigure = (p: Pose, f: number, seed: number, level: IdleLevel): IdleShift => {
+  const g = IDLE_GAIN[level] * IDLE_SCALE;
+  // f === 0 is the codebase's existing idiom for "this figure is frozen" (thumbs.tsx, and every
+  // crowd call site before this work order), and the ramp keeps that literally true: at frame 0 the
+  // figure is EXACTLY the pose the template staged. It also means the idle eases in over 8 frames
+  // after every cut instead of snapping to its seeded phase — `useCurrentFrame` is Sequence-local,
+  // so each shot restarts at 0.
+  const env = g * clamp01(f / 8);
+  if (env <= 0) return {pose: p, dx: 0, dy: 0};
+
+  const bpm = 12 + hash(seed * 1.3) * 6;                  // 12–18 breaths/min, per figure
+  const ph = hash(seed) * 90;                             // breath phase, per figure
+  const br = idleBreath(f + ph, 30, bpm);
+  const brLag = idleBreath(f - 4 + ph, 30, bpm);          // head follows the chest, ~4 frames late
+  const sway = wander(f, seed, 30, 0.26);
+  const swayLag = wander(f - 5, seed, 30, 0.26);
+  // ~one gesture every 3.5s, held for 0.8s. `pulse` jitters both period and phase off the seed.
+  const act = pulse(f, seed + 4, 104, 24);
+  const actLag = pulse(f - 5, seed + 4, 104, 24);
+
+  return {
+    pose: {
+      ...p,
+      spineLean: p.spineLean + env * (br * 0.7 + sway * 2.6 + act * 4.0),
+      headTilt: p.headTilt + env * (brLag * 0.6 + swayLag * 3.2 + actLag * 5.5),
+      bob: p.bob + env * (br * 1.1 + act * 3.4),
+      armNearShoulder: p.armNearShoulder + env * (sway * 3.0 - act * 15.0),
+      armNearElbow: p.armNearElbow + env * (actLag * 11.0),
+      armFarShoulder: p.armFarShoulder + env * (swayLag * 2.4 - actLag * 8.0),
+      armFarElbow: p.armFarElbow + env * (act * 6.0),
+    },
+    // A small whole-figure shift on top of the articulation. Pose angles rotate the body about the
+    // hip, which barely moves the large filled masses (torso, head) that carry most of the figure's
+    // area; a few units of translation moves all of it. Kept small enough that the contact shadow
+    // travelling with the feet reads as a weight change, not as a slide.
+    dx: env * (sway * 3.4 + act * 5.0),
+    dy: env * (-act * 2.2 - br * 0.8),
+  };
+};
+
 export const StickFigure: React.FC<{
   pose: Pose; x: number; y: number; scale?: number; facing?: number;
   pal?: Palette; view?: 'front' | 'profile' | 'back'; expr?: Expr; frame?: number;
   showFace?: boolean; briefcase?: boolean; lineW?: number; costume?: Costume;
+  /** How much localised idle motion this figure carries (WO-14). Defaults to `idle`; every existing
+   *  call site keeps compiling and a figure given `frame={0}` still renders exactly as before. */
+  idle?: IdleLevel;
   /** Accepted and ignored — the sketch filter is gone (see the header note). Kept so call sites compile. */
   rough?: boolean;
 }> = ({
-  pose, x, y, scale = 1, facing = 1, pal = INKPAL, view = 'profile',
+  pose: basePose, x, y, scale = 1, facing = 1, pal = INKPAL, view = 'profile',
   expr = {brow: 0, browRaise: 0, lid: 0, mouth: 'neutral', look: 0}, frame = 0,
-  showFace = true, briefcase = false, lineW = STROKE, costume = episodeCostume(),
+  showFace = true, briefcase = false, lineW = STROKE, costume = episodeCostume(), idle = 'idle',
 }) => {
   const front = view === 'front';
+  // Seeded off the figure's own staged position, so two figures in one row are never in phase and
+  // the same figure animates identically on every machine and every re-render.
+  const idleSeed = x * 0.0173 + y * 0.0071 + scale * 3.1;
+  const {pose, dx: idleDX, dy: idleDY} = idleFigure(basePose, frame, idleSeed, idle);
   // ALL linework — outlines, limb sticks, face, costume detail, and the solid shoe, which the
   // reference draws in the same black as the limb it terminates. Never desaturated; only fills are.
   const ink = pal.limb;
@@ -343,7 +417,7 @@ export const StickFigure: React.FC<{
   })();
 
   return (
-    <g transform={`translate(${x} ${y}) scale(${scale})`}>
+    <g transform={`translate(${x + idleDX * scale} ${y + idleDY * scale}) scale(${scale})`}>
       {/* contact shadow: a flat fill, not a sketched outline */}
       <ellipse cx={(footN.x + footF.x) / 2} cy={Math.max(footN.y, footF.y) + limbW * 1.2} rx={limbW * 4.5} ry={limbW * 1.1} fill={INK} opacity={0.10} />
       {/* far limbs */}

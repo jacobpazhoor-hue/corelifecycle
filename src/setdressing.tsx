@@ -1,6 +1,8 @@
 import React from 'react';
+import {useCurrentFrame} from 'remotion';
 import {StickFigure, DIM} from './figure';
 import * as A from './actions';
+import {blinkOn, stepIndex} from './anim';
 import {
   INK, PAPER_WHITE, STROKE, STROKE_THIN, TONE_MAX_STEP, shade, sceneTones, SceneTones,
 } from './crayonStyle';
@@ -24,8 +26,18 @@ import {useSceneColors} from './stage';
 // RULES every component here obeys:
 //   - Flat vector only. No gradients anywhere: Chromium dithers every gradient it paints, which is
 //     what destroyed this metric before (see stage.tsx's WO-8a note). Solid `fill` or nothing.
-//   - Static. Nothing here takes `frame` and nothing animates, so composing more set dressing can
-//     never cost camera-lock cells (bible §3). Motion stays with the characters and hero props.
+//   - Motion is LOCALISED and OPTIONAL (WO-14, revising WO-8d's blanket "nothing here animates").
+//     A locked camera is not a frozen picture: the reference holds the frame still while characters
+//     and props keep moving, and with the camera locked and nothing put back, WO-4 measured us at
+//     80–90% motionless against the reference's ~40%. So a few components here now read `frame` —
+//     the crowds, the screens, the phone lamp — under three standing constraints:
+//       (a) only small elements move; no component may translate, scale or rotate a whole backdrop
+//           plane or anything spanning most of the frame, which is what would re-break bible §3;
+//       (b) every clock is seeded from the element's own identity, never shared, so a row never
+//           pulses in unison — and only a seeded MINORITY of any crowd moves at all, so a crowd
+//           cannot light up a whole band of the 8×6 motion-locality grid;
+//       (c) frame 0 renders EXACTLY what it rendered before, so stills (thumbs.tsx) are unaffected.
+//     Everything else here is still static, and structure — walls, floors, bands — always is.
 //   - Colour comes from the scene's key via `useSceneColors()` (bg/mid/accent/crowd) plus INK and
 //     PAPER_WHITE. Callers may override a fill, but the DEFAULT is always the scene's own token, so
 //     dropping a cabinet wall into any template keys it correctly with no per-call palette work.
@@ -458,9 +470,10 @@ export const RopeLine: React.FC<{x0: number; x1: number; y: number; posts?: numb
 // this kit as much as the first six did, and a second tier that only one module can import is a
 // fork of the library, not a layer on it.
 //
-// Same rules as everything above: flat vector only, static (nothing takes `frame`), and every
-// default drawn from `useSceneTones()`/`useSceneColors()` so a prop dropped into any template keys
-// itself correctly with no per-call palette work.
+// Same rules as everything above: flat vector only, every default drawn from
+// `useSceneTones()`/`useSceneColors()` so a prop dropped into any template keys itself correctly
+// with no per-call palette work, and any motion localised, seeded and zero at frame 0 (see the
+// module header). Furniture is static; the screens and the phone lamp are not.
 // ---------------------------------------------------------------------------
 
 /**
@@ -501,16 +514,27 @@ export const Desk: React.FC<{
  *   'grid'  — a quote grid, dense blocks of figures
  * A screen is the densest cheap prop in an office frame and the one place a dark interior gets a
  * legitimate patch of light, so every desk in the explainer set carries at least one.
+ *
+ * ANIMATION (WO-14). A screen is the prop the format has the strongest licence to move: a live chart
+ * ticks, a quote grid reprints, a document grows a line. The motion is DISCRETE — the content is
+ * re-derived from a seeded step counter, not slid — because a screen updates in jumps and because a
+ * jump inside a ~180×140 prop is far too small to be mistaken for a cut by peak-based cut detection.
+ * Each screen's step period and phase come from its own `seed`, so a wall of them scatters instead
+ * of blinking as one. `live={false}` opts a screen out (a photograph on a wall, a dead terminal).
  */
 export const Monitor: React.FC<{
   x: number; y: number; w?: number; h?: number; content?: 'text' | 'chart' | 'grid';
-  stand?: boolean; seed?: number;
-}> = ({x, y, w = 190, h = 132, content = 'text', stand = true, seed = 0}) => {
+  stand?: boolean; seed?: number; live?: boolean;
+}> = ({x, y, w = 190, h = 132, content = 'text', stand = true, seed = 0, live = true}) => {
+  const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
   const glass = shade(tn.deep, -1);
   const pad = 14;
   const ix = x + pad, iy = y + pad, iw = w - pad * 2, ih = h - pad * 2;
+  // The chart scrolls one SAMPLE per step, so the trace slides left a slot at a time and gains a new
+  // right-hand point — a live trace, not a redraw. `text` and `grid` reprint a couple of cells.
+  const k = live ? stepIndex(f, seed * 1.9 + 5, 110) : 0;
   return (
     <g>
       {stand && (
@@ -522,22 +546,25 @@ export const Monitor: React.FC<{
       <rect x={x} y={y} width={w} height={h} rx={8} fill={tn.body} stroke={INK} strokeWidth={STROKE * 0.75} />
       <rect x={ix} y={iy} width={iw} height={ih} fill={glass} />
       {content === 'text' && Array.from({length: 6}, (_, i) => (
-        <rect key={i} x={ix + 8} y={iy + 10 + i * (ih - 16) / 6} width={iw * (0.4 + rnd(seed * 31 + i) * 0.5)}
+        // only the last two lines re-set, the way a document being written does
+        <rect key={i} x={ix + 8} y={iy + 10 + i * (ih - 16) / 6}
+          width={iw * (0.4 + rnd(seed * 31 + i + (i >= 4 ? k : 0)) * 0.5)}
           height={Math.max(4, ih * 0.055)} fill={PAPER_WHITE} opacity={0.85} />
       ))}
       {content === 'chart' && (
         <g>
           <polyline
             points={Array.from({length: 9}, (_, i) =>
-              `${ix + 6 + (i * (iw - 12)) / 8},${iy + ih * (0.82 - 0.6 * rnd(seed * 17 + i))}`).join(' ')}
+              `${ix + 6 + (i * (iw - 12)) / 8},${iy + ih * (0.82 - 0.6 * rnd(seed * 17 + i + k))}`).join(' ')}
             fill="none" stroke={c.accent} strokeWidth={STROKE_THIN * 0.9} strokeLinejoin="round" />
           <line x1={ix + 4} y1={iy + ih * 0.9} x2={ix + iw - 4} y2={iy + ih * 0.9} stroke={PAPER_WHITE} strokeWidth={2} opacity={0.6} />
         </g>
       )}
       {content === 'grid' && Array.from({length: 12}, (_, i) => (
+        // one column of the grid reprints per step, so a quote screen is never wholly repainted
         <rect key={i} x={ix + 7 + (i % 3) * (iw / 3)} y={iy + 8 + Math.floor(i / 3) * (ih / 4)}
           width={iw / 3 - 14} height={Math.max(4, ih * 0.09)}
-          fill={rnd(seed * 53 + i) > 0.68 ? c.accent : PAPER_WHITE} opacity={0.85} />
+          fill={rnd(seed * 53 + i + (i % 3 === k % 3 ? k : 0)) > 0.68 ? c.accent : PAPER_WHITE} opacity={0.85} />
       ))}
     </g>
   );
@@ -608,20 +635,33 @@ export const Papers: React.FC<{x: number; y: number; n?: number; s?: number; see
 );
 
 /** A desk telephone — base, keypad, cradled handset, coiled cord. The reference office's one
- *  unmissable prop (wolf_office_singleframe, every cell). */
-export const DeskPhone: React.FC<{x: number; y: number; s?: number; facing?: number}> = ({x, y, s = 1, facing = 1}) => (
-  <g>
-    <path d={`M ${x} ${y} L ${x + 128 * s} ${y} L ${x + 116 * s} ${y - 44 * s} L ${x + 10 * s} ${y - 44 * s} Z`}
-      fill={INK} stroke={INK} strokeWidth={STROKE_THIN * 0.8} strokeLinejoin="round" />
-    {Array.from({length: 6}, (_, i) => (
-      <rect key={i} x={x + 22 * s + (i % 3) * 22 * s} y={y - 34 * s + Math.floor(i / 3) * 16 * s}
-        width={13 * s} height={9 * s} fill={PAPER_WHITE} opacity={0.75} />
-    ))}
-    <rect x={x + 4 * s} y={y - 62 * s} width={124 * s} height={24 * s} rx={11 * s} fill={INK} />
-    <path d={`M ${x + (facing > 0 ? 128 : 4) * s} ${y - 30 * s} q ${facing * 30 * s} ${16 * s} ${facing * 6 * s} ${30 * s}`}
-      fill="none" stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
-  </g>
-);
+ *  unmissable prop (wolf_office_singleframe, every cell).
+ *
+ *  WO-14: it carries a message lamp that blinks on its own seeded clock. Nothing moves — one small
+ *  fill switches — so it is the cheapest possible sign of life, and a bank of phones blinks as a
+ *  scatter rather than in time. */
+export const DeskPhone: React.FC<{
+  x: number; y: number; s?: number; facing?: number; seed?: number; live?: boolean;
+}> = ({x, y, s = 1, facing = 1, seed = 0, live = true}) => {
+  const f = useCurrentFrame();
+  const c = useSceneColors();
+  const lit = live && blinkOn(f, seed + x * 0.011, 150, 42);
+  return (
+    <g>
+      <path d={`M ${x} ${y} L ${x + 128 * s} ${y} L ${x + 116 * s} ${y - 44 * s} L ${x + 10 * s} ${y - 44 * s} Z`}
+        fill={INK} stroke={INK} strokeWidth={STROKE_THIN * 0.8} strokeLinejoin="round" />
+      {Array.from({length: 6}, (_, i) => (
+        <rect key={i} x={x + 22 * s + (i % 3) * 22 * s} y={y - 34 * s + Math.floor(i / 3) * 16 * s}
+          width={13 * s} height={9 * s} fill={PAPER_WHITE} opacity={0.75} />
+      ))}
+      <rect x={x + 4 * s} y={y - 62 * s} width={124 * s} height={24 * s} rx={11 * s} fill={INK} />
+      <rect x={x + 96 * s} y={y - 38 * s} width={14 * s} height={9 * s} rx={3 * s}
+        fill={lit ? c.accent : shade(c.crowd, -2)} />
+      <path d={`M ${x + (facing > 0 ? 128 : 4) * s} ${y - 30 * s} q ${facing * 30 * s} ${16 * s} ${facing * 6 * s} ${30 * s}`}
+        fill="none" stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+    </g>
+  );
+};
 
 /** A potted plant — pot, soil line, five flat leaves. */
 export const Plant: React.FC<{x: number; y: number; s?: number; seed?: number}> = ({x, y, s = 1, seed = 0}) => {
@@ -781,23 +821,42 @@ export const TextLines: React.FC<{
 // ---------------------------------------------------------------------------
 
 /**
+ * How many of a crowd's bodies carry idle motion (WO-14).
+ *
+ * NOT all of them, and the reason is the camera-lock metric: a row spanning the frame with every
+ * body moving lights up a whole band of the 8×6 motion-locality grid, which is the same failure as
+ * a moving camera dressed up as character animation. A seeded MINORITY moves — chosen by the same
+ * hash that placed the figure, so it is stable per element and not a live coin-flip — and each of
+ * those runs on its own phase and rate inside StickFigure. The rest hold, exactly as before.
+ *
+ * A real crowd behaves this way too: at any instant most of a room is still and a few people are
+ * shifting, which is what makes the mass read as people rather than as one pulsing organism.
+ */
+const CROWD_ALIVE = 0.34;
+/** `frac` lets a template dial its own crowd down (or off) where the composition cannot afford the
+ *  motion-locality cells — an occluded row behind a desk bank buys nothing and costs the same. */
+const crowdAlive = (s: number, frac = CROWD_ALIVE): boolean => rnd(s + 13) < frac;
+
+/**
  * A row of grey anonymous background people — the channel's primary focal-hierarchy device
  * (bible §6.5: "grey anonymous crowd + colour hero"), used behind the coloured subject.
  *
- * Deliberately STATIC: every figure is posed at frame 0 and drawn faceless, so a crowd never costs
- * camera-lock cells and never pulls the eye off the hero. Depth jitter (±`dz`) keeps the row from
- * reading as a chorus line.
+ * Depth jitter (±`dz`) keeps the row from reading as a chorus line, and roughly a third of the row
+ * (see `crowdAlive`) carries a `subtle` idle so the background is not a photograph behind a moving
+ * hero. The rest are still posed at frame 0 and are byte-identical to what they rendered before.
  */
 export const CrowdRow: React.FC<{
   y: number; x0: number; x1: number; n: number; scale?: number; seed?: number;
-  facing?: number; view?: 'front' | 'profile' | 'back'; dz?: number;
-}> = ({y, x0, x1, n, scale = 0.6, seed = 0, facing = 1, view = 'front', dz = 26}) => {
+  facing?: number; view?: 'front' | 'profile' | 'back'; dz?: number; alive?: number;
+}> = ({y, x0, x1, n, scale = 0.6, seed = 0, facing = 1, view = 'front', dz = 26, alive: aliveFrac}) => {
+  const f = useCurrentFrame();
   const step = n > 1 ? (x1 - x0) / (n - 1) : 0;
   return (
     <g>
       {Array.from({length: n}, (_, i) => {
         const s = seed * 149 + i * 11;
         const back = (rnd(s + 5) - 0.5) * 2;      // -1 .. 1 depth offset
+        const alive = crowdAlive(s, aliveFrac);
         return (
           <StickFigure
             key={i}
@@ -809,7 +868,8 @@ export const CrowdRow: React.FC<{
             view={view}
             pal={DIM}
             showFace={false}
-            frame={0}
+            frame={alive ? f : 0}
+            idle={alive ? 'subtle' : 'none'}
           />
         );
       })}
@@ -822,24 +882,33 @@ export const CrowdRow: React.FC<{
  *
  * `CrowdRow` only STANDS, and every interior in the explainer format is full of people sitting — at
  * desks, around tables, in a gallery — where a standing row behind a desk reads as a queue. Same
- * contract as `CrowdRow` otherwise: DIM fills, no faces, and static at frame 0, so a crowd never
- * costs camera-lock cells.
+ * contract as `CrowdRow` otherwise: DIM fills, no faces, and the same seeded minority (`crowdAlive`)
+ * carrying a `subtle` idle while the rest hold.
+ *
+ * A working seat also gets its typing hands driven by the frame rather than frozen at 0 — a bank of
+ * people at keyboards with nothing moving is the single most obviously dead thing in an office
+ * frame — and each seat's typing clock is offset by its own seeded stagger so the row is not one
+ * choir hitting the keys together.
  *
  * `working` swaps the seated pose for a typing one, which is what a desk bank needs.
  */
 export const SeatedRow: React.FC<{
   y: number; x0: number; x1: number; n: number; scale?: number; seed?: number; facing?: number;
-  view?: 'front' | 'profile' | 'back'; working?: boolean;
-}> = ({y, x0, x1, n, scale = 0.8, seed = 0, facing = 1, view = 'front', working = false}) => {
+  view?: 'front' | 'profile' | 'back'; working?: boolean; alive?: number;
+}> = ({y, x0, x1, n, scale = 0.8, seed = 0, facing = 1, view = 'front', working = false, alive: aliveFrac}) => {
+  const f = useCurrentFrame();
   const step = n > 1 ? (x1 - x0) / (n - 1) : 0;
   return (
     <g>
       {Array.from({length: n}, (_, i) => {
         const s = seed * 173 + i * 19;
+        const alive = crowdAlive(s, aliveFrac);
+        // the typing clock is per-seat: a whole-number frame offset drawn from the seat's own seed
+        const tf = alive ? f + Math.floor(rnd(s + 21) * 90) : 0;
         return (
           <StickFigure
             key={i}
-            pose={working ? A.type_(0, 30) : A.sit(0)}
+            pose={working ? A.type_(tf, 30) : A.sit(tf)}
             x={x0 + i * step + (rnd(s) - 0.5) * step * 0.18}
             y={y + (rnd(s + 4) - 0.5) * 14}
             scale={scale * (0.95 + rnd(s + 2) * 0.1)}
@@ -847,7 +916,8 @@ export const SeatedRow: React.FC<{
             view={view}
             pal={DIM}
             showFace={false}
-            frame={0}
+            frame={alive ? f : 0}
+            idle={alive ? 'subtle' : 'none'}
           />
         );
       })}
@@ -862,10 +932,16 @@ export const SeatedRow: React.FC<{
  * TONE (WO-8e): rows step one rung LIGHTER with depth, so the mass separates into rows and off the
  * wall behind it instead of reading as a single grey clot. The reference's stair crowd does exactly
  * this — the figures behind are paler than the ones in front.
+ *
+ * MOTION (WO-14): the same seeded minority as the figure crowds nods, each on its own slow clock,
+ * and only by a fraction of a head radius. A deep crowd is the classic place for unison motion to
+ * ruin a frame, so the fraction is deliberately small and no two heads share a period.
  */
 export const CrowdHeads: React.FC<{
-  y: number; x0: number; x1: number; n: number; rows?: number; r?: number; seed?: number; fill?: string;
-}> = ({y, x0, x1, n, rows = 2, r = 34, seed = 0, fill}) => {
+  y: number; x0: number; x1: number; n: number; rows?: number; r?: number; seed?: number;
+  fill?: string; alive?: number;
+}> = ({y, x0, x1, n, rows = 2, r = 34, seed = 0, fill, alive = 0.14}) => {
+  const f = useCurrentFrame();
   const c = useSceneColors();
   const out: React.ReactNode[] = [];
   // row 0 is the front row; each row behind it lifts a rung, capped so a deep crowd stays on ladder
@@ -878,8 +954,13 @@ export const CrowdHeads: React.FC<{
       const cx = x0 + (i + 0.5) * step + (rnd(s) - 0.5) * step * 0.5;
       const cy = y - row * r * 1.15 + (rnd(s + 3) - 0.5) * r * 0.4;
       const rr = r * (0.86 + rnd(s + 6) * 0.28);
+      // a nod: ±0.16 of a head radius, on a period of its own. The same frame-0 ramp StickFigure
+      // uses, so a still (thumbs.tsx composes this crowd) renders exactly as it did before.
+      const nod = crowdAlive(s, alive)
+        ? Math.sin((f / 30) * 2.4 * (0.6 + rnd(s + 8) * 0.8) + rnd(s + 9) * 6.283) * rr * 0.16 * Math.min(1, Math.max(0, f / 8))
+        : 0;
       out.push(
-        <g key={`${row}_${i}`}>
+        <g key={`${row}_${i}`} transform={nod === 0 ? undefined : `translate(0 ${nod.toFixed(3)})`}>
           {/* shoulders under the head so the mass reads as people, not as bubbles */}
           <path d={`M ${cx - rr * 1.5} ${cy + rr * 2.4} Q ${cx} ${cy + rr * 0.5} ${cx + rr * 1.5} ${cy + rr * 2.4} Z`}
             fill={tone} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />

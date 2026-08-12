@@ -94,6 +94,57 @@ export const gaze = (f: number, seed = 0, fps = 30): number => {
   return slow * 0.7 + (Math.abs(flick) > 0.85 ? Math.sign(flick) * 0.5 : 0);
 };
 
+// ---------- localised element animation (WO-14) ----------
+// CRAYON_BIBLE §3 locks the CAMERA, not the picture: the reference holds the frame still while its
+// characters and props keep moving, and only ~40% of its sampled frames are completely motionless.
+// WO-3 removed our camera motion and put nothing back, so frames went dead between cuts (WO-4
+// measured 80–90% motionless). Everything below exists to put movement back INSIDE the frame.
+//
+// The one rule that matters here is DE-SYNCHRONISATION. A crowd driven off one clock pulses in
+// unison, which reads worse than stillness. So every helper takes a `seed` — the element's own
+// identity (its x/y, its index) — and derives BOTH its phase and its rate from it. Nothing shares a
+// clock, nothing calls Math.random, and the same frame number always produces the same output.
+
+/** A stable per-element offset in [0,1) — the phase every helper below starts its cycle at. */
+export const seedPhase = (seed: number): number => hash(seed * 3.77 + 1.13);
+
+/**
+ * An occasional event: holds at 0, then eases 0 → 1 → 0 over `hold` frames, once every `period`
+ * frames. Both the phase and the period are jittered ±25% off `seed`, so two elements given the
+ * same nominal timing drift apart instead of firing together.
+ *
+ * Returning to 0 at both ends is deliberate: the caller adds the result to a rest pose, so a
+ * gesture always settles back to the pose the template staged, never accumulates.
+ */
+export const pulse = (f: number, seed: number, period: number, hold: number): number => {
+  const per = Math.max(hold + 2, Math.round(period * (0.75 + hash(seed * 1.7) * 0.5)));
+  const t = ((f + Math.floor(seedPhase(seed) * per)) % per + per) % per;
+  if (t >= hold) return 0;
+  return 0.5 - 0.5 * Math.cos((t / hold) * TAU);          // ease in and out, 0 at both ends
+};
+
+/** Slow organic wander in ~[-1,1] — the weight-shift/lean layer under the gestures. Rate as well as
+ *  phase comes from `seed`, so a row of figures never sways as one body. */
+export const wander = (f: number, seed: number, fps = 30, hz = 0.25): number =>
+  noise1((f / fps) * hz * (0.7 + hash(seed * 5.1) * 0.6) + seedPhase(seed * 2.9) * 40, seed);
+
+/**
+ * A per-element STEP COUNTER for props that change in discrete jumps rather than sliding — a quote
+ * cell reprinting, a screen redrawing, a signal changing. `period` is jittered off `seed`, so a wall
+ * of screens updates as a scatter instead of blinking together.
+ */
+export const stepIndex = (f: number, seed: number, period: number): number => {
+  const per = Math.max(2, Math.round(period * (0.7 + hash(seed * 2.11) * 0.6)));
+  return Math.floor((f + Math.floor(seedPhase(seed * 1.31) * per)) / per);
+};
+
+/** A blinking indicator (a phone message light, a signal lamp): 1 for `on` frames of every
+ *  `period`, seeded phase. Cheap — the caller switches a fill, nothing moves. */
+export const blinkOn = (f: number, seed: number, period: number, on: number): boolean => {
+  const per = Math.max(on + 1, Math.round(period * (0.75 + hash(seed * 4.3) * 0.5)));
+  return (((f + Math.floor(seedPhase(seed * 6.7) * per)) % per) + per) % per < on;
+};
+
 // ---------- impact language (transform-only) ----------
 // Organic camera/impact shake: exponential-decay simplex-ish noise. Returns px + degrees.
 export const shake = (f: number, amp = 10, decayFrames = 10, seed = 0) => {

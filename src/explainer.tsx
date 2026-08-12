@@ -3,6 +3,7 @@ import {useCurrentFrame, useVideoConfig} from 'remotion';
 import {StickFigure, LIGHT, DIM} from './figure';
 import {FACES} from './faces';
 import * as A from './actions';
+import {stepIndex} from './anim';
 import {keyedTemplates, useSceneColors} from './stage';
 import {INK, PAPER_WHITE, STROKE, STROKE_THIN, shade} from './crayonStyle';
 import {
@@ -33,9 +34,15 @@ import {
 //   - **Flat vector only. No gradients, anywhere, for any reason.** Chromium dithers every gradient
 //     it paints — adjacent pixels alternate by ±1 even inside a purely vertical ramp — which is what
 //     collapsed flat fill from ~99% to 29% in WO-8a. Solid `fill` or nothing.
-//   - **Locked camera (§3).** Nothing here takes `frame` for whole-frame motion. `useCurrentFrame`
-//     is read ONLY to pose the one or two hero figures; every wall, prop and crowd member is static,
-//     so composing more set dressing can never cost motion-locality cells.
+//   - **Locked camera (§3), moving picture (WO-14).** Nothing here takes `frame` for WHOLE-FRAME
+//     motion — no template may translate, scale or rotate its ground, its backdrop or anything
+//     spanning most of the frame, which is what §3 actually forbids. What §3 does NOT ask for is a
+//     frozen picture: the reference holds the camera still while its characters and props keep
+//     moving, and WO-4 measured the cost of having removed the camera motion and put nothing back —
+//     80-90% of our frames completely motionless against the reference's ~40%. So each template now
+//     also animates a SMALL number of its own elements (a colleague crossing, a clock, a passing
+//     car, a quote board reprinting), every one of them seeded off its own identity so nothing
+//     shares a clock, and each chosen to stay inside a couple of motion-locality cells.
 //   - **Density is the metric.** Flat fill is a DENSITY reading, not only a texture one: too HIGH
 //     means the frame is empty. The reference band is 74-92% measured on native 1280×720, and the
 //     same artwork reads ~6.5 points higher at 1920. Every template below was rendered natively at
@@ -62,6 +69,17 @@ const rnd = (i: number): number => {
  * scenes.tsx templates. Every hero below is staged to the right of it.
  */
 const CAPTION_SAFE_X = 760;
+
+/**
+ * A ticking second hand (WO-14). One 6° step per second — a tick, never a sweep, because a stepped
+ * hand is what a wall clock actually does and because a 26-unit line jumping once a second is the
+ * most local motion available: it can only ever touch the one motion-locality cell it sits in.
+ */
+const ClockHand: React.FC<{cx: number; cy: number; r: number; f: number}> = ({cx, cy, r, f}) => {
+  const a = ((Math.floor(f / 30) % 60) * 6 - 90) * (Math.PI / 180);
+  return <line x1={cx} y1={cy} x2={cx + Math.cos(a) * r} y2={cy + Math.sin(a) * r}
+    stroke={INK} strokeWidth={STROKE_THIN} strokeLinecap="round" />;
+};
 
 // ---------------------------------------------------------------------------
 // Frame
@@ -100,6 +118,13 @@ const OfficeFloor: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // The colleague crossing the aisle (WO-14). Amplitude and leg speed are TIED, because a walk cycle
+  // whose stride does not match its travel moonwalks: this rig's stride is ~103 units, i.e. ~74px at
+  // this figure's 0.72 scale, and a step takes 15/speed frames, so the drift's peak speed AMP·RATE
+  // must equal 74·speed/15. 128px · 0.01353 rad/frame · speed 0.35 satisfies it. The phase is chosen
+  // so the figure is at its old x, facing its old way, at frame 0.
+  const aisleX = 1000 + Math.sin(f * 0.01353) * 128;
+  const aisleFacing = Math.cos(f * 0.01353) >= 0 ? -1 : 1;
   return (
     <Frame>
       <Ceiling y={190} lights={4} />
@@ -166,9 +191,11 @@ const OfficeFloor: React.FC = () => {
           fill={rnd(i * 7) > 0.7 ? c.accent : shade(tn.card, -(i % 3))}
           stroke={INK} strokeWidth={2.4} />;
       })}
+      {/* wall clock. The second hand TICKS — one 6° step a second, never a sweep — which is the
+          cheapest honest motion in an office frame and the most local: one 30px line, one cell. */}
       <circle cx={1044} cy={234} r={38} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
-      <line x1={1044} y1={234} x2={1044} y2={210} stroke={INK} strokeWidth={STROKE_THIN} strokeLinecap="round" />
       <line x1={1044} y1={234} x2={1062} y2={244} stroke={INK} strokeWidth={STROKE_THIN} strokeLinecap="round" />
+      <ClockHand cx={1044} cy={234} r={26} f={f} />
 
       {/* --- floor --- */}
       <SlabFloor y={OFFICE_WALL} cols={26} rows={10} />
@@ -176,8 +203,8 @@ const OfficeFloor: React.FC = () => {
       {/* --- cubicle bank: workers behind partitions, heads and shoulders showing over the top.
           Figures first, partitions over them: the partition line crossing their chests is what puts
           them BEHIND it rather than standing loose on the floor. --- */}
-      <SeatedRow y={766} x0={90} x1={660} n={4} scale={0.56} seed={5} working view="front" />
-      <SeatedRow y={766} x0={1258} x1={1834} n={4} scale={0.56} seed={11} working view="front" />
+      <SeatedRow y={766} x0={90} x1={660} n={4} scale={0.56} seed={5} working view="front" alive={0.55} />
+      <SeatedRow y={766} x0={1258} x1={1834} n={4} scale={0.56} seed={11} working view="front" alive={0.55} />
       <RibbedPanel x={20} y={706} w={744} h={192} ribs={11} dir="v" fill={tn.back} />
       <RibbedPanel x={1160} y={706} w={744} h={192} ribs={11} dir="v" fill={tn.back} />
       {[20, 1160].map((px, i) => (
@@ -200,8 +227,9 @@ const OfficeFloor: React.FC = () => {
       <rect x={800} y={790} width={78} height={104} fill={tn.card} stroke={INK} strokeWidth={STROKE_THIN} />
       <BoxStack x={1076} baseY={880} n={3} s={0.6} seed={21} />
       <RibbedPanel x={912} y={794} w={82} h={100} ribs={6} dir="v" fill={tn.body} />
-      <StickFigure pose={A.stand(0)} x={1000} y={790} scale={0.72} facing={-1} view="profile"
-        pal={DIM} showFace={false} frame={0} />
+      {/* the colleague crossing the aisle actually crosses it — see `aisleX` above */}
+      <StickFigure pose={A.walk(f, 30, 0.35)} x={aisleX} y={790} scale={0.72}
+        facing={aisleFacing} view="profile" pal={DIM} showFace={false} frame={f} idle="subtle" />
 
       {/* --- near plane: the hero's desk bank ---
           The figures go down BEFORE the desk so the slab occludes their laps; the props go down
@@ -210,7 +238,7 @@ const OfficeFloor: React.FC = () => {
           in the frame. */}
       <Chair x={1330} y={1054} s={1.05} facing={-1} />
       <StickFigure pose={A.type_(f, 30)} x={1330} y={966} scale={1.02} facing={-1} view="front"
-        expr={FACES.focused} pal={LIGHT} frame={f} />
+        expr={FACES.focused} pal={LIGHT} frame={f} idle="gesture" />
       <SeatedRow y={968} x0={1062} x1={1062} n={1} scale={0.96} seed={31} working view="front" />
       <Desk x={560} y={OFFICE_DESK} w={1120} legH={146} drawers={0} />
       {/* drawer pedestals under the slab, and the cable run behind them */}
@@ -324,7 +352,7 @@ const Boardroom: React.FC = () => {
 
       {/* --- near plane: the two backs at the near edge, and the hero standing at the head --- */}
       <StickFigure pose={A.stand(f)} x={1770} y={862} scale={1.16} facing={-1} view="profile"
-        expr={FACES.hardened} pal={LIGHT} frame={f} />
+        expr={FACES.hardened} pal={LIGHT} frame={f} idle="gesture" />
       <SeatedRow y={1054} x0={330} x1={1180} n={4} scale={1.12} seed={23} view="back" />
       {[300, 590, 880, 1170].map((cx, i) => (
         <Chair key={i} x={cx} y={1096} s={1.16} facing={1} fill={shade(tn.body, -2)} />
@@ -353,6 +381,7 @@ const EXCHANGE_WALL = 640;
  *  single densest object in the six — ~150 outlined blocks across the back wall. */
 const QuoteBoard: React.FC<{x: number; y: number; w: number; h: number; cols: number; rows: number}> =
 ({x, y, w, h, cols, rows}) => {
+  const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
   const cw = w / cols, ch = h / rows;
@@ -361,7 +390,11 @@ const QuoteBoard: React.FC<{x: number; y: number; w: number; h: number; cols: nu
     for (let k = 0; k < cols; k++) {
       const s = r * 37 + k * 11;
       const cx = x + k * cw, cy = y + r * ch;
-      const up = rnd(s) > 0.42;
+      // Each cell REPRINTS on a clock of its own — a quote board is a grid of numbers that change,
+      // and nothing about it slides. The period is long (~8s, jittered per cell off `stepIndex`), so
+      // in any two frames ten apart only about one cell of sixty has turned over: the board reads as
+      // live without spraying the whole back wall across the motion-locality grid.
+      const up = rnd(s + stepIndex(f, s + 3, 240)) > 0.42;
       cells.push(
         <g key={`${r}_${k}`}>
           <rect x={cx + 5} y={cy + 4} width={cw * 0.3} height={ch * 0.42} fill={PAPER_WHITE} opacity={0.9} />
@@ -400,13 +433,13 @@ const DeskBank: React.FC<{y: number; s: number; seats: number; seed: number}> = 
           x={x0 + (Math.floor(i / 2) + 0.5) * seatW - seatW * 0.42 + (i % 2) * seatW * 0.44}
           y={y - 128 * s}
           w={seatW * 0.4} h={124 * s}
-          content={rnd(seed * 13 + i) > 0.5 ? 'chart' : 'grid'} stand={false} seed={seed * 3 + i} />
+          content={rnd(seed * 13 + i) > 0.5 ? 'chart' : 'grid'} stand={false} seed={seed * 3 + i} live={false} />
       ))}
       <Desk x={x0} y={y} w={w} h={30 * s} legH={150 * s} />
       {Array.from({length: seats}, (_, i) => (
         <g key={'k' + i}>
           <Keyboard x={x0 + (i + 0.5) * seatW - seatW * 0.18} y={y - 6} w={seatW * 0.36} />
-          <DeskPhone x={x0 + (i + 0.5) * seatW + seatW * 0.22} y={y - 2} s={0.62 * s * 2.4} />
+          <DeskPhone x={x0 + (i + 0.5) * seatW + seatW * 0.22} y={y - 2} s={0.62 * s * 2.4} live={false} />
         </g>
       ))}
     </g>
@@ -451,13 +484,13 @@ const ExchangeFloor: React.FC = () => {
           <line x1={cx} y1={546} x2={cx} y2={531} stroke={INK} strokeWidth={2.6} strokeLinecap="round" />
         </g>
       ))}
-      <CrowdHeads y={592} x0={120} x1={1800} n={17} rows={2} r={15} seed={4} />
+      <CrowdHeads y={592} x0={120} x1={1800} n={17} rows={2} r={15} seed={4} alive={0.08} />
       <Fence x0={110} x1={1810} y={628} h={54} posts={26} opacity={0.75} />
       <rect x={0} y={EXCHANGE_WALL - 30} width={1920} height={30} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
       <SlabFloor y={EXCHANGE_WALL} cols={26} rows={11} />
 
       {/* --- far bank: seated rows, then the desk slab over their laps --- */}
-      <SeatedRow y={706} x0={330} x1={1600} n={7} scale={0.6} seed={3} working view="front" />
+      <SeatedRow y={706} x0={330} x1={1600} n={7} scale={0.6} seed={3} working view="front" alive={0} />
       <DeskBank y={742} s={0.62} seats={5} seed={2} />
       {/* standing figures between the banks — the floor's characteristic gesture, arms up. `climb`
           at frame 0 is a raised-arms pose; the crowd stays static so the camera lock is untouched. */}
@@ -467,13 +500,18 @@ const ExchangeFloor: React.FC = () => {
       ))}
 
       {/* --- mid bank --- */}
-      <SeatedRow y={846} x0={240} x1={1700} n={6} scale={0.82} seed={9} working view="front" />
+      <SeatedRow y={846} x0={240} x1={1700} n={6} scale={0.82} seed={9} working view="front" alive={0} />
       <DeskBank y={898} s={0.84} seats={4} seed={6} />
       <Papers x={300} y={1010} n={3} s={0.9} seed={12} />
       <Papers x={1660} y={1002} n={2} s={0.85} seed={16} />
+      {/* The near pair are the floor's characteristic gesture, arms up, and they stay POSED. This is
+          the one place WO-14 measured a motion it then took back out: an animated trader here reads
+          the same as a still one at 0.94 scale, and putting one on each side of the pit lit two more
+          motion-locality columns in the template that already had the least budget of the six. The
+          hero below carries this frame's character motion; the pit is its background. */}
       {[196, 1748].map((x, i) => (
         <StickFigure key={i} pose={A.climb(0, 30)} x={x} y={946} scale={0.94}
-          facing={i ? -1 : 1} view="front" pal={DIM} showFace={false} frame={0} />
+          facing={i ? -1 : 1} view="front" pal={DIM} showFace={false} frame={0} idle="none" />
       ))}
 
       {/* discarded paper all over the floor between the banks — the format's shorthand for a bad day */}
@@ -485,7 +523,7 @@ const ExchangeFloor: React.FC = () => {
       ))}
       {/* --- near plane: the coloured hero on the phone, over the near desk edge --- */}
       <StickFigure pose={A.stand(f)} x={1180} y={962} scale={1.24} facing={-1} view="front"
-        expr={FACES.shock} pal={LIGHT} frame={f} />
+        expr={FACES.shock} pal={LIGHT} frame={f} idle="gesture" />
       <Desk x={-40} y={1016} w={2000} h={38} legH={70} />
       <Monitor x={230} y={882} w={230} h={166} content="chart" seed={21} />
       <Monitor x={506} y={888} w={214} h={160} content="grid" seed={23} />
@@ -644,7 +682,7 @@ const CityStreet: React.FC = () => {
           The first render put a `CrowdHeads` mass here and the heads read as a mound of small people
           sitting on the kerb — heads-only works against a WALL, not on an open pavement. Two full
           `CrowdRow`s at different scales carry the same depth honestly. --- */}
-      <CrowdRow y={716} x0={70} x1={1860} n={13} scale={0.42} seed={5} dz={10} />
+      <CrowdRow y={716} x0={70} x1={1860} n={13} scale={0.42} seed={5} dz={10} alive={0.15} />
       <CrowdRow y={744} x0={160} x1={1500} n={7} scale={0.54} seed={23} dz={12} />
       <Fence x0={1580} x1={1920} y={806} h={62} posts={8} opacity={0.5} />
 
@@ -657,13 +695,18 @@ const CityStreet: React.FC = () => {
           <ellipse cx={lx} cy={STREET_KERB} rx={22} ry={7} fill={INK} opacity={0.35} />
         </g>
       ))}
-      {/* traffic signal + a litter bin + a news box */}
+      {/* traffic signal + a litter bin + a news box. The signal CHANGES — one of three 15px lamps
+          lit at a time, on a ~4s cycle — which is a colour switch with no moving geometry at all. */}
       <rect x={1470} y={STREET_KERB - 402} width={18} height={402} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
       <rect x={1442} y={STREET_KERB - 470} width={74} height={132} rx={12} fill={shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
-      {[0, 1, 2].map((i) => (
-        <circle key={i} cx={1479} cy={STREET_KERB - 440 + i * 40} r={15}
-          fill={i === 0 ? c.accent : i === 1 ? shade(c.accent, 2) : PAPER_WHITE} />
-      ))}
+      {[0, 1, 2].map((i) => {
+        const lit = [0, 2, 1][Math.floor(f / 118) % 3];
+        const off = shade(tn.deep, -1);
+        return (
+          <circle key={i} cx={1479} cy={STREET_KERB - 440 + i * 40} r={15}
+            fill={i !== lit ? off : i === 0 ? c.accent : i === 1 ? shade(c.accent, 2) : PAPER_WHITE} />
+        );
+      })}
       <RibbedPanel x={634} y={STREET_KERB - 96} w={78} h={96} ribs={5} dir="v" fill={tn.body} />
       <rect x={626} y={STREET_KERB - 106} width={94} height={14} rx={6} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
       <rect x={1156} y={STREET_KERB - 124} width={92} height={124} rx={8} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
@@ -672,10 +715,17 @@ const CityStreet: React.FC = () => {
       <BoxStack x={890} baseY={STREET_KERB} n={2} s={0.5} seed={11} />
       <CaseStack x={1330} baseY={STREET_KERB} n={3} s={0.6} seed={13} />
 
-      {/* --- road traffic. Drawn far-to-near so a nearer car occludes the one behind it --- */}
+      {/* --- road traffic. Drawn far-to-near so a nearer car occludes the one behind it.
+          The NEAR car DRIVES (WO-14): it runs the near lane right-to-left and wraps round off frame,
+          so the street always has something crossing it. It is a single 380-unit object, so it only
+          ever touches two or three motion-locality cells at a time — the opposite of moving the road
+          under it. The near lane is the only one it can use: it is drawn last, so passing the two
+          parked cars occludes them, which is what a nearer lane should do. Any of the parked lanes
+          would have driven one car straight THROUGH another. The wrap constant puts it at exactly
+          its old x at frame 0, so the composition is unchanged in a still. --- */}
       <Car x={430} y={946} s={0.62} facing={1} body={shade(tn.body, -1)} />
       <Car x={1500} y={968} s={0.72} facing={-1} body={tn.card} />
-      <Car x={880} y={1064} s={1.0} facing={1} body={c.accent} />
+      <Car x={2200 - ((f * 13 + 1320) % 2600)} y={1064} s={1.0} facing={-1} body={c.accent} />
       <Cone x={1698} y={1010} s={0.8} />
       <Cone x={1790} y={1024} s={0.8} />
 
@@ -782,8 +832,8 @@ const DomesticInterior: React.FC = () => {
       <WallFrame x={344} y={444} w={124} h={150} art="head" seed={8} />
       <WallFrame x={1436} y={210} w={190} h={150} art="scape" seed={11} />
       <circle cx={1720} cy={256} r={62} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
-      <line x1={1720} y1={256} x2={1720} y2={214} stroke={INK} strokeWidth={STROKE_THIN} strokeLinecap="round" />
       <line x1={1720} y1={256} x2={1748} y2={272} stroke={INK} strokeWidth={STROKE_THIN} strokeLinecap="round" />
+      <ClockHand cx={1720} cy={256} r={44} f={f} />
       {/* a bookcase is a UnitWall without handles, plus spines */}
       <UnitWall x={1420} y={412} w={392} h={344} cols={1} rows={4} handle={false} />
       {Array.from({length: 44}, (_, i) => {
@@ -828,9 +878,11 @@ const DomesticInterior: React.FC = () => {
       {/* --- the people. BOTH in colour: the reference's domestic frames run a coloured couple
           (depression montage 10:10), which is the one place the grey-crowd rule is relaxed. --- */}
       <StickFigure pose={A.sit(f)} x={CAPTION_SAFE_X + 250} y={858} scale={1.06} facing={-1} view="front"
-        expr={FACES.worried} pal={LIGHT} frame={f} />
-      <StickFigure pose={A.sit(0)} x={740} y={858} scale={1.02} facing={1} view="front"
-        expr={FACES.tired} pal={LIGHT} frame={0} />
+        expr={FACES.worried} pal={LIGHT} frame={f} idle="gesture" />
+      {/* the second of the pair used to be frozen at frame 0, which read as a mannequin sitting next
+          to a living person. It breathes and shifts on its own seed — one figure, two adjacent cells. */}
+      <StickFigure pose={A.sit(f + 47)} x={740} y={858} scale={1.02} facing={1} view="front"
+        expr={FACES.tired} pal={LIGHT} frame={f} />
       <Plant x={1866} y={1060} s={1.15} seed={9} />
     </Frame>
   );
@@ -849,6 +901,14 @@ const DomesticInterior: React.FC = () => {
 // Every sheet is STATIC and rotated by a fixed seeded angle — there is no drift, no flutter and no
 // per-frame anything in this template at all, which makes it the strictest camera-lock case of the
 // six (all 48 motion cells read exactly 0.0).
+//
+// WO-14 LEFT IT THAT WAY, deliberately, while animating the other five. There is nothing in a pile
+// of cuttings that plausibly moves, and the only elements big enough to register on the
+// frame-difference metric are the cuttings themselves — a 600×700 sheet drifting or rocking spans
+// four to eight motion-locality cells, which is the "whole element spanning most of the frame"
+// failure with a paper texture on it. The bible also wants shots like this: ~40% of the reference's
+// frames are completely motionless, and a document montage is exactly the shot type that holds. So
+// this template stays at 48/48 and 100% motionless, and the frames that move live elsewhere.
 // ---------------------------------------------------------------------------
 
 /** One cutting: masthead, rules, headline, a photo box with a flat portrait or chart, and columns. */
