@@ -93,6 +93,184 @@ export const SCENE_COLORS: Record<SceneKey, SceneColors> = {
 
 export const sceneColors = (key: SceneKey): SceneColors => SCENE_COLORS[key];
 
+// ---------------------------------------------------------------------------
+// Tones — flat siblings of a scene's four keys
+// ---------------------------------------------------------------------------
+
+/**
+ * WHY (WO-8e). Four tokens per scene meant every set-dressing component in a frame landed on the
+ * SAME hue: the WO-8d `jet` frame is dense but monochrome — hangars, boxes, carts, trolleys and the
+ * apron are all one gold. The reference is not monochrome per scene: it commits to a dominant hue and
+ * then carries several distinct FLAT tones inside it (the office frame runs dark-brown cabinets, a tan
+ * box, a navy suit and white paper at once), measuring 216–444 distinct quantised colours per frame.
+ *
+ * `shade()` is the whole mechanism: one base token, a small integer ladder of derived flat tones.
+ *
+ * Three constraints it exists to respect, all of them load-bearing:
+ *
+ *  1. **Flat solid colour, never a gradient.** Chromium dithers every gradient it paints, and the
+ *     dither pattern destroys the flat-fill metric (bible §5, stage.tsx's WO-8a note). A tone ladder
+ *     is how you get depth and material separation with zero gradients.
+ *  2. **Restricted palette.** Steps are integer rungs bounded by `TONE_MAX_STEP`, derived from the
+ *     scene's own key. A scene can therefore reach at most 4 tokens × 7 rungs of flat colour, not
+ *     arbitrary colour. Out-of-range or non-integer steps throw rather than silently clamping, so a
+ *     caller cannot quietly widen the palette.
+ *  3. **Linework still reads.** Outlines are pure black (`INK`), so a derived tone is clamped to
+ *     `TONE_FLOOR` lightness and to `TONE_CEIL` (so a light tone never collides with `PAPER_WHITE`).
+ *     Measured across all five keys × four tokens × every rung, the darkest tone `shade()` can return
+ *     is 1.53:1 against black — which is the `interior` key's OWN pre-existing level, i.e. the ladder
+ *     never produces a fill darker than the palette already contains.
+ */
+
+/** One rung of the ladder, in HSL lightness. */
+export const TONE_STEP = 0.075;
+
+/** Rungs available in each direction. Bounds the derived palette; exceeding it throws. */
+export const TONE_MAX_STEP = 3;
+
+/** Lightening a flat tone also drains it, or the light end reads as neon rather than as sunlit. */
+const TONE_DESAT = 0.13;
+/** Darkening enriches slightly — flat-vector shadow tones read as material, not as added black. */
+const TONE_ENRICH = 0.06;
+/** Lightness clamps: keep derived tones off pure black (INK outlines must read) and off PAPER_WHITE. */
+const TONE_FLOOR = 0.2;
+const TONE_CEIL = 0.93;
+
+const hexToRgb = (hex: string): [number, number, number] => {
+  const m = /^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/.exec(hex.trim());
+  if (!m) {
+    throw new Error(`shade() takes a #rgb or #rrggbb colour, got ${JSON.stringify(hex)}`);
+  }
+  const h = m[1].length === 3 ? m[1].split('').map((ch) => ch + ch).join('') : m[1];
+  return [
+    parseInt(h.slice(0, 2), 16) / 255,
+    parseInt(h.slice(2, 4), 16) / 255,
+    parseInt(h.slice(4, 6), 16) / 255,
+  ];
+};
+
+const rgbToHex = (r: number, g: number, b: number): string => {
+  const to = (v: number) => Math.round(Math.min(1, Math.max(0, v)) * 255).toString(16).padStart(2, '0');
+  return `#${to(r)}${to(g)}${to(b)}`;
+};
+
+const rgbToHsl = (r: number, g: number, b: number): [number, number, number] => {
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  if (max === min) return [0, 0, l];
+  const d = max - min;
+  const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+  const h = max === r ? ((g - b) / d + (g < b ? 6 : 0)) / 6
+    : max === g ? ((b - r) / d + 2) / 6
+    : ((r - g) / d + 4) / 6;
+  return [h, s, l];
+};
+
+const hslToRgb = (h: number, s: number, l: number): [number, number, number] => {
+  if (s === 0) return [l, l, l];
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  const p = 2 * l - q;
+  const ch = (t: number): number => {
+    const tt = t < 0 ? t + 1 : t > 1 ? t - 1 : t;
+    if (tt < 1 / 6) return p + (q - p) * 6 * tt;
+    if (tt < 1 / 2) return q;
+    if (tt < 2 / 3) return p + (q - p) * (2 / 3 - tt) * 6;
+    return p;
+  };
+  return [ch(h + 1 / 3), ch(h), ch(h - 1 / 3)];
+};
+
+/**
+ * A flat sibling of `color`, `step` rungs lighter (+) or darker (−). Hue is never changed.
+ *
+ * `shade(c, 0)` is the identity — it returns `color` itself, so a component's default and its
+ * explicitly-shaded variants stay in the same family.
+ *
+ * The `TONE_FLOOR` clamp is asymmetric on purpose: a token that ALREADY sits at or below the floor
+ * (the `interior` key's `mid` is #3b2a1d) keeps its own lightness as the floor, so a negative step on
+ * an already-dark token holds that lightness (`shade('#3b2a1d', -1)` → `#3c2a1c`, the same value with
+ * only the saturation nudge) rather than returning something *lighter* than its base.
+ * Dark keys differentiate upward — which is exactly what the reference's brown office does, separating
+ * near-black cabinets from a tan box, not from a blacker box. Where a dark scene genuinely needs a
+ * shadow, use an INK overlay, not a tone.
+ *
+ * @throws if `step` is not an integer, or exceeds ±`TONE_MAX_STEP`.
+ */
+export const shade = (color: string, step: number): string => {
+  if (!Number.isInteger(step)) {
+    throw new Error(`shade() step must be a whole rung, got ${step}`);
+  }
+  if (Math.abs(step) > TONE_MAX_STEP) {
+    throw new Error(
+      `shade() step ${step} exceeds ±${TONE_MAX_STEP}: the tone ladder is deliberately short so a ` +
+      `scene stays on a restricted palette. Key another SceneKey instead of shading further.`
+    );
+  }
+  if (step === 0) return color;
+  const [r, g, b] = hexToRgb(color);
+  const [h, s, l] = rgbToHsl(r, g, b);
+  const floor = Math.min(l, TONE_FLOOR);
+  const l2 = Math.min(TONE_CEIL, Math.max(floor, l + step * TONE_STEP));
+  const s2 = Math.min(1, s * (step > 0 ? (1 - TONE_DESAT) ** step : (1 + TONE_ENRICH) ** -step));
+  return rgbToHex(...hslToRgb(h, s2, l2));
+};
+
+/**
+ * The named flat materials a scene gets for free, all derived from its own four keys.
+ *
+ * Set dressing keys its DEFAULTS to these, so composing a template with zero colour arguments still
+ * produces a frame with several materials in it instead of one hue everywhere.
+ */
+export type SceneTones = {
+  /** Distant structures — lifted toward the sky, which is how flat art does aerial perspective. */
+  far: string;
+  /** Second plane: back walls, the band behind the main mass. */
+  back: string;
+  /** The mid-ground mass itself. Identical to `SceneColors.mid`. */
+  body: string;
+  /** The ground plane — one rung under the things standing on it, so they separate from it. */
+  floor: string;
+  /** Recesses, window blocks, shutter shadow, the dark face of a solid. */
+  deep: string;
+  /**
+   * The light material: cardboard, paper, plaster, luggage — the tan box against a dark wall in the
+   * reference office. Derived from `mid`, not `bg`: cardboard belongs to the scene's MATERIAL family,
+   * and keying it to the dominant hue put pale-blue boxes in every `daylight` scene.
+   */
+  card: string;
+  /** A wall/panel keyed to the dominant hue but readable against a `bg` field of it. */
+  panel: string;
+  /** Deep crowd rows — paler, so a mass of people recedes behind the row in front of it. */
+  crowdFar: string;
+  /** Near crowd rows, held off the wall behind them. */
+  crowdNear: string;
+  /** The accent's shadow side. The accent itself stays the scene's ONE saturated note. */
+  accentDeep: string;
+};
+
+const TONE_CACHE = new Map<string, SceneTones>();
+
+/** Derive (and cache) a scene's flat tone set from its four colour keys. */
+export const sceneTones = (c: SceneColors): SceneTones => {
+  const k = `${c.bg}|${c.mid}|${c.accent}|${c.crowd}`;
+  const hit = TONE_CACHE.get(k);
+  if (hit) return hit;
+  const t: SceneTones = {
+    far: shade(c.mid, 2),
+    back: shade(c.mid, 1),
+    body: c.mid,
+    floor: shade(c.mid, -1),
+    deep: shade(c.mid, -2),
+    card: shade(c.mid, TONE_MAX_STEP),
+    panel: shade(c.bg, -1),
+    crowdFar: shade(c.crowd, 1),
+    crowdNear: shade(c.crowd, -1),
+    accentDeep: shade(c.accent, -1),
+  };
+  TONE_CACHE.set(k, t);
+  return t;
+};
+
 /**
  * Explicit key per template — EVERY template in scenes.tsx (S00-S19) and every pack template in
  * stage.tsx. Anything absent falls to a deterministic rotation so a new template still gets a

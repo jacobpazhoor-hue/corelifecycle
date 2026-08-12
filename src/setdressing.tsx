@@ -1,7 +1,9 @@
 import React from 'react';
 import {StickFigure, DIM} from './figure';
 import * as A from './actions';
-import {INK, PAPER_WHITE, STROKE, STROKE_THIN} from './crayonStyle';
+import {
+  INK, PAPER_WHITE, STROKE, STROKE_THIN, TONE_MAX_STEP, shade, sceneTones, SceneTones,
+} from './crayonStyle';
 import {useSceneColors} from './stage';
 
 // ============================================================================
@@ -27,6 +29,16 @@ import {useSceneColors} from './stage';
 //   - Colour comes from the scene's key via `useSceneColors()` (bg/mid/accent/crowd) plus INK and
 //     PAPER_WHITE. Callers may override a fill, but the DEFAULT is always the scene's own token, so
 //     dropping a cabinet wall into any template keys it correctly with no per-call palette work.
+//
+// TONES (WO-8e). WO-8d's verdict on its own prototype was that density alone does not close the gap:
+// the frame was dense but MONOCHROME, because every component here defaulted to the one `mid` token.
+// The reference commits to a dominant hue and then carries several distinct FLAT tones inside it —
+// dark cabinets, a tan box, white paper, a navy suit, all in one restricted brown frame.
+//
+// So every default below now keys to a *role* in `sceneTones()` rather than to `mid`: structures step
+// in tone with depth, the ground sits under the things standing on it, boxes and cases are a lighter
+// material than the floor, crowd rows separate from each other. `shade()` returns flat solid colour
+// only — no component here may introduce a gradient, at any depth, for any reason.
 // ============================================================================
 
 /** Deterministic hash-noise in [0,1). Same generator scenes.tsx/stage.tsx use, so a seeded layout
@@ -35,6 +47,13 @@ const rnd = (i: number): number => {
   const x = Math.sin(i * 127.1 + 31.7) * 43758.5453;
   return x - Math.floor(x);
 };
+
+/**
+ * The active scene's flat tone set (WO-8e) — the material roles every default below keys to.
+ * Templates composing their own bespoke props should use this too, so a hero prop lands in the same
+ * restricted ladder as the furniture around it.
+ */
+export const useSceneTones = (): SceneTones => sceneTones(useSceneColors());
 
 // ---------------------------------------------------------------------------
 // GROUND
@@ -47,17 +66,27 @@ const rnd = (i: number): number => {
  * all have joints, and it is the cheapest honest way to stop a ground plane reading as a colour
  * field. Rows converge toward the horizon so the plane reads as receding without any perspective
  * transform.
+ *
+ * TONE (WO-8e): the ground defaults to `floor` — one rung UNDER the mid-ground mass — so the
+ * buildings, carts and boxes standing on it are no longer the same colour as it. The strip nearest
+ * the horizon is drawn one rung lighter again (`farBand`), which is how flat art says "this plane
+ * recedes" without a gradient.
  */
 export const SlabFloor: React.FC<{
   y: number; fill?: string; cols?: number; rows?: number; bottom?: number; opacity?: number;
-}> = ({y, fill, cols = 9, rows = 5, bottom = 1080, opacity = 0.28}) => {
-  const c = useSceneColors();
+  farBand?: boolean;
+}> = ({y, fill, cols = 9, rows = 5, bottom = 1080, opacity = 0.28, farBand = true}) => {
+  const tn = useSceneTones();
   const h = bottom - y;
+  const ground = fill ?? tn.floor;
   // row lines: spacing grows toward the viewer (t^1.9), i.e. slabs get taller as they approach
   const rowYs = Array.from({length: rows}, (_, i) => y + h * Math.pow((i + 1) / (rows + 1), 1.9));
   return (
     <g>
-      <rect x={0} y={y} width={1920} height={h} fill={fill ?? c.mid} />
+      <rect x={0} y={y} width={1920} height={h} fill={ground} />
+      {farBand && rows > 0 && (
+        <rect x={0} y={y} width={1920} height={rowYs[0] - y} fill={shade(ground, 1)} />
+      )}
       <line x1={0} y1={y} x2={1920} y2={y} stroke={INK} strokeWidth={STROKE} />
       <g stroke={INK} strokeWidth={STROKE_THIN * 0.7} opacity={opacity}>
         {rowYs.map((ry, i) => <line key={'r' + i} x1={0} y1={ry} x2={1920} y2={ry} />)}
@@ -83,19 +112,25 @@ export const SlabFloor: React.FC<{
  *
  * One component covers filing cabinets, lockers, server racks, deposit boxes, warehouse racking and
  * apothecary shelving; only the fill and the cell aspect change.
+ *
+ * TONE (WO-8e): the reference's cabinet wall is TWO tones — a dark carcass with lighter drawer fronts
+ * set into it — which is what makes a grid of rectangles read as furniture instead of as a grid. So
+ * `fill` is the drawer FACE, and the carcass behind it defaults two rungs down.
  */
 export const UnitWall: React.FC<{
   x: number; y: number; w: number; h: number; cols: number; rows: number;
-  fill?: string; handle?: boolean; opacity?: number;
-}> = ({x, y, w, h, cols, rows, fill, handle = true, opacity = 1}) => {
-  const c = useSceneColors();
+  fill?: string; carcass?: string; handle?: boolean; opacity?: number;
+}> = ({x, y, w, h, cols, rows, fill, carcass, handle = true, opacity = 1}) => {
+  const tn = useSceneTones();
+  const face = fill ?? tn.body;
+  const box = carcass ?? shade(face, -2);
   const cw = w / cols, ch = h / rows;
   const cells: React.ReactNode[] = [];
   for (let r = 0; r < rows; r++) {
     for (let k = 0; k < cols; k++) {
       const cx = x + k * cw, cy = y + r * ch;
       cells.push(<rect key={`u${r}_${k}`} x={cx + 3} y={cy + 3} width={cw - 6} height={ch - 6}
-        fill={fill ?? c.mid} stroke={INK} strokeWidth={STROKE_THIN} />);
+        fill={face} stroke={INK} strokeWidth={STROKE_THIN} />);
       if (handle) {
         cells.push(<rect key={`h${r}_${k}`} x={cx + cw * 0.36} y={cy + ch * 0.56} width={cw * 0.28}
           height={Math.max(4, ch * 0.07)} rx={2} fill={INK} />);
@@ -104,7 +139,7 @@ export const UnitWall: React.FC<{
   }
   return (
     <g opacity={opacity}>
-      <rect x={x} y={y} width={w} height={h} fill={fill ?? c.mid} stroke={INK} strokeWidth={STROKE} />
+      <rect x={x} y={y} width={w} height={h} fill={box} stroke={INK} strokeWidth={STROKE} />
       {cells}
     </g>
   );
@@ -113,15 +148,18 @@ export const UnitWall: React.FC<{
 /**
  * A corrugated/ribbed panel: hangar shutter, roller door, radiator, blind, container side.
  * Vertical ribs when `dir` is 'v' (a shutter is horizontal-ribbed — pass 'h').
+ *
+ * TONE (WO-8e): defaults one rung under the mid-ground mass, because a shutter is a different
+ * material from the wall it is set into and a same-tone door disappears into its building.
  */
 export const RibbedPanel: React.FC<{
   x: number; y: number; w: number; h: number; ribs: number;
   fill?: string; dir?: 'v' | 'h'; opacity?: number;
 }> = ({x, y, w, h, ribs, fill, dir = 'h', opacity = 1}) => {
-  const c = useSceneColors();
+  const tn = useSceneTones();
   return (
     <g opacity={opacity}>
-      <rect x={x} y={y} width={w} height={h} fill={fill ?? c.mid} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={x} y={y} width={w} height={h} fill={fill ?? tn.floor} stroke={INK} strokeWidth={STROKE_THIN} />
       <g stroke={INK} strokeWidth={STROKE_THIN * 0.6} opacity={0.7}>
         {Array.from({length: ribs}, (_, i) => {
           const t = (i + 1) / (ribs + 1);
@@ -138,12 +176,30 @@ export const RibbedPanel: React.FC<{
  * A band of low buildings along a base line — hangars, warehouses, a terminal, a village street,
  * a factory row. Each unit gets a shutter or a window strip, so the band carries detail instead of
  * being a silhouette.
+ *
+ * TONE (WO-8e). A band used to be ONE colour, which is what made a dense skyline still read as a
+ * single slab of hue. Now:
+ *   - neighbouring units alternate deterministically between two rungs, so the row has facets;
+ *   - `depth` lifts the whole band toward the sky — stack two bands at depth 1 and 0 and the far one
+ *     sits behind the near one on tone alone, no haze, no gradient, no opacity trick;
+ *   - the parapet sits a rung under its wall and the window blocks three rungs under, which is what
+ *     separates a building from the building beside it when both share a fill.
  */
 export const BuildingBand: React.FC<{
   baseY: number; x0: number; x1: number; n: number; seed?: number;
-  fill?: string; opacity?: number; minH?: number; maxH?: number;
-}> = ({baseY, x0, x1, n, seed = 0, fill, opacity = 1, minH = 90, maxH = 190}) => {
-  const c = useSceneColors();
+  fill?: string; opacity?: number; minH?: number; maxH?: number; depth?: number;
+}> = ({baseY, x0, x1, n, seed = 0, fill, opacity = 1, minH = 90, maxH = 190, depth = 0}) => {
+  const tn = useSceneTones();
+  const base = fill ?? tn.body;
+  if (!Number.isInteger(depth) || Math.abs(depth) > TONE_MAX_STEP - 1) {
+    throw new Error(
+      `BuildingBand depth must be a whole rung within ±${TONE_MAX_STEP - 1} (it is combined with the ` +
+      `per-unit facet rung), got ${depth}`
+    );
+  }
+  // Every tone below is a net step off ONE base colour, clamped to the ladder — a band can never
+  // wander outside the scene's restricted palette however it is nested.
+  const rung = (step: number) => shade(base, Math.max(-TONE_MAX_STEP, Math.min(TONE_MAX_STEP, step)));
   const units: React.ReactNode[] = [];
   const span = (x1 - x0) / n;
   for (let i = 0; i < n; i++) {
@@ -153,15 +209,20 @@ export const BuildingBand: React.FC<{
     const h = minH + rnd(s + 3) * (maxH - minH);
     const top = baseY - h;
     const shutter = rnd(s + 7) > 0.45;
+    const step = depth + (rnd(s + 11) > 0.5 ? 1 : 0);
+    const wall = rung(step);
+    const parapet = rung(step - 1);
+    const glass = rung(step - 3);
+    const door = rung(step - 2);
     // A taller unit carries more storeys / more shutter ribs. Detail density tracks the drawn size
     // instead of a fixed count, so the same component reads correctly as a 90px shed and a 500px hangar.
     const winRows = Math.max(1, Math.round(h / 190));
     const doorH = Math.min(h * 0.62, 250);
     units.push(
       <g key={i}>
-        <rect x={bx} y={top} width={w} height={h} fill={fill ?? c.mid} stroke={INK} strokeWidth={STROKE_THIN} />
+        <rect x={bx} y={top} width={w} height={h} fill={wall} stroke={INK} strokeWidth={STROKE_THIN} />
         {/* roof lip — reads as a parapet, and separates neighbouring units of the same fill */}
-        <rect x={bx - 8} y={top - 10} width={w + 16} height={12} fill={fill ?? c.mid} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+        <rect x={bx - 8} y={top - 10} width={w + 16} height={12} fill={parapet} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
         {/* storey bands: what stops a tall block reading as one slab */}
         {Array.from({length: winRows}, (_, r) => (
           <g key={'w' + r}>
@@ -170,13 +231,13 @@ export const BuildingBand: React.FC<{
             {Array.from({length: 7}, (_, k) => (
               <rect key={k} x={bx + w * (0.07 + k * 0.128)} y={top + (h - doorH) * ((r + 0.25) / (winRows + 1)) + 14}
                 width={w * 0.088} height={Math.min(64, (h - doorH) / (winRows + 1) * 0.5)}
-                fill={INK} opacity={0.5} />
+                fill={glass} />
             ))}
           </g>
         ))}
         {shutter
-          ? <RibbedPanel x={bx + w * 0.16} y={baseY - doorH} w={w * 0.68} h={doorH} ribs={Math.max(6, Math.round(doorH / 24))} fill={fill ?? c.mid} />
-          : <RibbedPanel x={bx + w * 0.1} y={baseY - doorH} w={w * 0.8} h={doorH} ribs={Math.max(5, Math.round(w / 34))} dir="v" fill={fill ?? c.mid} />}
+          ? <RibbedPanel x={bx + w * 0.16} y={baseY - doorH} w={w * 0.68} h={doorH} ribs={Math.max(6, Math.round(doorH / 24))} fill={door} />
+          : <RibbedPanel x={bx + w * 0.1} y={baseY - doorH} w={w * 0.8} h={doorH} ribs={Math.max(5, Math.round(w / 34))} dir="v" fill={door} />}
       </g>
     );
   }
@@ -190,11 +251,16 @@ export const BuildingBand: React.FC<{
 /**
  * A leaning stack of cardboard boxes — the reference's storage room (wolf montage 2:08). Each box
  * gets a lid seam and a tape strip, which is what makes a pile read as boxes and not as blocks.
+ *
+ * TONE (WO-8e): cardboard is the scene's LIGHT material (`card`), not its ground colour — in the
+ * reference office a tan box sits against near-black cabinets, and in the storage room the boxes are
+ * the lightest thing in a dark room. Boxes in one pile alternate a rung so the stack has faces.
  */
 export const BoxStack: React.FC<{
   x: number; baseY: number; n?: number; s?: number; seed?: number; fill?: string;
 }> = ({x, baseY, n = 4, s = 1, seed = 0, fill}) => {
-  const c = useSceneColors();
+  const tn = useSceneTones();
+  const card = fill ?? tn.card;
   const boxes: React.ReactNode[] = [];
   let y = baseY;
   for (let i = 0; i < n; i++) {
@@ -202,11 +268,13 @@ export const BoxStack: React.FC<{
     const w = (110 + rnd(r) * 70) * s;
     const h = (74 + rnd(r + 2) * 34) * s;
     const bx = x - w / 2 + (rnd(r + 4) - 0.5) * 34 * s;
+    const face = rnd(r + 9) > 0.5 ? card : shade(card, -1);
     y -= h;
     boxes.push(
       <g key={i}>
-        <rect x={bx} y={y} width={w} height={h} fill={fill ?? c.mid} stroke={INK} strokeWidth={STROKE_THIN} />
-        <line x1={bx} y1={y + h * 0.3} x2={bx + w} y2={y + h * 0.3} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+        <rect x={bx} y={y} width={w} height={h} fill={face} stroke={INK} strokeWidth={STROKE_THIN} />
+        {/* lid flap: a second flat tone across the top third, so a box has a top as well as a front */}
+        <rect x={bx} y={y} width={w} height={h * 0.3} fill={shade(face, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
         <rect x={bx + w * 0.42} y={y} width={w * 0.16} height={h * 0.3} fill={INK} opacity={0.25} />
       </g>
     );
@@ -214,11 +282,18 @@ export const BoxStack: React.FC<{
   return <g>{boxes}</g>;
 };
 
-/** A stack of suitcases/crates on a baggage cart, shipping pallet or porter's trolley. */
+/**
+ * A stack of suitcases/crates on a baggage cart, shipping pallet or porter's trolley.
+ *
+ * TONE (WO-8e): cases cycle three materials — white, the light `card` tone and the mid-ground body —
+ * because a real luggage pile is the densest bit of material variety in a frame, and a two-tone
+ * alternation reads as a pattern rather than as a pile.
+ */
 export const CaseStack: React.FC<{
   x: number; baseY: number; n?: number; s?: number; seed?: number;
 }> = ({x, baseY, n = 4, s = 1, seed = 0}) => {
-  const c = useSceneColors();
+  const tn = useSceneTones();
+  const skins = [PAPER_WHITE, tn.card, tn.body];
   const out: React.ReactNode[] = [];
   let y = baseY;
   for (let i = 0; i < n; i++) {
@@ -229,7 +304,7 @@ export const CaseStack: React.FC<{
     y -= h;
     out.push(
       <g key={i}>
-        <rect x={bx} y={y} width={w} height={h} rx={6 * s} fill={i % 2 ? PAPER_WHITE : c.mid} stroke={INK} strokeWidth={STROKE_THIN} />
+        <rect x={bx} y={y} width={w} height={h} rx={6 * s} fill={skins[i % skins.length]} stroke={INK} strokeWidth={STROKE_THIN} />
         {/* strap + handle: the two details that make a rounded rect read as luggage */}
         <line x1={bx + w * 0.3} y1={y} x2={bx + w * 0.3} y2={y + h} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
         <rect x={bx + w * 0.44} y={y - 7 * s} width={w * 0.2} height={8 * s} rx={4 * s} fill="none" stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
@@ -239,33 +314,43 @@ export const CaseStack: React.FC<{
   return <g>{out}</g>;
 };
 
-/** A wheeled flatbed — baggage cart, hand truck, service trolley, gurney base. */
+/**
+ * A wheeled flatbed — baggage cart, hand truck, service trolley, gurney base.
+ *
+ * TONE (WO-8e): the bed is the mid-ground body tone and the wheel hubs are the light `card` tone, so
+ * a hub reads inside its black tyre instead of vanishing into the ground behind the cart.
+ */
 export const Trolley: React.FC<{x: number; y: number; w?: number; s?: number}> = ({x, y, w = 300, s = 1}) => {
-  const c = useSceneColors();
+  const tn = useSceneTones();
   const wheelR = 24 * s;
   return (
     <g>
-      <rect x={x} y={y} width={w} height={18 * s} fill={c.mid} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={x} y={y} width={w} height={18 * s} fill={tn.body} stroke={INK} strokeWidth={STROKE_THIN} />
       <rect x={x + 10} y={y + 18 * s} width={16 * s} height={26 * s} fill={INK} opacity={0.6} />
       <rect x={x + w - 26 * s} y={y + 18 * s} width={16 * s} height={26 * s} fill={INK} opacity={0.6} />
       <circle cx={x + 46 * s} cy={y + 44 * s + wheelR} r={wheelR} fill={INK} />
       <circle cx={x + w - 46 * s} cy={y + 44 * s + wheelR} r={wheelR} fill={INK} />
-      <circle cx={x + 46 * s} cy={y + 44 * s + wheelR} r={wheelR * 0.38} fill={c.mid} />
-      <circle cx={x + w - 46 * s} cy={y + 44 * s + wheelR} r={wheelR * 0.38} fill={c.mid} />
+      <circle cx={x + 46 * s} cy={y + 44 * s + wheelR} r={wheelR * 0.38} fill={tn.card} />
+      <circle cx={x + w - 46 * s} cy={y + 44 * s + wheelR} r={wheelR * 0.38} fill={tn.card} />
       {/* draw bar */}
       <line x1={x} y1={y + 6 * s} x2={x - 70 * s} y2={y + 52 * s} stroke={INK} strokeWidth={STROKE_THIN} strokeLinecap="round" />
     </g>
   );
 };
 
-/** Safety cone — apron, roadworks, gym, film set, warehouse. The scene accent gets one honest use. */
+/**
+ * Safety cone — apron, roadworks, gym, film set, warehouse. The scene accent gets one honest use.
+ * TONE (WO-8e): the base skirt takes the accent's shadow rung, which is what gives a 56px prop a
+ * readable form at 1920 without a gradient.
+ */
 export const Cone: React.FC<{x: number; y: number; s?: number}> = ({x, y, s = 1}) => {
   const c = useSceneColors();
+  const tn = useSceneTones();
   return (
     <g>
       <path d={`M ${x} ${y - 56 * s} L ${x + 26 * s} ${y} L ${x - 26 * s} ${y} Z`} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
       <rect x={x - 20 * s} y={y - 34 * s} width={40 * s} height={10 * s} fill={PAPER_WHITE} />
-      <rect x={x - 34 * s} y={y - 6 * s} width={68 * s} height={12 * s} rx={3 * s} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
+      <rect x={x - 34 * s} y={y - 6 * s} width={68 * s} height={12 * s} rx={3 * s} fill={tn.accentDeep} stroke={INK} strokeWidth={STROKE_THIN} />
     </g>
   );
 };
@@ -341,13 +426,20 @@ export const CrowdRow: React.FC<{
 /**
  * A packed mass of featureless grey heads — the reference's deep crowd (depression montage 15:00),
  * where the back rows are heads only. Far cheaper than full figures and reads correctly as a mass.
+ *
+ * TONE (WO-8e): rows step one rung LIGHTER with depth, so the mass separates into rows and off the
+ * wall behind it instead of reading as a single grey clot. The reference's stair crowd does exactly
+ * this — the figures behind are paler than the ones in front.
  */
 export const CrowdHeads: React.FC<{
   y: number; x0: number; x1: number; n: number; rows?: number; r?: number; seed?: number; fill?: string;
 }> = ({y, x0, x1, n, rows = 2, r = 34, seed = 0, fill}) => {
   const c = useSceneColors();
   const out: React.ReactNode[] = [];
+  // row 0 is the front row; each row behind it lifts a rung, capped so a deep crowd stays on ladder
+  const rowFill = (row: number) => shade(fill ?? c.crowd, Math.min(TONE_MAX_STEP, row));
   for (let row = 0; row < rows; row++) {
+    const tone = rowFill(row);
     for (let i = 0; i < n; i++) {
       const s = seed * 613 + row * 97 + i * 17;
       const step = (x1 - x0) / n;
@@ -358,8 +450,8 @@ export const CrowdHeads: React.FC<{
         <g key={`${row}_${i}`}>
           {/* shoulders under the head so the mass reads as people, not as bubbles */}
           <path d={`M ${cx - rr * 1.5} ${cy + rr * 2.4} Q ${cx} ${cy + rr * 0.5} ${cx + rr * 1.5} ${cy + rr * 2.4} Z`}
-            fill={fill ?? c.crowd} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
-          <ellipse cx={cx} cy={cy} rx={rr} ry={rr * 1.1} fill={fill ?? c.crowd} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+            fill={tone} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+          <ellipse cx={cx} cy={cy} rx={rr} ry={rr * 1.1} fill={tone} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
         </g>
       );
     }
