@@ -1,143 +1,332 @@
-# CoreLifecycle Production Bible (the canon — every video obeys this)
+# CoreLifecycle Production Bible — the WRITER canon (every video obeys this)
 
-## Concept  (POV immersion — the MasterPOVs model)
-**"Your Life as a [X] at Every Level / at Every Rank"** — the viewer LIVES the climb in first-hand
-POV. Not a documentary ABOUT a job; a STORY where YOU are the person, rising rank by rank from the
-bottom to the anonymous people at the top. Money + power + moral erosion, but felt PERSONALLY.
-Topics are dramatic / exotic / high-stakes (crime, war, empire, espionage, wealth, power, danger),
-not just white-collar careers — that is where the curiosity + clicks live.
-**FORMATS (topic_queue `format` field, same retention skeleton, different LADDER):** `rank` (default,
-"…at Every Level"), `history` ("…Every Rank in [Empire]"), `scenario` ("POV: You're a [X]" — levels
-are escalating DAYS/DECISIONS/$ not job ranks), `survival` ("Could You Survive [X]?" — levels are a
-HOUR→DAY→WEEK threat ladder). The color grade escalates by each level-start's POSITION, so any label
-vocabulary works — keep the ladder monotonic. (Proven adjacents: "POV: You're a Trillionaire" 2.1M,
-"Black Market Surgeon" 5.3M, "Could You Survive…" 7.7M — see NEXT_LEVEL_PLAN Phase 4.)
+**Rewritten 2026-08-11 (WO-10) for the full format swap.** The channel no longer writes second-person
+present-tense fictional POV ladders ("Your Life as a [X] at Every Level"). It writes **third-person,
+past-tense explainers about real subjects** — real companies, people, scandals, crises.
 
-## Voice & audio  (tuned for short attention spans — see docs/bibles/ENGAGEMENT_PLAN.md)
-- Engine: **edge-tts `en-US-AndrewMultilingualNeural`**. **RATE `+8%`** (~190 WPM — faster/energetic;
-  Andrew's default is already brisk ~174; hard stop +15%). **GAP `0.25s`** after each scene (was 0.5 —
-  cutting dead air is the biggest "feels fast" lever), with a per-scene `gap=0.7` override ONLY on
-  dramatic reveal/cliffhanger beats. **LEAD `0.1s`**. Each clip is **silence-trimmed** (breaths/tails).
-- ALWAYS run through the **mastering chain** in gen_voice_edge.py `master()`: 48kHz upsample,
-  HP 85Hz, de-mud 320Hz, **nasal/boxy cut ~2.6k (−2.5dB — the TTS tell)**, presence shelf ~3.2k,
-  de-ess 7.2k, gentle harmonic exciter (air), soft compression, normalize 0.97. Crisp, never staticy.
-- **Human-izing (Sound 2.0):** a soft real **breath** is prepended before longer lines (>48 words,
-  not the cold open) — impossible breathlessness reads as synthetic ~90s in. Scenes may set a per-scene
-  `rate` (e.g. `-10%` gravity / `+12%` action) overriding the +8% default.
-- **Sound design (Sound 2.0 — sfx_lib.py + make_ambient.py + duck_music.py, all numpy, copyright-clean):**
-  - Score = **3 ACTS** (setup/escalation/climax) in different keys + tempo, crossfaded at act breaks
-    (music changing at act boundaries is a real retention lever).
-  - **Per-level diegetic beds** (rain/office hum/casino/cell block/street/wind/crowd/night, chosen by
-    template keyword) mixed WAY under the voice so narration is never "floating in a digital void".
-  - **SFX layer** placed on structure: whoosh INTO every cut; **riser + brand STAMP + thud** on every
-    LEVEL cut; a soft **pop** on every number/overlay reveal; cold-open thud.
-  - **One silence beat** (~1.3s, music+SFX to near-silence) right before the midpoint-reversal line,
-    then swell back. A single soft **heartbeat** leads into the final level. Music dips extra under SFX hits.
-  - Final mix loudnorm'd to −14 LUFS (audio_master.py). Keep synths deterministic (topic-seeded).
+Two documents, two jobs — do not confuse them:
 
-## Script (writer) — POV STORYTELLING (study docs/MASTERPOVS_ANALYSIS.md + docs/bibles/QUALITY_MAX_PLAN.md §2.1)
-RETENTION IS THE METRIC. North-star: hold **≥78% of viewers at 0:30**, **45–55% average-percent-viewed**
-across the full run (the viral bar for 12-min videos). The first 30s + the level transitions are where
-the graph bleeds — that's where the craft goes. >55% of viewers leave in minute one.
-- **≥11 minutes** runtime (~12-13 ideal). ~3-4 scenes per level (~28-34 scenes), ~2200-2600 words.
-  Scenes ~60–85 words (one idea each). Gate HALTS if < routine.minMinutes.
-- **WRITE IN SECOND-PERSON, PRESENT-TENSE POV — the viewer IS the character, living it.**
-- **THE STORY SKELETON (Harmon story-circle mapped onto the rank ladder):**
-  1. **COLD OPEN** (first ~15s): in medias res at the most dangerous/highest-status moment of the
-     WHOLE arc, then cut away before it resolves. No logo, no intro, no "in this video." This is the
-     master open loop the ending pays off.
-  2. **PROMISE + COST-LINE**: state the through-line the ending answers ("You want this. You don't
-     know yet what it costs.").
-  3. **LEVEL 1 — comfort + want**: concrete sensory lack (an exact object/number, not "poor"), a
-     named want, a named person. CARE inside 60s.
-  3b. **MINUTE-3 RE-ENGAGEMENT (~2:30–3:30)**: the FIRST delivered spectacle/reversal of act one (not
-     a tease) — minute 1 sells the watch, minute 3 re-buys it. Don't coast to the midpoint.
-  4. **LEVELS 2–6 — adapt + escalate**: each level a mini story-circle (new world → task →
-     complication → promotion → hook into next rank); each raises danger, status, OR moral cost.
-  5. **MIDPOINT REVERSAL (~50%)**: betrayal / death / the real cost revealed — the biggest completion
-     lever. The thing you wanted starts to rot. Set `gap=1.4` on the scene BEFORE the reversal line so
-     the sound engine drops to near-silence and the line lands raw (once per episode).
-  6. **LEVELS 7–8 — get it, at cost**: deliver the fantasy, undercut it, resolve the cold-open loop.
-  7. **LOOP CLOSE**: end on what victory COST; bend the last image back to the opening (cyclical,
-     rewatchable). Never a triumphant ending.
-- **CAUSALITY — but/therefore, never "and then."** Every level/beat connects by complication (but) or
-  consequence (therefore). If "and then" fits between two beats, rewrite one.
-- **PACING**: pattern-interrupt every 30–45s (new template/tone/threat — hence no adjacent-template
-  repeats); re-hook (open a fresh loop) at the end of every level.
-- **POV sentence craft (hard rules):**
-  - Present tense always. Short, declarative, ONE idea per line — staccato; average <15 words, with
-    2–4 word punches at peaks.
-  - Break "you…you…you" drone with the **IMPERATIVE** ("Don't look back. Count the doors.").
-  - **Body-based dread — state the FACT, not the feeling** ("Your hands are steady. That's what
-    scares you."), never "you feel scared."
-  - **BAN perception filters** — never "you see/notice/feel/watch/realize"; describe the world
-    directly (the "you" is assumed). Filters push the viewer out of the body.
-  - **Sensory anchor motif** — one recurring sensation/object per episode, re-triggered each level-up
-    (a callback engine). 2–3 senses per scene, favor sound + smell.
-  - **SPECIFICITY over abstraction** ("Forty-two hundred in a cereal box," not "good money").
-  - **Anaphora** at theme moments ("Money buys medicine. Money buys safety. Money buys a way out.").
-  - One **share-worthy** "wait — that's real?" beat (shocking true fact/number; shares ≈ 5–8× likes).
-- **A NAMED MENTOR / rival** introduced early — attach to them, set up a betrayal/loss payoff.
-- **DIALOGUE (2nd voice)** — 2–4 short in-world lines/episode via scene `dialogue=dict(text=..)`
-  (mentor's warning / rival's taunt / one pre-ending line); a deeper voice places them in the scene.
-  Sparse — never a conversation. Also structurally varies the episode (YPP authenticity).
-- **SHARED UNIVERSE** — reuse a recurring fixer character (gets the dialogue lines), bar, or object
-  across episodes; resolve this episode's loops but leave ONE unresolved universe thread (binge/session).
-- **STRUCTURAL VARIATION** — never two consecutive episodes with the same cold-open type / act-2 shape /
-  ending flavor (check produced_topics.json).
-- **PROMISE→PAYOFF LEDGER** — a comment atop content.py lists every open loop + its payoff scene id;
-  all pay off except the one universe thread. Broken promises = the mid-video cliff the algorithm punishes.
-- **Escalation spine**: each level's number bigger; power widens; morality erodes
-  (earnest → exhausted → hardened → hollow). Numbers serve the STORY (woven into POV, never listed).
+| doc | owns | status |
+|---|---|---|
+| `docs/CRAYON_BIBLE.md` | the **measured style spec** — art, camera, editing, typography, sound, packaging | **read-only evidence.** Never edit it to make a script fit. |
+| **this file** | the **writer canon** — what the script says, how it is shaped, what numbers it must hit | edit here when a *writing* rule changes |
 
-## Visuals (art-director)
-- Character: clean **white stick figure** with an expressive face (eyes/brows/mouth, blink,
-  idle eye motion). Face always front (both eyes). Limbs originate from spine (no detachment).
-- **Expression arc** across levels: earnest → exhausted → focused → conflicted → hardened →
-  hollow/smug. Blend expressions mid-scene at pivotal beats.
-- **SCENE VARIETY IS MANDATORY:** no two adjacent scenes share the same background template.
-  Rotate archetypes (desk/laptop · file wall · tower · boardroom · window · dinner · atrium ·
-  street/walk · jet · revolving-door · war-room/globe · empty-chair · lobby). Each scene needs
-  distinct, engaging imagery + motion (camera push-in, rain, screens, steam, car-lights, motes).
-- Props sit IN FRONT of the figure (laptop/document drawn after figure; hands hidden behind) —
-  avoids hand/prop misalignment.
-- Palette: hand-drawn DOODLE (ink #2a2620 on warm paper) but **MOODIER + more cinematic** than bright
-  white — slightly desaturated, dim, lamp-glow warmth, stronger edge vignette (MasterPOVs is muted +
-  atmospheric, never flat-bright). Gold accent (#e8b54b) for money/levels; occasional bold color pop.
-- Director engine (Video2/director.tsx): every scene = multi-shot (wide → medium → CLOSE-UP on the
-  face at the emotional beat → INSERT), money COUNTS UP. Keep this — it's an edge MasterPOVs lacks.
-  Camera is an EXPO-OUT dolly push (per shot type); count-up pops via spring; text entrances are
-  staggered (Phase 3).
-- **Per-level COLOR DRAMATURGY (Phase 4, automatic):** Video2 derives a `levelProgress` (0→1) from the
-  LEVEL labels and grades each scene warm→cool→ember→rich-gold as the climb rises (CSS-only tint +
-  darkening + bloom + saturation lift; NO SVG filters → render-safe). The writer doesn't set colors —
-  just label each level ("LEVEL 0N · …") and the grade escalates itself. Keep warm-paper noir as the
-  baseline (level 1); the world cools, then darkens toward the apex.
-- Overlays: level label top-left; big number bottom-left (the escalation), gold sub-caption. The
-  money card auto-sizes to its widest line (the number or the sub) — keep `sub` to ~20-30 chars or it
-  can widen past a template's figure and bury it (confirmed on `fileWall`/`boardroomNotes`; safer
-  templates for a visible overlay: `deskSilhouette`, `window`, `tower`, `openHouse`). See
-  ops/improvements.json `money-card-width-scales-with-sub-caption-length`.
+Every number below traces to `docs/research/crayon/MEASUREMENTS.md` (7 transcripts, 17,269 words,
+116.3 min) and was **independently re-measured from the raw transcripts on 2026-08-11** for the three
+reference videos cited throughout: `HawmGu7oNrc` (Wolf of Wall Street), `LuEcoqizj0o` (Great
+Depression), `sMH8WchxQR8` (Rockefeller). Re-measurement reproduced the published table to within
+rounding, so the rules in this file genuinely describe the reference, not an idealisation of it.
 
-## Packaging (packager) — see PACKAGING_PLAYBOOK.md + QUALITY_MAX_PLAN.md §2.2 (title ≈50% of CTR,
-   thumbnail ≈50%; target browse/suggested CTR 6–8%+).
-- Title (second-person POV): **`Your Life as a [X] at Every Level`** + a **stakes PARENTHETICAL**
-  ("(Most Die at Level 4)", "(You Won't Survive Level 7)") — parens lift CTR ~15–20%. **40–65 chars**,
-  hook front-loaded in the first ~40. NEVER the generic word "Architect."
-- Description: hook (first 150 chars, second-person) → keyword paragraph → AUTO chapters → a BINGE/next
-  tease ("Watch the whole series — every life, every level") → CTA → hashtags → disclaimer.
-- Thumbnail (MasterPOVs formula): a bold HERO figure (≥40% of frame, ONE focal point) + a provocative
-  caption with the KEY WORD in RED + a hand-drawn **curved arrow** text → figure.
-  - **SYNERGY RULE: thumbnail SHOWS, title TELLS — never the same words.** Title "Spy" → thumbnail
-    keyword is a DIFFERENT tension (BURNED / TRAITOR / LEVEL 9 / DON'T RUN), never "SPY."
-  - **EMOTION is the #1 CTR lever and we have no real faces** → push the doodle expression HARDER than
-    a real face could (expr "shock" = huge eyes/open mouth/sweat = face-of-fear). Up to ~30% CTR.
-  - **Premium doodle finish:** metallic gold pills (`#tgold` gradient, not flat yellow), heroes lifted
-    off the page with a drop-shadow (`#tdrop`), heavy hero outline / figure-ground depth.
-  - ≤3 words; high contrast (reserve saturated red + gold as accent-only against muted paper); rotate
-    the archetype every video (thumbs.tsx: pov/ladder/beforeafter/number/face/question/setting/climb —
-    FAVOR pov/number/ladder/question, climb rare); mobile-readable at 120px.
-  - A/B via YouTube Studio Test & Compare (UI-only; pick meaningfully different formulas, not near-dupes).
+> Every quotation below was copied from those transcript files and re-checked against them. The
+> transcripts are **ASR output**, so proper nouns are mangled in the raw text ("Belelfford" for
+> Belfort, "Terraneian" for Mediterranean) and sentence punctuation is approximate. Names are
+> corrected and sentence breaks lightly normalised in the quotes here; the wording is untouched.
 
-## Engagement — see ENGAGEMENT_RESEARCH.md.  Quality gate — gate.py (HALT on fail, never publish broken).
-## Brand: channel @corelifecycle, bars logo + bars banner, gold accent.
+---
+
+## 0. What survived the swap, and why
+
+These rules were kept because they are **format-independent craft**, and every one of them is visible
+in the reference transcripts:
+
+- **Causality — "but / therefore", never "and then."** Every beat connects by complication or
+  consequence. The reference is built on this: *"Against Clark's judgment, they took on a brilliant
+  chemist… **But** the tension between the partners grew like a cancer."* / *"They thought they had
+  won. **They were wrong.**"*
+- **Specificity over abstraction.** Exact objects, exact numbers, named people. The reference never
+  says "he was frugal"; it says *"ordering a factory to use exactly 39 drops of solder to seal a
+  kerosene tin because 40 was a waste and 38 leaked."*
+- **A recurring motif as a callback engine.** The old canon called this a *sensory anchor*. In the new
+  format it is a **factual through-line** — an object, a phrase, or an epithet re-triggered at every
+  escalation. Rockefeller's episode runs two at once: *"ledger A"* (the boyhood notebook → *"the ledger
+  A mindset"* applied to oil → *"his ledger A obsession"* applied to the world) and the epithet *"the
+  bookkeeper"* (*"By age 30, the bookkeeper had done it"* → *"By 1879, the bookkeeper had finally
+  finished the map"* → *"By the 1890s, the bookkeeper was worth over $900 million"*).
+- **One share-worthy "wait — that's real?" beat.** Shares are weighted far above likes. Reference:
+  *"he posed as a deaf-mute beggar to eavesdrop on farmers"*; *"smuggling cash stuffed envelopes sewn
+  into her bra."*
+- **Anaphora at theme moments.** *"Turned 22 months into a book deal. Turned fraud into fame."*
+- **Sentence-length variation with short punches at peaks** (now with a *lower* target — see §3).
+- **Pattern interrupt every ~30–45s** and **never the same template on two adjacent scenes.**
+- **Promise → payoff ledger** as a comment at the top of `content.py`. An unpaid setup is the
+  mid-video cliff the algorithm punishes, in an explainer exactly as in a story.
+- **Structural variation across consecutive episodes** — check the last ~2 entries in
+  `ops/produced_topics.json` and deliberately differ (cold-open type, act-2 shape, ending flavour).
+- **Silence as the strongest emphasis tool**, spent once, on the biggest reversal.
+- **Quality gate discipline** — `gate.py` HALTs; never publish broken.
+
+These rules were **deleted** because they only existed to serve the POV format:
+
+- Second-person present tense as the frame; the "you…you…you" drone and its imperative break.
+- The **ban on perception filters**. It was a POV rule (filters push the viewer out of the body). In
+  third person the reference uses them freely and well: *"Rockefeller looked at that river and saw
+  money disappearing."* Do not carry the ban over.
+- Body-based dread ("your hands are steady"), the 2–3-senses-per-scene rule, the fictional named
+  mentor/rival, the shared fictional universe and its one unresolved thread, the rank-ladder
+  escalation spine, and the `LEVEL 0N ·` label vocabulary.
+- Anything that invents facts. The subject is **real**; invention is now a defect, not a device.
+
+---
+
+## 1. Format
+
+**Third-person, past-tense explainer about a real subject.** A famous company, person, scandal,
+crisis, or institution. Not a documentary voice — a *storyteller's* voice applied to true events.
+
+- **Runtime 13–21 min.** (All 28 reference videos fall in 10:14–21:00; the seven best sit 13:12–20:16.)
+  `ops/routine.json` currently sets `minMinutes: 11`, so the gate floor is *below* the band — the
+  writer, not the gate, is responsible for clearing 13 min.
+- **3–5 chapters**, each named in the two-part **`Evocative Noun: Plain Explanation`** form:
+  "The Trap: Learning Not to Trust" · "The Mask: How Enron Hid the Truth in Plain Sight" ·
+  "The Day America Fell: Black Tuesday and the Market Collapse".
+- Chapters are a *structural* instruction to the writer and a *packaging* deliverable (they go in the
+  description timestamps). See §8 for what is renderable on screen today.
+
+## 2. Voice and tense
+
+- **Past tense is the spine.** Measured on the three references: past-tense markers outnumber
+  present-tense markers 234:6 (Wolf), 263:12 (Rockefeller), 212:18 (Depression).
+- **Present tense is a licensed device for one act, not the default.** The Great Depression episode
+  runs its "party before the fall" act in present tense — *"Imagine waking up in 1922. The war is
+  over. The mustaches are ridiculous. And the economy, it's vibing."* — then hard-cuts to past for
+  the crash: *"October 29th, 1929. America woke up rich and went to bed broke."* If you use this,
+  use it for a whole act and make the switch land on a date.
+- **Second person is seasoning, measured at 2.6–13.4 "you" per 1000 words** (re-measured: 9.8 Wolf /
+  7.0 Depression / 11.4 Rockefeller). It appears as a direct address inside a general truth —
+  *"You know things are bad when your barber, your butcher, and your dog all start giving stock
+  tips"* / *"If you give a man a lamp, you own his nights"* — never as the frame. A script that reads
+  as "you are the character" has failed the format.
+- **Register varies by subject, deliberately.** Villain biographies (Wolf, Rockefeller) are straight
+  and noirish. Systemic crises (Depression, 2008) are comic and anachronistic —
+  *"Jazz music becomes the Wi-Fi of the 20s"* / *"the financial equivalent of saying, 'Sure, I'll
+  marry you. We've been on two dates.'"* Pick one register per episode and hold it; a biography that
+  cracks jokes about its subject's victims reads as callous.
+- **Complicit first-person plural at the close** — "we", not "they". See §7.
+
+## 3. The numbers a script must hit
+
+| metric | target | measured range (7 refs) |
+|---|---|---|
+| **Pace** | **148.5 WPM** | 139.2–152.9 |
+| Sentence length, mean | **7.5–10.6 words** | same |
+| Sentence length, median | **6–9 words** | same |
+| Sentences under 8 words | **40–59%** | 39.9–58.7% |
+| Explicit numbers | **29–68 per video** (~2–3.5/min) | same |
+| Questions | 3–27 per video | same |
+| "you" per 1000 words | 2.6–13.4 | same |
+| Total words | **~2,000–3,100** for a 13–21 min runtime | 1,870–3,099 |
+
+> **WPM metric definition — this matters and has already burned one work order.**
+> 148.5 WPM is **transcript words ÷ total video minutes**: **runtime-inclusive**, counting pauses,
+> music beats, dialogue and text cards. It is **NOT speech-only WPM**. Speech-only runs roughly
+> 3 WPM higher on the same audio. Anything that re-measures this must compare like for like.
+> `gen_voice_edge.py` now prints **both** at the end of a build — `"~X WPM speech / Y WPM runtime"` —
+> and the runtime figure is the one to compare against 148.5. The synth rate is `RATE = "-13%"`,
+> measured (not assumed) at 149.1 speech / 145.7 runtime.
+
+**How to hit the sentence numbers:** write in fragments. Roughly half of all reference sentences are
+under eight words, and a large share are not grammatical sentences at all — *"No war, no warning."* /
+*"Trust is weakness."* / *"Enter Wall Street."* / *"Scorched earth."* / *"Gone."* If a paragraph
+averages fifteen words a sentence, it is the old canon's rhythm, not this one.
+
+**How to hit the number density:** ~2–3.5 explicit numbers per minute means a number in most scenes.
+Dates, dollar figures, percentages, counts, ages. *"22 of the 26 refineries in Cleveland had
+surrendered"* is worth more than "almost all of them".
+
+## 4. The hook — five steps, first ~30 seconds
+
+Identical structure in all seven autopsied videos. Reproduce it in order.
+
+1. **Shock stat or paradox, one sentence.**
+2. **Escalating consequence fragments.**
+3. **The paradox turn** — usually "But…", sometimes "And when…".
+4. **Thesis naming the subject** — very often the literal words *"This is the story of…"*.
+5. **Hard cut to DATE + PLACE.**
+
+**Worked example — Wolf of Wall Street (`HawmGu7oNrc`), verbatim:**
+
+1. "He lied about $1 stock, made millions, and only served 22 months in jail."
+2. "Then Hollywood turned his crimes into a blockbuster."
+3. "And the wildest part, people still cheer for him."
+4. "This is the story of Jordan Belfort, the man who scammed America and got rich again doing it."
+5. "Bayside, Queens, 1962."
+
+**Worked example — Rockefeller (`sMH8WchxQR8`), verbatim:**
+
+1. "This man controlled 90% of America's oil."
+2. / 3. "And when the government shattered his empire to stop him, he actually became richer."
+4. "This is the story of John D. Rockefeller, the most hated businessman who became the world's first
+   billionaire."
+5. "July 8th, 1839, Richford, New York. A baby was born into poverty."
+
+**Documented variant — Great Depression (`LuEcoqizj0o`).** Steps 1–3 are intact ("It's the Great
+Depression. You woke up rich, then went to bed broke. No war, no warning, just a terrifying crash
+that wiped out $200 billion…"), step 4 is replaced by a **question thesis** ("So, what the hell
+happened?"), and step 5 becomes a **rewind to a year** rather than a date-and-place ("Let's rewind to
+the party before the fall. Imagine waking up in 1922."). Use this variant for a *systemic* subject
+that has no single birthplace. Do not use it for a person.
+
+Note what the hook never contains: no logo, no "in this video", no channel name, no subscribe.
+
+## 5. Body structure
+
+- **Chronological spine**, chaptered. Origin → the mechanism → the peak → the exposure → the
+  reckoning is the reference's default shape for a person; boom → crash → consequence → recovery for
+  a crisis.
+- **Every chapter ends on a forward hook**, and the hook is a *question the next chapter answers*:
+  *"But there was a new problem. When you own 90% of the world, you have a massive target on your
+  back, and that target was about to be painted red."* / *"The crash wasn't the bottom. It was just
+  the beginning. And what waited below — that's where things get dark."*
+- **Explain the mechanism, don't gesture at it.** The format's whole promise is "explained like
+  you're 5". The reference stops and teaches: what a pump and dump *is*, what a margin call *is*,
+  what the three pillars of the South Improvement Company *were* (the rebate, the spy network, the
+  drawback), each named and defined in one short sentence.
+- **One midpoint reversal**, structural not fictional — the moment the subject's own machine turns on
+  them (the leak, the raid, the journalist, Black Tuesday). Set `gap=1.4` on the scene immediately
+  before that line, once per episode, so the sound engine drops to near-silence and the line lands raw.
+- **Analogy is the primary teaching tool** and is allowed to be absurd in the comic register:
+  *"the day the stock market didn't just fall — it performed a flawless 10-meter dive into concrete."*
+- **Accuracy is a hard constraint.** Every date, figure and quote must be verified in
+  `docs/research/<slug>.md` before it enters the script, and anything unverified must be flagged
+  there and then either verified or cut. There is no fictional-composite escape hatch any more.
+
+## 6. Dialogue — now a primary device, not a garnish
+
+The old canon allowed 2–4 audio-only lines per episode. The reference uses **far more**: short
+in-world exchanges, usually two to four lines, rendered as speech bubbles or floating handwritten
+text, dropped in to dramatise a decision rather than narrate it.
+
+> "One lemon ice, please." / "For you, two for one, but only if you tell three friends." / "What are
+> you, 12?" / "16, and I'm going to be rich."
+
+> "Jump, son. I'll catch you." … "Remember, never trust anyone completely, not even me."
+
+> "Everyone, please, your money is completely safe. Okay, not completely."
+
+Rules: **exchanges, not conversations** (2–4 lines, then back to narration); every exchange must
+*replace* narration that would otherwise explain the same beat; period-plausible phrasing; and the
+lines carry characterisation the narrator then declines to spell out. Emit them with the existing
+`dialogue=dict(text=...)` scene field (optional `voice=`, `rate=`); `BEAT_GAP` is 0.8s.
+
+## 7. The ending
+
+**Thematic reflection → a direct quote or a callback to the opening → often a forward tease.**
+Never plot resolution. Never a CTA; the words "subscribe", "like" and "comment" do not appear in
+narration at all.
+
+**Reflection + complicit "we" + quote — Wolf of Wall Street, verbatim close:**
+
+> "He didn't just escape justice, he sold it. Turned 22 months into a book deal. Turned fraud into
+> fame. And maybe the scariest part, **we** applauded. 'I was guilty of being greedy,' he once said,
+> 'but so is everybody else.' Maybe that's why he got away with it. Because deep down, **we** never
+> wanted him punished. **We** wanted to be him."
+
+**Unanswered question + quote — Rockefeller, verbatim close:**
+
+> "Was it guilt? A genuine awakening? Or the final brilliant con of a man who knew that history is
+> written by the winners? We'll never know. What we do know is that on May 23rd, 1937, the machine
+> finally stopped. … As Rockefeller himself once put it, 'I believe the power to make money is a gift
+> from God…'"
+
+**Forward tease — Great Depression, verbatim close:**
+
+> "But as America stood back up, it didn't realize that something else was already on the horizon,
+> something darker, louder, global, and this time the whole world would feel it."
+
+Pick one of the three shapes per episode and vary it against the last two produced.
+
+## 8. Scene requirements — environments, and what actually exists today
+
+The writer emits a `template=` per scene. **Read this section before writing a single one.**
+
+### AVAILABLE TODAY (safe to emit)
+Only the templates catalogued in **`docs/TEMPLATES.md`** exist in the registry
+(`src/scenes.tsx` `TEMPLATES`, packs in `src/stage.tsx`). A `template=` value not in that catalogue
+will not render. Of the catalogue, these documented entries map onto explainer environments and are
+the interim safe set: `deskSilhouette` · `desk` · `deskClose` · `fileWall` · `tower` · `window` ·
+`signing` · `boardroomNotes` · `boardroomHead` · `atrium` · `dinner` · `layoffs` · `revolvingDoor` ·
+`warRoom` · `emptyChair` · `lobby` · `tradingFloor` · `pnlWall` · `courtroom` · `podiumScene` ·
+`streetCorner` · `prisonCell`.
+
+> ⚠ **Caveat, stated plainly:** those templates *render*, but most are still in the old
+> line-art-on-warm-paper style. Only the handful touched by WO-8a–8d are at reference density. An
+> episode built on this interim set is a **script test, not a publishable episode.**
+
+### ASPIRATIONAL — the environment vocabulary to write toward (DOES NOT EXIST YET)
+`docs/research/crayon/TEMPLATE_STRATEGY.md` retired the plan to restyle the 358-template library.
+It is being replaced by a **new set of ~20–30 dense explainer templates**, which **a later work order
+(WO-8f / WO-8g) has not yet built**. Until it does, the following are **environment archetypes in
+plain English, deliberately NOT template identifiers** — they are what a scene should *depict*, and
+they are the reason the environment set is narrow enough to be built properly:
+
+> office / cubicle floor · boardroom · trading floor · bank or institutional exterior · street ·
+> domestic interior · courtroom or hearing · factory / industrial · newspaper & document montage ·
+> broadcast or news frame · crowd or queue · character close-up · chart & diagram ·
+> multi-panel split · full-screen text card
+
+**Do not invent a camelCase name from that list and put it in `template=`.** None of them are
+registered. When WO-8f lands the real set, `docs/TEMPLATES.md` becomes the source of truth for their
+actual names, and this section gets rewritten to point at them.
+
+### Devices built but NOT yet wired to a scene field
+- `src/textcard.tsx` (WO-5) renders narration cards, chapter cards and single-word beats — but
+  **nothing imports it**; `Video2.tsx` has no `TextCard` reference. There is **no `chapter=` scene
+  key today.** The only existing carrier is the legacy `level` field on the first scene of a chapter,
+  which renders as a gold-bar label top-left, **force-uppercased** in the old paper styling
+  (`src/Video2.tsx:140`), and which also drives the chapter-start SFX. Put the **short half** there
+  ("THE MASK") and ship the full two-part name in the description timestamps. Do not emit a field the
+  pipeline will ignore.
+- Bubbles, panels and crowd components (WO-6/WO-7) are on the same footing — check the actual imports
+  in `src/Video2.tsx` before assuming any of them is reachable from `content.py`.
+
+### Still true regardless of which set is live
+Never the same template on two adjacent scenes; rotate the environment every ~30–45s; pick the
+environment the *fact* happened in, not the one that looks good.
+
+## 9. Packaging
+
+**Title — 36–64 characters.** Three formulas, in order of dominance (17 of 28 reference videos use
+the first):
+
+1. **`<Subject> Explained Like You're 5`** — "The Great Depression Explained Like You're 5" (44 chars),
+   "The Wolf of Wall Street Scam Explained Like You're 5" (52).
+2. **`How <Person> Actually <Verb>ed <Thing>`** — "How Jeff Bezos Actually Built Amazon" (36 — exactly
+   on the floor; formula 2 titles run short, so check the count before committing one).
+3. **`The <Superlative> <Noun> That <Surprise>`** — "The $63 BILLION Company That Sold Nothing" (41),
+   "The Man Who Built Singapore in One Generation" (45).
+
+(All counts verified 2026-08-11 against the real titles in `docs/research/crayon/MEASUREMENTS.md`.)
+
+No stakes parenthetical. No "Every Level". No second person in the title.
+
+**Description:** hook in the first 150 chars (third person, the paradox from the hook) → keyword
+paragraph → **chapter timestamps using the exact two-part chapter names** → sources/credits →
+hashtags → disclaimer. No "watch the whole series, every life every level" binge line — that was a
+POV-format artefact.
+
+**Thumbnail:** the full measured spec is `docs/CRAYON_BIBLE.md` §9 — one hero character in full
+colour against a desaturated grey crowd, a single saturated accent, pushed facial expression, and
+either an amber band with black ALL-CAPS text or heavy-outlined white caps. **The archetype rotation
+rule stands**: rotate archetypes and never reuse one from the last 3 produced episodes (2026-08-04
+owner direction). `src/thumbs.tsx` is being rebuilt by WO-11; the *rotation* rule survives that
+rebuild, whatever the archetype names become.
+
+## 10. Visuals and audio
+
+Not specified here — see `docs/CRAYON_BIBLE.md`: §3 camera (locked, no dolly/sway), §4 editing
+(12.5 cuts/min, mean shot 4.79s, ~40% motionless frames), §5 art (flat vector, per-scene colour key),
+§6 signature devices, §7 typography (handwritten italic everywhere), §8 sound (bed ducked 8–15 dB,
+deliberate silent passages, inter-sentence gaps 0.18–1.0s).
+
+What a *writer* needs from those sections: scenes are short and still. Mean shot 4.79s and a locked
+camera mean a scene's narration must be interesting standing still — there is no push-in to carry a
+flat line.
+
+## 11. Build discipline
+
+`python3 build.py` syntax-checks `content.py` + `ops/episode_meta.json`, synthesises VO, runs
+`gate.py`, and does a 1-frame smoke render. It HALTs rather than shipping broken. Read the printed
+`WPM speech / WPM runtime` line every build and compare the **runtime** figure to 145–152.
+
+## Brand
+Channel @corelifecycle. Thumbnail/typography brand rules live in `docs/CRAYON_BIBLE.md` §7 and §9.

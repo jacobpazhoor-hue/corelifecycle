@@ -1,166 +1,282 @@
 {
- "_note": "CoreLifecycle topic queue (refreshed 2026-07-04, research-backed \u2014 see docs/bibles/NEXT_LEVEL_PLAN.md Phase 4). Showrunner pulls the next UNPRODUCED slug top-to-bottom; when exhausted, invent a new one in the same spirit (favor proven-demand drama). Each item has a `format` \u2014 the writer maps it to the right title spine + level-label vocab + thumbnail archetype (see AUTOPILOT_PROMPT step 1/4). Every topic here is chosen because an existing video in the niche PROVES demand (`proof`). Frame crime/violence as cautionary dramatized POV, never how-to. Each needs docs/research/<slug>.md before writing.",
+ "_note": "CoreLifecycle topic queue — REPLACED 2026-08-11 (WO-10) for the format swap. The channel now produces THIRD-PERSON PAST-TENSE EXPLAINERS about REAL subjects (famous companies, business figures, financial scandals, economic crises), not fictional POV rank ladders. Showrunner pulls the next UNPRODUCED slug top-to-bottom; when exhausted, invent a new one in the same subject space. Each item's `format` selects the TITLE FORMULA (see _formats); `title_hint` is already inside the measured 36-64 char band; `environments` are PLAIN-ENGLISH SCENE ARCHETYPES, NOT template identifiers — never put one in a `template=` (see docs/BIBLE.md §8). Every topic needs docs/research/<slug>.md with dates, figures and quotes VERIFIED before writing; unverified detail is cut, not softened. `proof` states measured demand ONLY where it cites a number from docs/research/crayon/MEASUREMENTS.md; everything else is explicitly marked as rationale, not data.",
  "_formats": {
-  "rank": "Your Life as a [X] at Every Level / at Every Rank  \u2014 level labels LEVEL 01\u2026/RANK I\u2026; careers, crime, military, agencies.",
-  "history": "Your Life as Every Rank in [Empire]  \u2014 historical power ladders; level labels by rank or era.",
-  "scenario": "POV: You're a [X]  /  What It's Like to Be a [X]  \u2014 a one-off; level labels are escalating DAYS/DECISIONS/MILLIONS, not job ranks.",
-  "survival": "Could You Survive [X]?  \u2014 level labels are a countdown ladder: HOUR 1 \u00b7 DAY 3 \u00b7 WEEK 2 (question-title CTR machine)."
+  "eli5": "<Subject> Explained Like You're 5 — the dominant formula (17 of the reference channel's 28 videos). Use for a mechanism, a scandal, or a crisis.",
+  "how": "How <Person> Actually <Verb>ed <Thing> — use for a single named person's decisive act. Runs SHORT; count characters against the 36-64 band.",
+  "superlative": "The <Superlative> <Noun> That <Surprise> — use when the paradox is stronger than the subject's name."
  },
+ "_learned": "PERFORMANCE DATA CAVEAT 2026-08-11: ops/analytics.json (33 videos) measures the RETIRED second-person POV-ladder format and says nothing about which explainer subjects work. Recorded for history: under the old format the winning axis was BUILDER ASPIRATION (founder = 410 views, 41% of the channel) and every passive/elite-money ladder flopped (trillionaire = 0, real_estate_mogul = 16, billionaire_heir = 19, investment_banker = 24, hedge_fund_manager = 40). Do NOT carry that guidance into topic selection here — the explainer format has no view data of its own yet. The only measured signal available is the reference channel's own ranking in docs/research/crayon/MEASUREMENTS.md, where FRAUD and CRISIS outrank FOUNDER BIOGRAPHY: Wolf of Wall Street 4.18M > Great Depression 2.68M > 2008 Crisis 2.25M > Rockefeller 1.22M > Bezos 939K > Singapore 896K > Enron 872K. The queue is ordered fraud-and-collapse first to match that.",
+ "_environment_set": "The narrow environment vocabulary the new template set is being built against (docs/research/crayon/TEMPLATE_STRATEGY.md). NOT template names: office / cubicle floor · boardroom · trading floor · bank or institutional exterior · street · domestic interior · courtroom or hearing · factory / industrial · newspaper & document montage · broadcast or news frame · crowd or queue · character close-up · chart & diagram · multi-panel split · full-screen text card",
  "queue": [
   {
-   "slug": "special_forces",
-   "format": "rank",
-   "title_hint": "Your Life as Every Rank in Special Forces (Most Die at Selection)",
-   "proof": "MasterPOVs #1 video \u2014 674K, 14.7x outlier",
-   "why": "recruit -> operator -> team leader -> the command that spends you; elite + lethal"
+   "slug": "theranos",
+   "format": "eli5",
+   "title_hint": "The Theranos Fraud Explained Like You're 5",
+   "proof": "same subject space as the reference channel's Enron episode, 'The $63 BILLION Company That Sold Nothing' (871,542 views, measured 2026-08-11)",
+   "why": "one machine that never worked, a $9B valuation, a criminal conviction; the mechanism (a fake demo running on someone else's analyser) explains in one sentence",
+   "environments": [
+    "office",
+    "boardroom",
+    "courtroom or hearing",
+    "broadcast or news frame",
+    "newspaper & document montage",
+    "character close-up"
+   ]
   },
   {
-   "slug": "mexican_cartel",
-   "format": "rank",
-   "title_hint": "Your Life in a Cartel at Every Rank (No Way Out)",
-   "proof": "The Life Outline 6.1M; Life By Rank + MasterPOVs both ran it",
-   "why": "lookout -> sicario -> plaza boss -> kingpin; cautionary POV, highest views/video in niche"
+   "slug": "madoff",
+   "format": "eli5",
+   "title_hint": "The Madoff Ponzi Scheme Explained Like You're 5",
+   "proof": "no measured demand data; subject-space match to the reference's fraud biographies",
+   "why": "the largest Ponzi scheme in history ($65B of fictional statements); a Ponzi is the single most 'explain like you're 5'-able mechanism in finance",
+   "environments": [
+    "office",
+    "domestic interior",
+    "courtroom or hearing",
+    "newspaper & document montage",
+    "crowd or queue",
+    "chart & diagram"
+   ]
   },
   {
-   "slug": "trillionaire",
-   "format": "scenario",
-   "title_hint": "POV: You're the World's First Trillionaire",
-   "proof": "Hypothetically 2.1M",
-   "why": "escalating wealth fantasy by MILLIONS/BILLIONS, not job ranks; widens topic space"
+   "slug": "lehman_brothers",
+   "format": "superlative",
+   "title_hint": "The 158-Year-Old Bank That Died in a Weekend",
+   "proof": "the reference's 2008 Financial Crisis episode measured 2,247,853 views — this is the same crisis told through one firm",
+   "why": "158-year-old bank, 25,000 employees, gone in a weekend; the boxes-on-the-pavement image is the whole story in one frame",
+   "environments": [
+    "trading floor",
+    "boardroom",
+    "bank or institutional exterior",
+    "street",
+    "broadcast or news frame",
+    "crowd or queue"
+   ]
   },
   {
-   "slug": "could_you_survive_ocean",
-   "format": "survival",
-   "title_hint": "Could You Survive Alone in the Middle of the Ocean?",
-   "proof": "Nick Kratka 7.7M; Survive History 334-419K/video",
-   "why": "HOUR 1 -> DAY 3 -> WEEK 2 threat ladder; question-title CTR machine"
+   "slug": "ftx",
+   "format": "how",
+   "title_hint": "How Sam Bankman-Fried Actually Lost $8 Billion",
+   "proof": "no measured demand data; the modern-scandal end of the reference's subject space",
+   "why": "a customer-funds hole explained with two bank accounts and one arrow; a recent subject the back catalogue has none of",
+   "environments": [
+    "office",
+    "courtroom or hearing",
+    "broadcast or news frame",
+    "chart & diagram",
+    "character close-up",
+    "multi-panel split"
+   ]
   },
   {
-   "slug": "hitman",
-   "format": "rank",
-   "title_hint": "Your Life as a Hitman at Every Level (You Don't Retire)",
-   "proof": "MasterPOVs 'Every Level of a Hitman' 73K + proven format",
-   "why": "first contract -> cleaner -> the handler who owns you; cautionary"
+   "slug": "wework",
+   "format": "superlative",
+   "title_hint": "The Office Company That Burned $47 Billion",
+   "proof": "no measured demand data; adjacent to the reference's company-collapse episodes",
+   "why": "'a community-adjusted EBITDA' is a joke that explains itself; the S-1 is the murder weapon and it is a document you can put on screen",
+   "environments": [
+    "office",
+    "boardroom",
+    "newspaper & document montage",
+    "street",
+    "chart & diagram",
+    "character close-up"
+   ]
   },
   {
-   "slug": "samurai",
-   "format": "history",
-   "title_hint": "Your Life as a Samurai at Every Rank (Honor Kills You)",
-   "proof": "Life By Rank 'Every Samurai Rank'",
-   "why": "ashigaru -> samurai -> daimyo -> shogun; history + honor + violence"
+   "slug": "volkswagen_dieselgate",
+   "format": "eli5",
+   "title_hint": "The Volkswagen Emissions Scandal Explained",
+   "proof": "no measured demand data; corporate-fraud subject space",
+   "why": "11 million cars carrying software that cheated a test; a factory-and-courtroom episode with a mechanism a child can follow",
+   "environments": [
+    "factory / industrial",
+    "boardroom",
+    "courtroom or hearing",
+    "street",
+    "newspaper & document montage",
+    "chart & diagram"
+   ]
   },
   {
-   "slug": "black_market_surgeon",
-   "format": "scenario",
-   "title_hint": "What It's Like to Be a Black Market Surgeon",
-   "proof": "Hypothetically 5.3M (their #1)",
-   "why": "escalating cases/nights, moral rot; one-off scenario, not a rank ladder"
+   "slug": "blockbuster",
+   "format": "how",
+   "title_hint": "How Netflix Actually Killed Blockbuster",
+   "proof": "no measured demand data; the reference's 'How <Person> Actually <Verb>ed <Thing>' formula proved out on Bezos/Amazon (939,239 views)",
+   "why": "a $50 late fee, a rejected $50M offer, 9,000 stores to one; the reversal is the entire hook",
+   "environments": [
+    "street",
+    "boardroom",
+    "office",
+    "domestic interior",
+    "chart & diagram",
+    "multi-panel split"
+   ]
   },
   {
-   "slug": "north_korea",
-   "format": "rank",
-   "title_hint": "Your Life at Every Rank in North Korea (You Can't Leave)",
-   "proof": "MasterPOVs 'North Korea' 211K",
-   "why": "citizen -> party -> inner circle -> the family above; dread + curiosity"
+   "slug": "ford_five_dollar_day",
+   "format": "how",
+   "title_hint": "How Henry Ford Actually Doubled Every Wage",
+   "proof": "no measured demand data; the reference's industrial-founder space (Rockefeller, 1,219,596 views)",
+   "why": "the $5 day looked like generosity and was arithmetic — turnover was 370% a year; the factory is the set for the whole episode",
+   "environments": [
+    "factory / industrial",
+    "office",
+    "street",
+    "crowd or queue",
+    "newspaper & document montage",
+    "chart & diagram"
+   ]
   },
   {
-   "slug": "startup_unicorn",
-   "format": "rank",
-   "title_hint": "Every Level of a Startup \u2014 From Garage to $1B Unicorn",
-   "proof": "OUR OWN #1 video: 'Every Level of a Founder \u2014 From First Idea to IPO' = 410 views = 41% of ALL channel views (next best: mafia 141). Internal data outranks niche proof.",
-   "why": "garage -> seed -> Series A -> Series C -> unicorn -> IPO. This is the COMPANY's ladder, not the person's, so it does not repeat the produced 'founder' topic. Aspirational + concrete money rungs + a known destination = the exact shape that made founder outperform."
+   "slug": "carnegie",
+   "format": "eli5",
+   "title_hint": "Andrew Carnegie's Steel Empire Explained",
+   "proof": "no measured demand data; direct peer of the reference's Rockefeller episode (1,219,596 views)",
+   "why": "vertical integration told a second way, plus Homestead — the episode has a real moral reckoning built in",
+   "environments": [
+    "factory / industrial",
+    "boardroom",
+    "street",
+    "crowd or queue",
+    "bank or institutional exterior",
+    "character close-up"
+   ]
   },
   {
-   "slug": "zombie_apocalypse",
-   "format": "survival",
-   "title_hint": "Could You Survive Day 1 of a Zombie Apocalypse?",
-   "proof": "Hypothetically 'Day 1 of the Zombie Apocalypse' 770K",
-   "why": "HOUR 0 -> DAY 1 -> WEEK 1 -> MONTH 1 threat ladder"
+   "slug": "jp_morgan_1907",
+   "format": "superlative",
+   "title_hint": "The Banker Who Personally Bailed Out America",
+   "proof": "no measured demand data; the reference's crisis space (Great Depression, 2,679,505 views)",
+   "why": "one man locked the bankers in his library until they funded the rescue; it is a single-room climax",
+   "environments": [
+    "boardroom",
+    "bank or institutional exterior",
+    "domestic interior",
+    "crowd or queue",
+    "newspaper & document montage",
+    "character close-up"
+   ]
   },
   {
-   "slug": "venture_capitalist",
-   "format": "rank",
-   "title_hint": "Your Life as a Venture Capitalist at Every Level (One Bet Pays for All)",
-   "proof": "money+startup cluster; 'founder' is our #1 video (414 views) \u2014 the money behind founders",
-   "why": "analyst -> partner -> the fund that owns your name; one 100x bet carries a decade of losses"
+   "slug": "tulip_mania",
+   "format": "eli5",
+   "title_hint": "The Tulip Bubble Explained Like You're 5",
+   "proof": "no measured demand data; the reference's bubble/crisis space",
+   "why": "the original bubble, and the cleanest possible teaching case: a flower priced like a house",
+   "environments": [
+    "street",
+    "crowd or queue",
+    "domestic interior",
+    "chart & diagram",
+    "newspaper & document montage",
+    "multi-panel split"
+   ]
   },
   {
-   "slug": "crypto_founder",
-   "format": "scenario",
-   "title_hint": "POV: You Found a Crypto Startup (Billion or Zero)",
-   "proof": "startup/money; timely wealth-fantasy + collapse arc",
-   "why": "token launch -> paper billions -> the exit that's a trap; escalating money+risk one-off"
+   "slug": "weimar_hyperinflation",
+   "format": "eli5",
+   "title_hint": "German Hyperinflation Explained Like You're 5",
+   "proof": "no measured demand data; the reference's economic-crisis space",
+   "why": "a wheelbarrow of cash for bread; every abstract monetary idea has a concrete street-level image",
+   "environments": [
+    "street",
+    "crowd or queue",
+    "domestic interior",
+    "factory / industrial",
+    "newspaper & document montage",
+    "chart & diagram"
+   ]
   },
   {
-   "slug": "self_made_billionaire",
-   "format": "rank",
-   "title_hint": "Your Life From $0 to Billionaire at Every Level (What Each Zero Costs)",
-   "proof": "pure money-climb aspiration; top-performer theme (founder/trillionaire)",
-   "why": "broke -> first million -> unicorn -> the price every zero adds; aspiration + cost"
+   "slug": "gamestop_squeeze",
+   "format": "eli5",
+   "title_hint": "The GameStop Short Squeeze Explained Like You're 5",
+   "proof": "no measured demand data; modern-market subject space",
+   "why": "a short squeeze is genuinely hard to explain and therefore perfect for the format; crowd vs trading floor is a built-in visual contrast",
+   "environments": [
+    "trading floor",
+    "domestic interior",
+    "crowd or queue",
+    "broadcast or news frame",
+    "chart & diagram",
+    "multi-panel split"
+   ]
   },
   {
-   "slug": "lottery_winner",
-   "format": "scenario",
-   "title_hint": "POV: You Win the Lottery (Every Level of the Money)",
-   "proof": "Master POV lottery/wealth top-video cluster",
-   "why": "escalating windfall/decisions; wealth fantasy one-off"
+   "slug": "black_monday_1987",
+   "format": "superlative",
+   "title_hint": "The Day the Market Fell 22% in One Session",
+   "proof": "no measured demand data; crisis space, and the reference's Wolf episode (4,180,864 views) already uses Black Monday as a beat",
+   "why": "the largest one-day percentage drop ever, caused partly by the software meant to prevent it",
+   "environments": [
+    "trading floor",
+    "broadcast or news frame",
+    "office",
+    "street",
+    "chart & diagram",
+    "character close-up"
+   ]
   },
   {
-   "slug": "yakuza",
-   "format": "rank",
-   "title_hint": "Your Life in the Yakuza at Every Rank (You Owe a Finger)",
-   "proof": "MasterPOVs catalog; crime-ladder demand",
-   "why": "kobun -> lieutenant -> oyabun -> the syndicate; ritual + cost"
+   "slug": "de_beers",
+   "format": "how",
+   "title_hint": "How De Beers Actually Invented the Engagement Ring",
+   "proof": "no measured demand data; the reference's 'invented demand' territory",
+   "why": "'A Diamond Is Forever' — a supply monopoly plus one ad line manufactured a tradition; newspaper montage is the natural set",
+   "environments": [
+    "boardroom",
+    "newspaper & document montage",
+    "street",
+    "domestic interior",
+    "factory / industrial",
+    "broadcast or news frame"
+   ]
   },
   {
-   "slug": "mongol_empire",
-   "format": "history",
-   "title_hint": "Your Life as Every Rank in the Mongol Empire",
-   "proof": "MasterPOVs history outliers (Aztec 53K vs ~10K baseline); Sleepless Historian 702K",
-   "why": "herder -> warrior -> noyan -> khan; the largest land empire, huge scale"
+   "slug": "ray_kroc",
+   "format": "how",
+   "title_hint": "How Ray Kroc Actually Took Over McDonald's",
+   "proof": "no measured demand data; peer of the reference's founder biographies",
+   "why": "the brothers invented it and the salesman took it; the real lever was buying the land, not the burgers",
+   "environments": [
+    "street",
+    "office",
+    "boardroom",
+    "courtroom or hearing",
+    "factory / industrial",
+    "character close-up"
+   ]
   },
   {
-   "slug": "fbi_undercover",
-   "format": "rank",
-   "title_hint": "Your Life as an Undercover Agent at Every Level (You Forget Who You Are)",
-   "proof": "MasterPOVs 'Undercover Agent' 42K + agency-ladder demand",
-   "why": "recruit -> deep cover -> handler -> the bureau that burns you"
+   "slug": "purdue_pharma",
+   "format": "superlative",
+   "title_hint": "The Family That Sold America a Painkiller",
+   "proof": "no measured demand data; the reference's corporate-reckoning space",
+   "why": "a marketing claim built on one sentence of a letter to the editor; boardroom-to-courtroom with a documented paper trail",
+   "environments": [
+    "boardroom",
+    "domestic interior",
+    "courtroom or hearing",
+    "newspaper & document montage",
+    "broadcast or news frame",
+    "crowd or queue"
+   ]
   },
   {
-   "slug": "gladiator",
-   "format": "history",
-   "title_hint": "Your Life as a Gladiator at Every Level (Survive to Level 7)",
-   "proof": "Rome + survival-stakes demand (Roman POV outliers)",
-   "why": "novice -> champion -> free man -> the lanista above; survival stakes"
-  },
-  {
-   "slug": "bratva",
-   "format": "rank",
-   "title_hint": "Your Life in the Russian Bratva at Every Rank",
-   "proof": "The Life Outline Russian Bratva 621K",
-   "why": "prospect -> soldier -> avtoritet -> pakhan; prison-code crime ladder"
-  },
-  {
-   "slug": "astronaut",
-   "format": "rank",
-   "title_hint": "Your Life as an Astronaut at Every Level (You Leave Earth)",
-   "proof": "MasterPOVs 'You Leave Earth' astronaut",
-   "why": "candidate -> specialist -> commander -> the agency above; aspirational + danger"
-  },
-  {
-   "slug": "ottoman_empire",
-   "format": "history",
-   "title_hint": "Your Life as Every Rank in the Ottoman Empire",
-   "proof": "MasterPOVs runs Ottoman/empires; history-POV demand",
-   "why": "janissary -> pasha -> vizier -> sultan; harem + power intrigue"
-  },
-  {
-   "slug": "pirate",
-   "format": "rank",
-   "title_hint": "Your Life as a Pirate at Every Rank (The Golden Age Ends Badly)",
-   "proof": "Somali-pirate + golden-age pirate POV demand",
-   "why": "deckhand -> first mate -> captain -> pirate lord; adventure + danger"
+   "slug": "victor_lustig",
+   "format": "superlative",
+   "title_hint": "The Con Man Who Sold the Eiffel Tower Twice",
+   "proof": "no measured demand data; peer of the reference's Wolf of Wall Street con-artist biography (4,180,864 views, the channel's #1)",
+   "why": "a forged letterhead, a rented limousine, and a mark too embarrassed to call the police; pure street-and-office staging",
+   "environments": [
+    "street",
+    "office",
+    "domestic interior",
+    "newspaper & document montage",
+    "courtroom or hearing",
+    "character close-up"
+   ]
   }
- ],
- "_learned": "PERFORMANCE DATA 2026-07-19 (ops/analytics.json, 33 videos): the winning axis is BUILDER ASPIRATION, not wealth. founder=410 views (41% of channel). But every PASSIVE/ELITE money topic flopped: trillionaire=0, real_estate_mogul=16, billionaire_heir=19, investment_banker=24, hedge_fund_manager=40. Crime is the #2 lane (mob_boss=141, black_market_surgeon=86). PREFER topics the viewer can imagine BECOMING, with concrete money rungs and a known destination. AVOID inherited/passive wealth and elite-finance job ladders \u2014 five tested, all flopped."
+ ]
 }
