@@ -5,7 +5,7 @@ import {FACES} from './faces';
 import * as A from './actions';
 import {blinkOn, pulse, stepIndex} from './anim';
 import {keyedTemplates, useSceneColors} from './stage';
-import {INK, PAPER_WHITE, STROKE, STROKE_THIN, TONE_MAX_STEP, shade} from './crayonStyle';
+import {INK, MATERIAL, PAPER_WHITE, STROKE, STROKE_THIN, TONE_MAX_STEP, shade} from './crayonStyle';
 import {
   SlabFloor, UnitWall, RibbedPanel, BuildingBand, BoxStack, CaseStack, Cone,
   CrowdRow, CrowdHeads, Fence, useSceneTones,
@@ -140,6 +140,19 @@ const Dentils: React.FC<{x0: number; x1: number; y: number; n: number; h?: numbe
 //   3. NO ERA-MARKED PROP MAY REAPPEAR ELSEWHERE. A substitution that quietly re-adds a screen on
 //      another wall is cosmetic, not genuine; the point of the flag is that the finished frame
 //      contains no dated machine at all.
+//
+// ...AND A FOURTH, ADDED BY WO-31 BECAUSE THE FIRST THREE WERE NOT ENOUGH:
+//   4. JUDGE IT ON THE RENDERED FRAME, NEVER ON THE JSX. WO-27 scored ten rooms PERIOD-CLEAN by
+//      reading this file. COMPARISON rendered them and four failed. The three rules above are all
+//      about SHAPE, and every one of them was kept — what betrayed the century was COLOUR (a
+//      substituted prop inherited the room's tone ladder, so a "timber" frame was blue in a
+//      blue-keyed room; `crayonStyle.MATERIAL` is the fix and carries the argument) and, in this
+//      template's own case, PROPS THIS FILE DREW THAT NOBODY LOOKED AT. `factoryFloor` had a period
+//      branch for its beacon, its chevrons and its cones, and none at all for the three MACHINES
+//      that dominate it, the extractor fan, the roller shutter, the lit fascia sign, the service
+//      pipework or the four steel drums — the largest objects in the room, in other words. They are
+//      all substituted now (line shaft and belts, wall sheave, plank doors, painted name board,
+//      coopered casks) and the room was re-rendered and looked at before that sentence was written.
 // ===========================================================================
 
 /**
@@ -574,15 +587,22 @@ const Boardroom: React.FC = () => {
           Chairs first, then the far-side figures over them, then the table slab over their laps:
           in the first render the chairs were drawn last and every far-side director had a chair
           back floating across his chest. */}
+      {/* PERIOD (WO-31): the explicit `fill` is what stopped `Chair`'s own period substitution from
+          landing here — a caller naming a colour wins, by design, so six turned wooden chairs were
+          being painted the room's structural grey. Dropped in period so the chair takes its oak. */}
       {[430, 640, 850, 1060, 1270, 1480].map((cx, i) => (
-        <Chair key={i} x={cx} y={890} s={0.62} facing={1} fill={tn.deep} />
+        <Chair key={i} x={cx} y={890} s={0.62} facing={1} fill={period ? undefined : tn.deep} />
       ))}
       <SeatedRow y={834} x0={470} x1={1520} n={6} scale={0.86} seed={13} view="front" />
       {/* the slab: a long boardroom table, near edge wider than the far edge */}
+      {/* PERIOD: the slab and its edge are OAK. A board table is the largest single object in this
+          room — ~11% of the frame — so it is also the biggest single carrier of the room's hue, and
+          a pale blue table is the thing that makes the rest of the substitutions look like a tinted
+          modern room rather than an 1844 one. */}
       <path d={`M 210 ${BOARD_TABLE} L 1712 ${BOARD_TABLE} L 1856 ${BOARD_TABLE + 88} L 66 ${BOARD_TABLE + 88} Z`}
-        fill={tn.card} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+        fill={period ? MATERIAL.timber : tn.card} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
       <path d={`M 66 ${BOARD_TABLE + 88} L 1856 ${BOARD_TABLE + 88} L 1856 ${BOARD_TABLE + 122} L 66 ${BOARD_TABLE + 122} Z`}
-        fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+        fill={period ? MATERIAL.oak : shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
       <line x1={228} y1={BOARD_TABLE + 40} x2={1700} y2={BOARD_TABLE + 40} stroke={INK} strokeWidth={STROKE_THIN * 0.6} opacity={0.35} />
       {/* what is ON the table: folders, glasses, a carafe, a laptop, notepads */}
       {[300, 520, 740, 960, 1180, 1400, 1620].map((px, i) => (
@@ -601,7 +621,7 @@ const Boardroom: React.FC = () => {
         expr={FACES.hardened} pal={LIGHT} frame={f} idle="gesture" />
       <SeatedRow y={1054} x0={330} x1={1180} n={4} scale={1.12} seed={23} view="back" />
       {[300, 590, 880, 1170].map((cx, i) => (
-        <Chair key={i} x={cx} y={1096} s={1.16} facing={1} fill={shade(tn.body, -2)} />
+        <Chair key={i} x={cx} y={1096} s={1.16} facing={1} fill={period ? undefined : shade(tn.body, -2)} />
       ))}
     </Frame>
   );
@@ -661,10 +681,24 @@ const QuoteBoard: React.FC<{x: number; y: number; w: number; h: number; cols: nu
     }
     return (
       <g>
-        <rect x={x - 18} y={y - 18} width={w + 36} height={h + 36} fill={shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE} />
-        {/* the timber frame the slate is set into, and the chalk rail under it */}
-        <rect x={x - 18} y={y - 18} width={w + 36} height={16} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
-        <rect x={x - 18} y={y + h + 2} width={w + 36} height={16} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
+        {/* WO-31. The slate and its frame took `tn.deep` and `tn.card` — the ROOM's darkest structural
+            grey and the room's pale material — so in `exchangeFloor`, which is blue-keyed, this drew
+            a near-black rectangle with a BLUE band across the top of it. That is a lit electronic
+            quote board, drawn exactly, which is what COMPARISON reported: "the chalked slate still
+            reads as a dark electronic quote board". Slate is slate and the frame is oak, in every
+            room; and the frame is now a full SURROUND with stiles, because a band across the top of a
+            dark rectangle is a bezel and a surround is a picture frame. */}
+        <rect x={x - 18} y={y - 18} width={w + 36} height={h + 36} fill={MATERIAL.slate} stroke={INK} strokeWidth={STROKE} />
+        <rect x={x - 18} y={y - 18} width={w + 36} height={16} fill={MATERIAL.oak} stroke={INK} strokeWidth={STROKE_THIN} />
+        <rect x={x - 18} y={y + h + 2} width={w + 36} height={16} fill={MATERIAL.oak} stroke={INK} strokeWidth={STROKE_THIN} />
+        <rect x={x - 18} y={y - 18} width={16} height={h + 36} fill={MATERIAL.oak} stroke={INK} strokeWidth={STROKE_THIN} />
+        <rect x={x + w + 2} y={y - 18} width={16} height={h + 36} fill={MATERIAL.oak} stroke={INK} strokeWidth={STROKE_THIN} />
+        {/* the chalk rail: a projecting oak ledge with sticks of chalk lying on it */}
+        <rect x={x - 26} y={y + h + 18} width={w + 52} height={12} fill={shade(MATERIAL.oak, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+        {Array.from({length: 6}, (_, i) => (
+          <rect key={'ch' + i} x={x + 60 + i * (w / 6)} y={y + h + 12} width={38} height={7} rx={3}
+            fill={PAPER_WHITE} stroke={INK} strokeWidth={2} />
+        ))}
         {cells}
         {Array.from({length: rows - 1}, (_, i) => (
           <line key={'h' + i} x1={x - 12} y1={y + (i + 1) * ch - 2} x2={x + w + 12} y2={y + (i + 1) * ch - 2}
@@ -2009,7 +2043,21 @@ const Machine: React.FC<{
 }> = ({x, y, w, h, seed, spin = false, f = 0}) => {
   const c = useSceneColors();
   const tn = useSceneTones();
-  const body = shade(tn.body, (seed % 2) - 1);
+  // PERIOD (WO-31). COMPARISON's open defect 1: "machines keep circular DIAL GAUGES and LIT
+  // PUSH-BUTTON PANELS" under 1844 narration. WO-27's flag never reached this component at all — it
+  // is bespoke to this template, so the sweep that gave `Monitor`, `Chair` and `DeskPhone` a period
+  // form went straight past the largest object in the room, three times over.
+  //
+  // The substitution, at the same footprint, is the one QA specified: the control panel becomes a
+  // CAST-IRON NAMEPLATE with a single BRASS pressure dial beside it, and the row of lit buttons
+  // becomes the plate's bolt heads. A mill engine had exactly one instrument on it. The riveted
+  // casing, the hopper, the stack and the flywheel are already correct for 1844 and are untouched —
+  // but their COLOUR is not: `tn.body` is the room's committed hue, so a "riveted iron casing" was
+  // whatever colour the key said, which is the same tone-inheritance defect `MATERIAL` exists to end.
+  const period = usePeriod();
+  const body = period
+    ? shade(MATERIAL.iron, (seed % 2))
+    : shade(tn.body, (seed % 2) - 1);
   const wheelR = Math.min(w, h) * 0.2;
   const wx = x + w * 0.82, wy = y - h * 0.36;
   return (
@@ -2036,23 +2084,48 @@ const Machine: React.FC<{
         fill={shade(body, 1)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
       <rect x={x + w * 0.72} y={y - h - 120} width={30} height={120} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
       <rect x={x + w * 0.68} y={y - h - 138} width={46} height={22} rx={6} fill={shade(tn.deep, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
-      {/* control panel: a lighter face carrying dials, a readout and a row of buttons */}
-      <rect x={x + w * 0.08} y={y - h * 0.78} width={w * 0.44} height={h * 0.34} fill={shade(tn.card, -1)}
-        stroke={INK} strokeWidth={STROKE_THIN} />
-      {Array.from({length: 3}, (_, i) => (
-        <g key={i}>
-          <circle cx={x + w * (0.15 + i * 0.13)} cy={y - h * 0.66} r={h * 0.052} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
-          <line x1={x + w * (0.15 + i * 0.13)} y1={y - h * 0.66}
-            x2={x + w * (0.15 + i * 0.13) + Math.cos(seed + i * 2) * h * 0.036}
-            y2={y - h * 0.66 + Math.sin(seed + i * 2) * h * 0.036} stroke={INK} strokeWidth={2.6} strokeLinecap="round" />
+      {/* control panel: a lighter face carrying dials, a readout and a row of buttons — or, in
+          period, a bolted maker's plate with ONE brass dial beside it */}
+      {period ? (
+        <g>
+          <rect x={x + w * 0.08} y={y - h * 0.78} width={w * 0.44} height={h * 0.34} fill={shade(MATERIAL.iron, -1)}
+            stroke={INK} strokeWidth={STROKE_THIN} />
+          {/* the maker's plate: raised timber-framed brass with two ruled lines of engraving on it */}
+          <rect x={x + w * 0.12} y={y - h * 0.72} width={w * 0.24} height={h * 0.2} fill={MATERIAL.brass}
+            stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+          <TextLines x={x + w * 0.14} y={y - h * 0.68} w={w * 0.2} n={2} gap={h * 0.06} th={4} seed={seed * 3} opacity={0.75} />
+          {/* its bolt heads, where the lit push-buttons were — same count, same rhythm, no light */}
+          {Array.from({length: 5}, (_, i) => (
+            <circle key={'v' + i} cx={x + w * (0.125 + i * 0.075)} cy={y - h * 0.45} r={h * 0.018}
+              fill={shade(MATERIAL.iron, 1)} stroke={INK} strokeWidth={2.2} />
+          ))}
+          {/* the one instrument: a brass-bezelled pressure gauge, needle at rest */}
+          <circle cx={x + w * 0.44} cy={y - h * 0.6} r={h * 0.082} fill={MATERIAL.brass} stroke={INK} strokeWidth={STROKE_THIN} />
+          <circle cx={x + w * 0.44} cy={y - h * 0.6} r={h * 0.058} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+          <line x1={x + w * 0.44} y1={y - h * 0.6}
+            x2={x + w * 0.44 + Math.cos(seed) * h * 0.042}
+            y2={y - h * 0.6 + Math.sin(seed) * h * 0.042} stroke={INK} strokeWidth={2.6} strokeLinecap="round" />
         </g>
-      ))}
-      <rect x={x + w * 0.11} y={y - h * 0.55} width={w * 0.38} height={h * 0.1} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
-      <TextLines x={x + w * 0.13} y={y - h * 0.52} w={w * 0.32} n={2} gap={h * 0.04} th={4} seed={seed * 3} opacity={0.7} />
-      {Array.from({length: 5}, (_, i) => (
-        <rect key={'b' + i} x={x + w * (0.11 + i * 0.08)} y={y - h * 0.42} width={w * 0.05} height={h * 0.05}
-          rx={4} fill={i === 2 ? c.accent : shade(tn.body, 1)} stroke={INK} strokeWidth={2.2} />
-      ))}
+      ) : (
+        <g>
+          <rect x={x + w * 0.08} y={y - h * 0.78} width={w * 0.44} height={h * 0.34} fill={shade(tn.card, -1)}
+            stroke={INK} strokeWidth={STROKE_THIN} />
+          {Array.from({length: 3}, (_, i) => (
+            <g key={i}>
+              <circle cx={x + w * (0.15 + i * 0.13)} cy={y - h * 0.66} r={h * 0.052} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+              <line x1={x + w * (0.15 + i * 0.13)} y1={y - h * 0.66}
+                x2={x + w * (0.15 + i * 0.13) + Math.cos(seed + i * 2) * h * 0.036}
+                y2={y - h * 0.66 + Math.sin(seed + i * 2) * h * 0.036} stroke={INK} strokeWidth={2.6} strokeLinecap="round" />
+            </g>
+          ))}
+          <rect x={x + w * 0.11} y={y - h * 0.55} width={w * 0.38} height={h * 0.1} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          <TextLines x={x + w * 0.13} y={y - h * 0.52} w={w * 0.32} n={2} gap={h * 0.04} th={4} seed={seed * 3} opacity={0.7} />
+          {Array.from({length: 5}, (_, i) => (
+            <rect key={'b' + i} x={x + w * (0.11 + i * 0.08)} y={y - h * 0.42} width={w * 0.05} height={h * 0.05}
+              rx={4} fill={i === 2 ? c.accent : shade(tn.body, 1)} stroke={INK} strokeWidth={2.2} />
+          ))}
+        </g>
+      )}
       {/* access hatch and its ribs, low on the body */}
       <RibbedPanel x={x + w * 0.1} y={y - h * 0.3} w={w * 0.5} h={h * 0.22} ribs={5} fill={shade(body, -1)} />
       {/* the flywheel. `spin` turns it in place — a rotate about its own centre, so it can never
@@ -2126,15 +2199,51 @@ const FactoryFloor: React.FC = () => {
       </g>
       <PipeRun x0={0} x1={1920} y={190} n={3} gap={34} th={26} flanges={11} />
       <PipeRun x0={196} x1={470} y={1494} n={2} gap={40} th={24} flanges={4} dir="v" />
-      {/* the shutter's ribs run VERTICALLY. Drawn `dir="h"` this panel measured 98.7% flat — the
-          emptiest cell in the template — because horizontal ribs never break a row. */}
-      <RibbedPanel x={716} y={330} w={470} h={334} ribs={21} dir="v" fill={shade(tn.body, -1)} />
-      <rect x={700} y={306} width={502} height={32} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
-      <SerifWords x={744} y={314} w={410} h={18} words={3} seed={9} fill={c.accent} serif={false} />
-      {/* a wall-mounted control cabinet, a pegboard of tools, an extract fan and the plant clock */}
-      <rect x={1244} y={520} width={94} height={144} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE} />
+      {/* THE LOADING BAY (WO-31). Modern: a roller shutter under a lit fascia sign — COMPARISON's
+          "a roller shutter with a lit sign strip above it", two of the four things that betrayed the
+          century here. PERIOD: the same 470x334 opening becomes a pair of PLANK DOORS on strap
+          hinges, and the fascia becomes a painted timber name board, its lettering in ink rather than
+          in the accent, because a sign that GLOWS is the whole tell. The opening keeps its width, its
+          vertical articulation and its edge count — the plank joints replace the shutter ribs
+          one for one, so the panel's flat fill is unchanged. */}
+      {period ? (
+        <g>
+          <rect x={716} y={330} width={470} height={334} fill={MATERIAL.timber} stroke={INK} strokeWidth={STROKE} />
+          {Array.from({length: 10}, (_, i) => (
+            <line key={'pl' + i} x1={716 + (470 * (i + 1)) / 10} y1={330} x2={716 + (470 * (i + 1)) / 10} y2={664}
+              stroke={INK} strokeWidth={STROKE_THIN * 0.7} opacity={0.6} />
+          ))}
+          {/* the meeting stile down the centre, and a ledge-and-brace pair of straps each side */}
+          <rect x={944} y={330} width={14} height={334} fill={shade(MATERIAL.timber, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          {[0, 1].map((k) => (
+            <g key={'st' + k}>
+              {[398, 596].map((sy) => (
+                <rect key={sy} x={k ? 958 : 716} y={sy} width={228} height={20}
+                  fill={MATERIAL.iron} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+              ))}
+            </g>
+          ))}
+          <rect x={700} y={296} width={502} height={42} fill={MATERIAL.oak} stroke={INK} strokeWidth={STROKE_THIN} />
+          <SerifWords x={744} y={306} w={410} h={22} words={3} seed={9} fill={INK} serif />
+        </g>
+      ) : (
+        <g>
+          {/* the shutter's ribs run VERTICALLY. Drawn `dir="h"` this panel measured 98.7% flat — the
+              emptiest cell in the template — because horizontal ribs never break a row. */}
+          <RibbedPanel x={716} y={330} w={470} h={334} ribs={21} dir="v" fill={shade(tn.body, -1)} />
+          <rect x={700} y={306} width={502} height={32} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
+          <SerifWords x={744} y={314} w={410} h={18} words={3} seed={9} fill={c.accent} serif={false} />
+        </g>
+      )}
+      {/* a wall-mounted control cabinet, a pegboard of tools, an extract fan and the plant clock.
+          PERIOD: the cabinet's four slots include one lit in the accent, which is a live indicator on
+          a distribution board; it becomes a TIMBER KEY CUPBOARD with four panelled doors and no light
+          on any of them. */}
+      <rect x={1244} y={520} width={94} height={144} fill={period ? MATERIAL.oak : shade(tn.card, -1)}
+        stroke={INK} strokeWidth={STROKE} />
       {Array.from({length: 4}, (_, i) => (
-        <rect key={i} x={1258} y={536 + i * 34} width={66} height={22} fill={i === 1 ? c.accent : tn.deep} stroke={INK} strokeWidth={2.4} />
+        <rect key={i} x={1258} y={536 + i * 34} width={66} height={22}
+          fill={period ? shade(MATERIAL.timber, -1) : i === 1 ? c.accent : tn.deep} stroke={INK} strokeWidth={2.4} />
       ))}
       <rect x={584} y={452} width={110} height={210} fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE} />
       {Array.from({length: 12}, (_, i) => {
@@ -2142,16 +2251,38 @@ const FactoryFloor: React.FC = () => {
         return <rect key={i} x={598 + col * 30} y={466 + row * 50} width={18} height={30 + rnd(i * 7) * 12}
           fill={shade(tn.body, (i % 3) - 1)} stroke={INK} strokeWidth={2.2} />;
       })}
-      <g>
-        <circle cx={1270} cy={372} r={62} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE} />
-        {Array.from({length: 6}, (_, i) => {
-          const a = (i * Math.PI) / 3;
-          return <path key={i} d={`M 1270 372 L ${1270 + Math.cos(a) * 54} ${372 + Math.sin(a) * 54}
-            L ${1270 + Math.cos(a + 0.5) * 50} ${372 + Math.sin(a + 0.5) * 50} Z`}
-            fill={shade(tn.body, 1)} stroke={INK} strokeWidth={2.4} />;
-        })}
-        <circle cx={1270} cy={372} r={13} fill={INK} />
-      </g>
+      {/* THE FAN (WO-31). Modern: a six-blade electric extractor in a circular housing — COMPARISON's
+          "an electric extractor fan in a circular housing". PERIOD: the same 62-unit disc on the same
+          pier becomes the line shaft's WALL PULLEY — an iron sheave in a bracket, with its flat belt
+          running away down the wall. Same silhouette class (a big outlined circle on a plain pier),
+          same footprint, and it now belongs to the shaft overhead rather than contradicting it. */}
+      {period ? (
+        <g>
+          <path d="M 1208 372 l -34 -26 l 0 52 Z" fill={MATERIAL.iron} stroke={INK} strokeWidth={STROKE_THIN * 0.7} strokeLinejoin="round" />
+          <path d="M 1252 372 L 1236 664 L 1290 664 L 1288 372 Z" fill={shade(MATERIAL.timber, -2)}
+            stroke={INK} strokeWidth={STROKE_THIN * 0.6} strokeLinejoin="round" />
+          <circle cx={1270} cy={372} r={62} fill={shade(MATERIAL.iron, 1)} stroke={INK} strokeWidth={STROKE} />
+          <circle cx={1270} cy={372} r={44} fill={MATERIAL.iron} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+          {/* the sheave's six spokes — an outlined wheel, not a bladed rotor */}
+          {Array.from({length: 6}, (_, i) => {
+            const a = (i * Math.PI) / 3;
+            return <line key={i} x1={1270} y1={372} x2={1270 + Math.cos(a) * 42} y2={372 + Math.sin(a) * 42}
+              stroke={INK} strokeWidth={STROKE_THIN * 1.1} />;
+          })}
+          <circle cx={1270} cy={372} r={13} fill={INK} />
+        </g>
+      ) : (
+        <g>
+          <circle cx={1270} cy={372} r={62} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE} />
+          {Array.from({length: 6}, (_, i) => {
+            const a = (i * Math.PI) / 3;
+            return <path key={i} d={`M 1270 372 L ${1270 + Math.cos(a) * 54} ${372 + Math.sin(a) * 54}
+              L ${1270 + Math.cos(a + 0.5) * 50} ${372 + Math.sin(a + 0.5) * 50} Z`}
+              fill={shade(tn.body, 1)} stroke={INK} strokeWidth={2.4} />;
+          })}
+          <circle cx={1270} cy={372} r={13} fill={INK} />
+        </g>
+      )}
       <circle cx={1400} cy={372} r={40} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
       <line x1={1400} y1={372} x2={1422} y2={384} stroke={INK} strokeWidth={STROKE_THIN} strokeLinecap="round" />
       <ClockHand cx={1400} cy={372} r={28} f={f} />
@@ -2238,17 +2369,32 @@ const FactoryFloor: React.FC = () => {
       {/* A rank of steel drums, in the NEAR plane. They were first staged against the far wall at
           floor level, which is exactly the band the workers stand in: they rendered across four
           torsos at waist height and read as men standing inside barrels. Nothing about either
-          metric could see it. Down here they occlude only the floor. */}
+          metric could see it. Down here they occlude only the floor.
+          PERIOD (WO-31): a pressed-steel drum with a rolled bung is 20th-century, and four of them
+          stand across the bottom sixth of the frame — the same class of tell as the extractor fan,
+          and one COMPARISON did not catch because it was reading JSX rather than the picture. Same
+          four cylinders, same footprint, drawn as COOPERED CASKS: timber staves between two iron
+          hoops, a bung in the head. `Cone`'s barrel already made this exact substitution elsewhere in
+          the library; this is that decision applied where the drums actually are. */}
       {Array.from({length: 4}, (_, i) => {
         const dx = 342 + i * 66;
         return (
           <g key={i}>
             <rect x={dx} y={968} width={62} height={112} rx={7}
-              fill={shade(tn.card, -(i % 3))} stroke={INK} strokeWidth={STROKE} />
-            <line x1={dx} y1={1002} x2={dx + 62} y2={1002} stroke={INK} strokeWidth={2.6} opacity={0.55} />
-            <line x1={dx} y1={1046} x2={dx + 62} y2={1046} stroke={INK} strokeWidth={2.6} opacity={0.55} />
-            <ellipse cx={dx + 31} cy={968} rx={31} ry={10} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
-            <circle cx={dx + 31} cy={968} r={9} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+              fill={period ? shade(MATERIAL.timber, -(i % 2)) : shade(tn.card, -(i % 3))}
+              stroke={INK} strokeWidth={STROKE} />
+            <line x1={dx} y1={1002} x2={dx + 62} y2={1002} stroke={INK}
+              strokeWidth={period ? 9 : 2.6} opacity={period ? 1 : 0.55} />
+            <line x1={dx} y1={1046} x2={dx + 62} y2={1046} stroke={INK}
+              strokeWidth={period ? 9 : 2.6} opacity={period ? 1 : 0.55} />
+            {period && [0.28, 0.5, 0.72].map((t) => (
+              <line key={t} x1={dx + 62 * t} y1={968} x2={dx + 62 * t} y2={1080}
+                stroke={INK} strokeWidth={2.2} opacity={0.45} />
+            ))}
+            <ellipse cx={dx + 31} cy={968} rx={31} ry={10}
+              fill={period ? shade(MATERIAL.timber, 1) : shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
+            <circle cx={dx + 31} cy={968} r={9}
+              fill={period ? MATERIAL.iron : shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
           </g>
         );
       })}

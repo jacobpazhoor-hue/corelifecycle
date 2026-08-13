@@ -617,6 +617,64 @@ export const sceneTones = (c: SceneColors): SceneTones => {
   return t;
 };
 
+// ---------------------------------------------------------------------------
+// MATERIALS — the one family of colours a scene key does NOT get to tint (WO-31)
+// ---------------------------------------------------------------------------
+//
+// THE DEFECT THIS EXISTS TO FIX, stated exactly as COMPARISON §5 found it: *a substituted prop
+// inherits the scene's tone ladder, so a "wooden" prop is only wooden in a warm-keyed room.*
+//
+// Period mode (setdressing.tsx) substitutes a modern prop for its pre-1900 counterpart at the same
+// footprint — a monitor becomes a timber board, a swivel chair a turned wooden one, a desk phone an
+// inkstand. Every one of those substitutions took its colour from `SceneTones`, and `SceneTones`'
+// MATERIAL roles (`body`, `card`) ladder off `c.mid`, which carries the scene's committed hue. So
+// the substitution only ever *looked* like the thing it claimed to be on a room keyed brown or
+// amber. Rendered and measured on the period frames:
+//   * `exchangeFloor` (blue key) — the chalked slate reads as a dark electronic quote board and the
+//     "timber-framed" easel boards read as blue-bezelled flat screens;
+//   * `boardroom` (blue key) — the framed chart reads as a wall screen, the ledger board as a laptop.
+// The prop geometry was right in both. The colour said "modern" louder than the shape said "1844".
+//
+// So a material is not a tone. Oak is brown in a blue room, brass is yellow in a grey one, and cast
+// iron is neither. These are the fabric of the century, authored ONCE, at the lightness band the
+// ladder roles they replace already occupied — so a period frame keeps its density, its
+// figure/ground separation and its flat fill, and only stops lying about what things are made of.
+//
+// It is not a second palette for general use, and nothing outside a period branch may reach for it:
+// per-scene colour keying (bible §5) is the look, and a room full of absolute colours would undo it.
+// The blast radius is bounded by that rule — a modern scene contains no material colours at all.
+//
+// It also happens to be COMPARISON MISS #1's own prescribed fix ("give every key a SECOND MATERIAL
+// FAMILY — one prop group in a complementary hue at the same lightness — instead of more rungs of
+// the same ladder"), arrived at from the other direction. A period room now carries two families
+// where it carried one, which is where the missing colour buckets were supposed to come from.
+//
+// Every value goes through `hsl()`, so `CHROMA_FLOOR` still decides whether it lands as a hue or as
+// the neutral of the same lightness — a material cannot smuggle a half-tint past the rule that the
+// rest of the palette obeys. `shade()` is hue-preserving, so `shade(MATERIAL.oak, -1)` is still oak.
+export type MaterialName = 'timber' | 'oak' | 'brass' | 'iron' | 'slate';
+
+export const MATERIAL: Record<MaterialName, string> = {
+  /** Planed deal / softwood: barrel staves, plank doors, crates, scaffold boards. */
+  timber: hsl(32, 0.42, 0.52),
+  /** Joinery and furniture — frames, turned chairs, counters, easels. One rung under `timber`. */
+  oak: hsl(28, 0.44, 0.38),
+  /** The century's bright metal: dials, bell, instrument bezels, lamp collars. The material family's
+   *  saturated note, and it is deliberately close to the `gold` mood so it never fights an accent. */
+  brass: hsl(43, 0.52, 0.50),
+  /**
+   * Cast and wrought iron: machine casings, hoops, brackets, line shafts, railings.
+   *
+   * It resolves to a pure NEUTRAL (#4f4f4f) because `CHROMA_FLOOR` catches it, and that is the
+   * intended answer twice over — cast iron is grey, and the reference's own large structural planes
+   * are `#242424`/`#3c3c3c`/`#6c6c6c`. It is authored on a hue anyway so that `shade()` keeps it in
+   * one family if the floor ever moves.
+   */
+  iron: hsl(220, 0.06, 0.31),
+  /** Slate and blackboard — a written surface that is not paper. Also neutral, and near-black. */
+  slate: hsl(210, 0.10, 0.24),
+};
+
 /**
  * Explicit key per template — EVERY template in scenes.tsx (S00-S19), every pack template in
  * stage.tsx and every explainer template in explainer.tsx. Anything absent falls to a deterministic

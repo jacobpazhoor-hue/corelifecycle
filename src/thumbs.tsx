@@ -239,10 +239,45 @@ const advance = (text: string): number => {
 const fitFs = (text: string, maxW: number, cap: number) =>
   Math.max(40, Math.min(cap, Math.floor(maxW / advance(text))));
 const textW = (text: string, fs: number) => advance(text) * fs;
-/** Montserrat's caps are 0.700em tall (measured: `measureText('H').actualBoundingBoxAscent` at
- *  1000px = 700.0); a baseline this far below a box's centre centres them in it. Arial Black's were
- *  0.716em, so the old 0.358 now sits caps ~1% of the size low in the amber band. */
-const CAP_MID = 0.350;
+/** Montserrat's cap height, in em (measured: `measureText('H').actualBoundingBoxAscent` at 1000px
+ *  = 700.0). Everything below that reasons about legibility reasons about CAP HEIGHT, not font size. */
+const CAP_EM = 0.700;
+/** Half of it: a baseline this far below a box's centre centres the caps in it. Arial Black's caps
+ *  were 0.716em, so the old 0.358 now sits caps ~1% of the size low in the amber band. */
+const CAP_MID = CAP_EM / 2;
+
+// ---------------------------------------------------------------------------
+// THE 120 PX RAIL (WO-31) — the size a thumbnail is actually judged at
+// ---------------------------------------------------------------------------
+//
+// QA: "at 120 px wide only the headline reads; the kicker and the placard are illegible smudges."
+// That is a real defect and it had a real cause: NOTHING in this file knew what size anything was
+// going to be looked at. Type was fitted to its COLUMN — `fitFs` maximises the size that fits a box
+// and floors at 40 — so a line's on-screen size was whatever its copy length and column happened to
+// leave, and 40 on a 1920 viewBox is 1.75 px of cap on the rail, i.e. a grey stain.
+//
+// So the rail gets a number, and it is the REFERENCE'S OWN, not an invented threshold. The measured
+// tokens at the top of this file record the amber band's caps at **51 px at 1280** — the smallest
+// type the reference channel ships as a thumbnail's primary message. 51/1280 = 0.0398 of frame width,
+// which on the 120 px rail is **4.8 px of cap**. That is the floor: type at or above it reads on the
+// rail (verified by eye on `band`, `number` and `question` downscaled to 120 px), type under it does
+// not (verified the same way on the kicker at its old 0.42-of-headline size, which lands at 2.6 px).
+//
+// Two things follow, and they are opposite, which is the whole judgement call:
+//   * a HEADLINE must clear the floor, because it is the one message the rail carries. `TitleBlock`
+//     now guarantees it by wrapping TIGHTER — shorter lines set bigger — instead of hoping.
+//   * a SUBORDINATE line that cannot clear the floor is not "small", it is NOISE, and it sits
+//     directly under the headline where noise costs the most. `Kicker` is set AT the floor where its
+//     column can hold it and DROPPED where it cannot, rather than rendered as a smudge.
+// The placard is deliberately in neither camp — see `ThumbCrash`.
+const RAIL_W = 120;
+/** The reference's own amber-band cap height, as a fraction of frame width (51 px at 1280). */
+const RAIL_MIN_CAP_FRAC = 51 / 1280;
+/** …which is this many pixels of cap once the frame is 120 px wide. Recorded, not used: the point of
+ *  the constant is that it is a number somebody can argue with. */
+const RAIL_MIN_CAP_PX = RAIL_MIN_CAP_FRAC * RAIL_W;   // 4.78
+/** The smallest font size on the 1920 viewBox that still reads at 120 px wide. */
+const RAIL_MIN_FS = Math.ceil((RAIL_MIN_CAP_FRAC * 1920) / CAP_EM);   // 110
 
 /** Greedy wrap to at most `max` characters a line, so a long line fits its column at a usable size. */
 const wrap = (text: string, max: number): string[] => {
@@ -277,11 +312,23 @@ const Outline: React.FC<{
  * cover seven of the nine, and `Thumbnail` REFUSES to render on the other two rather than dropping
  * it again (see KICKERLESS_ARCHES).
  *
- * Set at ~0.42 of the headline and placed UNDER the block rather than over it: at `crash`'s cap of
- * 140 the headline's own caps already reach y=50 from a baseline of 150, and a kicker above that
- * would be clipped off the top edge.
+ * Placed UNDER the block rather than over it: at `crash`'s cap of 140 the headline's own caps already
+ * reach y=50 from a baseline of 150, and a kicker above that would be clipped off the top edge.
+ *
+ * WHY IT IS NO LONGER "0.42 OF THE HEADLINE" (WO-31). That fraction is what made it a smudge: at
+ * `crash`'s cap of 140 it set the kicker at 58, which is **2.6 px of cap on the 120 px rail** against
+ * the reference's own 4.8 (see RAIL_MIN_FS). A kicker is not decoration — it carries the hook's
+ * NUMBER — so it is now set AT the rail floor, and only clamped DOWN from there by the headline it
+ * sits under, which it must never out-shout. At this episode's `crash` that is 110 against the
+ * headline's 140: 79% of it, still unmistakably the second line, and legible on the rail.
+ *
+ * AND WHY IT IS DROPPED RATHER THAN SHRUNK when the column is too narrow for that. Type under the
+ * floor does not become quieter, it becomes texture — grey mush pressed against the underside of the
+ * headline, which is the one place in the frame where mush costs contrast. Losing the words entirely
+ * is the cheaper failure, and unlike `KICKERLESS_ARCHES` this cannot HALT: that check refuses a
+ * LAYOUT with no kicker slot, which is a authoring mistake the writer can fix, where this one is a
+ * copy-length fact discovered at fit time and halting on it would take a nightly episode down.
  */
-const KICKER_FRAC = 0.42;
 const Kicker: React.FC<{
   x: number; baseline: number; maxW: number; cap: number; anchor?: Anchor;
   /** The headline this kicker sits under, so an episode whose HEAD *is* the kicker (no `line1`,
@@ -289,27 +336,66 @@ const Kicker: React.FC<{
   over: string;
 }> = ({x, baseline, maxW, cap, anchor = 'start', over}) => {
   if (!KICKER || KICKER === over) return null;
-  const fs = fitFs(KICKER, maxW, Math.round(cap * KICKER_FRAC));
-  // Drop = the kicker's own cap height (0.700em in Montserrat, was 0.716 in Arial Black) plus a
-  // little, plus a clear gap of 0.30 of the HEADLINE's size. Its own height alone put its caps 3px
-  // under the headline's baseline and the two blocks touched.
+  // Never bigger than the headline; never smaller than the rail floor; and if the floor does not fit
+  // the column, there is no size left that is both legible and subordinate, so it does not draw.
+  const fs = Math.min(cap, RAIL_MIN_FS);
+  if (fs < RAIL_MIN_FS || textW(KICKER, fs) > maxW) return null;
+  // Drop = the kicker's own cap height plus a little, plus a clear gap of 0.30 of the HEADLINE's
+  // size. Its own height alone put its caps 3px under the headline's baseline and the two touched.
   const drop = Math.round(fs * 0.76 + cap * 0.30);
   return <Outline x={x} y={baseline + drop} fs={fs} anchor={anchor}>{KICKER}</Outline>;
 };
 
-/** A wrapped, auto-fitted block of treatment-(b) type. Returns its own bottom edge via `onBottom`. */
+/**
+ * A wrapped, auto-fitted block of treatment-(b) type — the headline, i.e. the ONE message the 120 px
+ * rail carries.
+ *
+ * `perLine` is now a STARTING POINT, not the wrap (WO-31). It used to be the whole of it, so the
+ * headline's on-screen size was a side effect of how the copy happened to break: `question`'s 12-char
+ * wrap put "WHO PAID FOR" on one line, and a 12-character line in a 980-wide column can only be set
+ * at 117 — under the rail floor, and measurably softer at 120 px than `band`'s 132. The block now
+ * wraps TIGHTER until its longest line clears `RAIL_MIN_FS`: shorter lines set bigger, which is the
+ * one lever that trades a dimension the frame has (vertical space) for the one it does not (rail
+ * legibility). It stops at the first wrap that clears, so a headline already over the floor — every
+ * other archetype's — re-wraps not at all and renders byte-identically.
+ */
+const TITLE_MIN_PER_LINE = 6;
+const TITLE_MAX_LINES = 4;
 const TitleBlock: React.FC<{
   text: string; x: number; y: number; maxW: number; cap?: number; anchor?: Anchor; perLine?: number;
-  hot?: number;   // index of a line drawn in the mood accent instead of white
-}> = ({text, x, y, maxW, cap = 150, anchor = 'start', perLine = 15, hot = -1}) => {
-  const lines = wrap(text, perLine);
-  const longest = lines.reduce((a, b) => (advance(a) >= advance(b) ? a : b), '');
-  const fs = fitFs(longest, maxW, cap);
+  /** Draw the LAST line in the mood accent instead of white. Named rather than indexed, because the
+   *  wrap above is now chosen at fit time — a caller that computed `wrap(text, perLine).length - 1`
+   *  itself would colour the wrong line the moment the block re-wraps tighter. */
+  hotLast?: boolean;
+}> = ({text, x, y, maxW, cap = 150, anchor = 'start', perLine = 15, hotLast = false}) => {
+  const lay = (per: number) => {
+    const ls = wrap(text, per);
+    const longest = ls.reduce((a, b) => (advance(a) >= advance(b) ? a : b), '');
+    return {lines: ls, fs: fitFs(longest, maxW, cap)};
+  };
+  let best = lay(perLine);
+  for (let per = perLine; best.fs < RAIL_MIN_FS && per >= TITLE_MIN_PER_LINE; per--) {
+    const tighter = lay(per);
+    if (tighter.lines.length > TITLE_MAX_LINES) break;
+    if (tighter.fs > best.fs) best = tighter;
+  }
+  if (best.fs < RAIL_MIN_FS) {
+    throw new Error(
+      `Thumbnail headline "${text}" cannot be set at a size that reads on the 120 px rail: the ` +
+      `largest fit in its ${maxW}-unit column is ${best.fs}, under the ${RAIL_MIN_FS} floor (the ` +
+      `reference's own amber-band cap height, ${RAIL_MIN_CAP_PX.toFixed(1)} px at 120 px wide), even ` +
+      `wrapped to ${TITLE_MAX_LINES} lines. The copy is too long for a thumbnail — shorten ` +
+      `thumb.line1/line2. A headline nobody can read at rail size is the only thing on the frame ` +
+      `that has to work, so this halts rather than shipping a smudge.`
+    );
+  }
+  const {lines, fs} = best;
   const lh = Math.round(fs * 1.06);
   return (
     <g>
       {lines.map((ln, i) => (
-        <Outline key={i} x={x} y={y + i * lh} fs={fs} anchor={anchor} fill={i === hot ? E.accent : PAPER_WHITE}>
+        <Outline key={i} x={x} y={y + i * lh} fs={fs} anchor={anchor}
+          fill={hotLast && i === lines.length - 1 ? E.accent : PAPER_WHITE}>
           {ln}
         </Outline>
       ))}
@@ -512,6 +598,7 @@ const Hero: React.FC<{
   squiggle?: boolean;
 }> = ({x, hipY, scale, mood, facing = 1, pose, costume = COSTUME, marks, markSide = -1, squiggle}) => {
   const p = pose ?? A.stand(0);
+  assertArmsRooted(p);
   const box = headBox(x, hipY, scale, facing, p);
   return (
     <g>
@@ -528,14 +615,98 @@ const Hero: React.FC<{
 };
 
 /**
- * Hands up beside the face — the reference's panic pose (KE-WJevx-7c, VSbO8vmZNm0). The shoulder
- * angle has to swing the upper arm nearly HORIZONTAL before the elbow lifts, or the forearm runs
- * diagonally across the face: figure.tsx draws the near arm after the head, and the character has no
- * neck, so an arm raised straight from the shoulder passes through the chin.
+ * Hands up beside the face — the reference's panic pose (KE-WJevx-7c, VSbO8vmZNm0).
+ *
+ * WHY THE SHOULDER ANGLE CAME DOWN FROM 95° TO 74° (WO-31) — the detached-brackets defect.
+ *
+ * QA reported the hero's arms twice, as "two detached black brackets with a visible gap to the
+ * torso". It is not a z-order bug and not the bust crop: it is where the arm ROOT lands.
+ *
+ * The rig has no neck and its drawn head is WIDER than its shoulders. In figure.tsx units the head
+ * half-width is `SEG.head * HEAD_HW` = 58.8 against a torso shoulder half-width of `SEG.head * 1.02`
+ * = 53.0, and the head's bottom edge falls at `headC.y + HEAD_HH*SEG.head` = shoulder.y - 0.04, i.e.
+ * exactly ON the shoulder joint. So the joint, and everything within 58.8 units of it sideways, is
+ * covered by the head.
+ *
+ * At 95° the upper arm leaves that buried joint pointing 5° ABOVE horizontal and stays inside the
+ * head's own vertical band the whole way out — it emerges not from the body but from the head's
+ * rounded bottom corner (at that height the corner arc has pulled the silhouette in to x≈37), and
+ * emerges ABOVE the torso's top edge, so nothing connects the two. What is left on screen is the
+ * forearm and a stub: a bracket. In the episode nobody sees it because episode figures are small and
+ * their arms hang below the head; the thumbnail is the only place a 3.0–3.4 scale figure raises them.
+ *
+ * At 74° the upper arm leaves the same joint pointing 16° BELOW horizontal, clears the head's bottom
+ * edge immediately, and crosses the torso's shoulder on its way out — the near arm over it, the far
+ * arm emerging from behind its outer edge, both visibly rooted in the body. `ARM_ROOT_MAX_DEG` below
+ * makes that a checked property rather than a number somebody has to remember.
+ *
+ * The old comment's worry — "the forearm runs diagonally across the face" — was real but is answered
+ * by the ELBOW, not the shoulder. At (74°, 101°) the elbow sits 67 units out and 19 down from the
+ * joint, already outside the 58.8-unit head, and the forearm rises from there at 175° (5° off
+ * vertical), so it runs UP THE OUTSIDE of the head and the hand still finishes above shoulder height,
+ * beside the face, where the reference puts it.
  */
 const HANDS_UP: Pose = {
   ...A.stand(0),
-  armNearShoulder: 95, armNearElbow: 80, armFarShoulder: 95, armFarElbow: 80,
+  armNearShoulder: 74, armNearElbow: 101, armFarShoulder: 74, armFarElbow: 101,
+};
+
+/**
+ * THE ARM-ROOT RULE, DERIVED RATHER THAN REMEMBERED.
+ *
+ * The property `HANDS_UP` above has to hold is not "the shoulder angle is 74": it is *the upper arm
+ * leaves the head's silhouette below the head's bottom edge*, so the viewer sees it emerge from a
+ * body instead of from thin air. That property is computable from the rig's own constants, so it is
+ * computed here rather than encoded as a magic degree count somebody has to keep true by memory —
+ * which is exactly what would rot the next time `SEG` or `HEAD_HH` moves in figure.tsx.
+ *
+ * In figure.tsx units, taking the shoulder joint as the origin and +y as DOWN:
+ *   * the drawn head spans x ∈ ±`HEAD_HW · SEG.head` = ±58.76 — WIDER than the torso's shoulder
+ *     half-width of `SEG.head · 1.02` = 53.0, so the head is the covering shape on both arms;
+ *   * its bottom edge sits at `HEAD_HH·SEG.head − (SEG.neck + SEG.head)` = **−0.04**, i.e. level
+ *     with the joint (the rig has no neck — that is the whole reason the joint is buried);
+ *   * an upper arm at θ leaves the joint along (sin θ, cos θ), so where it crosses out of the head's
+ *     horizontal band it is at y = `HEAD_HW·SEG.head · cot θ`.
+ *
+ * Requiring that crossing point to clear the head's bottom edge by one limb width (8.81 units — an
+ * arm that only half-clears still reads as fused to the outline) gives a ceiling of **81.5°**. At 95°
+ * the crossing point is 5.1 units ABOVE the edge: the arm is inside the head for its whole length and
+ * only the forearm survives on screen, which is the reported bracket. At 74° it is 16.8 units below,
+ * clear by nearly two limb widths.
+ *
+ * It is checked in `Hero` for EVERY pose, because this defect is invisible to every metric the
+ * project runs — flat fill, camera lock and saturation all score a bracket-armed hero exactly as they
+ * score a correct one, and it took two QA passes to catch by eye.
+ */
+const HEAD_HALF_W = SEG.head * HEAD_HW;
+/** Head bottom edge, relative to the shoulder joint, +y down. ≈ −0.04: level with the joint. */
+const HEAD_BOTTOM_Y = HEAD_HH * SEG.head - (SEG.neck + SEG.head);
+/** figure.tsx's `HEAD_W * LIMB_W_RATIO`, restated (both are module-private there) — the arm's width. */
+const LIMB_W = 2 * HEAD_HALF_W * 0.075;
+
+/** Where an upper arm at `deg` crosses out of the head's horizontal band, relative to the joint. */
+const armExitY = (deg: number): number => {
+  const r = deg * D2R;
+  // Straight down (sin θ = 0) never leaves the band sideways at all; it exits below, which is fine.
+  if (Math.abs(Math.sin(r)) < 1e-6) return Math.sign(Math.cos(r) || 1) * Infinity;
+  return (HEAD_HALF_W * Math.cos(r)) / Math.abs(Math.sin(r));
+};
+
+const assertArmsRooted = (p: Pose): void => {
+  for (const [side, deg] of [['near', p.armNearShoulder], ['far', p.armFarShoulder]] as const) {
+    const exit = armExitY(deg);
+    if (exit < HEAD_BOTTOM_Y + LIMB_W) {
+      throw new Error(
+        `thumbs: the hero's ${side} upper arm leaves the shoulder at ${deg.toFixed(1)}°, which puts ` +
+        `it inside the drawn head for its whole length (it crosses out of the head's ${(2 * HEAD_HALF_W).toFixed(1)}-unit ` +
+        `band at y=${exit.toFixed(1)}, needing y≥${(HEAD_BOTTOM_Y + LIMB_W).toFixed(1)} to clear the head's ` +
+        `bottom edge by one limb width). The rig has no neck and its head is wider than its shoulders, ` +
+        `so an arm rooted up there is painted over and the forearm renders as a detached bracket — the ` +
+        `defect QA reported twice. Bring the shoulder angle down (HANDS_UP uses 74°) and open the ` +
+        `ELBOW instead if the hand has to finish beside the face.`
+      );
+    }
+  }
 };
 
 // ---------------------------------------------------------------------------
@@ -630,6 +801,44 @@ const ThumbBand: React.FC = () => (
 );
 
 /**
+ * The protest placard `crash` puts in its crowd's hands.
+ *
+ * IT IS SCENERY, AND THAT IS A DECISION, NOT AN OVERSIGHT (WO-31). QA filed it alongside the kicker:
+ * "at 120 px the kicker and the `$613 BILLION` placard are both illegible smudges." Both halves are
+ * true and they get OPPOSITE answers, because they are not the same kind of element.
+ *
+ * The kicker sits under the headline and is read as part of it, so type there that misses the rail
+ * floor is noise pressed against the one thing that has to work — it is set at the floor or dropped.
+ * A placard is a PROP a crowd is holding, thirty units of frame away from the type, and it reads at
+ * 120 px as what it is: a white sign with writing on it. Sizing its copy to the rail floor would need
+ * ~760 units of line — a 820-unit sign, 43% of the frame — which does not make the thumbnail more
+ * legible, it makes it a second headline held by three grey men. The reference's own placard
+ * (LuEcoqizj0o) is unreadable at 120 px for exactly this reason and ships anyway.
+ *
+ * So the placard keeps its job and the fix is smaller: the sign is now sized FROM its text instead of
+ * the text being squeezed into a fixed 384x150 rect. The copy sets on ONE line at 69 rather than
+ * wrapping to two at 46 — 3.0 px of cap on the rail against 2.0, which is the difference between a
+ * sign with writing on it and a sign with a stain on it. Copy too long for one line at that size
+ * drops the SIGN with it: an empty white rect reads as a rendering failure, not as a placard.
+ */
+const PLACARD_FS = 69;
+const PLACARD_MAX_W = 560;
+const Placard: React.FC<{text: string; cx: number; cy: number}> = ({text, cx, cy}) => {
+  const w = textW(text, PLACARD_FS) + PLACARD_FS;   // half an em of card either side of the copy
+  if (w > PLACARD_MAX_W) return null;
+  const h = Math.round(PLACARD_FS * 1.9);
+  return (
+    <g transform={`rotate(-4 ${cx} ${cy})`}>
+      <rect x={cx - w / 2} y={cy - h / 2} width={w} height={h} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
+      {/* the stick, from the sign's bottom edge down behind the crowd */}
+      <rect x={cx - 13} y={cy + h / 2} width={26} height={230} fill={E.floor} stroke={INK} strokeWidth={STROKE_THIN} />
+      <text x={cx} y={cy + PLACARD_FS * CAP_MID} textAnchor="middle" fontFamily={SANS}
+        fontSize={PLACARD_FS} fontWeight={THUMB_WEIGHT} fill={INK}>{text}</text>
+    </g>
+  );
+};
+
+/**
  * CRASH — docs/research/crayon/LuEcoqizj0o/thumb.png ("The Great Depression").
  * A red crash polyline straight across a drained street, a panicking colour hero on the right with
  * "!!" and stress squiggles, and a small grey protest group on the left.
@@ -643,16 +852,7 @@ const ThumbCrash: React.FC = () => (
         figure is in frame. */}
     <CrowdRow y={1060} x0={110} x1={520} n={3} scale={1.75} seed={7} view="front" dz={26}
       showFace expr={CROWD_EXPR} />
-    {TAG ? (
-      <g transform="rotate(-4 470 620)">
-        <rect x={280} y={545} width={384} height={150} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
-        <rect x={452} y={695} width={26} height={230} fill={E.floor} stroke={INK} strokeWidth={STROKE_THIN} />
-        {wrap(TAG, 11).slice(0, 2).map((ln, i) => (
-          <text key={i} x={472} y={600 + i * 60} textAnchor="middle" fontFamily={SANS}
-            fontSize={fitFs(ln, 320, 46)} fontWeight={THUMB_WEIGHT} fill={INK}>{ln}</text>
-        ))}
-      </g>
-    ) : null}
+    {TAG ? <Placard text={TAG} cx={472} cy={620} /> : null}
     <CrashLine d="M -30 520 L 330 210 L 560 600 L 830 400 L 1090 780 L 1400 640 L 1960 1060" />
     <Hero x={1430} hipY={1290} scale={3.3} mood={pushFor('panic')} pose={HANDS_UP} marks="!!" squiggle />
     <TitleBlock text={HEAD} x={70} y={150} maxW={900} cap={140} perLine={13} />
@@ -843,7 +1043,12 @@ const ThumbNumber: React.FC = () => {
     <Wrap>
       <GreyRoom />
       <GreyCrowd headY={1000} rowY={1330} scale={1.8} />
-      {KICKER ? <Outline x={720} y={250} fs={fitFs(KICKER, 1120, 84)} anchor="middle">{KICKER}</Outline> : null}
+      {/* `number` is the one archetype that places its own kicker rather than hanging it off a
+          headline, so it repeats the rail rule rather than inheriting it: at the old cap of 84 this
+          line measured 3.7 px of cap at 120 px and read as a bar with texture in it. Set at the
+          floor, or not at all — the same trade `Kicker` makes. */}
+      {KICKER && textW(KICKER, RAIL_MIN_FS) <= 1120
+        ? <Outline x={720} y={250} fs={RAIL_MIN_FS} anchor="middle">{KICKER}</Outline> : null}
       <Outline x={720} y={620} fs={fs} anchor="middle" sw={fs * 0.075}>{BIG}</Outline>
       <rect x={720 - bw / 2} y={672} width={bw} height={30} fill={RED} stroke={INK} strokeWidth={STROKE_THIN} />
       <Hero x={1590} hipY={1280} scale={2.7} mood={pushFor('shock')} facing={-1} marks="!!" markSide={1} />
@@ -859,7 +1064,7 @@ const ThumbQuestion: React.FC = () => (
   <Wrap>
     <GreyRoom />
     <GreyCrowd headY={840} rowY={1190} scale={1.8} />
-    <TitleBlock text={QUESTION} x={70} y={270} maxW={980} cap={150} perLine={12} hot={wrap(QUESTION, 12).length - 1} />
+    <TitleBlock text={QUESTION} x={70} y={270} maxW={980} cap={150} perLine={12} hotLast />
     <Hero x={1500} hipY={1270} scale={3.1} mood={pushFor('worried')} facing={-1} marks="??" squiggle />
   </Wrap>
 );

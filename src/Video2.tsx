@@ -440,8 +440,33 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
     era ? <PeriodProvider era={era}>{art}</PeriodProvider> : art;
 
   let t = 0;
+  // THE CUT FADE IS A PICTURE FADE, NOT A FRAME FADE (WO-31).
+  //
+  // `beatOp` used to sit on the scene's whole subtree, so at each end of every scene it composited
+  // the LETTERING toward the white PAPER along with the art. That is where the white-on-pale float
+  // defect actually came from, and it is why three rounds of colour fixes could not close it: at
+  // beatOp 0.4 an INK glyph composites to #999 and its PAPER_WHITE keyline stays #fff, so the device
+  // arrives at the one state its own design rules out — pale script with a pale halo on a pale wall —
+  // no matter which colour anybody picks. Measured at t105 (frame 21693): darkest pixel in the whole
+  // frame #727272, the "black" script among them.
+  //
+  // This is WO-25's own doctrine applied one layer up. It deleted the balloon's 5-frame entrance fade
+  // on the grounds that "a device that is see-through for a sixth of a second is see-through" and
+  // "a reference balloon is flat opaque white with a uniform black keyline in EVERY FRAME IT EXISTS".
+  // `beatOp` was making that false again for 16 frames of every scene — longer than the ramp WO-25
+  // removed — and for floating dialogue, which has no opaque lozenge to hide the loss, it is fatal
+  // rather than cosmetic.
+  //
+  // So the fade wraps the PICTURE — the shots, the panels split, the foreground silhouette and the
+  // number note — and the lettering cuts. Stacking order is unchanged (art, note, balloons, card) and
+  // the card keeps its own copy of the same fade, so a card scene still cuts in and out exactly as
+  // before; the only frames that differ anywhere are the ones where a balloon or a float was being
+  // washed. `backgroundColor: PAPER` moves outside the fade, which is a no-op: it was fading over the
+  // identical PAPER the composition root paints.
+  const picture = (art: React.ReactNode) => <AbsoluteFill style={{opacity: beatOp}}>{art}</AbsoluteFill>;
   return (
-    <AbsoluteFill style={{opacity: beatOp, backgroundColor: PAPER}}>
+    <AbsoluteFill style={{backgroundColor: PAPER}}>
+     {picture(<>
       {/* shots cut together underneath — ungraded, and with no transform of their own: the frame is
           locked, so the only thing that ever moves is what the scene template animates internally.
           A `panels` scene (bible §6.4) replaces the whole shot plan with one static split: a split IS
@@ -511,6 +536,7 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
             <NumberCard figure={big} sub={scene.overlay.sub} negative={negOverlay} />
           </div>
         ))}
+     </>)}
 
       {/* speech balloons + floating dialogue (bible §6.3), over the art and over the money card.
           Each line gets its own Sequence, which is what makes the component's entrance fire when the
@@ -528,8 +554,10 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
                 // the device pick white or INK off its luminance; the key's `bg` is the colour a
                 // template paints FIRST and then covers, not the colour behind the glyphs, so the rule
                 // was right on some scenes and wrong on others — white-on-pale at t28, "fixed", then
-                // white-on-pale again at t022. The device now defaults to INK and guarantees the rest
-                // with its keyline; `bubble.tsx` has the full argument.
+                // white-on-pale again at t022. `color` is still forwarded verbatim, but it can no
+                // longer choose an unreadable result: the device pairs it with the further of INK /
+                // PAPER_WHITE, requires 7:1 between the two, and raises otherwise (WO-31). Anything
+                // this renderer can pass either reads or halts the build; `bubble.tsx` has the argument.
                 maxWidth={b.maxWidth} maxLines={b.maxLines} keyline={b.keyline}
               />
             ) : (
@@ -547,7 +575,10 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
           covers the art, the money card and any balloon for exactly as long as it holds. */}
       {scene.card && (
         <Sequence from={0} durationInFrames={cardFrames}>
-          {cardElement(scene.card, scene.id)}
+          {/* the card keeps the scene-cut fade it has always had — it is a full-screen opaque device
+              that cuts in and out with the scene, not lettering laid over a picture, and its own
+              ground moves with it, so the wash never separates its glyphs from what is behind them */}
+          {picture(cardElement(scene.card, scene.id))}
         </Sequence>
       )}
 

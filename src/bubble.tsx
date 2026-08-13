@@ -144,6 +144,27 @@ const FLOAT_MAX_LINES = 5;
  */
 const FLOAT_KEYLINE_EM = 0.07;
 
+/**
+ * The keyline is the device's GROUND, so it has a floor and the floor is not negotiable.
+ *
+ * A balloon guarantees legibility with an opaque white lozenge. Floating dialogue has no lozenge, so
+ * the keyline is the only ground the glyphs ever get — it is what the contrast guarantee below is
+ * computed against. `keyline={0}` therefore no longer means "bare glyphs"; it means "no ground", and
+ * the device raises instead of drawing a line whose legibility is a coin toss against art it cannot
+ * see. A caller can still make the keyline HEAVIER.
+ */
+const FLOAT_KEYLINE_MIN_EM = 0.06;
+
+/**
+ * The contrast a glyph must carry against its own keyline, as a WCAG ratio.
+ *
+ * 7:1 is WCAG AAA for body text. It is reachable by construction — INK against PAPER_WHITE is 21:1 —
+ * so this threshold only ever fires on a colour that could not have been legible: a mid-grey glyph
+ * contrasts with neither black nor white and fails whichever keyline it is given. That is the case
+ * the device now REFUSES rather than renders.
+ */
+const FLOAT_MIN_CONTRAST = 7;
+
 // One weight for everything, as in textcard.tsx: the reference's hierarchy is size, never stroke weight.
 const WEIGHT = CRAYON_TEXT_WEIGHT;
 
@@ -450,6 +471,12 @@ export type FloatingDialogueProps = {
   /**
    * Glyph colour. Defaults to INK.
    *
+   * WHAT AN EXPLICIT COLOUR CAN AND CANNOT DO (WO-31). It chooses the POLARITY of the device — dark
+   * script on a light keyline, or the reference's light script on a dark one. It cannot choose an
+   * unreadable one: whatever it is, `keylineFor` pairs it with the opposite extreme and `assertLegible`
+   * refuses the pair if it does not clear `FLOAT_MIN_CONTRAST`. There is no colour a caller can pass
+   * that renders this device illegible against its own ground, and no way to render it without one.
+   *
    * WHY THERE IS NO `ground` PARAMETER ANY MORE, AND WHY THE DEFAULT IS A CONSTANT (WO-25).
    *
    * This device has now produced the SAME defect — white script, illegible, on a pale ground — in two
@@ -483,23 +510,78 @@ export type FloatingDialogueProps = {
   /** Wrap ceiling. Past this the text shrinks instead of adding lines. */
   maxLines?: number;
   /**
-   * Flat keyline under the glyphs so white script survives a mid-tone ground, in em (see
-   * FLOAT_KEYLINE_EM). Pass 0 for the bare glyphs. The keyline is INK when the text is light and
-   * PAPER_WHITE when it is not, so it always separates rather than thickening.
+   * The keyline's weight in em (see `FLOAT_KEYLINE_EM`), floored at `FLOAT_KEYLINE_MIN_EM`. Heavier
+   * is allowed; lighter — and 0 in particular — RAISES, because the keyline is this device's ground
+   * and without it legibility goes back to being a guess about art the renderer cannot see.
    */
   keyline?: number;
   /** Play the entrance from the current Sequence's frame 0. */
   animate?: boolean;
 };
 
-/** Relative luminance, to pick a keyline that contrasts with the glyph rather than merging into it. */
-const isLight = (hex: string): boolean => {
+// ---------------------------------------------------------------------------
+// The legibility guarantee (WO-31)
+// ---------------------------------------------------------------------------
+//
+// THIS DEVICE HAS NOW PRODUCED THE SAME DEFECT IN FOUR CONSECUTIVE QA PASSES — t28, t022, t105, t105
+// again — and every fix before this one changed a COLOUR. That is why they kept failing: the failing
+// quantity was never the colour, it was the CONTRAST of a pair, and neither half of the pair was
+// something the earlier rules actually held.
+//
+//   * Fix 1 paired the glyph with the scene key's `bg`. Wrong quantity: `bg` is the rect a template
+//     paints first and then covers, not the plane under the glyphs.
+//   * Fix 2 (WO-25) gave up on knowing the plane — correctly — and paired INK with a keyline in the
+//     opposite polarity. Right idea, but it was left as a DEFAULT and a comment. `color` stayed an
+//     open parameter documented as "an explicit editorial choice", `keyline` could still be set to 0,
+//     and nothing anywhere computed the ratio the argument turned on. The guarantee was asserted in
+//     prose and enforced nowhere.
+//
+// So the rule is moved out of the prose and into the code. The pair the device is judged on is
+// (glyph, keyline) — both of them values this module chooses or validates, neither of them a guess
+// about the art — and the ratio between them is COMPUTED and REQUIRED. An unreadable combination can
+// no longer render: it raises.
+
+/** WCAG relative luminance of an `#rrggbb`, with the sRGB transfer curve applied (not a raw mean). */
+const luminance = (hex: string, who: string): number => {
   const m = /^#([0-9a-fA-F]{6})$/.exec(hex.trim());
   if (!m) {
-    throw new Error(`bubble: FloatingDialogue colour must be #rrggbb, got ${JSON.stringify(hex)}`);
+    throw new Error(`bubble: ${who} colour must be #rrggbb, got ${JSON.stringify(hex)}`);
   }
-  const [r, g, b] = [0, 2, 4].map((i) => parseInt(m[1].slice(i, i + 2), 16) / 255);
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.5;
+  const [r, g, b] = [0, 2, 4]
+    .map((i) => parseInt(m[1].slice(i, i + 2), 16) / 255)
+    .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+
+/** WCAG contrast ratio, 1:1 (identical) to 21:1 (black on white). */
+const contrast = (a: string, b: string, who: string): number => {
+  const [la, lb] = [luminance(a, who), luminance(b, who)];
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+};
+
+/**
+ * The ground for `ink`: whichever of the palette's two extremes is further from it.
+ *
+ * Not `isLight(ink) ? INK : PAPER_WHITE` on a 0.5 split, which is the same coin-flip shape as the
+ * rules that failed — it picks a side without ever asking how much contrast that side actually buys.
+ * This picks the BETTER of the two and hands the number to `assertLegible`, so the choice and the
+ * check are one computation.
+ */
+const keylineFor = (ink: string, who: string): string =>
+  contrast(ink, PAPER_WHITE, who) >= contrast(ink, INK, who) ? PAPER_WHITE : INK;
+
+/** The whole guarantee, in one place: no glyph/ground pair under `FLOAT_MIN_CONTRAST` ever renders. */
+const assertLegible = (ink: string, ground: string, text: string): void => {
+  const ratio = contrast(ink, ground, 'FloatingDialogue');
+  if (ratio < FLOAT_MIN_CONTRAST) {
+    throw new Error(
+      `bubble: FloatingDialogue ${JSON.stringify(text.slice(0, 40))} would render illegibly — glyph ` +
+      `${ink} against its best available keyline ${ground} is ${ratio.toFixed(2)}:1, under the ` +
+      `${FLOAT_MIN_CONTRAST}:1 this device requires. Unballooned script has no balloon behind it, so ` +
+      `the keyline is its only ground: a colour that contrasts with neither ${INK} nor ${PAPER_WHITE} ` +
+      `cannot be made readable by any keyline at all. Pass a colour nearer one end of the ramp.`
+    );
+  }
 };
 
 export const FloatingDialogue: React.FC<FloatingDialogueProps> = ({
@@ -517,10 +599,31 @@ export const FloatingDialogue: React.FC<FloatingDialogueProps> = ({
   const ready = useCrayonFace('floating dialogue');
   const {opacity, scale} = useEntrance(animate);
 
-  // `isLight` validates the hex, so a malformed writer-supplied colour still raises here rather than
-  // rendering as a browser-default black.
+  // The pair, and the check on it. `luminance` validates the hex on the way through, so a malformed
+  // writer-supplied colour still raises here rather than rendering as a browser-default black.
   const ink = color;
-  const keylineColor = isLight(ink) ? INK : PAPER_WHITE;
+  const keylineColor = keylineFor(ink, 'FloatingDialogue');
+  assertLegible(ink, keylineColor, text);
+  // …and the one way a keyline could still go missing without the floor noticing: a writer-supplied
+  // non-number. `NaN < FLOAT_KEYLINE_MIN_EM` is FALSE, so it would sail past the floor below and land
+  // in `strokeWidth`, where SVG drops the attribute — bare glyphs, no ground, no error, which is the
+  // exact failure the floor exists to make impossible. So the type is checked before the value.
+  if (typeof keyline !== 'number' || !Number.isFinite(keyline)) {
+    throw new Error(
+      `bubble: FloatingDialogue ${JSON.stringify(text.slice(0, 40))} was given a non-numeric ` +
+      `keyline ${JSON.stringify(keyline)}. It is a width in em and it is this device's only ground; ` +
+      `a value SVG cannot use silently removes the ground rather than failing, so it raises here.`
+    );
+  }
+  if (keyline < FLOAT_KEYLINE_MIN_EM) {
+    throw new Error(
+      `bubble: FloatingDialogue ${JSON.stringify(text.slice(0, 40))} was given keyline=${keyline} em, ` +
+      `under the ${FLOAT_KEYLINE_MIN_EM} em floor. The keyline is this device's GROUND — it is the ` +
+      `surface the ${FLOAT_MIN_CONTRAST}:1 guarantee is measured against — so thinning it away puts ` +
+      `the glyphs back on whatever plane the template happened to draw, which is the defect this ` +
+      `device has shipped three times. Heavier is fine; lighter is not.`
+    );
+  }
 
   if (!ready) return null;
 

@@ -4,7 +4,7 @@ import {StickFigure, DIM, Expr} from './figure';
 import * as A from './actions';
 import {blinkOn, crossing, stepIndex} from './anim';
 import {
-  INK, PAPER_WHITE, STROKE, STROKE_THIN, TONE_MAX_STEP, shade, sceneTones, SceneTones,
+  INK, MATERIAL, PAPER_WHITE, STROKE, STROKE_THIN, TONE_MAX_STEP, shade, sceneTones, SceneTones,
 } from './crayonStyle';
 import {useSceneColors} from './stage';
 
@@ -89,6 +89,25 @@ export const useSceneTones = (): SceneTones => sceneTones(useSceneColors());
 // `Video2.tsx` for a scene whose timeline record carries `period`, so a scene that does not ask for
 // it renders the byte-identical element tree it rendered before this work order (proved by render:
 // all thirteen templates, before and after, identical SHA-256).
+//
+// AND THE SECOND RULE, WHICH WO-27 DID NOT HAVE (WO-31): **a substitution names a MATERIAL, and a
+// material's colour does not come from the room.**
+//
+// WO-27 got the geometry right and the colour wrong, everywhere, in one consistent way. Every branch
+// below reached into `useSceneTones()` for its "timber" and its "iron" — and `SceneTones`' material
+// roles (`body`, `card`) ladder off `c.mid`, the scene's committed hue. So the timber frame around a
+// period board was BLUE in a blue-keyed room, the turned chair was blue, the inkstand was blue, and
+// COMPARISON §5 recorded the result honestly: "the chalked slate still reads as a dark electronic
+// quote board; blue-framed easel boards read as flat screens". The substitution was only ever a
+// substitution on a room that was already warm — which is why the ten rooms WO-27 scored PERIOD-CLEAN
+// by reading JSX came out four short when somebody rendered them.
+//
+// `MATERIAL` (crayonStyle.ts) is the fix and the argument is there in full: oak is brown in a blue
+// room. Below, every period branch takes its wood from `MATERIAL.timber`/`.oak`, its metal from
+// `MATERIAL.iron`/`.brass` and its written-on surfaces from `MATERIAL.slate` or `PAPER_WHITE`, and
+// NOTHING in a period branch may take a material colour off the scene ladder again. Structure — the
+// walls, floors and recesses the room is made of — still keys to the scene, because that is the look;
+// it is only the substituted OBJECTS that stop lying about what they are made of.
 // ---------------------------------------------------------------------------
 
 /**
@@ -382,9 +401,30 @@ export const Ceiling: React.FC<{y?: number; lights?: number; fill?: string}> = (
   const panel = fill ?? tn.back;
   return (
     <g>
-      <g transform={`matrix(1 0 0 -1 0 ${y})`}>
-        <SlabFloor y={0} bottom={y} cols={19} rows={6} fill={panel} opacity={0.22} />
-      </g>
+      {/* THE CEILING PLANE ITSELF (WO-31). WO-27 substituted the FITTINGS and left the plane, which
+          is a mirrored `SlabFloor` — a 19x6 lay-in tile grid, i.e. a suspended ceiling, i.e. the
+          single most twentieth-century surface in the library, across the top eighth of every
+          interior. It is why `boardroom` and `exchangeFloor` still read as tinted modern rooms after
+          every prop in them had been swapped. In period the plane is limewashed plaster carrying
+          exposed cross JOISTS in timber: the same band, the same edge count (nineteen columns of tile
+          joint become nineteen joists), and the joists are VERTICAL edges where the tile grid's were
+          split between both axes, so the band's flat fill goes up rather than down. */}
+      {period ? (
+        <g>
+          <rect x={0} y={0} width={1920} height={y} fill={shade(panel, 2)} />
+          {Array.from({length: 19}, (_, i) => (
+            <rect key={i} x={(1920 * i) / 19 + 12} y={0} width={26} height={y}
+              fill={MATERIAL.oak} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+          ))}
+          {/* the two purlins the joists sit on, and the wall plate they die into */}
+          <rect x={0} y={y * 0.34} width={1920} height={16} fill={shade(MATERIAL.oak, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+          <rect x={0} y={y - 18} width={1920} height={18} fill={MATERIAL.timber} stroke={INK} strokeWidth={STROKE_THIN} />
+        </g>
+      ) : (
+        <g transform={`matrix(1 0 0 -1 0 ${y})`}>
+          <SlabFloor y={0} bottom={y} cols={19} rows={6} fill={panel} opacity={0.22} />
+        </g>
+      )}
       {/* recessed fittings: a white panel in a dark reveal. The one honest bit of white in a dark
           interior, and what stops the top eighth of an interior frame reading as an empty band. */}
       {Array.from({length: lights}, (_, i) => {
@@ -574,8 +614,66 @@ export const PipeRun: React.FC<{
   fill?: string; dir?: 'h' | 'v';
 }> = ({x0, x1, y, n = 3, gap = 30, th = 22, flanges = 6, fill, dir = 'h'}) => {
   const tn = useSceneTones();
-  const metal = fill ?? tn.body;
+  const period = usePeriod();
+  // A vertical run is a downpipe or a riser, which a mill also has, so it keeps its geometry — but
+  // its metal comes from the material family in period, not from the room's hue.
+  const metal = fill ?? (period ? MATERIAL.iron : tn.body);
   const len = x1 - x0;
+
+  // PERIOD (WO-31). A bank of parallel service pipes running the width of a plant is 20th-century
+  // building services, and COMPARISON logged it as one of the four things that betray the century in
+  // `factoryFloor`: "blue service pipework across the full width". A mill of 1844 has the opposite
+  // thing in the same place and doing the same compositional job — a LINE SHAFT: one iron shaft on
+  // hangers spanning the building, carrying fast-and-loose pulleys, with flat leather belts dropping
+  // off it to the machines below. It is where a mill's power came from and it is unmistakably not a
+  // pipe rack.
+  //
+  // Same footprint, deliberately: the shaft sits in the middle of the band the pipes occupied, the
+  // belts fall to its bottom edge, and the pulleys are on the shaft's own axis. A period frame must
+  // never be emptier than the modern one (see the PERIOD MODE rule) and this one is denser — the
+  // pipes drew `n` rectangles and `n × flanges` studs, the shaft draws a bar, hangers, pulleys and
+  // belts, all outlined, and the belts are VERTICAL edges, which is the direction flat fill counts.
+  if (period && dir === 'h') {
+    const band = (n - 1) * gap + th;          // the cross-axis depth the pipes filled
+    const shaftY = y + band * 0.42;
+    const shaftH = th * 0.62;
+    const pulleyR = th * 1.05;
+    const nPulley = Math.max(2, Math.round(flanges * 0.6));
+    return (
+      <g>
+        {/* hangers up out of the shaft, into whatever the template drew above it */}
+        {Array.from({length: flanges}, (_, k) => {
+          const hx = x0 + (len * (k + 0.5)) / flanges;
+          return (
+            <g key={'h' + k}>
+              <rect x={hx - th * 0.13} y={shaftY - band * 0.42} width={th * 0.26} height={band * 0.42}
+                fill={MATERIAL.iron} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+              <path d={`M ${hx - th * 0.5} ${shaftY} l ${th * 0.37} ${-th * 0.5} l ${th * 0.26} 0 l ${th * 0.37} ${th * 0.5} Z`}
+                fill={shade(MATERIAL.iron, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.6} strokeLinejoin="round" />
+            </g>
+          );
+        })}
+        <rect x={x0} y={shaftY} width={len} height={shaftH} rx={shaftH * 0.4}
+          fill={MATERIAL.iron} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+        {Array.from({length: nPulley}, (_, k) => {
+          const px = x0 + (len * (k + 0.5)) / nPulley;
+          const cy = shaftY + shaftH / 2;
+          // the belt: two leather runs dropping off the pulley to the machine below, splayed a little
+          // so the pair reads as a belt in perspective rather than as a bracket
+          const drop = band - (shaftY - y) + th * 0.6;
+          return (
+            <g key={'p' + k}>
+              <path d={`M ${px - pulleyR * 0.72} ${cy} L ${px - pulleyR * 0.96} ${cy + drop}
+                        L ${px - pulleyR * 0.34} ${cy + drop} L ${px - pulleyR * 0.16} ${cy} Z`}
+                fill={shade(MATERIAL.timber, -2)} stroke={INK} strokeWidth={STROKE_THIN * 0.55} strokeLinejoin="round" />
+              <circle cx={px} cy={cy} r={pulleyR} fill={shade(MATERIAL.iron, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+              <circle cx={px} cy={cy} r={pulleyR * 0.34} fill={MATERIAL.iron} stroke={INK} strokeWidth={STROKE_THIN * 0.5} />
+            </g>
+          );
+        })}
+      </g>
+    );
+  }
   return (
     <g>
       {Array.from({length: n}, (_, i) => {
@@ -653,7 +751,12 @@ export const BoxStack: React.FC<{
   x: number; baseY: number; n?: number; s?: number; seed?: number; fill?: string;
 }> = ({x, baseY, n = 4, s = 1, seed = 0, fill}) => {
   const tn = useSceneTones();
-  const card = fill ?? tn.card;
+  const period = usePeriod();
+  // PERIOD (WO-31): a stack of cartons in the room's own pale hue reads as moulded plastic totes at
+  // any tint that is not brown — the same tone-inheritance defect the whole material family exists
+  // to end. Before 1900 the box is a TIMBER CRATE, which is the same rectangle with the same lid
+  // band, in timber. Shape and count are untouched, so density and flat fill do not move.
+  const card = fill ?? (period ? MATERIAL.timber : tn.card);
   const boxes: React.ReactNode[] = [];
   let y = baseY;
   for (let i = 0; i < n; i++) {
@@ -686,7 +789,12 @@ export const CaseStack: React.FC<{
   x: number; baseY: number; n?: number; s?: number; seed?: number;
 }> = ({x, baseY, n = 4, s = 1, seed = 0}) => {
   const tn = useSceneTones();
-  const skins = [PAPER_WHITE, tn.card, tn.body];
+  const period = usePeriod();
+  // PERIOD (WO-31): the same three-tone stack in timber, oak and canvas-white — a rank of packing
+  // cases rather than moulded flight cases. Same rule as `BoxStack`: material, not tone.
+  const skins = period
+    ? [PAPER_WHITE, MATERIAL.timber, MATERIAL.oak]
+    : [PAPER_WHITE, tn.card, tn.body];
   const out: React.ReactNode[] = [];
   let y = baseY;
   for (let i = 0; i < n; i++) {
@@ -749,15 +857,20 @@ export const Cone: React.FC<{x: number; y: number; s?: number}> = ({x, y, s = 1}
       <g>
         <path d={`M ${x - 26 * s} ${y} L ${x - 21 * s} ${y - 66 * s} L ${x + 21 * s} ${y - 66 * s}
                   L ${x + 26 * s} ${y} Z`}
-          fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
-        {/* WO-29: the hoops are IRON (`tn.deep`, the shell's darkest structural grey), not
+          fill={MATERIAL.timber} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+        {/* WO-29: the hoops are IRON, not
             `tn.accentDeep`. Measured on the rendered frame: in an orange-keyed room (`cityStreet`)
             two accent bands across a pale near-white body reproduce the exact signature of a modern
             traffic cone / delineator post, which is the prop this one exists to REPLACE — the barrel
             was reading as the cone it substituted for. The lid keeps `c.accent`, so the frame does
             not lose its saturated note. */}
-        <rect x={x - 25 * s} y={y - 52 * s} width={50 * s} height={9 * s} fill={tn.deep} />
-        <rect x={x - 23 * s} y={y - 22 * s} width={46 * s} height={9 * s} fill={tn.deep} />
+        {/* WO-31: `MATERIAL.iron` rather than `tn.deep`. WO-29's fix was right about the hoops not
+            being an accent and wrong about where iron comes from: `tn.deep` is the room's structural
+            grey, so in a tinted room the hoops took the room's tint and the barrel's staves took the
+            room's hue — a blue barrel with blue bands. Iron and timber now come from the material
+            family, so the barrel is a barrel in all thirteen rooms. */}
+        <rect x={x - 25 * s} y={y - 52 * s} width={50 * s} height={9 * s} fill={MATERIAL.iron} />
+        <rect x={x - 23 * s} y={y - 22 * s} width={46 * s} height={9 * s} fill={MATERIAL.iron} />
         <ellipse cx={x} cy={y - 66 * s} rx={21 * s} ry={7 * s} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
         <line x1={x - 8 * s} y1={y - 64 * s} x2={x - 8 * s} y2={y} stroke={INK} strokeWidth={1.8} opacity={0.5} />
         <line x1={x + 8 * s} y1={y - 64 * s} x2={x + 8 * s} y2={y} stroke={INK} strokeWidth={1.8} opacity={0.5} />
@@ -907,7 +1020,11 @@ export const Monitor: React.FC<{
   // ledger, a plotted chart. Nothing here reads `frame`: a sheet of paper does not reprint itself,
   // so the substitute is static where the screen was live.
   if (period) {
-    const frame = shade(tn.card, -2);
+    // WO-31: `shade(tn.card, -2)` — the room's own pale material, two rungs down. In `exchangeFloor`
+    // and `boardroom` (both blue-keyed) that drew a blue bezel around a white sheet, which is a
+    // FLAT SCREEN, not an easel board: the one prop this feature turns on was reading as the prop it
+    // exists to replace. Oak, from the material family, in every room.
+    const frame = MATERIAL.oak;
     // the sheet is PAPER_WHITE, not the pale `card` rung: WO-24's CHROMA_FLOOR says a surface either
     // carries the hue at real chroma or it is neutral, and a pale keyed rung this large (seven boards
     // across `broadcastDesk`) pays full coloured coverage for a hue nobody can name. It is also what
@@ -1047,7 +1164,9 @@ export const Chair: React.FC<{x: number; y: number; s?: number; facing?: number;
 ({x, y, s = 1, facing = 1, fill}) => {
   const tn = useSceneTones();
   const period = usePeriod();
-  const skin = fill ?? shade(tn.body, -1);
+  // WO-31: a TURNED WOODEN chair whose wood came off `tn.body` was only wooden in a warm-keyed room.
+  // An explicit `fill` still wins — a caller naming a colour has said what it wants.
+  const skin = fill ?? (period ? MATERIAL.oak : shade(tn.body, -1));
   // PERIOD (WO-27): the gas post and the five-star castor base are the giveaway — a swivel chair is
   // 20th-century office furniture and it stands in five of the thirteen rooms. The substitute is a
   // TURNED WOODEN CHAIR at the same footprint and the same seat height: a spindle back between two
@@ -1139,12 +1258,15 @@ export const DeskPhone: React.FC<{
   if (period) {
     return (
       <g>
+        {/* WO-31: the tray is TIMBER and the wells are IRON, from the material family — off the
+            scene ladder they were the room's own hue, so the "inkstand" was a blue moulded object
+            with two blue pots on it, which reads as a desk gadget rather than as 1844. */}
         <path d={`M ${x} ${y} L ${x + 128 * s} ${y} L ${x + 116 * s} ${y - 30 * s} L ${x + 10 * s} ${y - 30 * s} Z`}
-          fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
+          fill={MATERIAL.oak} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
         {[26, 52].map((dx, i) => (
           <g key={i}>
             <rect x={x + dx * s} y={y - 52 * s} width={20 * s} height={24 * s} rx={4 * s}
-              fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+              fill={MATERIAL.iron} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
             <ellipse cx={x + (dx + 10) * s} cy={y - 52 * s} rx={11 * s} ry={4 * s} fill={INK} />
           </g>
         ))}
@@ -1154,7 +1276,7 @@ export const DeskPhone: React.FC<{
         {/* the hand bell */}
         <path d={`M ${x + 86 * s} ${y - 30 * s} Q ${x + 86 * s} ${y - 74 * s} ${x + 108 * s} ${y - 74 * s}
                   Q ${x + 130 * s} ${y - 74 * s} ${x + 130 * s} ${y - 30 * s} Z`}
-          fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN * 0.8} strokeLinejoin="round" />
+          fill={MATERIAL.brass} stroke={INK} strokeWidth={STROKE_THIN * 0.8} strokeLinejoin="round" />
         <rect x={x + 103 * s} y={y - 92 * s} width={10 * s} height={20 * s} rx={4 * s} fill={INK} />
         <circle cx={x + 108 * s} cy={y - 28 * s} r={5 * s} fill={INK} />
       </g>
@@ -1237,11 +1359,17 @@ export const WallFrame: React.FC<{
 }> = ({x, y, w, h, art = 'bars', seed = 0, ground}) => {
   const c = useSceneColors();
   const tn = useSceneTones();
+  const period = usePeriod();
   const face = ground ?? PAPER_WHITE;
   const ix = x + 16, iy = y + 16, iw = w - 32, ih = h - 32;
+  // PERIOD (WO-31): the moulding took `shade(tn.body, -2)` — the room's own mid mass — so in
+  // `boardroom` (blue-keyed) a white sheet inside a deep blue border is a WALL SCREEN, which is what
+  // COMPARISON reported. The frame is oak; a hung picture frame was oak in every room in 1844, and
+  // the substitution costs the frame nothing but its inherited tint.
   return (
     <g>
-      <rect x={x} y={y} width={w} height={h} fill={shade(tn.body, -2)} stroke={INK} strokeWidth={STROKE * 0.9} />
+      <rect x={x} y={y} width={w} height={h} fill={period ? MATERIAL.oak : shade(tn.body, -2)}
+        stroke={INK} strokeWidth={STROKE * 0.9} />
       <rect x={ix} y={iy} width={iw} height={ih} fill={face} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
       {art === 'bars' && (
         <g>
