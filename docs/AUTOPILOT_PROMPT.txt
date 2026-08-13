@@ -40,13 +40,30 @@ DO, in order:
 
    SCENE GRANULARITY — READ BIBLE.md §3a BEFORE WRITING. This is the rule that most changes what the
    episode looks like, and it is the one the WO-13 sample episode failed.
-     • ONE set-up per 1–2 SENTENCES. 10–16 narration words per scene. A scene carrying three or more
-       sentences should have been two or three scenes.
-     • ~180–210 SCENES for a 15–17 min episode -> mean scene 4.5–6.0s, 10–13 cuts/min. (The reference
+     • ~180–210 SCENES for a 15–17 min episode -> mean scene 4.5–5.5s, 10–13 cuts/min. (The reference
        runs 4.79s / 12.5 cuts/min. §3a has the measurements and says why we sit at its cut rate but do
        not go past it — do not "fix" this by writing 39 long scenes.)
      • Since WO-17 there is exactly ONE framing per scene, so a scene IS a shot. The renderer cannot
        add a cut. The cut rate is YOUR number and nobody else's.
+     • WRITE A DISTRIBUTION, NOT A MEAN (§3a "THE RHYTHM RULE", WO-30). Hitting 4.79s on average and
+       cutting every 4–6s all episode is a TELL — it was the last structural difference the final
+       review found, in these words: "our longest hold is 9.8s where theirs runs to 16.5s. Ours never
+       pauses." The reference runs 0.61–16.46s. Budget per episode:
+         HOLD 12–16s    4–6 scenes, ONE of them 14–16s: the first real reveal, the mechanism
+                        definition, the MIDPOINT REVERSAL, and the LAST SHOT. 30–40 words, 4–5
+                        sentences, one set-up, no cut inside it.
+         long 8–12s     10–14 scenes — one continuous piece of reasoning, or a reflective beat.
+         bulk 3–7s      ~60% of scenes. ONE set-up per 1–2 sentences here, and only here.
+         PUNCH <=2.5s   25–30 scenes, ~6 of them at ~1s: a single word, a bare date ("1994."), a hard
+                        number, a turn, a verdict ("Not one.").
+       PAY FOR EVERY HOLD WITH A SPLIT. Runtime is set by the WORD count, not the scene count (a
+       boundary costs ~0.49s and the per-scene audio constant gives back about the same), so merging
+       two or three adjacent scenes into a hold and splitting a punch off a long scene elsewhere keeps
+       the runtime, the WPM and the cut rate where they were. Do NOT lengthen scenes to make a hold.
+       CHECK, on the built timeline: longest shot >= 12s · median BELOW the mean · standard deviation
+       >= ~2.3s · no more than ~5 scenes in a row inside +/-1s of each other.
+       A scene under 38 frames renders fine (WO-25/WO-28 closed that render-killer, WO-30 re-proved it
+       on a 30-frame scene) — but render one still if you write one.
      • VARY THE SET-UP, not just the template: full-screen `card=` beats (chapter/narration/word/
        objects), `panels=` splits, `foreground=dict(kind="overShoulder", side=...)`, and
        `closeUpPortrait` as a genuine cut-in on a reaction. Budget per episode: 5 chapter cards,
@@ -58,7 +75,13 @@ DO, in order:
        engine's hashed gaps are what score the measured MATCH on varied inter-scene silence.
      • MEASURE variety before you stop: sample the timeline at 8 evenly spaced points, resolve what is
        on screen at each (card kind / panel split / template), and count DISTINCT values. Target 8/8.
-       The reference scores 8/8; the 39-scene WO-13 build scored 4/8.
+       The reference scores 8/8; the 39-scene WO-13 build scored 4/8. A 12s+ HOLD pulls a sample point
+       onto whatever room it sits in, so re-measure after every hold you add — WO-30 dropped to 7/8
+       when two holds landed on the same template and got 8/8 back by re-templating ONE neighbouring
+       beat (never by shortening the hold).
+     • MEASURE the shot-length DISTRIBUTION in the same pass, not just the mean: mean, median, min,
+       max, standard deviation and deciles of durationInFrames/fps. Reference: mean 4.79s, range
+       0.61–16.46s. WO-30: mean 4.80 / median 4.57 / 1.00–15.50 / sd 2.45 / 12.5 cuts/min.
 
    THE HOOK (first ~30s, five steps, in order — worked examples in BIBLE.md §4):
      1) shock stat or paradox, ONE sentence
@@ -231,7 +254,8 @@ DO, in order:
    SELF-CHECK the script against BIBLE.md §3 before you build: mean and median sentence length, the
    share under 8 words, the number count, and the "you"-per-1000 rate. If any is out of band, rewrite
    — those bands ARE the format. Then self-check §3a on the built timeline: scene count, mean scene
-   seconds, cuts/min, and DISTINCT SET-UPS IN 8 EVENLY SPACED SAMPLES (target 8/8).
+   seconds, cuts/min, DISTINCT SET-UPS IN 8 EVENLY SPACED SAMPLES (target 8/8), and the SHOT-LENGTH
+   DISTRIBUTION (median below the mean, longest shot >= 12s, shortest ~1s, sd >= ~2.3s).
 
 6. LEARN — do NOT touch ops/produced_topics.json (the shell appends the topic there ONLY after a
    successful publish, so a failed render never orphans it). Move any shipped backlog items in

@@ -7,17 +7,45 @@ that standard is in that file's CUT list and is absent here. Register: straight 
 throughout (§2) — the subject has 25,000 real victims, so the Depression episode's comic anachronism
 register would read as callous.
 
-GRANULARITY — THIS IS THE WO-22 REWRITE. Same subject, same verified facts, same measured MATCHes as
-the 39-scene WO-13 build; what changed is the EDIT. That build ran 39 scenes over 13.7 min: a 21.1s
-mean scene against the reference's 4.79s mean shot, and at 8 evenly spaced samples it showed only
-4 distinct set-ups out of 8 (the reference montages show 8 of 8). Since WO-17 there is exactly ONE
-framing per scene, so a scene IS a shot and the writer — not the director — owns the cut rate.
-This script is written to docs/BIBLE.md §3a: ONE set-up per 1-2 sentences, 10-16 narration words a
-scene. MEASURED on this build: 196 scenes, 16.16 min, mean scene 4.95s, 12.4 cuts/min, 8 of 8 distinct
-set-ups at the reference montages' own sampling density, 152.7 WPM runtime-inclusive, gate PASS.
+GRANULARITY — WO-22 set the cut RATE, WO-30 set the RHYTHM. WO-22 re-cut the 39-scene WO-13 build
+(21.1s mean scene, 4 distinct set-ups in 8 samples) into 196 scenes at a 4.95s mean — 0.16s off the
+reference's 4.79s. The final verification still scored the edit as the largest remaining structural
+difference, and it was not the average: "our longest hold is 9.8s where theirs runs to 16.5s. Ours
+never pauses." WO-22's shots ran 1.17-9.80s, sd 1.77s, with the MEDIAN (4.83s) sitting ABOVE the mean.
+The reference is mean 4.79s over 0.61-16.46s and is right-skewed — many short shots, a few long holds.
+
+WO-30 RESHAPES THAT DISTRIBUTION WITHOUT MOVING THE MEAN, and the narration is otherwise VERBATIM the
+WO-22 text: not one fact, quote or figure changed, and only one word in the whole script differs (the
+"and" lost when "Move four, and this is the one that killed it" became two shots). What changed is
+WHERE THE CUTS FALL. Seventeen merges and seventeen splits, in matched pairs: adjacent scenes whose
+narration is ONE thought were merged onto one set-up to make a hold, and a punch was split off a long
+scene elsewhere to pay for it. That works because runtime is set by the WORD count, not the scene
+count — a scene boundary costs LEAD + gap ~0.49s and the per-scene audio constant gives back about the
+same, so merging and splitting are close to runtime-neutral.
+
+MEASURED on this build (docs/BIBLE.md §3a "THE RHYTHM RULE"):
+                        reference        WO-22            WO-30
+  scenes / runtime      —                196 / 16.16 min  202 / 16.18 min
+  mean shot             4.79s            4.95s            4.80s
+  median shot           2.67-6.81s       4.83s            4.57s   (now BELOW the mean)
+  range                 0.61-16.46s      1.17-9.80s       1.00-15.50s
+  standard deviation    —                1.77s            2.45s
+  shots >= 12s          several          0                6
+  shots <= 2.5s         —                9                29
+  cuts/min (from plan)  12.5             12.4             12.5
+  8-sample set-ups      8/8              8/8              8/8
+  WPM runtime-inclusive —                152.7            152.5   gate PASS, 0 warnings
+The four biggest holds are t011 (13.8s, the derivative reveal), t067 (14.0s, Repo 105), t082 (13.0s,
+the midpoint reversal), t097 (15.5s, the Saturday plan) and t140 (13.9s, the closing shot).
 An intermediate 141-scene draft of this same script measured 154.2 WPM and would have HALTED: past
 about a 7s mean scene, splitting a scene REMOVES more sentence-final pause than the gap it adds, so
-the fix for a high WPM is more scenes, not fewer. The table is in §3a.
+the fix for a high WPM is more scenes, not fewer. The table is in §3a. WO-30's 202 scenes sit well
+clear of that dead zone at a 4.80s mean, and the figure was RE-MEASURED, not assumed.
+
+SHORT SCENES RENDER. Six scenes are 30-35 frames, below the ~38-frame threshold that used to kill the
+render. That class is closed by construction (WO-25/WO-28 swept Remotion's `interpolate` over
+D=1..600), and WO-30 re-proved it on the frame: the first, middle and last frames of t031 (30 frames,
+officeFloor) render as complete art, 89.1-89.5% flat fill at 1280x720, inside the §5 band.
 
 SET-UP ROTATION. Thirteen explainer environments exist (`EXPLAINER_TEMPLATES` in src/explainer.tsx —
 NOT docs/TEMPLATES.md, which still documents only the legacy library): officeFloor · boardroom ·
@@ -25,8 +53,19 @@ exchangeFloor · cityStreet · domesticInterior · newsMontage · bankExterior �
 factoryFloor · broadcastDesk · crowdQueue · closeUpPortrait · chartBoard. At this cut rate the
 template list alone is not enough variety, so the devices carry their share: 5 chapter cards,
 6 narration cards, 4 word cards, 2 object cards, 4 panel splits, 4 over-the-shoulder foregrounds,
-5 bubble/float beats. Rule held throughout: at least two other set-ups between any two uses of one
-template (the bible's "never adjacent" is the floor, not the target).
+5 bubble/float beats, 14 hand-set breaths. Rule held throughout: at least two other set-ups between
+any two uses of one template (the bible's "never adjacent" is the floor, not the target) — MEASURED
+0 adjacent repeats, 0 pairs closer than 3 scenes, 9 pairs sitting exactly at that minimum.
+Histogram after WO-30, flattest it has been: boardroom 21 · closeUpPortrait 21 · bankExterior 20 ·
+chartBoard 19 · officeFloor 19 · newsMontage 17 · crowdQueue 16 · exchangeFloor 16 · cityStreet 12 ·
+factoryFloor 12 · broadcastDesk 11 · domesticInterior 10 · courtHearing 8.
+
+ONE ROTATION TRAP WO-30 FOUND, and it is caused by the holds. A 12s+ shot is ~1.3% of the episode, so
+it is disproportionately likely to catch one of the 8 evenly spaced set-up samples. Two holds on the
+same template therefore drop the score from 8/8 to 7/8 even though the rotation rule is not broken
+anywhere — which is what happened when t042 (12.0s) and t061 both sat on `chartBoard`. The fix is to
+re-template a NEIGHBOURING beat, never to shorten the hold: t061 moved to `courtHearing`, the least
+used room in the episode (7 -> 8), and the line needs no chart. 8/8 restored.
 
 PERIOD (WO-29, replacing the WO-26 rule). WO-26 fixed the anachronism defect COMPARISON.md §7 scored
 ("1844 Alabama narration over CRT monitors, a projector, a parked car and a glass skyline") the only
@@ -67,34 +106,43 @@ because the art beneath them is never rendered (t008's word card).
 
 So the honest count is EIGHT rooms in the pre-1900 span, not the bible's twelve — but eight against
 WO-26's four, and WO-26's four included `factoryFloor`, so the count of rooms that are actually
-era-correct goes 3 -> 8. The span (t005-t015b, 19 scenes) is: newsMontage 4 · bankExterior 3 ·
-officeFloor 3 · domesticInterior 3 · factoryFloor 2 · courtHearing 2 · chartBoard 1 · cityStreet 1.
+era-correct goes 3 -> 8. The span is t005-t015b plus the two ending callbacks t138/t139 — still 19
+period scenes after WO-30's re-cut, because the two the merge removed (t011b, t012) were paid for by
+the holds not touching the rest of the chapter: domesticInterior 4 · newsMontage 4 · bankExterior 3 ·
+officeFloor 2 · factoryFloor 2 · courtHearing 2 · chartBoard 1 · cityStreet 1.
 
 `factoryFloor`, used TWICE and deliberately. t007 keeps it because the over-the-shoulder silhouette
 masks the right third of the frame including one machine, and because no other room holds cotton
 bales; t015 keeps it because "the Civil War burned the cotton trade to the ground" wants a stopped
 mill. Both are short. It is not used anywhere else before 1900.
 
-`cityStreet`, used ONCE (t011b, "sold to a buyer in New York"). Its drays carry shafts and a correct
-load but no horse, so they read as parked handcarts; its ground-floor retail fascia band and its
+`cityStreet`, used ONCE in the period span — at t010 ("Lehman Brothers. Now look at what trading
+cotton actually meant."), where WO-29 had it at t011b. Its drays carry shafts and a correct load but
+no horse, so they read as parked handcarts; its ground-floor retail fascia band and its
 rectangular-headed lamp standards are untouched by the flag. Acceptable at the far plane of a wide
-establishing shot, wrong for any shot where the eye rests on the road. One use, at the moment the
-chapter needs to open out of interiors.
+establishing shot, wrong for any shot where the eye rests on the road — which is exactly WHY it moved.
+WO-29's t011b is now part of the 13.8s hold at t011, and a 13.8s shot IS the eye resting on the road.
+t010 is 4.3s and it is the moment the chapter needs to open out of interiors. The hold went to
+`chartBoard` instead: a wooden easel and slat chairs, and a bale sold forward is a chart's subject.
 
-`officeFloor` REPETITION (the WO-26 QA defect: "it looks the same every time"). WO-26 cut it 20 -> 16.
-WO-29 puts three back, at t005b, t007b and t012 — but ALL THREE are period, and a period `officeFloor`
-is a counting house, not a repeat of the open-plan modern room. Counted as (template, period) pairs
-the real figure is 16 modern + 3 period: the modern room did not gain a single use. The episode-wide
-histogram still FLATTENS on this pass — `factoryFloor` 16 -> 13, `newsMontage` 19 -> 17, `courtHearing`
-9 -> 6 (WO-26 had inflated it as a period workaround), `bankExterior` 11 -> 14 — and the number of
-template pairs sitting at the minimum 2-scene reuse gap drops 18 -> 10.
+`officeFloor` REPETITION (the WO-26 QA defect: "it looks the same every time"). WO-26 cut it 20 -> 16,
+WO-29 put three period uses back (16 modern + 3 period), and WO-30's t012 merge takes one of those out
+again: 19 total, 17 modern + 2 period. Counted as (template, period) pairs the modern room has not
+gained a use since WO-26. The busiest room in the episode is now `boardroom`/`closeUpPortrait` at 21
+in 202 scenes = 1.04 per 10 scenes, which is the §8 target.
 
-HOOK — the five steps (§4), in order, all inside the first ~30s:
-  1 shock stat            t001  "A hundred and fifty-eight-year-old bank died in seventy-two hours."
-  2 consequence fragments t002  "$639 billion in assets. $613 billion in debt. 25,000 employees."
-  3 the paradox turn      t003  "But it did not fall because nobody saw it coming..."
-  4 thesis naming it      t004  "This is the story of Lehman Brothers..."
-  5 hard cut DATE + PLACE t005  "Montgomery, Alabama, 1844."
+HOOK — the five steps (§4), in order, all inside the first ~30s. WO-30 gives step 2 the cut rate the
+canon describes it with: "escalating consequence fragments" is a RHYTHM, so the fragments are now four
+shots of shrinking length (4.7s · 2.5s · 1.5s · 1.2s) instead of two scenes that merely said the words.
+  1 shock stat            t001   "A hundred and fifty-eight-year-old bank died in seventy-two hours."
+    the counter-image     t001b  "No war. No fire. No robbery."          (its own shot)
+  2 consequence fragments t002   "$639 billion in assets."
+                          t002b  "$613 billion of debt."
+                          t002c  "Twenty-five thousand employees."
+                          t002d  "Four continents."
+  3 the paradox turn      t003   "But it did not fall because nobody saw it coming..."
+  4 thesis naming it      t004   "This is the story of Lehman Brothers..."
+  5 hard cut DATE + PLACE t005   "Montgomery, Alabama, 1844."
 
 CHAPTERS (§1, `Evocative Noun: Plain Explanation`, emitted as card=dict(kind="chapter", …) and used
 verbatim in the description timestamps). MEASURED DEFECT (COMPARISON.md §2 §7): a subtitle past ~36
@@ -106,21 +154,24 @@ of frame width against the reference's 0.565. Every subtitle below is inside 36 
   4 The Weekend      : Three Days at the New York Fed (30)  t086
   5 The Pavement     : What Monday Morning Cost       (24)  t114
 
-PROMISE -> PAYOFF LEDGER (a `b` suffix is the second half of a scene split for pace, §3a):
+PROMISE -> PAYOFF LEDGER (a `b`/`a`/`c` suffix is a further fragment of a scene split for pace, §3a):
   * t004b promise: "It starts with cotton. It ends with cardboard boxes on a New York sidewalk."
-        -> boxes PAID at t116b/t119, cotton PAID at t138-t141b. Both halves land.
-  * t001 promise: "No war. No fire. No robbery." -> PAID at t094-t113, three days in one room.
+        -> boxes PAID at t116b/t119, cotton PAID at t138-t140. Both halves land.
+  * t001b promise: "No war. No fire. No robbery." -> PAID at t094-t113, three days in one room.
   * MOTIF (the factual through-line replacing the old sensory anchor): **taking the thing the
         customer cannot pay for, and selling it on.** Planted t006-t008 (cotton instead of cash) ->
-        re-triggered t025 (the habit outlives the cotton), t031-t033 (the mortgage bond), t040-t042
-        (leverage), t070 (Repo 105) -> maximal payoff t139-t141.
+        re-triggered t025b/t025c (the habit outlives the cotton, now two beats so the second half is
+        its own shot), t031-t033 (the mortgage bond), t040-t042 (leverage), t070 (Repo 105) ->
+        maximal payoff inside the closing 13.9s hold at t140.
   * EPITHET: "the Gorilla" / "Lehman would never be small again" planted t020-t023 -> re-triggered
         t049 ("The Gorilla was right") -> inverted t113.
   * share-worthy beat #1: Repo 105 — 105% of the cash makes a loan a "sale" -> t061-t071
   * share-worthy beat #2: Einhorn read the fraud out loud on a stage four months early -> t076, t134
   * share-worthy beat #3: the Fuld pay hearing, where the ARGUMENT was over $175M -> t129-t131b
   * MIDPOINT REVERSAL (§5): the machine runs backwards at the same leverage — t081, with gap=1.4 on
-        t080 so the sound engine drops to near-silence and the line lands raw. Spent once.
+        t080 so the sound engine drops to near-silence and the line lands raw. Spent once. WO-30 gives
+        it the edit to match: the near-silence is followed by t081 (2.9s), the narration card on t081b,
+        and then a 13.0s HOLD at t082 on which the whole reversal plays without a single cut.
 
 STRUCTURAL VARIATION vs the last 2 produced (ops/produced_topics.json: bratva, astronaut — both old
 format): cold open is a DEATH-FIRST autopsy (the ending stated in sentence one, then a 158-year
@@ -150,17 +201,32 @@ NARRATION_RATE = "-7%"
 SCENES = [
     # ================= HOOK — the five steps, first ~30s =================
     dict(id="t001", level=None, template="cityStreet",
-         narration=("A hundred and fifty-eight-year-old bank died in seventy-two hours. No war. No fire. No "
-                    "robbery."),
+         narration=("A hundred and fifty-eight-year-old bank died in seventy-two hours."),
+         overlay=None),
+
+    # §3a RHYTHM — the three fragments are their own shot. The building that none of those things
+    # touched is the picture that argues with them.
+    dict(id="t001b", level=None, template="bankExterior",
+         narration=("No war. No fire. No robbery."),
          overlay=None),
 
     dict(id="t002", level=None, template="chartBoard",
          narration=("Six hundred and thirty-nine billion dollars of assets."),
          overlay=dict(big="$639 BILLION", sub="THE LARGEST BANKRUPTCY IN U.S. HISTORY")),
 
+    # §3a RHYTHM — hook step 2 is "escalating consequence fragments", and fragments are a CUT RATE,
+    # not a sentence structure: three fragments, three shots, each shorter than the last (~2.5s, 1.5s,
+    # 1.2s). The old single 6.2s scene said the words and threw away the escalation.
     dict(id="t002b", level=None, template="crowdQueue",
-         narration=("Six hundred and thirteen billion of debt. Twenty-five thousand employees. Four "
-                    "continents."),
+         narration=("Six hundred and thirteen billion of debt."),
+         overlay=None),
+
+    dict(id="t002c", level=None, template="officeFloor",
+         narration=("Twenty-five thousand employees."),
+         overlay=None),
+
+    dict(id="t002d", level=None, template="newsMontage",
+         narration=("Four continents."),
          overlay=None),
 
     dict(id="t003", level=None, template="boardroom",
@@ -223,20 +289,19 @@ SCENES = [
          narration=("The sign over the door was repainted, and the name on it outlived all three of them."),
          overlay=None),
 
-    dict(id="t010", level=None, template="chartBoard", period="pre1900",
+    # `cityStreet`'s ONE period use moves here from the old t011b. Short, and the eye never rests on
+    # the road — which is the condition §8 sets on this room in a pre-1900 scene.
+    dict(id="t010", level=None, template="cityStreet", period="pre1900",
          narration=("Lehman Brothers. Now look at what trading cotton actually meant."),
          overlay=None),
 
-    dict(id="t011", level=None, template="newsMontage", period="pre1900",
-         narration=("A bale that did not exist yet. Grown in Alabama."),
-         overlay=None),
-
-    dict(id="t011b", level=None, template="cityStreet", period="pre1900",
-         narration=("Sold to a buyer in New York, months before anybody knew what the crop would be worth."),
-         overlay=None),
-
-    dict(id="t012", level=None, template="officeFloor", period="pre1900",
-         narration=("At a price agreed before the crop came in."),
+    # §3a RHYTHM — HOLD #1 of four (13-15s). The first reveal of the episode: three sentences that
+    # only mean something together, so the picture must not change while they land. Built by merging
+    # the old t011 + t011b + t012 (narration verbatim, in order) onto ONE set-up.
+    dict(id="t011", level=None, template="chartBoard", period="pre1900",
+         narration=("A bale that did not exist yet. Grown in Alabama. Sold to a buyer in New York, months "
+                    "before anybody knew what the crop would be worth. At a price agreed before the crop "
+                    "came in."),
          overlay=None),
 
     dict(id="t012b", level=None, template="courtHearing", period="pre1900",
@@ -266,7 +331,14 @@ SCENES = [
          overlay=None),
 
     dict(id="t016", level=None, template="crowdQueue",
-         narration=("The Great Depression killed American banks by the thousand. Lehman survived that too."),
+         narration=("The Great Depression killed American banks by the thousand."),
+         overlay=None),
+
+    # §3a RHYTHM — PUNCH (~1.8s), deliberately rhyming with t015b's "Lehman survived." (~1.5s) and
+    # feeding t017's "Survived, survived, survived." Three shots of shrinking length is the survival
+    # motif done as an EDIT rather than as a sentence.
+    dict(id="t016a", level=None, template="bankExterior",
+         narration=("Lehman survived that too."),
          overlay=None),
 
     dict(id="t017", level=None, template="newsMontage",
@@ -279,17 +351,21 @@ SCENES = [
                  dict(template="newsMontage"),
                  dict(template="officeFloor", ground="#e8541f")])),
 
+    # §3a RHYTHM — LONG (~11s). The two halves are one thought and the second only means anything
+    # against the first; a cut between them makes the viewer re-anchor instead of think. Old
+    # t018 + t018b, verbatim, on t018's face.
     dict(id="t018", level=None, template="closeUpPortrait",
-         narration=("A hundred and fifty-eight years is long enough to start believing you cannot die."),
+         narration=("A hundred and fifty-eight years is long enough to start believing you cannot die. It "
+                    "is also long enough for everybody who remembers the last near miss to retire."),
          overlay=None),
 
-    dict(id="t018b", level=None, template="domesticInterior",
-         narration=("It is also long enough for everybody who remembers the last near miss to retire."),
-         overlay=None),
-
+    # §3a RHYTHM — PUNCH. A bare year on its own set-up, ~1.5s. The date is the turn; give it a frame.
     dict(id="t019", level=None, template="cityStreet", breath=True,
-         narration=("1994. Lehman is spun out on its own, and a trader named Richard Fuld takes the top "
-                    "job."),
+         narration=("1994."),
+         overlay=None),
+
+    dict(id="t019b", level=None, template="bankExterior",
+         narration=("Lehman is spun out on its own, and a trader named Richard Fuld takes the top job."),
          overlay=None),
 
     dict(id="t020", level=None, template="officeFloor",
@@ -326,8 +402,13 @@ SCENES = [
          narration=("Lehman still made its money the same way."),
          overlay=None),
 
+    # The MOTIF, planted. Two beats, because the second half is the half that repeats.
     dict(id="t025b", level=None, template="crowdQueue",
-         narration=("Take the thing the customer cannot pay for. Sell it on."),
+         narration=("Take the thing the customer cannot pay for."),
+         overlay=None),
+
+    dict(id="t025c", level=None, template="exchangeFloor",
+         narration=("Sell it on."),
          overlay=None),
 
     dict(id="t026", level=None, template="domesticInterior",
@@ -345,7 +426,18 @@ SCENES = [
          overlay=None),
 
     dict(id="t028", level=None, template="chartBoard",
-         narration=("Here is the machine, in four moves. Move one. Somebody borrows."),
+         narration=("Here is the machine, in four moves."),
+         overlay=None),
+
+    # §3a RHYTHM — the four move announcements are PUNCHES, ~1.2s each, one per act of the teardown.
+    # A recurring one-beat shot is a motif at this spacing (t028a, t031, t036, t040 are 3-12 scenes
+    # apart), not a metronome: nothing else in the episode is that short for that long a stretch.
+    dict(id="t028a", level=None, template="bankExterior",
+         narration=("Move one."),
+         overlay=None),
+
+    dict(id="t028b", level=None, template="crowdQueue",
+         narration=("Somebody borrows."),
          overlay=None),
 
     dict(id="t029", level=None, template="domesticInterior",
@@ -364,7 +456,11 @@ SCENES = [
          overlay=None),
 
     dict(id="t031", level=None, template="officeFloor",
-         narration=("Move two. The loan gets sold."),
+         narration=("Move two."),
+         overlay=None),
+
+    dict(id="t031a", level=None, template="exchangeFloor",
+         narration=("The loan gets sold."),
          overlay=None),
 
     dict(id="t031b", level=None, template="chartBoard",
@@ -401,7 +497,11 @@ SCENES = [
          card=dict(kind="objects", items=["houseModel", "cashStack"])),
 
     dict(id="t036", level=None, template="cityStreet",
-         narration=("Move three. This is where Lehman went further than anyone."),
+         narration=("Move three."),
+         overlay=None),
+
+    dict(id="t036b", level=None, template="boardroom",
+         narration=("This is where Lehman went further than anyone."),
          overlay=None),
 
     dict(id="t037", level=None, template="bankExterior",
@@ -422,23 +522,29 @@ SCENES = [
          overlay=None),
 
     dict(id="t040", level=None, template="boardroom",
-         narration=("Move four, and this is the one that killed it. Do all of it with borrowed money."),
+         narration=("Move four."),
+         overlay=None),
+
+    # The over-the-shoulder moved off t040 when t040 became a ~1.2s punch — a silhouette that exists
+    # for 36 frames reads as a flash, not as a point of view. §6.8: `factoryFloor` stages its colour
+    # hero at x 1260, so the near plane takes the RIGHT edge (the same note t007 carries).
+    dict(id="t040b", level=None, template="factoryFloor",
+         narration=("This is the one that killed it. Do all of it with borrowed money."),
          overlay=None,
-         # §6.8 — boardroom's hero stands at the RIGHT, so the silhouette takes the left edge.
-         foreground=dict(kind="overShoulder", side="left")),
+         foreground=dict(kind="overShoulder", side="right")),
 
     dict(id="t041", level=None, template="exchangeFloor",
          narration=("For every dollar Lehman actually owned, it had borrowed more than thirty dollars to "
                     "invest alongside it."),
          overlay=dict(big="30 TO 1", sub="BORROWED AGAINST ITS OWN MONEY")),
 
+    # §3a RHYTHM — LONG (~11s). A definition and its first worked example belong on one board; the
+    # teardown is the place in the episode where a viewer most needs the picture to stop moving.
+    # Old t042 + t043, verbatim.
     dict(id="t042", level=None, template="chartBoard",
          narration=("That is what leverage means. It works beautifully in one direction, and only in one "
-                    "direction."),
-         overlay=None),
-
-    dict(id="t043", level=None, template="broadcastDesk",
-         narration=("A three percent gain on borrowed money becomes a hundred percent gain on your own."),
+                    "direction. A three percent gain on borrowed money becomes a hundred percent gain on "
+                    "your own."),
          overlay=None),
 
     dict(id="t044", level=None, template="closeUpPortrait",
@@ -450,8 +556,13 @@ SCENES = [
          narration=("And for a while it worked exactly the way the model said it would."),
          overlay=None),
 
+    # §3a RHYTHM — PUNCH, then the fact. The overlay rides the fact, not the date.
     dict(id="t046", level=None, template="exchangeFloor",
-         narration=("February 2007. Lehman stock touches eighty-six dollars a share."),
+         narration=("February 2007."),
+         overlay=None),
+
+    dict(id="t046a", level=None, template="chartBoard",
+         narration=("Lehman stock touches eighty-six dollars a share."),
          overlay=dict(big="$86", sub="A SHARE — FEBRUARY 2007")),
 
     dict(id="t046b", level=None, template="bankExterior",
@@ -539,7 +650,12 @@ SCENES = [
                     "exactly the few days that mattered."),
          overlay=None),
 
-    dict(id="t061", level=None, template="chartBoard",
+    # Was `chartBoard`. Moved because the 8-sample set-up check landed on t042 and t061 in the same
+    # pass and both were chartBoard — the two 12s+ holds pull sample points onto whatever room they
+    # sit in, so the busiest room must not host them AND the beats either side. `courtHearing` is the
+    # least-used room in the episode (7) and the line needs no chart; the examiner's room is where
+    # this trick ended up anyway.
+    dict(id="t061", level=None, template="courtHearing",
          narration=("It was called Repo 105, and it is beautiful the way a card trick is beautiful."),
          overlay=None),
 
@@ -576,20 +692,24 @@ SCENES = [
                     "you take..."),
          overlay=None),
 
+    # §3a RHYTHM — HOLD #2 of four (~14s). The Repo 105 reveal: the sentence that renames the thing,
+    # the sentence that says nothing else changed, and the consequence. Cutting between them is what
+    # makes a card trick look like three unrelated card tricks. Old t067 + t067b + t068, verbatim.
+    # It also gives the 105% note somewhere to sit for its full ~3.5s reveal without eating the shot.
     dict(id="t067", level=None, template="officeFloor",
-         narration=("...the accounting lets you call it a sale. Not a loan. A sale."),
+         narration=("...the accounting lets you call it a sale. Not a loan. A sale. The same transaction, "
+                    "with a different name on it. And a sold asset leaves the books entirely, taking its "
+                    "debt with it."),
          overlay=dict(big="105%", sub="THE LINE THAT TURNED A LOAN INTO A SALE")),
 
-    dict(id="t067b", level=None, template="exchangeFloor",
-         narration=("The same transaction, with a different name on it."),
-         overlay=None),
-
-    dict(id="t068", level=None, template="factoryFloor",
-         narration=("And a sold asset leaves the books entirely, taking its debt with it."),
-         overlay=None),
-
     dict(id="t069", level=None, template="boardroom",
-         narration=("Same bond. Same cash. Same buy-back a few days later. Completely different picture."),
+         narration=("Same bond. Same cash. Same buy-back a few days later."),
+         overlay=None),
+
+    # §3a RHYTHM — PUNCH, and a §3a cut-in: one face on a verdict. The punchline is a different
+    # picture, so it gets one.
+    dict(id="t069b", level=None, template="closeUpPortrait",
+         narration=("Completely different picture."),
          overlay=None),
 
     dict(id="t070", level=None, template="exchangeFloor",
@@ -608,16 +728,29 @@ SCENES = [
          narration=("The balance sheet was photographed. Then the assets came back."),
          overlay=None),
 
+    # §3a RHYTHM — a matched PAIR of punches (~2.3s each). The reported number and the real one are
+    # the same length in the writing and now the same length on screen; the cut between them IS the
+    # comparison.
     dict(id="t072", level=None, template="newsMontage",
-         narration=("Reported leverage, twelve point one. Actual leverage, thirteen point nine."),
+         narration=("Reported leverage, twelve point one."),
+         overlay=None),
+
+    dict(id="t072a", level=None, template="factoryFloor",
+         narration=("Actual leverage, thirteen point nine."),
          overlay=None),
 
     dict(id="t072b", level=None, template="boardroom",
          narration=("The difference was the entire point of the exercise."),
          overlay=None),
 
+    # §3a RHYTHM — two PUNCHES then a longer beat: the three "nothing"s land as three shots, which is
+    # the shape the sentence was written in and the shape the old single scene threw away.
     dict(id="t073", level=None, template="closeUpPortrait",
-         narration=("Nothing had been sold. Nothing had been fixed."),
+         narration=("Nothing had been sold."),
+         overlay=None),
+
+    dict(id="t073a", level=None, template="exchangeFloor",
+         narration=("Nothing had been fixed."),
          overlay=None),
 
     dict(id="t073b", level=None, template="factoryFloor",
@@ -638,9 +771,12 @@ SCENES = [
          overlay=None),
 
     dict(id="t076", level=None, template="broadcastDesk", breath=True,
-         narration=("May 21st, 2008. A hedge fund manager named David Einhorn stands up at a New York "
-                    "conference."),
+         narration=("May 21st, 2008."),
          overlay=dict(big="MAY 2008", sub="EINHORN READ IT OUT LOUD, ON A STAGE")),
+
+    dict(id="t076b", level=None, template="courtHearing",
+         narration=("A hedge fund manager named David Einhorn stands up at a New York conference."),
+         overlay=None),
 
     dict(id="t077", level=None, template="closeUpPortrait",
          narration=("The talk is called Accounting Ingenuity. He goes through Lehman's own public filings, "
@@ -666,21 +802,20 @@ SCENES = [
          narration=("Here is what the whole industry missed."),
          overlay=None),
 
+    # The narration card moved BACK one scene, onto the line it quotes, because t082 is now a held
+    # shot and a full-screen card cannot be held for 13s without becoming a title sequence.
     dict(id="t081b", level=None, template="domesticInterior",
          narration=("The machine that turned houses into money only ran in one direction."),
-         overlay=None),
-
-    dict(id="t082", level=None, template="chartBoard",
-         narration=("When house prices fell, it ran backwards. At the same speed. With the same leverage."),
          overlay=None,
          card=dict(kind="narration", text="The machine only ever ran in one direction.")),
 
-    dict(id="t083", level=None, template="crowdQueue",
-         narration=("Thirty to one, pointed the other way."),
-         overlay=None),
-
-    dict(id="t083b", level=None, template="exchangeFloor",
-         narration=("The same arithmetic that made the profits made the hole."),
+    # §3a RHYTHM — HOLD #3 of four (~13s), and the one the structure is built around: the MIDPOINT
+    # REVERSAL. gap=1.4 on t080 has already dropped the bed to near-silence; the reversal then plays
+    # out on ONE unmoving picture for thirteen seconds. Old t082 + t083 + t083b, verbatim.
+    dict(id="t082", level=None, template="chartBoard",
+         narration=("When house prices fell, it ran backwards. At the same speed. With the same leverage. "
+                    "Thirty to one, pointed the other way. The same arithmetic that made the profits made "
+                    "the hole."),
          overlay=None),
 
     dict(id="t084", level=None, template="cityStreet",
@@ -724,8 +859,11 @@ SCENES = [
          overlay=None),
 
     dict(id="t089", level=None, template="boardroom",
-         narration=("September 10th, 2008. Lehman pre-announces its third quarter. A loss of three point "
-                    "nine billion dollars."),
+         narration=("September 10th, 2008."),
+         overlay=None),
+
+    dict(id="t089b", level=None, template="broadcastDesk",
+         narration=("Lehman pre-announces its third quarter. A loss of three point nine billion dollars."),
          overlay=dict(big="$3.9B LOSS", sub="THE THIRD QUARTER, ANNOUNCED SEPT 10")),
 
     dict(id="t090", level=None, template="domesticInterior",
@@ -733,11 +871,8 @@ SCENES = [
          overlay=None),
 
     dict(id="t091", level=None, template="newsMontage",
-         narration=("The stock had been eighty-six dollars."),
-         overlay=None),
-
-    dict(id="t091b", level=None, template="chartBoard",
-         narration=("It was now under eight, and falling every hour the market was open."),
+         narration=("The stock had been eighty-six dollars. It was now under eight, and falling every hour "
+                    "the market was open."),
          overlay=None),
 
     dict(id="t092", level=None, template="officeFloor",
@@ -771,16 +906,14 @@ SCENES = [
          narration=("And the government is not paying for it. Not this time."),
          overlay=None),
 
+    # §3a RHYTHM — the LONGEST shot in the episode (~15s, against the reference's 16.46s ceiling).
+    # The plan is one continuous piece of reasoning that ends on its own verdict, and chapter 4 has
+    # been cutting hard for a dozen scenes: this is the pause the chapter is built around. Old
+    # t097 + t098 + t098b, verbatim and in order.
     dict(id="t097", level=None, template="crowdQueue",
-         narration=("Saturday. The room builds a plan. The banks pool their own money into a bad bank."),
-         overlay=None),
-
-    dict(id="t098", level=None, template="factoryFloor",
-         narration=("Take Lehman's worst property off its hands. Let a buyer have the clean half."),
-         overlay=None),
-
-    dict(id="t098b", level=None, template="cityStreet",
-         narration=("It is the Bear Stearns rescue, without the Federal Reserve."),
+         narration=("Saturday. The room builds a plan. The banks pool their own money into a bad bank. Take "
+                    "Lehman's worst property off its hands. Let a buyer have the clean half. It is the Bear "
+                    "Stearns rescue, without the Federal Reserve."),
          overlay=None),
 
     dict(id="t099", level=None, template="boardroom",
@@ -839,7 +972,11 @@ SCENES = [
          overlay=None),
 
     dict(id="t108", level=None, template="cityStreet", breath=True,
-         narration=("Sunday night, September 14th. There is no buyer. There is no federal money."),
+         narration=("Sunday night, September 14th."),
+         overlay=None),
+
+    dict(id="t108b", level=None, template="boardroom",
+         narration=("There is no buyer. There is no federal money."),
          overlay=None),
 
     dict(id="t109", level=None, template="courtHearing",
@@ -853,7 +990,11 @@ SCENES = [
          overlay=None),
 
     dict(id="t111", level=None, template="newsMontage",
-         narration=("Every door had been tried. The Treasury. The Fed. Two buyers. A room full of rivals."),
+         narration=("Every door had been tried."),
+         overlay=None),
+
+    dict(id="t111a", level=None, template="bankExterior",
+         narration=("The Treasury. The Fed. Two buyers. A room full of rivals."),
          overlay=None),
 
     dict(id="t111b", level=None, template="boardroom",
@@ -862,8 +1003,12 @@ SCENES = [
          card=dict(kind="word", word="No")),
 
     dict(id="t112", level=None, template="courtHearing",
-         narration=("A quarter to two in the morning, September 15th, 2008. Lehman Brothers Holdings filed "
-                    "for bankruptcy."),
+         narration=("A quarter to two in the morning, September 15th, 2008."),
+         overlay=None),
+
+    # §3a RHYTHM — PUNCH on the hardest fact in the episode. ~2.5s, and the $613B note lands on it.
+    dict(id="t112b", level=None, template="bankExterior",
+         narration=("Lehman Brothers Holdings filed for bankruptcy."),
          overlay=dict(big="$613 BILLION", sub="IN DEBT — FILED AT 1:45 A.M.")),
 
     dict(id="t113", level=None, template="closeUpPortrait",
@@ -905,12 +1050,11 @@ SCENES = [
          narration=("Twenty-five thousand employees. Most of them found out from the news."),
          overlay=None),
 
+    # §3a RHYTHM — LONG (~8.5s). An inventory read slowly is the beat; cutting on every second object
+    # turns it into a list. Old t119 + t119b, verbatim.
     dict(id="t119", level=None, template="domesticInterior",
-         narration=("What was inside the boxes was ordinary. Photographs. A mug."),
-         overlay=None),
-
-    dict(id="t119b", level=None, template="closeUpPortrait",
-         narration=("A pair of running shoes. Somebody's kid's drawing."),
+         narration=("What was inside the boxes was ordinary. Photographs. A mug. A pair of running shoes. "
+                    "Somebody's kid's drawing."),
          overlay=None),
 
     dict(id="t120", level=None, template="factoryFloor",
@@ -965,7 +1109,12 @@ SCENES = [
          overlay=None),
 
     dict(id="t128", level=None, template="crowdQueue",
-         narration=("No Lehman executive went to prison. Not one."),
+         narration=("No Lehman executive went to prison."),
+         overlay=None),
+
+    # §3a RHYTHM — PUNCH, ~1.2s. Two words on one face is the whole verdict of the chapter.
+    dict(id="t128b", level=None, template="closeUpPortrait",
+         narration=("Not one."),
          overlay=None),
 
     dict(id="t129", level=None, template="courtHearing",
@@ -994,12 +1143,11 @@ SCENES = [
          narration=("Here is the part that should bother us. Nothing Lehman did that weekend was a secret."),
          overlay=None),
 
+    # §3a RHYTHM — LONG (~8s). The ending decelerates from here: this shot, then t136 (~8.4s), then
+    # the closing hold at ~14s. Old t133 + t133b, verbatim.
     dict(id="t133", level=None, template="newsMontage",
-         narration=("The leverage was in the filings. The mortgages were in the newspapers."),
-         overlay=None),
-
-    dict(id="t133b", level=None, template="domesticInterior",
-         narration=("None of it was hidden from anybody who wanted to look."),
+         narration=("The leverage was in the filings. The mortgages were in the newspapers. None of it was "
+                    "hidden from anybody who wanted to look."),
          overlay=None),
 
     dict(id="t134", level=None, template="broadcastDesk",
@@ -1028,16 +1176,15 @@ SCENES = [
          narration=("He took the cotton anyway, because he knew he could sell it on to somebody else."),
          overlay=None),
 
-    dict(id="t140", level=None, template="exchangeFloor",
-         narration=("A hundred and fifty-eight years later, his firm was still doing precisely that."),
-         overlay=None),
-
-    dict(id="t140b", level=None, template="crowdQueue",
-         narration=("Taking the thing nobody could pay for. Selling it on."),
-         overlay=None),
-
-    dict(id="t141", level=None, template="factoryFloor",
-         narration=("It worked every single time, right up until the Monday it did not."),
+    # §3a RHYTHM — HOLD #4 of four, the longest in the episode (~14.5s), and the last shot. The motif
+    # pays off, the epithet inverts and the video ends WITHOUT another cut: the reference's endings
+    # stop moving before they stop talking, and ours cut three times in the last twelve seconds.
+    # Old t140 + t140b + t141, verbatim. The set-up is `cityStreet` — t001's room — so the closing
+    # frame is literally the opening image the ending formula (§7) asks it to call back to.
+    dict(id="t140", level=None, template="cityStreet", breath=True,
+         narration=("A hundred and fifty-eight years later, his firm was still doing precisely that. Taking "
+                    "the thing nobody could pay for. Selling it on. It worked every single time, right up "
+                    "until the Monday it did not."),
          overlay=None),
 ]
 

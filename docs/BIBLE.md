@@ -152,21 +152,67 @@ samples it showed **4 distinct set-ups out of 8** where both reference montages 
 
 ### The target
 
-| | reference | **write to this** | WO-13 build | WO-22 rewrite |
-|---|---|---|---|---|
-| narration words per scene | ~12 (at its rate) | **10–16** | 54 | 12.6 |
-| mean scene | 4.79s | **4.5–6.0s** | 21.1s | **4.95s** |
-| cuts/min | 12.5 | **10–13** | 2.8 | **12.4** |
-| scenes per episode | — | **180–210** (15–17 min) | 39 | 196 |
-| distinct set-ups in 8 evenly spaced samples | 8/8 | **8/8** | 4/8 | **8/8** |
-| same template within | never repeats | **≥ 3 scenes apart** | adjacent-only rule | ≥ 3 |
+| | reference | **write to this** | WO-13 build | WO-22 | **WO-30** |
+|---|---|---|---|---|---|
+| narration words per scene | ~12 (at its rate) | **mean 10–16, see below** | 54 | 12.6 | 12.2 |
+| mean scene | 4.79s | **4.5–5.5s** | 21.1s | 4.95s | **4.80s** |
+| **median scene** | **2.67–6.81s** | **below the mean** | — | 4.83s | **4.57s** |
+| **longest shot** | **16.46s** | **one at 14–16s** | — | 9.80s | **15.50s** |
+| **shortest shot** | **0.61s** | **~1s, ~15 of them** | — | 1.17s | **1.00s** |
+| cuts/min | 12.5 | **10–13** | 2.8 | 12.4 | **12.5** |
+| scenes per episode | — | **180–210** (15–17 min) | 39 | 196 | 202 |
+| distinct set-ups in 8 evenly spaced samples | 8/8 | **8/8** | 4/8 | 8/8 | **8/8** |
+| same template within | never repeats | **≥ 3 scenes apart** | adjacent-only rule | ≥ 3 | ≥ 3 |
 
-**One set-up per 1–2 sentences.** That is the reference's own rhythm: 7.5–10.6-word sentences and a
-4.79s mean shot means it changes the picture roughly every sentence and a half. A scene carrying three
-or more sentences should have been two or three scenes.
+### THE RHYTHM RULE — write a DISTRIBUTION, not a mean (WO-30)
 
-Scenes may be very short. A one-word scene (`"Unless."`) measured **1.17s** in the WO-22 build and sits
-inside the reference's own shot range (0.61–16.46s). Use them as punches, not as a habit.
+**Hitting the reference's mean and missing its spread is the defect this rule exists to prevent.** The
+WO-22 build sat at a 4.95s mean — 0.16s off the reference — and the final review still called the edit
+a tell, in these words: *"our longest hold is 9.8s where theirs runs to 16.5s. Ours never pauses."*
+Its shot lengths ran 1.17–9.80s with a **1.77s standard deviation** and a median (4.83s) sitting
+*above* its mean. That is a metronome. The reference is measured at mean 4.79s over a **0.61–16.46s**
+range, and its per-window medians (2.67s, 2.98s, 4.62s, 5.07s, 6.81s) sit mostly *below* its window
+means — many short shots, a few long holds, right-skewed.
+
+Budget it explicitly, per episode:
+
+| band | how many | what goes there |
+|---|---|---|
+| **HOLD 12–16s** | **4–6, one of them 14–16s** | the first real reveal · the mechanism definition · the MIDPOINT REVERSAL · the last shot. 30–40 words, 4–5 sentences, ONE set-up. |
+| long 8–12s | 10–14 | a continuous piece of reasoning; a reflective beat; an inventory read slowly |
+| the bulk 3–7s | ~60% of scenes | ordinary explanation |
+| **PUNCH ≤2.5s** | **25–30, of which ~6 at ~1s** | a single word · a bare date · a hard number · a turn · a verdict |
+
+Concrete tests, all cheap to run on the built timeline:
+
+- **The longest shot must be ≥ 12s.** If the maximum is under 12s the episode has no pause in it,
+  whatever the mean says.
+- **The median must be below the mean.** Equal means symmetric means metronomic.
+- **Standard deviation ≥ ~2.3s.** WO-22 measured 1.77s and read as uniform; WO-30 measures 2.45s.
+- **No more than ~5 consecutive scenes inside ±1s of each other.** That run *is* the metronome.
+
+**How to build a hold without breaking the WPM arithmetic.** Runtime is set by the WORD count, not by
+the scene count — a scene boundary costs `LEAD` + gap ≈ 0.49s and the per-scene audio constant recovers
+almost exactly that much, so **merging and splitting are close to runtime-neutral**. So: **pay for
+every hold with a split somewhere else.** Merge two or three adjacent scenes whose narration is one
+thought onto one set-up, and split a punch off the front of a long scene elsewhere to keep the count.
+WO-30 did this seventeen times in both directions on a script whose narration is otherwise **verbatim**
+the WO-22 text: 202 scenes against 196, 2,467 words against 2,468, runtime 16.18 min against 16.16, and
+runtime WPM moved 152.7 → 152.5.
+
+**What makes a beat want a hold:** the sentences only mean something *together* (a definition and its
+worked example; a reveal and its consequence), or the viewer has just been given something to feel and
+a cut would make them re-anchor instead. **What makes a beat want a punch:** it is one fact, one word,
+or one turn, and the next shot is the point.
+
+Scenes may be very short. A one-word scene (`"Unless."`) measures **1.17s**, and `"Move two."` /
+`"Not one."` measure **1.00s** — 30 frames. Sub-38-frame scenes used to kill the render; that whole
+class is closed by construction (WO-25/WO-28 swept `interpolate` over D=1..600), and WO-30 rendered
+first, middle and last frames of a 30-frame scene to confirm it. **Render one anyway if you write
+one** — it costs one `npx remotion still`.
+
+A recurring one-beat shot is a *motif*, not a metronome, as long as it is spaced: WO-30's four
+"Move one/two/three/four" punches sit 3–12 scenes apart and nothing else nearby is that short.
 
 ### The WPM arithmetic is NOT what it looks like — measure, and read this before "fixing" a HALT
 
@@ -184,6 +230,7 @@ Measured on this same script and subject, at `RATE = "-7%"`:
 | 39 | 21.1s | 156.8 | 152.5 | PASS |
 | 141 | 6.81s | 167.1 | **154.2** | **HALT** — over `gate.py`'s 154.0 ceiling |
 | 196 | 4.95s | 170.5 | 152.7 | PASS |
+| 202 | 4.80s | 170.9 | 152.5 | PASS — WO-30, same words re-cut into a wide distribution |
 
 So runtime WPM is **not** monotonic in scene count: the speech-rate gain outruns the gap cost until
 roughly 7s and then falls behind it. There is a **dead zone around a 6.5–7.5s mean scene** where the
@@ -208,9 +255,11 @@ The measured band leaves room to cut faster still. Four reasons not to, and none
    cut lands on a full stop with a silence in it. The reference cuts underneath continuous narration.
    Past ~13 cuts/min our scenes fall below one sentence each and we would be fragmenting sentences
    purely to make a cut, which reads as a stutter, not a rhythm.
-3. **Ten words is not an explanation.** A 4.95s scene is ~13 words. The format's promise is "explained
+3. **Ten words is not an explanation.** A 4.8s scene is ~12 words. The format's promise is "explained
    like you're 5", and the mechanism beats (what a repo *is*, what a tranche *is*) need two or three
-   sentences standing in one place. Below ~10 words a scene, the teaching stops.
+   sentences standing in one place. Below ~10 words a scene, the teaching stops. **This is a bound on
+   the MEAN, not a floor on any one scene** — the rhythm rule above spends 25–30 scenes an episode at
+   1–3 words precisely so the mechanism beats can be 30–40-word holds and the mean still lands.
 4. **Gate headroom.** 152.7 sits 1.3 under the ceiling. That is margin for the next script's prose, not
    spare capacity to spend on cuts.
 
@@ -244,7 +293,24 @@ Budget per episode, roughly: 5 chapter cards · 4–6 narration cards · 3–4 w
 
 After `gen_voice_edge.py`, sample the timeline at **8 evenly spaced points** (the density of the
 reference's own montage sheets), resolve what is on screen at each — card kind, panel split, or template
-— and count the distinct values. **Report it as x/8.** Reference 8/8, WO-13 4/8, WO-22 8/8.
+— and count the distinct values. **Report it as x/8.** Reference 8/8, WO-13 4/8, WO-22 8/8, WO-30 8/8.
+
+> **A 12s+ hold pulls sample points onto whatever room it sits in.** WO-30 dropped to 7/8 the moment
+> two of its holds landed on the same template, and got 8/8 back by moving ONE scene's `template=`.
+> So: do not put your holds in the busiest room, re-measure after every hold you add, and fix a
+> collision by re-templating a *neighbouring* beat rather than by shortening the hold.
+
+And measure the **distribution** in the same pass — `mean, median, min, max, standard deviation and the
+deciles` of `durationInFrames / fps`. Against the reference (mean 4.79s, range 0.61–16.46s):
+
+| | WO-22 | **WO-30** |
+|---|---|---|
+| mean / median | 4.95s / 4.83s (median *above* mean) | **4.80s / 4.57s** |
+| min / max | 1.17s / 9.80s | **1.00s / 15.50s** |
+| standard deviation | 1.77s | **2.45s** |
+| deciles | 1.17 · 2.63 · 3.37 · 3.87 · 4.37 · 4.83 · 5.40 · 5.78 · 6.60 · 7.30 · 9.80 | **1.00 · 1.97 · 2.71 · 3.31 · 3.87 · 4.57 · 5.17 · 5.69 · 6.65 · 7.46 · 15.50** |
+| shots ≥ 12s | **0** | **6** |
+| shots ≤ 2.5s | 9 | **29** |
 
 > **The 30s-sample repeat share is inventory-bound, not cadence-bound — do not chase it.** Sampling
 > every 30s across a 16-min episode takes 33 samples from a vocabulary of 13 rooms, so at least
