@@ -20,6 +20,21 @@ READ FIRST:
 
 DO, in order:
 
+0. THE EPISODE ALREADY ON DISK — DECIDE THIS FIRST, AND SAY WHICH BRANCH YOU TOOK IN YOUR FINAL
+   MESSAGE. content.py and ops/episode_meta.json always still hold the PREVIOUS run's episode when
+   you start. Which of these two you are doing is NOT a judgement call (WO-32: a cold run of this
+   prompt spent its whole pass VERIFYING the script it found on disk and re-shipped it, having read
+   step 1 as satisfied — that is only sometimes right, and it must never be an accident):
+     • REUSE — the topic in ops/episode_meta.json is NOT in ops/produced_topics.json. The previous
+       run built that episode and never published it (render or upload failed), so it is still owed
+       to the channel. Do NOT throw it away and do NOT rewrite it: check its docs/research/<slug>.md
+       exists and is sourced, run the step-5 self-checks and `python3 build.py` until it prints
+       BUILD OK, then STOP. Skip steps 1-4. Say plainly that you re-used the existing episode.
+     • WRITE A NEW ONE — the topic in ops/episode_meta.json IS already in produced_topics.json (or
+       there is no topic). Then content.py is a SHIPPED episode: it is a shape reference, nothing
+       more. Do steps 1-6 in full and overwrite it. Never re-ship a produced topic — the runner
+       HALTs on one anyway, which darkens the channel for the night.
+
 1. TOPIC — take the first topic in ops/topic_queue.json whose slug is NOT in produced_topics.json.
    (If all are produced, invent a new one in the same spirit: a famous company, business figure,
    financial scandal, or economic crisis — a REAL subject with a documented record.) Read its
@@ -256,6 +271,51 @@ DO, in order:
    — those bands ARE the format. Then self-check §3a on the built timeline: scene count, mean scene
    seconds, cuts/min, DISTINCT SET-UPS IN 8 EVENLY SPACED SAMPLES (target 8/8), and the SHOT-LENGTH
    DISTRIBUTION (median below the mean, longest shot >= 12s, shortest ~1s, sd >= ~2.3s).
+
+   HOW YOU ARE RUN, AND THE TWO WAYS THAT HAS ALREADY KILLED A RUN (WO-32 — measured, not theory:
+   these are the exact failures of the first two cold runs of this prompt, so read them as bugs that
+   have happened, not as advice):
+     • YOU ARE HEADLESS (`claude --print`). ENDING YOUR TURN ENDS THE PROCESS. There is nobody to
+       send you a follow-up message, so a background task you are "waiting for a notification from"
+       never reaches you — the run simply dies at that point, half-finished. RUN `python3 build.py`
+       IN THE FOREGROUND and wait for it to return, however long it takes (a full VO synth of ~200
+       scenes is several minutes and that is normal). Never background build.py, gen_voice_edge.py
+       or a remotion command and then stop. Never end your turn "to wait" for anything.
+       A cold run did exactly this: it wrote content.py, launched build.py in the background,
+       announced it would wait for the notification, and exited — leaving the episode unpackaged.
+     • WRITE ops/episode_meta.json BEFORE THE FIRST BUILD, not after it. The shell's anti-duplicate
+       guard reads the TOPIC OUT OF THAT FILE the moment you stop, and HALTs the whole night if it
+       is still the previous episode's. A content.py that advanced to a new subject while
+       episode_meta.json still names the last one is the worst state you can leave behind: the
+       packaging, title and thumbnail no longer describe the video. Order: research -> content.py ->
+       episode_meta.json -> build.
+
+   THE CHECKS A COLD RUN OF THIS PROMPT HAS ACTUALLY FAILED (WO-32). Every one of these passed
+   gate.py — the gate warns or is silent on all of them, so nothing downstream will catch them:
+     • SCENE COUNT. It wrote 158 scenes for a 14.9-min episode (mean 5.64s, 10.6 cuts/min). The
+       target is ~180–210 and a 4.5–5.5s mean. Print len(SCENES) before you build; under 180, split
+       until you are inside the band.
+     • ONE RUNAWAY HOLD. Its longest shot was 27.9s. The HOLD budget is 12–16s, ONE of them 14–16s.
+       Print max(durationInFrames)/fps and split anything past 16s.
+     • ADJACENT REPEATS. Four pairs of neighbouring scenes shared a template. gate.py only WARNs on
+       this, so it publishes. Walk the list yourself: for every i, assert SCENES[i]['template'] !=
+       SCENES[i-1]['template'].
+     • A LOPSIDED HISTOGRAM. closeUpPortrait ran 28 times in 158 scenes (18%), domesticInterior 20,
+       while broadcastDesk got 2 and bankExterior 5. The cap is ~len(SCENES)/10 per room. The cut-in
+       templates (closeUpPortrait, newsMontage) are the ones that run away — count them first.
+     • DEVICES UNDER-SPENT. It used ZERO dialogue= exchanges (dialogue is a PRIMARY device — at
+       least 4), 2 bubbles (budget 5–10), 2 panels (3–4), 6 non-chapter cards (budget 8–13).
+     • WPM 144.0 — inside the gate's 143–154 but BELOW the 145–152 the step above tells you to hit,
+       and 1.0 WPM from a HALT. Do not stop on a number that close to the edge; add words.
+     • EVERY SCENE NEEDS A `template=`, INCLUDING A FULL-SCREEN CARD SCENE. A `card=` with no `hold`
+       covers the whole scene and draws no art, so `template` feels pointless there — but gate.py
+       checks the template of EVERY scene in the timeline and HALTs the night on
+       `template 'None' not in registry`. A later cold run left four card-only scenes without one
+       and the build HALTed. Give a card scene the room its narration belongs in anyway; nothing
+       from that room is drawn while the card is up.
+   RE-CHECK AFTER YOUR LAST EDIT, NOT BEFORE IT. Every one of these numbers moves when you split or
+   merge a scene, so a check you ran three edits ago is not a check. The last thing you do is a
+   clean `python3 build.py` that prints BUILD OK, and only then do you stop.
 
 6. LEARN — do NOT touch ops/produced_topics.json (the shell appends the topic there ONLY after a
    successful publish, so a failed render never orphans it). Move any shipped backlog items in

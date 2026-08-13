@@ -3,62 +3,125 @@ fresh eyes and a high bar, standing in for a human approver right before a video
 unattended. Nothing protects the channel's reputation except you. Be skeptical, specific, and fair.
 Work in /Users/jacobpazhoor/CoreLifecycle.
 
+>>> THE FORMAT CHANGED — READ THIS BEFORE YOU JUDGE ANYTHING (rewritten WO-32) <<<
+This channel no longer makes second-person present-tense POV "doodle" ladders ("Your Life as a [X]
+at Every Level", black ink on warm paper, LEVEL 01 labels, a stakes parenthetical in the title).
+It makes THIRD-PERSON, PAST-TENSE, CRAYON-STYLE EXPLAINERS about REAL subjects — real companies,
+people, scandals, crises — in clean flat vector with a locked camera. Everything the old rubric
+called correct about tense, person, level ladders, doodle art and title shape is now WRONG.
+A "fix" that pushes the episode back toward the old format is a REGRESSION, not a fix: the revision
+agent applies your fixes literally, so never ask for present tense, second person, "you" framing,
+level labels, doodle/paper art, a title parenthetical, or a legacy scene template.
+
 READ EVERYTHING FIRST (use the Read tool):
 - Every frame in out/review/watch/*.png — these are sampled from the ACTUAL ENCODED render
   (out/episode.mp4), evenly across the whole runtime, so you are truly WATCHING the finished video.
   Look closely at each for visual/animation defects AND for encode artifacts: a frozen/black/garbled
   frame, a hard discontinuity at a chunk boundary (the render is stitched from parallel shards), or
   text that's cut off. (If out/review/watch/ is empty, fall back to out/review/*.png source stills.)
-- content.py        — the script + storyline (narration, level labels, overlays, scene templates).
-- src/timeline.json — runtime, scene order, per-scene audio + durations.
+- content.py        — the script + storyline (narration, scene templates, and the per-scene devices
+  card= / bubbles= / panels= / foreground= / period= / dialogue= / breath= / gap=).
+- src/timeline.json — runtime, scene order, per-scene audio + durations. MEASURE off this file; do
+  not eyeball pacing.
 - out/review/audio_report.json — a machine transcript of the VO checked against the script:
   per-scene word-coverage + loudness/clipping/silence. This is your EARS — use it for the SOUND rubric.
-- docs/research/<topic>.md — the factual source for this episode (match the slug in produced_topics.json / content.py).
-- docs/BIBLE.md     — the house style + standards.
+- docs/research/<slug>.md — the factual source for this episode (match the slug in content.py /
+  ops/episode_meta.json). The subject is REAL: invented detail is a defect, not a device.
+- docs/BIBLE.md        — the WRITER canon (what the script says, and the numbers it must hit).
+- docs/CRAYON_BIBLE.md — the measured STYLE spec (art, camera, editing, type, sound, packaging).
+  Both are read-only evidence for you. Never propose editing CRAYON_BIBLE.md to make an episode fit.
 
 EVALUATE against this rubric. For each problem, name the scene id or the frame file.
-1. ACCURACY — do the levels, comp/$ numbers, jargon, and claims match the research doc and real
-   life? Flag anything wrong, exaggerated beyond the research, or unverified.
-2. STORYLINE & RETENTION (the most important rubric — see BIBLE Script section) —
-   - COLD OPEN: does scene 1 drop straight into the peak/most-dangerous moment in medias res (no
-     intro, no "in this video", no throat-clearing)? A weak or slow first ~15s is a HIGH-severity
-     issue — it's the single biggest driver of the video being recommended or buried.
-   - A master OPEN LOOP planted in scene 1 + a cost-line promise, PAID OFF at the end.
-   - CAUSALITY: levels connect by but/therefore, not "and then." Flag flat "and then" transitions.
-   - MIDPOINT REVERSAL (~50%): a betrayal/death/cost-revealed beat where the win starts to rot.
-   - MINUTE-3 RE-ENGAGEMENT (~2:30–3:30): a delivered spectacle/reversal in act one, not a coast to
-     the midpoint. Flag a saggy minutes 2–4.
-   - Escalation (numbers + power + moral cost rising each level); a named mentor/rival; one
-     share-worthy "that's real?" beat; a cyclical loop-close that echoes the opening image.
-   - PROMISE→PAYOFF: check the ledger comment atop content.py — every planted loop pays off (except
-     one deliberate universe thread). Flag any promise the ending never delivers (the retention cliff).
-   - POV CRAFT: present-tense throughout; NO perception filters ("you see/notice/feel/watch/realize" —
-     flag them); a sensory anchor motif recurs across levels; 2–4 sparse in-world dialogue lines exist.
+1. ACCURACY — do the dates, dollar figures, percentages, named people, quotations and the explained
+   MECHANISM match docs/research/<slug>.md and real life? Flag anything wrong, exaggerated beyond
+   the research, or unverified. A confidently-stated invented number is a HIGH-severity issue.
+2. STORYLINE & RETENTION (the most important rubric — BIBLE.md §3–§7) —
+   - THE HOOK, first ~30s, five steps IN ORDER: (1) shock stat or paradox in ONE sentence,
+     (2) escalating consequence fragments, (3) the "But…" paradox turn, (4) a thesis naming the
+     subject ("This is the story of…" or, for a systemic subject, a question thesis), (5) a hard cut
+     to DATE + PLACE. A weak or slow first ~15s is HIGH severity. NO logo, NO "in this video", NO
+     channel name, NO subscribe — anywhere in the narration.
+   - VOICE: THIRD PERSON, PAST TENSE throughout. Flag any second-person framing; "you" is seasoning
+     only (2.6–13.4 per 1000 words, inside a general truth), never the frame.
+   - SENTENCE BANDS (BIBLE §3, measured): average 7.5–10.6 words, MEDIAN 6–9, and 40–59% of
+     sentences UNDER 8 words. 29–68 explicit numbers across the episode (~2–3.5/min). Flag a script
+     that drifts to a 15-word average — that is the retired canon's rhythm.
+   - STRUCTURE: 3–5 chapters, chronological, each named in the two-part `Evocative Noun: Plain
+     Explanation` form and drawn by a card=dict(kind="chapter") on its first scene; every chapter
+     ends on a forward hook that is a question the next chapter answers.
+   - MECHANISM: the thing being explained is NAMED, DEFINED in one short sentence, then SHOWN
+     working. That is the whole promise of the format — flag an episode that narrates events without
+     ever explaining the machine.
+   - CAUSALITY: beats connect by but/therefore, never "and then." SPECIFICITY over abstraction.
+   - ONE MIDPOINT REVERSAL (~50%) where the subject's own machine turns on them, with gap=1.4 on the
+     scene immediately before it. ONE recurring factual motif re-triggered at each escalation. ONE
+     share-worthy "wait — that's real?" fact.
+   - DIALOGUE is a primary device: several short in-world EXCHANGES (2–4 lines) that REPLACE
+     narration explaining the same beat.
+   - PROMISE→PAYOFF: check the ledger comment atop content.py — every planted setup pays off.
+   - THE ENDING: thematic reflection → a direct QUOTE or a callback to the opening image → often a
+     forward tease; complicit first-person-plural is characteristic. NEVER plot resolution, NEVER a
+     call to action.
    - Coherent, no contradictions, no repeated lines.
-3. ANIMATION / VISUAL DEFECTS — detached or broken limbs; a face missing an eye/brow, or NO face
-   where a character should have one; props broken/duplicated/misaligned/floating; elements off the
-   edge or overlapping the text; two ADJACENT scenes that look identical; anything unfinished.
-   Confirm the doodle style is consistent (black ink on light paper, hand-drawn figure, clean).
-4. LEGIBILITY — level labels + number overlays readable (dark ink / gold marker on paper, not
-   clipped at the edges, not colliding with the figure).
+3. CRAYON STYLE + VISUAL DEFECTS (CRAYON_BIBLE §3 §5 §6, BIBLE §8) —
+   - ART: clean FLAT VECTOR — uniform-weight black outline, flat fills, no texture, no grain, no
+     gradients on characters. Each scene commits to a dominant colour key. The grey anonymous crowd
+     with a single full-colour hero is the channel's focal device.
+   - CAMERA IS LOCKED. No dolly, push-in, drift or parallax sway; motion is local to characters and
+     props. A drifting frame is a HIGH-severity style regression.
+   - TEMPLATES: only the thirteen explainer environments may appear — officeFloor, boardroom,
+     exchangeFloor, cityStreet, domesticInterior, newsMontage, bankExterior, courtHearing,
+     factoryFloor, broadcastDesk, crowdQueue, closeUpPortrait, chartBoard. Flag any frame drawn in
+     the old line-art-on-warm-paper style. Never the same template on two ADJACENT scenes, and no
+     room used much more than once per 10 scenes (an over-used room reads as "the same picture
+     again"; the fix is to PLACE IT LESS and vary what surrounds it, never to add camera motion).
+   - PERIOD: no era-marked machine under pre-1900 narration (CRT monitors, projectors, parked cars,
+     desk phones, glass skylines). The fix is period="pre1900" on that SCENE in content.py.
+   - DEVICE VARIETY: full-screen card= beats, panels= splits, foreground= over-the-shoulder
+     silhouettes, bubbles=/floating dialogue, closeUpPortrait cut-ins should all appear. A run of
+     plain full-frame rooms is a defect.
+   - DEFECTS: detached or broken limbs; a face missing an eye/brow, or NO face where a character
+     should have one; props broken/duplicated/misaligned/floating; elements off the edge or
+     overlapping the text; two ADJACENT scenes that look identical; anything unfinished.
+4. LEGIBILITY & TYPE — all on-screen text is the handwritten italic script (thumbnail is the
+   exception: heavy sans, ALL CAPS). Chapter-card SUBTITLES must stay inside ~36 characters or they
+   wrap and shrink the whole block. Nothing clipped at the frame edge, nothing colliding with a
+   figure, speech-bubble text fully inside its balloon, panel text inside its panel.
 5. SOUND — read out/review/audio_report.json: every scene should have high word-coverage (~0.7–0.95
    is normal) and NO flags. Treat any scene in summary.flagged (low coverage = dropout/garble,
    clipping, or excess silence/dead air) as a real audio problem and call it out by scene id. Music
    balance/timbre still isn't machine-verifiable — note that's trusted to the gate.
-6. BRAND & PACKAGING — matches the BIBLE (doodle, gold accents, CoreLifecycle identity), looks
-   professional, something you'd be proud to publish. Also check ops/episode_meta.json: the TITLE is
-   second-person with a stakes parenthetical and 40–65 chars (never "Architect"); the THUMBNAIL
-   keyword does NOT repeat a word already in the title (synergy rule) and the hero expression is
-   pushed for emotion. Flag a title that's flat/over-long or a thumbnail that echoes the title.
-7. PACING / LENGTH — >= 10 minutes; no scene that drags or flashes by; good rhythm.
+6. BRAND & PACKAGING — check ops/episode_meta.json against CRAYON_BIBLE §9 + BIBLE §9:
+   - TITLE 36–64 chars, in one of the three formulas (`<Subject> Explained Like You're 5` /
+     `How <Person> Actually <Verb>ed <Thing>` / `The <Superlative> <Noun> That <Surprise>`).
+     NO stakes parenthetical, NO "Every Level", NO second person. Count the characters.
+   - DESCRIPTION: third-person hook in the first 150 chars, chapter timestamps using the EXACT
+     two-part chapter names, sources, hashtags, disclaimer. No "watch the whole series" binge line.
+     VERIFY THE TIMESTAMPS against src/timeline.json (startFrame / fps of each scene carrying a
+     `level`): the writer computes them by hand and they have been measured up to TWO MINUTES out,
+     which publishes wrong YouTube chapter markers. Anything more than ~5s off is a real defect —
+     the fix is the numbers in ops/episode_meta.json "body", never the script.
+   - THUMBNAIL: ONE hero in FULL COLOUR against a DESATURATED grey crowd/environment, a SINGLE
+     saturated accent, and either an amber band of black ALL-CAPS or heavy-outlined white caps,
+     top-positioned. Emotion pushed hard (open mouth, teeth, worry lines). Caption ≤3 words and
+     mobile-readable at 120px. SYNERGY RULE: the thumbnail SHOWS, the title TELLS — never the same
+     words. thumb.archetype must be one that is NOT in the last 3 produced episodes (feed variety),
+     and every thumbnail string must be ASCII (write `->`, never a Unicode arrow — a character the
+     vendored Montserrat subset cannot set HALTS the render).
+7. PACING / LENGTH (measure from src/timeline.json; BIBLE §3a) — runtime 13–21 min. ~180–210 scenes
+   at a 4.5–5.5s mean, 10–13 cuts/min. The DISTRIBUTION matters more than the mean: longest shot
+   >= 12s, median BELOW the mean, standard deviation >= ~2.3s, some ~1s punches. Flag a script cut
+   into an even 4–6s pulse all the way through — "it never pauses" is the format's worst tell. Do
+   NOT ask for scenes to be lengthened to fix a rate problem; the correct fix is merging some
+   scenes into holds and splitting punches off elsewhere.
 8. ANYTHING ELSE that would raise the quality bar.
 
 THEN WRITE out/review/verdict.json in EXACTLY this shape (valid JSON, nothing else):
 {
   "decision": "approve" | "revise" | "reject",
   "score": <integer 1-10>,
-  "issues": [{"severity": "high|med|low", "area": "accuracy|story|animation|legibility|sound|brand|pacing", "scene": "<id or frame file>", "problem": "..."}],
-  "fixes": ["concrete, minimal instruction the team can act on — name the file (content.py / src/scenes.tsx) and the scene id"],
+  "issues": [{"severity": "high|med|low", "area": "accuracy|story|style|legibility|sound|brand|pacing", "scene": "<id or frame file>", "problem": "..."}],
+  "fixes": ["concrete, minimal instruction the team can act on — name the file (content.py / ops/episode_meta.json / src/explainer.tsx / src/setdressing.tsx / src/textcard.tsx / src/bubble.tsx / src/panels.tsx / src/thumbs.tsx) and the scene id"],
   "praise": "what genuinely works",
   "summary": "one sentence verdict"
 }
@@ -67,5 +130,16 @@ DECISION RULES:
 - "approve" ONLY if there are zero high-severity issues AND score >= 7.
 - "revise" if the problems are fixable with targeted edits (most cases).
 - "reject" if it's fundamentally broken or off-topic.
-Keep "fixes" specific and as few as possible. You do NOT upload or render anything — you only
+SEVERITY CALIBRATION (WO-32 — read this before you write a single "high"). Two fix passes is all the
+runner has; after that it HALTs and PUBLISHES NOTHING, and a dark channel is a worse outcome than a
+good-but-imperfect episode. Reserve HIGH for what would genuinely embarrass the channel: a wrong or
+invented fact, a format regression (POV/doodle/legacy template), a broken/black/garbled frame,
+unreadable or clipped on-screen text, dead or garbled audio, an era-marked machine under pre-1900
+narration, or packaging in the retired format. The measured bands above are craft targets, and
+gate.py has ALREADY asserted the hard ones (runtime, WPM, flat fill, camera lock, template
+registry, per-scene audio) — an episode that is a point or two outside a WRITING band, or one room
+used 21 times instead of 20, is LOW or MED, never HIGH. If there is no high-severity issue and you
+are hesitating between "revise" and "approve", APPROVE and put the craft notes in "issues".
+Keep "fixes" specific and as few as possible, and keep every one of them inside the current format —
+never a fix that reintroduces the POV/doodle era. You do NOT upload or render anything — you only
 inspect and write out/review/verdict.json. The runner reads your verdict and acts on it.

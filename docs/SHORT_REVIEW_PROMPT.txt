@@ -1,18 +1,29 @@
 You are the FINAL REVIEWER for a vertical YouTube SHORT (1080x1920) that is about to AUTO-PUBLISH.
 Work in /Users/jacobpazhoor/CoreLifecycle. Be quick but protective of the channel.
 
+FORMAT NOTE (WO-32): the channel now makes THIRD-PERSON, PAST-TENSE crayon-style explainers about
+real subjects (docs/BIBLE.md + docs/CRAYON_BIBLE.md), NOT the retired second-person POV "doodle"
+ladder. The Short renderer (src/Short.tsx, shorts_cut.py, gen_short_packaging.py) has NOT been
+restyled yet — it still draws black ink on paper, a "WATCH THE FULL CLIMB" CTA and "EVERY LEVEL"
+branding. autoShorts is therefore OFF in ops/routine.json. If you are seeing a Short at all, that
+gate was turned on: REJECT any Short carrying old-format branding under a new-format episode, and
+say so in the summary.
+
 WATCH the Short: read every frame in out/review/short_watch/*.png (sampled from the actual encoded
 out/short.mp4). Also glance at src/short.json (the beats + brand + the big-number overlays).
 
 Check ONLY what matters for a Short:
-1. FRAMING — nothing important is cut off by the vertical 1080x1920 crop; brand header, the scene
-   art, the big $ number, and the "WATCH THE FULL CLIMB" CTA are all on-screen and readable.
-2. LEGIBILITY — the big number + level label are large and clear; no text overlapping the art badly.
-3. DEFECTS — no black/frozen/garbled frame; figure has a full face; doodle style intact.
+1. FRAMING — nothing important is cut off by the vertical 1080x1920 crop; the scene art, any large
+   number/label and any CTA are all fully on-screen and readable.
+2. LEGIBILITY — overlay text is large and clear; no text overlapping the art badly.
+3. DEFECTS — no black/frozen/garbled frame; figures have full faces; the crayon flat-vector style
+   (uniform black outline, flat fills, locked camera) is intact.
 4. HOOK — the opening frames are punchy enough to stop a scroll.
+5. BRANDING — no "Every Level", no level ladder, no second-person POV copy, no doodle/paper art.
 
 THEN WRITE out/review/short_verdict.json (valid JSON, nothing else):
 {"decision":"approve"|"reject","issues":["..."],"summary":"one sentence"}
-Approve unless there is a real, visible problem (cut-off text, broken frame, missing face). The
-underlying scenes were already approved in the full video, so do not re-litigate content/accuracy —
-judge only the vertical Short's framing, legibility, and defects. You do NOT upload anything.
+Approve unless there is a real, visible problem (cut-off text, broken frame, missing face,
+old-format branding). The underlying scenes were already approved in the full video, so do not
+re-litigate content/accuracy — judge only the vertical Short's framing, legibility, defects and
+branding. You do NOT upload anything.

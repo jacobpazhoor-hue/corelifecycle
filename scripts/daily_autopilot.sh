@@ -258,7 +258,12 @@ echo "reviewer decision: $DEC"
 tries=0
 while [ "$DEC" = "revise" ] && [ $tries -lt 2 ]; do
   echo "--- reviewer requested revisions (pass $((tries + 1))) ---"
-  "$CLAUDE" --print --model sonnet "You are the production team. Read out/review/verdict.json (the reviewer's notes) and apply its 'fixes' PRECISELY. You MAY edit any of: content.py, ops/episode_meta.json, src/scenes.tsx, src/stage.tsx (scene packs / figure positions), src/director.tsx + src/Video2.tsx (shot framing + overlay layout), src/thumbs.tsx (thumbnail). Keep the same topic + doodle style. Apply EVERY actionable fix in the verdict (do not skip a fix because of file scope — the whole src/ is in scope). Then STOP; the runner will rebuild, re-render, and re-review."
+  # WO-32: this prompt used to say "keep the same topic + DOODLE style" and pointed at the LEGACY
+  # template files (src/scenes.tsx, src/stage.tsx). On a CRAYON episode that actively pushes the
+  # video back toward the retired POV/doodle format and edits files the thirteen explainer
+  # environments do not live in. The format is third-person crayon (docs/BIBLE.md +
+  # docs/CRAYON_BIBLE.md); the art lives in src/explainer.tsx and its helpers.
+  "$CLAUDE" --print --model sonnet "You are the production team. Read out/review/verdict.json (the reviewer's notes) and apply its 'fixes' PRECISELY. FORMAT: this channel is a THIRD-PERSON, PAST-TENSE crayon-style explainer about a real subject — docs/BIBLE.md is the writer canon and docs/CRAYON_BIBLE.md is the measured style spec. Keep the same topic and the same crayon style: never reintroduce the retired second-person POV / doodle format (line art on warm paper, 'Every Level', level ladders, present tense), and never emit a legacy template name from docs/TEMPLATES.md — the episode uses ONLY the thirteen explainer environments (officeFloor, boardroom, exchangeFloor, cityStreet, domesticInterior, newsMontage, bankExterior, courtHearing, factoryFloor, broadcastDesk, crowdQueue, closeUpPortrait, chartBoard). You MAY edit any of: content.py + ops/episode_meta.json (script, scene fields card=/bubbles=/panels=/foreground=/period=, packaging copy), src/explainer.tsx (the thirteen environments), src/setdressing.tsx + src/crayonStyle.ts (shared props, palette, ink), src/textcard.tsx (full-screen cards), src/bubble.tsx (speech balloons / floating dialogue), src/panels.tsx (multi-panel splits), src/director.tsx + src/Video2.tsx (shot framing + overlay layout), src/thumbs.tsx (thumbnail). Do NOT edit gate.py or docs/CRAYON_BIBLE.md, and do not weaken a rule to make the episode fit it. Apply EVERY actionable fix in the verdict (do not skip a fix because of file scope). Then STOP; the runner will rebuild, re-render, and re-review."
   if ! python3 build.py; then notify "HALT" "build failed after revision. See $LOG"; exit 0; fi
   render || { notify "FAIL" "render failed after revision. See $LOG"; exit 1; }
   package
@@ -286,7 +291,21 @@ if grep -q '"autoUpload": *true' ops/routine.json; then
   # failed, and the next attempt uploads it again. That produced the duplicate special_forces
   # (molUoFUlmso / MiXTy6PUdDk) and again the startup_unicorn pair on 2026-07-20.
   # Without --force the guard sees the existing title and exits 0 instead of publishing a twin.
+  # ---------------------------------------------------------------------------------------------
+  # >>> FIRST-RUN SAFETY (WO-32) — RECOMMENDED FOR THE FIRST UNATTENDED **CRAYON** NIGHT ONLY <<<
+  # Tonight is the first time the autopilot writes AND publishes a new-format episode with no human
+  # in the loop: the creative agent has only ever been exercised by hand on this format, and the
+  # reviewer is judging against freshly-rewritten canon. Everything downstream of the gate is
+  # unproven END TO END. To de-risk exactly one night, comment out the `--privacy public` line
+  # below and uncomment the `--privacy unlisted` one: the run still produces, gates, reviews and
+  # UPLOADS, so a failure shows up as a real video you can watch — it simply is not pushed to subs
+  # or the feed, and flipping it to public in YouTube Studio is one click. Nothing else changes
+  # (produced_topics + last_post are still written, so the duplicate guards keep working).
+  # REVERT: put the two lines back the way they are now. Do not leave unlisted on past one night —
+  # an unlisted episode earns no impressions and the channel reads as dark.
+  #   if python3 scripts/yt_upload.py --privacy unlisted; then   # <-- first crayon night only
   if python3 scripts/yt_upload.py --privacy public; then
+  # ---------------------------------------------------------------------------------------------
     notify "PUBLISHED" "$(python3 -c "import json;print(json.load(open('ops/episode_meta.json'))['title'])" 2>/dev/null)"
     # mark the topic produced ONLY now (on a real publish) so a failed render never orphans it
     python3 -c "
@@ -302,6 +321,11 @@ if t and t not in [x.get('topic') for x in p['produced']]:
     # 7) SHORT — auto-cut a vertical Short, WATCH + gate + review it, then publish (growth; non-fatal)
     # Gated on routine.json autoShorts (default OFF since 2026-07-19 — see _autoShorts_note there).
     # Skipping saves a FULL extra Remotion render + a reviewer agent call on every episode.
+    # WO-32: KEEP IT OFF ON THE CRAYON FORMAT. The Short path is still entirely POV/doodle-era —
+    # src/Short.tsx renders black-ink-on-paper with a "WATCH THE FULL CLIMB" CTA, shorts_cut.py
+    # defaults its kicker to "EVERY LEVEL OF A", and gen_short_packaging.py mints
+    # "Every Level of a <profession>" titles off a topic slug that is now a company or a scandal.
+    # Turning autoShorts on today would post old-format branding under new-format episodes.
     if ! grep -q '"autoShorts": *true' ops/routine.json; then
       echo "--- short: SKIPPED (autoShorts off in ops/routine.json) ---"
     else
