@@ -71,7 +71,7 @@
       "id": "t004b",
       "level": null,
       "overlay": null,
-      "template": "factoryFloor",
+      "template": "cityStreet",
       "audio": "audio/t004b.wav",
       "audioStartFrame": 3,
       "startFrame": 779,
@@ -85,7 +85,7 @@
         "big": "1844",
         "sub": "MONTGOMERY, ALABAMA"
       },
-      "template": "cityStreet",
+      "template": "bankExterior",
       "audio": "audio/t005.wav",
       "audioStartFrame": 3,
       "startFrame": 941,
@@ -96,18 +96,20 @@
         "title": "The Cotton Store",
         "subtitle": "A Shop Where Nobody Had Cash",
         "hold": 2.4
-      }
+      },
+      "period": "pre1900"
     },
     {
       "id": "t005b",
       "level": null,
       "overlay": null,
-      "template": "crowdQueue",
+      "template": "officeFloor",
       "audio": "audio/t005b.wav",
       "audioStartFrame": 3,
       "startFrame": 1178,
       "durationInFrames": 116,
-      "gap": 0.253
+      "gap": 0.253,
+      "period": "pre1900"
     },
     {
       "id": "t006",
@@ -118,29 +120,36 @@
       "audioStartFrame": 3,
       "startFrame": 1294,
       "durationInFrames": 114,
-      "gap": 0.364
+      "gap": 0.364,
+      "period": "pre1900"
     },
     {
       "id": "t006b",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "newsMontage",
       "audio": "audio/t006b.wav",
       "audioStartFrame": 3,
       "startFrame": 1408,
       "durationInFrames": 261,
-      "gap": 0.338
+      "gap": 0.338,
+      "period": "pre1900"
     },
     {
       "id": "t007",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "factoryFloor",
       "audio": "audio/t007.wav",
       "audioStartFrame": 3,
       "startFrame": 1669,
       "durationInFrames": 74,
-      "gap": 0.355
+      "gap": 0.355,
+      "foreground": {
+        "kind": "overShoulder",
+        "side": "right"
+      },
+      "period": "pre1900"
     },
     {
       "id": "t007b",
@@ -151,13 +160,14 @@
       "audioStartFrame": 3,
       "startFrame": 1743,
       "durationInFrames": 208,
-      "gap": 0.504
+      "gap": 0.504,
+      "period": "pre1900"
     },
     {
       "id": "t008",
       "level": null,
       "overlay": null,
-      "template": "factoryFloor",
+      "template": "domesticInterior",
       "audio": "audio/t008.wav",
       "audioStartFrame": 3,
       "startFrame": 1951,
@@ -166,7 +176,8 @@
       "card": {
         "kind": "word",
         "word": "Cotton"
-      }
+      },
+      "period": "pre1900"
     },
     {
       "id": "t009",
@@ -175,111 +186,121 @@
         "big": "1850",
         "sub": "THE NAME OVER THE DOOR"
       },
-      "template": "bankExterior",
+      "template": "newsMontage",
       "audio": "audio/t009.wav",
       "audioStartFrame": 3,
       "startFrame": 2057,
       "durationInFrames": 206,
-      "gap": 0.354
+      "gap": 0.354,
+      "period": "pre1900"
     },
     {
       "id": "t009b",
       "level": null,
       "overlay": null,
-      "template": "cityStreet",
+      "template": "bankExterior",
       "audio": "audio/t009b.wav",
       "audioStartFrame": 3,
       "startFrame": 2263,
       "durationInFrames": 183,
-      "gap": 0.347
+      "gap": 0.347,
+      "period": "pre1900"
     },
     {
       "id": "t010",
       "level": null,
       "overlay": null,
-      "template": "exchangeFloor",
+      "template": "chartBoard",
       "audio": "audio/t010.wav",
       "audioStartFrame": 3,
       "startFrame": 2446,
       "durationInFrames": 129,
-      "gap": 0.477
+      "gap": 0.477,
+      "period": "pre1900"
     },
     {
       "id": "t011",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "newsMontage",
       "audio": "audio/t011.wav",
       "audioStartFrame": 3,
       "startFrame": 2575,
       "durationInFrames": 116,
-      "gap": 0.444
+      "gap": 0.444,
+      "period": "pre1900"
     },
     {
       "id": "t011b",
       "level": null,
       "overlay": null,
-      "template": "factoryFloor",
+      "template": "cityStreet",
       "audio": "audio/t011b.wav",
       "audioStartFrame": 3,
       "startFrame": 2691,
       "durationInFrames": 166,
-      "gap": 0.445
+      "gap": 0.445,
+      "period": "pre1900"
     },
     {
       "id": "t012",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "officeFloor",
       "audio": "audio/t012.wav",
       "audioStartFrame": 3,
       "startFrame": 2857,
       "durationInFrames": 87,
-      "gap": 0.446
+      "gap": 0.446,
+      "period": "pre1900"
     },
     {
       "id": "t012b",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "courtHearing",
       "audio": "audio/t012b.wav",
       "audioStartFrame": 3,
       "startFrame": 2944,
       "durationInFrames": 171,
-      "gap": 0.346
+      "gap": 0.346,
+      "period": "pre1900"
     },
     {
       "id": "t013",
       "level": null,
       "overlay": null,
-      "template": "newsMontage",
+      "template": "bankExterior",
       "audio": "audio/t013.wav",
       "audioStartFrame": 3,
       "startFrame": 3115,
       "durationInFrames": 155,
-      "gap": 0.453
+      "gap": 0.453,
+      "period": "pre1900"
     },
     {
       "id": "t013b",
       "level": null,
       "overlay": null,
-      "template": "bankExterior",
+      "template": "newsMontage",
       "audio": "audio/t013b.wav",
       "audioStartFrame": 3,
       "startFrame": 3270,
       "durationInFrames": 109,
-      "gap": 0.439
+      "gap": 0.439,
+      "period": "pre1900"
     },
     {
       "id": "t014",
       "level": null,
       "overlay": null,
-      "template": "broadcastDesk",
+      "template": "domesticInterior",
       "audio": "audio/t014.wav",
       "audioStartFrame": 3,
       "startFrame": 3379,
       "durationInFrames": 75,
-      "gap": 0.316
+      "gap": 0.316,
+      "period": "pre1900"
     },
     {
       "id": "t015",
@@ -290,18 +311,20 @@
       "audioStartFrame": 3,
       "startFrame": 3454,
       "durationInFrames": 168,
-      "gap": 0.413
+      "gap": 0.413,
+      "period": "pre1900"
     },
     {
       "id": "t015b",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "courtHearing",
       "audio": "audio/t015b.wav",
       "audioStartFrame": 3,
       "startFrame": 3622,
       "durationInFrames": 45,
-      "gap": 0.407
+      "gap": 0.407,
+      "period": "pre1900"
     },
     {
       "id": "t016",
@@ -1472,7 +1495,18 @@
       "audioStartFrame": 3,
       "startFrame": 17102,
       "durationInFrames": 99,
-      "gap": 0.345
+      "gap": 0.345,
+      "panels": {
+        "variant": "v2",
+        "cells": [
+          {
+            "template": "officeFloor"
+          },
+          {
+            "template": "crowdQueue"
+          }
+        ]
+      }
     },
     {
       "id": "t085b",
@@ -1877,7 +1911,7 @@
       "id": "t109",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "courtHearing",
       "audio": "audio/t109.wav",
       "audioStartFrame": 3,
       "startFrame": 22215,
@@ -2025,7 +2059,7 @@
       "id": "t117b",
       "level": null,
       "overlay": null,
-      "template": "newsMontage",
+      "template": "broadcastDesk",
       "audio": "audio/t117b.wav",
       "audioStartFrame": 3,
       "startFrame": 24252,
@@ -2036,7 +2070,7 @@
       "id": "t118",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "newsMontage",
       "audio": "audio/t118.wav",
       "audioStartFrame": 3,
       "startFrame": 24388,
@@ -2240,7 +2274,7 @@
       "id": "t130",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "broadcastDesk",
       "audio": "audio/t130.wav",
       "audioStartFrame": 3,
       "startFrame": 26856,
@@ -2262,7 +2296,7 @@
       "id": "t131b",
       "level": null,
       "overlay": null,
-      "template": "courtHearing",
+      "template": "closeUpPortrait",
       "audio": "audio/t131b.wav",
       "audioStartFrame": 3,
       "startFrame": 27164,
@@ -2295,7 +2329,7 @@
       "id": "t133b",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "domesticInterior",
       "audio": "audio/t133b.wav",
       "audioStartFrame": 3,
       "startFrame": 27625,
@@ -2359,18 +2393,20 @@
       "audioStartFrame": 3,
       "startFrame": 28372,
       "durationInFrames": 160,
-      "gap": 0.326
+      "gap": 0.326,
+      "period": "pre1900"
     },
     {
       "id": "t139",
       "level": null,
       "overlay": null,
-      "template": "cityStreet",
+      "template": "newsMontage",
       "audio": "audio/t139.wav",
       "audioStartFrame": 3,
       "startFrame": 28532,
       "durationInFrames": 131,
-      "gap": 0.269
+      "gap": 0.269,
+      "period": "pre1900"
     },
     {
       "id": "t140",

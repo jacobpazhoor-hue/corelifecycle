@@ -750,8 +750,14 @@ export const Cone: React.FC<{x: number; y: number; s?: number}> = ({x, y, s = 1}
         <path d={`M ${x - 26 * s} ${y} L ${x - 21 * s} ${y - 66 * s} L ${x + 21 * s} ${y - 66 * s}
                   L ${x + 26 * s} ${y} Z`}
           fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
-        <rect x={x - 25 * s} y={y - 52 * s} width={50 * s} height={9 * s} fill={tn.accentDeep} />
-        <rect x={x - 23 * s} y={y - 22 * s} width={46 * s} height={9 * s} fill={tn.accentDeep} />
+        {/* WO-29: the hoops are IRON (`tn.deep`, the shell's darkest structural grey), not
+            `tn.accentDeep`. Measured on the rendered frame: in an orange-keyed room (`cityStreet`)
+            two accent bands across a pale near-white body reproduce the exact signature of a modern
+            traffic cone / delineator post, which is the prop this one exists to REPLACE — the barrel
+            was reading as the cone it substituted for. The lid keeps `c.accent`, so the frame does
+            not lose its saturated note. */}
+        <rect x={x - 25 * s} y={y - 52 * s} width={50 * s} height={9 * s} fill={tn.deep} />
+        <rect x={x - 23 * s} y={y - 22 * s} width={46 * s} height={9 * s} fill={tn.deep} />
         <ellipse cx={x} cy={y - 66 * s} rx={21 * s} ry={7 * s} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
         <line x1={x - 8 * s} y1={y - 64 * s} x2={x - 8 * s} y2={y} stroke={INK} strokeWidth={1.8} opacity={0.5} />
         <line x1={x + 8 * s} y1={y - 64 * s} x2={x + 8 * s} y2={y} stroke={INK} strokeWidth={1.8} opacity={0.5} />

@@ -28,26 +28,66 @@ template list alone is not enough variety, so the devices carry their share: 5 c
 5 bubble/float beats. Rule held throughout: at least two other set-ups between any two uses of one
 template (the bible's "never adjacent" is the floor, not the target).
 
-PERIOD (WO-26 — the defect COMPARISON.md §7 defect 4 scored, "period/anachronism mismatch through
-chapters 1-2"). Every one of the thirteen rooms is drawn CONTEMPORARY and none of them takes a period
-flag, so this is a WRITING constraint, not an art one: the fix is choosing rooms whose CONTENTS the
-narration's century does not contradict. The tiers are measured off the JSX in src/explainer.tsx and
-written down in docs/BIBLE.md §8 PERIOD. Chapter 1 runs 1844-1865 and the ending's callback returns
-there, so both are now built from the four rooms that carry no dated machine — newsMontage,
-courtHearing, factoryFloor, domesticInterior — plus the full-screen cards, which are era-free by
-construction because the art beneath them is never rendered. WHAT THIS COSTS, stated plainly: chapter
-1 has FOUR rooms available where the modern chapters have thirteen, so its rotation is tighter than
-theirs and it buys its fifth set-up from a device (the t007 over-the-shoulder silhouette — a black
-mass carries no century). All four of those rooms key `interior`, which is why the historical chapter
-now reads warm and enclosed and the 1994 cut to `cityStreet` at t019 opens out. That is a bonus, not
-the reason. The real fix is period art; until it exists, this is the rule.
+PERIOD (WO-29, replacing the WO-26 rule). WO-26 fixed the anachronism defect COMPARISON.md §7 scored
+("1844 Alabama narration over CRT monitors, a projector, a parked car and a glass skyline") the only
+way the art then allowed: by BANNING nine of the thirteen rooms from pre-1900 narration and rebuilding
+the historical span out of the four that carried no dated machine. WO-27 built the real fix —
+`period="pre1900"`, a per-scene field that redraws a room with its era-marking props SUBSTITUTED
+(ledger boards for monitors, an open ledger for a keyboard, an inkstand for a desk phone, a dray for a
+car, masonry for a glazed skyline, a barrel for a cone). This file now USES it: the 1844-1865 span
+t005-t015b and the ending's 1844 callback t138/t139 set the flag, and draw on EIGHT rooms where WO-26
+had four.
 
-`officeFloor` REPETITION (WO-26, the second QA defect: "it looks the same every time"). It was the
-most-placed room at 20 uses, 12 of them a plain full-frame room with no device on it. Now 16, of
-which 8 are plain: t007b went to courtHearing on the period rule, t109 to courtHearing (the line is
-about lawyers), t118 to newsMontage (the line is "most of them found out from the news"), t133b to
-domesticInterior (the complicit "we" watching from a front room), and t085 became a v2 split so the
-room arrives as half a frame beside the queue rather than as itself again.
+WHICH rooms, and WHY NOT ALL TWELVE. BIBLE §8 lists ten rooms as PERIOD-CLEAN. WO-29 judged them off
+the RENDERED period frames (out/_wo27/final3_on_*.png) rather than off the table, and FOUR of the ten
+do not hold up. The dominant cause is one thing, and it is worth naming because it is fixable: **the
+substituted props inherit the scene's own tone ladder, so a "wooden" prop is only wooden in a
+WARM-keyed room.** In a blue- or purple-keyed room the same geometry reads as modern painted furniture
+or as a screen.
+  * `factoryFloor` — the WORST, and the one WO-26 was already using as "near-neutral". The flag
+    changes the beacon, the chevrons and the cones and touches NOTHING ELSE: the machines keep
+    circular dial gauges and lit push-button control panels, there is an electric extractor fan in a
+    circular housing on the wall, a roller shutter with a lit sign strip over it, and blue service
+    pipework running the full width. All 20th century, all under 1844 narration.
+  * `exchangeFloor` (blue key) — the chalked slate still reads as a dark electronic quote board and
+    the blue-framed easel boards on the desks read as flat-screen monitors.
+  * `boardroom` (blue key) — arches and gasolier are right, but the framed chart reads as a
+    wall-mounted screen and the table ledger board as a laptop.
+  * `crowdQueue` (purple key) — the bank it queues outside is still a ribbon-glazed curtain-wall
+    block with a roller shutter. Nothing in the flag touches that mass, and it is a third of frame.
+  * `broadcastDesk` — excluded on the bible's own advice AND on the frame: it still reads as a
+    television studio with an antique camera parked in it, and no chapter-1 line is a hearing.
+The rooms that DO hold up, read off their own frames: `bankExterior` (best of the set — pediment,
+columns, gas lanterns, a loaded dray, a pillar box), `officeFloor` (a counting house: timber beam,
+pendants, ledger drawers, turned chair), `chartBoard` (wooden easel, slat chairs), `closeUpPortrait`
+(terracotta key, so its easel boards ARE wood), `domesticInterior` (candlesticks, framed picture,
+masonry through the sash), `cityStreet` (with the caveat below) and the two era-free rooms
+`newsMontage` and `courtHearing`. Full-screen cards with no `hold` remain era-free by construction
+because the art beneath them is never rendered (t008's word card).
+
+So the honest count is EIGHT rooms in the pre-1900 span, not the bible's twelve — but eight against
+WO-26's four, and WO-26's four included `factoryFloor`, so the count of rooms that are actually
+era-correct goes 3 -> 8. The span (t005-t015b, 19 scenes) is: newsMontage 4 · bankExterior 3 ·
+officeFloor 3 · domesticInterior 3 · factoryFloor 2 · courtHearing 2 · chartBoard 1 · cityStreet 1.
+
+`factoryFloor`, used TWICE and deliberately. t007 keeps it because the over-the-shoulder silhouette
+masks the right third of the frame including one machine, and because no other room holds cotton
+bales; t015 keeps it because "the Civil War burned the cotton trade to the ground" wants a stopped
+mill. Both are short. It is not used anywhere else before 1900.
+
+`cityStreet`, used ONCE (t011b, "sold to a buyer in New York"). Its drays carry shafts and a correct
+load but no horse, so they read as parked handcarts; its ground-floor retail fascia band and its
+rectangular-headed lamp standards are untouched by the flag. Acceptable at the far plane of a wide
+establishing shot, wrong for any shot where the eye rests on the road. One use, at the moment the
+chapter needs to open out of interiors.
+
+`officeFloor` REPETITION (the WO-26 QA defect: "it looks the same every time"). WO-26 cut it 20 -> 16.
+WO-29 puts three back, at t005b, t007b and t012 — but ALL THREE are period, and a period `officeFloor`
+is a counting house, not a repeat of the open-plan modern room. Counted as (template, period) pairs
+the real figure is 16 modern + 3 period: the modern room did not gain a single use. The episode-wide
+histogram still FLATTENS on this pass — `factoryFloor` 16 -> 13, `newsMontage` 19 -> 17, `courtHearing`
+9 -> 6 (WO-26 had inflated it as a period workaround), `bankExterior` 11 -> 14 — and the number of
+template pairs sitting at the minimum 2-scene reuse gap drops 18 -> 10.
 
 HOOK — the five steps (§4), in order, all inside the first ~30s:
   1 shock stat            t001  "A hundred and fifty-eight-year-old bank died in seventy-two hours."
@@ -137,90 +177,91 @@ SCENES = [
          overlay=None),
 
     # ================= CHAPTER 1 — The Cotton Store =================
-    dict(id="t005", level="CH 1", template="newsMontage", breath=True,
+    dict(id="t005", level="CH 1", template="bankExterior", period="pre1900", breath=True,
          narration=("Montgomery, Alabama, 1844. A German immigrant named Henry Lehman opened a shop."),
          overlay=dict(big="1844", sub="MONTGOMERY, ALABAMA"),
          card=dict(kind="chapter", title="The Cotton Store", subtitle="A Shop Where Nobody Had Cash", hold=2.4)),
 
-    dict(id="t005b", level=None, template="factoryFloor",
+    dict(id="t005b", level=None, template="officeFloor", period="pre1900",
          narration=("He sold pots, cloth and farm tools to cotton growers."),
          overlay=None),
 
-    dict(id="t006", level=None, template="domesticInterior",
+    dict(id="t006", level=None, template="domesticInterior", period="pre1900",
          narration=("There was one problem with the customers. They had no money."),
          overlay=None),
 
-    dict(id="t006b", level=None, template="newsMontage",
+    dict(id="t006b", level=None, template="newsMontage", period="pre1900",
          narration=("Alabama in the eighteen forties ran on cotton, not cash. A crop was the only money "
                     "most of his customers ever had."),
          overlay=None),
 
-    dict(id="t007", level=None, template="factoryFloor",
+    dict(id="t007", level=None, template="factoryFloor", period="pre1900",
          narration=("So Henry took cotton as payment."),
          overlay=None,
-         # §6.8 — the era-safe palette is only four rooms deep (§8 PERIOD), so chapter 1 buys its
-         # fifth set-up from a DEVICE rather than a fourteenth room: a silhouette is a black mass and
-         # carries no century. `factoryFloor` stages its colour hero at x 1260, so the near plane
-         # takes the RIGHT edge — the silhouette's shoulder line stops at 1360.
+         # §6.8 — kept from WO-26, when the era-safe palette was four rooms deep and the chapter had
+         # to buy a set-up from a DEVICE. The palette is eight rooms deep now (§8 PERIOD), so this is
+         # no longer load-bearing, but a silhouette is still the right beat on "took cotton as
+         # payment" and it carries no century either way. `factoryFloor` stages its colour hero at
+         # x 1260, so the near plane takes the RIGHT edge — the silhouette's shoulder stops at 1360.
          foreground=dict(kind="overShoulder", side="right")),
 
-    dict(id="t007b", level=None, template="courtHearing",
+    dict(id="t007b", level=None, template="officeFloor", period="pre1900",
          narration=("Then he did the thing that would make his family rich for a century and a half, and it "
                     "had nothing to do with pots."),
          overlay=None),
 
-    dict(id="t008", level=None, template="domesticInterior",
+    dict(id="t008", level=None, template="domesticInterior", period="pre1900",
          narration=("He sold the cotton. Not the pots. The cotton."),
          overlay=None,
          card=dict(kind="word", word="Cotton")),
 
-    dict(id="t009", level=None, template="newsMontage",
+    dict(id="t009", level=None, template="newsMontage", period="pre1900",
          narration=("By 1850 both of his brothers had crossed the Atlantic to join him. Emanuel. Mayer."),
          overlay=dict(big="1850", sub="THE NAME OVER THE DOOR")),
 
-    dict(id="t009b", level=None, template="factoryFloor",
+    dict(id="t009b", level=None, template="bankExterior", period="pre1900",
          narration=("The sign over the door was repainted, and the name on it outlived all three of them."),
          overlay=None),
 
-    dict(id="t010", level=None, template="courtHearing",
+    dict(id="t010", level=None, template="chartBoard", period="pre1900",
          narration=("Lehman Brothers. Now look at what trading cotton actually meant."),
          overlay=None),
 
-    dict(id="t011", level=None, template="newsMontage",
+    dict(id="t011", level=None, template="newsMontage", period="pre1900",
          narration=("A bale that did not exist yet. Grown in Alabama."),
          overlay=None),
 
-    dict(id="t011b", level=None, template="factoryFloor",
+    dict(id="t011b", level=None, template="cityStreet", period="pre1900",
          narration=("Sold to a buyer in New York, months before anybody knew what the crop would be worth."),
          overlay=None),
 
-    dict(id="t012", level=None, template="courtHearing",
+    dict(id="t012", level=None, template="officeFloor", period="pre1900",
          narration=("At a price agreed before the crop came in."),
          overlay=None),
 
-    dict(id="t012b", level=None, template="domesticInterior",
+    dict(id="t012b", level=None, template="courtHearing", period="pre1900",
          narration=("That is a derivative: a contract whose value depends on something that has not "
                     "happened yet."),
          overlay=None),
 
-    dict(id="t013", level=None, template="newsMontage",
+    dict(id="t013", level=None, template="bankExterior", period="pre1900",
          narration=("Lehman was trading derivatives decades before Wall Street had a word for them."),
          overlay=None),
 
-    dict(id="t013b", level=None, template="courtHearing",
+    dict(id="t013b", level=None, template="newsMontage", period="pre1900",
          narration=("The store became a broker. The broker became a bank."),
          overlay=None),
 
-    dict(id="t014", level=None, template="factoryFloor",
+    dict(id="t014", level=None, template="domesticInterior", period="pre1900",
          narration=("And then it simply kept not dying."),
          overlay=None),
 
-    dict(id="t015", level=None, template="newsMontage",
+    dict(id="t015", level=None, template="factoryFloor", period="pre1900",
          narration=("The Civil War burned the cotton trade to the ground and took the South's economy with "
                     "it."),
          overlay=None),
 
-    dict(id="t015b", level=None, template="courtHearing",
+    dict(id="t015b", level=None, template="courtHearing", period="pre1900",
          narration=("Lehman survived."),
          overlay=None),
 
@@ -979,11 +1020,11 @@ SCENES = [
          narration=("And believing that was more comfortable than checking, which is the part that repeats."),
          overlay=None),
 
-    dict(id="t138", level=None, template="domesticInterior", breath=True,
+    dict(id="t138", level=None, template="domesticInterior", period="pre1900", breath=True,
          narration=("Henry Lehman opened a shop where the customers had no money. Only cotton."),
          overlay=None),
 
-    dict(id="t139", level=None, template="newsMontage",
+    dict(id="t139", level=None, template="newsMontage", period="pre1900",
          narration=("He took the cotton anyway, because he knew he could sell it on to somebody else."),
          overlay=None),
 

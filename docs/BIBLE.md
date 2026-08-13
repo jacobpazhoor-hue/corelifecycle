@@ -408,15 +408,25 @@ existed in 1844.** A short list of props was, and props can be swapped.
 Read off the JSX in `src/explainer.tsx` and off rendered frames, both modes, one per template.
 Re-check them if the art changes.
 
+**⚠ WO-29 CORRECTED THIS TABLE BY LOOKING AT THE FRAMES.** WO-27 wrote it off the JSX and scored ten
+rooms PERIOD-CLEAN. Rendered and read (`out/_wo27/final3_on_*.png`, and this build's own stills),
+**four of those ten do not hold up**. The cause is one thing and it is worth knowing before you trust
+any row here: **a substituted prop inherits the scene's own tone ladder, so a "wooden" prop is only
+wooden in a WARM-keyed room.** In a blue- or purple-keyed room the same geometry reads as modern
+painted furniture, or as a screen. The tiers below are the corrected ones.
+
 | Tier | Rooms | Note |
 |---|---|---|
 | **ERA-FREE, no flag needed** | `newsMontage` · `courtHearing` | printed sheets; a panelled bench, gallery and wall clock. Setting `period` on `courtHearing` still helps a little (its ceiling panels become pendants) but nothing in it contradicts a century. |
-| **PERIOD-CLEAN with `period="pre1900"`** | `officeFloor` · `boardroom` · `exchangeFloor` · `cityStreet` · `domesticInterior` · `bankExterior` · `factoryFloor` · `crowdQueue` · `closeUpPortrait` · `chartBoard` | Ten rooms that read as 1844 with the flag and as 2008 without it. See the per-room table below for what actually changes. |
-| **PERIOD-PLAUSIBLE, use with judgement** | `broadcastDesk` | Broadcasting does not exist before 1920, so the flag does not pretend it does: it redraws the same composition as a **press rostrum** — two men at a long table, a painted chart board behind them, oil lamps overhead, a plate camera photographing them. Correct for a hearing, an inquiry or a public statement; wrong for anything the narration calls a broadcast. |
-| **ERA-MARKED, still, without the flag** | all eleven above | Nothing changed for a scene that does not set `period`. The old rule stands there in full. |
+| **PERIOD-CLEAN with `period="pre1900"`** | `bankExterior` · `officeFloor` · `chartBoard` · `closeUpPortrait` · `domesticInterior` | Five rooms verified on the frame. `bankExterior` is the best in the library — pediment, columns, gas lanterns, a loaded dray, a pillar box. `officeFloor` becomes a convincing counting house. All five are warm-keyed, which is not a coincidence (see the warning above). |
+| **PERIOD-CAVEATED, one use at a time** | `cityStreet` | The flag fixes the facades, the setts and the vehicles' bodies, but the drays have **no horse** (they read as parked handcarts), and the ground-floor retail fascia band and the rectangular-headed lamp standards are untouched. Fine at the far plane of a wide establishing shot; wrong for any shot where the eye rests on the road. |
+| **PERIOD-PLAUSIBLE, use with judgement** | `broadcastDesk` | Broadcasting does not exist before 1920, so the flag does not pretend it does: it redraws the composition as a **press rostrum**. Correct for a hearing, an inquiry or a public statement; wrong for anything the narration calls a broadcast — and on the frame it still reads as a TV studio with an antique camera parked in it. |
+| **DO NOT USE before 1900, flag or no flag** | `factoryFloor` · `exchangeFloor` · `boardroom` · `crowdQueue` | `factoryFloor` is the worst and WO-26 was already treating it as "near-neutral": the flag changes only the beacon, the chevrons and the cones, and leaves circular dial gauges and lit push-button panels on every machine, an electric extractor fan, a roller shutter with a lit sign strip, and blue overhead pipework. `exchangeFloor` and `boardroom` are blue-keyed, so the chalk slate reads as an electronic quote board and the easel boards read as flat screens. `crowdQueue` is purple-keyed and its bank is still a ribbon-glazed curtain-wall block with a roller shutter, filling a third of the frame. |
+| **ERA-MARKED, still, without the flag** | all eleven non-era-free rooms | Nothing changed for a scene that does not set `period`. The old rule stands there in full. |
 
-That is **twelve of thirteen rooms available to a pre-1900 chapter**, against four before, plus the
-thirteenth with the caveat above.
+That is **eight of thirteen rooms available to a pre-1900 chapter** — five clean, one caveated, two
+era-free — against WO-26's four, one of which (`factoryFloor`) was itself wrong. So the count of rooms
+that are genuinely era-correct goes **3 → 8**. WO-29 built the Lehman chapter 1 on exactly those eight.
 
 #### What each room does with the flag
 
@@ -443,7 +453,9 @@ thirteenth with the caveat above.
 * **Set the era off the NARRATION, scene by scene** — not off the chapter, and not off the topic. A
   chapter that opens in 1844 and closes in 1994 crosses the line inside itself, and `period` is a
   per-scene field precisely so it can. Monitors are wrong before ~1970; a glazed skyline and a car are
-  wrong before ~1900; print, a courtroom and a mill are never wrong.
+  wrong before ~1900; print and a courtroom are never wrong. **A mill is never wrong as a SUBJECT and
+  is wrong as OUR ART** — see `factoryFloor` in the DO-NOT-USE tier; that distinction is exactly the
+  trap WO-26 fell into.
 * **A `panels=` split takes the flag too** — it is applied to every cell — so a deliberately multi-era
   montage should *not* set it; the modern cell is correct there, because the cell *is* the later decade.
 * **Do not set `period` on a modern scene to "make it look classic".** It is an accuracy switch, not a
@@ -455,6 +467,16 @@ Named because a reviewer will see them: the **figures still wear modern suits an
 `figure.tsx`, not the templates); `crowdQueue`'s bank door keeps a horizontally-ribbed shutter panel
 that reads as a roller door if you look for it; and `broadcastDesk` remains a room whose *name* is an
 anachronism whatever is drawn in it. The flag removes dated MACHINES, which is what a viewer notices.
+
+**WO-29 adds three more, all measured on rendered frames.** (1) `factoryFloor`'s MACHINES were never
+substituted at all — dial gauges, lit push-button panels, an electric extractor fan, a roller shutter
+and overhead pipework all survive the flag, which is why it moved to the DO-NOT-USE tier. (2) The
+substituted props take the SCENE'S TONE LADDER, so in a blue or purple key the "wooden" forms read as
+modern painted furniture; this is the single reason three rooms fail, and the real fix is a
+period-specific wood/iron token pair on `SceneTones` keyed off shell warmth rather than off the scene
+hue. (3) `Cone`'s barrel banded a near-white body with two `accentDeep` hoops, which in an orange-keyed
+room reproduced the signature of the traffic cone it replaces — **fixed in WO-29**, the hoops are now
+iron (`tn.deep`) and only the lid keeps the accent.
 
 ### The vocabulary is 13 rooms, not 13 shots
 The environment archetypes the old canon listed in plain English (office · boardroom · trading floor ·
