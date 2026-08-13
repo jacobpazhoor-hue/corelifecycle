@@ -241,8 +241,32 @@ echo "creative agent advanced to NEW topic: $NEWTOPIC"
 python3 -c "import json,os; f='runs/autopilot_attempts.json'; d=json.load(open(f)) if os.path.exists(f) else {}; c=d.get('count',0) if d.get('date')=='$TODAY' else 0; json.dump({'date':'$TODAY','count':c+1}, open(f,'w'))" 2>/dev/null || true
 
 # 2) BUILD + GATE + SMOKE (crisp VO + music + quality gate + 1-frame render check). HALT if it fails.
+# --- ONE BOUNDED GATE REPAIR (WO-32) --------------------------------------------------------------
+# Measured, not hypothetical: across four cold runs of the creative step on the crayon format, the
+# agent NEVER got to see its own build result. A new script means ~200 VO clips to synthesise, which
+# is longer than one foreground command it is allowed to run, so it backgrounds build.py and — being
+# headless — dies the moment it stops to wait. AUTOPILOT_PROMPT.txt now tells it to run the build in
+# the foreground and simply re-run on timeout (the VO cache resumes), but the writer only gets ONE
+# look at the gate either way, and the two numbers it most often lands wrong (WPM runtime-inclusive
+# and scene count) are only knowable AFTER the build. One cold run left a well-formed 220-scene
+# episode at 136.4 WPM — a hard HALT the writer could have fixed in one pass by adding words.
+# So: on a failed build, hand the gate's own output back for ONE repair attempt and rebuild once.
+# Still fully gate-gated (a second failure HALTs exactly as before) and topic-locked (the repair
+# agent may not change the subject, so the step-1b anti-duplicate guard above still holds).
+# REVERT: delete this block and restore the single `if ! python3 build.py; then notify …` line.
 echo "--- build + gate + smoke ---"
-if ! python3 build.py; then notify "HALT" "build/gate/smoke failed — not rendering. See $LOG"; exit 0; fi
+BUILD_OUT="runs/autopilot/build_$(date +%H%M%S).txt"
+python3 build.py 2>&1 | tee "$BUILD_OUT"; BUILD_RC=${pipestatus[1]}
+if [ "${BUILD_RC:-1}" != 0 ]; then
+  echo "--- build failed — ONE gate-repair pass ---"
+  "$CLAUDE" --print --model sonnet "You are the production team on the CoreLifecycle crayon explainer pipeline. \`python3 build.py\` HALTED. Its output ends:
+
+$(tail -40 "$BUILD_OUT")
+
+Fix ONLY what made it HALT, in content.py and/or ops/episode_meta.json, and keep the SAME TOPIC — the runner has already committed to it and changing it re-posts stale content. Read docs/BIBLE.md §3 and §3a before you touch anything; the bands ARE the format. The usual causes and their ONLY correct fixes: WPM runtime-inclusive too LOW -> ADD WORDS to existing scenes (never lengthen scenes, never slow the voice); WPM too HIGH -> SPLIT MORE SCENES (measured: same script, 141 scenes = 154.2 WPM, 196 scenes = 152.7 WPM); runtime over 21 min -> cut scenes AND their words; \`template 'None' not in registry\` -> that scene has no \`template=\`, and EVERY scene needs one from the thirteen explainer environments even when a full-screen \`card=\` covers it; a template name not in the registry -> replace it with one of the thirteen (officeFloor, boardroom, exchangeFloor, cityStreet, domesticInterior, newsMontage, bankExterior, courtHearing, factoryFloor, broadcastDesk, crowdQueue, closeUpPortrait, chartBoard); missing/silent audio -> the scene text, not the audio. Do NOT edit gate.py, build.py, gen_voice_edge.py or docs/CRAYON_BIBLE.md, and never widen a band to pass. Then run \`python3 build.py\` in the FOREGROUND (it may time out on a big VO re-synth — if it does, run the same command again; every clip already made is cached, so each re-run resumes) until it prints BUILD OK or a different failure. Then STOP."
+  python3 build.py 2>&1 | tee -a "$BUILD_OUT"; BUILD_RC=${pipestatus[1]}
+fi
+if [ "${BUILD_RC:-1}" != 0 ]; then notify "HALT" "build/gate/smoke failed after 1 repair pass — not rendering. See $LOG"; exit 0; fi
 
 # 3) RENDER (verified)
 echo "--- render ---"

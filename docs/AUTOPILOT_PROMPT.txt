@@ -276,13 +276,23 @@ DO, in order:
    these are the exact failures of the first two cold runs of this prompt, so read them as bugs that
    have happened, not as advice):
      • YOU ARE HEADLESS (`claude --print`). ENDING YOUR TURN ENDS THE PROCESS. There is nobody to
-       send you a follow-up message, so a background task you are "waiting for a notification from"
-       never reaches you — the run simply dies at that point, half-finished. RUN `python3 build.py`
-       IN THE FOREGROUND and wait for it to return, however long it takes (a full VO synth of ~200
-       scenes is several minutes and that is normal). Never background build.py, gen_voice_edge.py
-       or a remotion command and then stop. Never end your turn "to wait" for anything.
-       A cold run did exactly this: it wrote content.py, launched build.py in the background,
-       announced it would wait for the notification, and exited — leaving the episode unpackaged.
+       send you a follow-up message, so a background task or monitor you are "waiting to report
+       back" never reaches you — the run dies there, half-finished, and it takes the build with it.
+       TWO separate cold runs died exactly this way, one saying "the background monitor will notify
+       me once build.py finishes", the other "waiting for the build to complete — will resume once
+       the monitor reports back". Never background build.py, gen_voice_edge.py or a remotion
+       command and then stop. Never end your turn "to wait" for anything.
+       AND THE REASON YOU WILL BE TEMPTED TO: on a NEW script every one of ~200 VO clips has to be
+       synthesised, which takes far longer than a single foreground command is allowed to run, so
+       the first `python3 build.py` will very likely TIME OUT. That is not a failure and it is not a
+       reason to background it. RUN IT IN THE FOREGROUND with the longest timeout your Bash tool
+       accepts, and IF THE CALL TIMES OUT, RUN THE SAME COMMAND AGAIN. gen_voice_edge caches every
+       clip it has already made (public/audio + .vo_cache.json), so each re-run resumes where the
+       last one stopped and the final one finishes in a couple of minutes — measured: a rerun with
+       189 of 220 scenes cached completed the whole build (VO + music + gate + smoke) in 3m20s.
+       Repeat until it prints either BUILD OK or a real gate failure you can act on. You cannot fix
+       the WPM, the scene count or a template error you never saw — a cold run left a 220-scene
+       episode at 136.4 WPM, a hard gate HALT, because it stopped before its own build reported.
      • WRITE ops/episode_meta.json BEFORE THE FIRST BUILD, not after it. The shell's anti-duplicate
        guard reads the TOPIC OUT OF THAT FILE the moment you stop, and HALTs the whole night if it
        is still the previous episode's. A content.py that advanced to a new subject while
