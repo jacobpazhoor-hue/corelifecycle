@@ -36,28 +36,85 @@ fi
 #     survives on this same battery Mac precisely because it caffeinates. -w $$ ties it to this run. ---
 caffeinate -dimsu -w $$ &
 
+# --- LOCK LIVENESS (2026-08-13): PID REUSE defeated the old `kill -0 $holder` check. A run died
+#     holding runs/.lock as pid 1231; macOS recycled 1231 to an unrelated app, so `kill -0 1231`
+#     succeeded FOREVER, the lock was never stolen, and every scheduled run from 11:04 to 21:04
+#     HALTed with "held by LIVE pid 1231" — the channel published NOTHING that day. A pid on its own
+#     does not identify a process. We now also require that the holder process STARTED BEFORE the
+#     lock was created (a process that began after the lock cannot be the one that took it) and,
+#     when recorded, that its command name still matches. If liveness cannot be determined we STEAL
+#     and log loudly: a day of silence is far worse than a rare double run, and the step-1b new-topic
+#     guard already blocks re-posting stale content. A genuinely live holder is still never stolen
+#     from — that is what keeps the cross-project queue on /tmp/video_autopilot.lock working. ---
+_proc_start() {  # $1 = pid -> epoch seconds at which that process started ('' if undeterminable).
+                 # ps -o etime= ([[dd-]hh:]mm:ss) is locale-independent, unlike lstart.
+  _ps_e="$(ps -p "$1" -o etime= 2>/dev/null | tr -d '[:space:]')"
+  [ -n "$_ps_e" ] || return 1
+  _ps_d=0; _ps_h=0
+  case "$_ps_e" in *-*) _ps_d="${_ps_e%%-*}"; _ps_e="${_ps_e#*-}" ;; esac
+  case "$_ps_e" in *:*:*) _ps_h="${_ps_e%%:*}"; _ps_e="${_ps_e#*:}" ;; esac
+  case "$_ps_e" in *:*) _ps_m="${_ps_e%%:*}"; _ps_s="${_ps_e#*:}" ;; *) return 1 ;; esac
+  case "${_ps_d}${_ps_h}${_ps_m}${_ps_s}" in ''|*[!0-9]*) return 1 ;; esac
+  # 10# = force base 10; ps zero-pads and a bare 08/09 is an invalid octal literal in shell math.
+  echo $(( $(date +%s) - (10#$_ps_d * 86400 + 10#$_ps_h * 3600 + 10#$_ps_m * 60 + 10#$_ps_s) ))
+}
+LOCK_WHY=""
+_lock_stale() {  # $1 = lock dir. TRUE (0) = no live holder, steal it. Sets LOCK_WHY either way.
+  _lk="$1"
+  _lk_pid="$(cat "$_lk/holder" 2>/dev/null | tr -d '[:space:]')"
+  _lk_mt="$(stat -f %m "$_lk" 2>/dev/null || echo 0)"
+  _lk_age=$(( $(date +%s) - _lk_mt ))
+  if [ -z "$_lk_pid" ]; then   # legacy pid-less lock: keep the original >3h age rule
+    LOCK_WHY="legacy pid-less lock, age ${_lk_age}s"
+    [ "$_lk_age" -gt 10800 ]; return $?
+  fi
+  case "$_lk_pid" in *[!0-9]*) LOCK_WHY="holder '$_lk_pid' is not a pid"; return 0 ;; esac
+  if ! kill -0 "$_lk_pid" 2>/dev/null; then LOCK_WHY="holder pid $_lk_pid is DEAD"; return 0; fi
+  if [ "$_lk_mt" -le 0 ]; then
+    LOCK_WHY="cannot stat $_lk, so pid $_lk_pid cannot be verified — failing toward steal"; return 0
+  fi
+  _lk_st="$(_proc_start "$_lk_pid")"
+  if [ -z "$_lk_st" ]; then
+    LOCK_WHY="ps reported no start time for pid $_lk_pid — cannot verify, failing toward steal"; return 0
+  fi
+  if [ "$_lk_st" -gt $(( _lk_mt + 120 )) ]; then
+    LOCK_WHY="pid $_lk_pid ($(ps -p "$_lk_pid" -o comm= 2>/dev/null)) started $(( _lk_st - _lk_mt ))s AFTER the lock was created — RECYCLED PID, not the holder"
+    return 0
+  fi
+  _lk_cmd="$(cat "$_lk/holder_cmd" 2>/dev/null)"
+  if [ -n "$_lk_cmd" ]; then
+    _lk_now="$(ps -p "$_lk_pid" -o comm= 2>/dev/null)"
+    if [ -n "$_lk_now" ] && [ "$_lk_now" != "$_lk_cmd" ]; then
+      LOCK_WHY="pid $_lk_pid is now '$_lk_now' but the lock was taken by '$_lk_cmd' — RECYCLED PID"
+      return 0
+    fi
+  fi
+  LOCK_WHY="pid $_lk_pid is LIVE (started $(( _lk_mt - _lk_st ))s before the lock, age ${_lk_age}s)"
+  return 1
+}
+
 # --- run lock: never let two runs (nightly + manual) collide on out/episode.mp4 ---
 LOCK="runs/.lock"
 if ! mkdir "$LOCK" 2>/dev/null; then
   # --- STALE-STEAL (2026-07-19): this lock used to record only a timestamp, so a run killed
   #     mid-flight left it wedged FOREVER and every later run exited 0 in silence. That is exactly
   #     what happened 2026-07-17 20:04 (the run finished the render, died at upload) — the channel
-  #     sat dark 4 days and no alert fired. We now record the holder pid and steal only when the
-  #     holder is provably DEAD, or when it is a legacy pid-less lock older than 3h. A live run is
-  #     never stolen from, no matter how long it has been going. ---
+  #     sat dark 4 days and no alert fired. We now record the holder pid and steal only when no LIVE
+  #     process holds it (see _lock_stale above: dead pid, RECYCLED pid, or unverifiable), or when it
+  #     is a legacy pid-less lock older than 3h. A run whose holder is VERIFIED live is never stolen
+  #     from, no matter how long it has been going. ---
   _lh="$(cat "$LOCK/holder" 2>/dev/null)"
-  _lage=$(( $(date +%s) - $(stat -f %m "$LOCK" 2>/dev/null || echo 0) ))
-  if { [ -n "$_lh" ] && ! kill -0 "$_lh" 2>/dev/null; } || { [ -z "$_lh" ] && [ "$_lage" -gt 10800 ]; }; then
-    echo "stealing stale $LOCK (holder=${_lh:-none}, age=${_lage}s)"
-    echo "$(date '+%F %H:%M') STALE LOCK stolen (holder=${_lh:-none} age=${_lage}s)" >> runs/autopilot/ALERTS.log
+  if _lock_stale "$LOCK"; then
+    echo "stealing stale $LOCK (holder=${_lh:-none}: $LOCK_WHY)"
+    echo "$(date '+%F %H:%M') STALE LOCK stolen (holder=${_lh:-none}: $LOCK_WHY)" >> runs/autopilot/ALERTS.log
     rm -rf "$LOCK"; mkdir "$LOCK" 2>/dev/null || { echo "HALT: lost the race for $LOCK. Exiting."; exit 0; }
   else
-    echo "HALT: another autopilot run holds $LOCK (started $(cat $LOCK/started 2>/dev/null), pid ${_lh:-?}). Exiting."
-    echo "$(date '+%F %H:%M') HALT $LOCK held by LIVE pid ${_lh:-?} (age ${_lage}s)" >> runs/autopilot/ALERTS.log
+    echo "HALT: another autopilot run holds $LOCK (started $(cat $LOCK/started 2>/dev/null), pid ${_lh:-?}: $LOCK_WHY). Exiting."
+    echo "$(date '+%F %H:%M') HALT $LOCK held by LIVE pid ${_lh:-?} ($LOCK_WHY)" >> runs/autopilot/ALERTS.log
     exit 0
   fi
 fi
-date > "$LOCK/started"; echo $$ > "$LOCK/holder"
+date > "$LOCK/started"; echo $$ > "$LOCK/holder"; ps -p $$ -o comm= > "$LOCK/holder_cmd" 2>/dev/null
 
 # --- SHARED machine-wide lock (cross-project) ---
 # This 8GB Mac also runs the Sammi the Sloth video autopilot at 2am. Two heavy TTS+render pipelines
@@ -68,13 +125,20 @@ SHARED_LOCK="/tmp/video_autopilot.lock"; _w=0
 while ! mkdir "$SHARED_LOCK" 2>/dev/null; do
   _h="$(cat "$SHARED_LOCK/holder" 2>/dev/null)"
   _age=$(( $(date +%s) - $(stat -f %m "$SHARED_LOCK" 2>/dev/null || echo 0) ))
-  if [ "$_age" -gt 10800 ] || { [ -n "$_h" ] && ! kill -0 "$_h" 2>/dev/null; }; then
-    rm -rf "$SHARED_LOCK"; continue   # steal a stale (dead holder, or >3h) lock
+  # Steal only a lock nobody live holds (dead holder, RECYCLED pid, unverifiable) or one >3h old.
+  # A live holder from the other project is left alone — the whole point of this lock is to QUEUE.
+  if [ "$_age" -gt 10800 ]; then _steal=1; LOCK_WHY="lock age ${_age}s > 3h"
+  elif _lock_stale "$SHARED_LOCK"; then _steal=1
+  else _steal=0; fi
+  if [ "$_steal" = 1 ]; then
+    echo "stealing stale $SHARED_LOCK (holder=${_h:-none}: $LOCK_WHY)"
+    echo "$(date '+%F %H:%M') STALE LOCK stolen $SHARED_LOCK (holder=${_h:-none}: $LOCK_WHY)" >> runs/autopilot/ALERTS.log
+    rm -rf "$SHARED_LOCK"; continue
   fi
   [ "$_w" -ge 14400 ] && { echo "shared video lock held >4h — exiting."; exit 0; }
-  echo "waiting on shared video lock (held by pid ${_h:-?}) … ${_w}s"; sleep 120; _w=$(( _w + 120 ))
+  echo "waiting on shared video lock ($LOCK_WHY) … ${_w}s"; sleep 120; _w=$(( _w + 120 ))
 done
-echo $$ > "$SHARED_LOCK/holder"; GOT_SHARED=1
+echo $$ > "$SHARED_LOCK/holder"; ps -p $$ -o comm= > "$SHARED_LOCK/holder_cmd" 2>/dev/null; GOT_SHARED=1
 
 CLAUDE=/Users/jacobpazhoor/.local/bin/claude
 STATUS="UNKNOWN"; STATUS_MSG=""
