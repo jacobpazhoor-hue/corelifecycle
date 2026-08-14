@@ -6,3 +6,6 @@ scipy
 soundfile
 edge-tts
 imageio-ffmpeg
+# gate.py's crayon style checks (flat fill / camera lock) read rendered stills via PIL.
+# Missing this HALTed the cloud build on 2026-08-14 and forced a local render.
+pillow
