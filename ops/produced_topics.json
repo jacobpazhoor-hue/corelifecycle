@@ -191,6 +191,30 @@
       "title": "Your Life as an Astronaut at Every Level (Most Never Fly)",
       "url": "https://youtu.be/0RMDnHa9tWg",
       "date": "2026-08-05"
+    },
+    {
+      "topic": "ottoman_empire",
+      "title": "Your Life as Every Rank in the Ottoman Empire (44 Are Strangled)",
+      "url": "https://youtu.be/DdsOyTW4oAQ",
+      "date": "2026-08-07"
+    },
+    {
+      "topic": "pirate",
+      "title": "Your Life as a Pirate at Every Rank (52 Hang in One Morning)",
+      "url": "https://youtu.be/lZrlevsO-Qk",
+      "date": "2026-08-08"
+    },
+    {
+      "topic": "basketball_player",
+      "title": "Your Life as an NBA Player at Every Level (60% Go Broke)",
+      "url": "https://youtu.be/btCz6g8Hw7Y",
+      "date": "2026-08-11"
+    },
+    {
+      "topic": "f1_driver",
+      "title": "Your Life as an F1 Driver at Every Level (You Pay to Play)",
+      "url": "https://youtu.be/k947Xisl8ZM",
+      "date": "2026-08-13"
     }
   ],
   "_note": "Showrunner must NOT repeat a produced topic. Auto-generate a new hierarchical profession each run."

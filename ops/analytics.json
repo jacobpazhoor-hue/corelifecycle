@@ -1,8 +1,8 @@
 {
-  "updated": "2026-08-07T04:51:33.190515+00:00",
+  "updated": "2026-08-14T01:25:27.653148+00:00",
   "channel": {
-    "videos": 45,
-    "views": 1304,
+    "videos": 48,
+    "views": 1321,
     "subscribers": 6
   },
   "videos": [
@@ -31,7 +31,7 @@
       "topic": "mob_boss",
       "title": "Your Life in the Mafia at Every Rank (Only 2 Ways Out)",
       "published": "2026-07-03T02:16:42Z",
-      "views": 141,
+      "views": 142,
       "likes": 4,
       "comments": 0,
       "duration": "PT12M12S"
@@ -61,7 +61,7 @@
       "topic": "hedge_fund_manager",
       "title": "Every Level of a Hedge Fund Manager \u2014 From Analyst to Billionaire",
       "published": "2026-06-24T20:32:02Z",
-      "views": 42,
+      "views": 43,
       "likes": 1,
       "comments": 0,
       "duration": "PT13M3S"
@@ -111,7 +111,7 @@
       "topic": "north_korea",
       "title": "Your Life at Every Rank in North Korea (You Can't Leave)",
       "published": "2026-07-19T15:15:07Z",
-      "views": 22,
+      "views": 23,
       "likes": 1,
       "comments": 0,
       "duration": "PT12M48S"
@@ -121,7 +121,7 @@
       "topic": "hitman",
       "title": "Your Life as a Hitman at Every Level (You Don't Retire)",
       "published": "2026-07-12T09:51:41Z",
-      "views": 21,
+      "views": 22,
       "likes": 0,
       "comments": 0,
       "duration": "PT11M37S"
@@ -187,6 +187,16 @@
       "duration": "PT57S"
     },
     {
+      "id": "TLg0RWBjLwA",
+      "topic": "samurai",
+      "title": "Your Life as a Samurai at Every Rank (Honor Kills You)",
+      "published": "2026-07-13T09:52:09Z",
+      "views": 11,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M42S"
+    },
+    {
       "id": "I9R57ipHorc",
       "topic": null,
       "title": "Every Level of a Hitman \ud83d\udcb0 #shorts",
@@ -195,16 +205,6 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT41S"
-    },
-    {
-      "id": "TLg0RWBjLwA",
-      "topic": "samurai",
-      "title": "Your Life as a Samurai at Every Rank (Honor Kills You)",
-      "published": "2026-07-13T09:52:09Z",
-      "views": 10,
-      "likes": 0,
-      "comments": 0,
-      "duration": "PT12M42S"
     },
     {
       "id": "ATr0UYrijBY",
@@ -237,6 +237,16 @@
       "duration": "PT1M1S"
     },
     {
+      "id": "ivebwz9oj1A",
+      "topic": "crypto_founder",
+      "title": "POV: You Found a Crypto Startup (Billion or Zero)",
+      "published": "2026-07-27T02:47:06Z",
+      "views": 6,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT11M42S"
+    },
+    {
       "id": "nPsCGe56xis",
       "topic": "venture_capitalist",
       "title": "Your Life as a VC at Every Level (One Bet Pays For All)",
@@ -267,14 +277,14 @@
       "duration": "PT59S"
     },
     {
-      "id": "ivebwz9oj1A",
-      "topic": "crypto_founder",
-      "title": "POV: You Found a Crypto Startup (Billion or Zero)",
-      "published": "2026-07-27T02:47:06Z",
+      "id": "8JnMXsYfDhI",
+      "topic": "mongol_empire",
+      "title": "Your Life as Every Rank in the Mongol Empire (3 of 4 Never Kneel)",
+      "published": "2026-08-01T13:01:07Z",
       "views": 5,
       "likes": 0,
       "comments": 0,
-      "duration": "PT11M42S"
+      "duration": "PT12M12S"
     },
     {
       "id": "ZQpAzns70b4",
@@ -287,14 +297,14 @@
       "duration": "PT10M8S"
     },
     {
-      "id": "8JnMXsYfDhI",
-      "topic": "mongol_empire",
-      "title": "Your Life as Every Rank in the Mongol Empire (3 of 4 Never Kneel)",
-      "published": "2026-08-01T13:01:07Z",
+      "id": "4TX8VMYpYp4",
+      "topic": null,
+      "title": "Every Level of a Black Market Surgeon \ud83d\udcb0 #shorts",
+      "published": "2026-07-15T09:44:43Z",
       "views": 4,
       "likes": 0,
       "comments": 0,
-      "duration": "PT12M12S"
+      "duration": "PT41S"
     },
     {
       "id": "q2wg7eeg1eE",
@@ -317,14 +327,24 @@
       "duration": "PT53S"
     },
     {
-      "id": "4TX8VMYpYp4",
-      "topic": null,
-      "title": "Every Level of a Black Market Surgeon \ud83d\udcb0 #shorts",
-      "published": "2026-07-15T09:44:43Z",
+      "id": "7mD1xx7tLXs",
+      "topic": "bratva",
+      "title": "Your Life in the Bratva at Every Rank (You Never Own It)",
+      "published": "2026-08-04T21:49:41Z",
       "views": 3,
       "likes": 0,
       "comments": 0,
-      "duration": "PT41S"
+      "duration": "PT12M14S"
+    },
+    {
+      "id": "SP0IpgEj5xI",
+      "topic": "gladiator",
+      "title": "Your Life as a Gladiator at Every Level (Survive to Level 7)",
+      "published": "2026-08-03T15:20:43Z",
+      "views": 3,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M16S"
     },
     {
       "id": "ilBfri70z-U",
@@ -337,14 +357,14 @@
       "duration": "PT56S"
     },
     {
-      "id": "SP0IpgEj5xI",
-      "topic": "gladiator",
-      "title": "Your Life as a Gladiator at Every Level (Survive to Level 7)",
-      "published": "2026-08-03T15:20:43Z",
+      "id": "DdsOyTW4oAQ",
+      "topic": "ottoman_empire",
+      "title": "Your Life as Every Rank in the Ottoman Empire (44 Are Strangled)",
+      "published": "2026-08-07T06:13:13Z",
       "views": 2,
       "likes": 0,
       "comments": 0,
-      "duration": "PT12M16S"
+      "duration": "PT12M10S"
     },
     {
       "id": "2xY-_B5XiNo",
@@ -367,14 +387,14 @@
       "duration": "PT1M2S"
     },
     {
-      "id": "7mD1xx7tLXs",
-      "topic": "bratva",
-      "title": "Your Life in the Bratva at Every Rank (You Never Own It)",
-      "published": "2026-08-04T21:49:41Z",
+      "id": "btCz6g8Hw7Y",
+      "topic": "basketball_player",
+      "title": "Your Life as an NBA Player at Every Level (60% Go Broke)",
+      "published": "2026-08-12T00:36:55Z",
       "views": 1,
       "likes": 0,
       "comments": 0,
-      "duration": "PT12M14S"
+      "duration": "PT12M19S"
     },
     {
       "id": "j_sHEG3GHpM",
@@ -415,6 +435,16 @@
       "likes": 0,
       "comments": 0,
       "duration": "PT5M22S"
+    },
+    {
+      "id": "lZrlevsO-Qk",
+      "topic": "pirate",
+      "title": "Your Life as a Pirate at Every Rank (52 Hang in One Morning)",
+      "published": "2026-08-08T09:39:34Z",
+      "views": 0,
+      "likes": 0,
+      "comments": 0,
+      "duration": "PT12M"
     },
     {
       "id": "0RMDnHa9tWg",

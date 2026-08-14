@@ -369,6 +369,59 @@ of the ladder composes from ROMAN's `legionDrill`/`shieldWall`/`warCouncil`/`pra
 `merchantHouse`/`lordAudience`/`keepTop`, DYNASTY's `portraitHall`, and universal `fileWall`/`dinner`
 — deliberately avoiding modern-coded universal templates, same discipline as the MONGOL pack.)
 
+## Pirate pack (pirate — green hand through able seaman/specialist/quartermaster/captain to a rare fleet command, and the reckoning above all of it)
+| template | depicts | good for |
+|---|---|---|
+| fishingCove | figure before a leaning shack + patched-net dinghy on a small sandy jetty | Level 1, the named want, the origin, the loop-close callback |
+| shipDeck | figure on a working ship's deck — mainmast, coiled rope, capstan, open horizon | THE recurring master/home-base beat — every rank still stands on this deck |
+| broadsideBattle | figure beside a recoiling deck cannon, powder smoke, a damaged enemy ship on a stormy horizon | the danger escalation, taking a prize by force |
+| nassauHarbor | figure before a palm-lined colonial waterfront, tavern fronts, a forest of anchored masts | the Republic of Pirates, the 1718 pardon offered, the loot spent fast between voyages |
+| captainsCabin | figure before a chart table + open treasure chest, wide stern windows on the night sea | command's private authority, the apex — a fortune commanded, not owned |
+| marooned | figure alone on a bare sandbar, one leaning palm, empty horizon | the real, VERIFIED Articles punishment — theft/cowardice/breaking the code |
+| executionDock | figure before a gallows frame + noose, a gibbet cage to the side, a dim crowd | the reckoning — the cold open + its loop-close payoff |
+
+(7 new bespoke backdrops — this is the first tall-ship/naval topic, so nothing existing covers
+rigging/broadsides/a gallows. The rest of the ladder composes from universal `signing` (re-narrated:
+the Articles, voted and signed by the whole crew before a voyage) and MAFIA's `countRoom` (splitting
+shares of pieces of eight under a naked bulb), `courtroom` (the Admiralty trial), `prisonCell`
+(captured, awaiting trial) — crime-adjacent packs read fine for piracy per the cartel/yakuza/bratva
+cross-genre precedent. Also reuses OCEAN's `oceanCapsize` for the storm danger beat rather than
+authoring a second storm backdrop.)
+
+## Basketball pack (basketball_player — driveway hopeful through college/G-League/two-way/drafted rookie/veteran comeback/All-Star to a supermax superstar, and the empty rafters above all of it)
+| template | depicts | good for |
+|---|---|---|
+| drivewayHoop | figure before a house facade, a hoop bolted above the garage, cracked driveway | Level 1, the named want, the origin, the loop-close callback |
+| highSchoolGym | figure on a polished high school court, bleachers, a lit scoreboard | the first spectacle, a scout in the stands |
+| gLeagueBus | figure seated on a bus, blurred highway lights streaming past the window | the grind, the recurring mentor's seat, minor-league travel |
+| arenaCourt | figure on an NBA arena court, a hanging jumbotron, packed dark stands, spotlight beams | THE recurring master/home-base beat — the rookie debut through the supermax apex, relit each time |
+| iceBathRoom | figure in a steel ice tub, rolled athletic tape, cold blue-white light | THE recurring sensory-anchor home base — bigger and colder every level-up |
+| rafterRetirement | figure alone on a dim empty court, one spotlight, a jersey banner already hanging in the rafters | the flash-forward cold open + its loop-close payoff |
+
+(6 new bespoke backdrops — this is the first team-sport-arena topic; the existing generic SPORTS
+pack's `stadiumField` is soccer-coded and `medalPodium` is Olympic-coded, neither fits an NBA ladder.
+The rest of the ladder composes from universal `signing`/`dinner`/`boardroomNotes`/`tower`/`jet`/
+`window`/`fileWall`/`layoffs` (re-narrated: waived, cut from the roster) and the GEN pack's
+`podiumScene`, plus a cross-genre reuse of the MEDICAL pack's `erTrauma` for the on-court injury
+cart-off — medical art reads fine for a sports injury per the crime-pack cross-genre precedent.)
+
+## Motorsport pack (f1_driver — karting through F4/F3/F2 to an F1 reserve seat, a race seat, a podium, and a world championship, and the reckoning above even that)
+| template | depicts | good for |
+|---|---|---|
+| kartTrack | figure beside a scrappy local asphalt kart circuit, painted curbs, two other kids' karts in the distance | Level 1, the named want, the origin, the loop-close callback |
+| paddockGarage | figure beside a stripped single-seater on stands in a cramped concrete bay, stacked slick tires | the F4/F3/F2 grind, the family's debt made physical |
+| gridWalk | figure walking a pre-race grid of receding single-seaters, sponsor banners overhead, a crowd behind barriers | the F1 debut, rookie-race pressure |
+| pitWall | figure before a bank of timing screens showing live lap times | team command, strategy, the radio call that ends a season |
+| cockpitClose | figure strapped in under a gold halo bar, a harness cinched across the chest, tunnel-vision framing | THE recurring sensory-anchor home base — tightens at every level-up |
+| podiumSpray | figure atop a 3-step trophy podium, champagne spray, drifting confetti | the win, the apex, made real |
+| crashBarrier | figure beside a crashed car against a tire wall, waving yellow marshal flags, dust | the danger beat, the midpoint reversal, the reminder every level carries the same real risk |
+
+(7 new bespoke backdrops — this is the first single-seater-racing topic, so nothing existing covers
+a cockpit/harness/pit wall/grid. The rest of the ladder composes from universal `signing`/`dinner`/
+`boardroomNotes`/`window`/`fileWall`/`deskClose`/`layoffs` (re-narrated: a sponsor-funded seat
+"reevaluation"). New reusable prop `RaceCarArt` — a side-profile open-wheel racecar, shared across
+kartTrack/paddockGarage/gridWalk/crashBarrier at different scales/liveries.)
+
 ## Adding a new domain pack
 If a topic needs settings none of these cover (e.g. soldier→battlefield, athlete→stadium,
 founder→garage), add backdrop/prop entries + a small template set to src/stage.tsx following the
