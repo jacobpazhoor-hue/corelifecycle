@@ -316,7 +316,30 @@ DO, in order:
      • DEVICES UNDER-SPENT. It used ZERO dialogue= exchanges (dialogue is a PRIMARY device — at
        least 4), 2 bubbles (budget 5–10), 2 panels (3–4), 6 non-chapter cards (budget 8–13).
      • WPM 144.0 — inside the gate's 143–154 but BELOW the 145–152 the step above tells you to hit,
-       and 1.0 WPM from a HALT. Do not stop on a number that close to the edge; add words.
+       and 1.0 WPM from a HALT. Do not stop on a number that close to the edge.
+
+   THE WPM RULE IS A RULE ABOUT WORD LENGTH, AND YOU CAN CHECK IT BEFORE YOU BUILD (WO-32, measured
+   on two finished episodes). Two cold runs HALTed the gate at 136.4 and 138.1 WPM, and neither was
+   fixable by the advice above, so here is what actually governs it:
+     The voice speaks at a CONSTANT SYLLABLE RATE. Measured across two whole episodes at the same
+     rate=-7%: 243.0 and 239.8 syllables per minute — 1.3% apart. Their WPM was 11% apart (170.9 vs
+     153.8 speech, 152.5 vs 138.1 runtime) for one reason only: SYLLABLES PER WORD, 1.422 vs 1.559.
+     Per-scene overhead was identical (0.516 vs 0.507 s/scene), so scene count was not the cause.
+     PREDICTOR, accurate to ~1 WPM on both episodes:  WPM runtime ≈ 215 / (syllables per word)
+       syll/word 1.41 -> 152 · 1.45 -> 148 · 1.48 -> 145 · 1.50 -> 143 (the HALT edge) · 1.56 -> 138
+     SO: BEFORE you build, count it — total syllables / total words across all narration — and get
+     it to 1.42–1.45. Vowel-group counting is close enough.
+     ADDING WORDS DOES NOT FIX A LOW WPM. It raises the numerator and the runtime together and the
+     ratio barely moves; it just makes the episode longer, and at ~200 scenes there is no word count
+     that reaches 143 from 1.56 syllables/word before the 21-minute cap HALTs you instead.
+     REMOVING COMMAS DOES NOT FIX IT EITHER — measured: replacing commas with full stops made the
+     same 268 words 4.0 WPM SLOWER, because a period pauses longer than a comma.
+     THE FIX IS SHORTER WORDS. Anglo-Saxon over Latinate, concrete over abstract — "lab" not
+     "laboratory", "about" not "approximately", "watchdog" not "regulatory authority", "he lied"
+     not "he misrepresented the situation". This is the register the canon asks for anyway (§3
+     SPECIFICITY, fragments, 40–59% of sentences under 8 words), so it costs nothing you wanted.
+     Proper nouns you cannot shorten (Elizabeth Holmes, Theranos) are part of the budget — spend
+     the rest of the sentence shorter to pay for them.
      • EVERY SCENE NEEDS A `template=`, INCLUDING A FULL-SCREEN CARD SCENE. A `card=` with no `hold`
        covers the whole scene and draws no art, so `template` feels pointless there — but gate.py
        checks the template of EVERY scene in the timeline and HALTs the night on
