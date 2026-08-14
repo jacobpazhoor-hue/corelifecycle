@@ -2,21 +2,21 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 22142,
+  "totalFrames": 21833,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t01",
       "level": null,
       "overlay": {
-        "big": "14 SEASONS",
-        "sub": "ONE BANNER"
+        "big": "LAP 58",
+        "sub": "LAST CORNER"
       },
-      "template": "rafterRetirement",
+      "template": "cockpitClose",
       "audio": "audio/t01.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 667,
+      "durationInFrames": 619,
       "gap": 0.7
     },
     {
@@ -26,357 +26,369 @@
       "template": "fileWall",
       "audio": "audio/t02.wav",
       "audioStartFrame": 3,
-      "startFrame": 667,
-      "durationInFrames": 545,
+      "startFrame": 619,
+      "durationInFrames": 580,
       "gap": 0.25
     },
     {
       "id": "t03",
-      "level": "LEVEL 01  \u00b7  THE DRIVEWAY",
+      "level": "LEVEL 01  \u00b7  THE GRID",
       "overlay": null,
-      "template": "drivewayHoop",
+      "template": "kartTrack",
       "audio": "audio/t03.wav",
       "audioStartFrame": 3,
-      "startFrame": 1212,
-      "durationInFrames": 692,
+      "startFrame": 1199,
+      "durationInFrames": 736,
       "gap": 0.25
     },
     {
       "id": "t04",
       "level": null,
-      "overlay": null,
+      "overlay": {
+        "big": "1 IN 1,000,000",
+        "sub": "EVER REACH THIS SEAT"
+      },
       "template": "dinner",
       "audio": "audio/t04.wav",
       "audioStartFrame": 3,
-      "startFrame": 1904,
-      "durationInFrames": 682,
+      "startFrame": 1935,
+      "durationInFrames": 721,
       "gap": 0.25
     },
     {
       "id": "t05",
       "level": null,
       "overlay": null,
-      "template": "highSchoolGym",
+      "template": "kartTrack",
       "audio": "audio/t05.wav",
       "audioStartFrame": 3,
-      "startFrame": 2586,
-      "durationInFrames": 707,
+      "startFrame": 2656,
+      "durationInFrames": 659,
       "gap": 0.25
     },
     {
       "id": "t06",
       "level": null,
       "overlay": {
-        "big": "0.03%",
-        "sub": "EVER REACH THE NBA"
+        "big": "THE ASTON",
+        "sub": "SOLD FOR AN ENGINE"
       },
-      "template": "boardroomNotes",
+      "template": "window",
       "audio": "audio/t06.wav",
       "audioStartFrame": 3,
-      "startFrame": 3293,
-      "durationInFrames": 649,
+      "startFrame": 3315,
+      "durationInFrames": 646,
       "gap": 0.25
     },
     {
       "id": "t07",
-      "level": "LEVEL 02  \u00b7  THE ROSTER",
+      "level": "LEVEL 02  \u00b7  FORMULA 4",
       "overlay": null,
-      "template": "lectureHallScene",
+      "template": "paddockGarage",
       "audio": "audio/t07.wav",
       "audioStartFrame": 3,
-      "startFrame": 3942,
-      "durationInFrames": 674,
+      "startFrame": 3961,
+      "durationInFrames": 827,
       "gap": 0.25
     },
     {
       "id": "t08",
       "level": null,
-      "overlay": null,
-      "template": "arenaCourt",
+      "overlay": {
+        "big": "$500,000",
+        "sub": "ONE F4 SEASON"
+      },
+      "template": "signing",
       "audio": "audio/t08.wav",
       "audioStartFrame": 3,
-      "startFrame": 4616,
-      "durationInFrames": 757,
+      "startFrame": 4788,
+      "durationInFrames": 634,
       "gap": 0.25
     },
     {
       "id": "t09",
       "level": null,
       "overlay": {
-        "big": "1%",
-        "sub": "OF NCAA PLAYERS GET DRAFTED"
+        "big": "+40 TEST DAYS",
+        "sub": "WHAT MONEY BUYS"
       },
-      "template": "window",
+      "template": "gridWalk",
       "audio": "audio/t09.wav",
       "audioStartFrame": 3,
-      "startFrame": 5373,
-      "durationInFrames": 610,
+      "startFrame": 5422,
+      "durationInFrames": 760,
       "gap": 0.25
     },
     {
       "id": "t10",
-      "level": null,
+      "level": "LEVEL 03  \u00b7  FORMULA 3",
       "overlay": null,
-      "template": "boardroomNotes",
+      "template": "paddockGarage",
       "audio": "audio/t10.wav",
       "audioStartFrame": 3,
-      "startFrame": 5983,
-      "durationInFrames": 718,
+      "startFrame": 6182,
+      "durationInFrames": 657,
       "gap": 0.25
     },
     {
       "id": "t11",
-      "level": "LEVEL 03  \u00b7  UNDRAFTED",
+      "level": null,
       "overlay": {
-        "big": "$40,500",
-        "sub": "G LEAGUE, FIVE MONTHS"
+        "big": "$1,000,000",
+        "sub": "THE DEBT KEEPS CLIMBING"
       },
-      "template": "signing",
+      "template": "boardroomNotes",
       "audio": "audio/t11.wav",
       "audioStartFrame": 3,
-      "startFrame": 6701,
-      "durationInFrames": 668,
+      "startFrame": 6839,
+      "durationInFrames": 718,
       "gap": 0.25
     },
     {
       "id": "t12",
       "level": null,
       "overlay": null,
-      "template": "gLeagueBus",
+      "template": "deskClose",
       "audio": "audio/t12.wav",
       "audioStartFrame": 3,
-      "startFrame": 7369,
-      "durationInFrames": 805,
+      "startFrame": 7557,
+      "durationInFrames": 696,
       "gap": 0.25
     },
     {
       "id": "t13",
-      "level": null,
+      "level": "LEVEL 04  \u00b7  FORMULA 2",
       "overlay": {
-        "big": "$578,577",
-        "sub": "NBA TWO-WAY SALARY"
+        "big": "$6,000,000",
+        "sub": "TWO SEASONS OF F2"
       },
-      "template": "signing",
+      "template": "paddockGarage",
       "audio": "audio/t13.wav",
       "audioStartFrame": 3,
-      "startFrame": 8174,
-      "durationInFrames": 627,
+      "startFrame": 8253,
+      "durationInFrames": 730,
       "gap": 0.25
     },
     {
       "id": "t14",
       "level": null,
       "overlay": null,
-      "template": "iceBathRoom",
+      "template": "gridWalk",
       "audio": "audio/t14.wav",
       "audioStartFrame": 3,
-      "startFrame": 8801,
-      "durationInFrames": 683,
+      "startFrame": 8983,
+      "durationInFrames": 654,
       "gap": 0.25
     },
     {
       "id": "t15",
-      "level": "LEVEL 04  \u00b7  THE CALL-UP",
-      "overlay": {
-        "big": "$1,361,969",
-        "sub": "NBA ROOKIE MINIMUM"
-      },
-      "template": "arenaCourt",
+      "level": null,
+      "overlay": null,
+      "template": "window",
       "audio": "audio/t15.wav",
       "audioStartFrame": 3,
-      "startFrame": 9484,
-      "durationInFrames": 617,
-      "gap": 0.25
+      "startFrame": 9637,
+      "durationInFrames": 644,
+      "gap": 1.4
     },
     {
       "id": "t16",
       "level": null,
-      "overlay": null,
-      "template": "tower",
+      "overlay": {
+        "big": "TH\u00c9O",
+        "sub": "GONE"
+      },
+      "template": "crashBarrier",
       "audio": "audio/t16.wav",
       "audioStartFrame": 3,
-      "startFrame": 10101,
-      "durationInFrames": 598,
-      "gap": 0.25
+      "startFrame": 10281,
+      "durationInFrames": 758,
+      "gap": 0.7
     },
     {
       "id": "t17",
       "level": null,
       "overlay": null,
-      "template": "arenaCourt",
+      "template": "fileWall",
       "audio": "audio/t17.wav",
       "audioStartFrame": 3,
-      "startFrame": 10699,
-      "durationInFrames": 772,
-      "gap": 1.4
+      "startFrame": 11039,
+      "durationInFrames": 669,
+      "gap": 0.25
     },
     {
       "id": "t18",
-      "level": null,
+      "level": "LEVEL 05  \u00b7  THE RESERVE SEAT",
       "overlay": {
-        "big": "ACL TORN",
-        "sub": "AVG CAREER: 4.5 YEARS"
+        "big": "40 POINTS",
+        "sub": "THE SUPERLICENCE, EARNED"
       },
-      "template": "erTrauma",
+      "template": "cockpitClose",
       "audio": "audio/t18.wav",
       "audioStartFrame": 3,
-      "startFrame": 11471,
-      "durationInFrames": 717,
-      "gap": 0.7
+      "startFrame": 11708,
+      "durationInFrames": 698,
+      "gap": 0.25
     },
     {
       "id": "t19",
       "level": null,
       "overlay": null,
-      "template": "layoffs",
+      "template": "pitWall",
       "audio": "audio/t19.wav",
       "audioStartFrame": 3,
-      "startFrame": 12188,
-      "durationInFrames": 838,
+      "startFrame": 12406,
+      "durationInFrames": 715,
       "gap": 0.25
     },
     {
       "id": "t20",
-      "level": null,
-      "overlay": null,
-      "template": "iceBathRoom",
+      "level": "LEVEL 06  \u00b7  THE RACE SEAT",
+      "overlay": {
+        "big": "$750,000",
+        "sub": "F1 ROOKIE MINIMUM"
+      },
+      "template": "gridWalk",
       "audio": "audio/t20.wav",
       "audioStartFrame": 3,
-      "startFrame": 13026,
-      "durationInFrames": 685,
+      "startFrame": 13121,
+      "durationInFrames": 609,
       "gap": 0.25
     },
     {
       "id": "t21",
-      "level": "LEVEL 05  \u00b7  THE COMEBACK",
+      "level": null,
       "overlay": null,
-      "template": "gLeagueBus",
+      "template": "crashBarrier",
       "audio": "audio/t21.wav",
       "audioStartFrame": 3,
-      "startFrame": 13711,
-      "durationInFrames": 727,
+      "startFrame": 13730,
+      "durationInFrames": 668,
       "gap": 0.25
     },
     {
       "id": "t22",
       "level": null,
-      "overlay": {
-        "big": "10-DAY DEAL",
-        "sub": "NO GUARANTEE PAST DAY 10"
-      },
-      "template": "arenaCourt",
+      "overlay": null,
+      "template": "layoffs",
       "audio": "audio/t22.wav",
       "audioStartFrame": 3,
-      "startFrame": 14438,
-      "durationInFrames": 782,
+      "startFrame": 14398,
+      "durationInFrames": 738,
       "gap": 0.25
     },
     {
       "id": "t23",
-      "level": null,
+      "level": "LEVEL 07  \u00b7  THE PODIUM",
       "overlay": null,
-      "template": "iceBathRoom",
+      "template": "pitWall",
       "audio": "audio/t23.wav",
       "audioStartFrame": 3,
-      "startFrame": 15220,
-      "durationInFrames": 622,
+      "startFrame": 15136,
+      "durationInFrames": 655,
       "gap": 0.25
     },
     {
       "id": "t24",
       "level": null,
-      "overlay": null,
-      "template": "dinner",
+      "overlay": {
+        "big": "$12,000,000",
+        "sub": "NEW CONTRACT AFTER P1"
+      },
+      "template": "podiumSpray",
       "audio": "audio/t24.wav",
       "audioStartFrame": 3,
-      "startFrame": 15842,
-      "durationInFrames": 587,
+      "startFrame": 15791,
+      "durationInFrames": 746,
       "gap": 0.25
     },
     {
       "id": "t25",
-      "level": "LEVEL 06  \u00b7  ALL-STAR",
+      "level": null,
       "overlay": null,
-      "template": "arenaCourt",
+      "template": "boardroomNotes",
       "audio": "audio/t25.wav",
       "audioStartFrame": 3,
-      "startFrame": 16429,
-      "durationInFrames": 600,
+      "startFrame": 16537,
+      "durationInFrames": 602,
       "gap": 0.25
     },
     {
       "id": "t26",
-      "level": null,
+      "level": "LEVEL 08  \u00b7  WORLD CHAMPION",
       "overlay": null,
-      "template": "boardroomNotes",
+      "template": "gridWalk",
       "audio": "audio/t26.wav",
       "audioStartFrame": 3,
-      "startFrame": 17029,
-      "durationInFrames": 785,
+      "startFrame": 17139,
+      "durationInFrames": 650,
       "gap": 0.25
     },
     {
       "id": "t27",
       "level": null,
-      "overlay": null,
-      "template": "podiumScene",
+      "overlay": {
+        "big": "LAP 58",
+        "sub": "LAST CORNER"
+      },
+      "template": "cockpitClose",
       "audio": "audio/t27.wav",
       "audioStartFrame": 3,
-      "startFrame": 17814,
-      "durationInFrames": 646,
-      "gap": 0.25
+      "startFrame": 17789,
+      "durationInFrames": 677,
+      "gap": 0.7
     },
     {
       "id": "t28",
-      "level": "LEVEL 07  \u00b7  SUPERMAX",
+      "level": null,
       "overlay": {
-        "big": "$313.9M",
-        "sub": "5-YEAR SUPERMAX DEAL"
+        "big": "$70,000,000",
+        "sub": "WORLD CHAMPION"
       },
-      "template": "signing",
+      "template": "podiumSpray",
       "audio": "audio/t28.wav",
       "audioStartFrame": 3,
-      "startFrame": 18460,
-      "durationInFrames": 594,
+      "startFrame": 18466,
+      "durationInFrames": 673,
       "gap": 0.25
     },
     {
       "id": "t29",
       "level": null,
-      "overlay": null,
-      "template": "jet",
+      "overlay": {
+        "big": "$1.1M",
+        "sub": "JUST FOR THE LICENSE"
+      },
+      "template": "pitWall",
       "audio": "audio/t29.wav",
       "audioStartFrame": 3,
-      "startFrame": 19054,
-      "durationInFrames": 922,
+      "startFrame": 19139,
+      "durationInFrames": 654,
       "gap": 0.25
     },
     {
       "id": "t30",
-      "level": "LEVEL 08  \u00b7  THE RECKONING",
+      "level": null,
       "overlay": {
-        "big": "14 SEASONS",
-        "sub": "3X THE AVG CAREER"
+        "big": "1 IN 1,000,000",
+        "sub": "MOST NEVER HAD THE MONEY"
       },
-      "template": "rafterRetirement",
+      "template": "boardroomNotes",
       "audio": "audio/t30.wav",
       "audioStartFrame": 3,
-      "startFrame": 19976,
-      "durationInFrames": 707,
-      "gap": 0.7
+      "startFrame": 19793,
+      "durationInFrames": 634,
+      "gap": 0.25
     },
     {
       "id": "t31",
       "level": null,
-      "overlay": {
-        "big": "60%",
-        "sub": "BROKE WITHIN 5 YEARS"
-      },
-      "template": "iceBathRoom",
+      "overlay": null,
+      "template": "dinner",
       "audio": "audio/t31.wav",
       "audioStartFrame": 3,
-      "startFrame": 20683,
-      "durationInFrames": 754,
+      "startFrame": 20427,
+      "durationInFrames": 756,
       "gap": 0.25
     },
     {
@@ -384,13 +396,13 @@
       "level": null,
       "overlay": {
         "big": "RETIRED",
-        "sub": "THE ICE STOPS COMING"
+        "sub": "THE HARNESS COMES OFF"
       },
-      "template": "rafterRetirement",
+      "template": "cockpitClose",
       "audio": "audio/t32.wav",
       "audioStartFrame": 3,
-      "startFrame": 21437,
-      "durationInFrames": 705,
+      "startFrame": 21183,
+      "durationInFrames": 650,
       "gap": 0.25
     }
   ]

@@ -140,6 +140,23 @@ const HoopArt: React.FC<{x: number; y: number; scale?: number}> = ({x, y, scale 
   </g>
 );
 
+// Side-profile open-wheel racecar art shared across the motorsport pack's backdrops (kart track,
+// paddock, grid, crash barrier) — front + rear wheel, low sidepod body, nose cone, cockpit + halo
+// bump, rear wing, in local coords with origin near the rear-wheel/ground contact line.
+const RaceCarArt: React.FC<{opacity?: number; livery?: string}> = ({opacity = 1, livery = '#c0392b'}) => (
+  <g opacity={opacity}>
+    <circle cx={190} cy={-40} r={54} fill={PAPERC} stroke={INK} strokeWidth={6} /><circle cx={190} cy={-40} r={18} fill="#c9c2ad" stroke={INK} strokeWidth={3} />
+    <circle cx={-210} cy={-30} r={44} fill={PAPERC} stroke={INK} strokeWidth={6} /><circle cx={-210} cy={-30} r={15} fill="#c9c2ad" stroke={INK} strokeWidth={3} />
+    <path d="M -230 -60 L -150 -110 L 60 -118 L 150 -95 L 230 -70 L 230 -40 L 150 -40 L -150 -40 L -230 -40 Z" fill={PAPERC} stroke={INK} strokeWidth={5} />
+    <path d="M -230 -60 L -280 -50 L -280 -36 L -230 -40 Z" fill={livery} stroke={INK} strokeWidth={4} />
+    <path d="M -40 -118 L -10 -150 L 40 -150 L 60 -118 Z" fill="#1c2026" stroke={INK} strokeWidth={4} />
+    <path d="M -20 -150 L -20 -178 L 34 -178 L 34 -150" fill="none" stroke={INK} strokeWidth={6} />
+    <line x1={210} y1={-95} x2={210} y2={-135} stroke={INK} strokeWidth={5} />
+    <rect x={175} y={-150} width={80} height={16} fill={livery} stroke={INK} strokeWidth={4} />
+    <rect x={-150} y={-90} width={280} height={14} fill={livery} opacity={0.85} />
+  </g>
+);
+
 // =================== BACKDROPS (far plane) ===================
 const BG: Record<string, React.FC<{frame: number}>> = {
   // tiered lecture hall — med school / training / any "learning" beat
@@ -2472,6 +2489,109 @@ const BG: Record<string, React.FC<{frame: number}>> = {
       <ellipse cx={960} cy={260} rx={180} ry={480} fill="url(#sglow)" opacity={0.1} />
     </g>
   ),
+  // --- Motorsport pack (f1_driver) ---
+  // the kart track — Level 1's named want, the origin, the loop-close callback: a scrappy local
+  // asphalt circuit, a painted curb, a thin roadside barrier, two other kids' karts in the distance
+  kartTrack: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#spaper)" />
+      <rect x={0} y={660} width={1920} height={420} fill="#3a3f46" /><line x1={0} y1={660} x2={1920} y2={660} stroke={INK} strokeWidth={5} />
+      {Array.from({length: 16}).map((_, i) => <rect key={i} x={i * 130} y={654} width={65} height={10} fill={i % 2 ? '#fff' : '#222'} />)}
+      <rect x={0} y={1000} width={1920} height={80} fill="#8fa0ac" opacity={0.55} />
+      {Array.from({length: 14}).map((_, i) => <rect key={i} x={30 + i * 140} y={1004} width={70} height={18} fill={i % 2 ? '#c0392b' : '#fff'} stroke={INK} strokeWidth={1} opacity={0.75} />)}
+      <rect x={0} y={560} width={1920} height={100} fill="#c9c2ad" opacity={0.9} /><line x1={0} y1={560} x2={1920} y2={560} stroke={INK} strokeWidth={3} opacity={0.35} />
+      {Array.from({length: 30}).map((_, i) => <line key={i} x1={i * 66} y1={560} x2={i * 66} y2={660} stroke={INK} strokeWidth={2} opacity={0.15} />)}
+      <g transform="translate(1420 990) scale(0.55)"><RaceCarArt livery="#2e6f95" /></g>
+      <g transform="translate(1640 986) scale(0.4)" opacity={0.5}><RaceCarArt livery="#5a8a3f" /></g>
+      <ellipse cx={960} cy={800} rx={760} ry={220} fill="url(#sglow)" opacity={0.12} />
+    </g>
+  ),
+  // the paddock garage — the F4/F3/F2 grind: a cramped concrete bay, stacked slick tires, a toolbox,
+  // the car up on stands mid-strip — the family's debt made physical
+  paddockGarage: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#20242a" />
+      <rect x={0} y={780} width={1920} height={300} fill="#2b3038" /><line x1={0} y1={780} x2={1920} y2={780} stroke={INK} strokeWidth={4} opacity={0.5} />
+      {Array.from({length: 6}).map((_, i) => <rect key={i} x={40 + i * 300} y={200} width={40} height={580} fill="#171a1f" opacity={0.35} />)}
+      <rect x={1300} y={640} width={280} height={140} fill={PAPERC} stroke={INK} strokeWidth={4} />
+      {[0, 1, 2].map((i) => <rect key={i} x={1320 + i * 90} y={660} width={70} height={100} fill="#c9c2ad" stroke={INK} strokeWidth={2} opacity={0.6} />)}
+      <g transform="translate(700 940) scale(1.1)"><RaceCarArt livery="#e8b54b" /></g>
+      <rect x={560} y={640} width={280} height={12} fill="#3a4048" />
+      {Array.from({length: 14}).map((_, i) => <circle key={i} cx={80 + (i % 7) * 40} cy={900 + Math.floor(i / 7) * 70} r={26} fill="#171a1f" stroke={INK} strokeWidth={3} opacity={0.7} />)}
+      <ellipse cx={960} cy={400} rx={600} ry={260} fill="url(#sglow)" opacity={0.1} />
+    </g>
+  ),
+  // the grid walk — sponsor banners overhead, a formation of receding cars, a crowd behind barriers —
+  // the F1 debut / rookie-race pressure beat
+  gridWalk: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#swarm)" />
+      <rect x={0} y={0} width={1920} height={140} fill="#151a20" />
+      {Array.from({length: 9}).map((_, i) => <rect key={i} x={i * 220} y={0} width={110} height={140} fill={i % 2 ? '#c0392b' : '#e8b54b'} opacity={0.75} />)}
+      <rect x={0} y={700} width={1920} height={380} fill="#4a4f56" /><line x1={0} y1={700} x2={1920} y2={700} stroke={INK} strokeWidth={5} />
+      {[0, 1].map((r) => Array.from({length: 5}).map((_, i) => (
+        <g key={`${r}-${i}`} transform={`translate(${1500 - i * 180 - r * 90} ${900 + r * 10}) scale(0.42)`} opacity={0.55}>
+          <RaceCarArt livery={i % 2 ? '#2e6f95' : '#5a8a3f'} />
+        </g>)))}
+      {Array.from({length: 40}).map((_, i) => <circle key={i} cx={20 + (i % 20) * 96} cy={780 + Math.floor(i / 20) * 40} r={9} fill={INK} opacity={0.18} />)}
+      <ellipse cx={960} cy={780} rx={800} ry={220} fill="url(#sglow)" opacity={0.14} />
+    </g>
+  ),
+  // the pit wall — a bank of timing screens, headset cable, live lap times — team command, strategy,
+  // the radio call that ends a season
+  pitWall: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#171a20" />
+      <rect x={620} y={90} width={680} height={420} fill="#0d1015" stroke={INK} strokeWidth={5} />
+      {Array.from({length: 12}).map((_, i) => (
+        <g key={i}>
+          <rect x={650 + (i % 4) * 160} y={120 + Math.floor(i / 4) * 130} width={140} height={100} fill="#141820" stroke={GOLD} strokeWidth={2} opacity={0.5} />
+          <text x={720 + (i % 4) * 160} y={175 + Math.floor(i / 4) * 130} textAnchor="middle" fontFamily={SANS} fontSize={22} fontWeight={700} fill={GOLD} opacity={0.7}>{`1:${18 + (i * 7) % 40}`}</text>
+        </g>))}
+      <rect x={0} y={760} width={1920} height={320} fill="#2a2f36" /><line x1={0} y1={760} x2={1920} y2={760} stroke={INK} strokeWidth={4} opacity={0.5} />
+      <ellipse cx={960} cy={500} rx={640} ry={260} fill="url(#sglow)" opacity={0.1} />
+    </g>
+  ),
+  // the cockpit — THE recurring sensory-anchor home base: a halo bar overhead, a five-point harness
+  // cinched across the chest, tunnel-vision framing — tightens at every level-up
+  cockpitClose: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#11151b" />
+      <path d="M 200 1080 L 260 620 Q 300 340 960 300 Q 1620 340 1660 620 L 1720 1080 Z" fill="#0a0d12" />
+      <path d="M 878 812 L 960 850 L 1042 812" fill="none" stroke="#3a2020" strokeWidth={24} strokeLinecap="round" />
+      <path d="M 878 812 L 960 850 L 1042 812" fill="none" stroke="#c0392b" strokeWidth={10} strokeLinecap="round" opacity={0.9} />
+      <rect x={800} y={848} width={320} height={34} fill="#3a2020" stroke={INK} strokeWidth={4} />
+      <rect x={860} y={830} width={200} height={20} fill="#c0392b" opacity={0.85} />
+      <circle cx={960} cy={848} r={20} fill="#2a2620" stroke={GOLD} strokeWidth={4} />
+      <path d="M 700 180 Q 960 130 1220 180 L 1220 230 Q 960 190 700 230 Z" fill="none" stroke={GOLD} strokeWidth={6} opacity={0.7} />
+      <ellipse cx={960} cy={600} rx={700} ry={420} fill="url(#sglow)" opacity={0.08} />
+    </g>
+  ),
+  // the podium — three trophy steps, champagne spray, drifting confetti — the win, the apex, made real
+  podiumSpray: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="url(#swarm)" />
+      {[0, 1, 2].map((i) => {const h = [220, 300, 180][i]; const x = [560, 900, 1260][i];
+        return <g key={i}><rect x={x} y={1080 - h} width={260} height={h} fill={PAPERC} stroke={INK} strokeWidth={5} />
+        <text x={x + 130} y={1080 - h + 50} textAnchor="middle" fontFamily={SANS} fontSize={40} fontWeight={800} fill={GOLD}>{[2, 1, 3][i]}</text></g>;})}
+      {Array.from({length: 30}).map((_, i) => {const t = (frame * 4 + i * 37) % 700; return <circle key={i} cx={200 + (i * 63) % 1600} cy={t} r={4} fill={i % 3 ? GOLD : '#fff'} opacity={0.6} />;})}
+      <rect x={870} y={640} width={180} height={20} fill="#c9c2ad" opacity={0.4} />
+      <ellipse cx={960} cy={500} rx={800} ry={260} fill="url(#sglow)" opacity={0.16} />
+    </g>
+  ),
+  // the crash barrier — a car against the tire wall, yellow marshal flags, dust — the danger beat, the
+  // midpoint reversal, the reminder every level still carries the same real risk
+  crashBarrier: ({frame}) => (
+    <g>
+      <rect x={0} y={0} width={1920} height={1080} fill="#2a2e34" />
+      <rect x={0} y={760} width={1920} height={320} fill="#4a4f56" /><line x1={0} y1={760} x2={1920} y2={760} stroke={INK} strokeWidth={5} />
+      {Array.from({length: 8}).map((_, i) => <circle key={i} cx={1500 + (i % 2) * 40} cy={700 + Math.floor(i / 2) * 70} r={34} fill="#171a1f" stroke={INK} strokeWidth={3} opacity={0.85} />)}
+      <g transform="translate(1300 900) scale(0.7) rotate(18)"><RaceCarArt livery="#c0392b" /></g>
+      {Array.from({length: 5}).map((_, i) => <rect key={i} x={200 + i * 90} y={640} width={70} height={30} fill="#e8b54b" opacity={0.85} transform={`rotate(${(frame * 0.5 + i * 7) % 4 - 2} ${235 + i * 90} 655)`} />)}
+      <ellipse cx={1300} cy={820} rx={420} ry={200} fill="url(#svig)" opacity={0.3} />
+      <ellipse cx={700} cy={500} rx={500} ry={260} fill="url(#sglow)" opacity={0.08} />
+    </g>
+  ),
 };
 // tiny helper so inline math reads cleanly above
 function y_(v: number) {return v;}
@@ -3976,4 +4096,42 @@ const BASKETBALL = {
       fig={{pose: A.stand(f), x: 900, y: 990, scale: 1.3, view: 'front', expr: blendExpr(FACES.hollow, FACES.cold, t)}} />;},
 };
 
-export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA, ...MONGOL, ...GLADIATOR, ...BRATVA, ...SPACE, ...OTTOMAN, ...PIRATE, ...BASKETBALL};
+// Motorsport pack (f1_driver — karting through F4/F3/F2 to an F1 reserve seat, a race seat, a
+// podium, and a world championship, and the reckoning above even that). 7 new bespoke backdrops —
+// this is the first single-seater-racing topic; nothing existing covers a cockpit/harness/pit wall.
+// The rest of the ladder composes from universal `signing`/`dinner`/`boardroomNotes`/`window`/
+// `fileWall`/`deskClose`/`layoffs` (re-narrated: a sponsor-funded seat "reevaluation").
+const MOTORSPORT = {
+  // the kart track — Level 1's named want, the origin, the loop-close callback
+  kartTrack: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="kartTrack" bg="url(#spaper)"
+      fig={{pose: A.stand(f), x: 960, y: 972, scale: 1.15, view: 'front', expr: blendExpr(FACES.earnest, FACES.focused, t)}} />;},
+  // the paddock garage — the junior-formula grind, the family's debt made physical
+  paddockGarage: () => {const f = useCurrentFrame();
+    return <Stage backdrop="paddockGarage" bg="url(#sclean)" figBehind
+      fig={{pose: A.stand(f), x: 1080, y: 900, scale: 1.3, view: 'profile', facing: -1, expr: FACES.exhausted}} />;},
+  // the grid walk — the F1 debut, rookie-race pressure, the crowd behind the barriers
+  gridWalk: () => {const f = useCurrentFrame(); const {fps} = useVideoConfig();
+    return <Stage backdrop="gridWalk" bg="url(#swarm)"
+      fig={{pose: A.walk(f, fps), x: 960, y: 940, scale: 1.3, view: 'profile', facing: 1, expr: FACES.worried}} />;},
+  // the pit wall — team command, strategy, the radio call
+  pitWall: () => {const f = useCurrentFrame();
+    return <Stage backdrop="pitWall" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 1240, y: 900, scale: 1.25, view: 'front', expr: FACES.focused}} />;},
+  // the cockpit — THE sensory-anchor home base, the harness tightening at every level-up
+  cockpitClose: () => {const f = useCurrentFrame(); const {durationInFrames: d} = useVideoConfig();
+    const t = interpolate(f, [d * 0.3, d * 0.7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return <Stage backdrop="cockpitClose" bg="url(#spaper)"
+      fig={{pose: A.sit(f), x: 960, y: 940, scale: 1.4, view: 'front', expr: blendExpr(FACES.cold, FACES.hardened, t)}} />;},
+  // the podium — the win, the apex, made real
+  podiumSpray: () => {const f = useCurrentFrame();
+    return <Stage backdrop="podiumSpray" bg="url(#swarm)"
+      fig={{pose: A.stand(f), x: 1030, y: 862, scale: 1.35, view: 'front', expr: FACES.smug}} />;},
+  // the crash barrier — the danger beat, the midpoint reversal
+  crashBarrier: () => {const f = useCurrentFrame();
+    return <Stage backdrop="crashBarrier" bg="url(#sclean)"
+      fig={{pose: A.stand(f), x: 1000, y: 900, scale: 1.3, view: 'front', expr: FACES.shock}} />;},
+};
+
+export const PACK_TEMPLATES: Record<string, React.FC> = {...GEN, ...MED, ...STARTUP, ...MILITARY, ...SPORTS, ...HEDGE, ...REALESTATE, ...SPY, ...ROMAN, ...MAFIA, ...DYNASTY, ...SAMURAI, ...CARTEL, ...OCEAN, ...BLACKMARKET, ...NORTHKOREA, ...ZOMBIE, ...WASTE, ...LOTTERY, ...YAKUZA, ...MONGOL, ...GLADIATOR, ...BRATVA, ...SPACE, ...OTTOMAN, ...PIRATE, ...BASKETBALL, ...MOTORSPORT};

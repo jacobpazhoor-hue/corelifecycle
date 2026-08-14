@@ -1,22 +1,22 @@
 {
   "thumb": {
     "kicker": "EVERY LEVEL OF AN",
-    "line1": "NBA PLAYER",
+    "line1": "F1 DRIVER",
     "line2": "",
-    "tag": "SUPERMAX",
-    "archetype": "beforeafter",
-    "big": "$313.9M",
-    "before": "UNDRAFTED",
-    "after": "SUPERMAX",
+    "tag": "PODIUM",
+    "archetype": "pov",
+    "big": "$70M",
+    "before": "KARTING",
+    "after": "CHAMPION",
     "expr": "shock",
-    "povline": "YOU BECOME AN",
-    "keyword": "SUPERMAX",
-    "setting": "arenaCourt",
-    "question": "WHO STAYS RICH?",
-    "mood": "money",
+    "povline": "ONE SECOND",
+    "keyword": "GONE",
+    "setting": "cockpitClose",
+    "question": "WHO PAYS FIRST?",
+    "mood": "danger",
     "costume": "uniform",
     "word": "YOU",
     "prop": "vault"
   },
-  "topic": "basketball_player"
+  "topic": "f1_driver"
 }
