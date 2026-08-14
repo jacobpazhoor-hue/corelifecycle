@@ -313,8 +313,17 @@ DO, in order:
      • A LOPSIDED HISTOGRAM. closeUpPortrait ran 28 times in 158 scenes (18%), domesticInterior 20,
        while broadcastDesk got 2 and bankExterior 5. The cap is ~len(SCENES)/10 per room. The cut-in
        templates (closeUpPortrait, newsMontage) are the ones that run away — count them first.
-     • DEVICES UNDER-SPENT. It used ZERO dialogue= exchanges (dialogue is a PRIMARY device — at
-       least 4), 2 bubbles (budget 5–10), 2 panels (3–4), 6 non-chapter cards (budget 8–13).
+     • DEVICES UNDER-SPENT — THE MOST REPEATED MISS, and the one the reviewer will send back.
+       THREE cold runs in a row under-spent the signature devices, two of them using ZERO
+       dialogue= exchanges (dialogue is a PRIMARY device, at least 4 per episode), 2–3 bubbles
+       against a 5–10 budget, and 2–4 foregrounds/panels. The structural numbers (scene count,
+       mean, cuts/min) are the ones you keep hitting; these are the ones you keep missing, so
+       COUNT THEM EXPLICITLY before you build — dialogue=, bubbles=, panels=, foreground=, and
+       each card kind — and place the missing ones rather than trusting your impression of the
+       script. A run that hits every rhythm number and carries no dialogue is still off-format.
+     • PUNCHES UNDER-SPENT alongside them: one cold run finished with 18 scenes at <=2.5s against
+       a 25–30 budget and exactly ONE at ~1s against ~6. The bare date, the single word and the
+       one-line verdict are what make the rhythm read as deliberate rather than even.
      • WPM 144.0 — inside the gate's 143–154 but BELOW the 145–152 the step above tells you to hit,
        and 1.0 WPM from a HALT. Do not stop on a number that close to the edge.
 
