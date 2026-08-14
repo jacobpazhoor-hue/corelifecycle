@@ -10,6 +10,8 @@ import {Avatar, AvatarOptions, AvatarPreview, BannerA, BannerB, BannerC} from '.
 import {Thumbnail, ThumbAll} from './thumbs';
 import timeline from './timeline.json';
 import short from './short.json';
+// registers the vendored handwritten face (CRAYON_BIBLE §7) before the first frame is drawn
+import './crayonFont';
 
 export const RemotionRoot: React.FC = () => {
   return (

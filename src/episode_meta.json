@@ -1,22 +1,18 @@
 {
   "thumb": {
-    "kicker": "EVERY LEVEL OF AN",
-    "line1": "F1 DRIVER",
+    "kicker": "158 YEARS OLD",
+    "line1": "DEAD IN A WEEKEND",
     "line2": "",
-    "tag": "PODIUM",
-    "archetype": "pov",
-    "big": "$70M",
-    "before": "KARTING",
-    "after": "CHAMPION",
+    "tag": "$613 BILLION",
+    "archetype": "crash",
+    "big": "$613 BILLION",
     "expr": "shock",
-    "povline": "ONE SECOND",
-    "keyword": "GONE",
-    "setting": "cockpitClose",
-    "question": "WHO PAYS FIRST?",
-    "mood": "danger",
-    "costume": "uniform",
-    "word": "YOU",
-    "prop": "vault"
+    "mood": "money",
+    "keyword": "LEHMAN",
+    "question": "WHO PAID FOR IT?",
+    "word": "NO",
+    "before": "158 YEARS",
+    "after": "72 HOURS"
   },
-  "topic": "f1_driver"
+  "topic": "lehman_brothers"
 }

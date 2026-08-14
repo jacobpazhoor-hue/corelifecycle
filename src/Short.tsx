@@ -2,6 +2,12 @@ import React from 'react';
 import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import short from './short.json';
 import {TEMPLATES} from './scenes';
+// RAMP SAFETY (WO-25, extended here by WO-28). `interpolate` THROWS on a non-increasing input range,
+// and every ramp below is built out of a beat's own length, so a short beat folds a range back on
+// itself and kills the whole Short render at one arbitrary frame. `fadeRamp`/`rising` are the one
+// mechanism for that, defined in director.tsx — imported, never re-implemented. See director.tsx's
+// "RAMP SAFETY" block for why `rising` can only ever move a stop later.
+import {fadeRamp, rising} from './director';
 
 const FONT = "'Helvetica Neue', Helvetica, Arial, sans-serif";
 const INK = '#2a2620';
@@ -17,12 +23,16 @@ const BeatCard: React.FC<{beat: Beat}> = ({beat}) => {
   const f = useCurrentFrame();
   const d = beat.durationInFrames;
   const fade = 12;
-  const op = interpolate(f, [0, fade, d - fade, d], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  // `[0, fade, d - fade, d]` folded over on any beat of 24 frames or fewer (2,518-pair sweep, WO-28)
+  // and shorts_cut.py copies a beat's length straight off the episode timeline, whose shortest scene
+  // today is 35 frames. `fadeRamp` caps the ramp at d/4, so a short beat gets the fade COMPRESSED —
+  // identical stops on every beat of 48 frames or more, which is every beat this cutter has produced.
+  const op = interpolate(f, fadeRamp('short beat fade', d, fade), [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const tIn = 10;
   const textOp = interpolate(f, [tIn, tIn + 12], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const numScale = interpolate(f, [tIn, tIn + 8, tIn + 16], [0.7, 1.08, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const barW = interpolate(f, [tIn + 2, tIn + 20], [0, 520], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const z = interpolate(f, [0, d], [1.05, 1.16]);
+  const z = interpolate(f, rising('short beat push-in', [0, d]), [1.05, 1.16]);
   const b = short.brand;
   const big = beat.overlay?.big ?? '';
   const bigSize = big.length > 12 ? 96 : big.length > 8 ? 118 : 140;
