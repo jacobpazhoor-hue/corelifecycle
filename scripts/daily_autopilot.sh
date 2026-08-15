@@ -213,16 +213,81 @@ package() {  # thumbnail still + upload_kit.json — MUST run before every revie
   npx remotion still Thumbnail out/thumbnail.png --timeout=60000
   python3 gen_packaging.py
 }
-review() { python3 qa_watch.py out/episode.mp4 || python3 qa_sample.py; python3 qa_audio.py || echo "qa_audio failed (non-fatal)"; "$CLAUDE" --print --model sonnet "$(cat docs/REVIEW_PROMPT.txt)"; }
+review() {
+  # --- STALE-FRAME PRUNE (token audit 2026-08-15, TOKEN_AUDIT §5.5) — THIS IS A CORRECTNESS FIX, ---
+  # not housekeeping. out/review/ was still holding 16 source stills from 2026-06-21 — a RETIRED
+  # POV/doodle-format episode — and REVIEW_PROMPT.txt names out/review/*.png as the fallback for when
+  # out/review/watch/ is empty. qa_watch.py only ever clears its own watch/ dir; qa_sample.py does
+  # clear the root stills but had not run in weeks (it is only the fallback). So a single qa_watch
+  # failure would have handed the reviewer a TWO-MONTH-OLD video from the retired format and it would
+  # have approved or rejected the wrong episode. Delete every frame the previous episode left behind
+  # BEFORE sampling this one, so the reviewer can only ever see stills this run just produced.
+  # check_watch/ is an orphaned 2026-07-20 sample dir that nothing regenerates; short_watch/ is from
+  # the disabled Shorts path and qa_watch recreates it from scratch when that path runs.
+  rm -f out/review/*.png 2>/dev/null
+  rm -rf out/review/watch out/review/check_watch out/review/short_watch 2>/dev/null
+  python3 qa_watch.py out/episode.mp4 || python3 qa_sample.py
+  # HARD ASSERT — fail LOUDLY rather than review nothing. With the prune above, zero frames means
+  # qa_watch AND qa_sample both failed, and the reviewer would be judging an empty directory. A
+  # reviewer with no frames cannot see a black frame, a clipped overlay or a broken limb, and its
+  # failure mode is silent APPROVAL — which publishes the defect. A dark night is recoverable; a bad
+  # public post is not. The catchup job retries in 2h.
+  local NFRAMES
+  NFRAMES=$(ls out/review/watch/*.png out/review/*.png 2>/dev/null | wc -l | tr -d '[:space:]')
+  if [ "${NFRAMES:-0}" -lt 1 ]; then
+    notify "HALT" "no review frames produced (qa_watch AND qa_sample both failed) — refusing to run the reviewer blind. See $LOG"
+    exit 0
+  fi
+  echo "review frames: ${NFRAMES} (all from THIS render)"
+  python3 qa_audio.py || echo "qa_audio failed (non-fatal)"
+  # --- PRECOMPUTED FACTS (token audit §7 S7) — emit the deterministic statistics the reviewer used
+  # to re-derive by hand with ad-hoc python one-liners (measured: 39 Bash turns in one session,
+  # ~2.6M context tokens of pure arithmetic). It ADDS information and removes none: the reviewer
+  # still reads every frame and every file, and REVIEW_PROMPT.txt tells it to re-measure anything it
+  # doubts. Non-fatal by design — without facts.json the reviewer simply measures by hand as before.
+  python3 scripts/review_facts.py || echo "review_facts failed (non-fatal) — reviewer will measure by hand"
+  "$CLAUDE" --print --model sonnet "$(cat docs/REVIEW_PROMPT.txt)"
+}
 decision() { python3 -c "import json;print(json.load(open('out/review/verdict.json')).get('decision','reject'))" 2>/dev/null || echo reject; }
 
 # 0) ANALYTICS — refresh performance data so the showrunner can learn from what landed
 echo "--- analytics refresh ---"
 python3 scripts/yt_analytics.py || echo "analytics refresh failed (non-fatal)"
 
+# --- DAILY BUDGET ACCOUNTING (token audit §4, 2026-08-15) ------------------------------------------
+# THE RULE: an attempt is counted if the creative agent CONSUMED REAL WORK — i.e. it changed
+# content.py, ops/episode_meta.json, or docs/research/ — whether or not it went on to succeed.
+#
+# WHY, precisely. The 2026-07-24 fix moved the increment to AFTER the step-1b new-topic guard so that
+# two transient creative failures producing NOTHING could not burn the whole day's budget and dark
+# the channel. That intent is right and is preserved below: an agent that dies instantly (the 401, or
+# the 2026-08-13 rate-limit that returned in 1 turn at $0.00) touches no file, so it still costs
+# nothing. But counting ONLY successes left the opposite hole wide open: an agent that researched the
+# topic and half-wrote the script before dying was never counted either, so the 2-hourly catchup
+# could spend up to TWELVE full creative sessions in a day against MAX_BUILDS_PER_DAY=2. That is not
+# hypothetical — 2026-08-14 ran THREE creative sessions ($17.64 + $0.80 + $1.68) against a cap of 2.
+# A file fingerprint separates the two cases exactly: no work done, no charge; work done, charged.
+_work_fingerprint() {  # hash of everything a creative pass would have written
+  { cat content.py ops/episode_meta.json 2>/dev/null; ls -l docs/research 2>/dev/null; } | shasum | cut -d' ' -f1
+}
+ATT_COUNTED=0
+count_attempt() {  # idempotent — the same run must never burn two of the day's attempts
+  [ "$ATT_COUNTED" = 1 ] && return 0
+  ATT_COUNTED=1
+  python3 -c "import json,os; f='$ATT_FILE'; d=json.load(open(f)) if os.path.exists(f) else {}; c=d.get('count',0) if d.get('date')=='$TODAY' else 0; json.dump({'date':'$TODAY','count':c+1}, open(f,'w'))" 2>/dev/null || true
+  echo "counted a build attempt against MAX_BUILDS_PER_DAY=${MAX_BUILDS_PER_DAY:-2} — $1"
+}
+
 # 1) CREATIVE — pick topic, research, write content.py + ops/episode_meta.json (per AUTOPILOT_PROMPT)
 echo "--- creative agent ---"
+PRE_FP="$(_work_fingerprint)"
 "$CLAUDE" --print --model sonnet "$(cat docs/AUTOPILOT_PROMPT.txt)"
+POST_FP="$(_work_fingerprint)"
+if [ "$POST_FP" != "$PRE_FP" ]; then
+  count_attempt "creative agent wrote to content.py / episode_meta.json / docs/research"
+else
+  echo "creative agent changed no file — transient no-op, NOT counted against the daily budget"
+fi
 
 # 1b) GUARD — the creative agent MUST have advanced to a NEW (unproduced) topic. If it failed (e.g.
 #     the transient claude 401 on 2026-06-24), episode_meta is left on the PREVIOUS topic and we would
@@ -234,11 +299,9 @@ if ! python3 -c "import json,sys;t='$NEWTOPIC';p=[x['topic'] for x in json.load(
   exit 0
 fi
 echo "creative agent advanced to NEW topic: $NEWTOPIC"
-# Count this as a full build attempt ONLY now that the creative agent has actually advanced to a new
-# topic — i.e. we are committing to a real build+render+review. Counting BEFORE this guard (the old
-# behavior) let two transient creative-agent failures that produce nothing burn the whole day's
-# MAX_BUILDS_PER_DAY budget and dark the channel (2026-07-24). Failed-agent HALTs no longer count.
-python3 -c "import json,os; f='runs/autopilot_attempts.json'; d=json.load(open(f)) if os.path.exists(f) else {}; c=d.get('count',0) if d.get('date')=='$TODAY' else 0; json.dump({'date':'$TODAY','count':c+1}, open(f,'w'))" 2>/dev/null || true
+# Belt-and-braces: a successful pass always rewrites episode_meta.json, so the fingerprint above has
+# already counted it. count_attempt is idempotent, so this can never double-charge the day.
+count_attempt "creative agent advanced to a new topic — committing to build+render+review"
 
 # 2) BUILD + GATE + SMOKE (crisp VO + music + quality gate + 1-frame render check). HALT if it fails.
 # --- ONE BOUNDED GATE REPAIR (WO-32) --------------------------------------------------------------
@@ -287,7 +350,7 @@ while [ "$DEC" = "revise" ] && [ $tries -lt 2 ]; do
   # video back toward the retired POV/doodle format and edits files the thirteen explainer
   # environments do not live in. The format is third-person crayon (docs/BIBLE.md +
   # docs/CRAYON_BIBLE.md); the art lives in src/explainer.tsx and its helpers.
-  "$CLAUDE" --print --model sonnet "You are the production team. Read out/review/verdict.json (the reviewer's notes) and apply its 'fixes' PRECISELY. FORMAT: this channel is a THIRD-PERSON, PAST-TENSE crayon-style explainer about a real subject — docs/BIBLE.md is the writer canon and docs/CRAYON_BIBLE.md is the measured style spec. Keep the same topic and the same crayon style: never reintroduce the retired second-person POV / doodle format (line art on warm paper, 'Every Level', level ladders, present tense), and never emit a legacy template name from docs/TEMPLATES.md — the episode uses ONLY the thirteen explainer environments (officeFloor, boardroom, exchangeFloor, cityStreet, domesticInterior, newsMontage, bankExterior, courtHearing, factoryFloor, broadcastDesk, crowdQueue, closeUpPortrait, chartBoard). You MAY edit any of: content.py + ops/episode_meta.json (script, scene fields card=/bubbles=/panels=/foreground=/period=, packaging copy), src/explainer.tsx (the thirteen environments), src/setdressing.tsx + src/crayonStyle.ts (shared props, palette, ink), src/textcard.tsx (full-screen cards), src/bubble.tsx (speech balloons / floating dialogue), src/panels.tsx (multi-panel splits), src/director.tsx + src/Video2.tsx (shot framing + overlay layout), src/thumbs.tsx (thumbnail). Do NOT edit gate.py or docs/CRAYON_BIBLE.md, and do not weaken a rule to make the episode fit it. Apply EVERY actionable fix in the verdict (do not skip a fix because of file scope). Then STOP; the runner will rebuild, re-render, and re-review."
+  "$CLAUDE" --print --model sonnet "You are the production team. Read out/review/verdict.json (the reviewer's notes) and apply its 'fixes' PRECISELY. READ AND EDIT IN BATCHES: issue 8-12 tool calls in a SINGLE message rather than one per message. Every round-trip re-sends your whole accumulated context, so serial single-call turns cost quadratically — measured, this step runs 101-123 turns at ONE tool call each, which is the most wasteful shape in the pipeline. Batching changes nothing about what you read or edit; open the verdict, content.py, ops/episode_meta.json and the .tsx files you need in one message, and group independent edits together too. FORMAT: this channel is a THIRD-PERSON, PAST-TENSE crayon-style explainer about a real subject — docs/BIBLE.md is the writer canon and docs/CRAYON_BIBLE.md is the measured style spec. Keep the same topic and the same crayon style: never reintroduce the retired second-person POV / doodle format (line art on warm paper, 'Every Level', level ladders, present tense), and never emit a legacy template name from docs/TEMPLATES.md — the episode uses ONLY the thirteen explainer environments (officeFloor, boardroom, exchangeFloor, cityStreet, domesticInterior, newsMontage, bankExterior, courtHearing, factoryFloor, broadcastDesk, crowdQueue, closeUpPortrait, chartBoard). You MAY edit any of: content.py + ops/episode_meta.json (script, scene fields card=/bubbles=/panels=/foreground=/period=, packaging copy), src/explainer.tsx (the thirteen environments), src/setdressing.tsx + src/crayonStyle.ts (shared props, palette, ink), src/textcard.tsx (full-screen cards), src/bubble.tsx (speech balloons / floating dialogue), src/panels.tsx (multi-panel splits), src/director.tsx + src/Video2.tsx (shot framing + overlay layout), src/thumbs.tsx (thumbnail). Do NOT edit gate.py or docs/CRAYON_BIBLE.md, and do not weaken a rule to make the episode fit it. Apply EVERY actionable fix in the verdict (do not skip a fix because of file scope). Then STOP; the runner will rebuild, re-render, and re-review."
   if ! python3 build.py; then notify "HALT" "build failed after revision. See $LOG"; exit 0; fi
   render || { notify "FAIL" "render failed after revision. See $LOG"; exit 1; }
   package

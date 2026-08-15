@@ -75,8 +75,8 @@ These rules were **deleted** because they only existed to serve the POV format:
 crisis, or institution. Not a documentary voice — a *storyteller's* voice applied to true events.
 
 - **Runtime 13–21 min.** (All 28 reference videos fall in 10:14–21:00; the seven best sit 13:12–20:16.)
-  `ops/routine.json` currently sets `minMinutes: 11`, so the gate floor is *below* the band — the
-  writer, not the gate, is responsible for clearing 13 min.
+  `ops/routine.json` sets `minMinutes: 13` / `maxMinutes: 21`, so the gate floor is *at* the band and
+  `gate.py` HALTs in BOTH directions — an episode under 13 min or over 21 min does not build.
 - **3–5 chapters**, each named in the two-part **`Evocative Noun: Plain Explanation`** form:
   "The Trap: Learning Not to Trust" · "The Mask: How Enron Hid the Truth in Plain Sight" ·
   "The Day America Fell: Black Tuesday and the Market Collapse".
@@ -122,8 +122,12 @@ crisis, or institution. Not a documentary voice — a *storyteller's* voice appl
 > music beats, dialogue and text cards. It is **NOT speech-only WPM**. Speech-only runs roughly
 > 3 WPM higher on the same audio. Anything that re-measures this must compare like for like.
 > `gen_voice_edge.py` now prints **both** at the end of a build — `"~X WPM speech / Y WPM runtime"` —
-> and the runtime figure is the one to compare against 148.5. The synth rate is `RATE = "-13%"`,
-> measured (not assumed) at 149.1 speech / 145.7 runtime.
+> and the runtime figure is the one to compare against 148.5. The synth rate is `RATE = "-7%"`
+> (`gen_voice_edge.py`, `CACHE_VERSION` v7 — the OWNER retune from -10%), measured (not assumed) at
+> **156.8 speech / 152.5 runtime**. `content.py`'s `NARRATION_RATE` carries the same value and stamps
+> it onto every scene; a per-scene `rate` wins over both, so changing one alone is a silent no-op.
+> §3a's table below reports the same -7% figures — if this line and that table ever disagree again,
+> `gen_voice_edge.py` is the truth.
 
 **How to hit the sentence numbers:** write in fragments. Roughly half of all reference sentences are
 under eight words, and a large share are not grammatical sentences at all — *"No war, no warning."* /
@@ -816,8 +820,9 @@ both writer-side: **place it less** (most over-use is a default, and there is us
 the line *better* — "lawyers drafting a filing" is `courtHearing`, "they found out from the news" is
 `newsMontage`), and **vary what surrounds it** — a `panels=` split so it arrives as half a frame, a
 `foreground=` silhouette, a card or an object showcase on the beat beside it. **Print the histogram
-before you stop** and keep it flat: no room much past **~1 use per 10 scenes** (this build measures
-20/196 at the top and 9/196 at the bottom, i.e. 1-in-9.8 to 1-in-21.8). `closeUpPortrait` is the one
+before you stop** and keep it flat: no room much past **~1 use per 10 scenes** (the WO-30 build
+measures 21/202 at the top and 8/202 at the bottom, i.e. 1-in-9.6 to 1-in-25.3 — a dated record of
+that build, not a target to reproduce). `closeUpPortrait` is the one
 licensed to sit at that ceiling — it depicts nowhere, so it is a cut-in rather than a room repeating.
 
 ## 9. Packaging
@@ -863,8 +868,12 @@ instruction, not a rendering one; §3a is where it turns into a scene budget.
 ## 11. Build discipline
 
 `python3 build.py` syntax-checks `content.py` + `ops/episode_meta.json`, synthesises VO, runs
-`gate.py`, and does a 1-frame smoke render. It HALTs rather than shipping broken. Read the printed
-`WPM speech / WPM runtime` line every build and compare the **runtime** figure to 145–152.
+`gate.py`, and does a 2-frame smoke render (frame 0 and the midpoint). It HALTs rather than shipping
+broken. Read the printed `WPM speech / WPM runtime` line every build and compare the **runtime**
+figure to the **145–152 target**. That is the target, not the gate: `gate.py` HALTs only outside
+**143–154** (`WPM_LO`/`WPM_HI`), deliberately wider than the target because the reference channel's
+own per-video spread is 139.2–152.9 and a false HALT blocks publishing outright. An episode at 153 is
+a craft note, not a build failure.
 
 ## Brand
 Channel @corelifecycle. Thumbnail/typography brand rules live in `docs/CRAYON_BIBLE.md` §7 and §9.

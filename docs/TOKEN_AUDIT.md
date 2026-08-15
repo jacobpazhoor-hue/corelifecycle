@@ -494,5 +494,41 @@ worst-case night**, which is the mechanism by which 2026-08-13 went dark.
 
 ## 10. Changes made by this audit
 
-**One: this file.** No code, prompt, canon, `ops/*.json`, `gate.py`, `content.py` or render was
-touched. Nothing was published or uploaded. Every item in §7 is a proposal awaiting sign-off.
+**At the time of writing, one: this file.** No code, prompt, canon, `ops/*.json`, `gate.py`,
+`content.py` or render was touched. Nothing was published or uploaded. Every item in §7 was a
+proposal awaiting sign-off.
+
+### APPLIED 2026-08-15 (owner sign-off — the zero-risk set + the two bugs)
+
+| item | what shipped | where |
+|---|---|---|
+| **S1** | reviewer told to `Read` in batches of 8–12 per message; still reads all 48 frames | `docs/REVIEW_PROMPT.txt` |
+| **S2 (revision only)** | same batching instruction in the revision prompt | `scripts/daily_autopilot.sh` |
+| **S3** | stale frames pruned at the START of every `review()`, + a HARD ASSERT that HALTs when zero frames exist rather than reviewing blind | `scripts/daily_autopilot.sh` |
+| **S7** | `out/review/facts.json` precomputed before every review pass | `scripts/review_facts.py` (new), wired in `review()` |
+| **§4 bug** | daily budget now counts any creative pass that CONSUMED WORK (file fingerprint), not just successes | `scripts/daily_autopilot.sh` |
+| **M4 bug** | `RATE = "-13%"` → `-7%`, plus three more stale constants found in the same sweep | `docs/BIBLE.md` |
+
+**Deliberately NOT applied** (still awaiting sign-off): S4 (drop `TEMPLATES.md`), S5 (archive
+`improvements.json` done-history), S6 (drop `analytics.json`), S8/S9 (cap the loops), S10 (Actions
+caching), M1, M2, M3. Nothing in §8 was touched.
+
+**Three further stale constants fixed in `BIBLE.md` alongside M4**, found by cross-checking every
+numeric claim in the canon against the code that implements it:
+
+* **line 78** — "`ops/routine.json` currently sets `minMinutes: 11`, so the gate floor is *below* the
+  band". It is **13** (`ops/routine.json:6`), so `gate.py` HALTs in both directions. The doc was
+  telling the writer the gate would not catch a short episode when it would.
+* **line 866** — "does a **1-frame** smoke render". `build.py:57–59` renders **frame 0 and the
+  midpoint** — two stills.
+* **line 867** — "compare the **runtime** figure to **145–152**". That is the aggregate *target*;
+  `gate.py:32` HALTs only outside **143–154**, deliberately wider (see its own comment). An episode
+  at 153 was reading as a build failure against §11 when it passes.
+
+**Found but deliberately NOT changed:** three claims in `docs/CRAYON_BIBLE.md` (§3 camera "applies an
+expo-out dolly push … to every shot", §7 "Current CoreLifecycle uses Helvetica Neue everywhere … must
+be vendored", §8 "CoreLifecycle's fixed 0.25s" gaps) describe the **pre-restyle** engine and are now
+all fixed in code (`director.tsx` is locked, Caveat is vendored, gaps are hashed 0.25–0.55s). They are
+the before-side of a deliberate gap analysis rather than assertions about current behaviour, and the
+reviewer is explicitly instructed never to edit that file — so they were left alone and are recorded
+here instead.
