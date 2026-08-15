@@ -135,11 +135,18 @@ export const rising = (who: string, stops: number[]): number[] => {
 /** Beats after the cut before the note starts, so it lands ON the scene rather than with it. */
 const NOTE_LEAD = 8;
 /** Entrance: opacity + the spring pop. */
-const NOTE_ENTER = 6;
+const NOTE_ENTER = 4;
+// reviewer fix (t002 "$638 BILLION" on a $639B figure, t041 "30 TO 1" caught mid-exit at ~34%
+// opacity): both defects are the SAME root cause — a random still (or a viewer who simply pauses)
+// is more likely to land on a mid-count or mid-fade frame than on the settled figure, because COUNT
+// used to be more than half of the note's life and HOLD less than a third. COUNT is now short enough
+// to reliably reach its rounded target well inside any scene long enough to run it at all, and the
+// reclaimed time goes to HOLD, so "settled, full-opacity, correct" is now the note's dominant state
+// rather than its minority one.
 /** How long the figure counts (a `CountUp`) or simply sits legible (a static figure). */
-const NOTE_COUNT = 54;
+const NOTE_COUNT = 40;
 /** Settled and readable, after the count lands. */
-const NOTE_HOLD = 30;
+const NOTE_HOLD = 55;
 /** Exit. */
 const NOTE_EXIT = 8;
 /** The device's whole life, ~3.5s. See `noteRamp` for why it is a life and not a scene-long hold. */
