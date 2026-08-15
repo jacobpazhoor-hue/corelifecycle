@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
 """Convert ops/improvements.json (the autopilot's learning backlog) into a Ralph prd.json.
-Each backlog item -> one user story. A story stays passed if it is in improvements.json "done"
-OR was already marked passed in an existing prd.json, so re-running never regresses completed work.
-See docs/superpowers/specs/2026-07-12-autonomous-improvement-loop-design.md."""
+Each backlog item -> one user story. A story stays passed if it is in the "done" history OR was
+already marked passed in an existing prd.json, so re-running never regresses completed work.
+See docs/superpowers/specs/2026-07-12-autonomous-improvement-loop-design.md.
+
+2026-08-15 (docs/TOKEN_AUDIT.md S5): the 49-item `done` history was moved OUT of
+ops/improvements.json into ops/improvements_done.json, because the creative agent reads the former
+in full every night and 44.8 KB of shipped history is ~11.2k tokens of context it never acts on.
+The history was KEPT, not deleted. This converter reads BOTH files and unions their `done` arrays,
+so it behaves identically whichever file an id happens to live in — including for items the agent
+marks shipped from tonight onward."""
 import json, os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 IMP = os.path.join(ROOT, "ops", "improvements.json")
+IMP_DONE = os.path.join(ROOT, "ops", "improvements_done.json")   # archived shipped history (S5)
 PRD = os.path.join(ROOT, "ralph", "prd.json")
 IMPACT_RANK = {"high": 1, "med": 2, "medium": 2, "low": 3}
 
@@ -30,7 +38,15 @@ def build_prd():
     d = json.load(open(IMP))
     backlog = d.get("backlog", []) if isinstance(d, dict) else (d if isinstance(d, list) else [])
     done = d.get("done", []) if isinstance(d, dict) else []
-    done_ids = {x["id"] for x in done}
+    # The archive is the normal home of shipped items now; improvements.json may still carry a
+    # `done` key on an older checkout, so union the two rather than choosing between them.
+    if os.path.exists(IMP_DONE):
+        try:
+            a = json.load(open(IMP_DONE))
+            done = done + (a.get("done", []) if isinstance(a, dict) else (a if isinstance(a, list) else []))
+        except (json.JSONDecodeError, OSError):
+            pass
+    done_ids = {x["id"] for x in done if isinstance(x, dict) and "id" in x}
     if os.path.exists(PRD):
         try:
             done_ids |= {s["id"] for s in json.load(open(PRD)).get("userStories", []) if s.get("passes")}

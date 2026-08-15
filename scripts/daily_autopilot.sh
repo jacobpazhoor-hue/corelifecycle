@@ -211,7 +211,16 @@ render() {  # FREE CLOUD (GitHub Actions) -> Modal -> local. VERIFY by file size
 package() {  # thumbnail still + upload_kit.json — MUST run before every review so the reviewer judges
              # the packaging that matches the CURRENT episode on disk, not a stale one from the last run.
   npx remotion still Thumbnail out/thumbnail.png --timeout=60000
-  python3 gen_packaging.py
+  # gen_packaging.py is no longer advisory. It now reconciles the description's chapter list against
+  # the chapter CARDS actually drawn on screen (see its header for the fork it closes) and exits
+  # non-zero when the two cannot be aligned — a real authoring defect. This script has no `set -e`,
+  # so the old unchecked call would have swallowed that: out/upload_kit.json would keep the PREVIOUS
+  # episode's title, description and chapters, and step 6 would publish them against tonight's video.
+  # A dark night is recoverable; publishing last night's description on tonight's episode is not.
+  if ! python3 gen_packaging.py; then
+    notify "HALT" "gen_packaging failed — the description's chapters could not be reconciled with the on-screen chapter cards, and out/upload_kit.json would be STALE. NOT publishing. See $LOG"
+    exit 0
+  fi
 }
 review() {
   # --- STALE-FRAME PRUNE (token audit 2026-08-15, TOKEN_AUDIT §5.5) — THIS IS A CORRECTNESS FIX, ---
@@ -278,15 +287,89 @@ count_attempt() {  # idempotent — the same run must never burn two of the day'
   echo "counted a build attempt against MAX_BUILDS_PER_DAY=${MAX_BUILDS_PER_DAY:-2} — $1"
 }
 
+# --- WRITE-BY-DEFAULT: WHO DECIDES "REUSE vs WRITE", AND WHAT CATCHES A SHORT-CIRCUIT ------------
+# (2026-08-15. The failure this closes happened on the FIRST live post-merge run.)
+#
+# WHAT WENT WRONG. content.py and ops/episode_meta.json always still hold the PREVIOUS run's episode
+# when the creative agent starts. AUTOPILOT_PROMPT step 0 (WO-32) asked the AGENT to decide whether
+# that episode was owed to the channel (REUSE) or already shipped (WRITE A NEW ONE), using one test:
+# "is the topic on disk in produced_topics.json?". On the first live run the repo happened to hold
+# the merged `lehman_brothers` SAMPLE — never published, therefore not in produced_topics — so the
+# agent took REUSE, spent its whole pass VALIDATING the episode it found, and wrote nothing new.
+# The step-1b anti-duplicate guard waved it through because the topic was genuinely unpublished.
+# THAT GUARD DID NOT SAVE US; IT AGREED WITH THE BUG. A silent reuse that happens to pass the
+# duplicate check is exactly how a channel republishes stale work.
+#
+# WHY THE AGENT COULD NOT GET IT RIGHT. "Unpublished topic on disk" does not mean "owed episode". It
+# also means: a sample someone merged, a half-written draft from a crashed run, or an episode the
+# reviewer REJECTED. The agent cannot tell those apart from the files alone — the information simply
+# is not there. So we stop asking it.
+#
+# THE RUNNER DECIDES, AND WRITING IS THE DEFAULT. An episode is "owed" only if THIS SCRIPT built it,
+# committed to publishing it, and then failed at render or upload. That is a fact only the runner
+# knows, so the runner records it in runs/owed_episode.txt (written after BUILD OK; cleared on a
+# successful publish, on a non-approve verdict, and on a final-gate failure — a rejected episode is
+# to be rewritten, not re-shipped). REUSE is authorised ONLY when that marker names the exact topic
+# sitting on disk. Every other state — including "unpublished topic, no marker", the case that broke
+# — is WRITE A NEW ONE. The decision is prepended to the prompt as a runner directive so the agent
+# is told which branch it is on rather than inferring it.
+#
+# AND IF THE AGENT SHORT-CIRCUITS ANYWAY, WE CATCH IT. A pass that was ordered to WRITE and came
+# back with the SAME topic it started with AND no new or changed research file did not write an
+# episode — whatever it says it did. That is a FAILED creative pass, not a night's work, and it
+# HALTs. Both conditions are required: a genuine new episode always changes the topic, and a genuine
+# new episode always writes docs/research/<slug>.md (prompt step 2, "BEFORE writing a line of
+# script"). Requiring both is what keeps a legitimate rewrite of an already-researched subject from
+# tripping it.
+_topic_on_disk() { python3 -c "import json;print(json.load(open('ops/episode_meta.json')).get('topic',''))" 2>/dev/null; }
+_research_fp() {   # CONTENT hash, not `ls -l`: a rewrite within the same minute at the same size is
+                   # invisible to a timestamp listing, and that is precisely a re-researched topic.
+  find docs/research -type f -name '*.md' -exec shasum {} + 2>/dev/null | sort | shasum | cut -d' ' -f1
+}
+OWED_FILE="runs/owed_episode.txt"
+PRE_TOPIC="$(_topic_on_disk)"
+PRE_RESEARCH="$(_research_fp)"
+OWED_TOPIC="$(cat "$OWED_FILE" 2>/dev/null)"
+REUSE_OK=0
+if [ -n "$PRE_TOPIC" ] && [ "$OWED_TOPIC" = "$PRE_TOPIC" ] && \
+   python3 -c "import json,sys;t='$PRE_TOPIC';p=[x['topic'] for x in json.load(open('ops/produced_topics.json'))['produced']];sys.exit(0 if t not in p else 1)" 2>/dev/null; then
+  REUSE_OK=1
+fi
+
+if [ "$REUSE_OK" = 1 ]; then
+  echo "step 0 decided by the runner: REUSE — '$PRE_TOPIC' was built by a previous run and never published (runs/owed_episode.txt)"
+  REUSE_DIRECTIVE="RUNNER DIRECTIVE — STEP 0 IS ALREADY DECIDED, DO NOT RE-DECIDE IT: **REUSE**.
+The runner built the episode now on disk (topic '$PRE_TOPIC') on an earlier run and it failed at render or upload, so it is still owed to the channel. Do NOT rewrite it and do NOT change the topic. Verify docs/research/<slug>.md exists and is sourced, run the step-5 self-checks, get a BUILD OK, then STOP. Skip steps 1-4. Ignore the REUSE/WRITE test in step 0 below — this directive overrides it."
+else
+  echo "step 0 decided by the runner: WRITE A NEW ONE (no owed-episode marker for '$PRE_TOPIC')"
+  REUSE_DIRECTIVE="RUNNER DIRECTIVE — STEP 0 IS ALREADY DECIDED, DO NOT RE-DECIDE IT: **WRITE A NEW ONE**.
+The episode on disk (topic '$PRE_TOPIC') is NOT owed to the channel. It is a shape reference and nothing more. Ignore the REUSE/WRITE test in step 0 below — this directive overrides it, and REUSE is not available to you on this run.
+You MUST do steps 1-6 in full: pick a NEW subject, write docs/research/<slug>.md for it, and overwrite content.py and ops/episode_meta.json so the topic is NOT '$PRE_TOPIC'.
+Validating, checking or repairing the episode already on disk is NOT this run's work. The runner detects it — if the topic is unchanged and no research file was written, it treats the pass as FAILED and HALTs the night. Writing a fresh episode is the job."
+fi
+
 # 1) CREATIVE — pick topic, research, write content.py + ops/episode_meta.json (per AUTOPILOT_PROMPT)
 echo "--- creative agent ---"
 PRE_FP="$(_work_fingerprint)"
-"$CLAUDE" --print --model sonnet "$(cat docs/AUTOPILOT_PROMPT.txt)"
+rm -f runs/build_attempts.txt   # fresh bounded-build budget for this agent (scripts/build_capped.sh)
+"$CLAUDE" --print --model sonnet "$REUSE_DIRECTIVE
+
+$(cat docs/AUTOPILOT_PROMPT.txt)"
 POST_FP="$(_work_fingerprint)"
 if [ "$POST_FP" != "$PRE_FP" ]; then
   count_attempt "creative agent wrote to content.py / episode_meta.json / docs/research"
 else
   echo "creative agent changed no file — transient no-op, NOT counted against the daily budget"
+fi
+echo "creative agent used $(cat runs/build_attempts.txt 2>/dev/null || echo 0) of ${MAX_BUILD_RERUNS:-4} bounded build attempts"
+
+# 1a) SHORT-CIRCUIT DETECTION — see the block above. Ordered AFTER the budget accounting on purpose:
+#     an agent that burned a real session still burns the day's attempt even though we reject its work.
+POST_TOPIC="$(_topic_on_disk)"
+POST_RESEARCH="$(_research_fp)"
+if [ "$REUSE_OK" != 1 ] && [ "$POST_TOPIC" = "$PRE_TOPIC" ] && [ "$POST_RESEARCH" = "$PRE_RESEARCH" ]; then
+  notify "HALT" "creative agent SHORT-CIRCUITED: it was told to WRITE A NEW ONE but came back on the same topic ('$POST_TOPIC') with no new or changed research file — it validated the episode already on disk instead of writing one. Treating this as a FAILED creative pass; NOT rendering or publishing stale work. Catchup retries in 2h. See $LOG"
+  exit 0
 fi
 
 # 1b) GUARD — the creative agent MUST have advanced to a NEW (unproduced) topic. If it failed (e.g.
@@ -322,14 +405,24 @@ BUILD_OUT="runs/autopilot/build_$(date +%H%M%S).txt"
 python3 build.py 2>&1 | tee "$BUILD_OUT"; BUILD_RC=${pipestatus[1]}
 if [ "${BUILD_RC:-1}" != 0 ]; then
   echo "--- build failed — ONE gate-repair pass ---"
+  rm -f runs/build_attempts.txt   # the repair agent gets its own fresh bounded-build budget
   "$CLAUDE" --print --model sonnet "You are the production team on the CoreLifecycle crayon explainer pipeline. \`python3 build.py\` HALTED. Its output ends:
 
 $(tail -40 "$BUILD_OUT")
 
-Fix ONLY what made it HALT, in content.py and/or ops/episode_meta.json, and keep the SAME TOPIC — the runner has already committed to it and changing it re-posts stale content. Read docs/BIBLE.md §3 and §3a before you touch anything; the bands ARE the format. The usual causes and their ONLY correct fixes: WPM runtime-inclusive too LOW -> USE SHORTER WORDS, and do NOT add words or scenes. This is measured (WO-32): the voice speaks at a constant ~241 syllables/minute, so WPM runtime is set by SYLLABLES PER WORD and nothing else — WPM ≈ 215 / (syllables per word), accurate to ~1 WPM across two finished episodes (1.422 syll/word = 152.5 WPM, 1.559 = 138.1). Count syllables/word across all narration, then rewrite Latinate words as short concrete ones ('lab' not 'laboratory', 'about' not 'approximately', 'he lied' not 'he misrepresented the situation') until it is 1.42-1.45. Adding words raises the runtime with the word count and barely moves the ratio; removing commas makes it SLOWER, not faster (a period pauses longer than a comma). WPM too HIGH -> SPLIT MORE SCENES (measured: same script, 141 scenes = 154.2 WPM, 196 scenes = 152.7 WPM); runtime over 21 min -> cut scenes AND their words; \`template 'None' not in registry\` -> that scene has no \`template=\`, and EVERY scene needs one from the thirteen explainer environments even when a full-screen \`card=\` covers it; a template name not in the registry -> replace it with one of the thirteen (officeFloor, boardroom, exchangeFloor, cityStreet, domesticInterior, newsMontage, bankExterior, courtHearing, factoryFloor, broadcastDesk, crowdQueue, closeUpPortrait, chartBoard); missing/silent audio -> the scene text, not the audio. Do NOT edit gate.py, build.py, gen_voice_edge.py or docs/CRAYON_BIBLE.md, and never widen a band to pass. Then run \`python3 build.py\` in the FOREGROUND (it may time out on a big VO re-synth — if it does, run the same command again; every clip already made is cached, so each re-run resumes) until it prints BUILD OK or a different failure. Then STOP."
+Fix ONLY what made it HALT, in content.py and/or ops/episode_meta.json, and keep the SAME TOPIC — the runner has already committed to it and changing it re-posts stale content. Read docs/BIBLE.md §3 and §3a before you touch anything; the bands ARE the format. The usual causes and their ONLY correct fixes: WPM runtime-inclusive too LOW -> USE SHORTER WORDS, and do NOT add words or scenes. This is measured (WO-32): the voice speaks at a constant ~241 syllables/minute, so WPM runtime is set by SYLLABLES PER WORD and nothing else — WPM ≈ 215 / (syllables per word), accurate to ~1 WPM across two finished episodes (1.422 syll/word = 152.5 WPM, 1.559 = 138.1). Count syllables/word across all narration, then rewrite Latinate words as short concrete ones ('lab' not 'laboratory', 'about' not 'approximately', 'he lied' not 'he misrepresented the situation') until it is 1.42-1.45. Adding words raises the runtime with the word count and barely moves the ratio; removing commas makes it SLOWER, not faster (a period pauses longer than a comma). WPM too HIGH -> SPLIT MORE SCENES (measured: same script, 141 scenes = 154.2 WPM, 196 scenes = 152.7 WPM); runtime over 21 min -> cut scenes AND their words; \`template 'None' not in registry\` -> that scene has no \`template=\`, and EVERY scene needs one from the thirteen explainer environments even when a full-screen \`card=\` covers it; a template name not in the registry -> replace it with one of the thirteen (officeFloor, boardroom, exchangeFloor, cityStreet, domesticInterior, newsMontage, bankExterior, courtHearing, factoryFloor, broadcastDesk, crowdQueue, closeUpPortrait, chartBoard); missing/silent audio -> the scene text, not the audio. Do NOT edit gate.py, build.py, gen_voice_edge.py or docs/CRAYON_BIBLE.md, and never widen a band to pass. Then run \`scripts/build_capped.sh\` in the FOREGROUND — it wraps \`python3 build.py\` and is the ONLY build command you may use. It may time out on a big VO re-synth; if it does, run the SAME command again, because every clip already made is cached and each re-run resumes. YOU GET AT MOST ${MAX_BUILD_RERUNS:-4} ATTEMPTS: the wrapper counts them in runs/build_attempts.txt and REFUSES to start another build once they are gone. Stop the moment it prints BUILD OK, or on a failure you cannot act on. If the cap is reached without a BUILD OK, STOP and say plainly that the build did not complete and what the last failure was — do not look for another way to run it. Then STOP."
   python3 build.py 2>&1 | tee -a "$BUILD_OUT"; BUILD_RC=${pipestatus[1]}
 fi
 if [ "${BUILD_RC:-1}" != 0 ]; then notify "HALT" "build/gate/smoke failed after 1 repair pass — not rendering. See $LOG"; exit 0; fi
+echo "gate-repair used $(cat runs/build_attempts.txt 2>/dev/null || echo 0) of ${MAX_BUILD_RERUNS:-4} bounded build attempts"
+
+# --- OWED-EPISODE MARKER (see the write-by-default block above) ---------------------------------
+# From here the runner is committed to shipping THIS episode: it is built and gate-passed. If the
+# night now dies in render or upload, tomorrow's run is entitled to REUSE it instead of throwing a
+# good episode away — and this file is the only place that fact is recorded. It is CLEARED on a
+# successful publish, on a non-approve verdict, and on a final-gate failure, because an episode the
+# reviewer refused is to be rewritten, not re-shipped.
+_topic_on_disk > "$OWED_FILE"
 
 # 3) RENDER (verified)
 echo "--- render ---"
@@ -361,13 +454,16 @@ while [ "$DEC" = "revise" ] && [ $tries -lt 2 ]; do
 done
 
 if [ "$DEC" != "approve" ]; then
+  # The reviewer refused this episode: it is NOT owed to the channel. Drop the marker so tomorrow's
+  # run writes a fresh one instead of REUSING work that was judged not good enough.
+  rm -f "$OWED_FILE"
   notify "HALT" "reviewer decision='$DEC' after $tries fix pass(es). NOT publishing — left for human."
   exit 0
 fi
 echo "reviewer APPROVED ✅"
 
 # 5) FINAL FILE GATE — packaging (thumbnail + upload_kit.json) already matches the approved episode
-python3 gate.py out/episode.mp4 || { notify "HALT" "final gate failed — not publishing. See $LOG"; exit 0; }
+python3 gate.py out/episode.mp4 || { rm -f "$OWED_FILE"; notify "HALT" "final gate failed — not publishing. See $LOG"; exit 0; }
 
 # 6) PUBLISH
 if grep -q '"autoUpload": *true' ops/routine.json; then
@@ -405,6 +501,7 @@ if t and t not in [x.get('topic') for x in p['produced']]:
     json.dump(p, open('ops/produced_topics.json','w'), indent=2); print('marked produced:', t)
 " || echo "produced_topics update failed (non-fatal)"
     date +%F > runs/last_post.txt
+    rm -f "$OWED_FILE"   # published — nothing is owed to the channel any more, so the next run WRITES
     # 7) SHORT — auto-cut a vertical Short, WATCH + gate + review it, then publish (growth; non-fatal)
     # Gated on routine.json autoShorts (default OFF since 2026-07-19 — see _autoShorts_note there).
     # Skipping saves a FULL extra Remotion render + a reviewer agent call on every episode.

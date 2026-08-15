@@ -10,30 +10,39 @@ READ FIRST:
                           must hit. Obey it literally; it is measured, not opinion.
   docs/CRAYON_BIBLE.md  — the measured STYLE spec (art, camera, editing, type, sound, packaging).
                           READ-ONLY. Never edit it to make an episode fit.
-  docs/TEMPLATES.md     — the LEGACY scene-template catalog. It does NOT list the thirteen restyled
-                          explainer environments this format uses; those live in BIBLE.md §8 and in
-                          EXPLAINER_TEMPLATES in src/explainer.tsx. Do not emit a legacy name.
-  ops/topic_queue.json, ops/produced_topics.json, ops/improvements.json, ops/analytics.json
-                          (analytics are from the OLD POV format — they say nothing about which
-                          explainer subjects work. Ignore their topic guidance until this format has
-                          its own view data.)
+  ops/topic_queue.json, ops/produced_topics.json, ops/improvements.json
+
+DO NOT READ (2026-08-15, docs/TOKEN_AUDIT.md S4/S5/S6 — these cost ~15k tokens a night and change
+nothing you do). docs/TEMPLATES.md is the RETIRED legacy catalog: it contains none of the thirteen
+explainer environments, documents at least one pack that no longer exists in the code, and you must
+never emit a name from it — the thirteen are listed in step 3 below and in BIBLE.md §8.
+ops/analytics.json is all OLD POV-format view data and says nothing about which explainer subjects
+work (restore it to the list above once the crayon format has its own views). ops/improvements_done.json
+is the shipped-improvement archive — read it only if you need to resolve a specific id you saw cited.
 
 DO, in order:
 
-0. THE EPISODE ALREADY ON DISK — DECIDE THIS FIRST, AND SAY WHICH BRANCH YOU TOOK IN YOUR FINAL
-   MESSAGE. content.py and ops/episode_meta.json always still hold the PREVIOUS run's episode when
-   you start. Which of these two you are doing is NOT a judgement call (WO-32: a cold run of this
-   prompt spent its whole pass VERIFYING the script it found on disk and re-shipped it, having read
-   step 1 as satisfied — that is only sometimes right, and it must never be an accident):
-     • REUSE — the topic in ops/episode_meta.json is NOT in ops/produced_topics.json. The previous
-       run built that episode and never published it (render or upload failed), so it is still owed
-       to the channel. Do NOT throw it away and do NOT rewrite it: check its docs/research/<slug>.md
-       exists and is sourced, run the step-5 self-checks and `python3 build.py` until it prints
-       BUILD OK, then STOP. Skip steps 1-4. Say plainly that you re-used the existing episode.
-     • WRITE A NEW ONE — the topic in ops/episode_meta.json IS already in produced_topics.json (or
-       there is no topic). Then content.py is a SHIPPED episode: it is a shape reference, nothing
-       more. Do steps 1-6 in full and overwrite it. Never re-ship a produced topic — the runner
-       HALTs on one anyway, which darkens the channel for the night.
+0. THE EPISODE ALREADY ON DISK — YOU DO NOT DECIDE THIS. content.py and ops/episode_meta.json
+   always still hold the PREVIOUS run's episode when you start. THE RUNNER HAS ALREADY DECIDED which
+   branch you are on and states it in the RUNNER DIRECTIVE at the very top of this message. Obey the
+   directive; it overrides anything you infer from the files. Say which branch you took in your
+   final message.
+   **WRITING A NEW EPISODE IS THE DEFAULT.** If there is no directive, WRITE A NEW ONE.
+     • WRITE A NEW ONE (the default, and what you will almost always be told). content.py is a shape
+       reference, nothing more. Do steps 1-6 in full and overwrite it with a NEW subject. Validating
+       or repairing the episode you found on disk is NOT this run's work — the runner detects that
+       (same topic in, same topic out, with no research file written), calls the pass FAILED and
+       HALTs the night on it.
+     • REUSE — ONLY when the directive says so. It means the runner itself built that episode on an
+       earlier run and lost it to a render or upload failure, so it is still owed to the channel. Do
+       NOT throw it away and do NOT rewrite it: check its docs/research/<slug>.md exists and is
+       sourced, run the step-5 self-checks and `scripts/build_capped.sh` until it prints BUILD OK,
+       then STOP. Skip steps 1-4. Say plainly that you re-used the existing episode.
+   WHY IT WORKS THIS WAY (2026-08-15): this used to be your call, tested as "is the topic on disk
+   already in produced_topics.json?". On the first live run the repo held an unpublished SAMPLE
+   episode, that test said REUSE, and the pass shipped stale work — the anti-duplicate guard agreed
+   with it, because the topic genuinely had never been published. "Unpublished episode on disk" does
+   not mean "owed episode"; only the runner knows the difference, so only the runner decides.
 
 1. TOPIC — take the first topic in ops/topic_queue.json whose slug is NOT in produced_topics.json.
    (If all are produced, invent a new one in the same spirit: a famous company, business figure,
@@ -252,7 +261,8 @@ DO, in order:
    thumb.setting and thumb.prop THROW on an unknown name rather than substituting a stand-in — use a
    real scenes.tsx template name, or leave `setting` empty for the default grey city.
 
-5. BUILD + SELF-CHECK — run `python3 build.py`. It syntax-checks content.py + episode_meta.json,
+5. BUILD + SELF-CHECK — run `scripts/build_capped.sh` (the bounded wrapper around `python3
+   build.py`; see the re-run rule below — never call build.py directly). It syntax-checks content.py + episode_meta.json,
    makes the VO + music, runs the gate, and does a 1-frame smoke render. Read the printed
    "~X WPM speech / Y WPM runtime" line and confirm the RUNTIME figure is 145–152; if it is out of
    band, the fix is the SCRIPT, not the synth rate (RATE is measured and calibrated — do not change
@@ -284,7 +294,7 @@ DO, in order:
        command and then stop. Never end your turn "to wait" for anything.
        AND THE REASON YOU WILL BE TEMPTED TO: on a NEW script every one of ~200 VO clips has to be
        synthesised, which takes far longer than a single foreground command is allowed to run, so
-       the first `python3 build.py` will very likely TIME OUT. That is not a failure and it is not a
+       the first build will very likely TIME OUT. That is not a failure and it is not a
        reason to background it. RUN IT IN THE FOREGROUND with the longest timeout your Bash tool
        accepts, and IF THE CALL TIMES OUT, RUN THE SAME COMMAND AGAIN. gen_voice_edge caches every
        clip it has already made (public/audio + .vo_cache.json), so each re-run resumes where the
@@ -293,6 +303,13 @@ DO, in order:
        Repeat until it prints either BUILD OK or a real gate failure you can act on. You cannot fix
        the WPM, the scene count or a template error you never saw — a cold run left a 220-scene
        episode at 136.4 WPM, a hard gate HALT, because it stopped before its own build reported.
+       THE ONE BUILD COMMAND YOU MAY USE IS `scripts/build_capped.sh` (it wraps `python3 build.py`;
+       pass no arguments). It is the same build — the ONLY difference is that it COUNTS your attempts
+       in runs/build_attempts.txt and REFUSES to start a further build once you have used FOUR, so
+       "run it again" can never become an unbounded loop. Four is enough for the cold-cache case by
+       a wide margin. If it refuses, the budget is gone: STOP, and say plainly in your final message
+       that the build did not reach BUILD OK and what the last failure was. Do not look for another
+       way to run the build, and never edit the wrapper or its ledger to buy yourself more attempts.
      • WRITE ops/episode_meta.json BEFORE THE FIRST BUILD, not after it. The shell's anti-duplicate
        guard reads the TOPIC OUT OF THAT FILE the moment you stop, and HALTs the whole night if it
        is still the previous episode's. A content.py that advanced to a new subject while
@@ -357,11 +374,14 @@ DO, in order:
        from that room is drawn while the card is up.
    RE-CHECK AFTER YOUR LAST EDIT, NOT BEFORE IT. Every one of these numbers moves when you split or
    merge a scene, so a check you ran three edits ago is not a check. The last thing you do is a
-   clean `python3 build.py` that prints BUILD OK, and only then do you stop.
+   clean `scripts/build_capped.sh` that prints BUILD OK, and only then do you stop.
 
 6. LEARN — do NOT touch ops/produced_topics.json (the shell appends the topic there ONLY after a
-   successful publish, so a failed render never orphans it). Move any shipped backlog items in
-   ops/improvements.json to done and add 1–3 new ideas; update docs/BIBLE.md if a WRITING rule
+   successful publish, so a failed render never orphans it). Move any shipped backlog items OUT of
+   `backlog` in ops/improvements.json and append them to the `done` array in
+   ops/improvements_done.json (the archive; 2026-08-15 — improvements.json is read in full every
+   night, so shipped history must not accumulate there, and it no longer has a `done` key: do not
+   recreate one). Add 1–3 new ideas to `backlog`; update docs/BIBLE.md if a WRITING rule
    changed (never docs/CRAYON_BIBLE.md). Write a short run note to runs/<date>.md.
 
 Then STOP. After you stop, the runner renders out/episode.mp4 and a separate FINAL REVIEWER agent
