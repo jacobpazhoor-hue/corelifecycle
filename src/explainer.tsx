@@ -2920,6 +2920,16 @@ const ChartBoard: React.FC = () => {
   // nineteenth-century lecture exactly. The only dated objects are the laptop and the projector body
   // on the side table.
   const period = usePeriod();
+  // The board's series was a literal `seed={6}`, so every scene that cuts to this template held the
+  // SAME bars and the SAME line — the hook (t002), the derivative reveal (t011), the leverage
+  // definition (t042) and the midpoint-reversal hold (t082) all showed one frozen chart. A template
+  // takes no props (director.tsx calls it with nothing — see the registration note below), so there
+  // is no scene id to seed from; `useId()` is React's own per-mount identity, stable across a
+  // scene's frames and distinct between scenes, and gets hashed the same way `resolveSceneKey` hashes
+  // a string into a number (crayonStyle.ts).
+  const chartMountId = React.useId();
+  let chartSeed = 0;
+  for (let i = 0; i < chartMountId.length; i++) chartSeed = (chartSeed * 31 + chartMountId.charCodeAt(i)) >>> 0;
   // The presenting arm. `A.stand` returns a plain Pose object, so the two joint angles that swing
   // the near arm toward the board are an override on it rather than a new action.
   //
@@ -2954,7 +2964,7 @@ const ChartBoard: React.FC = () => {
       {/* 16 bars and 9 gridlines. The plot's pale ground is ~20% of the frame, so the SERIES is what
           has to carry its density: at 12 bars / 6 gridlines the template measured 91.1% flat fill,
           i.e. against the empty end of the band with the board doing the emptying. */}
-      <ChartPlot x={234} y={220} w={864} h={486} kind="bars" bars={16} seed={6} live crash grid={9} />
+      <ChartPlot x={234} y={220} w={864} h={486} kind="bars" bars={16} seed={chartSeed} live crash grid={9} />
       {/* the two easel legs, splaying to the floor, with a stretcher across them */}
       {[[276, -1], [1046, 1]].map(([px, dir], i) => (
         <g key={i}>
