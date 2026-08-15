@@ -487,7 +487,7 @@ if grep -q '"autoUpload": *true' ops/routine.json; then
   # REVERT: put the two lines back the way they are now. Do not leave unlisted on past one night —
   # an unlisted episode earns no impressions and the channel reads as dark.
   #   if python3 scripts/yt_upload.py --privacy unlisted; then   # <-- first crayon night only
-  if python3 scripts/yt_upload.py --privacy unlisted; then   # FIRST CRAYON NIGHT ONLY — revert to --privacy public after review
+  if python3 scripts/yt_upload.py --privacy public; then
   # ---------------------------------------------------------------------------------------------
     notify "PUBLISHED" "$(python3 -c "import json;print(json.load(open('ops/episode_meta.json'))['title'])" 2>/dev/null)"
     # mark the topic produced ONLY now (on a real publish) so a failed render never orphans it
