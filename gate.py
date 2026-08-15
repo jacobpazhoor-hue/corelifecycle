@@ -29,7 +29,26 @@ MAX_MIN = routine.get("maxMinutes", 21)          # CRAYON canon runtime band is 
 # dialogue beats — NOT speech-only WPM, which runs ~3 WPM higher on the same audio. gen_voice_edge.py
 # prints both ("~X WPM speech / Y WPM runtime"); this asserts Y, recomputed here from the same two
 # numbers it used (content narration words, timeline totalFrames).
-WPM_LO, WPM_HI = 143.0, 154.0
+#
+# CEILING RAISED 154.0 -> 157.0 (WO-31, 2026-08-15) — ON THE OWNER'S INSTRUCTION, AND IT IS A
+# DEPARTURE FROM THE REFERENCE RATHER THAN A MATCH TO IT.
+# The owner asked a second time for a faster voice, which took gen_voice_edge.RATE from -7% to -5%
+# and the measured runtime figure from 152.5 to 155.6 WPM. 155.6 is ABOVE the reference channel's
+# fastest single video (its per-video range is 139.2-152.9, aggregate 148.5) by 2.7 WPM, so this band
+# no longer describes "what the reference does" at its top end — it describes what the owner asked
+# for. Anyone re-deriving this from the reference measurements will get 154 back; don't, without
+# asking the owner first.
+# 157.0 is chosen to leave 155.6 a real 1.4 WPM of margin — outside the 1.0 band-edge WARN below, so
+# the episode is not sitting on the edge — and NOT to be the largest defensible number.
+# WHAT THIS COSTS, stated because it is a genuine loss: the old 154.0 ceiling also caught the scene-
+# granularity DEAD ZONE documented in docs/BIBLE.md §3a, where an edit with a ~6.5-7.5s mean scene
+# pushes runtime WPM through the ceiling (the 141-scene draft measured 154.2 and HALTed here). At
+# 157.0 that draft would now PASS this check. The dead zone is therefore no longer guarded by the WPM
+# band; it is guarded only by the §3a rhythm tests. If you widen this band any further you are
+# removing the last cheap check on it.
+# The floor is UNCHANGED at 143.0 and the check itself is not removed — a rate regression in the
+# other direction (the pre-crayon pipeline ran 180.7 WPM) still HALTs.
+WPM_LO, WPM_HI = 143.0, 157.0
 tl = json.load(open(os.path.join(ROOT, "src", "timeline.json")))
 
 # ============================================================================

@@ -196,7 +196,7 @@ FPS = 30
 # THIS LINE, NOT JUST gen_voice_edge.RATE, is what sets the rate for this episode: the setdefault at
 # the bottom of this file stamps it onto every scene, and a per-scene `rate` WINS over the module
 # default. Changing one without the other is a silent no-op.
-NARRATION_RATE = "-7%"
+NARRATION_RATE = "-5%"   # OWNER retune, 2026-08-15 — see gen_voice_edge.RATE (measured 155.6 runtime WPM)
 
 SCENES = [
     # ================= HOOK — the five steps, first ~30s =================
@@ -599,13 +599,14 @@ SCENES = [
          overlay=None,
          bubbles=[dict(text="If housing goes flat, we do not survive it.", x=0.66, y=0.19, tail="down", tailAt=0.35, tailSkew=-0.2, at=3.6)]),
 
+    # §3a RHYTHM — HOLD (~9.2s). MERGED from old t052 + t053 (narration verbatim, in order) when the
+    # narration rate went -7% -> -5%: the faster voice pulled the 8-12s bucket down to 9 shots against
+    # §3a's 10-14, and this is the beat that most wants one set-up — the risk officers running the
+    # number and being uninvited from the meetings are a reveal and its consequence, which §3a says
+    # should not be cut apart. Paid for with the t102/t102b split so the scene count stays at 202.
     dict(id="t052", level=None, template="chartBoard",
-         narration=("The risk officers ran the number, and then they ran it again."),
-         overlay=None),
-
-    dict(id="t053", level=None, template="officeFloor",
-         narration=("The answer was bad enough that the risk officers stopped being invited to the "
-                    "meetings."),
+         narration=("The risk officers ran the number, and then they ran it again. The answer was bad "
+                    "enough that the risk officers stopped being invited to the meetings."),
          overlay=None),
 
     dict(id="t054", level=None, template="crowdQueue",
@@ -793,7 +794,14 @@ SCENES = [
          narration=("Lehman called him a short seller talking his own book, which is what he was."),
          overlay=None),
 
-    dict(id="t080", level=None, template="closeUpPortrait", gap=1.4,
+    # SET-UP changed closeUpPortrait -> broadcastDesk (WO-31). Not a cosmetic swap: closeUpPortrait
+    # was joint most-used room in the episode (21 of 202) and t077, three scenes back, is also one,
+    # so this was a real close-range repeat. It also cost the §3a "8 distinct set-ups in 8 evenly
+    # spaced samples" test — after the -5% retune moved every sample point, closeUpPortrait landed on
+    # two of the eight and the measure fell 8/8 -> 7/8. broadcastDesk is the furthest-away
+    # alternative (5 scenes) and is the better room for the line anyway: the Einhorn argument this
+    # verdict closes was a PUBLIC one, conducted through the press. Restores 8/8.
+    dict(id="t080", level=None, template="broadcastDesk", gap=1.4,
          narration=("Lehman was not wrong about that. It was wrong about the numbers."),
          overlay=None),
 
@@ -933,9 +941,17 @@ SCENES = [
          narration=("It had been the likeliest buyer all week, and everyone in the room knew it."),
          overlay=None),
 
+    # SPLIT from one 6.5s scene into two bulk beats — this is the split that PAYS for the t052/t053
+    # merge above (§3a: merges and splits are near runtime-neutral, so buy a hold with a split). It is
+    # also the better edit on its own terms: Bank of America leaving the table and Bank of America
+    # buying Merrill instead are one fact and then the turn, and the turn is what the next shot is for.
+    # The big/sub overlay rides the SECOND half, which is the line that actually names the purchase.
     dict(id="t102", level=None, template="bankExterior",
-         narration=("On Saturday afternoon it left the table. By that evening it had bought Merrill Lynch "
-                    "instead."),
+         narration=("On Saturday afternoon it left the table."),
+         overlay=None),
+
+    dict(id="t102b", level=None, template="broadcastDesk",
+         narration=("By that evening it had bought Merrill Lynch instead."),
          overlay=dict(big="$50 BILLION", sub="BANK OF AMERICA BOUGHT MERRILL INSTEAD")),
 
     dict(id="t103", level=None, template="newsMontage",

@@ -194,6 +194,25 @@ Web Audio analysis, four valid windows (≥242 samples each, 16–38 Hz):
 - **Deliberate music-free passages exist** — the 240s window's −75 dB gap floor is real silence, not a
   low bed. Silence is used as a structural device, not merely one beat before a midpoint.
 - Inter-sentence gaps are **0.18–1.0s**, longer and more varied than CoreLifecycle's fixed 0.25s.
+- **The reference's SFX vocabulary was NOT measured.** Nothing in the table above is evidence for a
+  whoosh, a stamp, a riser, a pop or a heartbeat. This absence is a finding, not a gap to be filled in
+  by inference.
+
+> **TRANSIENT SFX ARE NOT PLACED (WO-31, 2026-08-15).** `duck_music.py` used to put a whoosh into
+> **every normal cut** — 196 of them in a 16-minute episode, ~12.4 per minute — plus a riser + brand
+> STAMP + thud on every chapter cut, a pop on all 18 big-number overlays, a cold-open thud and a
+> climax heartbeat. The owner's note was *"there is a weird sound when each clip changes that does not
+> need to be there."* The whole vocabulary was then re-examined against this section and **none of it
+> had evidence behind it**: it was retired doodle-era sound design carried over unexamined. Two pieces
+> were provably furniture from a format this channel no longer is — the STAMP is documented in
+> `sfx_lib.py` as *"a rank just locked in"* and there is no rank ladder (`level` holds `CH 1`..`CH 5`,
+> chapter markers), and the POP fired ~0.35s after a cut, landing **on top of the narration** the duck
+> exists to keep clear. All of it is removed. `sfx.wav` is still written, silent, because
+> `Video2.tsx` mounts it unconditionally.
+>
+> **What remains is exactly what this section measured**: the sidechain duck, the silence beat and the
+> dry passages. If you want to add a sound back, measure the reference first and put the measurement
+> in this table — the default here is silence.
 
 ## 9. Packaging
 

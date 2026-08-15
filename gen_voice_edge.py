@@ -9,7 +9,11 @@ import edge_tts
 import soundfile as sf
 from content import SCENES, FPS
 
-CACHE_VERSION = "v7"   # v7: OWNER retune, -10% -> -7% ("the voice needs to be slightly sped up").
+CACHE_VERSION = "v8"   # v8: OWNER retune #2 — -7% -> -5% ("a little faster") AND the master() crispness
+                       #     retune ("more crisp"). BOTH change the audio, so the bump is mandatory:
+                       #     the DSP is not part of the cache key, only this constant is, so a DSP-only
+                       #     edit without a bump is invisible. Verified: rebuild reported 0/202 reused.
+                       # v7: OWNER retune, -10% -> -7% ("the voice needs to be slightly sped up").
                        # v6: narration rate retuned to -10% for canon-length sentences (see RATE).
                        # v5: crayon narration rate (-13%) + varied gaps + wider BEAT_GAP.
                        # MUST be bumped whenever RATE or the DSP chain changes: the per-scene cache key
@@ -43,25 +47,57 @@ DIALOGUE_VOICE = "en-US-ChristopherNeural"  # 2nd voice for in-world dialogue (m
 #   -10%       152.5        148.4       14.09 min   <- WO-16 value; 0.1 off the reference's aggregate
 #    -9%       153.0        148.9       14.04 min   (edge-tts quantises: only +0.5 speech WPM for 1%)
 #    -8%       155.0        150.8       13.86 min
-#    -7%       156.8        152.5       13.71 min   <- CHOSEN (WO-17)
-#    -6%       159.2        154.8       13.50 min   OVER the 154.0 ceiling — gate.py HALTS here
-#    -5%       160.8        156.3       13.38 min   OVER the ceiling
+#    -7%       156.8        152.5       13.71 min   <- chosen at the time (WO-17)
+#    -6%       159.2        154.8       13.50 min   OVER the 154.0 ceiling of the time
+#    -5%       160.8        156.3       13.38 min   OVER that ceiling
 # The -10% row reproduces the WO-16 src/timeline.json frame for frame (25,364), which is what makes
 # every row the same quantity gate.py recomputes rather than a parallel estimate.
 #
+# ^ THAT TABLE IS HISTORICAL AND ITS NUMBERS NO LONGER APPLY. It was measured on the 39-SCENE edit.
+# The episode is now cut into 202 scenes, which changes runtime WPM at a FIXED rate by ~3 (39 scenes
+# at -7% gave 152.5; 202 scenes at -7% also gave 152.5, but -6% moved 154.8 -> 154.2 and -5% moved
+# 156.3 -> 155.6). Use the WO-31 table below for anything current; this one is kept only so the
+# -13%/-10%/-7% decision history stays readable.
+#
 # WHY -7% AND NOT -10% (WO-17, 2026-08-12): the OWNER, watching the sample episode, asked for the
 # voice to be "slightly sped up". -10% was tuned to the reference's 148.5 AGGREGATE, and the ear that
-# has to live with the channel outranks that aggregate. -7% is the fastest rate that still leaves the
-# gate real margin: 152.5 is 9.5 above the 143.0 floor and 1.5 below the 154.0 ceiling, i.e. outside
-# the 1.0 band-edge WARN, while -6% is already a HALT. It also stays inside the reference's OWN
-# per-video spread of 139.2-152.9 (152.5 sits at the top of it, which is the point), so this is the
-# channel's fast end rather than a departure from it.
+# has to live with the channel outranks that aggregate.
+#
+# RE-MEASURED AGAIN (WO-31, 2026-08-15) on the CURRENT 202-scene cut, because the table above was
+# measured on the 39-scene WO-13 edit and runtime WPM is NOT a function of the rate alone — it moves
+# with scene granularity too (see docs/BIBLE.md §3a: 39 scenes and 202 scenes both land at 152.5 at
+# -7%, but the 141-scene draft in between hit 154.2). Same method as before: every scene of the
+# committed content.py synthesised at each rate, through the real master() + trim_silence() chain and
+# this file's own per-scene timing arithmetic. Validated by reproducing the committed
+# src/timeline.json to within 6 frames of 29,112 (0.02%) and its runtime WPM exactly.
+#   RATE     speech WPM   runtime WPM   runtime
+#    -7%       170.8        152.5       16.18 min   <- previous value
+#    -6%       173.0        154.2       16.00 min
+#    -5%       174.8        155.6       15.85 min   <- CHOSEN (WO-31)
+#    -4%       176.3        156.8       15.74 min
+#
+# WHY -5% (WO-31): the OWNER asked a SECOND time for the voice to be faster ("more crisp and a little
+# faster"), having already been given -10% -> -7%. The first increment was +4.1 runtime WPM and was
+# not enough, so this one is deliberately comparable rather than token: +3.1 WPM, 152.5 -> 155.6.
+# -4% was measured and rejected as more than "a little"; -6% (+1.7) repeats the mistake of an
+# increment too small to answer the note.
+#
+# THIS IS A DELIBERATE DEPARTURE FROM THE REFERENCE, NOT A MATCH TO IT — say so plainly rather than
+# discovering it later. The reference channel's own per-video range is 139.2-152.9 WPM with a 148.5
+# aggregate. 152.5 was at the very top of that range; 155.6 is 2.7 WPM ABOVE THE FASTEST VIDEO THE
+# REFERENCE HAS. It is the owner's instruction and the owner outranks the reference, but nothing here
+# should be read as "this is what the reference does". It is not.
+# Cross-checked against the syllable-rate rule (WPM ~= 215 / syllables-per-word, because the voice
+# speaks at a near-constant syllable rate): this script measures 1.4220 syllables/word over its 2,467
+# words, so the rule predicts 151.2 WPM. -7% implied a constant of 216.9 (+0.9% over 215); -5% implies
+# 221.3 (+2.9%). That is the same ~3% departure seen in the WPM table, from an independent direction —
+# the words did not get shorter, the voice genuinely got faster.
 #
 # If you change this, BUMP CACHE_VERSION in the same edit or every scene reuses its cached wav.
 # content.py ALSO carries the rate: it does `_s.setdefault("rate", NARRATION_RATE)` on every scene,
 # and a per-scene `rate` WINS over this constant (`sc.get("rate", RATE)` below). Changing this value
 # alone does nothing to an episode whose content.py sets its own — change both.
-RATE = "-7%"                   # MEASURED 156.8 WPM speech / 152.5 runtime; re-measure if you change it
+RATE = "-5%"                   # MEASURED 174.8 WPM speech / 155.6 runtime; re-measure if you change it
 # Inter-scene silence. The reference's gaps measure 0.18–1.0s and VARY; one fixed value is a tell.
 GAP_MIN, GAP_MAX = 0.25, 0.55           # ordinary scene-to-scene breath (deterministic per scene id)
 TURN_GAP_MIN, TURN_GAP_MAX = 0.60, 1.00  # longer hold before a chapter/LEVEL turn
@@ -105,7 +141,46 @@ def master(y, sr):
     old harmonic EXCITER (tanh drive) was fabricating fizzy high-end = the graininess. Instead:
     proper band-limited resample to 48k, HP, de-mud, gentle nasal trim, clean PRESENCE + AIR shelves
     (linear, no distortion), de-ess, roll OFF the empty >13.5k band (artifact/fizz), gentle soft-knee
-    compression, normalize with headroom. Crisp from real presence, not synthetic air. Returns (audio, sr)."""
+    compression, normalize with headroom. Crisp from real presence, not synthetic air. Returns (audio, sr).
+
+    CRISPNESS RETUNE (WO-31, 2026-08-15) — the OWNER asked twice for the voice to be "more crisp".
+    THE DE-ESS WAS THE THING COSTING CRISPNESS, and not at its centre — at its SKIRT. At 0.42 deep
+    with sigma=850 the Gaussian was still cutting -3.07dB at 6.5kHz and -0.97dB at 6.0kHz, i.e. it
+    was scooping the top of the CLARITY band (4-6.5k, where consonant definition lives) as collateral
+    on every syllable, sibilant or not. That is only worth paying on a genuinely essy source, and
+    edge-tts's Andrew is not one. Three changes, ALL LINEAR EQ:
+      * de-ess sigma 850 -> 620 (and 0.42 -> 0.40 deep, centre 7000 -> 7100Hz). The depth AT THE
+        CENTRE is essentially kept — -4.73dB before, -4.44dB now, so real ess energy is still
+        controlled — but the skirt comes off the clarity band: 6.5kHz -3.07 -> -1.48dB, 6.0kHz
+        -0.97 -> -0.15dB, 5.0kHz -0.01 -> -0.00dB. This is the change that does most of the work.
+      * presence shelf +3.3dB@3.7k -> +4.6dB@3.1k (0.45/700 -> 0.66/560): more lift, and the lower,
+        tighter knee puts the whole 4-6.5k band on the shelf's flat top instead of part-way up its
+        slope (at 4kHz the shelf alone was only 60% engaged before).
+      * roll-off 13.5k -> 14.5k. NOT an attempt to add air. The 6th-order corner at 13.5k was still
+        -3.5dB at 12kHz, which is INSIDE the source's real content — it was discarding genuine top
+        end in order to kill a fizz band that starts above it. At 14.5k the same corner is -2.4dB
+        at 12k. Nothing is created above ~12k either way; there is nothing up there to create.
+    NOT DONE, DELIBERATELY: no harmonic exciter, no synthesised air. edge-tts is band-limited to
+    ~12kHz; a previous version fabricated high end with tanh drive and the grain that caused is the
+    reason this chain was rewritten (see the paragraph above). The only nonlinearity is the UNCHANGED
+    soft-knee tanh, and it was checked rather than assumed: its residual against a scale-matched
+    linear reference moved -32.75 -> -32.35 dB, so it is doing the same amount of work as before.
+
+    MEASURED, old chain vs new, over 39 real narration scenes of this episode (band RMS via Parseval,
+    after master() + trim_silence()):
+        presence  4-6.5k   -31.83 -> -30.53 dB   +1.30
+        sibilance 6-8k     -40.47 -> -38.52 dB   +1.95
+        air       9-12k    -44.04 -> -42.76 dB   +1.28
+        body      0.3-3k   -19.76 -> -19.98 dB   -0.22
+        peak (linear)        0.950 -> 0.950      +0.000  (both normalise to 0.95)
+        broadband RMS      -16.48 -> -16.62 dB   -0.14   <- it did NOT just get louder; it got
+                                                            marginally QUIETER while the bands rose.
+    Sibilance was checked for SPIKINESS, not just level, because "louder esses" and "sharper esses"
+    are different failures: the 6-8k band's crest factor moved 27.10 -> 27.07 dB (flat, marginally
+    calmer) and the loudest 10ms sibilant block rose +1.99dB against the band mean's +1.95dB — i.e.
+    the peaks tracked the band exactly. The band was LIFTED, not SHARPENED. The 6-8k rise is larger
+    than the 4-6.5k rise by construction and not by accident: 6-6.5k belongs to both bands, and it is
+    precisely the region the old de-ess skirt was over-cutting."""
     if y.ndim > 1:
         y = y.mean(axis=1)
     y = y.astype(np.float32)
@@ -126,10 +201,10 @@ def master(y, sr):
     g *= 1.0 / (1.0 + (85.0 / np.maximum(fr, 1.0)) ** 6)          # high-pass 85Hz (rumble)
     g *= 1.0 - 0.28 * np.exp(-((fr - 300.0) / 130.0) ** 2)        # de-mud dip @300Hz
     g *= 1.0 - 0.14 * np.exp(-((fr - 2600.0) / 700.0) ** 2)       # gentle nasal trim (-1.3dB, keep clarity)
-    g *= 1.0 + 0.45 * (1.0 / (1.0 + np.exp(-(fr - 3700.0) / 700.0)))  # CLEAN presence shelf ~+3.3dB (crisp consonants)
-    g *= 1.0 - 0.42 * np.exp(-((fr - 7000.0) / 850.0) ** 2)       # de-ess @7k
+    g *= 1.0 + 0.66 * (1.0 / (1.0 + np.exp(-(fr - 3100.0) / 560.0)))  # CLEAN presence shelf ~+4.6dB (crisp consonants)
+    g *= 1.0 - 0.40 * np.exp(-((fr - 7100.0) / 620.0) ** 2)       # de-ess @7.1k — as DEEP, much NARROWER (see below)
     g *= 1.0 + 0.18 * (1.0 / (1.0 + np.exp(-(fr - 9500.0) / 900.0)))  # small CLEAN air shelf ~+1.4dB (sparkle)
-    g *= 1.0 / (1.0 + (fr / 13500.0) ** 6)                        # roll OFF the empty >13.5k fizz band
+    g *= 1.0 / (1.0 + (fr / 14500.0) ** 6)                        # roll OFF the empty >14.5k fizz band
     out = np.fft.irfft(X * g, n=n).astype(np.float32)
     out = np.tanh(out * 1.25) / np.tanh(1.25)                     # gentle soft-knee compression (less drive)
     out = out / (np.max(np.abs(out)) + 1e-9) * 0.95              # normalize with headroom

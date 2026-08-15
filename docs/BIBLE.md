@@ -122,12 +122,18 @@ crisis, or institution. Not a documentary voice — a *storyteller's* voice appl
 > music beats, dialogue and text cards. It is **NOT speech-only WPM**. Speech-only runs roughly
 > 3 WPM higher on the same audio. Anything that re-measures this must compare like for like.
 > `gen_voice_edge.py` now prints **both** at the end of a build — `"~X WPM speech / Y WPM runtime"` —
-> and the runtime figure is the one to compare against 148.5. The synth rate is `RATE = "-7%"`
-> (`gen_voice_edge.py`, `CACHE_VERSION` v7 — the OWNER retune from -10%), measured (not assumed) at
-> **156.8 speech / 152.5 runtime**. `content.py`'s `NARRATION_RATE` carries the same value and stamps
-> it onto every scene; a per-scene `rate` wins over both, so changing one alone is a silent no-op.
-> §3a's table below reports the same -7% figures — if this line and that table ever disagree again,
-> `gen_voice_edge.py` is the truth.
+> and the runtime figure is the one to compare against 148.5. The synth rate is `RATE = "-5%"`
+> (`gen_voice_edge.py`, `CACHE_VERSION` v8 — the OWNER's SECOND speed-up, from -7%), measured (not
+> assumed) on the current 202-scene cut at **174.8 speech / 155.7 runtime**. `content.py`'s
+> `NARRATION_RATE` carries the same value and stamps it onto every scene; a per-scene `rate` wins over
+> both, so changing one alone is a silent no-op.
+>
+> **155.7 is FASTER THAN THE REFERENCE CHANNEL HAS EVER BEEN — deliberately, on the owner's
+> instruction.** The reference's per-video range is 139.2–152.9 with a 148.5 aggregate, so the pace
+> above is **+2.8 WPM past its fastest single video**. 148.5 remains the number this table was
+> measured from, but it is no longer the number the channel is tuned to, and `gate.py`'s ceiling was
+> raised 154.0 → 157.0 to admit it. Do not "correct" the rate back toward 148.5 on the grounds that
+> the reference says so; that is a decision the owner has now made twice, in the other direction.
 
 **How to hit the sentence numbers:** write in fragments. Roughly half of all reference sentences are
 under eight words, and a large share are not grammatical sentences at all — *"No war, no warning."* /
@@ -204,6 +210,34 @@ WO-30 did this seventeen times in both directions on a script whose narration is
 the WO-22 text: 202 scenes against 196, 2,467 words against 2,468, runtime 16.18 min against 16.16, and
 runtime WPM moved 152.7 → 152.5.
 
+**Re-measured after the WO-31 speed-up (`-7%` → `-5%`), because a faster voice shortens every scene
+and the distribution was tuned at the old rate.** Measured on the shipped `src/timeline.json`:
+
+| | shipped (−5%) | reference | §3a spec |
+|---|---|---|---|
+| scenes | 202 | — | — |
+| mean | **4.71s** | 4.79s | — |
+| median | **4.30s** | — | must be **below** the mean ✅ |
+| min / max | **1.00s / 15.33s** | 0.61s / 16.46s | longest **≥12s** ✅ |
+| sd | **2.43s** | — | **≥~2.3s** ✅ |
+| cuts/min | **12.75** | 12.5 | 10–13 ✅ |
+| holds 12–16s | **5** (1 at ≥14s) | — | 4–6, one at 14–16 ✅ |
+| shots 8–12s | **10** | — | 10–14 ✅ |
+| bulk 3–7s | **120 (59.4%)** | — | ~60% ✅ |
+| punches ≤2.5s | **29** | — | 25–30 ✅ |
+| longest run within ±1s | **5** | — | no more than ~5 ✅ |
+
+Deciles: 2.01 / 2.67 / 3.23 / 3.75 / 4.30 / 4.95 / 5.59 / 6.36 / 7.52.
+
+**The speed-up did break one bucket, and it was fixed in the edit, not in the voice.** At −5% the
+8–12s band fell to **9** shots against the 10–14 spec, because the faster narration pulled three
+scenes out of the bottom of it. Per the rule above that was paid for in both directions: **`t052`+`t053`
+were merged** into one 9.2s hold (the risk officers running the number and being uninvited from the
+meetings — a reveal and its consequence, which should not have been cut apart), and **`t102` was split**
+into `t102`/`t102b` (Bank of America leaving the table, then buying Merrill instead — one fact, then
+the turn) to keep the count at 202. Net runtime effect: ~0. The longest run within ±1s also sits
+**exactly on** the ~5 limit, up from 3 at −7% — worth watching, not yet a breach.
+
 **What makes a beat want a hold:** the sentences only mean something *together* (a definition and its
 worked example; a reveal and its consequence), or the viewer has just been given something to feel and
 a cut would make them re-anchor instead. **What makes a beat want a punch:** it is one fact, one word,
@@ -227,14 +261,29 @@ Splitting a scene does two opposite things at once, and the second one is easy t
 - it **removes one sentence-final pause from inside the synthesised utterance** (`trim_silence()` cuts
   the tail of every scene's audio), which pushes **speech** WPM *up*.
 
-Measured on this same script and subject, at `RATE = "-7%"`:
+Measured on this same script and subject, at the then-current `RATE = "-7%"`:
 
 | scenes | mean scene | speech WPM | **runtime WPM** | verdict |
 |---|---|---|---|---|
 | 39 | 21.1s | 156.8 | 152.5 | PASS |
-| 141 | 6.81s | 167.1 | **154.2** | **HALT** — over `gate.py`'s 154.0 ceiling |
+| 141 | 6.81s | 167.1 | **154.2** | **HALT** — over the 154.0 ceiling *of the time* |
 | 196 | 4.95s | 170.5 | 152.7 | PASS |
 | 202 | 4.80s | 170.9 | 152.5 | PASS — WO-30, same words re-cut into a wide distribution |
+
+**The rate is now `-5%` (WO-31) and the ceiling is now 157.0**, so the 141-scene row would no longer
+HALT — see the note in `gate.py`. The dead zone below is still real; it is just no longer caught by
+the WPM band, only by the rhythm tests. And measured at the SAME 202-scene cut, varying only the rate
+(the harness reproduced the committed timeline to within 6 frames of 29,118, i.e. 0.02%):
+
+| rate | speech WPM | **runtime WPM** | runtime | verdict |
+|---|---|---|---|---|
+| -7% | 170.8 | 152.5 | 16.18 min | previous value |
+| -6% | 173.0 | 154.2 | 16.00 min | +1.7 — too small an answer to a second complaint |
+| **-5%** | **174.8** | **155.6** | **15.85 min** | **CHOSEN** — +3.1, matches the first retune's step |
+| -4% | 176.3 | 156.8 | 15.74 min | more than "a little faster" |
+
+The shipped build measures **155.7 runtime / 174.8 speech over 15.8 min**, 1.3 WPM inside the 157.0
+ceiling and 12.7 above the 143.0 floor.
 
 So runtime WPM is **not** monotonic in scene count: the speech-rate gain outruns the gap cost until
 roughly 7s and then falls behind it. There is a **dead zone around a 6.5–7.5s mean scene** where the
@@ -869,11 +918,13 @@ instruction, not a rendering one; §3a is where it turns into a scene budget.
 
 `python3 build.py` syntax-checks `content.py` + `ops/episode_meta.json`, synthesises VO, runs
 `gate.py`, and does a 2-frame smoke render (frame 0 and the midpoint). It HALTs rather than shipping
-broken. Read the printed `WPM speech / WPM runtime` line every build and compare the **runtime**
-figure to the **145–152 target**. That is the target, not the gate: `gate.py` HALTs only outside
-**143–154** (`WPM_LO`/`WPM_HI`), deliberately wider than the target because the reference channel's
-own per-video spread is 139.2–152.9 and a false HALT blocks publishing outright. An episode at 153 is
-a craft note, not a build failure.
+broken. Read the printed `WPM speech / WPM runtime` line every build. `gate.py` HALTs outside
+**143–157** (`WPM_LO`/`WPM_HI`). The ceiling was raised from 154.0 to 157.0 in WO-31 to admit the
+owner's second speed-up (see §3 and the comment on `WPM_LO`/`WPM_HI` itself, which records what the
+raise costs). The band is deliberately wider than any target: the reference's own per-video spread is
+139.2–152.9, and a false HALT blocks publishing outright, which is worse than shipping a couple of
+WPM off. An episode a WPM or two either side of the current 155.7 is a craft note, not a build
+failure.
 
 ## Brand
 Channel @corelifecycle. Thumbnail/typography brand rules live in `docs/CRAYON_BIBLE.md` §7 and §9.
