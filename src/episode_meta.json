@@ -1,18 +1,18 @@
 {
   "thumb": {
-    "kicker": "158 YEARS",
-    "line1": "GONE.",
+    "kicker": "$9 BILLION",
+    "line1": "FAKE.",
     "line2": "",
-    "tag": "$613 BILLION",
-    "archetype": "crash",
-    "big": "$613 BILLION",
+    "tag": "ONE DROP OF BLOOD",
+    "archetype": "number",
+    "big": "$0",
     "expr": "shock",
-    "mood": "money",
-    "keyword": "LEHMAN",
-    "question": "WHO PAID FOR IT?",
-    "word": "NO",
-    "before": "158 YEARS",
-    "after": "72 HOURS"
+    "mood": "crime",
+    "keyword": "THERANOS",
+    "question": "DID SHE KNOW?",
+    "word": "LIES",
+    "before": "$9 BILLION",
+    "after": "$0"
   },
-  "topic": "lehman_brothers"
+  "topic": "theranos"
 }
