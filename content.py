@@ -159,9 +159,9 @@ SCENES = [
     # §3a RHYTHM — HOLD #1, ~12s. The reveal that the board had authority and pedigree, and nothing
     # medical at all.
     dict(id="t019", level=None, template="boardroom",
-         narration=("The board that watched over her medical device company had almost no doctors on "
-                    "it. It had a former Secretary of State, a former Secretary of Defense, two more "
-                    "former cabinet officials, and a four-star general. Not one of them had ever run a "
+         narration=("The board built up around her medical device company had almost no doctors on "
+                    "it. It had a former Secretary of State, a former Secretary of Defense, a "
+                    "longtime U.S. Senator, and a four-star general. Not one of them had ever run a "
                     "lab."),
          overlay=None),
 
@@ -483,8 +483,7 @@ SCENES = [
          overlay=None),
 
     dict(id="t090", level=None, template="domesticInterior", breath=True,
-         narration=("The company's own lab director had already quit once, in 2014, over the same "
-                    "worry."),
+         narration=("The company's own lab director had the same worry."),
          overlay=None),
 
     dict(id="t091", level=None, template="closeUpPortrait",
@@ -492,7 +491,7 @@ SCENES = [
          overlay=None),
 
     dict(id="t092", level=None, template="bankExterior",
-         narration=("Nobody fixed it before the product reached Walgreens' shelves."),
+         narration=("Nobody fixed it -- and the product was already on Walgreens' shelves."),
          overlay=None),
 
     dict(id="t093", level=None, template="courtHearing",
@@ -874,7 +873,7 @@ SCENES = [
 
     # §3a RHYTHM — HOLD, ~13s, the quote.
     dict(id="t176", level=None, template="bankExterior",
-         narration=("What we do know is this. She once told a reporter, 'I am devastated by my "
+         narration=("What we do know is this. At her sentencing, she said, 'I am devastated by my "
                     "failings.' Nobody ever asked the machine how it felt about that. It never worked "
                     "long enough to answer."),
          overlay=None),
