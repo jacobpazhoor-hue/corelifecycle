@@ -1,18 +1,18 @@
 {
   "thumb": {
-    "kicker": "$9 BILLION",
+    "kicker": "$65 BILLION",
     "line1": "FAKE.",
     "line2": "",
-    "tag": "ONE DROP OF BLOOD",
-    "archetype": "question",
-    "big": "$0",
-    "expr": "shock",
+    "tag": "TEN PERCENT. EVERY YEAR.",
+    "archetype": "band",
+    "big": "150 YEARS",
+    "expr": "smug",
     "mood": "crime",
-    "keyword": "THERANOS",
-    "question": "DID SHE KNOW?",
-    "word": "LIES",
-    "before": "$9 BILLION",
+    "keyword": "MADOFF",
+    "question": "DID ANYONE CHECK?",
+    "word": "FAKE",
+    "before": "$65 BILLION",
     "after": "$0"
   },
-  "topic": "theranos"
+  "topic": "madoff"
 }
