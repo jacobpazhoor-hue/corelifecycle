@@ -67,7 +67,7 @@ NARRATION_RATE = "-5%"   # matches the current channel-wide retune (docs/BIBLE.m
 SCENES = [
     # ================= HOOK — five steps, first ~30s =================
     dict(id="t001", level=None, template="cityStreet",
-         narration=("For almost twenty years, a Wall Street legend paid old investors with money that "
+         narration=("For almost fifty years, a Wall Street legend paid old investors with money that "
                     "was never actually invested."),
          overlay=None),
 
