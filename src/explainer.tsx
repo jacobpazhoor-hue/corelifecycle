@@ -431,7 +431,8 @@ const OfficeFloor: React.FC = () => {
       <RibbedPanel x={912} y={794} w={82} h={100} ribs={6} dir="v" fill={tn.body} />
       {/* the colleague crossing the aisle actually crosses it — see `aisleX` above */}
       <StickFigure pose={A.walk(f, 30, 0.35)} x={aisleX} y={790} scale={0.72}
-        facing={aisleFacing} view="profile" pal={DIM} showFace={false} frame={f} idle="subtle" />
+        facing={aisleFacing} view="profile" pal={DIM} showFace={false} frame={f} idle="subtle"
+        seed={41.3} />
 
       {/* --- near plane: the hero's desk bank ---
           The figures go down BEFORE the desk so the slab occludes their laps; the props go down

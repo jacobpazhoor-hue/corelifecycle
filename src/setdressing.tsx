@@ -1709,8 +1709,11 @@ export const Passerby: React.FC<{
             fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
         </g>
       )}
+      {/* `seed` is MANDATORY here: `x` moves 11 units a frame, and the idle seeds off the staged
+          position unless told otherwise (see StickFigure's `seed` note). */}
       <StickFigure pose={A.walk(f, 30, speed)} x={x} y={y} scale={scale} facing={dir}
-        view={view} pal={DIM} showFace={false} frame={f} idle="subtle" />
+        view={view} pal={DIM} showFace={false} frame={f} idle="subtle"
+        seed={seed * 7.7 + y * 0.0071 + scale * 3.1} />
     </g>
   );
 };

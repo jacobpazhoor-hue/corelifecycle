@@ -290,18 +290,38 @@ export const StickFigure: React.FC<{
    * in the linework.
    */
   idleGain?: number;
+  /**
+   * THIS FIGURE'S STABLE IDENTITY, and the one thing a MOVING figure must pass (WO-33).
+   *
+   * Every idle layer draws its phase and its rate from a seed, and the seed defaults to the figure's
+   * staged position — which is correct for the ~350 figures that stand still and catastrophically
+   * wrong for the handful that walk. `hash()` is a chaotic sin-fract: two seeds a fraction apart
+   * give unrelated outputs. So a `Passerby` translating 11 units a frame re-drew a NEW random breath
+   * phase, breath rate, sway seed and gesture phase on EVERY FRAME, and the idle — designed as three
+   * slow continuous layers — degenerated into white noise added to the pose. Measured on
+   * `exchangeFloor`'s runner: a steady -11.2 units/frame of travel rendered as head displacements
+   * swinging between -26.1 and +5.8 units, reversing direction two frames in three. That is the
+   * "characters spazz" the owner reported, and it is the only mechanism in the frame that alternates
+   * at the frame rate.
+   *
+   * Pass anything CONSTANT that is unique to the figure — its call-site seed, its index, its start x.
+   * Never pass its live position. It also seeds the blink and the gaze, for the same reason.
+   */
+  seed?: number;
   /** Accepted and ignored — the sketch filter is gone (see the header note). Kept so call sites compile. */
   rough?: boolean;
 }> = ({
   pose: basePose, x, y, scale = 1, facing = 1, pal = INKPAL, view = 'profile',
   expr = {brow: 0, browRaise: 0, lid: 0, mouth: 'neutral', look: 0}, frame = 0,
   showFace = true, briefcase = false, lineW = STROKE, costume = episodeCostume(), idle = 'idle',
-  idleGain = 1,
+  idleGain = 1, seed: idProp,
 }) => {
   const front = view === 'front';
   // Seeded off the figure's own staged position, so two figures in one row are never in phase and
-  // the same figure animates identically on every machine and every re-render.
-  const idleSeed = x * 0.0173 + y * 0.0071 + scale * 3.1;
+  // the same figure animates identically on every machine and every re-render. A figure that MOVES
+  // must pass `seed` instead — see the prop note; a position that changes every frame re-rolls every
+  // phase in here every frame, which is vibration, not idle.
+  const idleSeed = idProp ?? (x * 0.0173 + y * 0.0071 + scale * 3.1);
   const {pose, dx: idleDX, dy: idleDY} = idleFigure(basePose, frame, idleSeed, idle, idleGain);
   // ALL linework — outlines, limb sticks, face, costume detail, and the solid shoe, which the
   // reference draws in the same black as the limb it terminates. Never desaturated; only fills are.
@@ -348,7 +368,10 @@ export const StickFigure: React.FC<{
     const ang = Math.atan2(f.y - k.y, f.x - k.x) * 180 / Math.PI;
     return <ellipse key={key} cx={f.x} cy={f.y} rx={limbW * 2.0} ry={limbW * 1.0} fill={ink} transform={`rotate(${ang + 90} ${f.x} ${f.y})`} />;
   };
-  const seed = Math.round(x);
+  // Blink and gaze take the SAME stable identity as the idle: `Math.round(x)` on a walker changes
+  // every frame, which re-rolls the blink period and the gaze noise seed frame by frame — a
+  // stroboscopic eye on any moving figure that shows its face.
+  const seed = Math.round(idProp ?? x);
   const lid = Math.min(1, expr.lid + idleBlink(frame, seed));
   const R = SEG.head;
   const HW = R * HEAD_HW, HH = R * HEAD_HH;

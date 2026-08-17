@@ -253,7 +253,7 @@ const S03: React.FC = () => {
     <rect x={812} y={150} width={120} height={90} fill={COL.warm} opacity={0.9} /><rect x={812} y={150} width={120} height={90} fill="none" stroke={INK} strokeWidth={6} />
     <Skyline baseY={1010} tint="#0a1119" o={0.7} />
     <line x1={0} y1={1010} x2={1920} y2={1010} stroke={INK} strokeWidth={8} />
-    <StickFigure pose={A.walk(f, fps)} x={x} y={952} scale={0.62} facing={1} view="profile" expr={FACES.earnest} pal={LIGHT} frame={f} />
+    <StickFigure pose={A.walk(f, fps)} x={x} y={952} scale={0.62} facing={1} view="profile" expr={FACES.earnest} pal={LIGHT} frame={f} seed={3.7} />
   </Frame>);
 };
 const Junior: React.FC<{x: number; s: number; f: number; fps: number}> = ({x, s, f, fps}) => (
@@ -549,7 +549,7 @@ const S09: React.FC = () => {
     <path d="M 906 1002 L 1092 1002 L 1128 1062 L 872 1062 Z" fill={c.accent} stroke={CINK} strokeWidth={CSTROKE * 0.5} />
 
     {/* --- near plane: the coloured hero, then the foreground silhouette --- */}
-    <StickFigure pose={A.walk(f, fps)} x={x} y={860} scale={1.15} facing={1} view="profile" expr={FACES.cold} pal={LIGHT} briefcase frame={f} />
+    <StickFigure pose={A.walk(f, fps)} x={x} y={860} scale={1.15} facing={1} view="profile" expr={FACES.cold} pal={LIGHT} briefcase frame={f} seed={12.9} />
     <OverShoulder side="left" y={1120} scale={0.66} />
   </Frame>);
 };
@@ -620,7 +620,7 @@ const S13: React.FC = () => {  // layoffs — right-sizing; people leaving
   const f = useCurrentFrame(); const {fps} = useVideoConfig();
   const leavers = [980, 1180, 1380, 1560].map((x0, i) => {
     const x = x0 + ((f * 0.6) % 240); const s = 0.6 - i * 0.04;
-    return <StickFigure key={i} pose={A.walk(f + i * 40, fps)} x={x} y={904} scale={s} facing={1} view="profile" pal={DIM} showFace={false} frame={f} />;
+    return <StickFigure key={i} pose={A.walk(f + i * 40, fps)} x={x} y={904} scale={s} facing={1} view="profile" pal={DIM} showFace={false} frame={f} seed={13.4 + i * 2.9} />;
   });
   return (<Frame>
     <Skyline baseY={520} tint="#2a1622" o={0.5} /><Mullions o={0.28} />
@@ -652,7 +652,7 @@ const S14: React.FC = () => {  // power broker — the revolving door (govt <-> 
     {/* glass tower right */}
     <rect x={1340} y={180} width={420} height={700} fill={PAPER} stroke={INK} strokeWidth={3} /><Skyline baseY={880} tint="#0c1826" o={0.5} />
     <line x1={0} y1={910} x2={1920} y2={910} stroke={INK} strokeWidth={8} />
-    <StickFigure pose={A.walk(f, fps)} x={x} y={870} scale={0.9} facing={1} view="profile" expr={FACES.smug} pal={LIGHT} frame={f} />
+    <StickFigure pose={A.walk(f, fps)} x={x} y={870} scale={0.9} facing={1} view="profile" expr={FACES.smug} pal={LIGHT} frame={f} seed={15.2} />
   </Frame>);
 };
 
@@ -753,7 +753,7 @@ const S18: React.FC = () => {  // the loop closes — a new young associate walk
         <path d="M 1755 940 Q 1700 880 1730 830 M 1755 940 Q 1810 890 1780 820 M 1755 940 Q 1755 860 1755 810" fill="none" stroke="#2f7a4a" strokeWidth={6} strokeLinecap="round" />
       </>
     )}
-    <StickFigure pose={A.walk(f, fps)} x={x} y={897} scale={0.9} facing={1} view="profile" expr={FACES.earnest} pal={LIGHT} frame={f} />
+    <StickFigure pose={A.walk(f, fps)} x={x} y={897} scale={0.9} facing={1} view="profile" expr={FACES.earnest} pal={LIGHT} frame={f} seed={18.6} />
   </Frame>);
 };
 
