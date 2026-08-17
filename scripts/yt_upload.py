@@ -12,9 +12,17 @@ Defaults can also live in out/upload_kit.json:
 
 Privacy defaults to PRIVATE (safe) unless you pass --privacy public or set it in the kit.
 NOT made for kids. Writes results to out/uploads.json.
+
+REVIEW GUARD: this script refuses to publish a render the reviewer has not approved — see
+scripts/upload_guard.py. Approval is bound to the render's sha256, so re-rendering after an
+approve invalidates it. To publish anyway (rare, deliberate, and logged loudly):
+  --publish-without-review-approval --override-reason "..."
 """
 import os, sys, json, argparse
 from datetime import datetime
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import upload_guard  # noqa: E402  (review guard — see the block at the top of main())
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRETS = os.path.join(ROOT, "secrets")
@@ -81,10 +89,28 @@ def main():
     ap.add_argument("--category", default=kit.get("categoryId", "27"))
     ap.add_argument("--playlist", default=kit.get("playlist"))
     ap.add_argument("--force", action="store_true")
+    # --force only bypasses the DUPLICATE-TITLE guard. It has never had anything to do with the
+    # reviewer, and must not: the override below is the only way past a missing approval.
+    ap.add_argument(upload_guard.OVERRIDE_FLAG, dest="override_review", action="store_true",
+                    help="publish a render the reviewer did NOT approve (logs loudly; needs --override-reason)")
+    ap.add_argument("--override-reason", default=None,
+                    help=f"why you are using {upload_guard.OVERRIDE_FLAG} — required with it")
     a = ap.parse_args()
 
     if not a.video or not os.path.exists(a.video):
         die(f"video not found: {a.video}")
+
+    # --- REVIEW GUARD (2026-08-17) ---------------------------------------------------------------
+    # BEFORE authorizing, before touching the network: this process must not be able to publish a
+    # render the reviewer refused. The 2026-08-17 incident was a hand-run `--privacy public` against
+    # an episode the reviewer had REJECTED for four factual errors while the revision agent was still
+    # fixing them. Approval is tied to the render's sha256, so a stale approve cannot bless newer
+    # bytes. The autopilot's own upload runs after its reviewer approves and passes untouched.
+    try:
+        upload_guard.assert_publishable(a.video, override=a.override_review, reason=a.override_reason)
+    except upload_guard.GuardError as e:
+        die(str(e), 3)
+    # ---------------------------------------------------------------------------------------------
     title = (a.title or os.path.basename(a.video))[:100]
     if a.desc_file and os.path.exists(a.desc_file):
         description = open(a.desc_file).read()

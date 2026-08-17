@@ -248,6 +248,13 @@ review() {
     exit 0
   fi
   echo "review frames: ${NFRAMES} (all from THIS render)"
+  # --- BIND THE VERDICT TO THESE BYTES (2026-08-17) --------------------------------------------
+  # The frames above came from the file at out/episode.mp4 as it is RIGHT NOW, and that is the
+  # only render this reviewer's verdict can honestly speak for. Record its sha256 so
+  # scripts/upload_guard.py can refuse to publish any other bytes under this approval — including
+  # a later re-render, and including a hand-run upload while this loop is still revising.
+  python3 scripts/upload_guard.py stamp out/episode.mp4 \
+    || echo "review stamp FAILED — upload will be blocked by the review guard until this is fixed"
   python3 qa_audio.py || echo "qa_audio failed (non-fatal)"
   # --- PRECOMPUTED FACTS (token audit §7 S7) — emit the deterministic statistics the reviewer used
   # to re-derive by hand with ad-hoc python one-liners (measured: 39 Bash turns in one session,
@@ -518,6 +525,9 @@ if t and t not in [x.get('topic') for x in p['produced']]:
     if { [ "$CLOUD_OK" = 1 ] && [ -f out/short.mp4 ]; } || { python3 shorts_cut.py && npx remotion render Short out/short.mp4 --timeout=120000; }; then
       [ "$CLOUD_OK" = 1 ] || python3 audio_master.py out/short.mp4 || echo "short audio_master failed (non-fatal)"
       python3 qa_watch.py out/short.mp4 out/review/short_watch || echo "short qa_watch failed (non-fatal)"
+      # same binding as the episode: the Short's approval covers these exact bytes and no others
+      python3 scripts/upload_guard.py stamp out/short.mp4 \
+        || echo "short review stamp FAILED — the review guard will block the Short upload"
       if python3 short_gate.py out/short.mp4; then
         "$CLAUDE" --print --model sonnet "$(cat docs/SHORT_REVIEW_PROMPT.txt)"
         SDEC=$(python3 -c "import json;print(json.load(open('out/review/short_verdict.json')).get('decision','reject'))" 2>/dev/null || echo reject)
