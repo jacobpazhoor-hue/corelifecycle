@@ -788,8 +788,18 @@ export const Video2: React.FC = () => {
   // grade removed (see the note at the top of this file) nothing consumes it, so it is gone too.
   // carry the previous figure into the next count-up ONLY when the unit suffix matches
   // ("$5M / YR" -> "$500M / YR" counts 5->500; "$200 / WK" -> "$250K / YR" restarts at 0
-  // instead of counting across incompatible units)
+  // instead of counting across incompatible units) AND the two figures are close together in the
+  // timeline. Without a proximity check, `last` never resets between money scenes — t105's "$7
+  // BILLION" (withdrawal requests) carried its suffix all the way to t120's unrelated "$50 BILLION"
+  // (SEC's first estimate) sixteen scenes and a whole confession/arrest sequence later, so the
+  // count-up animated 7 -> 50 and rendered a mid-transition figure ("$13 BILLION") that never
+  // corresponded to any real number. `sinceLast` bounds how many scenes a figure survives without a
+  // same-suffix successor, which still lets an intentional back-to-back comparison carry (t120's
+  // "$50 BILLION" -> t120b (no overlay) -> t121's "$64.8 BILLION" -> t122's "$17.5 BILLION") while a
+  // stale, unrelated figure from many scenes back resets to 0 first.
+  const CARRY_WINDOW = 3;
   let last: {num: number; suffix: string} | null = null;
+  let sinceLast = 0;
   const out: React.ReactNode[] = [];
   // The previous scene's template and framing — the ONLY cross-scene state the planner needs now that
   // a scene is one framing: it exists so two consecutive scenes on the same template do not open on
@@ -797,14 +807,15 @@ export const Video2: React.FC = () => {
   let prev: {template: string; framing: Framing} | null = null;
   for (const s of scenes) {
     const money = splitMoney(s.overlay?.big);
-    const from = money && last && last.suffix === money.suffix ? last.num : null;
+    const from = money && last && last.suffix === money.suffix && sinceLast <= CARRY_WINDOW
+      ? last.num : null;
     const {shots, framing} = planShots(s, prev);
     prev = {template: s.template, framing};
     out.push(
       <Sequence key={s.id} from={s.startFrame} durationInFrames={s.durationInFrames}>
         <Beat scene={s} from={from} shots={shots} />
       </Sequence>);
-    if (money !== null) last = money;
+    if (money !== null) { last = money; sinceLast = 0; } else { sinceLast++; }
   }
   return (
     <AbsoluteFill style={{backgroundColor: PAPER}}>

@@ -137,11 +137,6 @@ SCENES = [
          narration=("Three times, the industry itself put him in charge of watching for fraud."),
          overlay=None),
 
-    dict(id="t013b", level=None, template="newsMontage",
-         narration=("If a friend told you he never once had a bad year, you might want to "
-                    "ask why."),
-         overlay=None),
-
     dict(id="t014", level=None, template="crowdQueue",
          narration=("That was the public Madoff — a regulator, a mentor, a name people trusted with "
                     "their life savings."),
@@ -242,10 +237,6 @@ SCENES = [
 
     dict(id="t034", level=None, template="chartBoard",
          narration=("Boring was the whole point. Boring is what nobody double-checks."),
-         overlay=None),
-
-    dict(id="t034b", level=None, template="domesticInterior",
-         narration=("You don't interrogate the machine that keeps paying you."),
          overlay=None),
 
     dict(id="t035", level=None, template="newsMontage",
@@ -370,10 +361,6 @@ SCENES = [
          narration=("It held the cash. It held the statements. It graded its own homework."),
          overlay=None),
 
-    dict(id="t059b", level=None, template="bankExterior",
-         narration=("No referee."),
-         overlay=None),
-
     dict(id="t060", level=None, template="chartBoard",
          narration=("So when the strategy needed a good month, the seventeenth floor simply wrote one."),
          overlay=None),
@@ -430,10 +417,6 @@ SCENES = [
          narration=("Almost none of it was ever actually invested."),
          overlay=None),
 
-    dict(id="t070b", level=None, template="crowdQueue",
-         narration=("You could call it a fund. It was a drawer with your name on it."),
-         overlay=None),
-
     # §3a RHYTHM — long, ~9s.
     dict(id="t071", level=None, template="closeUpPortrait", breath=True,
          narration=("For the scheme to survive, one thing had to stay true forever: more money had to "
@@ -477,10 +460,6 @@ SCENES = [
 
     dict(id="t079", level=None, template="newsMontage",
          narration=("A return that smooth isn't a strategy. It's a decision, dressed up as one."),
-         overlay=None),
-
-    dict(id="t079b", level=None, template="boardroom",
-         narration=("If you can't ever lose, the question isn't how. It's why."),
          overlay=None),
 
     dict(id="t080", level=None, template="closeUpPortrait",
@@ -529,10 +508,6 @@ SCENES = [
          narration=("Nine years."),
          overlay=None),
 
-    dict(id="t090b", level=None, template="closeUpPortrait",
-         narration=("Six separate warnings. The same answer, every time."),
-         overlay=None),
-
     dict(id="t091", level=None, template="boardroom",
          narration=("Investigators finally sat down with Madoff himself and asked him directly."),
          overlay=None,
@@ -541,10 +516,6 @@ SCENES = [
 
     dict(id="t092", level=None, template="courtHearing",
          narration=("They believed him."),
-         overlay=None),
-
-    dict(id="t092b", level=None, template="bankExterior",
-         narration=("That was the whole audit."),
          overlay=None),
 
     # §3a RHYTHM — HOLD #4, ~14s.
@@ -584,11 +555,6 @@ SCENES = [
     dict(id="t100", level=None, template="domesticInterior",
          narration=("The real cash, sitting in real accounts, was far smaller."),
          overlay=None),
-
-    dict(id="t100b", level=None, template="crowdQueue",
-         narration=("From the outside, nobody could tell the difference."),
-         overlay=None,
-         foreground=dict(kind="overShoulder", side="right")),
 
     # forward hook, end of chapter 3
     dict(id="t101", level=None, template="boardroom",
@@ -830,10 +796,6 @@ SCENES = [
 
     dict(id="t144", level=None, template="closeUpPortrait",
          narration=("December 11th. Two years to the day."),
-         overlay=None),
-
-    dict(id="t145", level=None, template="newsMontage",
-         narration=("Andrew Madoff, the younger son, died of cancer four years later, in 2014."),
          overlay=None),
 
     dict(id="t146", level=None, template="boardroom",
