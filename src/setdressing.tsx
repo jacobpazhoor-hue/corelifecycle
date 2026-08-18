@@ -1494,7 +1494,7 @@ export const ChartPlot: React.FC<{
       {/* title block — a chart with no heading reads as a window with bars in it. A chart the
           narration NAMES gets real words there instead of glyph runs (item 3). */}
       {label
-        ? <InkWords x={x + padL} y={y + h * 0.045} w={pw * 0.62} h={titleH * 1.35} text={label} />
+        ? <InkWords x={x + padL} y={y + h * 0.062} w={pw * 0.62} h={titleH * 1.2} text={label} />
         : <SerifWords x={x + padL} y={y + h * 0.045} w={pw * 0.62} h={titleH} words={2} seed={seed * 3} />}
       <line x1={x + padL} y1={y + padT * 0.78} x2={x + w - padR} y2={y + padT * 0.78}
         stroke={INK} strokeWidth={STROKE_THIN * 0.7} opacity={0.5} />

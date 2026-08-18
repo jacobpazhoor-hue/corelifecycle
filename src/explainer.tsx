@@ -546,6 +546,10 @@ const OfficeFloor: React.FC = () => {
   // this figure's 0.72 scale, and a step takes 15/speed frames, so the drift's peak speed AMP·RATE
   // must equal 74·speed/15. 128px · 0.01353 rad/frame · speed 0.35 satisfies it. The phase is chosen
   // so the figure is at its old x, facing its old way, at frame 0.
+  // THE TAKE (item 2). 15 scenes on this floor. What varies: the filing wall's stacks, the pinned
+  // notice board, the lit block opposite, the ring binders, who is at the cubicle banks, what is on
+  // the hero's desk and where the near chair and the plant stand.
+  const v = useVary();
   const aisleX = 1000 + Math.sin(f * 0.01353) * 128;
   const aisleFacing = Math.cos(f * 0.01353) >= 0 ? -1 : 1;
   return (
@@ -581,26 +585,26 @@ const OfficeFloor: React.FC = () => {
       <rect x={0} y={OFFICE_WALL - 34} width={1920} height={34} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
       {/* the filing wall, straight off the reference frame: 3 columns × 4 drawers, dark carcass */}
       <UnitWall x={26} y={372} w={404} h={384} cols={3} rows={4} />
-      <BoxStack x={150} baseY={372} n={2} s={0.58} seed={3} />
-      <BoxStack x={330} baseY={372} n={1} s={0.5} seed={9} />
-      <WallFrame x={54} y={266} w={166} h={92} art="line" seed={31} />
-      <WallFrame x={250} y={266} w={166} h={92} art="bars" seed={33} />
+      <BoxStack x={150} baseY={372} n={1 + v.pick(1, 3)} s={0.58} seed={v.seed(3)} />
+      <BoxStack x={330} baseY={372} n={1 + v.pick(2, 2)} s={0.5} seed={v.seed(9)} />
+      <WallFrame x={54} y={266} w={166} h={92} art={v.one(3, ['line', 'bars', 'scape'] as const)} seed={v.seed(31)} />
+      <WallFrame x={250} y={266} w={166} h={92} art={v.one(4, ['bars', 'scape', 'line'] as const)} seed={v.seed(33)} />
       {/* notice board: pinned paper is the cheapest honest density on an office wall */}
       <rect x={470} y={288} width={336} height={270} fill={tn.card} stroke={INK} strokeWidth={STROKE} />
-      {Array.from({length: 9}, (_, i) => {
+      {Array.from({length: 8 + v.pick(5, 2)}, (_, i) => {
         const px = 498 + (i % 3) * 100, py = 314 + Math.floor(i / 3) * 76;
         return (
-          <g key={i} transform={`rotate(${(rnd(i * 5) - 0.5) * 14} ${px + 34} ${py + 26})`}>
+          <g key={i} transform={`rotate(${(rnd(v.seed(i * 5)) - 0.5) * 14} ${px + 34} ${py + 26})`}>
             <rect x={px} y={py} width={70} height={56} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
-            <TextLines x={px + 8} y={py + 12} w={54} n={3} gap={11} th={3} seed={i * 3} opacity={0.6} />
+            <TextLines x={px + 8} y={py + 12} w={54} n={3} gap={11} th={3} seed={v.seed(i * 3)} opacity={0.6} />
             <circle cx={px + 35} cy={py + 6} r={5} fill={c.accent} />
           </g>
         );
       })}
       {/* credenza under the board, with files and paperwork landed on it */}
       <UnitWall x={470} y={596} w={336} h={160} cols={3} rows={1} />
-      <CaseStack x={548} baseY={596} n={3} s={0.48} seed={23} />
-      <Papers x={720} y={584} n={2} s={0.58} seed={27} />
+      <CaseStack x={548} baseY={596} n={2 + v.pick(6, 3)} s={0.48} seed={v.seed(23)} />
+      <Papers x={720} y={584} n={1 + v.pick(7, 3)} s={0.58} seed={v.seed(27)} />
       {/* flush door with a vision panel, under a lit exit sign */}
       <RibbedPanel x={846} y={352} w={182} h={404} ribs={2} dir="v" />
       <rect x={886} y={392} width={102} height={128} fill={shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
@@ -614,7 +618,7 @@ const OfficeFloor: React.FC = () => {
       <rect x={1086} y={278} width={520} height={296} fill={shade(tn.deep, -1)} />
       {Array.from({length: 33}, (_, i) => (
         <rect key={i} x={1100 + (i % 11) * 46} y={300 + Math.floor(i / 11) * 90} width={26} height={54}
-          fill={rnd(i * 11) > 0.45 ? c.accent : shade(tn.deep, 0)} opacity={0.85} />
+          fill={rnd(v.seed(i * 11)) > 0.45 ? c.accent : shade(tn.deep, 0)} opacity={0.85} />
       ))}
       <Glazing x={1086} y={278} w={520} h={296} bays={4} rows={2} pane={null} />
       {/* radiator under the sill, and a fire extinguisher on the pier beside it */}
@@ -637,8 +641,8 @@ const OfficeFloor: React.FC = () => {
       <UnitWall x={1690} y={344} w={206} h={412} cols={1} rows={4} handle={false} />
       {Array.from({length: 42}, (_, i) => {
         const col = i % 7, row = Math.floor(i / 7);
-        return <rect key={i} x={1706 + col * 26} y={366 + row * 102} width={20} height={72 + rnd(i * 3) * 14}
-          fill={rnd(i * 7) > 0.7 ? c.accent : shade(tn.card, -(i % 3))}
+        return <rect key={i} x={1706 + col * 26} y={366 + row * 102} width={20} height={72 + rnd(v.seed(i * 3)) * 14}
+          fill={rnd(v.seed(i * 7)) > 0.7 ? c.accent : shade(tn.card, -(i % 3))}
           stroke={INK} strokeWidth={2.4} />;
       })}
       {/* wall clock. The second hand TICKS — one 6° step a second, never a sweep — which is the
@@ -653,8 +657,10 @@ const OfficeFloor: React.FC = () => {
       {/* --- cubicle bank: workers behind partitions, heads and shoulders showing over the top.
           Figures first, partitions over them: the partition line crossing their chests is what puts
           them BEHIND it rather than standing loose on the floor. --- */}
-      <SeatedRow y={766} x0={90} x1={660} n={4} scale={0.56} seed={5} working view="front" alive={0.55} />
-      <SeatedRow y={766} x0={1258} x1={1834} n={4} scale={0.56} seed={11} working view="front" alive={0.55} />
+      {/* HOW MANY ARE STILL AT THEIR DESKS. Three to five a bank; the partitions in front of them are
+          unchanged, so the frame's density does not move with the head count. */}
+      <SeatedRow y={766} x0={90} x1={660} n={3 + v.pick(8, 3)} scale={0.56} seed={v.seed(5)} working view="front" alive={0.55} />
+      <SeatedRow y={766} x0={1258} x1={1834} n={3 + v.pick(9, 3)} scale={0.56} seed={v.seed(11)} working view="front" alive={0.55} />
       <RibbedPanel x={20} y={706} w={744} h={192} ribs={11} dir="v" fill={tn.back} />
       <RibbedPanel x={1160} y={706} w={744} h={192} ribs={11} dir="v" fill={tn.back} />
       {[20, 1160].map((px, i) => (
@@ -694,7 +700,7 @@ const OfficeFloor: React.FC = () => {
           <rect x={800} y={790} width={78} height={104} fill={tn.card} stroke={INK} strokeWidth={STROKE_THIN} />
         </g>
       )}
-      <BoxStack x={1076} baseY={880} n={3} s={0.6} seed={21} />
+      <BoxStack x={1076} baseY={880} n={2 + v.pick(10, 3)} s={0.6} seed={v.seed(21)} />
       <RibbedPanel x={912} y={794} w={82} h={100} ribs={6} dir="v" fill={tn.body} />
       {/* the colleague crossing the aisle actually crosses it — see `aisleX` above */}
       <StickFigure pose={A.walk(f, 30, 0.35)} x={aisleX} y={790} scale={0.72}
@@ -726,25 +732,25 @@ const OfficeFloor: React.FC = () => {
       ))}
       <path d={`M 820 ${OFFICE_DESK + 92} q 120 44 250 6 q 130 -38 250 10 q 120 46 200 -8`}
         fill="none" stroke={INK} strokeWidth={STROKE_THIN * 0.7} opacity={0.6} />
-      <Monitor x={598} y={OFFICE_DESK - 152} w={182} h={140} content="chart" seed={8} />
-      <Monitor x={824} y={OFFICE_DESK - 146} w={176} h={134} content="text" seed={4} />
+      <Monitor x={598} y={OFFICE_DESK - 152} w={182} h={140} content={v.one(11, ['chart', 'grid', 'text'] as const)} seed={v.seed(8)} />
+      <Monitor x={824} y={OFFICE_DESK - 146} w={176} h={134} content={v.one(12, ['text', 'chart', 'grid'] as const)} seed={v.seed(4)} />
       <Keyboard x={614} y={OFFICE_DESK - 4} w={158} />
       <Keyboard x={840} y={OFFICE_DESK - 4} w={150} />
       <DeskPhone x={1502} y={OFFICE_DESK - 2} s={0.9} />
-      <Papers x={1214} y={OFFICE_DESK - 18} n={3} s={0.74} seed={6} />
+      <Papers x={1214 + v.off(13, 60)} y={OFFICE_DESK - 18} n={2 + v.pick(14, 3)} s={0.74} seed={v.seed(6)} />
       <rect x={1450} y={OFFICE_DESK - 42} width={40} height={40} rx={6} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
       <path d={`M 1490 ${OFFICE_DESK - 34} q 20 8 0 18`} fill="none" stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
-      <BoxStack x={1618} baseY={OFFICE_DESK - 2} n={1} s={0.72} seed={14} />
+      <BoxStack x={1618} baseY={OFFICE_DESK - 2} n={1 + v.pick(15, 2)} s={0.72} seed={v.seed(14)} />
       {/* the near, empty chair — foreground depth without a large black mass */}
-      <Chair x={430} y={1080} s={1.5} facing={1} fill={shade(tn.body, -2)} />
+      <Chair x={430 + v.off(16, 90)} y={1080} s={1.5} facing={1} fill={shade(tn.body, -2)} />
       {/* Someone carrying a box run across the front of the floor (WO-24). This template measured
           100% motionless at 5 Hz on WO-23 — the aisle walker above drifts at 1.7 units/frame, which
           is a real walk but only ever a mean |Δ| of 0.57 against the bible's 1.0 threshold. A
           near-plane crossing clears it, and it is what an office floor during a move-out looks like. */}
       <Passerby y={1078} x0={-240} x1={2160} scale={1.06} seed={5} at={84} carry="boxes" />
-      <Papers x={1636} y={1050} n={2} s={0.9} seed={17} />
-      <Plant x={1844} y={1080} s={1.05} seed={12} />
-      <BoxStack x={132} baseY={1074} n={2} s={0.9} seed={19} />
+      <Papers x={1636} y={1050} n={1 + v.pick(17, 3)} s={0.9} seed={v.seed(17)} />
+      <Plant x={1844} y={1080} s={1.0 + v.pick(18, 3) * 0.05} seed={v.seed(12)} />
+      <BoxStack x={132 + v.off(19, 50)} baseY={1074} n={1 + v.pick(20, 3)} s={0.9} seed={v.seed(19)} />
     </Frame>
   );
 };
@@ -1053,6 +1059,10 @@ const ExchangeFloor: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // THE TAKE (item 2) and THE TICKER (item 3): the strip under the board is the one thing in this
+  // room a viewer tries to read, so it carries real words rather than a 13-word glyph run.
+  const tk = useTake();
+  const v = useVary();
   // PERIOD (WO-27): a nineteenth-century exchange — the pit, the gallery over it, the house clocks
   // and the paper on the floor are all correct as drawn. The board goes to CHALK (see `QuoteBoard`),
   // the desk screens and phones substitute in the library, and the running ticker strip becomes a
@@ -1070,8 +1080,8 @@ const ExchangeFloor: React.FC = () => {
         <g key={i}>
           <rect x={px} y={176} width={100} height={EXCHANGE_WALL - 176} fill={tn.back} stroke={INK} strokeWidth={STROKE} />
           <rect x={px - 10} y={176} width={120} height={22} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
-          <Monitor x={px + 6} y={236} w={88} h={128} content={i ? 'grid' : 'chart'} stand={false} seed={40 + i} />
-          <Monitor x={px + 6} y={392} w={88} h={128} content={i ? 'chart' : 'grid'} stand={false} seed={44 + i} />
+          <Monitor x={px + 6} y={236} w={88} h={128} content={i ? 'grid' : 'chart'} stand={false} seed={v.seed(40 + i)} />
+          <Monitor x={px + 6} y={392} w={88} h={128} content={i ? 'chart' : 'grid'} stand={false} seed={v.seed(44 + i)} />
         </g>
       ))}
       <QuoteBoard x={168} y={196} w={1584} h={244} cols={12} rows={5} />
@@ -1091,7 +1101,14 @@ const ExchangeFloor: React.FC = () => {
       ) : (
         <g>
           <rect x={0} y={452} width={1920} height={56} fill={shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
-          <SerifWords x={40} y={466} w={1840} h={24} words={13} seed={5} fill={c.accent} serif={false} />
+          {/* THE TICKER (item 3). Four real runs across the strip with glyph blocks between them:
+              a tape is mostly figures, and the parts a reader locks onto are the words. */}
+          {[0, 1, 2, 3].map((i) => (
+            <g key={i}>
+              <InkWords x={44 + i * 476} y={462} w={230} h={30} text={label(tk, 'ticker', 5 + i * 3)} fill={c.accent} />
+              <SerifWords x={294 + i * 476} y={466} w={186} h={24} words={2} seed={v.seed(5 + i)} fill={c.accent} serif={false} />
+            </g>
+          ))}
         </g>
       )}
       {/* the public gallery over the pit: a panelled wall, a row of house clocks, spectators behind a
@@ -1108,14 +1125,14 @@ const ExchangeFloor: React.FC = () => {
           <line x1={cx} y1={546} x2={cx} y2={531} stroke={INK} strokeWidth={2.6} strokeLinecap="round" />
         </g>
       ))}
-      <CrowdHeads y={592} x0={120} x1={1800} n={17} rows={2} r={15} seed={4} alive={0.08} />
+      <CrowdHeads y={592} x0={120} x1={1800} n={15 + v.pick(1, 5)} rows={2} r={15} seed={v.seed(4)} alive={0.08} />
       <Fence x0={110} x1={1810} y={628} h={54} posts={26} opacity={0.75} />
       <rect x={0} y={EXCHANGE_WALL - 30} width={1920} height={30} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
       <SlabFloor y={EXCHANGE_WALL} cols={26} rows={11} />
 
       {/* --- far bank: seated rows, then the desk slab over their laps --- */}
-      <SeatedRow y={706} x0={330} x1={1600} n={7} scale={0.6} seed={3} working view="front" alive={0.3} />
-      <DeskBank y={742} s={0.62} seats={5} seed={2} />
+      <SeatedRow y={706} x0={330} x1={1600} n={6 + v.pick(2, 3)} scale={0.6} seed={v.seed(3)} working view="front" alive={0.3} />
+      <DeskBank y={742} s={0.62} seats={5} seed={v.seed(2)} />
       {/* standing figures between the banks — the floor's characteristic gesture, arms up. `climb`
           at frame 0 is a raised-arms pose; the crowd stays static so the camera lock is untouched. */}
       {[380, 706, 1268, 1596].map((x, i) => (
@@ -1124,10 +1141,10 @@ const ExchangeFloor: React.FC = () => {
       ))}
 
       {/* --- mid bank --- */}
-      <SeatedRow y={846} x0={240} x1={1700} n={6} scale={0.82} seed={9} working view="front" alive={0.3} />
-      <DeskBank y={898} s={0.84} seats={4} seed={6} />
-      <Papers x={300} y={1010} n={3} s={0.9} seed={12} />
-      <Papers x={1660} y={1002} n={2} s={0.85} seed={16} />
+      <SeatedRow y={846} x0={240} x1={1700} n={5 + v.pick(3, 3)} scale={0.82} seed={v.seed(9)} working view="front" alive={0.3} />
+      <DeskBank y={898} s={0.84} seats={4} seed={v.seed(6)} />
+      <Papers x={300 + v.off(4, 70)} y={1010} n={2 + v.pick(5, 3)} s={0.9} seed={v.seed(12)} />
+      <Papers x={1660} y={1002} n={1 + v.pick(6, 3)} s={0.85} seed={v.seed(16)} />
       {/* The near pair are the floor's characteristic gesture, arms up, and they stay POSED. This is
           the one place WO-14 measured a motion it then took back out: an animated trader here reads
           the same as a still one at 0.94 scale, and putting one on each side of the pit lit two more
@@ -1140,25 +1157,25 @@ const ExchangeFloor: React.FC = () => {
 
       {/* discarded paper all over the floor between the banks — the format's shorthand for a bad day */}
       {[[120, 1002], [520, 986], [960, 1004], [1420, 992], [1810, 1006]].map(([px, py], i) => (
-        <g key={i} transform={`rotate(${(rnd(i * 9) - 0.5) * 50} ${px} ${py})`}>
+        <g key={i} transform={`rotate(${(rnd(v.seed(i * 9)) - 0.5) * 50} ${px + v.off(7 + i, 34)} ${py})`}>
           <rect x={px - 44} y={py - 28} width={88} height={56} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
-          <TextLines x={px - 34} y={py - 16} w={68} n={3} gap={12} th={3.4} seed={i * 7} opacity={0.55} />
+          <TextLines x={px - 34} y={py - 16} w={68} n={3} gap={12} th={3.4} seed={v.seed(i * 7)} opacity={0.55} />
         </g>
       ))}
       {/* --- near plane: the coloured hero on the phone, over the near desk edge --- */}
-      <StickFigure pose={A.stand(f)} x={1180} y={962} scale={1.24} facing={-1} view="front"
+      <StickFigure pose={A.stand(f)} x={1180 + v.off(13, 50)} y={962} scale={1.24} facing={-1} view="front"
         expr={FACES.shock} pal={LIGHT} frame={f} idle="gesture" />
       {/* a runner crossing the pit, cut off at the waist by the near desk drawn over him (WO-24) */}
-      <Passerby y={1000} x0={2140} x1={-220} scale={0.98} seed={11} at={72} />
+      <Passerby y={1000} x0={2140} x1={-220} scale={0.98} seed={v.seed(11)} at={72} />
       <Desk x={-40} y={1016} w={2000} h={38} legH={70} />
-      <Monitor x={230} y={882} w={230} h={166} content="chart" seed={21} />
-      <Monitor x={506} y={888} w={214} h={160} content="grid" seed={23} />
-      <Monitor x={1470} y={888} w={214} h={160} content="chart" seed={27} />
-      <Monitor x={1712} y={894} w={196} h={154} content="grid" seed={29} />
+      <Monitor x={230} y={882} w={230} h={166} content={v.one(14, ['chart', 'grid', 'text'] as const)} seed={v.seed(21)} />
+      <Monitor x={506} y={888} w={214} h={160} content={v.one(15, ['grid', 'chart'] as const)} seed={v.seed(23)} />
+      <Monitor x={1470} y={888} w={214} h={160} content={v.one(16, ['chart', 'text', 'grid'] as const)} seed={v.seed(27)} />
+      <Monitor x={1712} y={894} w={196} h={154} content={v.one(17, ['grid', 'chart'] as const)} seed={v.seed(29)} />
       <Keyboard x={280} y={1054} w={190} />
       <Keyboard x={1516} y={1054} w={172} />
       <DeskPhone x={760} y={1056} s={1.15} />
-      <Papers x={912} y={1046} n={2} s={0.9} seed={31} />
+      <Papers x={912 + v.off(18, 80)} y={1046} n={1 + v.pick(19, 3)} s={0.9} seed={v.seed(31)} />
       <Cone x={1880} y={1010} s={0.6} />
     </Frame>
   );
@@ -1187,8 +1204,8 @@ const STREET_ROAD = 858;    // road surface starts
  * Reuse: the upper storeys are a `UnitWall` with the handles turned off, the awning is a
  * `RibbedPanel`, the shopfront is `Glazing` and the fascia is `SerifWords`.
  */
-const Facade: React.FC<{x: number; w: number; topY: number; baseY: number; seed: number}> =
-({x, w, topY, baseY, seed}) => {
+const Facade: React.FC<{x: number; w: number; topY: number; baseY: number; seed: number; sign?: string}> =
+({x, w, topY, baseY, seed, sign}) => {
   const c = useSceneColors();
   const tn = useSceneTones();
   const period = usePeriod();
@@ -1252,7 +1269,10 @@ const Facade: React.FC<{x: number; w: number; topY: number; baseY: number; seed:
       )}
       {/* fascia sign */}
       <rect x={x + 8} y={fasciaY} width={w - 16} height={64} fill={shade(wall, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
-      <SerifWords x={x + 34} y={fasciaY + 20} w={w - 68} h={24} words={2} seed={seed * 5} fill={PAPER_WHITE} />
+      {/* The fascia is the one thing on a shopfront a viewer reads (item 3). */}
+      {sign
+        ? <InkWords x={x + 34} y={fasciaY + 14} w={w - 68} h={34} text={sign} fill={PAPER_WHITE} align="center" />
+        : <SerifWords x={x + 34} y={fasciaY + 20} w={w - 68} h={24} words={2} seed={seed * 5} fill={PAPER_WHITE} />}
       {/* awning + shopfront */}
       <RibbedPanel x={x + 8} y={fasciaY + 64} w={w - 16} h={40} ribs={Math.max(5, Math.round(w / 46))} dir="v" fill={c.accent} />
       <Glazing x={x + 26} y={fasciaY + 116} w={w - 176} h={baseY - fasciaY - 116} bays={2} rows={2}
@@ -1297,6 +1317,11 @@ const CityStreet: React.FC = () => {
   const {fps} = useVideoConfig();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // THE TAKE (item 2). QA's clearest single symptom was this template: "t001 f105 ~ t168 f29354 —
+  // the opening and the closing shot are the same frame", Δ1.58 across sixteen minutes. The street
+  // now varies its skyline, its frontage seeds, how busy the pavement is, and where the hero walks.
+  const tk = useTake();
+  const v = useVary();
   // PERIOD (WO-27): the frontage survives intact — awnings, fascia signs, sash windows over a
   // shopfront and a gas standard on the kerb are a Victorian high street already. The ROAD is what
   // dates it: lane markings, a zebra crossing, a traffic signal, a news box and three cars.
@@ -1305,14 +1330,16 @@ const CityStreet: React.FC = () => {
     <Frame>
       {/* --- far: the block behind, lifted two rungs so it sits back without haze or a gradient.
           Its parapets stay ABOVE the near frontage's, so it reads as taller towers further off. --- */}
-      <BuildingBand baseY={560} x0={-60} x1={1990} n={8} seed={41} depth={2} minH={300} maxH={520} opacity={0.6} />
+      <BuildingBand baseY={560} x0={-60} x1={1990} n={7 + v.pick(1, 3)} seed={v.seed(41)} depth={2} minH={300} maxH={520} opacity={0.6} />
       {/* --- the street-level frontage. Parapets vary so the row has a skyline of its own, and every
           one of them leaves sky above: `daylight` is the only key of the six that gets any. --- */}
-      <Facade x={-30} w={430} topY={214} baseY={STREET_KERB} seed={2} />
-      <Facade x={396} w={380} topY={158} baseY={STREET_KERB} seed={7} />
-      <Facade x={772} w={452} topY={252} baseY={STREET_KERB} seed={4} />
-      <Facade x={1220} w={396} topY={182} baseY={STREET_KERB} seed={9} />
-      <Facade x={1612} w={350} topY={286} baseY={STREET_KERB} seed={6} />
+      <Facade x={-30} w={430} topY={214 + v.off(2, 30)} baseY={STREET_KERB} seed={v.seed(2)} />
+      <Facade x={396} w={380} topY={158 + v.off(3, 26)} baseY={STREET_KERB} seed={v.seed(7)}
+        sign={label(tk, 'masthead', 7)} />
+      <Facade x={772} w={452} topY={252 + v.off(4, 30)} baseY={STREET_KERB} seed={v.seed(4)} />
+      <Facade x={1220} w={396} topY={182 + v.off(5, 26)} baseY={STREET_KERB} seed={v.seed(9)}
+        sign={label(tk, 'headline', 9)} />
+      <Facade x={1612} w={350} topY={286 + v.off(6, 26)} baseY={STREET_KERB} seed={v.seed(6)} />
 
       {/* --- pavement, kerb, road --- */}
       <rect x={0} y={STREET_KERB} width={1920} height={STREET_ROAD - STREET_KERB} fill={tn.card}
@@ -1362,8 +1389,8 @@ const CityStreet: React.FC = () => {
           The first render put a `CrowdHeads` mass here and the heads read as a mound of small people
           sitting on the kerb — heads-only works against a WALL, not on an open pavement. Two full
           `CrowdRow`s at different scales carry the same depth honestly. --- */}
-      <CrowdRow y={716} x0={70} x1={1860} n={13} scale={0.42} seed={5} dz={10} alive={0.15} />
-      <CrowdRow y={744} x0={160} x1={1500} n={7} scale={0.54} seed={23} dz={12} />
+      <CrowdRow y={716} x0={70} x1={1860} n={11 + v.pick(7, 5)} scale={0.42} seed={v.seed(5)} dz={10} alive={0.15} />
+      <CrowdRow y={744} x0={160} x1={1500} n={6 + v.pick(8, 3)} scale={0.54} seed={v.seed(23)} dz={12} />
       <Fence x0={1580} x1={1920} y={806} h={62} posts={8} opacity={0.5} />
 
       {/* --- street furniture --- */}
@@ -1432,8 +1459,8 @@ const CityStreet: React.FC = () => {
           <TextLines x={1178} y={STREET_KERB - 100} w={48} n={3} gap={11} th={3} seed={4} opacity={0.6} />
         </g>
       )}
-      <BoxStack x={890} baseY={STREET_KERB} n={2} s={0.5} seed={11} />
-      <CaseStack x={1330} baseY={STREET_KERB} n={3} s={0.6} seed={13} />
+      <BoxStack x={890 + v.off(9, 70)} baseY={STREET_KERB} n={1 + v.pick(10, 3)} s={0.5} seed={v.seed(11)} />
+      <CaseStack x={1330 + v.off(11, 60)} baseY={STREET_KERB} n={2 + v.pick(12, 3)} s={0.6} seed={v.seed(13)} />
 
       {/* --- road traffic. Drawn far-to-near so a nearer car occludes the one behind it.
           The NEAR car DRIVES (WO-14): it runs the near lane right-to-left and wraps round off frame,
@@ -1448,14 +1475,14 @@ const CityStreet: React.FC = () => {
           unchanged in size, speed and phase; only what it is made of changes. */}
       {period ? (
         <g>
-          <HandCart x={430} y={946} s={0.62} facing={1} body={shade(tn.body, -1)} />
-          <HandCart x={1500} y={968} s={0.72} facing={-1} body={tn.card} />
+          <HandCart x={430 + v.off(13, 90)} y={946} s={0.62} facing={1} body={shade(tn.body, -1)} />
+          <HandCart x={1500 + v.off(14, 90)} y={968} s={0.72} facing={-1} body={tn.card} />
           <HandCart x={2200 - ((f * 13 + 1320) % 2600)} y={1064} s={1.0} facing={-1} body={shade(tn.card, -1)} />
         </g>
       ) : (
         <g>
-          <Car x={430} y={946} s={0.62} facing={1} body={shade(tn.body, -1)} />
-          <Car x={1500} y={968} s={0.72} facing={-1} body={tn.card} />
+          <Car x={430 + v.off(13, 90)} y={946} s={0.62} facing={1} body={shade(tn.body, -1)} />
+          <Car x={1500 + v.off(14, 90)} y={968} s={0.72} facing={-1} body={tn.card} />
           <Car x={2200 - ((f * 13 + 1320) % 2600)} y={1064} s={1.0} facing={-1} body={c.accent} />
         </g>
       )}
@@ -1466,9 +1493,9 @@ const CityStreet: React.FC = () => {
           The first render put two `view="back"` crowd figures beside him at scale 0.96; a DIM figure
           from behind has no face and no costume detail, so at hero scale they read as two grey
           boulders. Profile at a smaller scale reads as people. --- */}
-      <StickFigure pose={A.walk(f, fps)} x={CAPTION_SAFE_X + 300} y={702} scale={1.02} facing={1}
-        view="profile" expr={FACES.cold} pal={LIGHT} briefcase frame={f} />
-      <CrowdRow y={730} x0={1390} x1={1660} n={2} scale={0.78} seed={17} dz={8} view="profile" facing={-1} />
+      <StickFigure pose={A.walk(f, fps)} x={CAPTION_SAFE_X + 300 + v.off(15, 70)} y={702} scale={1.02} facing={1}
+        view="profile" expr={FACES.cold} pal={LIGHT} briefcase frame={f} seed={7.11} />
+      <CrowdRow y={730} x0={1390} x1={1660} n={2 + v.pick(16, 2)} scale={0.78} seed={v.seed(17)} dz={8} view="profile" facing={-1} />
     </Frame>
   );
 };
@@ -1985,6 +2012,10 @@ const BankExterior: React.FC = () => {
   const {fps} = useVideoConfig();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // THE TAKE (item 2). The frieze over the portico is also the one piece of lettering on this
+  // building anybody reads, so it carries real words (item 3).
+  const tk = useTake();
+  const v = useVary();
   // PERIOD (WO-27): a stone portico, a civic flight, balustrades and a newel lantern are the most
   // era-free exterior in the set — this frontage would be built the same way in 1844. Exactly two
   // things dated it: the PARKED CAR on the plaza (WO-26's own finding) and the glazed skyline behind
@@ -1998,13 +2029,13 @@ const BankExterior: React.FC = () => {
               than as buildings. Two hundred units of gutter at each edge is enough for the flanking
               blocks to read, and it is what puts the building IN a street. Both near bands stand on
               the plaza line, so nothing floats above the paving. --- */}
-      <BuildingBand baseY={846} x0={-80} x1={2000} n={10} seed={53} depth={2} minH={220} maxH={470} opacity={0.55} />
-      <BuildingBand baseY={BANK_PLAZA} x0={-190} x1={230} n={2} seed={17} depth={1} minH={400} maxH={620} />
-      <BuildingBand baseY={BANK_PLAZA} x0={1690} x1={2110} n={2} seed={29} depth={1} minH={420} maxH={640} />
+      <BuildingBand baseY={846} x0={-80} x1={2000} n={9 + v.pick(1, 3)} seed={v.seed(53)} depth={2} minH={220} maxH={470} opacity={0.55} />
+      <BuildingBand baseY={BANK_PLAZA} x0={-190} x1={230} n={2} seed={v.seed(17)} depth={1} minH={400} maxH={620} />
+      <BuildingBand baseY={BANK_PLAZA} x0={1690} x1={2110} n={2} seed={v.seed(29)} depth={1} minH={420} maxH={640} />
 
       {/* --- the wings --- */}
-      <BankWing x={196} w={440} topY={286} seed={3} />
-      <BankWing x={1284} w={440} topY={286} seed={8} />
+      <BankWing x={196} w={440} topY={286} seed={v.seed(3)} />
+      <BankWing x={1284} w={440} topY={286} seed={v.seed(8)} />
 
       {/* --- the portico. Recess and columns first, then the doors inside it, then the entablature
               and pediment over the top, so the roof always occludes the shafts. --- */}
@@ -2030,8 +2061,10 @@ const BankExterior: React.FC = () => {
       {/* --- entablature across the whole frontage: architrave, lettered frieze, projecting cornice --- */}
       <rect x={180} y={286} width={1560} height={22} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
       <rect x={180} y={232} width={1560} height={56} fill={tn.card} stroke={INK} strokeWidth={STROKE_THIN} />
-      <SerifWords x={244} y={244} w={470} h={32} words={3} seed={11} />
-      <SerifWords x={1210} y={244} w={470} h={32} words={2} seed={13} />
+      {/* THE FRIEZE (item 3) — a bank puts its name across the front, in stone, and that is exactly
+          the class of lettering QA said must stop being glyph runs. */}
+      <InkWords x={244} y={240} w={470} h={40} text={label(tk, 'masthead', 11)} />
+      <InkWords x={1210} y={240} w={470} h={40} text={label(tk, 'chartTitle', 13)} align="center" />
       <rect x={164} y={198} width={1592} height={40} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE} />
       {/* dentils under the cornice — small blocks, the classic detail and cheap density */}
       {Array.from({length: 38}, (_, i) => (
@@ -2093,12 +2126,12 @@ const BankExterior: React.FC = () => {
       {/* The hero's walk cycle is the frame's largest moving object, so everything else is dialled
           back: he carries `idle="none"` (the stride is motion enough) and the crowds run well under
           the library default, which is what keeps this template's camera lock in band. */}
-      <CrowdColumn xFar={962} yFar={790} xNear={1160} yNear={880} n={5}
-        scaleNear={0.5} scaleFar={0.3} seed={7} facing={-1} view="profile" alive={0} />
-      <CrowdRow y={958} x0={110} x1={860} n={7} scale={0.62} seed={19} dz={14} alive={0.14} />
-      <CrowdRow y={996} x0={1500} x1={1880} n={3} scale={0.74} seed={31} dz={10} view="profile" facing={-1} alive={0} />
-      <StickFigure pose={A.walk(f, fps)} x={CAPTION_SAFE_X + 520} y={1004} scale={1.06} facing={-1}
-        view="profile" expr={FACES.cold} pal={LIGHT} briefcase frame={f} idle="none" />
+      <CrowdColumn xFar={962} yFar={790} xNear={1160} yNear={880} n={4 + v.pick(2, 3)}
+        scaleNear={0.5} scaleFar={0.3} seed={v.seed(7)} facing={-1} view="profile" alive={0} />
+      <CrowdRow y={958} x0={110} x1={860} n={6 + v.pick(3, 3)} scale={0.62} seed={v.seed(19)} dz={14} alive={0.14} />
+      <CrowdRow y={996} x0={1500} x1={1880} n={2 + v.pick(4, 3)} scale={0.74} seed={v.seed(31)} dz={10} view="profile" facing={-1} alive={0} />
+      <StickFigure pose={A.walk(f, fps)} x={CAPTION_SAFE_X + 520 + v.off(5, 60)} y={1004} scale={1.06} facing={-1}
+        view="profile" expr={FACES.cold} pal={LIGHT} briefcase frame={f} idle="none" seed={5.31} />
 
       {/* --- plaza furniture: bollards, a news box, cases by the kerb, a parked car --- */}
       {Array.from({length: 9}, (_, i) => (
@@ -2126,14 +2159,14 @@ const BankExterior: React.FC = () => {
           <TextLines x={1734} y={958} w={48} n={3} gap={11} th={3} seed={6} opacity={0.6} />
         </g>
       )}
-      <CaseStack x={286} baseY={1006} n={3} s={0.62} seed={23} />
+      <CaseStack x={286 + v.off(6, 60)} baseY={1006} n={2 + v.pick(7, 3)} s={0.62} seed={v.seed(23)} />
       {period
-        ? <HandCart x={520} y={1074} s={0.86} facing={1} body={shade(tn.body, -1)} />
-        : <Car x={520} y={1074} s={0.86} facing={1} body={shade(tn.body, -1)} />}
+        ? <HandCart x={520 + v.off(8, 80)} y={1074} s={0.86} facing={1} body={shade(tn.body, -1)} />
+        : <Car x={520 + v.off(8, 80)} y={1074} s={0.86} facing={1} body={shade(tn.body, -1)} />}
       {/* someone crossing the plaza (WO-24) — this frame measured 100% motionless, its only moving
           things being the flag and a 0.14 crowd, neither of which reaches the |Δ| 1.0 threshold */}
-      <Passerby y={1068} x0={2160} x1={-240} scale={0.96} seed={3} at={92} />
-      <Cone x={1636} y={1052} s={0.7} />
+      <Passerby y={1068} x0={2160} x1={-240} scale={0.96} seed={v.seed(3)} at={92} />
+      <Cone x={1636 + v.off(9, 60)} y={1052} s={0.7} />
     </Frame>
   );
 };
@@ -2214,6 +2247,10 @@ const CourtHearing: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // THE TAKE (item 2). 13 scenes in this room. The gallery's size and composition, the pictures
+  // either side of the seal, the paperwork on the bench and at counsel's table, and where the
+  // advocate stands in the well all move with the scene.
+  const v = useVary();
   return (
     <Frame>
       <Ceiling y={158} lights={3} />
@@ -2257,7 +2294,7 @@ const CourtHearing: React.FC = () => {
       ))}
       {[214, 1706].map((px, i) => (
         <g key={i}>
-          <WallFrame x={px} y={216} w={224} h={172} art={i ? 'head' : 'scape'} seed={4 + i * 5} />
+          <WallFrame x={px} y={216} w={224} h={172} art={i ? 'head' : v.one(1, ['scape', 'line', 'bars'] as const)} seed={v.seed(4 + i * 5)} />
           <rect x={px + 76} y={430} width={72} height={54} rx={10} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
           <rect x={px + 96} y={484} width={32} height={38} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
         </g>
@@ -2293,7 +2330,7 @@ const CourtHearing: React.FC = () => {
       <rect x={586} y={736} width={96} height={38} rx={6} fill={shade(tn.body, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
       <rect x={602} y={714} width={64} height={16} rx={7} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
       <rect x={660} y={702} width={12} height={40} fill={tn.deep} />
-      <Papers x={1258} y={762} n={3} s={0.68} seed={21} />
+      <Papers x={1258 + v.off(2, 60)} y={762} n={2 + v.pick(3, 3)} s={0.68} seed={v.seed(21)} />
       <rect x={1126} y={730} width={30} height={46} rx={4} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
       <g>
         <rect x={1348} y={698} width={12} height={76} fill={tn.deep} />
@@ -2313,24 +2350,24 @@ const CourtHearing: React.FC = () => {
               exhibit boxes; and an advocate on his feet at the bench, addressing it. He stands at
               x=560 rather than tucked in beside the table, where he was drawn straight through the
               two seated figures. --- */}
-      <SeatedRow y={856} x0={150} x1={150} n={1} scale={0.86} seed={9} working view="front" alive={1} />
-      <SeatedRow y={856} x0={360} x1={360} n={1} scale={0.86} seed={12} view="front" alive={0} />
+      <SeatedRow y={856} x0={150} x1={150} n={1} scale={0.86} seed={v.seed(9)} working view="front" alive={1} />
+      <SeatedRow y={856} x0={360} x1={360} n={1} scale={0.86} seed={v.seed(12)} view="front" alive={0} />
       <Desk x={56} y={884} w={396} h={30} legH={112} fill={shade(tn.card, -1)} />
-      <Papers x={150} y={876} n={3} s={0.7} seed={27} />
-      <Papers x={356} y={880} n={2} s={0.64} seed={33} />
-      <BoxStack x={72} baseY={1006} n={2} s={0.72} seed={15} />
-      <CaseStack x={330} baseY={1006} n={3} s={0.6} seed={45} />
+      <Papers x={150} y={876} n={2 + v.pick(4, 3)} s={0.7} seed={v.seed(27)} />
+      <Papers x={356} y={880} n={1 + v.pick(5, 3)} s={0.64} seed={v.seed(33)} />
+      <BoxStack x={72} baseY={1006} n={1 + v.pick(6, 3)} s={0.72} seed={v.seed(15)} />
+      <CaseStack x={330} baseY={1006} n={2 + v.pick(7, 3)} s={0.6} seed={v.seed(45)} />
       {/* the lectern in the well, and a runner of carpet up to it */}
       <path d="M 620 1002 L 1300 1002 L 1360 962 L 560 962 Z" fill={shade(tn.floor, 2)} stroke={INK} strokeWidth={STROKE_THIN} strokeLinejoin="round" />
       <g>
         <path d="M 1360 1004 L 1470 1004 L 1452 900 L 1378 900 Z" fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
         <path d="M 1366 900 L 1464 900 L 1470 872 L 1360 872 Z" fill={tn.card} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
-        <TextLines x={1382} y={912} w={64} n={5} gap={15} th={4} seed={51} opacity={0.5} />
+        <TextLines x={1382} y={912} w={64} n={5} gap={15} th={4} seed={v.seed(51)} opacity={0.5} />
       </g>
       {/* held still. The judge's idle, the clerk's typing hands and the wall clock are this
           template's whole motion budget; a fourth animated body at near-hero scale in the well put
           it under the 35/48 camera-lock floor. */}
-      <StickFigure pose={A.stand(0)} x={560} y={990} scale={0.98} facing={1} view="profile"
+      <StickFigure pose={A.stand(0)} x={560 + v.off(8, 60)} y={990} scale={0.98} facing={1} view="profile"
         expr={FACES.neutral} pal={DIM} frame={0} idle="none" />
 
       {/* --- the bar of the court, then the public gallery in front of it. Camera-side order is
@@ -2341,8 +2378,8 @@ const CourtHearing: React.FC = () => {
               the heads are whole and the shoulders reach the bottom, which is what makes the mass
               read as people in pews. --- */}
       <Balusters x0={20} x1={1900} y={984} h={54} n={36} />
-      <CrowdHeads y={1012} x0={-20} x1={1940} n={12} rows={2} r={46} seed={5} alive={0.04} />
-      <Plant x={1884} y={980} s={0.8} seed={7} />
+      <CrowdHeads y={1012} x0={-20} x1={1940} n={10 + v.pick(9, 5)} rows={2} r={46} seed={v.seed(5)} alive={0.04} />
+      <Plant x={1884} y={980} s={0.75 + v.pick(10, 3) * 0.05} seed={v.seed(7)} />
     </Frame>
   );
 };
@@ -2475,6 +2512,11 @@ const FactoryFloor: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // THE TAKE (item 2). No scene of the madoff episode uses this room, but the defect is a property
+  // of the TEMPLATE, not of one episode: the next industrial script would repeat this floor exactly
+  // as often as this one repeated the boardroom.
+  const tk = useTake();
+  const v = useVary();
   // PERIOD (WO-27): riveted machine casings, a flywheel, a belt, pipework, brick coursing and a
   // clerestory are a mill as it was built. WO-26 tiered this room NEAR-NEUTRAL and it nearly is: the
   // painted floor hazard chevrons and the electric beacon are the two things a mill did not have.
@@ -2551,7 +2593,7 @@ const FactoryFloor: React.FC = () => {
             </g>
           ))}
           <rect x={700} y={296} width={502} height={42} fill={MATERIAL.oak} stroke={INK} strokeWidth={STROKE_THIN} />
-          <SerifWords x={744} y={306} w={410} h={22} words={3} seed={9} fill={INK} serif />
+          <InkWords x={744} y={302} w={410} h={30} text={label(tk, 'masthead', 9)} fill={INK} align="center" />
         </g>
       ) : (
         <g>
@@ -2559,7 +2601,7 @@ const FactoryFloor: React.FC = () => {
               emptiest cell in the template — because horizontal ribs never break a row. */}
           <RibbedPanel x={716} y={330} w={470} h={334} ribs={21} dir="v" fill={shade(tn.body, -1)} />
           <rect x={700} y={306} width={502} height={32} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
-          <SerifWords x={744} y={314} w={410} h={18} words={3} seed={9} fill={c.accent} serif={false} />
+          <InkWords x={744} y={308} w={410} h={26} text={label(tk, 'masthead', 9)} fill={c.accent} align="center" />
         </g>
       )}
       {/* a wall-mounted control cabinet, a pegboard of tools, an extract fan and the plant clock.
@@ -2575,7 +2617,7 @@ const FactoryFloor: React.FC = () => {
       <rect x={584} y={452} width={110} height={210} fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE} />
       {Array.from({length: 12}, (_, i) => {
         const col = i % 3, row = Math.floor(i / 3);
-        return <rect key={i} x={598 + col * 30} y={466 + row * 50} width={18} height={30 + rnd(i * 7) * 12}
+        return <rect key={i} x={598 + col * 30} y={466 + row * 50} width={18} height={30 + rnd(v.seed(i * 7)) * 12}
           fill={shade(tn.body, (i % 3) - 1)} stroke={INK} strokeWidth={2.2} />;
       })}
       {/* THE FAN (WO-31). Modern: a six-blade electric extractor in a circular housing — COMPARISON's
@@ -2632,10 +2674,10 @@ const FactoryFloor: React.FC = () => {
 
       {/* --- the plant. Far machines first, then the workers between them, then the belt over the
               lot: the belt's slab is what puts the standing figures behind it. --- */}
-      <Machine x={48} y={FACT_WALL + 168} w={410} h={318} seed={3} spin f={f} />
-      <Machine x={1454} y={FACT_WALL + 156} w={396} h={300} seed={6} />
-      <Machine x={790} y={FACT_WALL + 120} w={300} h={214} seed={9} />
-      <CrowdRow y={790} x0={600} x1={1400} n={4} scale={0.56} seed={13} dz={10} alive={0.15} />
+      <Machine x={48} y={FACT_WALL + 168} w={410} h={318} seed={v.seed(3)} spin f={f} />
+      <Machine x={1454} y={FACT_WALL + 156} w={396} h={300} seed={v.seed(6)} />
+      <Machine x={790 + v.off(1, 50)} y={FACT_WALL + 120} w={300} h={214} seed={v.seed(9)} />
+      <CrowdRow y={790} x0={600} x1={1400} n={3 + v.pick(2, 3)} scale={0.56} seed={v.seed(13)} dz={10} alive={0.15} />
       {/* the conveyor: rails on trestles over a run of rollers, carrying crates */}
       <g>
         {Array.from({length: 26}, (_, i) => (
@@ -2650,7 +2692,7 @@ const FactoryFloor: React.FC = () => {
         ))}
       </g>
       {[120, 386, 640, 1180, 1470, 1730].map((bx, i) => (
-        <BoxStack key={i} x={bx} baseY={FACT_BELT} n={i % 2 ? 2 : 1} s={0.62} seed={i * 7 + 2} />
+        <BoxStack key={i} x={bx + v.off(3 + i, 26)} baseY={FACT_BELT} n={i % 2 ? 2 : 1} s={0.62} seed={v.seed(i * 7 + 2)} />
       ))}
       {/* A beacon on a post beside the belt, blinking on its own clock. Placed at x=500, in the gap
           between the left machine and the first worker: at its first position (x=930) it landed
@@ -2679,20 +2721,20 @@ const FactoryFloor: React.FC = () => {
               legs cut off by the frame edge. The grey worker beside him is drawn small and WITH A
               FACE — a `DIM` figure at near-hero scale with no face is the headless-pill defect
               COMPARISON logged against the thumbnail, and it was back here at scale 1.06. --- */}
-      <StickFigure pose={A.stand(f)} x={CAPTION_SAFE_X + 500} y={FACT_BELT + 128} scale={1.12}
+      <StickFigure pose={A.stand(f)} x={CAPTION_SAFE_X + 500 + v.off(10, 50)} y={FACT_BELT + 128} scale={1.12}
         facing={-1} view="front" expr={FACES.focused} pal={LIGHT} frame={f} idle="idle" />
       {/* held still: the spinning flywheel, the beacon, the clock and the hero are this template's
           whole motion budget, and a second animated near-plane body pushed it out of camera lock */}
-      <StickFigure pose={A.stand(0)} x={676} y={FACT_BELT + 78} scale={0.82} facing={1}
+      <StickFigure pose={A.stand(0)} x={676 + v.off(11, 50)} y={FACT_BELT + 78} scale={0.82} facing={1}
         view="profile" expr={FACES.neutral} pal={DIM} frame={0} idle="none" />
       {/* stock wheeled down the floor (WO-24). The note above still holds — a second animated body
           STANDING in the near plane cost this template its camera lock — but a crossing object does
           not: it touches two or three cells of the 8x6 grid at any one 10-frame gap, wherever it is,
           which is why `cityStreet`'s car still measures 40/48 while moving continuously. */}
-      <Passerby y={1062} x0={-260} x1={2180} scale={1.0} seed={17} at={78} carry="trolley" />
-      <Trolley x={1560} y={FACT_BELT + 96} w={280} s={1.0} />
-      <CaseStack x={1700} baseY={FACT_BELT + 96} n={3} s={0.8} seed={19} />
-      <BoxStack x={214} baseY={1074} n={3} s={0.94} seed={23} />
+      <Passerby y={1062} x0={-260} x1={2180} scale={1.0} seed={v.seed(17)} at={78} carry="trolley" />
+      <Trolley x={1560 + v.off(12, 50)} y={FACT_BELT + 96} w={280} s={1.0} />
+      <CaseStack x={1700} baseY={FACT_BELT + 96} n={2 + v.pick(13, 3)} s={0.8} seed={v.seed(19)} />
+      <BoxStack x={214 + v.off(14, 60)} baseY={1074} n={2 + v.pick(15, 3)} s={0.94} seed={v.seed(23)} />
       {/* A rank of steel drums, in the NEAR plane. They were first staged against the far wall at
           floor level, which is exactly the band the workers stand in: they rendered across four
           torsos at waist height and read as men standing inside barrels. Nothing about either
@@ -2792,6 +2834,11 @@ const BroadcastDesk: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // THE TAKE (item 2), THE BANNERS (item 3) and THE CHART (item 7). QA on this room: the masthead
+  // band, the lower third and the desk strap were all glyph runs — "the broadcastDesk banners at
+  // t120 f20071" — and the backdrop chart collapsed whatever the story was.
+  const tk = useTake();
+  const v = useVary();
   // PERIOD (WO-27) — the hardest of the thirteen, and the one to be honest about. Broadcasting does
   // not exist before 1920, so period mode does NOT pretend this is a studio: it draws the same
   // composition as a PRESS ROSTRUM — two men at a long table, a great painted chart board behind
@@ -2828,7 +2875,7 @@ const BroadcastDesk: React.FC = () => {
           keyed board is 24% of the frame — enough on its own to push this template's coloured
           coverage back up, which is the regression this work order must not cause. */}
       <rect x={306} y={296} width={1200} height={410} fill={period ? shade(tn.floor, 1) : shade(tn.deep, -2)} />
-      <BuildingBand baseY={706} x0={306} x1={1506} n={8} seed={23} depth={1} minH={90} maxH={230} opacity={0.8} />
+      <BuildingBand baseY={706} x0={306} x1={1506} n={7 + v.pick(1, 3)} seed={v.seed(23)} depth={1} minH={90} maxH={230} opacity={0.8} />
       {/* a stats panel on the left of the screen — the band between the masthead and the lower
           third was the emptiest region in the frame, and a news backdrop always carries figures */}
       <rect x={344} y={382} width={556} height={214} fill={period ? PAPER_WHITE : shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
@@ -2837,28 +2884,30 @@ const BroadcastDesk: React.FC = () => {
         return (
           <g key={i}>
             <rect x={358 + col * 184} y={396 + row * 52} width={116} height={20}
-              fill={rnd(i * 17) > 0.68 ? c.accent : period ? INK : PAPER_WHITE} opacity={period ? 0.62 : 0.88} />
+              fill={rnd(v.seed(i * 17)) > 0.68 ? c.accent : period ? INK : PAPER_WHITE} opacity={period ? 0.62 : 0.88} />
             <rect x={482 + col * 184} y={396 + row * 52} width={42} height={20}
               fill={period ? INK : PAPER_WHITE} opacity={period ? 0.4 : 0.55} />
           </g>
         );
       })}
-      <ChartPlot x={950} y={330} w={506} h={330} kind="line" bars={9} seed={4} live crash
-        ground={shade(tn.card, 1)} grid={4} />
+      <ChartPlot x={950} y={330} w={506} h={330} kind="line" bars={9} seed={v.seed(4)} live crash
+        ground={shade(tn.card, 1)} grid={4} dir={tk.chart} label={label(tk, 'chartTitle', 4)} />
       <rect x={306} y={296} width={1200} height={62} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} />
-      <SerifWords x={344} y={312} w={560} h={30} words={3} seed={7} fill={period ? INK : PAPER_WHITE} />
+      {/* THE MASTHEAD BAND (item 3) — a news graphic that says nothing is a placeholder. */}
+      <InkWords x={344} y={306} w={560} h={42} text={label(tk, 'lowerThird', 7)} fill={period ? INK : PAPER_WHITE} />
       <rect x={306} y={296} width={1200} height={410} fill="none" stroke={INK} strokeWidth={STROKE * 1.4} />
       {/* the lower-third strap, over the bottom of the screen */}
       <rect x={306} y={620} width={780} height={86} fill={period ? shade(tn.floor, -1) : shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
       <rect x={306} y={620} width={22} height={86} fill={c.accent} />
-      <SerifWords x={352} y={634} w={420} h={22} words={3} seed={12} fill={period ? INK : PAPER_WHITE} serif={period} />
-      <TextLines x={352} y={672} w={380} n={2} gap={13} th={5} seed={16} opacity={0.7} />
+      {/* THE LOWER THIRD (item 3) — the one strap a news frame exists to be read from. */}
+      <InkWords x={352} y={628} w={420} h={34} text={label(tk, 'headline', 12)} fill={period ? INK : PAPER_WHITE} />
+      <TextLines x={352} y={672} w={380} n={2} gap={13} th={5} seed={v.seed(16)} opacity={0.7} />
       {/* flanking wall monitors, both live */}
       {[46, 1556].map((px, i) => (
         <g key={i}>
-          <Monitor x={px} y={352} w={314} h={210} content={i ? 'chart' : 'grid'} stand={false} seed={30 + i * 4} />
+          <Monitor x={px} y={352} w={314} h={210} content={i ? 'chart' : 'grid'} stand={false} seed={v.seed(30 + i * 4)} />
           <rect x={px + 20} y={584} width={274} height={30} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
-          <TextLines x={px + 34} y={592} w={244} n={1} gap={12} th={6} seed={20 + i} opacity={0.75} />
+          <TextLines x={px + 34} y={592} w={244} n={1} gap={12} th={6} seed={v.seed(20 + i)} opacity={0.75} />
         </g>
       ))}
 
@@ -2867,7 +2916,7 @@ const BroadcastDesk: React.FC = () => {
       <SlabFloor y={STUDIO_FLOOR} cols={30} rows={12} />
       {[86, 1774].map((px, i) => (
         <g key={i}>
-          <Monitor x={px} y={784} w={146} h={100} content={i ? 'text' : 'chart'} seed={50 + i} />
+          <Monitor x={px} y={784} w={146} h={100} content={i ? 'text' : 'chart'} seed={v.seed(50 + i)} />
           <rect x={px - 14} y={906} width={174} height={16} rx={6} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
         </g>
       ))}
@@ -2880,9 +2929,9 @@ const BroadcastDesk: React.FC = () => {
               The co-anchor gets a FACE. `DIM` desaturates fills only, so a grey figure at this
               scale with `showFace={false}` is a blank head over a same-width torso — the headless
               pill COMPARISON logged against the thumbnail crowd, and it was back here at 1.12. --- */}
-      <StickFigure pose={A.sit(f)} x={CAPTION_SAFE_X + 400} y={866} scale={1.2} facing={-1} view="front"
+      <StickFigure pose={A.sit(f)} x={CAPTION_SAFE_X + 400 + v.off(2, 40)} y={866} scale={1.2} facing={-1} view="front"
         expr={FACES.earnest} pal={LIGHT} frame={f} idle="gesture" />
-      <StickFigure pose={A.sit(f + 53)} x={790} y={870} scale={1.12} facing={1} view="front"
+      <StickFigure pose={A.sit(f + 53)} x={790 + v.off(3, 40)} y={870} scale={1.12} facing={1} view="front"
         expr={FACES.neutral} pal={DIM} frame={f} idle="subtle" />
       <path d="M 340 908 L 1580 908 L 1700 972 L 224 972 Z" fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
       <rect x={224} y={972} width={1476} height={108} fill={tn.card} stroke={INK} strokeWidth={STROKE} />
@@ -2898,10 +2947,10 @@ const BroadcastDesk: React.FC = () => {
       <rect x={286} y={1004} width={112} height={42} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
       {/* PERIOD: the desk front is a painted board, so its lettering is ink on the paint rather than
           a lit strap */}
-      <SerifWords x={434} y={1010} w={800} h={26} words={4} seed={19} fill={period ? INK : PAPER_WHITE} />
+      <InkWords x={434} y={1004} w={800} h={38} text={label(tk, 'lowerThird', 19)} fill={period ? INK : PAPER_WHITE} />
       {/* what is on the desk: papers, a mug, a mic on a stand, a confidence monitor */}
-      <Papers x={520} y={900} n={3} s={0.66} seed={9} />
-      <Papers x={1364} y={904} n={2} s={0.6} seed={13} />
+      <Papers x={520 + v.off(4, 60)} y={900} n={2 + v.pick(5, 3)} s={0.66} seed={v.seed(9)} />
+      <Papers x={1364} y={904} n={1 + v.pick(6, 3)} s={0.6} seed={v.seed(13)} />
       <rect x={1204} y={866} width={44} height={40} rx={6} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
       <path d="M 1248 874 q 22 8 0 18" fill="none" stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
       {/* the mic on its stand. PERIOD: a WATER CARAFE and a tumbler in its place — what stands on a
@@ -3009,11 +3058,16 @@ const CrowdQueue: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // THE TAKE (item 2) and THE PLACARDS (item 3). QA: "the protest placards at t001c f370 / t097
+  // f15984 (three signs, all glyphs, held up as the focal point)". A placard is a thing somebody
+  // wrote; it now says something, and the institution's own name board does too.
+  const tk = useTake();
+  const v = useVary();
   return (
     <Frame>
       {/* --- the building line behind: two bands, the far one lifted two rungs --- */}
-      <BuildingBand baseY={470} x0={-80} x1={2000} n={10} seed={61} depth={2} minH={180} maxH={400} opacity={0.55} />
-      <BuildingBand baseY={628} x0={620} x1={2000} n={5} seed={37} depth={1} minH={230} maxH={430} />
+      <BuildingBand baseY={470} x0={-80} x1={2000} n={9 + v.pick(1, 3)} seed={v.seed(61)} depth={2} minH={180} maxH={400} opacity={0.55} />
+      <BuildingBand baseY={628} x0={620} x1={2000} n={4 + v.pick(2, 3)} seed={v.seed(37)} depth={1} minH={230} maxH={430} />
 
       {/* --- the institution the queue is for, at the far end of the line on the left --- */}
       <rect x={-40} y={196} width={700} height={QUEUE_KERB - 196} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE} />
@@ -3025,17 +3079,18 @@ const CrowdQueue: React.FC = () => {
       <UnitWall x={-20} y={236} w={660} h={210} cols={5} rows={1} handle={false}
         fill={shade(tn.deep, -1)} carcass={shade(tn.card, -2)} />
       <rect x={-40} y={462} width={700} height={26} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
-      <SerifWords x={40} y={506} w={560} h={40} words={3} seed={5} />
+      {/* The institution's name across its own frontage (item 3). */}
+      <InkWords x={40} y={498} w={560} h={52} text={label(tk, 'masthead', 5)} />
       {/* the door, shut, with a shutter half down and a notice pasted on it */}
       <rect x={214} y={568} width={244} height={198} fill={shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE} />
       <RibbedPanel x={214} y={568} w={244} h={96} ribs={7} dir="h" fill={shade(tn.body, -1)} />
       <rect x={258} y={674} width={96} height={72} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
-      <TextLines x={272} y={690} w={70} n={4} gap={14} th={4} seed={11} opacity={0.7} />
+      <TextLines x={272} y={690} w={70} n={4} gap={14} th={4} seed={v.seed(11)} opacity={0.7} />
       <Steps x0={158} x1={520} yTop={766} yBottom={QUEUE_KERB + 32} n={3} inset={44} />
       {/* a lamp bracket and a hanging sign on the frontage */}
       <rect x={548} y={520} width={16} height={132} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
       <rect x={504} y={652} width={104} height={68} fill={shade(tn.body, -1)} stroke={INK} strokeWidth={STROKE} />
-      <TextLines x={518} y={668} w={76} n={3} gap={14} th={4} seed={17} opacity={0.75} />
+      <TextLines x={518} y={668} w={76} n={3} gap={14} th={4} seed={v.seed(17)} opacity={0.75} />
 
       {/* --- pavement --- */}
       <SlabFloor y={QUEUE_KERB} cols={22} rows={9} />
@@ -3043,28 +3098,35 @@ const CrowdQueue: React.FC = () => {
 
       {/* --- the crowd, in three layers: heads packed against the frontage, a milling row in front
               of them, then the queue itself running out of the door toward the camera. --- */}
-      <CrowdHeads y={760} x0={80} x1={1320} n={13} rows={3} r={18} seed={9} alive={0.05} />
-      <CrowdRow y={798} x0={140} x1={1120} n={9} scale={0.48} seed={21} dz={12} alive={0.12} />
+      <CrowdHeads y={760} x0={80} x1={1320} n={11 + v.pick(3, 5)} rows={3} r={18} seed={v.seed(9)} alive={0.05} />
+      <CrowdRow y={798} x0={140} x1={1120} n={8 + v.pick(4, 3)} scale={0.48} seed={v.seed(21)} dz={12} alive={0.12} />
       {/* `faceScale` is doing real work here: the near end of this queue is drawn at 1.02, and a
           featureless grey head at that size reads as a pill rather than a person. Everything under
           0.82 stays anonymous, which is the §6.5 hierarchy the crowd exists for. */}
-      <CrowdColumn xFar={470} yFar={812} xNear={1420} yNear={1026} n={13}
-        scaleNear={1.02} scaleFar={0.36} seed={4} facing={-1} view="profile" alive={0.15}
+      <CrowdColumn xFar={470} yFar={812} xNear={1420} yNear={1026} n={11 + v.pick(5, 5)}
+        scaleNear={1.02} scaleFar={0.36} seed={v.seed(4)} facing={-1} view="profile" alive={0.15}
         expr={FACES.tired} />
-      {/* placards over the crowd — the reference carries one in BOTH captured thumbnails */}
-      <Placard x={352} y={806} w={158} h={104} tilt={-9} poleH={168} seed={3} />
-      <Placard x={846} y={862} w={190} h={122} tilt={7} poleH={196} seed={8} />
-      <Placard x={1258} y={946} w={224} h={140} tilt={-5} poleH={214} seed={14} />
+      {/* placards over the crowd — the reference carries one in BOTH captured thumbnails, and in
+          both of them it is LETTERED ("GIVE US WORK, NOT HUNGER", "WE GOT SOLD OUT"). */}
+      <Placard x={352 + v.off(6, 40)} y={806} w={158} h={104} tilt={-9 + v.off(7, 4)} poleH={168} seed={v.seed(3)}
+        label={label(tk, 'placard', 3)} />
+      <Placard x={846 + v.off(8, 50)} y={862} w={190} h={122} tilt={7 + v.off(9, 4)} poleH={196} seed={v.seed(8)}
+        label={label(tk, 'placard', 8)} />
+      {/* The third placard used to stand at x=1258 with its board at y 592-732, which is exactly
+          where the coloured hero's head is: drawn later, he painted over the bottom line of it. Now
+          it stands right of him and higher, so the board is whole. */}
+      <Placard x={1516 + v.off(10, 40)} y={930} w={224} h={140} tilt={-5 + v.off(11, 4)} poleH={250} seed={v.seed(14)}
+        label={label(tk, 'placard', 14)} />
 
       {/* --- barriers between the queue and the kerb --- */}
       <Fence x0={40} x1={780} y={840} h={62} posts={11} opacity={0.55} />
       <RopeLine x0={1500} x1={1880} y={1002} posts={3} s={1.0} />
 
       {/* --- near plane: the coloured hero at the head of the near end of the line --- */}
-      <StickFigure pose={A.stand(f)} x={CAPTION_SAFE_X + 460} y={1010} scale={1.16} facing={-1}
+      <StickFigure pose={A.stand(f)} x={CAPTION_SAFE_X + 460 + v.off(12, 46)} y={1010} scale={1.16} facing={-1}
         view="front" expr={FACES.worried} pal={LIGHT} frame={f} idle="gesture" />
       {/* someone walking past the head of the queue (WO-24) */}
-      <Passerby y={1076} x0={-240} x1={2160} scale={1.04} seed={23} at={96} />
+      <Passerby y={1076} x0={-240} x1={2160} scale={1.04} seed={v.seed(23)} at={96} />
 
       {/* --- street furniture: a lamp standard, a bin, crates, a dropped paper --- */}
       <g>
@@ -3074,12 +3136,12 @@ const CrowdQueue: React.FC = () => {
       </g>
       <RibbedPanel x={1758} y={936} w={92} h={112} ribs={6} dir="v" fill={tn.body} />
       <rect x={1748} y={922} width={112} height={16} rx={6} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
-      <CaseStack x={92} baseY={1042} n={3} s={0.78} seed={27} />
-      <BoxStack x={1560} baseY={1076} n={2} s={0.72} seed={33} />
+      <CaseStack x={92} baseY={1042} n={2 + v.pick(13, 3)} s={0.78} seed={v.seed(27)} />
+      <BoxStack x={1560} baseY={1076} n={1 + v.pick(14, 3)} s={0.72} seed={v.seed(33)} />
       {[[300, 1050], [980, 1064]].map(([px, py], i) => (
-        <g key={i} transform={`rotate(${(rnd(i * 13) - 0.5) * 44} ${px} ${py})`}>
+        <g key={i} transform={`rotate(${(rnd(v.seed(i * 13)) - 0.5) * 44} ${px + v.off(15 + i, 40)} ${py})`}>
           <rect x={px - 52} y={py - 34} width={104} height={68} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
-          <TextLines x={px - 40} y={py - 20} w={80} n={4} gap={13} th={3.6} seed={i * 9} opacity={0.55} />
+          <TextLines x={px - 40} y={py - 20} w={80} n={4} gap={13} th={3.6} seed={v.seed(i * 9)} opacity={0.55} />
         </g>
       ))}
       <Cone x={1892} y={1046} s={0.72} />
@@ -3089,7 +3151,7 @@ const CrowdQueue: React.FC = () => {
           on nothing, so it read as a red banner floating against a building line. */}
       <rect x={1648} y={606} width={286} height={QUEUE_KERB - 606} fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE} />
       <rect x={1656} y={622} width={270} height={44} fill={shade(tn.body, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
-      <SerifWords x={1678} y={632} w={226} h={20} words={2} seed={43} fill={PAPER_WHITE} />
+      <InkWords x={1678} y={628} w={226} h={28} text={label(tk, 'masthead', 43)} fill={PAPER_WHITE} />
       <RibbedPanel x={1656} y={666} w={270} h={40} ribs={8} dir="v" fill={c.accent} />
       <Glazing x={1668} y={716} w={246} h={QUEUE_KERB - 716} bays={3} rows={1} pane={shade(tn.deep, -2)} sill={false} />
     </Frame>
