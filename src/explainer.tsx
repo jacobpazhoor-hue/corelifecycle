@@ -337,6 +337,17 @@ const label = (tk: Take, role: LabelRole, salt: number): string => {
 };
 
 /**
+ * `n` labels for one run of identical props (a ticker, a row of signs), guaranteed to STEP through
+ * the pool rather than draw from it independently. Four independent draws out of a five-word pool
+ * printed "VOLUME · VOLUME · VOLUME · MARKET OPEN" across the exchange ticker, which reads as a bug.
+ */
+const labelRun = (tk: Take, role: LabelRole, n: number, salt: number): string[] => {
+  const pool = tk.words.length > 0 ? tk.words.slice(0, 3) : LEXICON[role];
+  const base = Math.floor(rnd(tk.seed * 2.11 + salt * 7.3 + 1.5) * pool.length) % pool.length;
+  return Array.from({length: n}, (_, i) => pool[(base + i) % pool.length]);
+};
+
+/**
  * director.tsx pins the money count-up card bottom-left (left 72, ~620 wide, ~330 tall), so anything
  * near the floor at x < this renders BEHIND it. Measured 2026-07-20; it silently ate the hero in two
  * scenes.tsx templates. Every hero below is staged to the right of it.
@@ -1103,9 +1114,9 @@ const ExchangeFloor: React.FC = () => {
           <rect x={0} y={452} width={1920} height={56} fill={shade(tn.deep, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
           {/* THE TICKER (item 3). Four real runs across the strip with glyph blocks between them:
               a tape is mostly figures, and the parts a reader locks onto are the words. */}
-          {[0, 1, 2, 3].map((i) => (
+          {labelRun(tk, 'ticker', 4, 5).map((tx, i) => (
             <g key={i}>
-              <InkWords x={44 + i * 476} y={462} w={230} h={30} text={label(tk, 'ticker', 5 + i * 3)} fill={c.accent} />
+              <InkWords x={44 + i * 476} y={462} w={230} h={30} text={tx} fill={c.accent} />
               <SerifWords x={294 + i * 476} y={466} w={186} h={24} words={2} seed={v.seed(5 + i)} fill={c.accent} serif={false} />
             </g>
           ))}
@@ -1832,6 +1843,9 @@ const NewsMontage: React.FC = () => {
   // cutting — the masthead and the headline — are real words.
   const tk = useTake();
   const v = useVary();
+  // Stepped rather than drawn independently, so a fan of six cuttings is six different papers.
+  const mast = labelRun(tk, 'masthead', 6, 3);
+  const head = labelRun(tk, 'headline', 6, 9);
   return (
     <Frame>
       {/* the surface the cuttings lie on — a flat slab, not a vignette */}
@@ -1852,33 +1866,33 @@ const NewsMontage: React.FC = () => {
           pile of identical WHITE ones also has no colour in it (WO-20). --- */}
       <NewsSheet x={60} y={150 + v.off(1, 26)} w={512} h={628} rot={-15 + v.off(2, 5)} seed={v.seed(3)}
         photo={v.one(3, ['chart', 'head', 'none'] as const)} stock={shade(tn.card, 2)}
-        masthead={label(tk, 'masthead', 3)} />
+        masthead={mast[0]} />
       <NewsSheet x={1340} y={128 + v.off(4, 26)} w={512} h={628} rot={13 + v.off(5, 5)} seed={v.seed(9)}
         photo={v.one(6, ['head', 'chart', 'none'] as const)}
-        masthead={label(tk, 'masthead', 9)} headline={label(tk, 'headline', 9)} />
+        masthead={mast[1]} headline={head[1]} />
       <NewsSheet x={706} y={72} w={470} h={556} rot={-4 + v.off(7, 4)} seed={v.seed(17)} photo="none" stock={tn.card}
-        masthead={label(tk, 'masthead', 17)} />
+        masthead={mast[2]} />
       <NewsSheet x={1176} y={330} w={470} h={556} rot={20 + v.off(8, 4)} seed={v.seed(19)} photo="none" stock={shade(tn.card, 1)} />
       <Nudge seed={5} cx={710} cy={732}>
         <NewsSheet x={430} y={402} w={560} h={660} rot={7 + v.off(9, 4)} seed={v.seed(5)}
           photo={v.one(10, ['head', 'chart'] as const)} stock={PAPER_WHITE} flash
-          masthead={label(tk, 'masthead', 5)} headline={label(tk, 'headline', 5)} />
+          masthead={mast[3]} headline={head[3]} />
       </Nudge>
       <Nudge seed={44} cx={1300} cy={718}>
         <NewsSheet x={1000} y={368} w={600} h={700} rot={-6 + v.off(11, 4)} seed={v.seed(11)}
           photo={v.one(12, ['chart', 'head'] as const)} flash
-          masthead={label(tk, 'masthead', 11)} headline={label(tk, 'headline', 11)} />
+          masthead={mast[4]} headline={head[4]} />
       </Nudge>
       {/* a torn strip and a clipped document, the two things a montage always has one of */}
       <g transform="rotate(21 1780 660)">
         <rect x={1636} y={556} width={290} height={208} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
-        <InkWords x={1660} y={578} w={244} h={36} text={label(tk, 'headline', 23)} />
+        <InkWords x={1660} y={578} w={244} h={36} text={head[5]} />
         <TextLines x={1660} y={636} w={244} n={7} gap={15} th={4} seed={v.seed(29)} opacity={0.72} />
         <rect x={1660} y={556} width={44} height={22} fill={c.accent} />
       </g>
       <g transform="rotate(-16 200 830)">
         <rect x={68} y={716} width={278} height={224} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
-        <InkWords x={94} y={738} w={228} h={32} text={label(tk, 'masthead', 37)} />
+        <InkWords x={94} y={738} w={228} h={32} text={mast[5]} />
         <TextLines x={94} y={794} w={228} n={8} gap={15} th={4} seed={v.seed(41)} opacity={0.72} />
         <rect x={276} y={700} width={26} height={58} rx={12} fill="none" stroke={INK} strokeWidth={STROKE_THIN * 1.2} />
       </g>
@@ -3063,6 +3077,7 @@ const CrowdQueue: React.FC = () => {
   // wrote; it now says something, and the institution's own name board does too.
   const tk = useTake();
   const v = useVary();
+  const signs = labelRun(tk, 'placard', 3, 3);
   return (
     <Frame>
       {/* --- the building line behind: two bands, the far one lifted two rungs --- */}
@@ -3109,14 +3124,14 @@ const CrowdQueue: React.FC = () => {
       {/* placards over the crowd — the reference carries one in BOTH captured thumbnails, and in
           both of them it is LETTERED ("GIVE US WORK, NOT HUNGER", "WE GOT SOLD OUT"). */}
       <Placard x={352 + v.off(6, 40)} y={806} w={158} h={104} tilt={-9 + v.off(7, 4)} poleH={168} seed={v.seed(3)}
-        label={label(tk, 'placard', 3)} />
+        label={signs[0]} />
       <Placard x={846 + v.off(8, 50)} y={862} w={190} h={122} tilt={7 + v.off(9, 4)} poleH={196} seed={v.seed(8)}
-        label={label(tk, 'placard', 8)} />
+        label={signs[1]} />
       {/* The third placard used to stand at x=1258 with its board at y 592-732, which is exactly
           where the coloured hero's head is: drawn later, he painted over the bottom line of it. Now
           it stands right of him and higher, so the board is whole. */}
       <Placard x={1516 + v.off(10, 40)} y={930} w={224} h={140} tilt={-5 + v.off(11, 4)} poleH={250} seed={v.seed(14)}
-        label={label(tk, 'placard', 14)} />
+        label={signs[2]} />
 
       {/* --- barriers between the queue and the kerb --- */}
       <Fence x0={40} x1={780} y={840} h={62} posts={11} opacity={0.55} />
