@@ -538,7 +538,14 @@ const PushedFace: React.FC<{box: HeadBox; mood: Push; lw: number}> = ({box, mood
       </g>
     );
   } else if (mood === 'smug') {
-    mouth = <path d={`M ${cx - hw * 0.42} ${my - hh * 0.05} Q ${cx} ${my + hh * 0.22} ${cx + hw * 0.42} ${my - hh * 0.05}`}
+    // A SMIRK: short, and up at ONE corner. It used to be a symmetric 0.84-of-head-width arc curving
+    // up at both ends — a broad open grin, and on `band` it is the whole face of the thumbnail. That
+    // is what QA_WATCH item 17 found on the madoff thumbnail ("Madoff is grinning broadly") over an
+    // episode whose register is "straight and noirish, held throughout", and it is the same defect
+    // as item 6 one layer out: pleased is not a register this format has. Smug is a closed mouth
+    // pulled up on one side, which is what the word means and what the reference's own smug faces
+    // draw; a figure that should look delighted asks for `bright` copy, not for this.
+    mouth = <path d={`M ${cx - hw * 0.26} ${my + hh * 0.04} Q ${cx + hw * 0.04} ${my + hh * 0.06} ${cx + hw * 0.28} ${my - hh * 0.07}`}
       fill="none" stroke={INK} strokeWidth={lw * 1.35} strokeLinecap="round" />;
   } else if (mood === 'worried') {
     mouth = <path d={`M ${cx - hw * 0.30} ${my + hh * 0.05} Q ${cx} ${my - hh * 0.10} ${cx + hw * 0.30} ${my + hh * 0.05}`}
@@ -720,10 +727,30 @@ const Wrap: React.FC<{children: React.ReactNode}> = ({children}) => (
 );
 
 /** Interior: a drained room with a dark ceiling — the Wolf of Wall Street backdrop. */
-const GreyRoom: React.FC = () => (
+/**
+ * `rim` — a FLAT backlight behind the hero's head (QA_WATCH item 17).
+ *
+ * The standing note for this channel's thumbnails is dark and mood-tinted, with the brightness spent
+ * on the subject and the type; the room was the opposite — one flat mid-grey field edge to edge with
+ * "no depth or backlight", and a hero standing on it at the same value as everything else.
+ *
+ * The ground is now two rungs darker and the light is put back where it belongs, as a HALO ON THE
+ * WALL BEHIND THE HEAD. It is two concentric flat discs, not a gradient: Chromium dithers every
+ * gradient it paints and the dither destroys flat fill (bible §5), so a soft edge has to be built
+ * the way every other soft thing in this project is — out of rungs of the tone ladder. Two steps up
+ * from a two-steps-darker ground is enough separation to read as a rim and cheap enough in area not
+ * to move the frame's colour statistics.
+ */
+const GreyRoom: React.FC<{rim?: {cx: number; cy: number; r: number}}> = ({rim}) => (
   <g>
-    <rect x={0} y={0} width={1920} height={1080} fill={E.back} />
-    <rect x={0} y={0} width={1920} height={330} fill={E.deep} />
+    <rect x={0} y={0} width={1920} height={1080} fill={E.deep} />
+    <rect x={0} y={0} width={1920} height={330} fill={shade(E.field, -3)} />
+    {rim && (
+      <g>
+        <circle cx={rim.cx} cy={rim.cy} r={rim.r * 1.34} fill={E.floor} />
+        <circle cx={rim.cx} cy={rim.cy} r={rim.r} fill={E.field} />
+      </g>
+    )}
     <line x1={0} y1={330} x2={1920} y2={330} stroke={INK} strokeWidth={STROKE} />
     {/* strip lights: the reference's ceiling carries two, and they stop the top band reading empty */}
     {/* Kept inside the amber band's own footprint (x 108..1800) so the `band` archetype hides them
@@ -777,7 +804,15 @@ const GreyCrowd: React.FC<{headY?: number; rowY?: number; scale?: number}> =
 ({headY = 880, rowY = 1240, scale = 1.9}) => (
   <g>
     <CrowdHeads y={headY} x0={-40} x1={1960} n={10} rows={2} r={62} seed={5} fill={E.field} />
-    <CrowdRow y={rowY} x0={-60} x1={1980} n={8} scale={scale} seed={2} view="front" dz={34}
+    {/* THE ROW SPANS 150..1770, NOT -60..1980 (QA_WATCH item 17: "the crowd row is cut off at the
+        bottom and both side edges"). The bottom crop is deliberate and stays — this is a near crowd
+        and a thumbnail is a bust shot — but a figure sliced down its own middle by the SIDE edge is
+        not depth, it is a mistake, and at scale 1.9 these are drawn near hero size where it shows.
+        `CrowdRow` clamps to keep a figure whole (see `insetToFrame`), but a span that starts 60
+        units off-frame asks it to clamp two of them into a heap at the edge; giving it a span that
+        fits spaces them properly instead. Seven rather than eight for the same reason: at scale 1.9
+        a figure is ~275 wide and eight of them over 1620 units of span is a pile, not a crowd. */}
+    <CrowdRow y={rowY} x0={170} x1={1750} n={7} scale={scale} seed={2} view="front" dz={34}
       showFace expr={CROWD_EXPR} />
   </g>
 );
@@ -793,9 +828,19 @@ const GreyCrowd: React.FC<{headY?: number; rowY?: number; scale?: number}> =
  */
 const ThumbBand: React.FC = () => (
   <Wrap>
-    <GreyRoom />
+    {/* the halo is centred on the hero's drawn head — hipY - scale*(SEG.spine + SEG.neck + SEG.head)
+        = 1280 - 3.2*196 = 653 — and sized a little over the drawn head's half-height (3.2*52*1.23
+        = 205), so it reads as light behind him rather than as a plate he is standing on. */}
+    <GreyRoom rim={{cx: 960, cy: 653, r: 300}} />
     <GreyCrowd headY={900} rowY={1250} scale={1.9} />
-    <Hero x={960} hipY={1200} scale={3.2} mood={pushFor('grim')} />
+    {/* THE HERO DROPPED 1200 -> 1280 (QA_WATCH item 17: "$65 BILLION sits on top of his hair").
+        The kicker cannot move up — it is already tight under the amber bar, with nothing above it
+        but the frame edge — and it cannot shrink, because RAIL_MIN_FS is the floor at which a line
+        is still legible on the 120 px rail this thumbnail is actually seen at. So the head moves.
+        Measured: the kicker sets at 110 and drops 123 below the bar, so its baseline is 427 and its
+        caps start at ~350; the head's crown was at 368, i.e. 59 units INSIDE the type. At hipY 1280
+        the crown is at 448, clear of the baseline with room to spare. */}
+    <Hero x={960} hipY={1280} scale={3.2} mood={pushFor('grim')} />
     <BandTitle text={HEAD} />
   </Wrap>
 );
