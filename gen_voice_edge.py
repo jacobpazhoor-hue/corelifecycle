@@ -347,7 +347,24 @@ async def main():
         # draw its room with the era-marking props substituted out (ledgers for monitors, a chalk
         # board for an electronic one, masonry for a glazed skyline). Same contract as the devices —
         # visual only, passed through verbatim, absent unless the writer set it.
-        for key in ("card", "bubbles", "panels", "foreground", "period"):
+        #
+        # QA_WATCH 2026-08-17 adds three more on exactly the same contract, and they are here because
+        # WITHOUT this line they do not exist. The consumers were built and shipped first:
+        #   * `chart`  — "up" | "down" | "flat", the direction this scene's chart points
+        #                (explainer.tsx `takeFor`, item 7). It closes "the picture says the opposite of
+        #                the narration": a falling chart under a line about money still climbing.
+        #   * `labels` — a list of short real words the templates may LETTER on their props
+        #                (explainer.tsx `wordsFrom`, item 3) instead of mining the scene's own card /
+        #                overlay / balloon copy.
+        #   * `cast`   — 0..CAST_SLOTS-1, WHICH named person this scene is about (figure.tsx
+        #                `CastProvider`, item 8), so the episode's second and third people stop being
+        #                drawn as the lead.
+        # A whitelisted key that the renderer reads but this loop does not copy is the worst of both
+        # worlds: the writer sets it, nothing raises, and the template quietly draws its default —
+        # which is the exact defect each of these three exists to close. Validation stays where it
+        # already is (explainer.tsx raises on an unknown `chart`, Video2.tsx on an out-of-range
+        # `cast`); this loop's only job is not to drop them.
+        for key in ("card", "bubbles", "panels", "foreground", "period", "chart", "labels", "cast"):
             if sc.get(key) is not None:
                 rec[key] = sc[key]
         scenes_out.append(rec)

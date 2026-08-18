@@ -20,6 +20,8 @@ import {Foreground, ForegroundT} from './foreground';
 import {resolveSceneKey, sceneColors} from './crayonStyle';
 // WO-27: the per-scene period flag — the room drawn with its era-marking props substituted out.
 import {Era, PeriodProvider} from './setdressing';
+// QA_WATCH item 8: the per-scene cast slot — WHICH named person this scene is about.
+import {CAST_SLOTS, CastProvider} from './figure';
 
 const PHOTO = PHOTO_RAW as {mode: string; scenes: Record<string, {img: string; depth: string; move: Move}>; fallback: string[]};
 
@@ -149,7 +151,8 @@ type PanelsT = {
 
 type SceneT = {id: string; level: string | null; overlay: Overlay; template: string;
   audio: string; audioStartFrame?: number; startFrame: number; durationInFrames: number;
-  card?: CardT; bubbles?: BubbleT[]; panels?: PanelsT; foreground?: ForegroundT; period?: string};
+  card?: CardT; bubbles?: BubbleT[]; panels?: PanelsT; foreground?: ForegroundT; period?: string;
+  cast?: number};
 type Shot = {type: string; dur: number; focus: [number, number]};
 
 // ============================================================================
@@ -384,6 +387,33 @@ const sceneEra = (scene: SceneT): Era | null => {
   );
 };
 
+/**
+ * WHICH NAMED PERSON this scene is about, or null for the episode's lead (QA_WATCH item 8).
+ *
+ * Same shape and same contract as `sceneEra` above: an OPT-IN scene field written in `content.py`,
+ * copied verbatim by `gen_voice_edge.py`, consumed here, and RAISING on a value the renderer cannot
+ * honour rather than falling back. The defect it closes is "every named person is drawn as Madoff" —
+ * `episodeCostume()` resolves one wardrobe per episode, so Harry Markopolos, Peter Madoff and Mark
+ * Madoff all rendered as the same black-haired man in the same navy suit. `figure.tsx` `castCostume`
+ * would also throw on an out-of-range slot, but only from inside a figure deep in a template, with no
+ * scene id in the message; catching it here names the scene that wrote it.
+ *
+ * `cast: 0` is the lead and is byte-identical to no field at all, so it is NOT wrapped: the provider
+ * is mounted only when the scene actually asks for somebody else, which keeps every existing frame
+ * unchanged.
+ */
+const sceneCast = (scene: SceneT): number | null => {
+  if (scene.cast === undefined || scene.cast === null) return null;
+  if (!Number.isInteger(scene.cast) || scene.cast < 0 || scene.cast >= CAST_SLOTS) {
+    throw new Error(
+      `${scene.id}: cast ${JSON.stringify(scene.cast)} is not a cast slot — cast must be a whole ` +
+      `number in 0..${CAST_SLOTS - 1} (0 = the episode's lead, 1..${CAST_SLOTS - 1} = the other ` +
+      `named people; docs/BIBLE.md §8 CAST)`
+    );
+  }
+  return scene.cast === 0 ? null : scene.cast;
+};
+
 // ============================================================================
 // BALLOONS AND FLOATS — one scene's dialogue (WO-34, QA defect 1)
 //
@@ -562,8 +592,14 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
   // silhouette is a black mass. Wrapping is a no-op when `period` is absent (the default), which is
   // what keeps every existing scene byte-identical.
   const era = sceneEra(scene);
-  const inEra = (art: React.ReactNode) =>
-    era ? <PeriodProvider era={era}>{art}</PeriodProvider> : art;
+  // The cast slot wraps the ART on exactly the same footing and for the same reason: the only thing
+  // it changes is a figure's wardrobe, and figures are only ever drawn by a template. A card, a
+  // balloon and the number note draw no people. Absent (or 0) it mounts nothing at all.
+  const cast = sceneCast(scene);
+  const dressArt = (art: React.ReactNode) => {
+    const inEra = era ? <PeriodProvider era={era}>{art}</PeriodProvider> : art;
+    return cast === null ? inEra : <CastProvider cast={cast}>{inEra}</CastProvider>;
+  };
 
   let t = 0;
   // THE CUT FADE IS A PICTURE FADE, NOT A FRAME FADE (WO-31).
@@ -599,7 +635,7 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
           a composition, so re-framing inside it would be a second camera on top of a locked one. */}
       {!artHidden && (
         <AbsoluteFill>
-          {inEra(scene.panels
+          {dressArt(scene.panels
             ? buildPanels(scene.panels, scene.id, D)
             : shots.map((sh, i) => {
                 const seq = (

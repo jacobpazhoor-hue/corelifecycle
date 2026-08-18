@@ -1,7 +1,7 @@
 import React from 'react';
 import {Internals, useCurrentFrame, useVideoConfig} from 'remotion';
 import timeline from './timeline.json';
-import {StickFigure, LIGHT, DIM} from './figure';
+import {StickFigure, LIGHT, DIM, CastContext, CAST_SLOTS} from './figure';
 import {FACES} from './faces';
 import * as A from './actions';
 import {blinkOn, pulse, stepIndex} from './anim';
@@ -125,6 +125,16 @@ const rnd = (i: number): number => {
 // cannot find its scene still has a scene-independent picture to draw, which is exactly right for a
 // still that is not part of an episode.
 // ===========================================================================
+
+/**
+ * The cast slot for the OTHER person in a two-hander, given whose scene it is (QA_WATCH item 8).
+ *
+ * A template that stages two people needs a second slot that is never the first one. Taking the next
+ * slot round the ring is the whole rule: it is a different person for every value of `sceneCast`, it
+ * is deterministic, and on a scene with no `cast=` at all it is slot 1 — which is what "two visibly
+ * different men on the sofa" means for the five scenes that shipped with twins on it.
+ */
+const companionCast = (sceneCast: number): number => (sceneCast + 1) % CAST_SLOTS;
 
 const CHART_DIRS: ChartDir[] = ['up', 'down', 'flat'];
 
@@ -1579,6 +1589,9 @@ const DomesticInterior: React.FC = () => {
   // a rug and a sofa are a parlour in any century after about 1830. ONE object dates the room — the
   // television on its low stand — and the standard lamp, which becomes an oil lamp by daylight.
   const period = usePeriod();
+  // WHOSE scene this is, if the writer said (`cast=` on the scene record -> Video2's CastProvider).
+  // 0 with no provider, which is every scene that existed before item 8.
+  const sceneCast = React.useContext(CastContext);
   return (
     <Frame>
       {/* --- wall: papered above a dado rail, panelled below.
@@ -1681,7 +1694,14 @@ const DomesticInterior: React.FC = () => {
           with two are different scenes, and this is a domestic interior where "alone" is a beat the
           format actually plays. The sofa keeps the footprint either way. */}
       {v.pick(20, 4) !== 0 && (
+        // ...and WHO he is, is the other half of it (QA_WATCH item 8). Both figures took the episode's
+        // single wardrobe, so t007/t043/t117/t133/t143 seated the SAME black-haired man in the same
+        // navy suit next to himself — read by QA as a cloning bug, not as two people. He takes the
+        // slot AFTER whoever this scene is about rather than a hardcoded 1: with no `cast=` on the
+        // scene that is slot 1, exactly as before; on a scene that names its subject (`cast=1`, Peter
+        // Madoff) it steps to 2 instead of re-cloning the subject, which is the same defect back.
         <StickFigure pose={A.sit(f + 47)} x={740 + v.off(21, 40)} y={858} scale={1.02} facing={1} view="front"
+          cast={companionCast(sceneCast)}
           expr={FACES.tired} pal={LIGHT} frame={f} />
       )}
       <Plant x={1866} y={1060} s={1.1 + v.pick(22, 3) * 0.05} seed={v.seed(9)} />

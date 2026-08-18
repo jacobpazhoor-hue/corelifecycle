@@ -640,12 +640,13 @@ set to a box, so a sentence only shrinks to unreadable.
 dict(id="t097", template="crowdQueue", labels=["GIVE IT BACK", "WHERE IS IT"])
 ```
 
-> ⚠ **Both fields are consumed but not yet PLUMBED.** `src/explainer.tsx` reads them off the scene
-> record in `src/timeline.json`, but `gen_voice_edge.py` copies only a whitelist of visual keys into
-> that file (`card`, `bubbles`, `panels`, `foreground`, `period`) — so a `chart=` or `labels=` written
-> in `content.py` is dropped on the way through and the scene falls back to the defaults above.
-> Adding the two names to that tuple is the whole remaining change; it was out of scope for the work
-> order that built the consumer.
+> ✅ **Plumbed end to end** (2026-08-17). `gen_voice_edge.py` copies visual keys into
+> `src/timeline.json` off a whitelist, and `chart` / `labels` are on it — so a field written in
+> `content.py` reaches `src/explainer.tsx`, which reads it off the scene record. Verified by setting
+> `chart="down", labels=["EIGHT LOOKS", "SIXTEEN YEARS"]` on `t093` (`chartBoard`), regenerating the
+> timeline and rendering the frame: the chart drew falling and the board read `EIGHT LOOKS` instead of
+> the lexicon's `RETURNS`. If you add another scene field, add it to that tuple in the same commit —
+> a field the renderer reads and the tuple drops is silent, and silent is how this one shipped.
 
 ### The vocabulary is 13 rooms, not 13 shots
 The environment archetypes the old canon listed in plain English (office · boardroom · trading floor ·
@@ -876,10 +877,11 @@ changed — the same three keys, the same defaults.
 
 #### `cast=` and `mood=` — WHO the scene is about, and how grim it is (QA_WATCH items 6 and 8)
 
-**Status: the renderer half is built and live; the scene half is not wired yet.** `src/figure.tsx`
-implements both, `src/Video2.tsx` does not yet read them off a scene record, and `content.py` does not
-yet emit them. Writing them today does nothing — an unknown key is ignored. They are documented here
-because the wire is one line each and the defect they answer is a writing-side one.
+**Status: `cast=` is wired end to end (2026-08-17); `mood=` is still renderer-only.**
+`src/figure.tsx` implements both. `cast` now travels the full path — written in `content.py`, copied
+by `gen_voice_edge.py`'s whitelist, validated in `src/Video2.tsx` (out of range RAISES with the scene
+id) and applied by mounting a `CastProvider` around the scene's ART. `mood` has no scene-level reader
+yet, so writing it still does nothing.
 
 **`cast=` — the person.** The episode's costume is resolved once from the topic (finance → suit,
 military → uniform, medical → scrubs). That is the KIND of person; it is not a person. Every named
@@ -894,6 +896,11 @@ are the three cues that survive at our in-frame size. An out-of-range slot raise
 
 The rule the writer needs: **the lead keeps slot 0 in every scene he appears in, and each other named
 person keeps ONE slot for the whole episode.** Two people in one frame must never share a slot.
+
+`domesticInterior` is the one template that stages TWO people, and it does not wait to be told: its
+second figure takes the slot AFTER the scene's own (`(cast + 1) % 3`). With no `cast=` that is slot 1,
+which is what stopped `t007` / `t043` / `t117` seating the same man next to himself; on a scene that
+names its subject it steps clear of him rather than re-cloning him.
 
 **`mood=` — the register of the beat.** Default `"neutral"`, which is the register this format is
 written in. `"grim"` is for a death, a sentencing, a ruin: no face in the scene can be pleased, and
