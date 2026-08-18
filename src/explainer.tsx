@@ -1,6 +1,7 @@
 import React from 'react';
 import {Internals, useCurrentFrame, useVideoConfig} from 'remotion';
 import timeline from './timeline.json';
+import meta from './episode_meta.json';
 import {StickFigure, LIGHT, DIM, CastContext, CAST_SLOTS} from './figure';
 import {FACES} from './faces';
 import * as A from './actions';
@@ -363,6 +364,9 @@ const labelRun = (tk: Take, role: LabelRole, n: number, salt: number): string[] 
  * scenes.tsx templates. Every hero below is staged to the right of it.
  */
 const CAPTION_SAFE_X = 760;
+
+/** WHO THIS EPISODE IS ABOUT, in caps, or '' — the same field the thumbnail sets its keyword from. */
+const SUBJECT_NAME: string = String((meta as any)?.thumb?.keyword || '').toUpperCase();
 
 /**
  * A ticking second hand (WO-14). One 6° step per second — a tick, never a sweep, because a stepped
@@ -2415,8 +2419,18 @@ const CourtHearing: React.FC = () => {
               shoulders only and occupies the bottom ~150 units, which is also what the reference's
               own packed-gallery frame is made of (depression_montage_verified.jpg, 15:00). --- */}
       <rect x={560} y={636} width={800} height={40} fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE_THIN} />
+      {/* THE MAN BEHIND THE BENCH IS THE JUDGE (QA_WATCH item 16). He was `pal={LIGHT}` — the
+          episode's hero costume — so on both courtroom scenes the subject stood centred behind the
+          raised bench, under the seal, in the one seat in the room that is not his (t113 f19101,
+          t127 f21537), while the actual judge was a small grey figure off to the right in the
+          witness box. director.tsx even named the anchors that way round: the bench head was
+          registered as `defendant` and the witness-box head as `judge`.
+          The bench keeps its occupant and its geometry — only the palette changes here — and the
+          subject gets his own mark in the well below (the defendant, standing, addressing it). The
+          three head anchors in director.tsx are re-labelled to match, and the witness-box head is
+          now called `witness`, which is what it has always been. */}
       <StickFigure pose={A.stand(f)} x={962} y={760} scale={1.1} facing={1} view="front"
-        expr={FACES.hardened} pal={LIGHT} frame={f} idle="idle" />
+        expr={FACES.hardened} pal={DIM} frame={f} idle="idle" />
       <path d="M 520 772 L 1400 772 L 1470 818 L 460 818 Z" fill={tn.card} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
       <rect x={460} y={818} width={1010} height={142} fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE} />
       <UnitWall x={486} y={836} w={958} h={106} cols={7} rows={1} handle={false} fill={shade(tn.card, -2)} carcass={shade(tn.deep, -1)} />
@@ -2464,6 +2478,15 @@ const CourtHearing: React.FC = () => {
           it under the 35/48 camera-lock floor. */}
       <StickFigure pose={A.stand(0)} x={560 + v.off(8, 60)} y={990} scale={0.98} facing={1} view="profile"
         expr={FACES.neutral} pal={DIM} frame={0} idle="none" />
+      {/* THE DEFENDANT'S MARK (QA_WATCH item 16) — a fixed x in the well, facing the bench, at the
+          right-hand end of the carpet runner beside the lectern. Distinct from the bench by
+          position, by height (he stands on the floor at 996 where the bench occupant is raised to
+          760) and by which way he faces. He is drawn AFTER the bench, so the bench's own props pass
+          behind him, which is what puts him in front of it rather than in it.
+          Fixed, deliberately: `v.off` on this figure would move the anchor director.tsx measures
+          every take, and this is the one figure in the room the balloon placer has to hit. */}
+      <StickFigure pose={A.stand(f)} x={1218} y={996} scale={1.06} facing={-1} view="front"
+        expr={FACES.hardened} pal={LIGHT} frame={f} idle="idle" />
 
       {/* --- the bar of the court, then the public gallery in front of it. Camera-side order is
               bench → bar → gallery, so the heads are drawn last and occlude the rail.
@@ -2989,16 +3012,31 @@ const BroadcastDesk: React.FC = () => {
           coverage back up, which is the regression this work order must not cause. */}
       <rect x={306} y={296} width={1200} height={410} fill={period ? shade(tn.floor, 1) : shade(tn.deep, -2)} />
       <BuildingBand baseY={706} x0={306} x1={1506} n={7 + v.pick(1, 3)} seed={v.seed(23)} depth={1} minH={90} maxH={230} opacity={0.8} />
-      {/* a stats panel on the left of the screen — the band between the masthead and the lower
-          third was the emptiest region in the frame, and a news backdrop always carries figures */}
+      {/* THE SUBJECT GOES ON THE SCREEN BEHIND THE ANCHORS (QA_WATCH item 16). The left half of the
+          backdrop was a stats panel of twelve glyph rows — the emptiest region in the frame, filled
+          with texture. It now carries what a news studio actually puts up while two anchors talk
+          about a man: his picture, on a card, with his name lettered under it. That is the "or on a
+          screen behind the anchors" half of item 16's fix, and it is what lets both DESK seats be
+          anonymous (see the anchors below) without the room losing its subject. The stats keep
+          their job in a column beside him, so the panel is no emptier than it was. */}
       <rect x={344} y={382} width={556} height={214} fill={period ? PAPER_WHITE : shade(tn.deep, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
-      {Array.from({length: 12}, (_, i) => {
-        const col = i % 3, row = Math.floor(i / 3);
+      <rect x={360} y={396} width={172} height={186} fill={period ? PAPER_WHITE : shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+      <Portrait cx={446} cy={468} r={50} />
+      <rect x={360} y={546} width={172} height={36} fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+      {/* The strap under the mugshot is the SUBJECT'S NAME, not a word mined off the scene's own
+          copy — `label()` on this slot returned "FIRST" out of "SEC'S FIRST ESTIMATE", which is a
+          caption for the chart, not for a face. `episode_meta.thumb.keyword` is the one place the
+          episode already writes down who it is about (the thumbnail sets it in 60pt caps), and
+          `figure.tsx` reads the same file for the wardrobe, so the man on the screen and the man
+          the costume was resolved for cannot disagree. */}
+      <InkWords x={370} y={553} w={152} h={22} text={SUBJECT_NAME || label(tk, 'masthead', 41)} fill={INK} />
+      {Array.from({length: 6}, (_, i) => {
+        const col = i % 2, row = Math.floor(i / 2);
         return (
           <g key={i}>
-            <rect x={358 + col * 184} y={396 + row * 52} width={116} height={20}
+            <rect x={556 + col * 184} y={396 + row * 52} width={116} height={20}
               fill={rnd(v.seed(i * 17)) > 0.68 ? c.accent : period ? INK : PAPER_WHITE} opacity={period ? 0.62 : 0.88} />
-            <rect x={482 + col * 184} y={396 + row * 52} width={42} height={20}
+            <rect x={680 + col * 184} y={396 + row * 52} width={42} height={20}
               fill={period ? INK : PAPER_WHITE} opacity={period ? 0.4 : 0.55} />
           </g>
         );
@@ -3042,8 +3080,14 @@ const BroadcastDesk: React.FC = () => {
               The co-anchor gets a FACE. `DIM` desaturates fills only, so a grey figure at this
               scale with `showFace={false}` is a blank head over a same-width torso — the headless
               pill COMPARISON logged against the thumbnail crowd, and it was back here at 1.12. --- */}
+      {/* THE ANCHOR IS NOT THE SUBJECT (QA_WATCH item 16). This seat was `pal={LIGHT}` — the
+          episode's own hero costume — so on both broadcastDesk scenes Madoff sat behind the news
+          desk reporting his own fraud (t120 f20071, t153 f26653). A news studio is the one room in
+          the set where the subject is definitionally NOT in the room; he is the story being read
+          out, and he is now on the screen behind them. Only the PALETTE changes here, so every
+          staging anchor for this template still describes the same two heads in the same places. */}
       <StickFigure pose={A.sit(f)} x={CAPTION_SAFE_X + 400 + v.off(2, 40)} y={866} scale={1.2} facing={-1} view="front"
-        expr={FACES.earnest} pal={LIGHT} frame={f} idle="gesture" />
+        expr={FACES.earnest} pal={DIM} frame={f} idle="gesture" />
       <StickFigure pose={A.sit(f + 53)} x={790 + v.off(3, 40)} y={870} scale={1.12} facing={1} view="front"
         expr={FACES.neutral} pal={DIM} frame={f} idle="subtle" />
       <path d="M 340 908 L 1580 908 L 1700 972 L 224 972 Z" fill={shade(tn.card, -1)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />

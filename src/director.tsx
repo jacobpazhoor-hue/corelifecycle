@@ -205,10 +205,18 @@ export const STAGING: Record<string, Staging> = {
     panelX: 0.595,
   },
   courtHearing: {
+    // RE-LABELLED AND RE-MEASURED 2026-08-17 (QA_WATCH item 16). The two head boxes at the bench and
+    // the witness box are unchanged — the same figures stand in the same places — but the ROLES on
+    // them were swapped: `defendant` pointed at the man behind the raised bench under the seal and
+    // `judge` at the small figure in the witness box. That mislabelling is the registry's own record
+    // of the staging defect, and it is why the subject was drawn in the judge's seat. The bench head
+    // is the JUDGE, the witness box holds a WITNESS, and the defendant now has a mark of his own in
+    // the well (explainer.tsx, x=1218 y=996 scale 1.06) — measured below by staging_check.py.
     speakers: [
-      {role: 'judge', head: {cx: 0.8515, cy: 0.5543, w: 0.0563, h: 0.1090}},
-      {role: 'defendant', head: {cx: 0.5050, cy: 0.5042, w: 0.0673, h: 0.1303}},
+      {role: 'judge', head: {cx: 0.5050, cy: 0.5042, w: 0.0673, h: 0.1303}},
+      {role: 'defendant', head: {cx: 0.6306, cy: 0.7299, w: 0.0649, h: 0.1256}},
       {role: 'counsel', head: {cx: 0.2952, cy: 0.7389, w: 0.0600, h: 0.1161}},
+      {role: 'witness', head: {cx: 0.8515, cy: 0.5543, w: 0.0563, h: 0.1090}},
     ],
     extraHeads: [
       {cx: 0.0781, cy: 0.6433, w: 0.1067, h: 0.1349},

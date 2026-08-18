@@ -1363,8 +1363,15 @@ export const Portrait: React.FC<{cx: number; cy: number; r: number}> = ({cx, cy,
                 Q ${cx - r * 0.5} ${cy - r * 0.62} ${cx - r * 0.92} ${cy - r * 0.16} Z`} fill={INK} />
       <circle cx={cx - r * 0.32} cy={cy + r * 0.06} r={r * 0.11} fill={INK} />
       <circle cx={cx + r * 0.32} cy={cy + r * 0.06} r={r * 0.11} fill={INK} />
-      <path d={`M ${cx - r * 0.26} ${cy + r * 0.54} q ${r * 0.26} ${r * 0.16} ${r * 0.52} 0`}
-        fill="none" stroke={INK} strokeWidth={Math.max(2, r * 0.09)} strokeLinecap="round" />
+      {/* A LEVEL MOUTH LINE, NOT A SMILE (QA_WATCH items 6 and 16). This was a `q` curve bowing
+          DOWNWARD from both corners — a grin — on a prop that hangs in a courtroom and, since the
+          subject's mugshot went on the broadcast backdrop, sits over news copy about a fraud and a
+          death. It is the same defect `figure.tsx` fixed in its own `'neutral'` mouth and for the
+          same reason: on this format the resting face is not pleased. A portrait is a still
+          photograph of somebody, so it takes the resting mouth and nothing else; `mood` cannot
+          reach it, because it is a prop rather than a figure. */}
+      <line x1={cx - r * 0.26} y1={cy + r * 0.58} x2={cx + r * 0.26} y2={cy + r * 0.58}
+        stroke={INK} strokeWidth={Math.max(2, r * 0.09)} strokeLinecap="round" />
       <rect x={cx - r * 0.22} y={cy + r * 1.0} width={r * 0.44} height={r * 1.0} fill={PAPER_WHITE}
         stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
     </g>
