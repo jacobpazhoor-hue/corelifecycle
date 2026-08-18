@@ -1717,6 +1717,33 @@ const crowdAlive = (s: number, frac = CROWD_ALIVE): boolean => rnd(s + 13) < fra
  * (see `crowdAlive`) carries a `subtle` idle so the background is not a photograph behind a moving
  * hero. The rest are still posed at frame 0 and are byte-identical to what they rendered before.
  */
+/**
+ * HALF A FIGURE'S SHOULDER WIDTH at scale 1, in authoring units — `CROWD_HALF_W` below is measured
+ * off the rig rather than guessed: a `StickFigure` torso is drawn to ±`SEG.hipW`-ish and its widest
+ * point at rest is the shoulder line, which renders ~66 units either side of `x` at scale 1. 72 adds
+ * a small margin for the arm swing so a clamped figure is whole and not merely nearly whole.
+ */
+const CROWD_HALF_W = 72;
+
+/**
+ * Keep a crowd figure INSIDE the 1920-wide frame (QA_WATCH item 12).
+ *
+ * "the leftmost/rightmost figures are sliced by the side edges in every exterior" — and they were,
+ * by construction, not by accident: every caller passes the span it wants the row to COVER, and the
+ * row then puts a figure's CENTRE on each end of that span and adds up to ±0.17 of a step of jitter
+ * on top. A figure centred on x0 is half outside the frame whenever x0 is under ~72, which is what
+ * `bankExterior` (x0=110 with jitter), `crowdQueue` and `cityStreet` all do at one end or the other.
+ *
+ * Clamping the drawn x rather than insetting the caller's span keeps every interior figure exactly
+ * where it was — only a figure that would have been cut moves, and it moves the minimum. A row whose
+ * span is genuinely meant to run off frame (a queue continuing past the edge) should say so by
+ * being a `CrowdColumn`, which is the component for a line with depth.
+ */
+const insetToFrame = (x: number, scale: number): number => {
+  const half = CROWD_HALF_W * scale;
+  return Math.min(1920 - half, Math.max(half, x));
+};
+
 export const CrowdRow: React.FC<{
   y: number; x0: number; x1: number; n: number; scale?: number; seed?: number;
   facing?: number; view?: 'front' | 'profile' | 'back'; dz?: number; alive?: number;
@@ -1740,13 +1767,14 @@ export const CrowdRow: React.FC<{
         const s = seed * 149 + i * 11;
         const back = (rnd(s + 5) - 0.5) * 2;      // -1 .. 1 depth offset
         const alive = crowdAlive(s, aliveFrac);
+        const sc = scale * (1 + back * 0.07);
         return (
           <StickFigure
             key={i}
             pose={A.stand(0)}
-            x={x0 + i * step + (rnd(s) - 0.5) * step * 0.34}
+            x={insetToFrame(x0 + i * step + (rnd(s) - 0.5) * step * 0.34, sc)}
             y={y + back * dz}
-            scale={scale * (1 + back * 0.07)}
+            scale={sc}
             facing={rnd(s + 2) > 0.5 ? facing : -facing}
             view={view}
             pal={DIM}

@@ -736,7 +736,13 @@ const OfficeFloor: React.FC = () => {
       <Chair x={1330} y={1054} s={1.05} facing={-1} />
       <StickFigure pose={A.type_(f, 30)} x={1330} y={966} scale={1.02} facing={-1} view="front"
         expr={FACES.focused} pal={LIGHT} frame={f} idle="gesture" />
-      <SeatedRow y={968} x0={1062} x1={1062} n={1} scale={0.96} seed={31} working view="front" />
+      {/* and the second person at the near bank moves out of the same lane: at x=1062 his head sat
+          at y~728, dead centre of the crossing, so the colleague walked out of his skull. He now
+          sits against the lane's right edge, clear of the hero's head box (which starts ~1270), and
+          a little smaller — 0.80 rather than 0.96 — so the two heads have air between them. The
+          colleague passing behind him at the end of his crossing is occluded by him, which is the
+          right way round: the seat's ground-y is 968, the crossing's is 790. */}
+      <SeatedRow y={968} x0={1146} x1={1146} n={1} scale={0.8} seed={31} working view="front" />
       <Desk x={560} y={OFFICE_DESK} w={1120} legH={146} drawers={0} />
       {/* drawer pedestals under the slab, and the cable run behind them */}
       {[642, 1544].map((px, i) => (
@@ -753,11 +759,29 @@ const OfficeFloor: React.FC = () => {
       ))}
       <path d={`M 820 ${OFFICE_DESK + 92} q 120 44 250 6 q 130 -38 250 10 q 120 46 200 -8`}
         fill="none" stroke={INK} strokeWidth={STROKE_THIN * 0.7} opacity={0.6} />
+      {/* THE DESK PROPS KEEP OUT OF THE AISLE (QA_WATCH item 12: "a grey figure is impaled by the
+          desk monitor — head above it, legs below it, body gone. Two figures do this in the same
+          shot", t006 f1353 / t040 f6972).
+          The z-order was never wrong: a monitor standing on the near desk (ground y 902) IS in front
+          of a colleague standing on the floor strip behind it (ground y 790), and it is drawn after
+          him for that reason. The trouble is that the floor strip between the back wall (756) and
+          the desk (902) is only 146 units deep while a monitor occupies 756-890 of the SAME screen
+          band — so ANY figure crossing behind the desk is cut across the middle by anything standing
+          on it, and looks bisected rather than occluded. Moving the figure cannot fix that; there is
+          nowhere on that strip to stand. The props move instead.
+          The colleague's lane is `aisleX` = 1000 +/- 128, i.e. 872-1128 (its amplitude and rate are
+          TIED to the walk cycle — see the note where it is defined — so the lane itself must not be
+          retuned casually). The second monitor sat at 824-1000, straight through it; it now sits at
+          1480, on the clear right end of the slab, and the desk phone takes the vacated spot. Every
+          prop is still on the desk and the desk is no less dressed — the only thing that changed is
+          that the aisle a person walks down no longer has furniture standing in it. */}
       <Monitor x={598} y={OFFICE_DESK - 152} w={182} h={140} content={v.one(11, ['chart', 'grid', 'text'] as const)} seed={v.seed(8)} />
-      <Monitor x={824} y={OFFICE_DESK - 146} w={176} h={134} content={v.one(12, ['text', 'chart', 'grid'] as const)} seed={v.seed(4)} />
+      <Monitor x={1480} y={OFFICE_DESK - 146} w={176} h={134} content={v.one(12, ['text', 'chart', 'grid'] as const)} seed={v.seed(4)} />
       <Keyboard x={614} y={OFFICE_DESK - 4} w={158} />
-      <Keyboard x={840} y={OFFICE_DESK - 4} w={150} />
-      <DeskPhone x={1502} y={OFFICE_DESK - 2} s={0.9} />
+      <Keyboard x={1496} y={OFFICE_DESK - 4} w={150} />
+      {/* the phone is short enough to sit at desk height (y ~840-900), well under the colleague's
+          feet at 790, so unlike a monitor it can stand anywhere along the slab */}
+      <DeskPhone x={1000} y={OFFICE_DESK - 2} s={0.9} />
       <Papers x={1214 + v.off(13, 60)} y={OFFICE_DESK - 18} n={2 + v.pick(14, 3)} s={0.74} seed={v.seed(6)} />
       <rect x={1450} y={OFFICE_DESK - 42} width={40} height={40} rx={6} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
       <path d={`M 1490 ${OFFICE_DESK - 34} q 20 8 0 18`} fill="none" stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
@@ -924,9 +948,26 @@ const Boardroom: React.FC = () => {
       <StickFigure pose={A.stand(f)} x={1770} y={862} scale={1.16} facing={-1}
         view={v.one(13, ['profile', 'profile', 'front'] as const)}
         expr={FACES.hardened} pal={LIGHT} frame={f} idle="gesture" />
-      <SeatedRow y={1054} x0={330} x1={1180} n={3 + v.pick(14, 2)} scale={1.12} seed={v.seed(23)} view="back" />
+      {/* THE NEAR BACKS SIT IN THEIR OWN CHAIRS (QA_WATCH item 12: "seated figures' legs are drawn
+          in front of the chair backs that should occlude them, in every chair, in every
+          boardroom/chartBoard").
+          The z-order was already right — chairs are drawn after the figures — but the two rows were
+          computed INDEPENDENTLY: a `SeatedRow` spread over x0=330..1180 with n varying 3..5 by the
+          take, against four chairs hard-coded at 300/590/880/1170. At n=4 every figure sat 30 units
+          right of its chair and its legs came down beside the back instead of behind it; at n=3 the
+          two rows had nothing to do with each other at all. Nobody was in a chair.
+          This is the pattern `chartBoard` below already uses and says why: ONE SEAT PER CALL, with
+          x0 === x1 and n === 1 so the row's own ±0.18-step jitter is zero, and the chair drawn at
+          the SAME x immediately after its occupant. `y` and `scale` are unchanged at 1054 / 1.12,
+          which is what keeps director.tsx's `extraHeads` band for this row valid — see
+          staging_check.py, and note that x is the only quantity that moved. */}
       {[300, 590, 880, 1170].map((cx, i) => (
-        <Chair key={i} x={cx} y={1096} s={1.16} facing={1} fill={period ? undefined : shade(tn.body, -2)} />
+        <g key={i}>
+          {i !== v.pick(14, 5) && (
+            <SeatedRow y={1054} x0={cx} x1={cx} n={1} scale={1.12} seed={v.seed(23 + i * 3)} view="back" />
+          )}
+          <Chair x={cx} y={1096} s={1.16} facing={1} fill={period ? undefined : shade(tn.body, -2)} />
+        </g>
       ))}
     </Frame>
   );
@@ -1490,20 +1531,33 @@ const CityStreet: React.FC = () => {
           under it. The near lane is the only one it can use: it is drawn last, so passing the two
           parked cars occludes them, which is what a nearer lane should do. Any of the parked lanes
           would have driven one car straight THROUGH another. The wrap constant puts it at exactly
-          its old x at frame 0, so the composition is unchanged in a still. --- */}
+          its old x at frame 0, so the composition is unchanged in a still.
+
+          THE PARKED LANES MOVED UP THE ROAD (QA_WATCH item 12: "two cars stacked on top of each
+          other at the kerb", t074 f12576, t168 f29354). The three lanes were 946 / 968 / 1064 with
+          the near car at s=1.0, and a car at that scale is ~120 units tall — so the near car's ROOF
+          landed at 944 and the near parked car's WHEELS at 946, tangent to within two units. Twice
+          a wrap the driving car passed under a parked one and the two read as one stacked on the
+          other. Widening the OVERLAP instead was tried first and is worse: at y=1004 the near car
+          swallows the parked one whole and leaves a sliver of roof poking out of its roof, which
+          reads as a drawing error rather than as depth.
+          The lanes now separate in the two quantities that carry distance in a flat frame — ground-y
+          and scale — so the far lane is unambiguously FURTHER UP THE ROAD rather than directly
+          behind: 910 at s=0.5 and 936 at s=0.60, leaving ~34 units of road between the near car's
+          roof and the far car's wheels at the worst phase. Both stay clear of STREET_ROAD (858). --- */}
       {/* PERIOD: the same three lanes, drawn as DRAYS. The near one keeps the identical wrap
           arithmetic, so the travelling object — this template's whole camera-lock argument — is
           unchanged in size, speed and phase; only what it is made of changes. */}
       {period ? (
         <g>
-          <HandCart x={430 + v.off(13, 90)} y={946} s={0.62} facing={1} body={shade(tn.body, -1)} />
-          <HandCart x={1500 + v.off(14, 90)} y={968} s={0.72} facing={-1} body={tn.card} />
+          <HandCart x={430 + v.off(13, 90)} y={910} s={0.5} facing={1} body={shade(tn.body, -1)} />
+          <HandCart x={1500 + v.off(14, 90)} y={936} s={0.6} facing={-1} body={tn.card} />
           <HandCart x={2200 - ((f * 13 + 1320) % 2600)} y={1064} s={1.0} facing={-1} body={shade(tn.card, -1)} />
         </g>
       ) : (
         <g>
-          <Car x={430 + v.off(13, 90)} y={946} s={0.62} facing={1} body={shade(tn.body, -1)} />
-          <Car x={1500 + v.off(14, 90)} y={968} s={0.72} facing={-1} body={tn.card} />
+          <Car x={430 + v.off(13, 90)} y={910} s={0.5} facing={1} body={shade(tn.body, -1)} />
+          <Car x={1500 + v.off(14, 90)} y={936} s={0.6} facing={-1} body={tn.card} />
           <Car x={2200 - ((f * 13 + 1320) % 2600)} y={1064} s={1.0} facing={-1} body={c.accent} />
         </g>
       )}
@@ -2194,9 +2248,16 @@ const BankExterior: React.FC = () => {
         </g>
       )}
       <CaseStack x={286 + v.off(6, 60)} baseY={1006} n={2 + v.pick(7, 3)} s={0.62} seed={v.seed(23)} />
+      {/* THE KERBSIDE CAR IS NEARER THAN THE CROWD, SO IT HAS TO LOOK IT (QA_WATCH item 12: "a
+          pedestrian stands at roof height ON a parked car", t001b f277 / t026 f4726). The car's
+          ground-y (1074) is correctly in front of the crowd row's (958) and it is correctly drawn
+          after it — but at s=0.86 its ROOF landed at 971, thirteen units BELOW the crowd's feet, so
+          it occluded none of them and the pedestrians standing behind it read as standing on it.
+          At s=1.15 the roof is at 936 and the car crosses their shins, which is the same z-order
+          finally visible as one. It also gives this plaza the near-plane mass bible §6.8 asks for. */}
       {period
-        ? <HandCart x={520 + v.off(8, 80)} y={1074} s={0.86} facing={1} body={shade(tn.body, -1)} />
-        : <Car x={520 + v.off(8, 80)} y={1074} s={0.86} facing={1} body={shade(tn.body, -1)} />}
+        ? <HandCart x={520 + v.off(8, 80)} y={1074} s={1.15} facing={1} body={shade(tn.body, -1)} />
+        : <Car x={520 + v.off(8, 80)} y={1074} s={1.15} facing={1} body={shade(tn.body, -1)} />}
       {/* someone crossing the plaza (WO-24) — this frame measured 100% motionless, its only moving
           things being the flag and a 0.14 crowd, neither of which reaches the |Δ| 1.0 threshold */}
       <Passerby y={1068} x0={2160} x1={-240} scale={0.96} seed={v.seed(3)} at={92} />
