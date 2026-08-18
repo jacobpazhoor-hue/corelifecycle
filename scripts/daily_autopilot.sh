@@ -15,6 +15,45 @@ mkdir -p runs/autopilot
 LOG="runs/autopilot/$(date +%Y%m%d_%H%M).log"
 exec >> "$LOG" 2>&1
 echo "=== autopilot start $(date) ==="
+
+# --- FREE-DISK PRECONDITION (flow audit R1, 2026-08-17) ------------------------------------------
+# 2026-08-17 went dark exactly like this: the cloud render came back 'cancelled', render() fell
+# through to a LOCAL render with no idea how much space existed, ground for ~2h and died with
+# "Error submitting a packet to the muxer: No space left on device" buried in an ffmpeg dump on line
+# ~30000 of the log. The alert said "render failed/unverified". Nothing anywhere said "disk". The
+# sibling Sammi project has logged free space at the top of every run since 2026-08-11, after a
+# near-miss ENOSPC corrupted its webpack cache. This is the cheap question asked BEFORE the expensive
+# work instead of discovered two hours into it.
+#
+# BOTH FLOORS ARE ESTIMATES, NOT MEASUREMENTS — nobody has instrumented a local render that
+# succeeded. What is known: the 08-17 render died writing a ~98 MB audio chunk having STARTED with
+# 6.3 GiB free, so a local 16-minute render eats more than 6 GiB before it even reaches the mux, and
+# it holds ~29 500 frame PNGs plus uncompressed WAV mix chunks in $TMPDIR while it does. 25 GiB is
+# the flow audit's engineering estimate on that single data point, deliberately generous because the
+# cost of being wrong low is a wasted night and the cost of being wrong high is one skipped local
+# render on a path that is the fallback, not the norm. RETUNE IT the first time a local render
+# succeeds: log `df -g` before and after, and set the floor to the observed peak plus ~50%.
+MIN_DISK_GIB_RUN="${MIN_DISK_GIB_RUN:-4}"                     # floor to start the night at all:
+                                                              # build.py writes ~200 VO clips, an
+                                                              # ambient wav and 2 smoke frames
+MIN_DISK_GIB_LOCAL_RENDER="${MIN_DISK_GIB_LOCAL_RENDER:-25}"  # ESTIMATE — see above. Retune freely.
+_free_gib() {  # -> whole GiB free, as the MINIMUM across the repo volume and $TMPDIR's volume: a
+               # local render writes frames to $TMPDIR and the mp4 to out/, and on this Mac they are
+               # the same volume today — but that is a fact about today, not a guarantee. Empty
+               # output means the measurement FAILED, which callers must treat as "do not proceed",
+               # never as "plenty of room".
+  local _r _t
+  _r="$(df -g . 2>/dev/null | awk 'NR==2{print $4}')"
+  _t="$(df -g "${TMPDIR:-/tmp}" 2>/dev/null | awk 'NR==2{print $4}')"
+  case "${_r}" in ''|*[!0-9]*) _r="" ;; esac
+  case "${_t}" in ''|*[!0-9]*) _t="" ;; esac
+  [ -n "$_r" ] || { echo "$_t"; return; }
+  [ -n "$_t" ] || { echo "$_r"; return; }
+  if [ "$_r" -le "$_t" ]; then echo "$_r"; else echo "$_t"; fi
+}
+echo "disk: $(_free_gib) GiB free (min of repo + \$TMPDIR volumes; run floor ${MIN_DISK_GIB_RUN}g, local-render floor ${MIN_DISK_GIB_LOCAL_RENDER}g)"
+df -h . "${TMPDIR:-/tmp}" 2>/dev/null
+
 if grep -q '"enabled": *false' ops/routine.json; then echo "disabled — exit"; exit 0; fi
 
 # --- already-posted-today guard: lets the catchup job fire safely every 2h (does nothing if a
@@ -125,18 +164,33 @@ SHARED_LOCK="/tmp/video_autopilot.lock"; _w=0
 while ! mkdir "$SHARED_LOCK" 2>/dev/null; do
   _h="$(cat "$SHARED_LOCK/holder" 2>/dev/null)"
   _age=$(( $(date +%s) - $(stat -f %m "$SHARED_LOCK" 2>/dev/null || echo 0) ))
-  # Steal only a lock nobody live holds (dead holder, RECYCLED pid, unverifiable) or one >3h old.
+  # Steal only a lock nobody live holds (dead holder, RECYCLED pid, unverifiable).
   # A live holder from the other project is left alone — the whole point of this lock is to QUEUE.
-  if [ "$_age" -gt 10800 ]; then _steal=1; LOCK_WHY="lock age ${_age}s > 3h"
-  elif _lock_stale "$SHARED_LOCK"; then _steal=1
-  else _steal=0; fi
+  #
+  # R6 (flow audit 2026-08-17): this used to read
+  #     if [ "$_age" -gt 10800 ]; then _steal=1; LOCK_WHY="lock age ${_age}s > 3h"
+  #     elif _lock_stale "$SHARED_LOCK"; then _steal=1
+  # — an UNCONDITIONAL age test ahead of the liveness test, which flatly contradicted the two lines
+  # above it: a verified-live holder was stolen from purely for being 3h old. sammy-sloth-video's
+  # script carries the mirror-image rule, so the two projects stole this lock from each other at the
+  # 3h mark and ran two heavy TTS+Remotion pipelines on one 8GB Mac — swap death, and a shared volume
+  # filling twice as fast, which is a plausible contributor to the 08-17 ENOSPC. CoreLifecycle runs
+  # routinely pass 3h (the 08-17 cloud poll alone was 81 minutes before the render started).
+  # The raw age heuristic predates the PID-reuse hardening in _lock_stale; that hardening is exactly
+  # what makes it unnecessary, which is why the runs/.lock path above already calls _lock_stale
+  # ALONE. A legacy pid-less lock still keeps its >3h rule, inside _lock_stale where it belongs.
+  # No longer backstop is needed either: if a genuinely live holder really does run forever, the
+  # _w >= 14400 check below exits THIS run after 4h instead of trampling that one.
+  # (Only this repo's side is fixed here. sammy-sloth-video needs the same change for the queue to
+  # actually queue; until it lands, Sammi can still steal from us at 3h.)
+  if _lock_stale "$SHARED_LOCK"; then _steal=1; else _steal=0; fi
   if [ "$_steal" = 1 ]; then
     echo "stealing stale $SHARED_LOCK (holder=${_h:-none}: $LOCK_WHY)"
     echo "$(date '+%F %H:%M') STALE LOCK stolen $SHARED_LOCK (holder=${_h:-none}: $LOCK_WHY)" >> runs/autopilot/ALERTS.log
     rm -rf "$SHARED_LOCK"; continue
   fi
   [ "$_w" -ge 14400 ] && { echo "shared video lock held >4h — exiting."; exit 0; }
-  echo "waiting on shared video lock ($LOCK_WHY) … ${_w}s"; sleep 120; _w=$(( _w + 120 ))
+  echo "waiting on shared video lock (holder=${_h:-none}: $LOCK_WHY, lock age ${_age}s) … ${_w}s"; sleep 120; _w=$(( _w + 120 ))
 done
 echo $$ > "$SHARED_LOCK/holder"; ps -p $$ -o comm= > "$SHARED_LOCK/holder_cmd" 2>/dev/null; GOT_SHARED=1
 
@@ -178,6 +232,8 @@ except Exception: print(999)" "$LASTPOST" 2>/dev/null || echo 999)
 trap finish EXIT
 
 render() {  # FREE CLOUD (GitHub Actions) -> Modal -> local. VERIFY by file size.
+  RENDER_WHY=""   # global: why the render refused/failed, so notify() can name the cause instead of
+                  # leaving it 30 000 lines up the log (2026-08-17: the word "disk" appeared nowhere)
   rm -f out/episode.mp4 out/short.mp4
   CLOUD_OK=0   # global: step 7 reuses the cloud-rendered Short + skips a double audio master
   # 1) FREE CLOUD RENDER — keeps the heavy render off the 8GB Mac (which thrashes on full episodes).
@@ -190,6 +246,26 @@ render() {  # FREE CLOUD (GitHub Actions) -> Modal -> local. VERIFY by file size
     echo "rendered on Modal (parallel shards)"
   else
     echo "rendering LOCALLY (no cloud config / Modal disabled or failed)"
+    # --- DO NOT START A LOCAL RENDER BLIND (flow audit R1, 2026-08-17) -------------------------
+    # This is THE branch that kills nights: it is reached whenever the cloud path fails for ANY
+    # reason (including a GitHub-side 'cancelled', which is what happened on 08-17), and it is by
+    # far the most disk-hungry thing this pipeline does. Reclaim first, THEN measure, THEN decide —
+    # the purge below used to run only AFTER a failure, i.e. after the damage.
+    # Refusing here is not a lost night: the episode is built and gate-passed, runs/owed_episode.txt
+    # already records that it is owed, and no daily attempt has been charged (see the R2 block
+    # below), so the 2-hourly catchup picks it straight back up and retries the CLOUD path. Failing
+    # fast with the word "disk" in the alert beats a 2h grind that ends in an ffmpeg ENOSPC.
+    rm -rf "${TMPDIR:-/tmp}"remotion-* 2>/dev/null; rm -rf /tmp/remotion-* 2>/dev/null
+    local _fg="$(_free_gib)"
+    if [ -z "$_fg" ]; then
+      RENDER_WHY="could not measure free disk (df failed) — refusing to start a LOCAL render blind"
+      echo "$RENDER_WHY"; return 1
+    fi
+    if [ "$_fg" -lt "$MIN_DISK_GIB_LOCAL_RENDER" ]; then
+      RENDER_WHY="insufficient disk for a LOCAL render: ${_fg} GiB free < ${MIN_DISK_GIB_LOCAL_RENDER} GiB floor (an ESTIMATE — see MIN_DISK_GIB_LOCAL_RENDER at the top of this script). NOT starting one. The episode is built and gate-passed and is kept in runs/owed_episode.txt; the catchup retries the cloud path in 2h. Free space up or raise the floor deliberately."
+      echo "$RENDER_WHY"; return 1
+    fi
+    echo "local render precondition OK: ${_fg} GiB free >= ${MIN_DISK_GIB_LOCAL_RENDER} GiB floor"
     # --gl=angle = stable headless GL; concurrency 4 (proven on this Mac by Sammi); --log=error keeps
     # the log small; caffeinate belt-and-suspenders. Retry once after purging caches on failure.
     _local_render() { caffeinate -dimsu npx remotion render EveryLevelLawyer out/episode.mp4 --gl=angle --concurrency="${1:-2}" --log=error --timeout=180000; }
@@ -198,7 +274,8 @@ render() {  # FREE CLOUD (GitHub Actions) -> Modal -> local. VERIFY by file size
       # Purge caches and RETRY AT CONCURRENCY 1 (minimal memory -> survives the stall).
       echo "local render failed — purging caches + retrying at concurrency 1 (lower memory)"
       rm -rf node_modules/.cache 2>/dev/null; rm -rf "${TMPDIR:-/tmp}"remotion-* 2>/dev/null; rm -rf /tmp/remotion-* 2>/dev/null
-      _local_render 1 || return 1
+      echo "disk after purge: $(_free_gib) GiB free"
+      _local_render 1 || { RENDER_WHY="local render failed twice (concurrency 2 then 1); $(_free_gib) GiB free at failure"; return 1; }
     fi
   fi
   [ -f out/episode.mp4 ] || { echo "render produced no file"; return 1; }
@@ -210,7 +287,21 @@ render() {  # FREE CLOUD (GitHub Actions) -> Modal -> local. VERIFY by file size
 }
 package() {  # thumbnail still + upload_kit.json — MUST run before every review so the reviewer judges
              # the packaging that matches the CURRENT episode on disk, not a stale one from the last run.
-  npx remotion still Thumbnail out/thumbnail.png --timeout=60000
+  # --- CLEAR THIS STAGE'S ARTIFACTS FIRST, THEN CHECK THEY WERE REWRITTEN (audit R5, 2026-08-17) --
+  # out/thumbnail.png was cleared by NOTHING and the still below was checked by NOTHING, while
+  # gen_packaging.py:247 hardcodes that path and yt_upload.py:170 uploads whatever is sitting at it.
+  # So a failed still published LAST NIGHT'S THUMBNAIL on tonight's video — silently, publicly, on
+  # the single most visible artifact this channel produces, with a normal-looking PUBLISHED line in
+  # the log. The comment below already explained at length why an unchecked gen_packaging.py would
+  # ship a stale kit; the still one line above it was left unchecked anyway.
+  # Deleting both first is what turns the failure mode from STALE (silent, ships) into ABSENT
+  # (loud, HALTs). On the cloud path these two files arrive inside the artifact and this stage has
+  # always regenerated them locally regardless, so nothing else changes.
+  rm -f out/thumbnail.png out/upload_kit.json 2>/dev/null
+  if ! npx remotion still Thumbnail out/thumbnail.png --timeout=60000 || [ ! -s out/thumbnail.png ]; then
+    notify "HALT" "thumbnail still failed — out/thumbnail.png is ABSENT (before 2026-08-17 it would have been left STALE, i.e. the previous episode's thumbnail published on tonight's video). NOT publishing. Catchup retries in 2h. See $LOG"
+    exit 0
+  fi
   # gen_packaging.py is no longer advisory. It now reconciles the description's chapter list against
   # the chapter CARDS actually drawn on screen (see its header for the fork it closes) and exits
   # non-zero when the two cannot be aligned — a real authoring defect. This script has no `set -e`,
@@ -235,6 +326,29 @@ review() {
   # the disabled Shorts path and qa_watch recreates it from scratch when that path runs.
   rm -f out/review/*.png 2>/dev/null
   rm -rf out/review/watch out/review/check_watch out/review/short_watch 2>/dev/null
+  # --- THE SAME RULE, FOR THE FOUR JSONs THE PRUNE ABOVE STOPPED SHORT OF (audit R3/R4) ----------
+  # The prune above was written with full awareness of this failure mode and ended at *.png. Every
+  # JSON in this directory is written by a call that is ALLOWED TO FAIL, and every one of them is
+  # read as a statement about THIS render:
+  #   facts.json        — REVIEW_PROMPT.txt:37 hands it to the reviewer as "DETERMINISTIC
+  #                       MEASUREMENTS OF THIS EPISODE" and :45 tells it to use those numbers
+  #                       INSTEAD of re-deriving them, so one exception inside review_facts.py fed
+  #                       the reviewer another episode's runtime, WPM, scene count and chapter
+  #                       timestamps with the cross-check deliberately removed.
+  #   audio_report.json — REVIEW_PROMPT.txt:55 calls it "your EARS".
+  #   verdict.json      — the worst of them. The reviewer call at the end of this function is a
+  #                       single unchecked LLM call; on a rate-limit or 401 (2026-08-13) the runner
+  #                       read the PREVIOUS verdict. The one on disk said "revise", so the failure
+  #                       mode was the fix agent applying ANOTHER EPISODE'S notes to tonight's
+  #                       content.py, then a rebuild and a re-render. decision()'s `|| echo reject`
+  #                       never covered this: it fires on missing or unparseable, never on
+  #                       present-and-stale.
+  #   reviewed_render.json — re-stamped below; it is sha-bound, so absence blocks the upload exactly
+  #                       as a mismatch does. It goes too, so this whole directory obeys one rule.
+  # ABSENCE IS SAFE AND DOCUMENTED (REVIEW_PROMPT.txt:49: "If the file is missing, fall back to
+  # measuring by hand"). STALENESS is what reviews the wrong episode. out/ is a workspace; every
+  # stage now clears its own artifacts before it writes them.
+  rm -f out/review/facts.json out/review/audio_report.json out/review/verdict.json out/review/reviewed_render.json 2>/dev/null
   python3 qa_watch.py out/episode.mp4 || python3 qa_sample.py
   # HARD ASSERT — fail LOUDLY rather than review nothing. With the prune above, zero frames means
   # qa_watch AND qa_sample both failed, and the reviewer would be judging an empty directory. A
@@ -255,16 +369,43 @@ review() {
   # a later re-render, and including a hand-run upload while this loop is still revising.
   python3 scripts/upload_guard.py stamp out/episode.mp4 \
     || echo "review stamp FAILED — upload will be blocked by the review guard until this is fixed"
-  python3 qa_audio.py || echo "qa_audio failed (non-fatal)"
+  python3 qa_audio.py || echo "!! qa_audio failed (non-fatal)"
+  [ -s out/review/audio_report.json ] || echo "!! out/review/audio_report.json was NOT written — the reviewer judges sound from the frames and the script. ABSENT, never stale."
   # --- PRECOMPUTED FACTS (token audit §7 S7) — emit the deterministic statistics the reviewer used
   # to re-derive by hand with ad-hoc python one-liners (measured: 39 Bash turns in one session,
   # ~2.6M context tokens of pure arithmetic). It ADDS information and removes none: the reviewer
   # still reads every frame and every file, and REVIEW_PROMPT.txt tells it to re-measure anything it
   # doubts. Non-fatal by design — without facts.json the reviewer simply measures by hand as before.
-  python3 scripts/review_facts.py || echo "review_facts failed (non-fatal) — reviewer will measure by hand"
-  "$CLAUDE" --print --model sonnet "$(cat docs/REVIEW_PROMPT.txt)"
+  python3 scripts/review_facts.py || echo "!! review_facts failed (non-fatal) — reviewer will measure by hand"
+  [ -s out/review/facts.json ] || echo "!! out/review/facts.json was NOT written — the reviewer re-derives every number by hand (REVIEW_PROMPT.txt:49). ABSENT, never stale."
+  # --- THE REVIEWER CALL IS CHECKED (audit R4) ---------------------------------------------------
+  # It was the one LLM call in the pipeline whose failure was invisible, and it is the most expensive
+  # one in the pipeline (mean $8.97), sharing an account with interactive work. With verdict.json
+  # pruned above, a failure here can no longer be papered over by the previous run's verdict — but
+  # say so out loud rather than letting decision()'s reject default explain it as a bad episode.
+  "$CLAUDE" --print --model sonnet "$(cat docs/REVIEW_PROMPT.txt)" \
+    || { notify "HALT" "reviewer agent FAILED (non-zero exit) — there is NO verdict for this render. NOT publishing unreviewed, and NOT acting on a previous run's verdict (which is what used to happen). Catchup retries in 2h. See $LOG"; exit 0; }
+  [ -s out/review/verdict.json ] || { notify "HALT" "reviewer agent exited 0 but wrote no out/review/verdict.json — there is NO verdict for this render. NOT publishing. See $LOG"; exit 0; }
 }
 decision() { python3 -c "import json;print(json.load(open('out/review/verdict.json')).get('decision','reject'))" 2>/dev/null || echo reject; }
+
+# --- RESOURCE PRECONDITION FOR THE NIGHT (audit R1) ---------------------------------------------
+# Re-measured here rather than reused from the start-of-run line: the shared-lock wait above can
+# sleep for up to 4h, and on this machine the other project's render is exactly what eats the volume
+# in between. This floor only has to cover build.py (~200 VO clips, an ambient wav, two smoke
+# frames); the far larger local-render floor is enforced inside render() where that path is chosen.
+# exit 0, not exit 1: this is a "come back later", and no attempt has been charged, so the 2-hourly
+# catchup gets a clean retry the moment space is freed.
+FREE_GIB="$(_free_gib)"
+if [ -z "$FREE_GIB" ]; then
+  notify "HALT" "could not measure free disk (df failed) — refusing to start a night blind. See $LOG"
+  exit 0
+fi
+if [ "$FREE_GIB" -lt "$MIN_DISK_GIB_RUN" ]; then
+  notify "HALT" "insufficient disk: ${FREE_GIB} GiB free < ${MIN_DISK_GIB_RUN} GiB floor. Not starting the night — build.py would fail partway and leave half-written state. Free space and the catchup retries in 2h. See $LOG"
+  exit 0
+fi
+echo "disk precondition OK: ${FREE_GIB} GiB free >= ${MIN_DISK_GIB_RUN} GiB run floor"
 
 # 0) ANALYTICS — refresh performance data so the showrunner can learn from what landed
 echo "--- analytics refresh ---"
@@ -290,7 +431,8 @@ ATT_COUNTED=0
 count_attempt() {  # idempotent — the same run must never burn two of the day's attempts
   [ "$ATT_COUNTED" = 1 ] && return 0
   ATT_COUNTED=1
-  python3 -c "import json,os; f='$ATT_FILE'; d=json.load(open(f)) if os.path.exists(f) else {}; c=d.get('count',0) if d.get('date')=='$TODAY' else 0; json.dump({'date':'$TODAY','count':c+1}, open(f,'w'))" 2>/dev/null || true
+  # atomic (audit R7): a truncated ledger reads as count=0 and silently disables the cap entirely
+  python3 -c "import json,os; f='$ATT_FILE'; d=json.load(open(f)) if os.path.exists(f) else {}; c=d.get('count',0) if d.get('date')=='$TODAY' else 0; t=f+'.tmp'; fh=open(t,'w'); json.dump({'date':'$TODAY','count':c+1}, fh); fh.flush(); os.fsync(fh.fileno()); fh.close(); os.replace(t,f)" 2>/dev/null || true
   echo "counted a build attempt against MAX_BUILDS_PER_DAY=${MAX_BUILDS_PER_DAY:-2} — $1"
 }
 
@@ -362,11 +504,20 @@ rm -f runs/build_attempts.txt   # fresh bounded-build budget for this agent (scr
 "$CLAUDE" --print --model sonnet "$REUSE_DIRECTIVE
 
 $(cat docs/AUTOPILOT_PROMPT.txt)"
+CREATIVE_RC=$?
 POST_FP="$(_work_fingerprint)"
 if [ "$POST_FP" != "$PRE_FP" ]; then
   count_attempt "creative agent wrote to content.py / episode_meta.json / docs/research"
+elif [ "$REUSE_OK" = 1 ] && [ "${CREATIVE_RC:-1}" = 0 ]; then
+  # REUSE branch: a SUCCESSFUL pass writes nothing by design (verify the built episode, get a BUILD
+  # OK, stop), so the fingerprint above is structurally unable to see it. The session still happened
+  # and still cost a real creative pass, so it is charged — otherwise the cap has NO teeth at all on
+  # this branch and a night that keeps failing downstream would buy a fresh validation session every
+  # 2h forever. A REUSE pass that DIED (non-zero rc: the 401, the 2026-08-13 rate-limit that returned
+  # in one turn at $0.00) consumed nothing and is not charged, exactly as on the WRITE branch.
+  count_attempt "REUSE pass completed (a successful REUSE writes no file by design) — a real creative session"
 else
-  echo "creative agent changed no file — transient no-op, NOT counted against the daily budget"
+  echo "creative agent changed no file (rc=${CREATIVE_RC:-?}) — transient no-op, NOT counted against the daily budget"
 fi
 echo "creative agent used $(cat runs/build_attempts.txt 2>/dev/null || echo 0) of ${MAX_BUILD_RERUNS:-4} bounded build attempts"
 
@@ -389,9 +540,25 @@ if ! python3 -c "import json,sys;t='$NEWTOPIC';p=[x['topic'] for x in json.load(
   exit 0
 fi
 echo "creative agent advanced to NEW topic: $NEWTOPIC"
-# Belt-and-braces: a successful pass always rewrites episode_meta.json, so the fingerprint above has
-# already counted it. count_attempt is idempotent, so this can never double-charge the day.
-count_attempt "creative agent advanced to a new topic — committing to build+render+review"
+# --- DELIBERATELY NO count_attempt HERE (flow audit R2, 2026-08-17) -----------------------------
+# This line used to be an UNCONDITIONAL
+#     count_attempt "creative agent advanced to a new topic — committing to build+render+review"
+# justified by "a successful pass always rewrites episode_meta.json, so the fingerprint above has
+# already counted it". That was false on the REUSE branch — the line above literally prints "NOT
+# counted against the daily budget" and this one counted it a statement later — but the real damage
+# was that it charged the day BEFORE the build and BEFORE the render, bypassing the work-fingerprint
+# that exists precisely to stop the budget paying for work nobody did.
+# WHAT IT COST: on 2026-08-17 two renders died on ENOSPC, at $0.00 in tokens each, and both of
+# MAX_BUILDS_PER_DAY's attempts were already spent. The 22:14 catchup exited in 147 bytes with
+# "2 full attempts already today — budget cap" and the channel stayed dark until midnight over a
+# budget that had not actually been spent.
+# THE RULE NOW: THE DAILY CAP CHARGES CREATIVE WORK CONSUMED, NOTHING ELSE. That decision is made in
+# full at the creative step above (the fingerprint changed, or a REUSE pass ran to completion) and is
+# final. Everything from here down — build, gate-repair, render, package, review, upload — is
+# infrastructure: when it fails it leaves the budget intact so the 2-hourly catchup can retry, and
+# the owed-episode marker written below means the retry costs no new creative pass either.
+# DO NOT re-add a count here. If a future failure mode needs charging, charge it where the tokens
+# are spent, not where the run happens to be standing.
 
 # 2) BUILD + GATE + SMOKE (crisp VO + music + quality gate + 1-frame render check). HALT if it fails.
 # --- ONE BOUNDED GATE REPAIR (WO-32) --------------------------------------------------------------
@@ -433,7 +600,7 @@ _topic_on_disk > "$OWED_FILE"
 
 # 3) RENDER (verified)
 echo "--- render ---"
-render || { notify "FAIL" "render failed/unverified. See $LOG"; exit 1; }
+render || { notify "FAIL" "render failed/unverified${RENDER_WHY:+ — $RENDER_WHY} See $LOG"; exit 1; }
 
 # 4) PACKAGE (thumbnail still + upload_kit.json) so the reviewer judges packaging that matches
 #    THIS episode, then REVIEWER (acts as a human creative director) + fix-loop (max 2 revisions)
@@ -452,7 +619,7 @@ while [ "$DEC" = "revise" ] && [ $tries -lt 2 ]; do
   # docs/CRAYON_BIBLE.md); the art lives in src/explainer.tsx and its helpers.
   "$CLAUDE" --print --model sonnet "You are the production team. Read out/review/verdict.json (the reviewer's notes) and apply its 'fixes' PRECISELY. READ AND EDIT IN BATCHES: issue 8-12 tool calls in a SINGLE message rather than one per message. Every round-trip re-sends your whole accumulated context, so serial single-call turns cost quadratically — measured, this step runs 101-123 turns at ONE tool call each, which is the most wasteful shape in the pipeline. Batching changes nothing about what you read or edit; open the verdict, content.py, ops/episode_meta.json and the .tsx files you need in one message, and group independent edits together too. FORMAT: this channel is a THIRD-PERSON, PAST-TENSE crayon-style explainer about a real subject — docs/BIBLE.md is the writer canon and docs/CRAYON_BIBLE.md is the measured style spec. Keep the same topic and the same crayon style: never reintroduce the retired second-person POV / doodle format (line art on warm paper, 'Every Level', level ladders, present tense), and never emit a legacy template name from docs/TEMPLATES.md — the episode uses ONLY the thirteen explainer environments (officeFloor, boardroom, exchangeFloor, cityStreet, domesticInterior, newsMontage, bankExterior, courtHearing, factoryFloor, broadcastDesk, crowdQueue, closeUpPortrait, chartBoard). You MAY edit any of: content.py + ops/episode_meta.json (script, scene fields card=/bubbles=/panels=/foreground=/period=, packaging copy), src/explainer.tsx (the thirteen environments), src/setdressing.tsx + src/crayonStyle.ts (shared props, palette, ink), src/textcard.tsx (full-screen cards), src/bubble.tsx (speech balloons / floating dialogue), src/panels.tsx (multi-panel splits), src/director.tsx + src/Video2.tsx (shot framing + overlay layout), src/thumbs.tsx (thumbnail). Do NOT edit gate.py or docs/CRAYON_BIBLE.md, and do not weaken a rule to make the episode fit it. Apply EVERY actionable fix in the verdict (do not skip a fix because of file scope). Then STOP; the runner will rebuild, re-render, and re-review."
   if ! python3 build.py; then notify "HALT" "build failed after revision. See $LOG"; exit 0; fi
-  render || { notify "FAIL" "render failed after revision. See $LOG"; exit 1; }
+  render || { notify "FAIL" "render failed after revision${RENDER_WHY:+ — $RENDER_WHY} See $LOG"; exit 1; }
   package
   review
   DEC=$(decision)
@@ -505,7 +672,14 @@ p=json.load(open('ops/produced_topics.json'))
 if t and t not in [x.get('topic') for x in p['produced']]:
     url=json.load(open('out/uploads.json'))[-1].get('url','') if os.path.exists('out/uploads.json') else ''
     p['produced'].append({'topic':t,'title':m.get('title'),'url':url,'date':datetime.date.today().isoformat()})
-    json.dump(p, open('ops/produced_topics.json','w'), indent=2); print('marked produced:', t)
+    # ATOMIC (audit R7): write-temp-then-os.replace, as gen_scene_images.py:170 already does. This
+    # runs immediately after a successful upload — the single moment the disk is fullest — and a
+    # truncate-in-place json.dump that hits ENOSPC here destroys the ENTIRE 37-episode duplicate
+    # guard history that three separate guards depend on. os.replace is atomic on the same volume:
+    # the file is either the old history or the new one, never a half-written one.
+    _tmp='ops/produced_topics.json.tmp'
+    _fh=open(_tmp,'w'); json.dump(p, _fh, indent=2); _fh.flush(); os.fsync(_fh.fileno()); _fh.close()
+    os.replace(_tmp,'ops/produced_topics.json'); print('marked produced:', t)
 " || echo "produced_topics update failed (non-fatal)"
     date +%F > runs/last_post.txt
     rm -f "$OWED_FILE"   # published — nothing is owed to the channel any more, so the next run WRITES
