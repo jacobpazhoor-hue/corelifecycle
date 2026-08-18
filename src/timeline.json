@@ -112,7 +112,8 @@
         "title": "The Chairman",
         "subtitle": "A Lifeguard's $5,000 Start",
         "hold": 2.4
-      }
+      },
+      "period": "mid20c"
     },
     {
       "id": "t007",
@@ -123,7 +124,8 @@
       "audioStartFrame": 3,
       "startFrame": 1447,
       "durationInFrames": 171,
-      "gap": 0.355
+      "gap": 0.355,
+      "period": "mid20c"
     },
     {
       "id": "t008",
@@ -145,7 +147,8 @@
       "audioStartFrame": 3,
       "startFrame": 1742,
       "durationInFrames": 168,
-      "gap": 0.354
+      "gap": 0.354,
+      "period": "mid20c"
     },
     {
       "id": "t010",

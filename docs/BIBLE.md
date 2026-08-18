@@ -535,7 +535,29 @@ or a one-line judgement** (§3a), which is what makes it the most valuable name 
 
 ### PERIOD — never put a dated machine under narration from a century that had not invented it
 
-**There IS a period flag now (WO-27): `period="pre1900"` on the scene.** It is opt-in, per scene, and
+**Two tiers: `period="pre1900"` and `period="mid20c"`.**
+
+| value | span | what it substitutes |
+|---|---|---|
+| `pre1900` | before ~1900 | no electricity anywhere in the picture: ledgers for screens, an inkstand for a desk phone, a chalk board for the quote board, oil and pendant lamps for panel lighting, a turned wooden chair, a masonry skyline, a dray for a car |
+| `mid20c` | ~1950–1985 | electricity yes, **microprocessors no**: a deep-cased CRT with a rounded inset screen and one amber phosphor (and a CRT television on the same component), a rotary dial in place of a keypad, a chair on four fixed legs in place of the five-star gas lift, a paper ledger where a detached keyboard would be |
+
+`mid20c` was added by QA_WATCH item 14, and the reason is the gap it left: with only `pre1900` in the
+type, **1960 rendered as the present day**. The madoff episode played "a twenty-two-year-old named
+Bernie Madoff started a small trading firm *that year*" (1960) over two colour flat-panel monitors
+and a five-star gas-lift swivel chair, and put a flat-panel television in the same year's living room.
+Tag the 1960–1985 span with it the same way a 19th-century span gets `pre1900`.
+
+> **A room with no mid-century branch renders MODERN, not Victorian, and that is deliberate.**
+> `usePeriod()` is pinned to `pre1900` rather than "any period", because 27 call sites are written as
+> `period ? <1844 art> : <modern art>` — had the boolean simply gone true for the new tier, every one
+> of them would have drawn oil lamps and inkstands in a 1960 scene, which is a worse anachronism than
+> the one the tier was added to fix. So `mid20c` changes exactly the props that have a mid-century
+> branch (`Monitor`, `Keyboard`, `DeskPhone`, `Chair` in `src/setdressing.tsx`) and leaves everything
+> else alone. If you tag a street scene and the cars still look modern, that is why — `Car` has no
+> mid-century branch yet, and adding one is how you fix it, not widening the flag.
+
+**The original flag (WO-27) is unchanged below.** It is opt-in, per scene, and
 default off — a scene that does not set it renders exactly what it always did (proved by render: all
 thirteen templates at native 1280, before and after, identical SHA-256). With it set, the template
 draws the same room with its era-marking props **substituted**, not deleted: ledgers and paper for

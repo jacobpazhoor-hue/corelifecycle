@@ -378,7 +378,7 @@ const buildPanels = (spec: PanelsT, sceneId: string, dur: number): React.ReactNo
  * would otherwise be the one failure that shows up as "the era flag did nothing", i.e. exactly the
  * anachronism the flag exists to prevent, discovered in the finished 15-minute file.
  */
-const ERAS: Era[] = ['pre1900'];
+const ERAS: Era[] = ['pre1900', 'mid20c'];
 const sceneEra = (scene: SceneT): Era | null => {
   if (scene.period === undefined || scene.period === null) return null;
   if ((ERAS as string[]).includes(scene.period)) return scene.period as Era;

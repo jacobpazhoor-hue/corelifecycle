@@ -104,12 +104,12 @@ SCENES = [
          overlay=None),
 
     # ================= CHAPTER 1 — The Chairman =================
-    dict(id="t006", level="CH 1", template="officeFloor", breath=True,
+    dict(id="t006", level="CH 1", template="officeFloor", breath=True, period="mid20c",
          narration=("A twenty-two-year-old named Bernie Madoff started a small trading firm that year."),
          overlay=None,
          card=dict(kind="chapter", title="The Chairman", subtitle="A Lifeguard's $5,000 Start", hold=2.4)),
 
-    dict(id="t007", level=None, template="domesticInterior",
+    dict(id="t007", level=None, template="domesticInterior", period="mid20c",
          narration=("His stake: five thousand dollars, saved lifeguarding and installing sprinklers."),
          overlay=None),
 
@@ -117,7 +117,7 @@ SCENES = [
          narration=("He built it into one of the busiest trading desks on Wall Street."),
          overlay=None),
 
-    dict(id="t009", level=None, template="chartBoard",
+    dict(id="t009", level=None, template="chartBoard", period="mid20c",
          narration=("He helped build the technology behind a brand-new stock exchange: NASDAQ."),
          overlay=None),
 

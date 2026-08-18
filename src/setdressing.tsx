@@ -113,12 +113,27 @@ export const useSceneTones = (): SceneTones => sceneTones(useSceneColors());
 // ---------------------------------------------------------------------------
 
 /**
- * The eras period mode knows how to draw. ONE for now, and adding a second means drawing art for it
- * — the value is validated at the timeline boundary (`Video2.tsx`) and an unknown one RAISES rather
- * than falling back to the modern room, which is exactly the silent failure this work order exists
- * to remove.
+ * The eras period mode knows how to draw.
+ *
+ * `mid20c` was added by QA_WATCH item 14, and it exists because the ONLY tier was `pre1900`: the
+ * 1960 scenes therefore rendered as the present day, and QA found "two desktop monitors with colour
+ * screens and a five-star gas-lift swivel chair" under "a twenty-two-year-old named Bernie Madoff
+ * started a small trading firm THAT YEAR" (t006 f1353), a flat-panel television in the 1960 living
+ * room (t007 f1523), and blue-bezel flat monitors on the 1960 exchange floor (t003 f813).
+ *
+ * WHAT EACH TIER MEANS, and it is a small vocabulary on purpose:
+ *   pre1900 — no electricity in the picture at all. Ledgers for screens, oil for light, oak and
+ *             iron for everything a factory would later make out of moulded plastic.
+ *   mid20c  — roughly 1950-1985. Electricity yes, MICROPROCESSORS no: a CRT in a deep case rather
+ *             than a flat panel (and often no screen at all), a rotary dial rather than a keypad,
+ *             a chair on four fixed legs rather than a gas lift on five castors, paper ledgers on
+ *             the desks beside the machines.
+ *
+ * Adding a THIRD means drawing art for it, in every prop that carries an era mark; the value is
+ * validated at the timeline boundary (`Video2.tsx`) and an unknown one RAISES rather than falling
+ * back to the modern room, which is exactly the silent failure this feature exists to remove.
  */
-export type Era = 'pre1900';
+export type Era = 'pre1900' | 'mid20c';
 
 const PeriodContext = React.createContext<Era | null>(null);
 
@@ -129,8 +144,24 @@ export const PeriodProvider: React.FC<{era: Era; children: React.ReactNode}> = (
   <PeriodContext.Provider value={era}>{children}</PeriodContext.Provider>
 );
 
-/** True inside a scene that opted into period mode. Anything era-marked must branch on this. */
-export const usePeriod = (): boolean => React.useContext(PeriodContext) !== null;
+/** The scene's era, or null outside period mode. The general form; prefer the two booleans below. */
+export const useEra = (): Era | null => React.useContext(PeriodContext);
+
+/**
+ * True inside a **pre-1900** scene. NOT "inside any period scene", and the distinction is the whole
+ * reason `mid20c` needed care rather than a new string.
+ *
+ * There are 27 call sites of the shape `period ? <1844 art> : <modern art>` across this file and
+ * `explainer.tsx`. When this returned `context !== null`, adding a second era to the type would have
+ * silently drawn OIL LAMPS AND INKSTANDS in a 1960 scene at every one of them — a worse anachronism
+ * than the modern default it was added to fix, and invisible until somebody rendered it. Keeping the
+ * boolean pinned to `pre1900` means every existing branch keeps its exact meaning and a room without
+ * a mid-century branch simply renders modern, which is where it was before.
+ */
+export const usePeriod = (): boolean => React.useContext(PeriodContext) === 'pre1900';
+
+/** True inside a **1950-1985** scene. Anything with a microprocessor in it must branch on this. */
+export const useMid20c = (): boolean => React.useContext(PeriodContext) === 'mid20c';
 
 // ---------------------------------------------------------------------------
 // GROUND
@@ -1028,6 +1059,7 @@ export const Monitor: React.FC<{
   const c = useSceneColors();
   const tn = useSceneTones();
   const period = usePeriod();
+  const mid = useMid20c();
   const glass = shade(tn.deep, -1);
   const pad = 14;
   const ix = x + pad, iy = y + pad, iw = w - pad * 2, ih = h - pad * 2;
@@ -1105,6 +1137,57 @@ export const Monitor: React.FC<{
   // The chart scrolls one SAMPLE per step, so the trace slides left a slot at a time and gains a new
   // right-hand point — a live trace, not a redraw. `text` and `grid` reprint a couple of cells.
   const k = live ? stepIndex(f, seed * 1.9 + 5, 110) : 0;
+  // MID-20C (QA_WATCH item 14): a CRT, which is a different OBJECT from a flat panel, not a tinted
+  // one. Three things carry the era and all three are silhouette rather than detail: the case is
+  // DEEP (a visible box behind the glass, drawn as a stepped side), the glass is INSET and rounded
+  // at the corners rather than filling the bezel, and the picture is MONOCHROME — one phosphor,
+  // amber here, because a colour desktop screen is the single loudest anachronism in a 1960 office.
+  // The stand becomes four short feet: a monitor pedestal on a post is 1990s office furniture.
+  // Content is drawn by the same three branches so a room's screens still say what they said.
+  if (mid) {
+    const glow = MATERIAL.brass;                 // amber phosphor, off the material family
+    const tube = shade(tn.body, -1);
+    const cx0 = x + w * 0.10, cy0 = y + h * 0.10, cw = w * 0.80, ch = h * 0.74;
+    return (
+      <g>
+        {stand && (
+          <g>
+            {[0.18, 0.82].map((fx, i) => (
+              <rect key={i} x={x + w * fx - 12} y={y + h} width={24} height={18} rx={4}
+                fill={shade(tn.body, -2)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
+            ))}
+          </g>
+        )}
+        {/* the case: a face plate with a deep body stepping back behind it on the right */}
+        <path d={`M ${x} ${y} L ${x + w} ${y} L ${x + w + 22} ${y + 20} L ${x + w + 22} ${y + h - 10}
+                  L ${x + w} ${y + h} L ${x} ${y + h} Z`}
+          fill={tube} stroke={INK} strokeWidth={STROKE * 0.75} strokeLinejoin="round" />
+        <rect x={cx0} y={cy0} width={cw} height={ch} rx={Math.min(cw, ch) * 0.22} fill={MATERIAL.slate}
+          stroke={INK} strokeWidth={STROKE_THIN} />
+        {content === 'text' && Array.from({length: 5}, (_, i) => (
+          <rect key={i} x={cx0 + 10} y={cy0 + 10 + i * (ch - 18) / 5}
+            width={cw * (0.36 + rnd(seed * 31 + i + (i >= 3 ? k : 0)) * 0.5)}
+            height={Math.max(4, ch * 0.06)} fill={glow} opacity={0.9} />
+        ))}
+        {content === 'chart' && (
+          <polyline
+            points={Array.from({length: 9}, (_, i) =>
+              `${cx0 + 8 + (i * (cw - 16)) / 8},${cy0 + ch * (0.80 - 0.58 * rnd(seed * 17 + i + k))}`).join(' ')}
+            fill="none" stroke={glow} strokeWidth={STROKE_THIN * 0.9} strokeLinejoin="round" />
+        )}
+        {content === 'grid' && Array.from({length: 9}, (_, i) => (
+          <rect key={i} x={cx0 + 9 + (i % 3) * (cw / 3)} y={cy0 + 9 + Math.floor(i / 3) * (ch / 3.4)}
+            width={cw / 3 - 16} height={Math.max(4, ch * 0.10)} fill={glow}
+            opacity={rnd(seed * 53 + i + (i % 3 === k % 3 ? k : 0)) > 0.68 ? 0.95 : 0.45} />
+        ))}
+        {/* two control knobs under the glass — the era's own interface, and unmistakable at size */}
+        {[0.30, 0.46].map((fx, i) => (
+          <circle key={i} cx={x + w * fx} cy={y + h * 0.90} r={Math.max(5, h * 0.05)}
+            fill={shade(tn.body, -2)} stroke={INK} strokeWidth={STROKE_THIN * 0.6} />
+        ))}
+      </g>
+    );
+  }
   return (
     <g>
       {stand && (
@@ -1144,9 +1227,15 @@ export const Monitor: React.FC<{
 export const Keyboard: React.FC<{x: number; y: number; w?: number}> = ({x, y, w = 178}) => {
   const tn = useSceneTones();
   const period = usePeriod();
+  const mid = useMid20c();
   // PERIOD (WO-27): the same slab on the same desk, drawn as an OPEN LEDGER — two ruled pages either
   // side of a spine, with the pen laid across the right-hand one.
-  if (period) {
+  // MID-20C (QA_WATCH item 14) takes the SAME ledger, and that is a real answer rather than a reused
+  // one: the desks in a 1960 trading room carried paper next to the machines, which is the tier's
+  // own description ("paper ledger"). A detached QWERTY slab in front of a screen is a workstation,
+  // i.e. the 1980s at the earliest, and it is the second-loudest anachronism on that desk after the
+  // screen itself.
+  if (period || mid) {
     return (
       <g>
         <rect x={x} y={y} width={w} height={26} rx={3} fill={PAPER_WHITE}
@@ -1184,7 +1273,32 @@ export const Chair: React.FC<{x: number; y: number; s?: number; facing?: number;
   const period = usePeriod();
   // WO-31: a TURNED WOODEN chair whose wood came off `tn.body` was only wooden in a warm-keyed room.
   // An explicit `fill` still wins — a caller naming a colour has said what it wants.
+  const mid = useMid20c();
   const skin = fill ?? (period ? MATERIAL.oak : shade(tn.body, -1));
+  // MID-20C (QA_WATCH item 14): the same seat and the same back on FOUR SPLAYED LEGS instead of a
+  // gas post and a five-star castor base. QA named this prop by itself — "a five-star gas-lift
+  // swivel chair" under 1960 narration — and it is the right one to name: the star base is the most
+  // specific dateable silhouette in the modern set (five castors is 1980s office furniture; before
+  // that an office chair had four legs, or four castors on a cross, and no height column at all).
+  // Everything above the seat is untouched, so a room's chairs keep their colour and their footprint.
+  if (mid && !period) {
+    return (
+      <g>
+        <rect x={x - 58 * s} y={y - 250 * s} width={116 * s} height={150 * s} rx={22 * s} fill={skin}
+          stroke={INK} strokeWidth={STROKE * 0.8} />
+        <line x1={x - 40 * s} y1={y - 178 * s} x2={x + 40 * s} y2={y - 178 * s} stroke={INK} strokeWidth={STROKE_THIN * 0.7} opacity={0.5} />
+        <rect x={x - 66 * s + facing * 12 * s} y={y - 106 * s} width={132 * s} height={26 * s} rx={10 * s}
+          fill={skin} stroke={INK} strokeWidth={STROKE * 0.7} />
+        <g stroke={INK} strokeWidth={STROKE * 0.8} strokeLinecap="round">
+          <line x1={x - 40 * s} y1={y - 82 * s} x2={x - 56 * s} y2={y} />
+          <line x1={x + 40 * s} y1={y - 82 * s} x2={x + 56 * s} y2={y} />
+          <line x1={x - 22 * s} y1={y - 82 * s} x2={x - 28 * s} y2={y - 12 * s} />
+          <line x1={x + 22 * s} y1={y - 82 * s} x2={x + 28 * s} y2={y - 12 * s} />
+          <line x1={x - 52 * s} y1={y - 26 * s} x2={x + 52 * s} y2={y - 26 * s} />
+        </g>
+      </g>
+    );
+  }
   // PERIOD (WO-27): the gas post and the five-star castor base are the giveaway — a swivel chair is
   // 20th-century office furniture and it stands in five of the thirteen rooms. The substitute is a
   // TURNED WOODEN CHAIR at the same footprint and the same seat height: a spindle back between two
@@ -1268,6 +1382,7 @@ export const DeskPhone: React.FC<{
   const c = useSceneColors();
   const tn = useSceneTones();
   const period = usePeriod();
+  const mid = useMid20c();
   const lit = live && blinkOn(f, seed + x * 0.011, 150, 42);
   // PERIOD (WO-27): an INKSTAND on the same corner of the same desk — a timber tray carrying two
   // wells, a pen in its rest and a hand bell where the handset was. The message lamp goes with the
@@ -1297,6 +1412,30 @@ export const DeskPhone: React.FC<{
           fill={MATERIAL.brass} stroke={INK} strokeWidth={STROKE_THIN * 0.8} strokeLinejoin="round" />
         <rect x={x + 103 * s} y={y - 92 * s} width={10 * s} height={20 * s} rx={4 * s} fill={INK} />
         <circle cx={x + 108 * s} cy={y - 28 * s} r={5 * s} fill={INK} />
+      </g>
+    );
+  }
+  // MID-20C (QA_WATCH item 14): the same phone at the same size, with a ROTARY DIAL where the
+  // keypad is. A twelve-button keypad is the era mark on this prop — touch-tone is 1963 and rare for
+  // a decade after — and a dial is the one shape everybody reads as "old telephone" instantly: a
+  // ring of finger holes on a disc, with the finger stop at the four o'clock position. The message
+  // lamp goes too; a lit indicator on a desk phone is later still.
+  if (mid) {
+    const dcx = x + 64 * s, dcy = y - 24 * s, dr = 19 * s;
+    return (
+      <g>
+        <path d={`M ${x} ${y} L ${x + 128 * s} ${y} L ${x + 116 * s} ${y - 44 * s} L ${x + 10 * s} ${y - 44 * s} Z`}
+          fill={INK} stroke={INK} strokeWidth={STROKE_THIN * 0.8} strokeLinejoin="round" />
+        <circle cx={dcx} cy={dcy} r={dr} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
+        {Array.from({length: 8}, (_, i) => {
+          const a = (-120 + i * 30) * (Math.PI / 180);
+          return <circle key={i} cx={dcx + Math.sin(a) * dr * 0.66} cy={dcy - Math.cos(a) * dr * 0.66}
+            r={dr * 0.16} fill={INK} />;
+        })}
+        <circle cx={dcx} cy={dcy} r={dr * 0.3} fill={shade(tn.body, -2)} stroke={INK} strokeWidth={STROKE_THIN * 0.5} />
+        <rect x={x + 4 * s} y={y - 62 * s} width={124 * s} height={24 * s} rx={11 * s} fill={INK} />
+        <path d={`M ${x + (facing > 0 ? 128 : 4) * s} ${y - 30 * s} q ${facing * 30 * s} ${16 * s} ${facing * 6 * s} ${30 * s}`}
+          fill="none" stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
       </g>
     );
   }
