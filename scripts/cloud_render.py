@@ -38,7 +38,12 @@ def _ssl_ctx():
             return ctx
 WORKFLOW = "render.yml"
 POLL_SECS = 20
-MAX_WAIT = 115 * 60  # hard cap; must exceed the workflow's timeout-minutes (120) headroom
+# Hard cap on the whole cloud attempt, re-runs included. The workflow's own worst case is
+# prepare(40) + render(45) + stitch(45) = 130 min, and a re-run of the failed jobs adds roughly
+# one shard-length plus stitch. This is the outer bound; the re-run count below is the inner one.
+MAX_WAIT = 165 * 60
+MAX_RERUNS = 2
+RESTART_GRACE = 5 * 60   # how long a requested re-run gets to actually leave status=completed
 
 
 def load_cfg():
@@ -118,28 +123,77 @@ def main():
         sys.exit(f"cloud_render: dispatch failed {e.code}: {e.read().decode()[:300]}")
 
     # 3) find the run (created from our dispatch) + poll to completion
-    run_id = None
     deadline = time.time() + MAX_WAIT
-    while time.time() < deadline:
-        time.sleep(POLL_SECS)
-        try:                                    # a transient SSL/DNS blip during a poll must NOT kill the
-            runs, _ = api(cfg, "GET", f"{base}/actions/workflows/{WORKFLOW}/runs?event=workflow_dispatch&per_page=10")
-        except Exception as e:                  # whole wait — the render is running fine on GitHub. Just retry.
-            print(f"cloud_render: poll blip ({e}); retrying"); continue
+
+    def get_run(run_id):
+        """Our dispatch's run: by id once we know it, otherwise by head_sha."""
+        if run_id is not None:
+            r, _ = api(cfg, "GET", f"{base}/actions/runs/{run_id}")
+            return r
+        runs, _ = api(cfg, "GET", f"{base}/actions/workflows/{WORKFLOW}/runs"
+                                  f"?event=workflow_dispatch&per_page=10")
         for r in runs.get("workflow_runs", []):
             if r.get("head_sha") == sha:
-                run_id = r["id"]; status = r["status"]; concl = r.get("conclusion")
-                break
-        else:
-            print("cloud_render: waiting for run to appear...")
-            continue
-        print(f"cloud_render: run {run_id} status={status} conclusion={concl}")
-        if status == "completed":
-            if concl != "success":
-                sys.exit(f"cloud_render: workflow concluded '{concl}' — see {r.get('html_url')}")
-            break
-    else:
+                return r
+        return None
+
+    def wait_completed(run_id, require_restart=False):
+        """Block until the run reports status=completed; returns (id, conclusion, html_url).
+
+        require_restart is for the poll that follows a re-run request: for a few seconds the API
+        keeps serving the PREVIOUS completed/cancelled state, and taking that at face value would
+        look like the re-run failing instantly. So first insist on seeing it leave 'completed'."""
+        left_completed = not require_restart
+        restart_deadline = time.time() + RESTART_GRACE
+        while time.time() < deadline:
+            time.sleep(POLL_SECS)
+            try:                                # a transient SSL/DNS blip during a poll must NOT kill the
+                r = get_run(run_id)             # whole wait — the render is running fine on GitHub.
+            except Exception as e:              # Just retry.
+                print(f"cloud_render: poll blip ({e}); retrying"); continue
+            if r is None:
+                print("cloud_render: waiting for run to appear..."); continue
+            run_id = r["id"]; status = r["status"]; concl = r.get("conclusion")
+            print(f"cloud_render: run {run_id} status={status} conclusion={concl}")
+            if not left_completed:
+                if status != "completed":
+                    left_completed = True
+                elif time.time() > restart_deadline:
+                    sys.exit(f"cloud_render: re-run of {run_id} never started — see {r.get('html_url')}")
+                continue
+            if status == "completed":
+                return run_id, concl, r.get("html_url")
         sys.exit("cloud_render: timed out waiting for the render workflow")
+
+    run_id, concl, url = wait_completed(None)
+
+    # A shard that hangs on GitHub's side blows its job's timeout-minutes, and GitHub reports a
+    # timed-out job — and therefore the whole run — as 'cancelled'. That is what happened on
+    # 2026-08-17 and 08-18: an `apt-get update` stalled on a dead Ubuntu mirror in 4-5 randomly
+    # chosen shards, the run came back 'cancelled', this function exited non-zero, and the Mac
+    # fell through to a local render it has ~5.7 GiB of disk for. Two dark nights.
+    #
+    # 'cancelled' is an infrastructure verdict, not a verdict on the episode, so retry it —
+    # `rerun-failed-jobs` re-runs ONLY the jobs that did not succeed and keeps the artifacts of
+    # the ones that did, so a 4-shard flake costs one shard-length plus a stitch, not a whole
+    # re-render. A 'failure' conclusion is NOT retried: that means a step genuinely failed (the
+    # gate, a bad asset) and is deterministic, so re-running it would only cost an hour before
+    # reporting the same thing.
+    attempt = 0
+    while concl == "cancelled" and attempt < MAX_RERUNS:
+        attempt += 1
+        print(f"cloud_render: run {run_id} was CANCELLED (a job hit its timeout) — re-running just "
+              f"its failed jobs, attempt {attempt}/{MAX_RERUNS}; {url}")
+        try:
+            api(cfg, "POST", f"{base}/actions/runs/{run_id}/rerun-failed-jobs")
+        except urllib.error.HTTPError as e:
+            sys.exit(f"cloud_render: cannot re-run the failed jobs of {run_id} "
+                     f"({e.code}: {e.read().decode()[:200]}) — see {url}")
+        run_id, concl, url = wait_completed(run_id, require_restart=True)
+    if concl != "success":
+        sys.exit(f"cloud_render: workflow concluded '{concl}'"
+                 + (f" after {attempt} re-run attempt(s)" if attempt else "")
+                 + f" — see {url}")
 
     # 4) download the artifact -> out/
     arts, _ = api(cfg, "GET", f"{base}/actions/runs/{run_id}/artifacts")

@@ -36,14 +36,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      # A bare `apt-get update` here hung for 70 minutes on runs 32086857638 and 32168842212
+      # and took the channel dark. The script bounds it, tolerates a dead mirror, and verifies
+      # the sonames instead. timeout-minutes is the outer guarantee that it can never again
+      # spend the job's whole budget. See .github/scripts/system-libs.sh.
       - name: System libs for headless Chromium
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libnss3 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 \
-            libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 \
-            libpango-1.0-0 libcairo2 libasound2t64 fonts-liberation || \
-          sudo apt-get install -y libasound2
+        timeout-minutes: 6
+        run: .github/scripts/system-libs.sh
       - name: Install JS deps
         run: npm ci
       - name: Install Python deps
@@ -87,8 +86,14 @@ jobs:
 
   render:
     needs: prepare
+    # 45, not 70. A healthy shard finishes in 9-14 minutes (the slowest ever observed is 14m23s),
+    # so this is 3x headroom and no honest shard is at risk -- but a stuck one now surrenders the
+    # runner in 45 minutes instead of 70. This is a MITIGATION, not the fix: shortening a hang
+    # only makes it cheaper, it does not stop one. The fix is the bounded system-libs step above
+    # (which is what actually hung) plus the per-step timeout on the render itself; the recovery
+    # is cloud_render.py re-running only the failed jobs.
     runs-on: ubuntu-latest
-    timeout-minutes: 70
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
@@ -98,14 +103,13 @@ jobs:
         with:
           node-version: 20
           cache: npm
+      # A bare `apt-get update` here hung for 70 minutes on runs 32086857638 and 32168842212
+      # and took the channel dark. The script bounds it, tolerates a dead mirror, and verifies
+      # the sonames instead. timeout-minutes is the outer guarantee that it can never again
+      # spend the job's whole budget. See .github/scripts/system-libs.sh.
       - name: System libs for headless Chromium
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libnss3 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 \
-            libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 \
-            libpango-1.0-0 libcairo2 libasound2t64 fonts-liberation || \
-          sudo apt-get install -y libasound2
+        timeout-minutes: 6
+        run: .github/scripts/system-libs.sh
       - name: Install JS deps
         run: npm ci
       - name: Ensure Remotion browser
@@ -114,7 +118,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: prepared
+      # Step-level cap so an in-render stall (a delayRender() that never resolves, a Chromium that
+      # never paints) is reported as a failed step in minutes rather than silently absorbing the
+      # rest of the job budget. The shard render itself takes ~8 minutes.
       - name: Render shard ${{ matrix.idx }} (frames ${{ matrix.start }}-${{ matrix.end }}, muted/video-only)
+        timeout-minutes: 30
         run: |
           mkdir -p out
           npx remotion render EveryLevelLawyer out/shard_${{ matrix.idx }}.mp4 \
@@ -142,13 +150,8 @@ jobs:
         with:
           python-version: "3.12"
       - name: System libs + ffmpeg
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg \
-            libnss3 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 \
-            libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 \
-            libpango-1.0-0 libcairo2 libasound2t64 fonts-liberation || \
-          sudo apt-get install -y ffmpeg libasound2
+        timeout-minutes: 6
+        run: .github/scripts/system-libs.sh ffmpeg
       - name: Install JS deps
         run: npm ci
       - name: Install Python deps
