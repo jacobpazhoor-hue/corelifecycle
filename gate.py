@@ -238,6 +238,28 @@ for s in tl["scenes"]:
     if peak >= 0.999: fails.append(f"{s['id']}: audio clipping (peak {peak:.3f})")
 
 # ============================================================================
+# 3b) STAGING DRIFT — director.tsx's head anchors vs explainer.tsx's figure call sites.
+#
+# STAGING is a hand-measured registry, and the three layers that read it (balloon placement + tail,
+# the number note's corner, a panel's re-centre) cannot see the frame. So when a template moves a
+# figure the anchor goes stale SILENTLY — which is how two men ended up decapitated by their own
+# balloons in a shipped episode with every check on this page passing. `staging_check.py` re-derives
+# each anchor from the figure rig and HALTS when they disagree; it found `closeUpPortrait` already
+# stale by 182 units the first time it ran. See that file's header for what it cannot check and what
+# a full fix (a template publishing its own anchors) would take.
+#
+# It parses source, renders nothing and costs milliseconds, so it runs unconditionally — it is not
+# behind GATE_STYLE_FRAMES.
+# ============================================================================
+import staging_check
+try:
+    _sfails, _swarns = staging_check.check()
+except staging_check.StagingParseError as e:
+    _sfails, _swarns = [f"staging drift check could not read the sources it guards: {e}"], []
+fails += _sfails
+warns += _swarns
+
+# ============================================================================
 # 4) CRAYON STYLE on RENDERED FRAMES — flat fill (bible §5) and camera lock (bible §3).
 #
 # RESOLUTION IS PART OF THE ASSERTION. Flat fill counts pixels exactly equal to their right

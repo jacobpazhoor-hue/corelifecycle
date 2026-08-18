@@ -88,6 +88,19 @@ export const FOCUS: Record<string, [number, number]> = {
 // guessing separately. The staging is arithmetic on the figure rig, not taste — head centre is
 // `(x + dx·scale, y + dy·scale)` for the pose's own spine/neck/head angles (see `figure.tsx` SEG), so
 // it can be re-derived whenever a template moves someone.
+//
+// WHICH IS NOW DONE ON EVERY BUILD (2026-08-17). `staging_check.py` re-derives every speaker anchor
+// below from the figure call site it was measured off — the head centre lies on a circle of radius
+// `(SEG.spine + SEG.neck + SEG.head) * scale` about the figure's own staged (x, y), and the head box
+// is `2*HEAD_HW*SEG.head*scale` wide — and `gate.py` HALTS when the two disagree. It costs
+// milliseconds and renders nothing. The registry is still a registry, but it can no longer go stale
+// QUIETLY, which was the whole weakness: the first run of that checker found `closeUpPortrait`
+// already 182 units out, describing a framing the template stopped using.
+//
+// SO: MOVE A FIGURE AND YOU MUST RE-MEASURE ITS ANCHOR IN THE SAME COMMIT. The build will tell you,
+// with the number it expected. Two anchors are BANDS rather than one head (a `.map()`ed row, a
+// figure that walks) and are named in `staging_check.UNVERIFIED` with a reason; those two are on
+// your honour, and they warn on every run so they stay visible.
 // ============================================================================
 
 /** A figure's head, in frame fractions: centre plus full size. The unit the whole mechanism runs on. */
@@ -175,7 +188,16 @@ export const STAGING: Record<string, Staging> = {
     panelX: 0.347,
   },
   closeUpPortrait: {
-    speakers: [{role: 'hero', head: {cx: 0.5946, cy: 0.5769, w: 0.3428, h: 0.6633}}],
+    // RE-MEASURED 2026-08-17, and the first thing `staging_check.py` caught. This anchor described a
+    // head at hip y=1720, scale 5.6 — the framing this template had BEFORE the take rebuilt it
+    // ("at 5.6x off a hip at y=1720 the crown landed at 264", explainer.tsx's own note on why that
+    // framing went). The live figure sits at hip y=150+259.96*4.55=1332.8, scale 4.55, so the
+    // declared box was 182 units LOW and 23% too large on all 28 scenes that use this template. That
+    // is the CRITICAL defect the registry exists to prevent, back, silently, exactly as predicted.
+    // Quoted at the TAKE CENTRE (`v.off` -> 0, `v.pick` -> 0), which is the convention the whole
+    // table uses and the `plain` take renders; the take's own framing moves this head by up to ~59
+    // units and its scale by ~8%, well inside the head it is describing.
+    speakers: [{role: 'hero', head: {cx: 0.5984, cy: 0.4089, w: 0.2785, h: 0.5389}}],
     extraHeads: [
       {cx: 0.1771, cy: 0.5502, w: 0.2417, h: 0.1065},
       {cx: 0.8618, cy: 0.5733, w: 0.0477, h: 0.0924},
