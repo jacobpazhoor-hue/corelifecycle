@@ -1589,32 +1589,56 @@ const CityStreet: React.FC = () => {
 // ---------------------------------------------------------------------------
 const HOME_WALL = 792;
 
-/** A three-seat sofa, head-on: base, back, arms, cushions, feet. */
-const Sofa: React.FC<{x: number; y: number; w?: number; h?: number; fill?: string}> =
-({x, y, w = 720, h = 210, fill}) => {
+/**
+ * A three-seat sofa, head-on: base, back, arms, cushions, feet.
+ *
+ * IT DRAWS IN TWO PARTS, AND THE PEOPLE GO BETWEEN THEM (QA_WATCH item 12: "t007 f1523: the seated
+ * men's legs pass through the sofa front"). A sitter is in front of the back cushions and BEHIND the
+ * seat and the arms; drawn as one object before the figures, the sofa could only ever be entirely
+ * behind them, so their thighs and shins were painted straight over its seat slab. This is the same
+ * fix the boardroom chairs got, in the form a single drawn object needs:
+ *
+ *   `part="back"`  — back panel, back cushions. Drawn BEFORE the figures.
+ *   `part="front"` — arms, seat slab, accent cushion, feet. Drawn AFTER them, so it occludes laps.
+ *   `part="all"`   — both, in the original order. The default, so any other caller is unchanged.
+ *
+ * The two parts share every coordinate because they are computed from the same props; a caller that
+ * draws one must draw the other with identical arguments.
+ */
+const Sofa: React.FC<{x: number; y: number; w?: number; h?: number; fill?: string;
+                      part?: 'all' | 'back' | 'front'}> =
+({x, y, w = 720, h = 210, fill, part = 'all'}) => {
   const c = useSceneColors();
   const tn = useSceneTones();
   const skin = fill ?? shade(tn.body, 2);
   const armW = w * 0.13;
   return (
     <g>
-      {/* back first, then arms and seat over it */}
-      <rect x={x + armW * 0.5} y={y - h} width={w - armW} height={h * 0.86} rx={20} fill={skin}
-        stroke={INK} strokeWidth={STROKE} />
-      {Array.from({length: 3}, (_, i) => (
-        <rect key={i} x={x + armW * 0.7 + i * ((w - armW * 1.4) / 3)} y={y - h + 14}
-          width={(w - armW * 1.4) / 3 - 12} height={h * 0.6} rx={14} fill={shade(skin, 1)}
-          stroke={INK} strokeWidth={STROKE_THIN} />
-      ))}
-      <rect x={x} y={y - h * 0.62} width={armW} height={h * 0.68} rx={16} fill={shade(skin, -1)} stroke={INK} strokeWidth={STROKE} />
-      <rect x={x + w - armW} y={y - h * 0.62} width={armW} height={h * 0.68} rx={16} fill={shade(skin, -1)} stroke={INK} strokeWidth={STROKE} />
-      <rect x={x + armW * 0.4} y={y - h * 0.3} width={w - armW * 0.8} height={h * 0.34} rx={12} fill={shade(skin, -2)}
-        stroke={INK} strokeWidth={STROKE} />
-      {/* one accent cushion — the scene's single saturated note */}
-      <rect x={x + w - armW * 2.1} y={y - h * 0.78} width={armW * 0.86} height={armW * 0.86} rx={10}
-        fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} transform={`rotate(-12 ${x + w - armW * 1.7} ${y - h * 0.5})`} />
-      <rect x={x + 22} y={y + h * 0.04} width={18} height={26} fill={INK} />
-      <rect x={x + w - 40} y={y + h * 0.04} width={18} height={26} fill={INK} />
+      {part !== 'front' && (
+        <g>
+          {/* back first, then (in the front part) arms and seat over it */}
+          <rect x={x + armW * 0.5} y={y - h} width={w - armW} height={h * 0.86} rx={20} fill={skin}
+            stroke={INK} strokeWidth={STROKE} />
+          {Array.from({length: 3}, (_, i) => (
+            <rect key={i} x={x + armW * 0.7 + i * ((w - armW * 1.4) / 3)} y={y - h + 14}
+              width={(w - armW * 1.4) / 3 - 12} height={h * 0.6} rx={14} fill={shade(skin, 1)}
+              stroke={INK} strokeWidth={STROKE_THIN} />
+          ))}
+        </g>
+      )}
+      {part !== 'back' && (
+        <g>
+          <rect x={x} y={y - h * 0.62} width={armW} height={h * 0.68} rx={16} fill={shade(skin, -1)} stroke={INK} strokeWidth={STROKE} />
+          <rect x={x + w - armW} y={y - h * 0.62} width={armW} height={h * 0.68} rx={16} fill={shade(skin, -1)} stroke={INK} strokeWidth={STROKE} />
+          <rect x={x + armW * 0.4} y={y - h * 0.3} width={w - armW * 0.8} height={h * 0.34} rx={12} fill={shade(skin, -2)}
+            stroke={INK} strokeWidth={STROKE} />
+          {/* one accent cushion — the scene's single saturated note */}
+          <rect x={x + w - armW * 2.1} y={y - h * 0.78} width={armW * 0.86} height={armW * 0.86} rx={10}
+            fill={c.accent} stroke={INK} strokeWidth={STROKE_THIN} transform={`rotate(-12 ${x + w - armW * 1.7} ${y - h * 0.5})`} />
+          <rect x={x + 22} y={y + h * 0.04} width={18} height={26} fill={INK} />
+          <rect x={x + w - 40} y={y + h * 0.04} width={18} height={26} fill={INK} />
+        </g>
+      )}
     </g>
   );
 };
@@ -1712,7 +1736,7 @@ const DomesticInterior: React.FC = () => {
       {/* a side table with a table lamp and a stack of post, left of the sofa */}
       <Desk x={392} y={806} w={150} h={22} legH={78} fill={shade(tn.card, -1)} />
       <Papers x={452} y={798} n={1 + v.pick(12, 3)} s={0.5} seed={v.seed(29)} />
-      <Sofa x={560} y={880} w={720} h={214} />
+      <Sofa x={560} y={880} w={720} h={214} part="back" />
       {/* the coffee table and what is on it */}
       <Desk x={700} y={936} w={452} h={26} legH={96} fill={shade(tn.card, -1)} />
       <Papers x={800 + v.off(13, 70)} y={928} n={2 + v.pick(14, 3)} s={0.62} seed={v.seed(13)} />
@@ -1762,6 +1786,11 @@ const DomesticInterior: React.FC = () => {
           cast={companionCast(sceneCast)}
           expr={FACES.tired} pal={LIGHT} frame={f} />
       )}
+      {/* THE SOFA'S FRONT, OVER THEIR LAPS (QA_WATCH item 12). Identical arguments to the `back`
+          call above — a sitter is in front of the back cushions and behind the seat and the arms,
+          and drawing the whole sofa before the figures could only ever put it entirely behind them,
+          which is why their legs came through its seat slab at t007 f1523. */}
+      <Sofa x={560} y={880} w={720} h={214} part="front" />
       <Plant x={1866} y={1060} s={1.1 + v.pick(22, 3) * 0.05} seed={v.seed(9)} />
     </Frame>
   );
