@@ -597,6 +597,56 @@ hue. (3) `Cone`'s barrel banded a near-white body with two `accentDeep` hoops, w
 room reproduced the signature of the traffic cone it replaces — **fixed in WO-29**, the hoops are now
 iron (`tn.deep`) and only the lid keeps the accent.
 
+### CHART — which way the chart in the scene points
+
+**`chart="up"` · `"down"` · `"flat"`, on the scene. Optional; defaults to `"up"`.**
+
+The QA watch of the madoff episode (`docs/QA_WATCH.md` item 7, HIGH) found the picture saying the
+opposite of the line being read over it, six times, four of them the same object: `chartBoard` and
+`broadcastDesk` drew a hard-coded **falling** chart under "use options to **cap** the losses, and the
+gains", under "**funneled in** $7.2 billion", and under both halves of a split whose entire point was
+"the statements, still **climbing**". The direction was a property of the TEMPLATE. It is now a
+property of the SCENE.
+
+```python
+dict(id="t067", template="chartBoard", chart="up",   narration="…the statements, still climbing.")
+dict(id="t105", template="chartBoard", chart="down", narration="…seven billion in withdrawal requests.")
+dict(id="t021", template="chartBoard", chart="flat", narration="Use options to cap the losses, and the gains.")
+```
+
+The default is **`"up"`**, not `"down"`: this format's charts mostly illustrate money arriving, and
+the crash is the exception that should have to be asked for. The saturated accent leg stays on every
+chart whichever way it points — it is the one saturated element in a grey-keyed chart frame — so
+`"flat"` gives it a shallow drift rather than deleting it. An unrecognised value **raises**, with the
+scene id, exactly as `period` does.
+
+### LABELS — the words a room is allowed to letter
+
+**`labels=["…", "…"]`, on the scene. Optional.**
+
+QA item 3 (HIGH): "whole frames of placeholder block-glyph text", worst on the scenes that were
+*about* documents. The rule the art now follows is that **body copy stays block glyphs** — a
+paragraph at frame scale is texture, and drawing it as letter-shaped blocks is honest — while
+anything the narration NAMES carries real lettering: a masthead, a headline, a placard, a chart
+title, a shop fascia, a lower third, a ticker.
+
+Where those words come from, in order: this field if you set it; otherwise the words the scene
+already says on screen (its `card` title, its `overlay` subtitle, its balloon text); otherwise a
+short per-role lexicon of the format's own furniture words ("THE RECORD", "THE FUND", "GIVE IT BACK"),
+which is real English rather than a run of rectangles. Keep entries SHORT — one or two words. They are
+set to a box, so a sentence only shrinks to unreadable.
+
+```python
+dict(id="t097", template="crowdQueue", labels=["GIVE IT BACK", "WHERE IS IT"])
+```
+
+> ⚠ **Both fields are consumed but not yet PLUMBED.** `src/explainer.tsx` reads them off the scene
+> record in `src/timeline.json`, but `gen_voice_edge.py` copies only a whitelist of visual keys into
+> that file (`card`, `bubbles`, `panels`, `foreground`, `period`) — so a `chart=` or `labels=` written
+> in `content.py` is dropped on the way through and the scene falls back to the defaults above.
+> Adding the two names to that tuple is the whole remaining change; it was out of scope for the work
+> order that built the consumer.
+
 ### The vocabulary is 13 rooms, not 13 shots
 The environment archetypes the old canon listed in plain English (office · boardroom · trading floor ·
 bank exterior · street · domestic interior · courtroom · factory · newspaper montage · broadcast ·

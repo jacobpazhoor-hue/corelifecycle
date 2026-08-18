@@ -3413,8 +3413,13 @@ const ChartBoard: React.FC = () => {
           i.e. against the empty end of the band with the board doing the emptying. */}
       {/* `dir` and `label` come from the SCENE (items 7 and 3): the chart points where the narration
           points, and the board's heading is real lettering rather than a run of glyph blocks. */}
-      <ChartPlot x={234} y={220} w={864} h={486} kind={v.one(2, ['bars', 'bars', 'line'] as const)}
-        bars={16} seed={chartSeed} live crash grid={9}
+      {/* KIND STAYS `bars`. A `line` variant was tried and measured: the plot's pale ground is ~20%
+          of the frame and the SERIES is what carries its density, so a polyline in place of sixteen
+          filled bars took this template from 88.8% flat to 90.2% and its coloured coverage from
+          0.264 to 0.218 — toward the empty end of a band this room was already near. The bar COUNT
+          varies instead, which changes the picture without changing how much of it is filled. */}
+      <ChartPlot x={234} y={220} w={864} h={486} kind="bars"
+        bars={15 + v.pick(2, 3)} seed={chartSeed} live crash grid={8 + v.pick(3, 3)}
         dir={tk.chart} label={label(tk, 'chartTitle', 1)} />
       {/* the two easel legs, splaying to the floor, with a stretcher across them */}
       {[[276, -1], [1046, 1]].map(([px, dir], i) => (
