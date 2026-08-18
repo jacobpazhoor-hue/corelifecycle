@@ -21,7 +21,8 @@ import {resolveSceneKey, sceneColors} from './crayonStyle';
 // WO-27: the per-scene period flag — the room drawn with its era-marking props substituted out.
 import {Era, PeriodProvider} from './setdressing';
 // QA_WATCH item 8: the per-scene cast slot — WHICH named person this scene is about.
-import {CAST_SLOTS, CastProvider} from './figure';
+import {CAST_SLOTS, CastProvider, MoodProvider} from './figure';
+import type {Mood} from './figure';
 
 const PHOTO = PHOTO_RAW as {mode: string; scenes: Record<string, {img: string; depth: string; move: Move}>; fallback: string[]};
 
@@ -152,7 +153,7 @@ type PanelsT = {
 type SceneT = {id: string; level: string | null; overlay: Overlay; template: string;
   audio: string; audioStartFrame?: number; startFrame: number; durationInFrames: number;
   card?: CardT; bubbles?: BubbleT[]; panels?: PanelsT; foreground?: ForegroundT; period?: string;
-  cast?: number};
+  cast?: number; mood?: string};
 type Shot = {type: string; dur: number; focus: [number, number]};
 
 // ============================================================================
@@ -414,6 +415,37 @@ const sceneCast = (scene: SceneT): number | null => {
   return scene.cast === 0 ? null : scene.cast;
 };
 
+/**
+ * THE BEAT'S EMOTIONAL REGISTER, or null for the default (QA_WATCH item 6).
+ *
+ * Third field on the identical contract to `sceneEra` and `sceneCast` above: opt-in, written in
+ * `content.py`, copied verbatim by `gen_voice_edge.py`, consumed here, RAISING with the scene id on a
+ * value the renderer cannot honour.
+ *
+ * WHY IT IS WORTH A THIRD COPY OF THIS PATTERN. `figure.tsx` already had the whole mechanism —
+ * `Mood`, `MoodContext`, `MoodProvider`, `moodExpr()` — built, tested and doing nothing, because
+ * nothing between the writer and the renderer could carry the value. That is not a smaller bug than
+ * having no mechanism: the two news anchors went on grinning through the $50bn fraud (t120 f20071)
+ * and DiPascali's death before sentencing (t153 f26653), and the gallery went on smiling at the
+ * guilty plea (t127 f21537), with the fix for all three already merged. A renderer-only feature is
+ * indistinguishable from an absent one.
+ *
+ * `mood: 'neutral'` is the context default, so it is NOT wrapped — a scene that says `neutral`
+ * mounts nothing and renders byte-identically to a scene that says nothing, exactly as `cast: 0`
+ * does. Wrapping only on a real change is what keeps this a no-op on the 189 untagged scenes.
+ */
+const MOODS: Mood[] = ['neutral', 'grim', 'bright'];
+const sceneMood = (scene: SceneT): Mood | null => {
+  if (scene.mood === undefined || scene.mood === null) return null;
+  if (!(MOODS as string[]).includes(scene.mood)) {
+    throw new Error(
+      `${scene.id}: unknown mood ${JSON.stringify(scene.mood)} — mood must be one of ` +
+      `${MOODS.map((m) => `'${m}'`).join(', ')} (docs/BIBLE.md §8 MOOD says what each one does)`
+    );
+  }
+  return scene.mood === 'neutral' ? null : (scene.mood as Mood);
+};
+
 // ============================================================================
 // BALLOONS AND FLOATS — one scene's dialogue (WO-34, QA defect 1)
 //
@@ -596,9 +628,15 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
   // it changes is a figure's wardrobe, and figures are only ever drawn by a template. A card, a
   // balloon and the number note draw no people. Absent (or 0) it mounts nothing at all.
   const cast = sceneCast(scene);
+  // The register wraps the ART on the same footing again, and for a sharper version of the same
+  // reason: the only thing it changes is a FACE, and faces are only ever drawn by a template. The
+  // devices layered over the art draw none — a card is lettering, a balloon is lettering on paper,
+  // the `foreground` silhouette has no face by construction. Absent (or 'neutral') it mounts nothing.
+  const mood = sceneMood(scene);
   const dressArt = (art: React.ReactNode) => {
     const inEra = era ? <PeriodProvider era={era}>{art}</PeriodProvider> : art;
-    return cast === null ? inEra : <CastProvider cast={cast}>{inEra}</CastProvider>;
+    const inCast = cast === null ? inEra : <CastProvider cast={cast}>{inEra}</CastProvider>;
+    return mood === null ? inCast : <MoodProvider mood={mood}>{inCast}</MoodProvider>;
   };
 
   let t = 0;

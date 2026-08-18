@@ -680,6 +680,40 @@ dict(id="t097", template="crowdQueue", labels=["GIVE IT BACK", "WHERE IS IT"])
 > the lexicon's `RETURNS`. If you add another scene field, add it to that tuple in the same commit —
 > a field the renderer reads and the tuple drops is silent, and silent is how this one shipped.
 
+### MOOD — the emotional register of one beat
+
+**`mood="neutral"` · `"grim"` · `"bright"`, on the scene. Optional; defaults to `"neutral"`.**
+
+QA item 6 (HIGH): "characters smile through the worst beats". Both news anchors grinned while the
+narration reported the $50bn fraud (`t120` f20071) and then DiPascali's death before sentencing
+(`t153` f26653); the courtroom gallery smiled at the guilty plea (`t127` f21537); a pair sat neutral
+in a cheerful pink living room over Mark Madoff's suicide (`t143` f24488). The register this format
+is written in is "straight and noirish, held throughout" (`content.py` header), and the art had no
+way to know which beats were graver than that.
+
+| value | what it does to every face in the scene |
+|---|---|
+| `neutral` | the default and the format's register. An unmotivated `smile` is suppressed to a resting mouth line; everything else passes through. Identical to writing nothing. |
+| `grim` | a death, a sentencing, a ruin. `smile`/`smirk`/`neutral` all harden to `flat` and the brow-raise is capped below the threshold that draws brows at all. `frown`, `tight` and `open` (shock) pass through — those are the right faces for a grim beat. |
+| `bright` | an explicit opt-in for the rare beat that is genuinely up. Passes everything, including a smile. |
+
+```python
+dict(id="t153", template="broadcastDesk", mood="grim",
+     narration="Frank DiPascali died before he could be sentenced.")
+```
+
+Tag the beat, not the chapter: `mood` wraps ONE scene's art. It reaches faces only — a card, a
+balloon and the `foreground` silhouette draw no people, so it never touches lettering. An
+unrecognised value **raises**, with the scene id, exactly as `period` and `cast` do.
+
+> ✅ **Plumbed end to end** (2026-08-17). This is the field that proves why the whitelist rule above
+> matters. `figure.tsx` had the entire mechanism — `Mood`, `MoodContext`, `MoodProvider` and
+> `moodExpr()` — built, merged and doing **nothing**, because no scene field could carry a value to
+> it: the anchors went on grinning with their fix already in the repo. A renderer-only feature is
+> indistinguishable from an absent one. `mood` is now on `gen_voice_edge.py`'s whitelist tuple and is
+> validated in `src/Video2.tsx` (`sceneMood`), which mounts the provider only when the scene asks for
+> something other than `neutral`.
+
 ### The vocabulary is 13 rooms, not 13 shots
 The environment archetypes the old canon listed in plain English (office · boardroom · trading floor ·
 bank exterior · street · domestic interior · courtroom · factory · newspaper montage · broadcast ·

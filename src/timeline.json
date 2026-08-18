@@ -1679,7 +1679,8 @@
       "audioStartFrame": 3,
       "startFrame": 20001,
       "durationInFrames": 157,
-      "gap": 0.3
+      "gap": 0.3,
+      "mood": "grim"
     },
     {
       "id": "t120b",
@@ -1790,7 +1791,8 @@
         "title": "The Reckoning",
         "subtitle": "Eleven Counts, 150 Years",
         "hold": 2.4
-      }
+      },
+      "mood": "grim"
     },
     {
       "id": "t128",
@@ -2001,7 +2003,8 @@
       "audioStartFrame": 3,
       "startFrame": 24385,
       "durationInFrames": 229,
-      "gap": 0.253
+      "gap": 0.253,
+      "mood": "grim"
     },
     {
       "id": "t144",
@@ -2177,7 +2180,8 @@
       "audioStartFrame": 3,
       "startFrame": 26541,
       "durationInFrames": 249,
-      "gap": 0.417
+      "gap": 0.417,
+      "mood": "grim"
     },
     {
       "id": "t154",

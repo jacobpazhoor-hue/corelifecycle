@@ -359,12 +359,19 @@ async def main():
         #   * `cast`   — 0..CAST_SLOTS-1, WHICH named person this scene is about (figure.tsx
         #                `CastProvider`, item 8), so the episode's second and third people stop being
         #                drawn as the lead.
+        #   * `mood`   — "neutral" | "grim" | "bright", this beat's EMOTIONAL REGISTER (figure.tsx
+        #                `MoodProvider`, item 6). Same lesson, one round later: the Mood type, the
+        #                provider and `moodExpr()` were all built and shipped renderer-only, so the
+        #                news anchors still grinned through the $50bn fraud (t120) and DiPascali's
+        #                death (t153) because no scene field could reach them. Wired here it is
+        #                writer-controllable; unset, every frame is byte-identical to today.
         # A whitelisted key that the renderer reads but this loop does not copy is the worst of both
         # worlds: the writer sets it, nothing raises, and the template quietly draws its default —
         # which is the exact defect each of these three exists to close. Validation stays where it
         # already is (explainer.tsx raises on an unknown `chart`, Video2.tsx on an out-of-range
         # `cast`); this loop's only job is not to drop them.
-        for key in ("card", "bubbles", "panels", "foreground", "period", "chart", "labels", "cast"):
+        for key in ("card", "bubbles", "panels", "foreground", "period", "chart", "labels", "cast",
+                    "mood"):
             if sc.get(key) is not None:
                 rec[key] = sc[key]
         scenes_out.append(rec)

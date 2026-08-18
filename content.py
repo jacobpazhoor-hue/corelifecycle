@@ -696,7 +696,7 @@ SCENES = [
          narration=("He was arrested within the hour."),
          overlay=None),
 
-    dict(id="t120", level=None, template="broadcastDesk",
+    dict(id="t120", level=None, template="broadcastDesk", mood="grim",
          narration=("The SEC's first public number, that week, was fifty billion dollars."),
          overlay=dict(big="$50 BILLION", sub="SEC'S FIRST ESTIMATE")),
 
@@ -738,7 +738,7 @@ SCENES = [
          overlay=None),
 
     # ================= CHAPTER 5 — The Reckoning =================
-    dict(id="t127", level="CH 5", template="courtHearing", breath=True,
+    dict(id="t127", level="CH 5", template="courtHearing", breath=True, mood="grim",
          narration=("There was no trial. On March 12th, 2009, Madoff pleaded guilty to all eleven "
                     "federal counts against him."),
          overlay=None,
@@ -823,7 +823,7 @@ SCENES = [
                     "number nobody expected him to ever actually pay."),
          overlay=None),
 
-    dict(id="t143", level=None, template="domesticInterior", breath=True,
+    dict(id="t143", level=None, template="domesticInterior", breath=True, mood="grim",
          narration=("Two years earlier, on the exact anniversary of his father's arrest, Mark Madoff "
                     "had taken his own life."),
          overlay=dict(big="DEC 11, 2010", sub="MARK MADOFF")),
@@ -886,7 +886,7 @@ SCENES = [
          narration=("Two numbers. Only one was ever real."),
          overlay=None),
 
-    dict(id="t153", level=None, template="broadcastDesk",
+    dict(id="t153", level=None, template="broadcastDesk", mood="grim",
          narration=("Frank DiPascali, the man who wrote the fake statements, died before his own "
                     "sentencing, in 2015."),
          overlay=None),
