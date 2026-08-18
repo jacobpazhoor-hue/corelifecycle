@@ -33,24 +33,19 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "out", "review", "facts.json")
 
 # Syllable counting is a heuristic, not a dictionary lookup — it is labelled as such in the output.
-# It exists because BIBLE §3a's WPM predictor (WPM ~= 215 / syllables-per-word) is the single most
+# It exists because BIBLE §3a's WPM predictor (WPM ~= K / syllables-per-word) is the single most
 # useful number for diagnosing a rate problem, and the reviewer currently estimates it by eye.
-_VOWELS = "aeiouy"
+#
+# THE COUNTER NOW LIVES IN scripts/wpm_predict.py, which is the pre-synthesis predictor, and is
+# imported from there rather than kept in both files. The predictor's constant K is calibrated
+# AGAINST THIS EXACT COUNTER, so a second copy that drifted would silently invalidate it.
+# `gate_band()` reads WPM_LO/WPM_HI out of gate.py's source for the same reason: `wpm_gate_band` used
+# to be the literal [143.0, 154.0] here and was two band changes stale by 2026-08-17, which quietly
+# told the reviewer the episode had margin it did not have.
+sys.path.insert(0, os.path.join(ROOT, "scripts"))
+from wpm_predict import syllables, gate_band, K as WPM_K   # noqa: E402
 
-
-def syllables(word):
-    w = re.sub(r"[^a-z]", "", word.lower())
-    if not w:
-        return 0
-    n, prev_vowel = 0, False
-    for ch in w:
-        is_vowel = ch in _VOWELS
-        if is_vowel and not prev_vowel:
-            n += 1
-        prev_vowel = is_vowel
-    if w.endswith("e") and not w.endswith(("le", "ee", "ye")) and n > 1:
-        n -= 1
-    return max(1, n)
+WPM_LO, WPM_HI = gate_band()
 
 
 def mmss(seconds):
@@ -218,13 +213,19 @@ def main():
         "pct_sentences_under_8_words": round(100 * sum(1 for n in slen if n < 8) / len(slen), 1) if slen else None,
         "band_reminder": "BIBLE §3: mean 7.5-10.6, median 6-9, 40-59% under 8 words",
         "syllables_per_word_heuristic": round(syl_total / len(all_words), 3) if all_words else None,
-        "wpm_predicted_from_syllables": round(215 / (syl_total / len(all_words)), 1) if all_words else None,
+        "wpm_predicted_from_syllables": round(WPM_K / (syl_total / len(all_words)), 1) if all_words else None,
         "wpm_runtime_inclusive": round(words_total / runtime_min, 1) if runtime_min else None,
-        "wpm_gate_band": [143.0, 154.0],
+        "wpm_gate_band": [WPM_LO, WPM_HI],
+        "wpm_margin_to_band": (round(min(words_total / runtime_min - WPM_LO,
+                                         WPM_HI - words_total / runtime_min), 1)
+                               if runtime_min else None),
         "_wpm_note": "wpm_runtime_inclusive is gate.py's exact quotient (content.py words / timeline "
-                     "minutes). wpm_predicted_from_syllables is BIBLE §3a's predictor and uses a "
-                     "HEURISTIC syllable counter — treat a disagreement between the two as noise in "
-                     "the heuristic, not as a gate failure.",
+                     "minutes). wpm_predicted_from_syllables is BIBLE §3a's predictor "
+                     f"(WPM ~= {WPM_K} / syllables-per-word) and uses a HEURISTIC syllable counter — "
+                     "treat a disagreement between the two as noise in the heuristic, not as a gate "
+                     "failure. wpm_gate_band is READ OUT OF gate.py, not copied: it was hardcoded "
+                     "here as [143.0, 154.0] and was two band changes stale by 2026-08-17. "
+                     "wpm_margin_to_band under ~2 is the number that costs a night's upload.",
         "numbers_digit_form": len(digit_numbers),
         "numbers_spelled_out": len(spelled),
         "_numbers_note": "this script narrates most figures in words, so 'numbers_spelled_out' is the "

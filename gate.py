@@ -46,9 +46,39 @@ MAX_MIN = routine.get("maxMinutes", 21)          # CRAYON canon runtime band is 
 # 157.0 that draft would now PASS this check. The dead zone is therefore no longer guarded by the WPM
 # band; it is guarded only by the §3a rhythm tests. If you widen this band any further you are
 # removing the last cheap check on it.
-# The floor is UNCHANGED at 143.0 and the check itself is not removed — a rate regression in the
-# other direction (the pre-crayon pipeline ran 180.7 WPM) still HALTs.
-WPM_LO, WPM_HI = 143.0, 157.0
+#
+# FLOOR LOWERED 143.0 -> 139.0 (QA_WATCH 2026-08-17). THIS IS A CORRECTION, NOT A WIDENING.
+# The paragraph at the top of this block states the design rule — "the reference's own PER-VIDEO
+# spread is 139.2-152.9, so pinning the gate to the aggregate would make it stricter than the channel
+# it copies, and a false HALT blocks publishing outright" — and then the floor never honoured it.
+# 143.0 is 3.8 WPM STRICTER than the slowest video the reference channel has ever published. The
+# ceiling was argued from the reference's extremes and then moved further out on owner instruction;
+# the floor was left at a number nothing measured.
+#
+# THE COST OF THAT ASYMMETRY IS NOW MEASURED, NOT HYPOTHETICAL. The last two episodes built by this
+# pipeline both landed ON the floor, not near the middle of the band:
+#     madoff   (2026-08-17, shipping)   2355 words / 16.42 min = 143.4 WPM   margin 0.4
+#     theranos (2026-08-16, shipped)    2149 words / 14.87 min = 144.5 WPM   margin 1.5
+# Both fired the band-edge WARN below. docs/BIBLE.md §3a said "the floor is only reachable by
+# extrapolation somewhere under a ~3s mean scene, which no other rule here would let you write
+# anyway" — that is false: it is reachable by writing ordinary sentences with slightly longer words.
+# Runtime WPM at a fixed synth rate is set by SYLLABLES PER WORD (§3a: WPM ~= K / syll-per-word), and
+# the two episodes above measure 1.484 and 1.465 syll/word. A 143.0 floor caps the writer at 1.483
+# syll/word — a limit the shipping script is already 0.001 inside. The next slightly more Latinate
+# script HALTs the build, at night, with nobody watching, and the channel goes dark for a day.
+#
+# 139.0 is the reference channel's own slowest published video (139.2), rounded down to a round
+# number. It is therefore the loosest floor that is still defensible as "no stricter than the channel
+# this format copies", and it gives the writer 1.53 syll/word to work in instead of 1.483.
+# WHAT THIS STILL CATCHES: the pre-crayon rate regression ran 180.7 WPM — the wrong side of the band
+# entirely, caught by the ceiling. On this side, the failure a floor exists to catch is narration
+# that has slowed to a crawl (a RATE misconfiguration, or gap arithmetic that has run away). 139.0
+# still HALTs all of those; what it stops doing is HALTing on a script that is merely wordier than
+# the last one. A slightly slow episode is cheap. A dark channel is not.
+# BEFORE SPENDING THIS MARGIN: scripts/wpm_predict.py now predicts this quotient from content.py
+# BEFORE synthesis (validated to 0.5 WPM on both episodes above), so a rate problem is now catchable
+# while it is still a cheap rewrite instead of a HALTed nightly build. Use that, not more band.
+WPM_LO, WPM_HI = 139.0, 157.0
 tl = json.load(open(os.path.join(ROOT, "src", "timeline.json")))
 
 # ============================================================================

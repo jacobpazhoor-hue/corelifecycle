@@ -283,7 +283,7 @@ the WPM band, only by the rhythm tests. And measured at the SAME 202-scene cut, 
 | -4% | 176.3 | 156.8 | 15.74 min | more than "a little faster" |
 
 The shipped build measures **155.7 runtime / 174.8 speech over 15.8 min**, 1.3 WPM inside the 157.0
-ceiling and 12.7 above the 143.0 floor.
+ceiling and 16.7 above the 139.0 floor (12.7 above the 143.0 floor that build was gated against).
 
 So runtime WPM is **not** monotonic in scene count: the speech-rate gain outruns the gap cost until
 roughly 7s and then falls behind it. There is a **dead zone around a 6.5–7.5s mean scene** where the
@@ -291,9 +291,41 @@ number climbs through the ceiling. Both the 21s edit and the 5s edit clear the g
 between did not.
 
 **The actionable rule that follows:** if `gate.py` reports runtime WPM *above* the band, **split more
-scenes** — do not lengthen them, and never touch `gen_voice_edge.RATE`. If it reports *below* the band,
-add words. The floor is only reachable by extrapolation somewhere under a ~3s mean scene, which no
-other rule here would let you write anyway.
+scenes** — do not lengthen them, and never touch `gen_voice_edge.RATE`. If it reports *below* the
+band, **use shorter words** — do NOT add words or scenes (see the predictor below).
+
+> **The claim that used to close this paragraph — "the floor is only reachable by extrapolation
+> somewhere under a ~3s mean scene, which no other rule here would let you write anyway" — was
+> wrong, and it is corrected here rather than deleted, because it is why the floor went unexamined.**
+> The floor is reachable by writing ordinary sentences with slightly longer words. Measured:
+> theranos (2026-08-16) shipped at **144.5** and madoff (2026-08-17) at **143.4**, against a floor of
+> **143.0** — 0.4 WPM of margin, at an 11.8 cuts/min edit nothing else in this document objects to.
+> Both fired `gate.py`'s band-edge WARN. The floor was therefore lowered **143.0 → 139.0**
+> (the reference channel's own slowest published video is 139.2); the argument is written out in full
+> at the top of `gate.py`. The ceiling is unchanged at 157.0.
+
+### Predicting the rate BEFORE you synthesise: `scripts/wpm_predict.py`
+
+At a fixed synth rate the voice speaks at a near-constant **syllable** rate, so runtime WPM is set by
+how long the writer's words are and by essentially nothing else:
+
+    WPM_runtime  ~=  K / (syllables per word)          K = 210.0
+
+`python3 scripts/wpm_predict.py` computes this from `content.py` alone — **no synthesis, no
+timeline** — prints the predicted WPM and runtime, restates `gate.py`'s band as the syllables-per-word
+range it implies (currently **1.338–1.511**), and on a predicted miss lists the scenes carrying the
+most excess syllables so you know which lines to rewrite. `build.py` runs it before `gen_voice_edge.py`
+and prints loudly on a miss, but **never blocks on it** — the predictor cannot see a gap or scene-count
+change, and a false positive must not be able to cost the upload it exists to protect.
+
+Accuracy is **0.6 WPM** across the two episodes it was calibrated on (predicted 143.9 vs measured
+143.4; 144.0 vs 144.5). `K` is calibrated against `wpm_predict.syllables()` — the repo's one heuristic
+counter, which `scripts/review_facts.py` imports rather than duplicating. **`K` is stale the moment
+`gen_voice_edge.RATE` changes**: re-measure it on the next finished build as
+`runtime WPM × syllables-per-word`. Note that the **221.3** quoted for `-5%` in `gen_voice_edge.py`
+and in §3 above comes from one build (lehman, 2026-08-15) which speaks ~5% faster than the two
+episodes produced since at the same nominal rate, for reasons nobody has explained; 210 is what this
+pipeline currently does.
 
 ### Why 10–13 cuts/min and not more, when the gate would allow it
 

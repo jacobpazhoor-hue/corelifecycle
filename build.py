@@ -41,6 +41,19 @@ json.dump({"thumb": meta["thumb"], "topic": meta.get("topic", "")}, open(os.path
 # and visualMode="doodle" makes this a no-op. Must run before the smoke render consumes assets.
 run("python3 gen_scene_images.py")
 
+# 0.6) NARRATION RATE, PREDICTED BEFORE SYNTHESIS — deliberately NON-FATAL, deliberately LOUD.
+# gate.py can only measure runtime WPM after every scene has been synthesised, so a rate problem
+# currently surfaces at the END of the night as a HALT with nothing uploaded. This predicts the same
+# quotient from content.py alone (docs/BIBLE.md §3a, validated to 0.6 WPM on the last two episodes),
+# so the writer/repair agent sees it while it is still a cheap rewrite.
+# IT DOES NOT BLOCK THE BUILD, and that is the whole design: the predictor cannot see a gap change, a
+# scene-count change or a RATE change, so a false positive here must never be able to do what it
+# exists to prevent — cost a night's upload. gate.py stays the only authority.
+if run("python3 scripts/wpm_predict.py") != 0:
+    print("!! WPM PREDICTION IS OUTSIDE gate.py's BAND — gate.py will very likely HALT this build\n"
+          "!! after the VO is synthesised. Fix the SCRIPT now (see the advice printed above);\n"
+          "!! building on regardless because the prediction is an estimate, not the gate.", flush=True)
+
 # 1) VO + music
 for step in ("python3 gen_voice_edge.py", "python3 make_ambient.py"):
     if run(step) != 0:
