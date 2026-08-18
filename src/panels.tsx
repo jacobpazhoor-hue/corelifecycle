@@ -104,6 +104,26 @@ export type Panel = {
   /** Shift of the child canvas inside the panel, as fractions of the FRAME. Re-centres the crop. */
   offsetX?: number;
   offsetY?: number;
+  /**
+   * The x of the child composition, as a fraction, that this cell should be a framing OF.
+   *
+   * WHY (WO-34, QA defect 9: "split panels bisect a figure at the seam and crop the art"). A cell was
+   * always a CENTRE crop: the full-frame canvas was centred on the cell and whatever fell outside was
+   * cut. On a `v2` cell — half the frame's width, all of its height, so 16:19 rather than 16:9 — that
+   * throws away the outer quarter on each side and keeps the middle, which is a framing decision made
+   * by arithmetic rather than by looking. Measured on the shipped episode it cut `chartBoard`'s chart
+   * off its own y-axis at the left edge and sliced `officeFloor`'s hero down the middle at the gutter,
+   * leaving a disembodied arm and hand floating at the seam in two of the three panel scenes.
+   *
+   * A cell now asks the ENVIRONMENT where its subject is — `director.tsx` `STAGING[template].panelX`,
+   * the same measured staging the balloons and the number note use — and slides the canvas so that x
+   * lands in the middle of the cell. The slide is CLAMPED so the canvas still covers the cell in both
+   * directions: a cell can re-frame onto the subject, it can never open a hole at the frame's edge.
+   *
+   * Unset = the centre crop, i.e. exactly the old behaviour. `offsetX` still applies on top, so a
+   * hand-set offset is not overridden by this.
+   */
+  subjectX?: number;
 };
 
 /**
@@ -122,10 +142,26 @@ const Cell: React.FC<{
   frameHeight: number;
   clipPath?: string;
 }> = ({panel, left, top, width, height, frameWidth, frameHeight, clipPath}) => {
-  const {ground, children, offsetX = 0, offsetY = 0} = panel;
+  const {ground, children, offsetX = 0, offsetY = 0, subjectX} = panel;
   // COVER, capped at native: fill the cell in both axes, never magnify. See `Panel.scale`.
   const cover = Math.min(1, Math.max(width / frameWidth, height / frameHeight));
   const scale = panel.scale ?? cover;
+
+  // RE-FRAME ONTO THE SUBJECT (see `Panel.subjectX`).
+  //
+  // The child canvas is frame-sized, centred on the cell, and scaled about its OWN centre, so the
+  // composition point `s` lands at `cellCentre + (s - 0.5)·frameWidth·scale`. Putting it in the middle
+  // of the cell therefore asks for a shift of `-(s - 0.5)·frameWidth·scale`.
+  //
+  // Then clamped: the scaled canvas is `scale·frameWidth` wide, so it can slide at most
+  // `(scale·frameWidth - width) / 2` either way before one of its edges comes inside the cell and the
+  // cell's flat ground shows through where the drawing should be. On a cell WIDER than its scaled
+  // child that budget is negative and the clamp collapses to 0 — the centre crop, unchanged.
+  const slack = Math.max(0, (scale * frameWidth - width) / 2);
+  const reframe = subjectX === undefined
+    ? 0
+    : Math.min(slack, Math.max(-slack, -(subjectX - 0.5) * frameWidth * scale));
+
   return (
     <div
       style={{
@@ -143,7 +179,7 @@ const Cell: React.FC<{
         style={{
           position: 'absolute',
           // the child canvas is frame-sized and centred on the cell, so a full-frame scene crops
-          left: (width - frameWidth) / 2 + offsetX * frameWidth,
+          left: (width - frameWidth) / 2 + offsetX * frameWidth + reframe,
           top: (height - frameHeight) / 2 + offsetY * frameHeight,
           width: frameWidth,
           height: frameHeight,

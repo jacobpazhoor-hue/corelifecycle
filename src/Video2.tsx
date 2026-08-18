@@ -1,12 +1,17 @@
 import React from 'react';
 import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import timeline from './timeline.json';
-import {FramedScene, FOCUS, CountUp, NumberCard, splitMoney, isNegativeOverlay, fadeRamp, noteRamp} from './director';
+import {
+  FramedScene, FOCUS, CountUp, NumberCard, splitMoney, isNegativeOverlay, fadeRamp, noteRamp,
+  // WO-34: the staged geometry three layers now read instead of guessing (QA defects 1, 4, 9).
+  STAGING, cornerStyle, noteCorner, speakerHead, stagedHeads,
+} from './director';
 import {Move} from './photoStage';
 import PHOTO_RAW from './photo_manifest.json';
 // CRAYON signature devices (bible §6). Built in WO-5/6/7, wired to the timeline here in WO-12a.
 import {TextCard, TextCardProps} from './textcard';
-import {FloatingDialogue, SpeechBubble} from './bubble';
+import {FloatingDialogue, SpeechBubble, Utterance, planBalloons} from './bubble';
+import {useCrayonFace} from './crayonText';
 import {Panel, Panels} from './panels';
 // WO-19: the two devices COMPARISON scored as MISSING — the object showcase card (§6.6) and the
 // over-the-shoulder foreground silhouette (§6.8).
@@ -89,6 +94,19 @@ type BubbleT = {
   /** 'bubble' (default) draws the balloon; 'float' is the bubble-less floating dialogue. */
   kind?: 'bubble' | 'float';
   text: string;
+  /**
+   * WHO SAYS IT — a role name from the scene's template (`director.tsx` `STAGING`). Balloons only.
+   *
+   * This is the whole writer-facing half of the WO-34 fix. A balloon's position and its tail are
+   * derived from that person's head box, so naming the wrong person is visible in the picture and a
+   * name that is not in the room halts the render. Omit it and the balloons of a scene are handed to
+   * the room's speakers in order, alternating — the two-hander shape every bubble scene in this
+   * format has: the visitor asks, the principal answers.
+   */
+  speaker?: string;
+  /**
+   * Float only. `x`/`y` on a BALLOON are IGNORED (WO-34) — see the block comment on `Balloons`.
+   */
   x?: number;
   y?: number;
   /**
@@ -99,7 +117,11 @@ type BubbleT = {
   dur?: number;
   maxWidth?: number;
   maxLines?: number;
-  /** balloon only — which edge the tail leaves from, i.e. roughly where the speaker stands */
+  /**
+   * Balloon tail controls, ACCEPTED AND IGNORED (WO-34). They are still in the type because
+   * `content.py` in the field still writes them, and a live nightly pipeline must not die on a key
+   * that used to be legal; nothing reads them. See the block comment on `Balloons` for why they went.
+   */
   tail?: 'left' | 'right' | 'down' | 'up' | 'none';
   tailAt?: number;
   tailLength?: number;
@@ -304,6 +326,13 @@ const cellToPanel = (cell: PanelCellT, sceneId: string, dur: number): Panel => {
     scale: cell.scale,
     offsetX: cell.offsetX,
     offsetY: cell.offsetY,
+    // RE-FRAME, DON'T CENTRE-CROP (WO-34, QA defect 9). A `v2` cell is half the frame's width and all
+    // of its height, so a centre crop keeps the middle and throws the outer quarters away — which is
+    // what cut `chartBoard`'s chart off its own y-axis and sliced `officeFloor`'s hero at the gutter,
+    // leaving an arm and a hand floating at the seam. The cell now asks the environment where its
+    // subject is (`STAGING[template].panelX`) and slides onto it, clamped so it can never uncover the
+    // frame's edge. Undeclared templates (the legacy pack) keep the centre crop.
+    subjectX: cell.template ? STAGING[cell.template]?.panelX : undefined,
     // 'wide' = the template at native scale, centre-cropped to the cell. The camera is locked, so a
     // panel never re-frames; `scale`/`offsetX`/`offsetY` on the cell are the only crop controls.
     children: cell.template ? (
@@ -355,9 +384,97 @@ const sceneEra = (scene: SceneT): Era | null => {
   );
 };
 
+// ============================================================================
+// BALLOONS AND FLOATS — one scene's dialogue (WO-34, QA defect 1)
+//
+// WHAT THIS REPLACES. Each line used to be handed to `SpeechBubble` with the `x`, `y` and `tail` the
+// writer typed into `content.py`, and the balloons of a scene never knew about each other or about
+// the people in the room. Shipped, that put two men's heads entirely behind white boxes at `t063b`
+// and pointed the upper balloon's tail into empty ceiling in all four boardroom scenes while the only
+// possible speaker stood at the far right — three of Madoff's lines attributed to nobody.
+//
+// WHAT REPLACES IT. The scene names WHO speaks (`speaker="hero"`, or nothing, which alternates through
+// the room's speakers in order); `director.tsx` resolves that to a measured head box, raising on a
+// name the room does not have; and `planBalloons` places every line of the scene at once, so a balloon
+// clears every head, two balloons never overlap, and every tail is solved to point at its own speaker.
+//
+// `x` / `y` / `tail` / `tailAt` / `tailSkew` ARE IGNORED ON A BALLOON, and that is deliberate rather
+// than an oversight. They are the mechanism the defect came through: a coordinate and a side, typed
+// against a room the writer cannot see, with nothing able to check them. Honouring them "when they
+// look fine" would keep exactly the failure mode — a placement nobody verified — so the balloon takes
+// its place from the staging, always. They stay in the type only because content.py in the field
+// still emits them and a live nightly pipeline must not die on a key that used to be legal;
+// `docs/BIBLE.md` §8 tells the writer to stop writing them. `maxWidth` / `maxLines` still apply:
+// those are ceilings on the TEXT, which the writer can reason about without seeing the art.
+//
+// FLOATING DIALOGUE IS UNCHANGED. It has no tail and no speaker — it is script laid on the frame, not
+// an utterance from a person in it — so `x`/`y` still position it exactly as before.
+// ============================================================================
+const Balloons: React.FC<{scene: SceneT; D: number}> = ({scene, D}) => {
+  const {fps, width, height} = useVideoConfig();
+  // The plan measures text in the REAL vendored face (crayonText's canvas), so it has to sit behind
+  // the same gate the components use — a plan made against a fallback face would size every balloon
+  // wrongly and the placement is computed FROM the size. The gate holds the render open, so no frame
+  // is ever captured in the un-ready state.
+  const ready = useCrayonFace('bubble layout');
+  const lines = scene.bubbles ?? [];
+  const timing = (b: BubbleT) => {
+    const bFrom = Math.max(0, Math.round((b.at ?? 0) * fps));
+    return {bFrom, bDur: b.dur === undefined ? Math.max(1, D - bFrom) : Math.max(1, Math.round(b.dur * fps))};
+  };
+
+  const floats = lines.map((b, i) => ({b, i})).filter(({b}) => b.kind === 'float');
+  const balloons = lines.map((b, i) => ({b, i})).filter(({b}) => b.kind !== 'float');
+
+  // Placed only when the face is live; the floats need no measurement of ours, so they mount either way.
+  const placements = ready && balloons.length > 0
+    ? planBalloons(
+        balloons.map(({b}, k): Utterance => ({
+          text: b.text,
+          head: speakerHead(scene.template, b.speaker, k, scene.id),
+          maxWidth: b.maxWidth,
+          maxLines: b.maxLines,
+        })),
+        {width, height, heads: stagedHeads(scene.template), who: scene.id}
+      )
+    : null;
+
+  return (
+    <>
+      {floats.map(({b, i}) => {
+        const {bFrom, bDur} = timing(b);
+        return (
+          <Sequence key={`f${i}`} from={bFrom} durationInFrames={bDur}>
+            <FloatingDialogue
+              text={b.text} x={b.x} y={b.y} align={b.align} color={b.color}
+              // NO `ground` (WO-25). The renderer used to hand the scene key's flat `bg` over and let
+              // the device pick white or INK off its luminance; the key's `bg` is the colour a
+              // template paints FIRST and then covers, not the colour behind the glyphs, so the rule
+              // was right on some scenes and wrong on others — white-on-pale at t28, "fixed", then
+              // white-on-pale again at t022. `color` is still forwarded verbatim, but it can no
+              // longer choose an unreadable result: the device pairs it with the further of INK /
+              // PAPER_WHITE, requires 7:1 between the two, and raises otherwise (WO-31). Anything
+              // this renderer can pass either reads or halts the build; `bubble.tsx` has the argument.
+              maxWidth={b.maxWidth} maxLines={b.maxLines} keyline={b.keyline}
+            />
+          </Sequence>
+        );
+      })}
+      {placements && balloons.map(({b, i}, k) => {
+        const {bFrom, bDur} = timing(b);
+        return (
+          <Sequence key={`b${i}`} from={bFrom} durationInFrames={bDur}>
+            <SpeechBubble text={b.text} {...placements[k]} />
+          </Sequence>
+        );
+      })}
+    </>
+  );
+};
+
 const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({scene, from, shots}) => {
   const f = useCurrentFrame();
-  const {fps} = useVideoConfig();
+  const {fps, width, height} = useVideoConfig();
   const D = scene.durationInFrames;
   // Scene-cut fade: previously ramped all the way to 0 opacity over 16 frames (~0.53s) on EACH side
   // of a cut, so any frame sampled inside that ~1s combined window at a scene boundary reads as a
@@ -420,6 +537,15 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
   //                 the composition; a card laid over one of its cells is a second one.
   // This is a documented, deliberate drop, not a silent one — `docs/BIBLE.md` §8 tells the writer.
   const noteSuppressed = Boolean(scene.card || scene.bubbles?.length || scene.panels);
+
+  // WHERE the note goes, when it goes anywhere (WO-34, QA defect 4). Ten overlay scenes all put it
+  // bottom-left, and QA found seven of them sitting on people — two seated figures at t122 with their
+  // heads above the card and their legs below it, a seated figure and half a desk at t150, two or
+  // three crowd figures at t141 and t113. `noteCorner` scores the four corners against the template's
+  // staged occupancy and returns the emptiest one plus the largest size that is actually clear in it.
+  // `null` for the legacy `scenes.tsx` templates, which this work order did not measure: those keep
+  // the placement they have always had rather than being moved on a guess.
+  const note = noteCorner(scene.template);
 
   const photo = PHOTO.mode === 'photo' && PHOTO.scenes[scene.id] ? PHOTO.scenes[scene.id] : undefined;
 
@@ -523,17 +649,22 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
           burned, sold, murdered...) get a red/amber accent instead of gain-gold so the moral-erosion
           beats read as losses, not more income. */}
       {scene.overlay && !noteSuppressed && (money !== null
-        ? <CountUp from={from ?? 0} to={money.num} suffix={money.suffix} sub={scene.overlay.sub} dur={D} negative={negOverlay} />
+        ? <CountUp from={from ?? 0} to={money.num} suffix={money.suffix} sub={scene.overlay.sub} dur={D}
+            negative={negOverlay} corner={note?.corner} size={note?.size} />
         : (
           // Non-numeric overlays ("1 IN 3", "-1 KIA", "10-DAY DEAL", "0.03%") render VERBATIM as one
           // static line — no count-up, no re-formatting as a dollar amount, and no forced uppercase:
           // the note sets whatever `content.py` wrote (WO-15; the retired `level` chip's caps-lock the
           // writer could not opt out of was one of the three reasons it went).
           // reviewer fix (t15 "4,000 BALISH"): the warCouncil mapTable prop's edge sat under this
-          // card's default left:72 corner -- nudged left so the card clears the table.
-          <div style={{position: 'absolute', bottom: 96, left: scene.id === 't15' ? 34 : 72, opacity: staticOp,
-            transform: `translateY(${staticRise}px)`}}>
-            <NumberCard figure={big} sub={scene.overlay.sub} negative={negOverlay} />
+          // card's default left:72 corner -- nudged left so the card clears the table. That template
+          // is in the legacy `scenes.tsx` pack, which WO-34 did not measure, so it keeps the hand
+          // nudge; every staged template gets its corner from `noteCorner` instead.
+          <div style={note
+            ? {...cornerStyle(note.corner, width, height), opacity: staticOp, transform: `translateY(${staticRise}px)`}
+            : {position: 'absolute', bottom: 96, left: scene.id === 't15' ? 34 : 72, opacity: staticOp,
+               transform: `translateY(${staticRise}px)`}}>
+            <NumberCard figure={big} sub={scene.overlay.sub} negative={negOverlay} size={note?.size} />
           </div>
         ))}
      </>)}
@@ -542,33 +673,7 @@ const Beat: React.FC<{scene: SceneT; from: number | null; shots: Shot[]}> = ({sc
           Each line gets its own Sequence, which is what makes the component's entrance fire when the
           LINE appears rather than when the scene does — and lets two speakers alternate in one scene,
           as the 9:20 reference frame does with its two balloons. */}
-      {scene.bubbles?.map((b, i) => {
-        const bFrom = Math.max(0, Math.round((b.at ?? 0) * fps));
-        const bDur = b.dur === undefined ? Math.max(1, D - bFrom) : Math.max(1, Math.round(b.dur * fps));
-        return (
-          <Sequence key={`b${i}`} from={bFrom} durationInFrames={bDur}>
-            {b.kind === 'float' ? (
-              <FloatingDialogue
-                text={b.text} x={b.x} y={b.y} align={b.align} color={b.color}
-                // NO `ground` (WO-25). The renderer used to hand the scene key's flat `bg` over and let
-                // the device pick white or INK off its luminance; the key's `bg` is the colour a
-                // template paints FIRST and then covers, not the colour behind the glyphs, so the rule
-                // was right on some scenes and wrong on others — white-on-pale at t28, "fixed", then
-                // white-on-pale again at t022. `color` is still forwarded verbatim, but it can no
-                // longer choose an unreadable result: the device pairs it with the further of INK /
-                // PAPER_WHITE, requires 7:1 between the two, and raises otherwise (WO-31). Anything
-                // this renderer can pass either reads or halts the build; `bubble.tsx` has the argument.
-                maxWidth={b.maxWidth} maxLines={b.maxLines} keyline={b.keyline}
-              />
-            ) : (
-              <SpeechBubble
-                text={b.text} x={b.x} y={b.y} tail={b.tail} tailAt={b.tailAt}
-                tailLength={b.tailLength} tailSkew={b.tailSkew} maxWidth={b.maxWidth} maxLines={b.maxLines}
-              />
-            )}
-          </Sequence>
-        );
-      })}
+      {scene.bubbles?.length ? <Balloons scene={scene} D={D} /> : null}
 
       {/* full-screen card (bible §6.1/§6.2/§6.6) — narration beat, single dramatic word, the chapter
           card, or the object showcase. LAST in the stack because it is full-screen and opaque: it

@@ -54,6 +54,244 @@ export const FOCUS: Record<string, [number, number]> = {
   countRoom: [0.28, 0.62], foundationScene: [0.32, 0.78],
 };
 
+// ============================================================================
+// STAGING — WHERE THE PEOPLE ARE (WO-34). QA defects 1, 4 and 9.
+//
+// THE PROBLEM ALL THREE SHARE. `bubble.tsx`, the number note and `panels.tsx` all have to place
+// something ON a frame whose contents they cannot see: the templates in `explainer.tsx` draw the
+// figures, and every layer over them was positioned by a constant or by a writer typing coordinates
+// into `content.py`. So the shipped episode put speech balloons over two men's heads with tails
+// pointing into empty ceiling, dropped number cards on top of seated crowds, and cropped a wide
+// composition down its own middle through a figure.
+//
+// None of that is visible to anything this project measures. Flat fill, camera lock and the colour
+// work all PASSED on the frame where two men are decapitated by their own balloons. It took a
+// frame-by-frame watch by eye to find, twice.
+//
+// THE FIX IS DATA, IN ONE PLACE. Each template publishes where its people's heads are — measured off
+// that template's own figure call sites, in frame fractions — plus the props an overlay must not
+// cover and the x a half-width crop should centre on. Everything else is derived:
+//
+//   * a balloon is placed in the free band ABOVE every head it would otherwise cross, in the lane of
+//     frame nearest its own speaker, with a tail solved to point at that speaker's head (`bubble.tsx`
+//     `planBalloons`), and a scene names its speaker by ROLE — a name checked against the room —
+//     rather than by typing an x and a side;
+//   * the number note's corner is the corner of the frame with the least of this in it (`noteCorner`),
+//     and it shrinks rather than overlapping;
+//   * a panel cell re-centres on `panelX` instead of taking the middle of the frame (`panels.tsx`).
+//
+// WHY THE NUMBERS LIVE HERE AND NOT IN `explainer.tsx`. Ideally a template would publish its own
+// anchors through a context, next to the call site that draws the figure, so the two cannot drift.
+// That is the right end state and it is written down as such in `docs/BIBLE.md` §8. It is NOT what
+// this work order could build: `explainer.tsx` is owned by concurrent work, and a registry that at
+// least EXISTS and RAISES on a name it does not know is a large step up from three layers each
+// guessing separately. The staging is arithmetic on the figure rig, not taste — head centre is
+// `(x + dx·scale, y + dy·scale)` for the pose's own spine/neck/head angles (see `figure.tsx` SEG), so
+// it can be re-derived whenever a template moves someone.
+// ============================================================================
+
+/** A figure's head, in frame fractions: centre plus full size. The unit the whole mechanism runs on. */
+export type HeadBox = {cx: number; cy: number; w: number; h: number};
+
+/** A rectangle in frame fractions. */
+export type Zone = {x0: number; y0: number; x1: number; y1: number};
+
+export type Staging = {
+  /**
+   * The room's speaking parts, IN THE ORDER A CONVERSATION IN THIS ROOM RUNS — the visitor who asks
+   * first, then the principal who answers. A scene that does not name its speakers gets them in this
+   * order, alternating, which is what a two-hander is; a scene that does name them overrides it.
+   */
+  speakers: {role: string; head: HeadBox}[];
+  /**
+   * Everybody else's heads: crowd rows, seated banks, background figures. They cannot speak, but a
+   * balloon must not cover them either — this list is what stopped both sofa men losing their heads
+   * to one balloon that belonged to only one of them. A row at a single depth is given as ONE band
+   * rather than one box per figure: it is conservative in the right direction (it blocks slightly
+   * more than the figures do) and it does not go stale when a row's seeded jitter changes.
+   */
+  extraHeads: HeadBox[];
+  /** Props an overlay card must not land on. Only ones a viewer would notice losing. */
+  props?: Zone[];
+  /**
+   * Where a HALF-WIDTH framing of this room should centre, as a fraction of frame width.
+   *
+   * A `v2` panel cell is 16:19, not 16:9, so it can only show about half the composition. Taking the
+   * middle half is what sliced a figure at the seam and cropped the chart's own y-axis off the left
+   * edge (QA defect 9). This is the x that keeps the room's SUBJECT in the cell: the chart on
+   * `chartBoard`, the hero at his desk on `officeFloor`, the couple on `domesticInterior`.
+   */
+  panelX: number;
+};
+
+/**
+ * Measured off `explainer.tsx`'s figure call sites. Head centre = the figure's staged (x, y) plus the
+ * pose's own head offset times its scale; head size = the drawn head box (`figure.tsx` HEAD_HW/HEAD_HH)
+ * times the same scale. Rows carry their seeded position/scale jitter in the box.
+ */
+export const STAGING: Record<string, Staging> = {
+  boardroom: {
+    // the far side of the table asks; the man standing at the head of it answers
+    speakers: [
+      {role: 'guest', head: {cx: 0.2448, cy: 0.6187, w: 0.0871, h: 0.1353}},
+      {role: 'hero', head: {cx: 0.9177, cy: 0.5878, w: 0.0710, h: 0.1374}},
+    ],
+    extraHeads: [
+      {cx: 0.5182, cy: 0.6187, w: 0.6537, h: 0.1353},   // the six directors along the far side
+      {cx: 0.3932, cy: 0.7760, w: 0.5827, h: 0.1722},   // the four backs at the near edge
+    ],
+    panelX: 0.55,
+  },
+  domesticInterior: {
+    speakers: [
+      {role: 'right', head: {cx: 0.5074, cy: 0.6052, w: 0.0649, h: 0.1256}},
+      {role: 'left', head: {cx: 0.4034, cy: 0.6123, w: 0.0624, h: 0.1208}},
+    ],
+    extraHeads: [],
+    props: [{x0: 0.102, y0: 0.659, x1: 0.251, y1: 0.841}],   // the television on its low stand
+    panelX: 0.455,
+  },
+  officeFloor: {
+    speakers: [
+      {role: 'colleague', head: {cx: 0.5531, cy: 0.7296, w: 0.1191, h: 0.1490}},
+      {role: 'hero', head: {cx: 0.6636, cy: 0.7173, w: 0.0624, h: 0.1208}},
+    ],
+    extraHeads: [
+      {cx: 0.1953, cy: 0.6120, w: 0.3842, h: 0.0923},
+      {cx: 0.8052, cy: 0.6120, w: 0.3875, h: 0.0923},
+    ],
+    panelX: 0.66,
+  },
+  chartBoard: {
+    speakers: [{role: 'presenter', head: {cx: 0.7720, cy: 0.6729, w: 0.0698, h: 0.1350}}],
+    extraHeads: [
+      {cx: 0.1302, cy: 0.7774, w: 0.1074, h: 0.1637},
+      {cx: 0.2917, cy: 0.7777, w: 0.1114, h: 0.1694},
+      {cx: 0.4688, cy: 0.7801, w: 0.1195, h: 0.1808},
+      {cx: 0.6302, cy: 0.7785, w: 0.1236, h: 0.1865},
+    ],
+    // the easel board IS this template's subject, and the plant is the near-left corner
+    props: [{x0: 0.109, y0: 0.181, x1: 0.585, y1: 0.676}, {x0: 0.021, y0: 0.870, x1: 0.096, y1: 1.0}],
+    panelX: 0.347,
+  },
+  closeUpPortrait: {
+    speakers: [{role: 'hero', head: {cx: 0.5946, cy: 0.5769, w: 0.3428, h: 0.6633}}],
+    extraHeads: [
+      {cx: 0.1771, cy: 0.5502, w: 0.2417, h: 0.1065},
+      {cx: 0.8618, cy: 0.5733, w: 0.0477, h: 0.0924},
+    ],
+    panelX: 0.595,
+  },
+  courtHearing: {
+    speakers: [
+      {role: 'judge', head: {cx: 0.8515, cy: 0.5543, w: 0.0563, h: 0.1090}},
+      {role: 'defendant', head: {cx: 0.5050, cy: 0.5042, w: 0.0673, h: 0.1303}},
+      {role: 'counsel', head: {cx: 0.2952, cy: 0.7389, w: 0.0600, h: 0.1161}},
+    ],
+    extraHeads: [
+      {cx: 0.0781, cy: 0.6433, w: 0.1067, h: 0.1349},
+      {cx: 0.1875, cy: 0.6391, w: 0.0871, h: 0.1353},
+    ],
+    panelX: 0.5,
+  },
+  broadcastDesk: {
+    speakers: [
+      {role: 'coAnchor', head: {cx: 0.4312, cy: 0.6056, w: 0.0686, h: 0.1327}},
+      {role: 'anchor', head: {cx: 0.5830, cy: 0.5876, w: 0.0734, h: 0.1421}},
+    ],
+    extraHeads: [],
+    panelX: 0.5,
+  },
+  crowdQueue: {
+    speakers: [{role: 'hero', head: {cx: 0.6313, cy: 0.7248, w: 0.0710, h: 0.1374}}],
+    extraHeads: [{cx: 0.3281, cy: 0.6518, w: 0.5672, h: 0.0952}],
+    panelX: 0.63,
+  },
+  cityStreet: {
+    speakers: [{role: 'hero', head: {cx: 0.5672, cy: 0.4669, w: 0.0624, h: 0.1208}}],
+    extraHeads: [
+      {cx: 0.5026, cy: 0.5868, w: 0.9894, h: 0.0824},
+      {cx: 0.4323, cy: 0.5909, w: 0.7769, h: 0.1044},
+      {cx: 0.7943, cy: 0.5345, w: 0.2455, h: 0.1335},
+    ],
+    panelX: 0.567,
+  },
+  bankExterior: {
+    speakers: [{role: 'hero', head: {cx: 0.6510, cy: 0.7393, w: 0.0649, h: 0.1256}}],
+    extraHeads: [
+      {cx: 0.2526, cy: 0.7746, w: 0.4581, h: 0.1202},
+      {cx: 0.8802, cy: 0.7880, w: 0.2857, h: 0.1311},
+    ],
+    panelX: 0.65,
+  },
+  exchangeFloor: {
+    speakers: [{role: 'hero', head: {cx: 0.6102, cy: 0.6658, w: 0.0759, h: 0.1469}}],
+    extraHeads: [
+      {cx: 0.5026, cy: 0.5495, w: 0.7558, h: 0.0980},
+      {cx: 0.5146, cy: 0.6152, w: 0.7049, h: 0.0782},
+      {cx: 0.5052, cy: 0.6410, w: 0.8896, h: 0.1292},
+      {cx: 0.5062, cy: 0.7103, w: 0.9102, h: 0.1113},
+    ],
+    panelX: 0.61,
+  },
+  factoryFloor: {
+    speakers: [
+      {role: 'worker', head: {cx: 0.3550, cy: 0.7309, w: 0.0502, h: 0.0971}},
+      {role: 'hero', head: {cx: 0.6523, cy: 0.7228, w: 0.0686, h: 0.1327}},
+    ],
+    extraHeads: [{cx: 0.5208, cy: 0.6299, w: 0.5048, h: 0.1037}],
+    panelX: 0.656,
+  },
+  // A pile of cuttings. Nobody is in it, so nobody in it can speak — a `bubbles=` scene on this
+  // template raises rather than drawing a tail into a document fan.
+  newsMontage: {speakers: [], extraHeads: [], panelX: 0.5},
+};
+
+/** Every head a layer must keep clear of, speaking or not. */
+export const stagedHeads = (template: string): HeadBox[] => {
+  const st = STAGING[template];
+  return st ? [...st.speakers.map((s) => s.head), ...st.extraHeads] : [];
+};
+
+/**
+ * The head box of the speaker for balloon `index` of a scene, by role or by position in the room.
+ *
+ * RAISES, three ways, and each one is a defect that used to render silently:
+ *   * a template with no staging at all — the renderer would have no idea where anyone is;
+ *   * a template with staging but nobody in it who can speak;
+ *   * a role that is not in the room, which is a typo or a memory of a different template.
+ * The alternative to raising is a balloon pointing at a default, which is what shipped.
+ */
+export const speakerHead = (
+  template: string, role: string | undefined, index: number, sceneId: string
+): HeadBox => {
+  const st = STAGING[template];
+  if (!st) {
+    throw new Error(
+      `${sceneId}: template '${template}' has no entry in director.tsx STAGING, so the renderer does ` +
+      `not know where anybody in it is standing — a balloon there could only be placed by guessing. ` +
+      `Add its speakers' head boxes to STAGING (measured off its figure call sites), or move the ` +
+      `dialogue to a template that has them.`
+    );
+  }
+  if (st.speakers.length === 0) {
+    throw new Error(
+      `${sceneId}: template '${template}' draws no people, so it has no speakers — a \`bubbles=\` line ` +
+      `on it would be a balloon with a tail pointing at nothing. Use \`card=\` or a \`kind="float"\` ` +
+      `line for narration over this template.`
+    );
+  }
+  if (role === undefined) return st.speakers[index % st.speakers.length].head;
+  const hit = st.speakers.find((s) => s.role === role);
+  if (!hit) {
+    throw new Error(
+      `${sceneId}: nobody called ${JSON.stringify(role)} is in '${template}' — its speakers are ` +
+      `${st.speakers.map((s) => `'${s.role}'`).join(', ')}`
+    );
+  }
+  return hit.head;
+};
+
 // dp = decimal places to keep. Count-ups pass the precision of their SETTLED target so a
 // fractional figure like 6.8 ("$6.8B") never rounds up to "$7" mid- or end-of-count.
 export const fmt = (v: number, dp = 0) => '$' + v.toLocaleString('en-US', {minimumFractionDigits: dp, maximumFractionDigits: dp});
@@ -308,6 +546,100 @@ const NOTE_MAX_H_FRAC = 0.30;
 /** The reference wraps a subtitle to at most 2 lines (bible §6.1); a longer caption shrinks instead. */
 const CAPTION_MAX_LINES = 2;
 
+// ---------------------------------------------------------------------------
+// WHICH CORNER THE NOTE SITS IN (WO-34, QA defect 4)
+// ---------------------------------------------------------------------------
+//
+// It used to be bottom-left in all ten overlay scenes, plus one hand-written per-scene nudge for the
+// one case somebody noticed. QA found seven more: `t122` covers two seated figures (heads above the
+// card, legs below it, torsos gone), `t150` a seated figure and half a desk, `t141` and `t113` two or
+// three crowd figures each, `t027` and `t105` the plant and the left chairs, `t143` the television.
+//
+// The corner is now chosen per scene by measuring which one is emptiest — not from pixels, which the
+// renderer has no access to, but from the same staged occupancy `planBalloons` uses: every head the
+// template declares, taken down to the floor (a figure is a head with a body under it, and the shipped
+// defect is torsos, not faces), plus the props worth not covering. And when no corner is completely
+// clear the note SHRINKS to the largest size that is, rather than sitting on somebody at full size.
+
+/** The note's margins from the frame edges, as fractions — the old `bottom: 96, left: 72` at 1920. */
+const NOTE_MARGIN_X = 72 / 1920;
+const NOTE_MARGIN_Y = 96 / 1080;
+
+export type NoteCorner = 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right';
+
+/**
+ * Preference order, used only to break ties between corners that are equally empty. Bottom-left comes
+ * first so a scene with nobody in the way keeps the placement every episode before this one used.
+ */
+const CORNER_ORDER: NoteCorner[] = ['bottom-left', 'bottom-right', 'top-left', 'top-right'];
+
+/** The rectangle a note of relative size `k` would occupy in `corner`. */
+const cornerRect = (corner: NoteCorner, k: number): Zone => {
+  const w = NOTE_MAX_W_FRAC * k;
+  const h = NOTE_MAX_H_FRAC * k;
+  const left = corner.endsWith('left');
+  const top = corner.startsWith('top');
+  const x0 = left ? NOTE_MARGIN_X : 1 - NOTE_MARGIN_X - w;
+  const y0 = top ? NOTE_MARGIN_Y : 1 - NOTE_MARGIN_Y - h;
+  return {x0, y0, x1: x0 + w, y1: y0 + h};
+};
+
+const overlapArea = (a: Zone, b: Zone): number =>
+  Math.max(0, Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0)) *
+  Math.max(0, Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0));
+
+/**
+ * What a note must not land on: every declared head carried down to the bottom of the frame, plus the
+ * template's named props.
+ */
+export const stagedOccupancy = (template: string): Zone[] => {
+  const st = STAGING[template];
+  if (!st) return [];
+  const bodies = stagedHeads(template).map((h) => ({
+    x0: h.cx - h.w / 2,
+    y0: h.cy - h.h / 2,
+    x1: h.cx + h.w / 2,
+    y1: 1,
+  }));
+  return [...bodies, ...(st.props ?? [])];
+};
+
+/** Relative sizes tried, largest first, when no corner is clear at full size. */
+const NOTE_SHRINK_STEPS = [1, 0.92, 0.84, 0.76, 0.68, 0.6];
+
+/**
+ * The emptiest corner for this template's number note, and how large the note may be there.
+ *
+ * `null` for a template with no staging — the legacy `scenes.tsx` pack, which this work order did not
+ * measure. Those keep the bottom-left placement they have always had rather than being moved on a
+ * guess.
+ */
+export const noteCorner = (template: string): {corner: NoteCorner; size: number} | null => {
+  const zones = stagedOccupancy(template);
+  if (zones.length === 0) return null;
+  const scored = CORNER_ORDER.map((corner) => {
+    const rect = cornerRect(corner, 1);
+    return {corner, area: zones.reduce((a, z) => a + overlapArea(rect, z), 0)};
+  });
+  const best = scored.reduce((a, b) => (b.area < a.area ? b : a));
+  // …and then take the largest size that is actually clear in it. At the common case — a corner with
+  // nothing in it — the first step succeeds and the note is full size.
+  for (const size of NOTE_SHRINK_STEPS) {
+    const rect = cornerRect(best.corner, size);
+    if (zones.every((z) => overlapArea(rect, z) === 0)) return {corner: best.corner, size};
+  }
+  // Nowhere is clear even at the smallest step: take the emptiest corner at that size. The note still
+  // has to render — it is the scene's figure — so this is the least-bad placement, not a silent pass.
+  return {corner: best.corner, size: NOTE_SHRINK_STEPS[NOTE_SHRINK_STEPS.length - 1]};
+};
+
+/** The CSS offsets that put a note of relative size `size` in `corner`. */
+export const cornerStyle = (corner: NoteCorner, width: number, height: number): React.CSSProperties => ({
+  position: 'absolute',
+  [corner.startsWith('top') ? 'top' : 'bottom']: NOTE_MARGIN_Y * height,
+  [corner.endsWith('left') ? 'left' : 'right']: NOTE_MARGIN_X * width,
+});
+
 /**
  * Caption:figure size ratio — deliberately NOT `CRAYON_SUBTITLE_RATIO` itself.
  *
@@ -340,6 +672,15 @@ export type NumberCardProps = {
   negative?: boolean;
   /** 0..1 wipe of the accent rule. 1 = full width (a static overlay); `CountUp` animates it. */
   rule?: number;
+  /**
+   * Relative size ceiling, 0..1, multiplying the note's own width/height fractions.
+   *
+   * How "let the card shrink rather than overlap a figure" is actually done (QA defect 4): `noteCorner`
+   * hands back the largest size that is clear in the corner it picked, and the note is fitted to that
+   * box. It is a CEILING on the auto-fit, not a transform — the figure is re-set at the smaller size,
+   * so the linework and the keyline keep the weight the rest of the frame is drawn at.
+   */
+  size?: number;
 };
 
 /**
@@ -347,7 +688,7 @@ export type NumberCardProps = {
  * placement, opacity and any entrance transform, exactly as `TextCard` leaves its own Sequence to
  * `Video2`.
  */
-export const NumberCard: React.FC<NumberCardProps> = ({figure, measure, sub, negative = false, rule = 1}) => {
+export const NumberCard: React.FC<NumberCardProps> = ({figure, measure, sub, negative = false, rule = 1, size = 1}) => {
   const {width, height} = useVideoConfig();
   // Auto-fit measures in the REAL vendored face; measuring before the woff2 is live would size the
   // note against a fallback. The shared gate holds the render open until the face is available and
@@ -356,8 +697,11 @@ export const NumberCard: React.FC<NumberCardProps> = ({figure, measure, sub, neg
   // Not laid out yet: the delayRender above guarantees no frame is ever captured in this state.
   if (!ready) return null;
 
-  const boxWidth = width * NOTE_MAX_W_FRAC;
-  const boxHeight = height * NOTE_MAX_H_FRAC;
+  if (!(size > 0 && size <= 1)) {
+    throw new Error(`number card: size must be in (0, 1], got ${size}`);
+  }
+  const boxWidth = width * NOTE_MAX_W_FRAC * size;
+  const boxHeight = height * NOTE_MAX_H_FRAC * size;
   const candidates = measure?.length ? measure : [figure];
   const widest = candidates.reduce((a, c) => (measureEm(c) > measureEm(a) ? c : a));
   const fit = fitText(widest, {
@@ -442,11 +786,17 @@ export const NumberCard: React.FC<NumberCardProps> = ({figure, measure, sub, neg
   );
 };
 
-// ---- positioned count-up overlay (sits on the scene shots, lower-left, while framing cuts) ----
-export const CountUp: React.FC<{from: number; to: number; suffix?: string; sub?: string | null; dur: number; negative?: boolean}> =
-({from, to, suffix = '', sub, dur, negative = false}) => {
+// ---- positioned count-up overlay (sits on the scene shots, in its scene's emptiest corner) ----
+export const CountUp: React.FC<{
+  from: number; to: number; suffix?: string; sub?: string | null; dur: number; negative?: boolean;
+  /** Where the note sits. Chosen per scene by `noteCorner`; bottom-left is the historical default. */
+  corner?: NoteCorner;
+  /** Relative size, 0..1 — `noteCorner`'s answer to "shrink rather than overlap a figure". */
+  size?: number;
+}> =
+({from, to, suffix = '', sub, dur, negative = false, corner = 'bottom-left', size = 1}) => {
   const f = useCurrentFrame();
-  const {fps} = useVideoConfig();
+  const {fps, width, height} = useVideoConfig();
   // One timing for the whole device, fitted to the scene and monotonic by construction (`noteRamp`).
   // The old stops were literals against `dur` — `[16, min(dur-12, 84)]` and `[10, 24, dur-18, dur]` —
   // and the second of those is the render-killer this work order was opened on: it went backwards for
@@ -467,13 +817,20 @@ export const CountUp: React.FC<{from: number; to: number; suffix?: string; sub?:
   // `val` never leaves the interval between them, so neither the settled label nor a carried-forward
   // opening figure that happens to be the longer of the two can ever overflow.
   return (
-    <div style={{position: 'absolute', bottom: 96, left: 72, opacity: op, transformOrigin: 'left bottom', transform: `scale(${pop})`}}>
+    <div style={{
+      ...cornerStyle(corner, width, height),
+      opacity: op,
+      // the spring pop grows the note out of the corner it is anchored to, not out of frame
+      transformOrigin: `${corner.endsWith('left') ? 'left' : 'right'} ${corner.startsWith('top') ? 'top' : 'bottom'}`,
+      transform: `scale(${pop})`,
+    }}>
       <NumberCard
         figure={fmt(val, dp) + suffix}
         measure={[fmt(from, dp) + suffix, fmt(to, dp) + suffix]}
         sub={sub}
         negative={negative}
         rule={rule}
+        size={size}
       />
     </div>
   );

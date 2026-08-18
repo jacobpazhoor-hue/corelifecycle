@@ -101,9 +101,25 @@ const PAD_Y_EM = 0.32;
 /** Corner radius as a fraction of the balloon's SHORT side. Reference ~7 cell px on a 32 cell px box. */
 const RADIUS_FRAC = 0.28;
 
-/** Default tail length as a fraction of frame height, and its half-width as a fraction of that length. */
-const TAIL_LEN_FRAC = 0.075;
+/**
+ * Tail length bounds as a fraction of frame height, and the base half-width as a fraction of the
+ * length. The length is no longer a caller setting: it is the distance from the balloon's edge to the
+ * speaker's head, clamped into this band (see `tailToward`). 0.075 — the old fixed default — sits
+ * inside it, so a balloon that happens to hover exactly that far above its speaker is unchanged.
+ */
+const TAIL_MIN_LEN_FRAC = 0.03;
+const TAIL_MAX_LEN_FRAC = 0.22;
 const TAIL_HALF_W_OF_LEN = 0.4;
+
+/**
+ * How far the tip may lean sideways, as a multiple of the tail's own length.
+ *
+ * The lean is what lets a balloon that is offset from its speaker still aim AT him rather than
+ * straight down beside him, so it has to be generous; past about 2 the triangle shears into a
+ * near-horizontal splinter that no longer reads as a tail, so it stops there and the tail points as
+ * far toward the speaker as it can.
+ */
+const TAIL_MAX_SKEW = 2;
 
 /** A balloon wraps to at most this many lines before it starts shrinking its text instead. */
 const BUBBLE_MAX_LINES = 4;
@@ -172,8 +188,36 @@ const WEIGHT = CRAYON_TEXT_WEIGHT;
 // Balloon outline
 // ---------------------------------------------------------------------------
 
-/** Which edge the tail leaves from. 'none' draws a plain balloon (a thought/label, or an off-screen speaker). */
+/**
+ * Which edge the tail leaves from. 'none' draws a plain balloon (a thought/label, or an off-screen
+ * speaker).
+ *
+ * NOTHING OUTSIDE THIS FILE CHOOSES IT ANY MORE (WO-34, QA defect 1). It used to be a writer-facing
+ * scene field — `tail="left"` beside a hand-typed `x`/`y` — and in all four boardroom bubble scenes of
+ * the shipped episode the upper balloon carried `tail="left"` while the only character who could be
+ * speaking stood at the far RIGHT, so three of Madoff's lines pointed into empty ceiling. A side is a
+ * derivative of where the speaker is; asking a writer to keep it in sync with art he cannot see is a
+ * defect generator, and it generated this one five scenes out of five. The side, the position along
+ * the edge, the length and the lean are now all solved from `pointAt` (see `tailToward`), and a
+ * balloon with no `pointAt` has no tail at all.
+ */
 export type BubbleTail = 'left' | 'right' | 'down' | 'up' | 'none';
+
+/** A point in the frame, as fractions — the thing a tail points AT. */
+export type FramePoint = {x: number; y: number};
+
+/**
+ * A figure's head, as fractions of the frame: centre plus full width/height.
+ *
+ * This is the unit the whole speaker mechanism is built on. `director.tsx` publishes one per named
+ * speaker per template (`STAGING`), measured off the template's own figure call sites, so a balloon's
+ * placement and its tail are both derived from where the drawing actually puts the head.
+ */
+export type HeadBox = {cx: number; cy: number; w: number; h: number};
+
+const headTop = (h: HeadBox): number => h.cy - h.h / 2;
+const headLeft = (h: HeadBox): number => h.cx - h.w / 2;
+const headRight = (h: HeadBox): number => h.cx + h.w / 2;
 
 type TailSpec = {
   side: BubbleTail;
@@ -245,6 +289,107 @@ const balloonPath = (x0: number, y0: number, x1: number, y1: number, r: number, 
   d.push(`L ${x0} ${y0 + r}`, `Q ${x0} ${y0} ${x0 + r} ${y0}`, 'Z');
 
   return d.join(' ');
+};
+
+// ---------------------------------------------------------------------------
+// Tail aiming — the whole of QA defect 1's "tails point at nobody"
+// ---------------------------------------------------------------------------
+
+const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, v));
+
+/**
+ * The tail that points from a balloon rectangle at `target`, in px.
+ *
+ * Solved, not chosen. The side is whichever edge the target is actually PAST — the one with the
+ * largest outward gap, so a speaker below and a little to the right gets a bottom tail leaning right
+ * rather than a right-edge tail crawling along the wall. The base slides along that edge to sit under
+ * the target, the length is the real distance to it (clamped so a very near or very distant speaker
+ * still gets a tail that reads as one), and the lean is set so the tip AIMS at the target even when
+ * the length had to be clamped short of it: the tip is `base + skew·len` sideways and `len` outward,
+ * so `skew = offset / len` puts the base→tip ray straight through the target.
+ *
+ * A target INSIDE the balloon raises. It is unreachable by construction — `planBalloons` never places
+ * a balloon over a head — so reaching it means the geometry disagrees with itself, and the failure it
+ * would otherwise produce (a tail folded back into the balloon's own body) is precisely the class of
+ * defect this function exists to make impossible.
+ */
+const tailToward = (
+  x0: number, y0: number, x1: number, y1: number, r: number,
+  target: {x: number; y: number}, height: number, who: string
+): TailSpec => {
+  const gaps: {side: BubbleTail; gap: number}[] = [
+    {side: 'up', gap: y0 - target.y},
+    {side: 'down', gap: target.y - y1},
+    {side: 'left', gap: x0 - target.x},
+    {side: 'right', gap: target.x - x1},
+  ];
+  const best = gaps.reduce((a, b) => (b.gap > a.gap ? b : a));
+  if (best.gap <= 0) {
+    throw new Error(
+      `bubble: ${who} would have to point at (${target.x.toFixed(1)}, ${target.y.toFixed(1)}), which is ` +
+      `INSIDE its own balloon [${x0.toFixed(1)}, ${y0.toFixed(1)}]-[${x1.toFixed(1)}, ${y1.toFixed(1)}] — ` +
+      `a balloon sitting on top of the head it is pointing at has no tail direction at all. The layout ` +
+      `owes every balloon clear air between itself and its speaker (see planBalloons).`
+    );
+  }
+
+  const len = clamp(best.gap, TAIL_MIN_LEN_FRAC * height, TAIL_MAX_LEN_FRAC * height);
+  const vertical = best.side === 'up' || best.side === 'down';
+  // the straight run between the corners: the only part of an edge a tail base can sit on
+  const [lo, hi] = vertical ? [x0 + r, x1 - r] : [y0 + r, y1 - r];
+  // the base has to fit that run whatever the tail length asks for
+  const halfW = Math.min(TAIL_HALF_W_OF_LEN * len, (hi - lo) / 2 - 1);
+  if (halfW <= 0) {
+    throw new Error(
+      `bubble: ${who} has no straight edge run left for a tail base (${(hi - lo).toFixed(1)}px between ` +
+      `corners of radius ${r.toFixed(1)}) — the balloon is too small for the corner radius it was given`
+    );
+  }
+  const want = vertical ? target.x : target.y;
+  const base = clamp(want, lo + halfW, hi - halfW);
+  const skew = clamp((want - base) / len, -TAIL_MAX_SKEW, TAIL_MAX_SKEW);
+  return {
+    side: best.side,
+    // `balloonPath` re-derives the base from `at` as a fraction of the same run, so invert it here
+    at: hi > lo ? (base - lo) / (hi - lo) : 0.5,
+    len,
+    halfW,
+    skew,
+  };
+};
+
+// ---------------------------------------------------------------------------
+// Balloon sizing, shared by the planner and the component
+// ---------------------------------------------------------------------------
+
+type BalloonBox = {fit: ReturnType<typeof fitText>; boxW: number; boxH: number};
+
+/**
+ * The balloon's box for one utterance, in px.
+ *
+ * ONE function, called by both `planBalloons` and `SpeechBubble`, because the two must agree exactly:
+ * the planner decides where a balloon goes from a box it computes, and the component then draws a box
+ * from the same inputs. Two copies of this arithmetic is a balloon that is laid out clear of a head
+ * and drawn over it.
+ */
+const balloonBox = (
+  text: string,
+  o: {width: number; height: number; maxWidth: number; maxHeight: number; maxLines: number; textFrac: number}
+): BalloonBox => {
+  const fit = fitText(text, {
+    maxLines: o.maxLines,
+    maxFontSize: o.height * o.textFrac,
+    boxWidth: o.width * o.maxWidth,
+    boxHeight: o.height * o.maxHeight,
+    padXEm: PAD_X_EM,
+    padYEm: PAD_Y_EM,
+    who: 'bubble',
+  });
+  return {
+    fit,
+    boxW: (fit.widestEm + 2 * PAD_X_EM) * fit.fontSize,
+    boxH: (fit.lines.length * LINE_HEIGHT + 2 * PAD_Y_EM) * fit.fontSize,
+  };
 };
 
 // ---------------------------------------------------------------------------
@@ -355,22 +500,23 @@ export type SpeechBubbleProps = {
   /** Balloon centre, as fractions of the frame. Defaults put it upper-centre, clear of a figure's head. */
   x?: number;
   y?: number;
-  /** Which edge the tail leaves from, i.e. roughly where the speaker is. */
-  tail?: BubbleTail;
-  /** Where the tail sits along that edge, 0..1 (left→right on top/bottom, top→bottom on the sides). */
-  tailAt?: number;
-  /** Tail length as a fraction of frame height. */
-  tailLength?: number;
   /**
-   * Lateral lean of the tail's tip, as a multiple of its length. Positive leans right (top/bottom
-   * tails) or down (side tails). The reference's balloons lean their tails toward the speaker rather
-   * than dropping them square.
+   * WHO IS SPEAKING, as a point in the frame — normally the top of the speaker's head box.
+   *
+   * The ONLY way to get a tail. There is no `tail`/`tailAt`/`tailSkew` any more: a side chosen by
+   * hand is a side that can disagree with the drawing, and in the shipped episode it disagreed in
+   * every bubble scene there was. Omit it and the balloon is drawn plain, which is the honest render
+   * for a thought, a label, or a speaker who is off frame.
    */
-  tailSkew?: number;
+  pointAt?: FramePoint;
   /** Width ceiling as a fraction of frame width. The balloon is only ever as wide as its text needs. */
   maxWidth?: number;
+  /** Height ceiling as a fraction of frame height. Past it the text shrinks rather than the box growing. */
+  maxHeight?: number;
   /** Wrap ceiling. Past this the text shrinks instead of adding lines. */
   maxLines?: number;
+  /** Text size ceiling as a fraction of frame height. `planBalloons` lowers it to hold the area cap. */
+  textFrac?: number;
   /** Play the entrance from the current Sequence's frame 0. Off = render settled (stills, thumbs). */
   animate?: boolean;
 };
@@ -379,12 +525,11 @@ export const SpeechBubble: React.FC<SpeechBubbleProps> = ({
   text,
   x = 0.5,
   y = 0.24,
-  tail = 'down',
-  tailAt = 0.5,
-  tailLength = TAIL_LEN_FRAC,
-  tailSkew = 0,
+  pointAt,
   maxWidth = BUBBLE_MAX_W_FRAC,
+  maxHeight = BUBBLE_MAX_H_FRAC,
   maxLines = BUBBLE_MAX_LINES,
+  textFrac = BUBBLE_TEXT_MAX_FRAC,
   animate = true,
 }) => {
   const {width, height} = useVideoConfig();
@@ -394,32 +539,20 @@ export const SpeechBubble: React.FC<SpeechBubbleProps> = ({
   // Not laid out yet: the delayRender in useCrayonFace guarantees no frame is captured in this state.
   if (!ready) return null;
 
-  const fit = fitText(text, {
-    maxLines,
-    maxFontSize: height * BUBBLE_TEXT_MAX_FRAC,
-    boxWidth: width * maxWidth,
-    boxHeight: height * BUBBLE_MAX_H_FRAC,
-    padXEm: PAD_X_EM,
-    padYEm: PAD_Y_EM,
-    who: 'bubble',
-  });
-
-  // The balloon is sized FROM the fitted text, which is why a long line cannot overflow it.
-  const boxW = (fit.widestEm + 2 * PAD_X_EM) * fit.fontSize;
-  const boxH = (fit.lines.length * LINE_HEIGHT + 2 * PAD_Y_EM) * fit.fontSize;
+  // The balloon is sized FROM the fitted text, which is why a long line cannot overflow it — and it is
+  // sized by the SAME function the planner sized it with, so the box it was placed as is the box drawn.
+  const {fit, boxW, boxH} = balloonBox(text, {width, height, maxWidth, maxHeight, maxLines, textFrac});
   const cx = x * width;
   const cy = y * height;
   const x0 = cx - boxW / 2;
   const y0 = cy - boxH / 2;
 
-  const len = tailLength * height;
-  const d = balloonPath(x0, y0, x0 + boxW, y0 + boxH, RADIUS_FRAC * Math.min(boxW, boxH), {
-    side: tail,
-    at: tailAt,
-    len,
-    halfW: TAIL_HALF_W_OF_LEN * len,
-    skew: tailSkew,
-  });
+  const radius = RADIUS_FRAC * Math.min(boxW, boxH);
+  const d = balloonPath(x0, y0, x0 + boxW, y0 + boxH, radius,
+    pointAt
+      ? tailToward(x0, y0, x0 + boxW, y0 + boxH, radius,
+          {x: pointAt.x * width, y: pointAt.y * height}, height, JSON.stringify(text.slice(0, 40)))
+      : {side: 'none', at: 0.5, len: 0, halfW: 0, skew: 0});
 
   return (
     <AbsoluteFill style={{opacity}}>
@@ -454,6 +587,194 @@ export const SpeechBubble: React.FC<SpeechBubbleProps> = ({
       </svg>
     </AbsoluteFill>
   );
+};
+
+// ---------------------------------------------------------------------------
+// Public API — planBalloons: where the balloons of ONE scene go
+// ---------------------------------------------------------------------------
+//
+// QA DEFECT 1, IN FULL. Five bubble scenes, five failures, two distinct symptoms and one cause.
+//   * At `t063b` both men on the sofa were DECAPITATED by their own balloons — suits and ties visible,
+//     heads entirely behind white boxes.
+//   * In all four boardroom scenes the upper balloon's tail pointed left into empty ceiling while the
+//     only possible speaker stood at the far right, so three of Madoff's lines were attributed to
+//     nothing at all.
+// The cause of both is that a balloon was positioned by a writer typing `x=0.28, y=0.55, tail="right"`
+// into `content.py` against a room he could not see. Nothing in the renderer knew where the figures
+// were, so nothing could catch it — and it is invisible to every metric this project gates on: flat
+// fill, camera lock and colour all passed on the exact frames where two men have no heads.
+//
+// THE MECHANISM. A template publishes the head boxes of the people in it (`director.tsx` `STAGING`,
+// measured off that template's own figure call sites), a scene names WHO speaks, and this function
+// derives everything else: which lane of the frame a balloon owns, how wide it may be, how far down it
+// may come, and where its tail points. The writer's control is `speaker="hero"` — a name, checked
+// against the room — and a name that does not exist in the room RAISES rather than rendering.
+//
+// The three guarantees, and where each one lives:
+//   1. A BALLOON NEVER COVERS A HEAD. Its bottom edge is capped at the top of the highest head whose
+//      x-range it overlaps, minus a clearance. Not just its own speaker's head: every head the
+//      template declares, which is what fixes the sofa.
+//   2. TWO BALLOONS NEVER OVERLAP. Each owns a LANE — a vertical slice of the frame bounded by the
+//      midpoints between its speaker and its neighbours — and is confined to it. Lanes are disjoint,
+//      so the balloons are.
+//   3. A TAIL POINTS AT ITS SPEAKER. It is not a side, it is a target point (`tailToward`).
+//
+// Everything here is pure and frame-independent, so a balloon does not move when another one appears
+// or leaves: the plan is made once from ALL of a scene's lines, and each balloon then holds its place
+// inside its own Sequence.
+
+/** One line to place. `head` is its speaker's head box, already resolved from the scene + template. */
+export type Utterance = {
+  text: string;
+  head: HeadBox;
+  maxWidth?: number;
+  maxLines?: number;
+};
+
+/** A placed balloon, in exactly the props `SpeechBubble` takes. */
+export type BalloonPlacement = {
+  x: number;
+  y: number;
+  maxWidth: number;
+  maxHeight: number;
+  maxLines: number;
+  textFrac: number;
+  pointAt: FramePoint;
+};
+
+/** Frame margin. A balloon touching the frame edge reads as a crop, not as a balloon. */
+const SAFE_FRAC = 0.025;
+
+/** Clear air between a balloon's edge and the top of any head under it. */
+const HEAD_CLEAR_FRAC = 0.03;
+
+/** Gap between two neighbouring lanes, so adjacent balloons never share an outline. */
+const LANE_GAP_FRAC = 0.015;
+
+/** A lane narrower than this cannot hold a readable balloon at all. */
+const MIN_LANE_FRAC = 0.22;
+
+/** …and a band shorter than this above the heads cannot hold one either. */
+const MIN_BAND_FRAC = 0.14;
+
+/**
+ * Total balloon area ceiling, as a fraction of the frame.
+ *
+ * QA measured the two shipped boardroom balloons together at ~40% of frame, hiding the scene's own
+ * wall chart — "the picture is a picture" is the reason the number note was narrowed in WO-25 and it
+ * is the same argument here. The reference's own two-balloon frame (wolf 9:20) measures 0.549×0.184
+ * plus 0.321×0.172 = 15.6%, so 25% is already generous against it.
+ */
+const BALLOON_AREA_CAP = 0.25;
+
+/**
+ * Place every balloon of one scene.
+ *
+ * Deterministic and side-effect free. Called once per scene by `Video2`, behind the same font gate the
+ * component uses — `fitText` measures in the real vendored face, so a plan made before the woff2 is
+ * live would be a plan against a fallback.
+ */
+export const planBalloons = (
+  items: Utterance[],
+  opts: {width: number; height: number; heads: HeadBox[]; who: string}
+): BalloonPlacement[] => {
+  const {width, height, heads, who} = opts;
+  if (items.length === 0) return [];
+
+  // ---- lanes: each speaker owns the slice of frame nearest to him -------------------------------
+  // Sorted by speaker x so the lanes come out in left-to-right order; the result is re-indexed back
+  // onto the caller's order at the end, because the caller's order is the order the lines are SPOKEN.
+  const order = items.map((_, i) => i).sort((a, b) => items[a].head.cx - items[b].head.cx);
+  const lanes = order.map((idx, k) => {
+    const prev = k > 0 ? (items[order[k - 1]].head.cx + items[idx].head.cx) / 2 : null;
+    const next = k < order.length - 1 ? (items[idx].head.cx + items[order[k + 1]].head.cx) / 2 : null;
+    return {
+      idx,
+      x0: prev === null ? SAFE_FRAC : prev + LANE_GAP_FRAC / 2,
+      x1: next === null ? 1 - SAFE_FRAC : next - LANE_GAP_FRAC / 2,
+    };
+  });
+  for (const lane of lanes) {
+    if (lane.x1 - lane.x0 < MIN_LANE_FRAC) {
+      throw new Error(
+        `bubble: ${who} cannot lay out ${items.length} balloons — the speaker at x=` +
+        `${items[lane.idx].head.cx.toFixed(3)} is left only ${(lane.x1 - lane.x0).toFixed(3)} of frame ` +
+        `width between his neighbours, under the ${MIN_LANE_FRAC} a balloon needs. Two speakers this ` +
+        `close together cannot each carry a balloon in one frame: give the scene fewer simultaneous ` +
+        `lines, or stage the speakers apart.`
+      );
+    }
+  }
+
+  // ---- one pass of the layout at a given text-size ceiling ---------------------------------------
+  const layout = (textFrac: number): {placed: BalloonPlacement[]; area: number} => {
+    const placed: BalloonPlacement[] = new Array(items.length);
+    let area = 0;
+    for (const lane of lanes) {
+      const item = items[lane.idx];
+      const laneW = lane.x1 - lane.x0;
+      const maxWidth = Math.min(item.maxWidth ?? BUBBLE_MAX_W_FRAC, laneW);
+      const maxLines = item.maxLines ?? BUBBLE_MAX_LINES;
+
+      // Two passes: the width fixes the balloon's x-span, the x-span fixes which heads constrain it
+      // from below, and that ceiling can shrink the text — which narrows the box, which can free a
+      // head. Twice is enough; the second pass only ever relaxes, so it cannot oscillate.
+      let maxHeight = BUBBLE_MAX_H_FRAC;
+      let cx = item.head.cx;
+      let bottom = 1 - SAFE_FRAC;
+      let box = balloonBox(item.text, {width, height, maxWidth, maxHeight, maxLines, textFrac});
+      for (let pass = 0; pass < 2; pass++) {
+        const bw = box.boxW / width;
+        cx = clamp(item.head.cx, lane.x0 + bw / 2, lane.x1 - bw / 2);
+        // GUARANTEE 1: the bottom edge stops above every head this balloon would otherwise cross.
+        bottom = heads.reduce((acc, h) => {
+          const overlaps = headRight(h) + HEAD_CLEAR_FRAC > cx - bw / 2 &&
+                           headLeft(h) - HEAD_CLEAR_FRAC < cx + bw / 2;
+          return overlaps ? Math.min(acc, headTop(h) - HEAD_CLEAR_FRAC) : acc;
+        }, 1 - SAFE_FRAC);
+        const band = bottom - SAFE_FRAC;
+        if (band < MIN_BAND_FRAC) {
+          throw new Error(
+            `bubble: ${who} has no room for the balloon reading ${JSON.stringify(item.text.slice(0, 40))} ` +
+            `— the free band above the heads under it is ${band.toFixed(3)} of frame height, under the ` +
+            `${MIN_BAND_FRAC} a balloon needs. Its speaker's room stages faces too high in frame to ` +
+            `carry dialogue; use a card or floating dialogue on this beat instead.`
+          );
+        }
+        maxHeight = Math.min(BUBBLE_MAX_H_FRAC, band);
+        box = balloonBox(item.text, {width, height, maxWidth, maxHeight, maxLines, textFrac});
+      }
+
+      const bh = box.boxH / height;
+      const bw = box.boxW / width;
+      cx = clamp(item.head.cx, lane.x0 + bw / 2, lane.x1 - bw / 2);
+      // sitting ON the ceiling, not floating at the top of frame: the balloon stays near its speaker,
+      // which is what keeps the tail short and legible
+      const cy = bottom - bh / 2;
+      area += bw * bh;
+      placed[lane.idx] = {
+        x: cx,
+        y: cy,
+        maxWidth,
+        maxHeight,
+        maxLines,
+        textFrac,
+        // GUARANTEE 3: aim at the top of the head, nudged toward the balloon so a balloon well off to
+        // one side points at the near side of the head instead of across it.
+        pointAt: {
+          x: clamp(cx, item.head.cx - item.head.w * 0.35, item.head.cx + item.head.w * 0.35),
+          y: headTop(item.head) + item.head.h * 0.12,
+        },
+      };
+    }
+    return {placed, area};
+  };
+
+  const first = layout(BUBBLE_TEXT_MAX_FRAC);
+  if (first.area <= BALLOON_AREA_CAP) return first.placed;
+  // Over the area cap: bring every balloon down together rather than picking one to shrink. Area goes
+  // as the square of the text size, so the square root is the scale that lands on the cap in one step.
+  return layout(BUBBLE_TEXT_MAX_FRAC * Math.sqrt(BALLOON_AREA_CAP / first.area)).placed;
 };
 
 // ---------------------------------------------------------------------------
