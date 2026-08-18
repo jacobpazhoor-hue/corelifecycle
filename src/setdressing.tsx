@@ -1,6 +1,6 @@
 import React from 'react';
 import {useCurrentFrame} from 'remotion';
-import {StickFigure, DIM, Expr} from './figure';
+import {StickFigure, DIM, Expr, SKIN} from './figure';
 import * as A from './actions';
 import {blinkOn, crossing, stepIndex} from './anim';
 import {
@@ -1350,7 +1350,13 @@ export const Portrait: React.FC<{cx: number; cy: number; r: number}> = ({cx, cy,
     <g>
       <path d={`M ${cx - r * 1.7} ${cy + r * 2.2} Q ${cx} ${cy + r * 0.3} ${cx + r * 1.7} ${cy + r * 2.2} Z`}
         fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
-      <ellipse cx={cx} cy={cy} rx={r * 0.92} ry={r} fill={shade(tn.card, 2)} stroke={INK} strokeWidth={STROKE_THIN} />
+      {/* SKIN, NOT A SCENE TONE (QA_WATCH item 18). This fill was `shade(tn.card, 2)` — two rungs up
+          the ROOM's own ladder — which is fine for a certificate or a landscape and wrong for a face:
+          on the blue-keyed courtroom (t113 f19101, t127 f21537) it rendered a violet-skinned man on
+          the wall while every character below him held the standard tone. A portrait is a picture OF
+          A PERSON, so it holds the figure palette's skin the way the people in the room do; the
+          FRAME around it still takes the room's tint, which is what actually ties it to the wall. */}
+      <ellipse cx={cx} cy={cy} rx={r * 0.92} ry={r} fill={SKIN} stroke={INK} strokeWidth={STROKE_THIN} />
       <path d={`M ${cx - r * 0.92} ${cy - r * 0.16} Q ${cx - r * 0.8} ${cy - r * 1.2} ${cx} ${cy - r * 1.06}
                 Q ${cx + r * 0.8} ${cy - r * 1.2} ${cx + r * 0.92} ${cy - r * 0.16}
                 Q ${cx + r * 0.5} ${cy - r * 0.62} ${cx} ${cy - r * 0.56}

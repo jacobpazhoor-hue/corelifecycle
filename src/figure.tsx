@@ -103,7 +103,11 @@ export const SIL: Palette = INKPAL;
 
 // Flat character fills, sampled off the reference thumbnail (docs/research/crayon/HawmGu7oNrc/thumb.png):
 // skin rgb(239,208,171), shirt rgb(251,251,251), suit rgb(32,35,55).
-const SKIN = '#efd0ab';
+// EXPORTED because a face drawn anywhere else must be this colour and not a scene tone. QA_WATCH
+// item 18: `setdressing.Portrait` filled its face from `shade(tn.card, 2)`, the room's own tone
+// ladder, so the framed portrait on the courtroom wall came out VIOLET on a blue-keyed scene
+// (t113 f19101, t127 f21537) while every live character in the frame held this skin.
+export const SKIN = '#efd0ab';
 // Background people are featureless grey, never coloured — the "grey crowd + colour hero" focal
 // device (bible §6.5). Callers opt in by passing pal={DIM}, and the costume is desaturated to these
 // greys rather than skipped, so a crowd figure still has a torso silhouette. These are FILLS only:

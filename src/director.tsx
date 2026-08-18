@@ -5,7 +5,7 @@ import slice from './slice.json';
 import {PhotoStage, Move} from './photoStage';
 import {
   CRAYON_FONT, CRAYON_SUBTITLE_RATIO, CRAYON_TEXT_SLANT_DEG, INK, PAPER_WHITE,
-  sceneColors, shade, strokeAt,
+  TONE_MAX_STEP, contrastRatio, sceneColors, shade, strokeAt,
 } from './crayonStyle';
 import {CRAYON_TEXT_WEIGHT, LINE_HEIGHT, fitText, measureEm, useCrayonFace} from './crayonText';
 
@@ -541,13 +541,36 @@ const GAIN = sceneColors('gold').bg;      // #e8b54b — income, gain, the good 
 const LOSS = sceneColors('grey').accent;  // #c0392b — cost/loss beats (see isNegativeOverlay)
 
 /**
- * Caption ink, per accent. The caption sits on the note's own white paper, so each accent is dropped
- * down its OWN tone ladder (`shade`) rather than being hand-picked: gain-gold starts at 1.88:1 against
- * white and needs the full −3 rungs to reach 3.44:1, while the loss red already sits at 5.44:1 and
- * −1 (7.06:1) is enough to hold it off the rule above it. Same ladder, different depth, because the
- * two accents start at different lightness.
+ * CAPTION LEGIBILITY IS A FLOOR, NOT A PALETTE CHOICE (QA_WATCH item 13).
+ *
+ * The caption used to be `{gain: shade(GAIN, -3), loss: shade(LOSS, -1)}`: each accent dropped down
+ * its own tone ladder until it "looked" separated from the rule above it. The comment that shipped
+ * with it stated the gain caption's own ratio — **3.44:1** — and took it, which is below the 4.5:1 a
+ * caption at this size needs. On screen that is mustard on white: five number cards (`t027` f4879,
+ * `t105` f17682, `t113` f19101, `t141` f24093, `t150` f25948) whose subtitle is visibly harder to
+ * read than the black figure above it, while `t122` f20490 — the one negative beat, red at 7.06:1 —
+ * is fine. The colour was being picked from the accent and then checked by eye.
+ *
+ * It is now SOLVED against the paper the caption actually sits on. Walk the accent's own ladder
+ * downward and take the first rung that clears `CAPTION_MIN_CONTRAST`; if the ladder bottoms out
+ * without clearing it, fall back to `INK`. Nothing is hand-picked and nothing is hue-shifted, so:
+ *   - loss red clears at −1 and is UNCHANGED (7.06:1) — QA says that card is fine, and it stays fine;
+ *   - gain gold cannot clear 4.5:1 at any rung the ladder allows (`TONE_MAX_STEP` is 3, and −3 is
+ *     the 3.44:1 that was shipping), so it resolves to INK — item 13's own second suggestion, but
+ *     arrived at by measurement rather than by decree, and it will pick the gold back up by itself
+ *     if the token or the ladder ever moves far enough to earn it.
+ * The gain/loss distinction is not lost: it is carried by the FLAT ACCENT RULE above the figure,
+ * which is the element the palette note above says exists to carry it.
  */
-const CAPTION_INK = {gain: shade(GAIN, -3), loss: shade(LOSS, -1)};
+const CAPTION_MIN_CONTRAST = 4.5;   // WCAG AA for text below ~24px at 1080p; the caption is smaller
+const captionInk = (accent: string): string => {
+  for (let step = 1; step <= TONE_MAX_STEP; step++) {
+    const c = shade(accent, -step);
+    if (contrastRatio(c, PAPER_WHITE) >= CAPTION_MIN_CONTRAST) return c;
+  }
+  return INK;
+};
+const CAPTION_INK = {gain: captionInk(GAIN), loss: captionInk(LOSS)};
 
 // Note geometry, all in em of the fitted figure size, so the note scales as ONE object rather than a
 // box of independently-tuned pixel constants. The proportions are the old card's, carried over:

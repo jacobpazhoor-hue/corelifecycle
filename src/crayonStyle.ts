@@ -491,6 +491,20 @@ const relLuminance = (r: number, g: number, b: number): number => {
 };
 
 /**
+ * WCAG contrast ratio between two flat hexes, 1..21. Order-independent.
+ *
+ * Exported because a colour that is merely "dark enough looking" is how QA item 13 happened: the
+ * number card's caption ink was hand-derived as `shade(GAIN, -3)` and annotated 3.44:1, which is
+ * below the 4.5:1 a small caption needs and reads on screen as mustard on white. A ratio anyone can
+ * assert beats a comment claiming one.
+ */
+export const contrastRatio = (a: string, b: string): number => {
+  const lum = (hex: string) => relLuminance(...hexToRgb(hex));
+  const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+};
+
+/**
  * A flat sibling of `color`, `step` rungs lighter (+) or darker (−). Hue is never changed.
  *
  * `shade(c, 0)` is the identity — it returns `color` itself, so a component's default and its
