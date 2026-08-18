@@ -1,5 +1,6 @@
 import React from 'react';
-import {useCurrentFrame, useVideoConfig} from 'remotion';
+import {Internals, useCurrentFrame, useVideoConfig} from 'remotion';
+import timeline from './timeline.json';
 import {StickFigure, LIGHT, DIM} from './figure';
 import {FACES} from './faces';
 import * as A from './actions';
@@ -18,6 +19,8 @@ import {
   Passerby,
   // WO-27 PERIOD MODE — see the block comment below and setdressing.tsx's own
   usePeriod,
+  // QA_WATCH item 3 — real lettering for anything the narration names; item 7 — chart direction
+  InkWords, ChartDir,
 } from './setdressing';
 
 // ============================================================================
@@ -67,6 +70,270 @@ import {
 const rnd = (i: number): number => {
   const x = Math.sin(i * 127.1 + 31.7) * 43758.5453;
   return x - Math.floor(x);
+};
+
+// ===========================================================================
+// THE TAKE — one scene's own version of a room (QA_WATCH 2026-08-17 item 2, CRITICAL).
+//
+// THE DEFECT. "A template renders one image regardless of which scene uses it." Measured on the
+// madoff episode: 49 of 2,346 sampled frame pairs were near-identical (mean |Δluma| < 3/255 at
+// 160×90) — the pink living room six times, the boardroom six, the opening and closing shot the same
+// frame, two shots 2m50s apart at Δ0.19. Twenty-five boardroom scenes were one picture seen 25 times.
+//
+// WHY THE OLD METRIC PASSED IT. "8/8 distinct set-ups in 8 samples" counted TEMPLATE NAMES. A
+// template name is not a picture: `closeUpPortrait` is used 28 times in this episode and rendered the
+// same 28 frames. Nothing below is verified by counting templates; it is verified by diffing the
+// rendered frames of the same template at different scene ids.
+//
+// WHAT A TAKE IS. Every template resolves a `Take` — a small deterministic bundle derived from the
+// SCENE ID — and dresses itself from it: which seeds its crowds, papers, wall art and chart series
+// run on, where the prop groups sit laterally, how many people are in the room, which of two or
+// three prop sets is present, and one rung of tone on the large planes (the "time of day" inside the
+// scene's own colour key). Same scene id -> same picture, always. Different scene id on the same
+// template -> the same ROOM from a different angle, with different people in it.
+//
+// THE FOUR RULES A VARIATION OBEYS, all inherited from the constraints this file already lives under:
+//   1. DETERMINISTIC, AND NOT A FUNCTION OF THE FRAME. Every value below is derived from the scene id
+//      alone. Nothing reads `useCurrentFrame()`. This is what keeps the camera locked and what keeps
+//      892d409 fixed (a walking figure re-rolled its idle every frame because its seed came from its
+//      live `x`; a take seed is a constant for the whole scene).
+//   2. SUBSTITUTE, DO NOT DELETE — the same rule PERIOD MODE obeys below. Flat fill is two-sided
+//      (74–92% at native 1280), so a variation that empties the room falls out of the band at the top.
+//      Prop-set A/B/C swaps keep the footprint; counts move by ±1–2, never to zero.
+//   3. NO GRADIENTS, EVER. Tone variation is an integer rung of the existing `shade()` ladder, which
+//      is a flat fill. `shade()` throws past ±3, so every rung below goes through `rung()`, which
+//      clamps into range instead of letting a variation raise at render time.
+//   4. STAY OFF THE HERO'S MARK. Lateral offsets apply to set dressing, not to the subject's staging:
+//      the caption-safe box, the balloon anchors and the close-up's head placement are composition,
+//      not decoration.
+//
+// WHERE THE SCENE ID COMES FROM. A template takes NO PROPS — director.tsx picks a component out of
+// TEMPLATES and calls it with nothing, and Video2.tsx/director.tsx are owned by other work in flight.
+// What IS in scope at render time is the Remotion sequence stack: Video2 mounts every scene as
+// `<Sequence from={scene.startFrame}>`, so `cumulatedFrom + relativeFrom` on the innermost sequence
+// is that scene's absolute start frame, which is a primary key into `timeline.json` — the same file
+// Video2 renders from. That gives the scene RECORD, and with it the id (which seeds everything),
+// plus the optional `chart` and `labels` fields item 7 and item 3 need.
+//
+// The lookup is by START FRAME but the SEED is the scene ID string, deliberately: re-timing an
+// episode (a re-recorded VO, a changed gap) moves every start frame, and a picture that reshuffles
+// because a line got 40ms longer is not deterministic in any sense a reviewer cares about.
+//
+// Outside the episode timeline — the `Thumbnail` composition, `StageTest`, a panel cell rendered
+// from a composition with no sequence — there is no record. That is take 0: `DEFAULT_TAKE`, which
+// reproduces the original look. It is a documented default, not a swallowed error; a template that
+// cannot find its scene still has a scene-independent picture to draw, which is exactly right for a
+// still that is not part of an episode.
+// ===========================================================================
+
+const CHART_DIRS: ChartDir[] = ['up', 'down', 'flat'];
+
+type TimelineScene = {
+  id: string;
+  startFrame: number;
+  template: string;
+  overlay?: {big?: string; sub?: string} | null;
+  card?: {title?: string; subtitle?: string; word?: string; text?: string} | null;
+  bubbles?: {text?: string}[] | null;
+  /** OPT-IN scene fields, `docs/BIBLE.md` §8 */
+  chart?: string;
+  labels?: string[];
+};
+
+const SCENE_BY_START = new Map<number, TimelineScene>();
+for (const s of (timeline as {scenes: TimelineScene[]}).scenes) {
+  SCENE_BY_START.set(s.startFrame, s);
+}
+
+/**
+ * FNV-1a over the scene id, folded into [0, 997).
+ *
+ * Folded SMALL on purpose. `rnd()` above is `sin`-based, and `Math.sin` of a 32-bit-sized argument is
+ * not bit-identical across JS engines — a cloud render and a local render would disagree about the
+ * picture. Every seed the templates already pass is a small integer; a take seed stays in the same
+ * range so it composes with them without leaving the regime the generator was tuned in.
+ */
+const hashId = (s: string): number => {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  return h % 997;
+};
+
+/** Words a template is allowed to LETTER (item 3) — pulled off the scene's own devices. */
+const STOPWORDS = new Set([
+  'THE', 'AND', 'FOR', 'WAS', 'WERE', 'HAS', 'HAD', 'HAVE', 'THAT', 'THIS', 'WITH', 'FROM',
+  'INTO', 'ONE', 'TWO', 'OUT', 'NOT', 'BUT', 'ITS', 'HIS', 'HER', 'THEY', 'THEM', 'WHEN',
+  'WHAT', 'WHO', 'ALL', 'ANY', 'YOU', 'YOUR', 'OF', 'IN', 'ON', 'AT', 'TO', 'IS', 'IT', 'A', 'AN',
+]);
+
+/**
+ * FIELD ORDER IS THE PRIORITY ORDER, and only the first few survive. A card TITLE is the beat's own
+ * headline — "The Warning", "The Crash" — so it is the best word on the scene; an overlay subtitle
+ * ("FUNNELED IN BY ONE FEEDER FUND") is next. Everything after that is there so a scene with only a
+ * balloon still has something true to letter. `label()` picks from the first three only, which is
+ * what keeps a chart title reading "THE WARNING" instead of "WOULDN'T" — the fourth word of the same
+ * scene's subtitle, and the kind of fragment that made the first pass at this look automated.
+ */
+const wordsFrom = (rec: TimelineScene): string[] => {
+  if (rec.labels && rec.labels.length > 0) return rec.labels.map((w) => w.toUpperCase());
+  const raw: (string | undefined)[] = [
+    rec.card?.title, rec.card?.word, rec.overlay?.sub, rec.card?.subtitle,
+    rec.overlay?.big, rec.card?.text,
+    ...(rec.bubbles ?? []).map((b) => b?.text),
+  ];
+  const out: string[] = [];
+  for (const s of raw) {
+    if (!s) continue;
+    for (const raw2 of s.toUpperCase().split(/[^A-Z']+/)) {
+      const w = raw2.replace(/^'+|'+$/g, '');
+      if (w.length < 3 || w.length > 11 || STOPWORDS.has(w) || out.includes(w)) continue;
+      out.push(w);
+    }
+  }
+  return out;
+};
+
+export type Take = {
+  /** The scene id, or '' outside an episode timeline. */
+  id: string;
+  /** Everything visual is derived from this. 0 = the original, scene-independent look. */
+  seed: number;
+  /** Item 7: which way this scene's chart points. */
+  chart: ChartDir;
+  /** Item 3: short real words this scene has actually said, in narration order. */
+  words: string[];
+};
+
+const DEFAULT_TAKE: Take = {id: '', seed: 0, chart: 'up', words: []};
+
+/**
+ * `chart` is validated HERE, with the scene id in hand, and RAISES on an unknown value — the same
+ * contract Video2.tsx's `sceneEra` holds for `period`. A mistyped direction that silently fell back
+ * to the default would reproduce exactly the defect the field exists to close: a chart pointing the
+ * opposite way to the line being read over it, discovered in the finished 16-minute file.
+ */
+const takeFor = (rec: TimelineScene): Take => {
+  if (rec.chart !== undefined && !(CHART_DIRS as string[]).includes(rec.chart)) {
+    throw new Error(
+      `${rec.id}: unknown chart ${JSON.stringify(rec.chart)} — chart must be one of ` +
+      `${CHART_DIRS.map((d) => `'${d}'`).join(', ')} (docs/BIBLE.md §8 CHART)`
+    );
+  }
+  return {
+    id: rec.id,
+    seed: hashId(rec.id),
+    // DEFAULT 'up', not 'down'. The old chart was a hard-coded `crash` down-leg in every scene that
+    // used it, which is how "use options to CAP the losses and the gains", "FUNNELED IN $7.2 billion"
+    // and two halves of a split whose point was "the statements, still CLIMBING" all ended up under a
+    // falling chart. A rising series is the honest default for a format whose charts mostly illustrate
+    // money arriving; the crash is the exception and now has to be asked for.
+    chart: (rec.chart as ChartDir | undefined) ?? 'up',
+    words: wordsFrom(rec),
+  };
+};
+
+const TAKE_CACHE = new Map<number, Take>();
+
+/** This scene's take. See the block comment above for where the identity comes from. */
+const useTake = (): Take => {
+  const seq = React.useContext(Internals.SequenceContext);
+  const start = seq ? seq.cumulatedFrom + seq.relativeFrom : -1;
+  const hit = TAKE_CACHE.get(start);
+  if (hit) return hit;
+  const rec = SCENE_BY_START.get(start);
+  const take = rec ? takeFor(rec) : DEFAULT_TAKE;
+  TAKE_CACHE.set(start, take);
+  return take;
+};
+
+/**
+ * The dressing dials a template turns. Every one of them is a pure function of the take seed, so a
+ * template's whole variation is `const v = useVary()` plus a handful of call-site substitutions.
+ */
+type Vary = {
+  /** `true` on take 0, i.e. outside an episode — templates use it to keep the original staging. */
+  plain: boolean;
+  /** An integer in [0, n). The A/B/C prop-set chooser. */
+  pick: (salt: number, n: number) => number;
+  /** An offset in [-amp, +amp] units — lateral camera-equivalent framing of the set dressing. */
+  off: (salt: number, amp: number) => number;
+  /** A per-take respin of a seeded prop's own seed (crowds, papers, wall art, chart series). */
+  seed: (base: number) => number;
+  /** `base` shifted by up to ±`amp` rungs, CLAMPED into `shade()`'s ±TONE_MAX_STEP. */
+  rung: (base: number, salt: number, amp?: number) => number;
+  /** One of `xs`, chosen by the take. */
+  one: <T,>(salt: number, xs: readonly T[]) => T;
+};
+
+const varyFor = (tk: Take): Vary => {
+  const s = tk.seed;
+  const r = (salt: number): number => rnd(s * 1.37 + salt * 3.11 + 0.5);
+  return {
+    plain: s === 0,
+    pick: (salt, n) => Math.min(n - 1, Math.floor(r(salt) * n)),
+    off: (salt, amp) => (r(salt) - 0.5) * 2 * amp,
+    seed: (base) => base + s * 0.61,
+    rung: (base, salt, amp = 1) => {
+      const step = base + Math.round((r(salt) - 0.5) * 2 * amp);
+      return Math.max(-TONE_MAX_STEP, Math.min(TONE_MAX_STEP, step));
+    },
+    one: <T,>(salt: number, xs: readonly T[]): T => xs[Math.min(xs.length - 1, Math.floor(r(salt) * xs.length))],
+  };
+};
+
+const useVary = (): Vary => varyFor(useTake());
+
+/**
+ * REAL LETTERING (QA_WATCH item 3, HIGH).
+ *
+ * The rule QA gave: block glyphs are fine as BODY copy at small scale — that is what a paragraph
+ * looks like at frame scale — but "anything the narration names should be real lettering". The
+ * worst frames in the episode were the ones ABOUT documents: `newsMontage` (19 scenes) was nothing
+ * but black rectangles standing in for words across seven documents, and the placards held up as the
+ * focal point of `crowdQueue` were three signs of glyphs.
+ *
+ * Where the words come from, in order:
+ *   1. the scene's own `labels` field, if the writer set one (`docs/BIBLE.md` §8);
+ *   2. the words the scene ALREADY says on screen — its overlay subtitle, its card title, its
+ *      balloon text — which are by construction the episode's own vocabulary at that beat;
+ *   3. a small per-ROLE lexicon of the format's own furniture words. Templates are topic-agnostic
+ *      archetypes, so this tier cannot be episode-specific; what it can be is REAL. A masthead
+ *      reading "THE RECORD" is a newspaper, where seven rectangles are an unfinished render.
+ *
+ * It is deliberately SHORT copy. A headline is 1–2 words at this size, and `InkWords` sets to the
+ * box, so a long string would only shrink to unreadable.
+ */
+type LabelRole = 'masthead' | 'headline' | 'placard' | 'chartTitle' | 'ticker' | 'lowerThird';
+
+const LEXICON: Record<LabelRole, readonly string[]> = {
+  masthead: ['THE RECORD', 'THE LEDGER', 'THE TRIBUNE', 'THE HERALD', 'CITY PRESS'],
+  headline: ['THE FUND', 'THE FILING', 'THE AUDIT', 'THE RETURNS', 'THE LOSSES', 'THE INQUIRY'],
+  placard: ['GIVE IT BACK', 'WHERE IS IT', 'PAY US', 'ANSWERS NOW', 'OUR SAVINGS'],
+  chartTitle: ['RETURNS', 'THE FUND', 'NET FLOWS', 'THE YEARS', 'THE MONEY'],
+  ticker: ['MARKET OPEN', 'LAST TRADE', 'THE TAPE', 'VOLUME'],
+  lowerThird: ['THE STORY', 'LIVE', 'THE REPORT', 'BREAKING'],
+};
+
+/**
+ * One label for a named prop. `salt` distinguishes several props of the same role in one frame, so a
+ * fan of documents does not print the same headline seven times.
+ */
+const label = (tk: Take, role: LabelRole, salt: number): string => {
+  const pool = LEXICON[role];
+  // Only the best three words on the scene — see `wordsFrom`.
+  const words = tk.words.slice(0, 3);
+  if (words.length > 0) {
+    const i = Math.floor(rnd(tk.seed * 1.37 + salt * 5.7 + 2.5) * words.length) % words.length;
+    // Two words where the scene has two to spare and the role is a headline-shaped one.
+    if ((role === 'headline' || role === 'placard') && words.length > 1) {
+      return `${words[i]} ${words[(i + 1) % words.length]}`;
+    }
+    return words[i];
+  }
+  return pool[Math.floor(rnd(tk.seed * 2.11 + salt * 7.3 + 1.5) * pool.length) % pool.length];
 };
 
 /**
@@ -499,6 +766,11 @@ const Boardroom: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // THE TAKE (item 2). 25 scenes of this episode are set in this room and QA measured them as one
+  // picture seen 25 times. What varies: the skyline through the glass, the art on the left wall, how
+  // many directors are at the table and where they sit, what is on the table, where the hero stands,
+  // and one rung of daylight on the panelled wall.
+  const v = useVary();
   // PERIOD (WO-27): the room is a panelled board room either way — a long table, chairs, a credenza,
   // charts on the wall. Two things date it: the CURTAIN WALL (an unbroken 1364-unit run of glass is
   // a 20th-century building) and the ceiling PROJECTOR.
@@ -508,8 +780,8 @@ const Boardroom: React.FC = () => {
       <Ceiling y={172} lights={3} />
       {/* --- the curtain wall, and the city seen through it --- */}
       <rect x={556} y={214} width={1364} height={486} fill={shade(c.bg, 2)} />
-      <BuildingBand baseY={700} x0={560} x1={1930} n={9} seed={31} depth={2} minH={120} maxH={300} opacity={0.55} />
-      <BuildingBand baseY={700} x0={540} x1={1940} n={6} seed={7} depth={1} minH={90} maxH={230} />
+      <BuildingBand baseY={700} x0={560} x1={1930} n={8 + v.pick(1, 3)} seed={v.seed(31)} depth={2} minH={120} maxH={300} opacity={0.55} />
+      <BuildingBand baseY={700} x0={540} x1={1940} n={5 + v.pick(2, 3)} seed={v.seed(7)} depth={1} minH={90} maxH={230} />
       <Glazing x={556} y={214} w={1364} h={486} bays={6} rows={3} pane={null} sill={false} />
       {/* PERIOD: masonry piers, arched heads and a sill course laid OVER the glazing, which turns the
           curtain wall into three tall round-headed sash windows in a stone wall without moving the
@@ -542,15 +814,15 @@ const Boardroom: React.FC = () => {
         </g>
       )}
       {/* --- the left wall: presentation screen, charts, a credenza --- */}
-      <rect x={0} y={172} width={560} height={528} fill={tn.panel} stroke={INK} strokeWidth={STROKE_THIN} />
-      <WallFrame x={40} y={216} w={470} h={272} art="line" seed={5} />
+      <rect x={0} y={172} width={560} height={528} fill={shade(tn.panel, v.rung(0, 3))} stroke={INK} strokeWidth={STROKE_THIN} />
+      <WallFrame x={40} y={216} w={470} h={272} art={v.one(4, ['line', 'bars', 'scape'] as const)} seed={v.seed(5)} />
       {/* NOT portraits. Three framed heads at exactly seated-head height, on the wall directly
           behind the far side of the table, read as three men standing in lit doorways — the
           composition defect neither metric can see. Charts carry the same density with no
           ambiguity about what is a person and what is on the wall. */}
-      <WallFrame x={40} y={506} w={148} h={172} art="bars" seed={2} />
-      <WallFrame x={206} y={506} w={148} h={172} art="line" seed={9} />
-      <WallFrame x={372} y={506} w={148} h={172} art="scape" seed={14} />
+      <WallFrame x={40} y={506} w={148} h={172} art={v.one(5, ['bars', 'line', 'scape'] as const)} seed={v.seed(2)} />
+      <WallFrame x={206} y={506} w={148} h={172} art={v.one(6, ['line', 'scape', 'bars'] as const)} seed={v.seed(9)} />
+      <WallFrame x={372} y={506} w={148} h={172} art={v.one(7, ['scape', 'bars', 'line'] as const)} seed={v.seed(14)} />
       <rect x={0} y={670} width={1920} height={30} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
       {/* --- floor, with a bordered rug under the table --- */}
       <SlabFloor y={BOARD_WALL} cols={24} rows={10} />
@@ -594,7 +866,10 @@ const Boardroom: React.FC = () => {
       {[430, 640, 850, 1060, 1270, 1480].map((cx, i) => (
         <Chair key={i} x={cx} y={890} s={0.62} facing={1} fill={period ? undefined : tn.deep} />
       ))}
-      <SeatedRow y={834} x0={470} x1={1520} n={6} scale={0.86} seed={13} view="front" />
+      {/* HOW FULL THE ROOM IS. Four to six directors on the far side — a board meeting and a
+          half-attended one are different pictures, and the chairs above still draw either way, so
+          the density holds (the SUBSTITUTE-DO-NOT-DELETE rule). */}
+      <SeatedRow y={834} x0={470} x1={1520} n={4 + v.pick(8, 3)} scale={0.86} seed={v.seed(13)} view="front" />
       {/* the slab: a long boardroom table, near edge wider than the far edge */}
       {/* PERIOD: the slab and its edge are OAK. A board table is the largest single object in this
           room — ~11% of the frame — so it is also the biggest single carrier of the room's hue, and
@@ -609,18 +884,20 @@ const Boardroom: React.FC = () => {
       {[300, 520, 740, 960, 1180, 1400, 1620].map((px, i) => (
         <g key={i}>
           <rect x={px - 54} y={BOARD_TABLE + 22} width={108} height={54} rx={4} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
-          <TextLines x={px - 42} y={BOARD_TABLE + 34} w={84} n={3} gap={11} th={3} seed={i * 5} opacity={0.5} />
+          <TextLines x={px - 42} y={BOARD_TABLE + 34} w={84} n={3} gap={11} th={3} seed={v.seed(i * 5)} opacity={0.5} />
           <rect x={px + 62} y={BOARD_TABLE + 26} width={26} height={40} rx={3} fill={shade(c.bg, 1)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
         </g>
       ))}
       <rect x={880} y={BOARD_TABLE - 46} width={44} height={70} rx={8} fill={tn.body} stroke={INK} strokeWidth={STROKE_THIN} />
-      <Monitor x={1276} y={BOARD_TABLE - 96} w={158} h={110} content="grid" stand={false} seed={12} />
-      <Papers x={620} y={BOARD_TABLE + 52} n={2} s={0.62} seed={19} />
+      <Monitor x={1276 + v.off(9, 90)} y={BOARD_TABLE - 96} w={158} h={110}
+        content={v.one(10, ['grid', 'chart', 'text'] as const)} stand={false} seed={v.seed(12)} />
+      <Papers x={620 + v.off(11, 110)} y={BOARD_TABLE + 52} n={2 + v.pick(12, 2)} s={0.62} seed={v.seed(19)} />
 
       {/* --- near plane: the two backs at the near edge, and the hero standing at the head --- */}
-      <StickFigure pose={A.stand(f)} x={1770} y={862} scale={1.16} facing={-1} view="profile"
+      <StickFigure pose={A.stand(f)} x={1770} y={862} scale={1.16} facing={-1}
+        view={v.one(13, ['profile', 'profile', 'front'] as const)}
         expr={FACES.hardened} pal={LIGHT} frame={f} idle="gesture" />
-      <SeatedRow y={1054} x0={330} x1={1180} n={4} scale={1.12} seed={23} view="back" />
+      <SeatedRow y={1054} x0={330} x1={1180} n={3 + v.pick(14, 2)} scale={1.12} seed={v.seed(23)} view="back" />
       {[300, 590, 880, 1170].map((cx, i) => (
         <Chair key={i} x={cx} y={1096} s={1.16} facing={1} fill={period ? undefined : shade(tn.body, -2)} />
       ))}
@@ -1255,6 +1532,11 @@ const DomesticInterior: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  // THE TAKE (item 2). QA: "the pink living room appears essentially unchanged 6 times", and two of
+  // those sittings were 2m50s apart at Δ0.19 — the single worst pair in the episode. What varies:
+  // the paper's tone rung, the pictures on the wall, the roofline through the window, what is on the
+  // shelves and tables, whether the second person is in the room at all, and where the pair sit.
+  const v = useVary();
   // PERIOD (WO-27): papered walls over a dado, a curtained sash window, framed pictures, a bookcase,
   // a rug and a sofa are a parlour in any century after about 1830. ONE object dates the room — the
   // television on its low stand — and the standard lamp, which becomes an oil lamp by daylight.
@@ -1264,7 +1546,7 @@ const DomesticInterior: React.FC = () => {
       {/* --- wall: papered above a dado rail, panelled below.
           The paper carries a small repeated motif as well as its stripe: a flat wall is the single
           largest region in a head-on domestic frame, and the reference's rooms are papered. --- */}
-      <rect x={0} y={0} width={1920} height={470} fill={tn.panel} />
+      <rect x={0} y={0} width={1920} height={470} fill={shade(tn.panel, v.rung(0, 1))} />
       {Array.from({length: 25}, (_, i) => (
         <line key={i} x1={i * 78} y1={0} x2={i * 78} y2={470} stroke={INK} strokeWidth={2} opacity={0.16} />
       ))}
@@ -1279,7 +1561,7 @@ const DomesticInterior: React.FC = () => {
       <rect x={0} y={HOME_WALL - 44} width={1920} height={44} fill={tn.card} stroke={INK} strokeWidth={STROKE_THIN} />
       {/* the window, curtained, with the neighbouring roofline through it */}
       <rect x={706} y={168} width={508} height={356} fill={shade(c.bg, 3)} />
-      <BuildingBand baseY={524} x0={712} x1={1210} n={3} seed={19} depth={1} minH={110} maxH={190} opacity={0.8} />
+      <BuildingBand baseY={524} x0={712} x1={1210} n={3 + v.pick(2, 3)} seed={v.seed(19)} depth={1} minH={110} maxH={190} opacity={0.8} />
       <Glazing x={706} y={168} w={508} h={356} bays={2} rows={2} pane={null} />
       {[660, 1218].map((cx, i) => (
         <path key={i} d={`M ${cx} 140 L ${cx + (i ? 60 : -60)} 140 L ${cx + (i ? 74 : -74)} 560 L ${cx + (i ? -6 : 6)} 560 Z`}
@@ -1287,10 +1569,10 @@ const DomesticInterior: React.FC = () => {
       ))}
       <rect x={640} y={128} width={640} height={22} rx={9} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
       {/* pictures, a clock and a shelf of books */}
-      <WallFrame x={168} y={192} w={302} h={216} art="scape" seed={3} />
-      <WallFrame x={196} y={444} w={124} h={150} art="head" seed={5} />
-      <WallFrame x={344} y={444} w={124} h={150} art="head" seed={8} />
-      <WallFrame x={1436} y={210} w={190} h={150} art="scape" seed={11} />
+      <WallFrame x={168 + v.off(3, 30)} y={192} w={302} h={216} art={v.one(4, ['scape', 'line', 'bars'] as const)} seed={v.seed(3)} />
+      <WallFrame x={196} y={444} w={124} h={150} art="head" seed={v.seed(5)} />
+      <WallFrame x={344} y={444} w={124} h={150} art={v.one(6, ['head', 'head', 'scape'] as const)} seed={v.seed(8)} />
+      <WallFrame x={1436} y={210} w={190} h={150} art={v.one(7, ['scape', 'head', 'line'] as const)} seed={v.seed(11)} />
       <circle cx={1720} cy={256} r={62} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
       <line x1={1720} y1={256} x2={1748} y2={272} stroke={INK} strokeWidth={STROKE_THIN} strokeLinecap="round" />
       <ClockHand cx={1720} cy={256} r={44} f={f} />
@@ -1298,8 +1580,8 @@ const DomesticInterior: React.FC = () => {
       <UnitWall x={1420} y={412} w={392} h={344} cols={1} rows={4} handle={false} />
       {Array.from({length: 44}, (_, i) => {
         const col = i % 11, row = Math.floor(i / 11);
-        return <rect key={i} x={1442 + col * 32} y={432 + row * 86} width={24} height={54 + rnd(i * 5) * 12}
-          fill={rnd(i * 3) > 0.78 ? c.accent : shade(tn.card, -(i % 3))}
+        return <rect key={i} x={1442 + col * 32} y={432 + row * 86} width={24} height={54 + rnd(v.seed(i * 5)) * 12}
+          fill={rnd(v.seed(i * 3)) > 0.78 ? c.accent : shade(tn.card, -(i % 3))}
           stroke={INK} strokeWidth={2.6} />;
       })}
       {/* radiator under the window */}
@@ -1315,21 +1597,21 @@ const DomesticInterior: React.FC = () => {
       ))}
 
       {/* --- furniture --- */}
-      <FloorLamp x={1268} y={834} s={0.95} />
-      <Plant x={106} y={856} s={0.95} seed={4} />
-      <BoxStack x={1830} baseY={866} n={2} s={0.62} seed={7} />
+      <FloorLamp x={1268 + v.off(8, 60)} y={834} s={0.9 + v.pick(9, 3) * 0.05} />
+      <Plant x={106} y={856} s={0.9 + v.pick(10, 3) * 0.05} seed={v.seed(4)} />
+      <BoxStack x={1830} baseY={866} n={1 + v.pick(11, 3)} s={0.62} seed={v.seed(7)} />
       {/* a side table with a table lamp and a stack of post, left of the sofa */}
       <Desk x={392} y={806} w={150} h={22} legH={78} fill={shade(tn.card, -1)} />
-      <Papers x={452} y={798} n={2} s={0.5} seed={29} />
+      <Papers x={452} y={798} n={1 + v.pick(12, 3)} s={0.5} seed={v.seed(29)} />
       <Sofa x={560} y={880} w={720} h={214} />
       {/* the coffee table and what is on it */}
       <Desk x={700} y={936} w={452} h={26} legH={96} fill={shade(tn.card, -1)} />
-      <Papers x={800} y={928} n={3} s={0.62} seed={13} />
+      <Papers x={800 + v.off(13, 70)} y={928} n={2 + v.pick(14, 3)} s={0.62} seed={v.seed(13)} />
       <rect x={996} y={906} width={44} height={34} rx={6} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
       <path d="M 1040 914 q 22 8 0 18" fill="none" stroke={INK} strokeWidth={STROKE_THIN * 0.8} />
       <rect x={1064} y={914} width={78} height={22} rx={5} fill={tn.body} stroke={INK} strokeWidth={STROKE_THIN} />
       {/* an armchair on the right, and the television it faces on its own low stand */}
-      <Chair x={1620} y={962} s={1.0} facing={-1} fill={shade(tn.body, 1)} />
+      <Chair x={1620 + v.off(15, 50)} y={962} s={1.0} facing={-1} fill={shade(tn.body, 1)} />
       <Desk x={168} y={916} w={330} h={24} legH={96} fill={shade(tn.card, -2)} />
       {/* the television. PERIOD: the same low stand carries a framed picture propped against the
           wall with a pair of candlesticks either side of it — a parlour's mantel arrangement, and
@@ -1346,20 +1628,25 @@ const DomesticInterior: React.FC = () => {
           ))}
         </g>
       ) : (
-        <Monitor x={196} y={712} w={286} h={196} content="text" seed={17} />
+        <Monitor x={196} y={712} w={286} h={196} content={v.one(16, ['text', 'chart', 'grid'] as const)} seed={v.seed(17)} />
       )}
       {/* a dropped newspaper on the boards, and the day's post on the floor by the door */}
-      <Papers x={1420} y={1046} n={2} s={1.0} seed={33} />
+      <Papers x={1420 + v.off(17, 90)} y={1046} n={1 + v.pick(18, 3)} s={1.0} seed={v.seed(33)} />
 
       {/* --- the people. BOTH in colour: the reference's domestic frames run a coloured couple
           (depression montage 10:10), which is the one place the grey-crowd rule is relaxed. --- */}
-      <StickFigure pose={A.sit(f)} x={CAPTION_SAFE_X + 250} y={858} scale={1.06} facing={-1} view="front"
+      <StickFigure pose={A.sit(f)} x={CAPTION_SAFE_X + 250 + v.off(19, 46)} y={858} scale={1.06} facing={-1} view="front"
         expr={FACES.worried} pal={LIGHT} frame={f} idle="gesture" />
       {/* the second of the pair used to be frozen at frame 0, which read as a mannequin sitting next
-          to a living person. It breathes and shifts on its own seed — one figure, two adjacent cells. */}
-      <StickFigure pose={A.sit(f + 47)} x={740} y={858} scale={1.02} facing={1} view="front"
-        expr={FACES.tired} pal={LIGHT} frame={f} />
-      <Plant x={1866} y={1060} s={1.15} seed={9} />
+          to a living person. It breathes and shifts on its own seed — one figure, two adjacent cells.
+          WHETHER HE IS THERE AT ALL is the take's (item 2): a room with one person in it and a room
+          with two are different scenes, and this is a domestic interior where "alone" is a beat the
+          format actually plays. The sofa keeps the footprint either way. */}
+      {v.pick(20, 4) !== 0 && (
+        <StickFigure pose={A.sit(f + 47)} x={740 + v.off(21, 40)} y={858} scale={1.02} facing={1} view="front"
+          expr={FACES.tired} pal={LIGHT} frame={f} />
+      )}
+      <Plant x={1866} y={1060} s={1.1 + v.pick(22, 3) * 0.05} seed={v.seed(9)} />
     </Frame>
   );
 };
@@ -1391,7 +1678,9 @@ const DomesticInterior: React.FC = () => {
 const NewsSheet: React.FC<{
   x: number; y: number; w: number; h: number; rot: number; seed: number;
   photo?: 'head' | 'chart' | 'none'; stock?: string; flash?: boolean;
-}> = ({x, y, w, h, rot, seed, photo = 'head', stock, flash = false}) => {
+  /** QA_WATCH item 3 — the two things on a cutting a viewer actually tries to read. */
+  masthead?: string; headline?: string;
+}> = ({x, y, w, h, rot, seed, photo = 'head', stock, flash = false, masthead, headline}) => {
   const c = useSceneColors();
   const tn = useSceneTones();
   // Newsprint is CREAM, not white (WO-20). The default was PAPER_WHITE, and because three of the six
@@ -1413,16 +1702,39 @@ const NewsSheet: React.FC<{
       {/* masthead + the two rules that bracket it. A `flash` puts the accent across the top corner,
           which is what a front page does and the one place this template gets saturated colour. */}
       {flash && <rect x={x} y={y} width={w} height={h * 0.038} fill={c.accent} />}
-      <SerifWords x={x + pad} y={y + h * 0.06} w={iw} h={h * 0.062} words={2} seed={seed} />
+      {/* MASTHEAD — real lettering (item 3). This template is 19 scenes of the madoff episode and QA
+          found it "nothing but black rectangles standing in for words across seven documents",
+          landing hardest on the beats that are ABOUT documents. */}
+      {masthead
+        ? <InkWords x={x + pad} y={y + h * 0.045} w={iw} h={h * 0.075} text={masthead} />
+        : <SerifWords x={x + pad} y={y + h * 0.06} w={iw} h={h * 0.062} words={2} seed={seed} />}
       <line x1={x + pad} y1={y + h * 0.152} x2={x + w - pad} y2={y + h * 0.152} stroke={INK} strokeWidth={5} />
       <line x1={x + pad} y1={y + h * 0.172} x2={x + w - pad} y2={y + h * 0.172} stroke={INK} strokeWidth={2.5} />
       {/* dateline strip under the rules */}
       <TextLines x={x + pad} y={y + h * 0.186} w={iw * 0.5} n={1} gap={10} th={3.4} seed={seed * 2} opacity={0.5} />
       {/* headline: three ragged lines of set type, at body-copy weight rather than as censor bars —
           at h*0.055 with 3 words per line the first render read as redaction, not as type */}
-      <SerifWords x={x + pad} y={y + h * 0.215} w={iw} h={h * 0.042} words={4} seed={seed * 3} />
-      <SerifWords x={x + pad} y={y + h * 0.278} w={iw} h={h * 0.042} words={4} seed={seed * 5} />
-      <SerifWords x={x + pad} y={y + h * 0.341} w={iw * 0.72} h={h * 0.042} words={3} seed={seed * 7} />
+      {/* HEADLINE — real lettering over one or two lines, with ONE ragged glyph line under it so the
+          cutting still reads as a page of type rather than as a title card. Body copy below stays
+          glyphs: that is the split QA asked for, and it is what the reference cuttings do. */}
+      {headline ? (
+        <g>
+          {(() => {
+            const ws = headline.split(' ');
+            const ls = ws.length > 1 ? [ws[0], ws.slice(1).join(' ')] : ws;
+            return ls.map((ln, i) => (
+              <InkWords key={i} x={x + pad} y={y + h * (0.205 + i * 0.066)} w={iw} h={h * 0.058} text={ln} />
+            ));
+          })()}
+          <SerifWords x={x + pad} y={y + h * 0.341} w={iw * 0.72} h={h * 0.042} words={3} seed={seed * 7} />
+        </g>
+      ) : (
+        <g>
+          <SerifWords x={x + pad} y={y + h * 0.215} w={iw} h={h * 0.042} words={4} seed={seed * 3} />
+          <SerifWords x={x + pad} y={y + h * 0.278} w={iw} h={h * 0.042} words={4} seed={seed * 5} />
+          <SerifWords x={x + pad} y={y + h * 0.341} w={iw * 0.72} h={h * 0.042} words={3} seed={seed * 7} />
+        </g>
+      )}
       {/* the picture */}
       {photo !== 'none' && (
         <g>
@@ -1488,6 +1800,11 @@ const Nudge: React.FC<{seed: number; cx: number; cy: number; children: React.Rea
 const NewsMontage: React.FC = () => {
   const c = useSceneColors();
   const tn = useSceneTones();
+  // THE TAKE (item 2) and THE LETTERING (item 3). 19 scenes on one pile of cuttings; every sheet now
+  // takes its seed, its stock and its picture from the scene, and the two things a viewer reads on a
+  // cutting — the masthead and the headline — are real words.
+  const tk = useTake();
+  const v = useVary();
   return (
     <Frame>
       {/* the surface the cuttings lie on — a flat slab, not a vignette */}
@@ -1498,7 +1815,7 @@ const NewsMontage: React.FC = () => {
       {[[210, 250, -19], [1690, 300, 15], [330, 880, 12], [1610, 900, -14], [960, 210, 6]].map(([sx, sy, r], i) => (
         <g key={i} transform={`rotate(${r} ${sx} ${sy})`}>
           <rect x={sx - 130} y={sy - 90} width={260} height={180} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
-          <TextLines x={sx - 108} y={sy - 66} w={216} n={9} gap={15} th={4} seed={i * 31} opacity={0.5} />
+          <TextLines x={sx - 108} y={sy - 66} w={216} n={9} gap={15} th={4} seed={v.seed(i * 31)} opacity={0.5} />
         </g>
       ))}
 
@@ -1506,27 +1823,36 @@ const NewsMontage: React.FC = () => {
           Stocks run across four rungs of newsprint tan plus ONE white hero sheet, because a pile of
           identical rectangles reads as one object however many outlines it carries — and because a
           pile of identical WHITE ones also has no colour in it (WO-20). --- */}
-      <NewsSheet x={60} y={150} w={512} h={628} rot={-15} seed={3} photo="chart" stock={shade(tn.card, 2)} />
-      <NewsSheet x={1340} y={128} w={512} h={628} rot={13} seed={9} photo="head" />
-      <NewsSheet x={706} y={72} w={470} h={556} rot={-4} seed={17} photo="none" stock={tn.card} />
-      <NewsSheet x={1176} y={330} w={470} h={556} rot={20} seed={19} photo="none" stock={shade(tn.card, 1)} />
+      <NewsSheet x={60} y={150 + v.off(1, 26)} w={512} h={628} rot={-15 + v.off(2, 5)} seed={v.seed(3)}
+        photo={v.one(3, ['chart', 'head', 'none'] as const)} stock={shade(tn.card, 2)}
+        masthead={label(tk, 'masthead', 3)} />
+      <NewsSheet x={1340} y={128 + v.off(4, 26)} w={512} h={628} rot={13 + v.off(5, 5)} seed={v.seed(9)}
+        photo={v.one(6, ['head', 'chart', 'none'] as const)}
+        masthead={label(tk, 'masthead', 9)} headline={label(tk, 'headline', 9)} />
+      <NewsSheet x={706} y={72} w={470} h={556} rot={-4 + v.off(7, 4)} seed={v.seed(17)} photo="none" stock={tn.card}
+        masthead={label(tk, 'masthead', 17)} />
+      <NewsSheet x={1176} y={330} w={470} h={556} rot={20 + v.off(8, 4)} seed={v.seed(19)} photo="none" stock={shade(tn.card, 1)} />
       <Nudge seed={5} cx={710} cy={732}>
-        <NewsSheet x={430} y={402} w={560} h={660} rot={7} seed={5} photo="head" stock={PAPER_WHITE} flash />
+        <NewsSheet x={430} y={402} w={560} h={660} rot={7 + v.off(9, 4)} seed={v.seed(5)}
+          photo={v.one(10, ['head', 'chart'] as const)} stock={PAPER_WHITE} flash
+          masthead={label(tk, 'masthead', 5)} headline={label(tk, 'headline', 5)} />
       </Nudge>
       <Nudge seed={44} cx={1300} cy={718}>
-        <NewsSheet x={1000} y={368} w={600} h={700} rot={-6} seed={11} photo="chart" flash />
+        <NewsSheet x={1000} y={368} w={600} h={700} rot={-6 + v.off(11, 4)} seed={v.seed(11)}
+          photo={v.one(12, ['chart', 'head'] as const)} flash
+          masthead={label(tk, 'masthead', 11)} headline={label(tk, 'headline', 11)} />
       </Nudge>
       {/* a torn strip and a clipped document, the two things a montage always has one of */}
       <g transform="rotate(21 1780 660)">
         <rect x={1636} y={556} width={290} height={208} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
-        <SerifWords x={1660} y={584} w={244} h={30} words={2} seed={23} />
-        <TextLines x={1660} y={636} w={244} n={7} gap={15} th={4} seed={29} opacity={0.72} />
+        <InkWords x={1660} y={578} w={244} h={36} text={label(tk, 'headline', 23)} />
+        <TextLines x={1660} y={636} w={244} n={7} gap={15} th={4} seed={v.seed(29)} opacity={0.72} />
         <rect x={1660} y={556} width={44} height={22} fill={c.accent} />
       </g>
       <g transform="rotate(-16 200 830)">
         <rect x={68} y={716} width={278} height={224} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
-        <SerifWords x={94} y={744} w={228} h={26} words={2} seed={37} />
-        <TextLines x={94} y={794} w={228} n={8} gap={15} th={4} seed={41} opacity={0.72} />
+        <InkWords x={94} y={738} w={228} h={32} text={label(tk, 'masthead', 37)} />
+        <TextLines x={94} y={794} w={228} n={8} gap={15} th={4} seed={v.seed(41)} opacity={0.72} />
         <rect x={276} y={700} width={26} height={58} rx={12} fill="none" stroke={INK} strokeWidth={STROKE_THIN * 1.2} />
       </g>
     </Frame>
@@ -2792,13 +3118,57 @@ const CrowdQueue: React.FC = () => {
 // The motion in this frame is the blink and gaze (which run off `frame` regardless of idle level and
 // move two 38px discs), the clock, and one background figure.
 // ---------------------------------------------------------------------------
-const PORTRAIT_SCALE = 5.6;
+// ---------------------------------------------------------------------------
+// HEADROOM AND THE SCALE READ (QA_WATCH 2026-08-17 item 10, MED-HIGH).
+//
+// QA, on the most-used environment in the episode (28 scenes): "The head is cut off by the top frame
+// edge, and a full-size room sits behind it at normal scale, with background figures roughly
+// one-sixth the height of the face — it reads as a head pasted onto a wide shot rather than a
+// close-up. Two of those background figures have no visible body (heads floating at desk level)."
+//
+// Three separate faults, and they need three separate fixes:
+//
+//   1. NO HEADROOM. `StickFigure` puts the head centre at `y - (spine + neck + head) * scale` =
+//      `y - 196s` and the crown half a head above that, so at 5.6× off a hip at y=1720 the crown
+//      landed at 264 with a 716-unit head under it — 66% of frame height, with the `subtle` idle
+//      swinging it. 4.75× off a hip at 1400 puts the crown at 165 with a 608-unit head: still the
+//      largest thing in the frame by a distance, now with room above it and margin for the idle.
+//      A portrait with no air over the head reads as a framing error even when nothing is clipped.
+//   2. THE ROOM COMPETED WITH THE FACE. We cannot blur (a blur is a gradient by another name and
+//      Chromium dithers it) and we cannot empty the room (flat fill is two-sided). So the room is
+//      KNOCKED BACK instead: one flat ink scrim across everything behind the head. Every plane under
+//      it is still a flat fill — a uniform composite maps equal pixels to equal pixels — so the
+//      density is untouched and only the contrast drops, which is the depth cue a close-up needs and
+//      the only one the style rules leave available.
+//   3. HEADS AT DESK LEVEL. The two-seat row at y=718 sat BEHIND a desk whose top is at 796, so both
+//      occupants were a head and shoulders floating over the desk with no body anywhere. They are
+//      replaced by case and box stacks on the same marks, which is the substitution rule: the mass
+//      stays, the anatomy stops being wrong. The standing figure at the right keeps the room
+//      populated and carries WO-24's motion.
+// ---------------------------------------------------------------------------
+const PORTRAIT_SCALE = 4.75;
+const PORTRAIT_CROWN = 150;   // units of headroom over the crown at the default framing
+/** `StickFigure` puts the crown `(spine + neck + head + headHalfHeight) * scale` above the hip. */
+const PORTRAIT_CROWN_TO_HIP = 259.96;
 const PORTRAIT_WALL = 636;
+/** How far the room behind a close-up is knocked back. Flat ink, flat result — see note 2 above. */
+const PORTRAIT_SCRIM = 0.24;
 
 const CloseUpPortrait: React.FC = () => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
+  const v = useVary();
+  // THE TAKE'S FRAMING. This template is used 28 times in one episode and QA measured it as one
+  // picture: the head is ~55% of the frame, so nothing that only redresses the room behind it can
+  // change the picture much. What does is the framing OF THE HEAD and how far back the room sits —
+  // both of which a real close-up varies between takes anyway. The hip is DERIVED from the crown so
+  // that every scale keeps its headroom; the headroom itself moves by ±34 units, which is a tighter
+  // or looser portrait, never a clipped one.
+  const headS = PORTRAIT_SCALE - 0.2 + v.pick(30, 4) * 0.13;
+  const crown = PORTRAIT_CROWN + v.off(31, 34);
+  const headHip = crown + PORTRAIT_CROWN_TO_HIP * headS;
+  const scrim = PORTRAIT_SCRIM - 0.08 + v.pick(32, 4) * 0.055;
   // PERIOD (WO-27): this is the room WO-26 warned about — the template "depicts nowhere" and in fact
   // depicts a modern office behind the head (two monitors, a keyboard, a desk phone, a printer and a
   // skyline in the bay). All of those substitute in the library except the PRINTER, which is here.
@@ -2820,51 +3190,55 @@ const CloseUpPortrait: React.FC = () => {
           legible, so the view read as a wall of garage doors rather than as somewhere further off.
           Small units, lifted two rungs, read as distance without haze or a gradient. */}
       <rect x={72} y={168} width={560} height={296} fill={shade(c.bg, 3)} />
-      <BuildingBand baseY={464} x0={64} x1={640} n={7} seed={13} depth={2} minH={56} maxH={132} opacity={0.75} />
+      <BuildingBand baseY={464} x0={64} x1={640} n={6 + v.pick(3, 3)} seed={v.seed(13)} depth={2} minH={56} maxH={132} opacity={0.75} />
       <Glazing x={72} y={168} w={560} h={296} bays={4} rows={2} pane={null} />
       {/* charts and a clock on the wall, and a bookcase under them */}
-      <WallFrame x={700} y={180} w={306} h={216} art="line" seed={7} />
-      <WallFrame x={1046} y={180} w={220} h={216} art="bars" seed={11} />
+      <WallFrame x={700} y={180} w={306} h={216} art={v.one(4, ['line', 'bars', 'scape'] as const)} seed={v.seed(7)} />
+      <WallFrame x={1046} y={180} w={220} h={216} art={v.one(5, ['bars', 'scape', 'line'] as const)} seed={v.seed(11)} />
       <circle cx={1420} cy={252} r={56} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE} />
       <line x1={1420} y1={252} x2={1448} y2={266} stroke={INK} strokeWidth={STROKE_THIN} strokeLinecap="round" />
       <ClockHand cx={1420} cy={252} r={40} f={f} />
       <UnitWall x={1546} y={176} w={352} h={300} cols={1} rows={3} handle={false} />
       {Array.from({length: 30}, (_, i) => {
         const col = i % 10, row = Math.floor(i / 10);
-        return <rect key={i} x={1566 + col * 32} y={196 + row * 100} width={24} height={56 + rnd(i * 5) * 12}
-          fill={rnd(i * 3) > 0.76 ? c.accent : shade(tn.card, -(i % 3))} stroke={INK} strokeWidth={2.6} />;
+        return <rect key={i} x={1566 + col * 32} y={196 + row * 100} width={24} height={56 + rnd(v.seed(i * 5)) * 12}
+          fill={rnd(v.seed(i * 3)) > 0.76 ? c.accent : shade(tn.card, -(i % 3))} stroke={INK} strokeWidth={2.6} />;
       })}
       <RibbedPanel x={716} y={456} w={470} h={176} ribs={13} dir="v" />
 
       {/* --- floor and the working desk across the mid-ground. Both are BEHIND the head, and both
               are what stop the picture reading as a portrait on a plain wall. --- */}
       <SlabFloor y={PORTRAIT_WALL} cols={30} rows={12} />
-      <SeatedRow y={718} x0={210} x1={470} n={2} scale={0.66} seed={9} working view="front" alive={0.5} />
-      <StickFigure pose={A.stand(f + 41)} x={1660} y={772} scale={0.78} facing={-1} view="profile"
-        pal={DIM} showFace={false} frame={f} idle="subtle" />
+      {/* WAS a two-seat row at y=718 behind a desk whose top is at 796 — see note 3 above: both
+          occupants rendered as heads and shoulders floating at desk level with no bodies. Same
+          footprint, no anatomy. */}
+      <CaseStack x={244 + v.off(6, 30)} baseY={782} n={2 + v.pick(7, 2)} s={0.72} seed={v.seed(9)} />
+      <BoxStack x={462 + v.off(8, 30)} baseY={786} n={2} s={0.66} seed={v.seed(17)} />
+      <StickFigure pose={A.stand(f + 41)} x={1660 + v.off(9, 60)} y={772} scale={0.78} facing={-1} view="profile"
+        pal={DIM} showFace={false} frame={f} idle="subtle" seed={v.seed(51)} />
       {/* a radiator under the window and a pinned run beside the bookcase — both are on the parts
           of the wall the head does NOT cover, which is the only place added density pays */}
       <RibbedPanel x={96} y={486} w={520} h={140} ribs={15} dir="v" />
       {Array.from({length: 4}, (_, i) => {
         const px = 1512 + (i % 2) * 214, py = 496 + Math.floor(i / 2) * 76;
         return (
-          <g key={i} transform={`rotate(${(rnd(i * 11) - 0.5) * 9} ${px + 92} ${py + 30})`}>
+          <g key={i} transform={`rotate(${(rnd(v.seed(i * 11)) - 0.5) * 9} ${px + 92} ${py + 30})`}>
             <rect x={px} y={py} width={184} height={60} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
-            <TextLines x={px + 14} y={py + 12} w={152} n={3} gap={14} th={4} seed={i * 7} opacity={0.6} />
+            <TextLines x={px + 14} y={py + 12} w={152} n={3} gap={14} th={4} seed={v.seed(i * 7)} opacity={0.6} />
             <circle cx={px + 92} cy={py + 6} r={6} fill={c.accent} />
           </g>
         );
       })}
       <Desk x={40} y={796} w={720} legH={132} />
-      <Monitor x={96} y={648} w={190} h={140} content="chart" seed={3} />
-      <Monitor x={310} y={664} w={162} h={124} content="text" seed={7} />
+      <Monitor x={96} y={648} w={190} h={140} content={v.one(10, ['chart', 'grid', 'text'] as const)} seed={v.seed(3)} />
+      <Monitor x={310} y={664} w={162} h={124} content={v.one(11, ['text', 'chart', 'grid'] as const)} seed={v.seed(7)} />
       <Keyboard x={330} y={792} w={160} />
       <DeskPhone x={548} y={794} s={0.9} />
-      <Papers x={690} y={784} n={2} s={0.7} seed={19} />
-      <CaseStack x={140} baseY={1024} n={3} s={0.7} seed={37} />
+      <Papers x={690} y={784} n={2} s={0.7} seed={v.seed(19)} />
+      <CaseStack x={140 + v.off(12, 40)} baseY={1024} n={2 + v.pick(13, 3)} s={0.7} seed={v.seed(37)} />
       <Desk x={1420} y={824} w={480} legH={150} fill={shade(tn.card, -1)} />
-      <Papers x={1560} y={814} n={3} s={0.78} seed={23} />
-      <BoxStack x={1830} baseY={816} n={2} s={0.6} seed={29} />
+      <Papers x={1560 + v.off(14, 40)} n={2 + v.pick(15, 2)} y={814} s={0.78} seed={v.seed(23)} />
+      <BoxStack x={1830} baseY={816} n={1 + v.pick(16, 3)} s={0.6} seed={v.seed(29)} />
       {/* a printer on the right desk: paper tray, output shelf, panel.
           PERIOD: a stack of bound LEDGERS with an oil lamp standing on them — the same mass on the
           same desk, and the lamp keeps the small accent the printer's panel light was carrying. */}
@@ -2884,19 +3258,26 @@ const CloseUpPortrait: React.FC = () => {
           <rect x={1706} y={784} width={140} height={16} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
         </g>
       )}
-      <Plant x={1240} y={824} s={1.0} seed={5} />
-      <Chair x={620} y={1060} s={1.35} facing={1} fill={shade(tn.body, -2)} />
+      <Plant x={1240 + v.off(17, 50)} y={824} s={0.9 + v.pick(18, 3) * 0.1} seed={v.seed(5)} />
+      <Chair x={620 + v.off(19, 70)} y={1060} s={1.35} facing={1} fill={shade(tn.body, -2)} />
 
-      {/* --- the subject. Drawn last, at 5.6× a staged figure, with the outline weight divided by
-              the same factor so the linework stays at the canon's ~8px at 1920 instead of 45px. --- */}
+      {/* --- the room goes BACK. One flat ink scrim over everything above, nothing under it: a
+              uniform composite over flat fills is still flat fills, so the density this template
+              works so hard for is untouched and only the contrast drops (note 2 above). --- */}
+      <rect x={0} y={0} width={1920} height={1080} fill={INK} opacity={scrim} />
+
+      {/* --- the subject. Drawn last, over the scrim, with the outline weight divided by the same
+              factor so the linework stays at the canon's ~8px at 1920 instead of 38px. --- */}
       {/* `subtle`, not `none` (WO-24). At 5.6x a normal idle would swing a head covering 23% of
           the frame; at `subtle` the same rig moves it a few units, which on THIS figure is the only
           motion in the template big enough to cross the bible's |Δ| 1.0 threshold — held at `none`
           it measured 100% motionless with a mean |Δ| of 0.24. A reaction shot that breathes is also
           what the reference's own pushed-face frames do. */}
-      <StickFigure pose={A.stand(0)} x={1180} y={1720} scale={PORTRAIT_SCALE} facing={-1} view="front"
+      {/* The head shifts along its own mark by ±44 units — a close-up recomposed, not a new
+          template — and stays right of `CAPTION_SAFE_X`. */}
+      <StickFigure pose={A.stand(0)} x={1180 + v.off(20, 62)} y={headHip} scale={headS} facing={-1} view="front"
         expr={FACES.shock} pal={LIGHT} frame={f} idle="subtle" idleGain={0.3}
-        lineW={STROKE / PORTRAIT_SCALE} />
+        lineW={STROKE / headS} />
     </Frame>
   );
 };
@@ -2921,16 +3302,16 @@ const ChartBoard: React.FC = () => {
   // nineteenth-century lecture exactly. The only dated objects are the laptop and the projector body
   // on the side table.
   const period = usePeriod();
-  // The board's series was a literal `seed={6}`, so every scene that cuts to this template held the
-  // SAME bars and the SAME line — the hook (t002), the derivative reveal (t011), the leverage
-  // definition (t042) and the midpoint-reversal hold (t082) all showed one frozen chart. A template
-  // takes no props (director.tsx calls it with nothing — see the registration note below), so there
-  // is no scene id to seed from; `useId()` is React's own per-mount identity, stable across a
-  // scene's frames and distinct between scenes, and gets hashed the same way `resolveSceneKey` hashes
-  // a string into a number (crayonStyle.ts).
-  const chartMountId = React.useId();
-  let chartSeed = 0;
-  for (let i = 0; i < chartMountId.length; i++) chartSeed = (chartSeed * 31 + chartMountId.charCodeAt(i)) >>> 0;
+  // The board's series was a literal `seed={6}`, so every scene that cut to this template held the
+  // SAME bars and the SAME line. A first pass at that used `React.useId()` — React's per-mount
+  // identity — because a template takes no props and there was no scene id to seed from. It did not
+  // hold: QA still measured this room as four near-identical pictures across the episode, because a
+  // mount id varies with tree POSITION, not with which scene is playing, and the one shot each scene
+  // mounts lands in the same position every time. The take (see the block comment at the top of this
+  // file) is the scene's real identity, and it dresses the whole room, not just the series.
+  const tk = useTake();
+  const v = useVary();
+  const chartSeed = v.seed(6);
   // The presenting arm. `A.stand` returns a plain Pose object, so the two joint angles that swing
   // the near arm toward the board are an override on it rather than a new action.
   //
@@ -2947,7 +3328,10 @@ const ChartBoard: React.FC = () => {
       {/* --- the room: a panel band under the ceiling, a picture rail, a papered wall --- */}
       <UnitWall x={0} y={162} w={1920} h={132} cols={18} rows={1} handle={false} fill={tn.card} carcass={tn.deep} />
       <rect x={0} y={290} width={1920} height={18} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
-      <rect x={0} y={306} width={1920} height={BOARD_FLOOR - 306} fill={tn.panel} />
+      {/* One rung of "time of day" inside the scene's own colour key — the papered wall is the
+          largest flat plane in the frame, so a single rung moves the whole frame's luma without
+          adding a colour, a gradient or any motion. `rung()` clamps into `shade()`'s ±3. */}
+      <rect x={0} y={306} width={1920} height={BOARD_FLOOR - 306} fill={shade(tn.panel, v.rung(0, 51))} />
       <g stroke={INK} strokeWidth={2} opacity={0.14}>
         {Array.from({length: 38}, (_, i) => <line key={i} x1={i * 52} y1={306} x2={i * 52} y2={BOARD_FLOOR} />)}
       </g>
@@ -2965,7 +3349,11 @@ const ChartBoard: React.FC = () => {
       {/* 16 bars and 9 gridlines. The plot's pale ground is ~20% of the frame, so the SERIES is what
           has to carry its density: at 12 bars / 6 gridlines the template measured 91.1% flat fill,
           i.e. against the empty end of the band with the board doing the emptying. */}
-      <ChartPlot x={234} y={220} w={864} h={486} kind="bars" bars={16} seed={chartSeed} live crash grid={9} />
+      {/* `dir` and `label` come from the SCENE (items 7 and 3): the chart points where the narration
+          points, and the board's heading is real lettering rather than a run of glyph blocks. */}
+      <ChartPlot x={234} y={220} w={864} h={486} kind={v.one(2, ['bars', 'bars', 'line'] as const)}
+        bars={16} seed={chartSeed} live crash grid={9}
+        dir={tk.chart} label={label(tk, 'chartTitle', 1)} />
       {/* the two easel legs, splaying to the floor, with a stretcher across them */}
       {[[276, -1], [1046, 1]].map(([px, dir], i) => (
         <g key={i}>
@@ -2980,15 +3368,17 @@ const ChartBoard: React.FC = () => {
           fill={i === 1 ? c.accent : shade(tn.body, i % 2)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
       ))}
 
-      {/* --- the wall right of the board: a second chart, a pinned sheet run, a flip pad --- */}
-      <WallFrame x={1298} y={196} w={288} h={230} art="line" seed={9} />
-      <WallFrame x={1622} y={196} w={244} h={230} art="scape" seed={15} />
-      {Array.from({length: 6}, (_, i) => {
+      {/* --- the wall right of the board: a second chart, a pinned sheet run, a flip pad ---
+              The take picks which pictures hang there and where the pinned run starts, so two
+              scenes in this room are the same room on a different day rather than one frame. */}
+      <WallFrame x={1298 + v.off(11, 26)} y={196} w={288} h={230} art={v.one(12, ['line', 'bars', 'scape'] as const)} seed={v.seed(9)} />
+      <WallFrame x={1622 + v.off(13, 22)} y={196} w={244} h={230} art={v.one(14, ['scape', 'line', 'bars'] as const)} seed={v.seed(15)} />
+      {Array.from({length: 5 + v.pick(15, 2)}, (_, i) => {
         const px = 1310 + (i % 3) * 190, py = 470 + Math.floor(i / 3) * 118;
         return (
           <g key={i} transform={`rotate(${(rnd(i * 7) - 0.5) * 10} ${px + 74} ${py + 46})`}>
             <rect x={px} y={py} width={148} height={92} fill={PAPER_WHITE} stroke={INK} strokeWidth={STROKE_THIN} />
-            <TextLines x={px + 14} y={py + 18} w={120} n={4} gap={16} th={4} seed={i * 5} opacity={0.6} />
+            <TextLines x={px + 14} y={py + 18} w={120} n={4} gap={16} th={4} seed={v.seed(i * 5)} opacity={0.6} />
             <circle cx={px + 74} cy={py + 8} r={7} fill={c.accent} />
           </g>
         );
@@ -2997,8 +3387,11 @@ const ChartBoard: React.FC = () => {
       {/* --- the presenter, right of the board and right of the caption card, arm to the chart.
               He stands at 1490, clear of the audience: the first build put him at 1420, which was
               also an audience chair's x, so the chair back painted straight across his chest. --- */}
-      <StickFigure pose={presenting} x={1490} y={950} scale={1.14} facing={-1}
-        view="front" expr={FACES.earnest} pal={LIGHT} frame={f} idle="gesture" />
+      {/* The presenter shifts along his own mark (±34 units, well clear of the 1420 chair back the
+          first build collided with) and turns to the board or to the room, which is the difference
+          between "presenting" and "being asked about it". */}
+      <StickFigure pose={presenting} x={1490 + v.off(21, 34)} y={950} scale={1.14} facing={-1}
+        view={v.one(22, ['front', 'front', 'profile'] as const)} expr={FACES.earnest} pal={LIGHT} frame={f} idle="gesture" />
       {/* a side table with a projector and a live laptop beside him */}
       <Desk x={1668} y={904} w={216} h={24} legH={104} fill={shade(tn.card, -1)} />
       {/* PERIOD: the laptop and its projector base become the presenter's own papers — a stack of
@@ -3029,16 +3422,22 @@ const ChartBoard: React.FC = () => {
       {/* someone crossing behind the audience (WO-24). Kept BEHIND the seated backs and at 0.84
           rather than in the near plane: at hero scale in the front lane this walker passed straight
           over the presenter, who is the one thing this template is a shot of. */}
-      <Passerby y={1016} x0={2180} x1={-260} scale={0.84} seed={29} at={80} />
+      <Passerby y={1016} x0={2180} x1={-260} scale={0.84} seed={v.seed(29)} at={80} />
+      {/* WHO IS IN THE ROOM. Three to four seats, offset along the row by the take: a briefing to a
+          half-empty room and a briefing to a full one are different pictures of the same room, and
+          the empty seat is the variation that costs the least density (the chair still draws). */}
       {[[250, 1044, 1.06, 31], [560, 1052, 1.1, 34], [900, 1070, 1.18, 37], [1210, 1076, 1.22, 40]]
         .map(([cx, cy, s, seed], i) => (
           <g key={i}>
-            <SeatedRow y={cy} x0={cx} x1={cx} n={1} scale={s} seed={seed} view="back" alive={i % 2} />
-            <Chair x={cx} y={1080} s={s * 1.04} facing={1} fill={shade(tn.body, i % 2 ? -1 : -2)} />
+            {i !== v.pick(31, 5) && (
+              <SeatedRow y={cy} x0={cx + v.off(32 + i, 20)} x1={cx + v.off(32 + i, 20)} n={1}
+                scale={s} seed={v.seed(seed)} view="back" alive={i % 2} />
+            )}
+            <Chair x={cx + v.off(32 + i, 20)} y={1080} s={s * 1.04} facing={1} fill={shade(tn.body, i % 2 ? -1 : -2)} />
           </g>
         ))}
-      <Plant x={92} y={1058} s={1.0} seed={3} />
-      <BoxStack x={1892} baseY={1074} n={2} s={0.7} seed={41} />
+      <Plant x={92} y={1058} s={0.9 + v.pick(41, 3) * 0.1} seed={v.seed(3)} />
+      <BoxStack x={1892} baseY={1074} n={2 + v.pick(43, 2)} s={0.7} seed={v.seed(41)} />
     </Frame>
   );
 };

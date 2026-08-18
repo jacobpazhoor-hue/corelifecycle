@@ -4,8 +4,10 @@ import {StickFigure, DIM, Expr} from './figure';
 import * as A from './actions';
 import {blinkOn, crossing, stepIndex} from './anim';
 import {
+  CRAYON_FONT, CRAYON_TEXT_SLANT_DEG,
   INK, MATERIAL, PAPER_WHITE, STROKE, STROKE_THIN, TONE_MAX_STEP, shade, sceneTones, SceneTones,
 } from './crayonStyle';
+import {CRAYON_TEXT_WEIGHT, measureEm, useCrayonFace} from './crayonText';
 import {useSceneColors} from './stage';
 
 // ============================================================================
@@ -891,25 +893,41 @@ export const Cone: React.FC<{x: number; y: number; s?: number}> = ({x, y, s = 1}
  *
  * The reference uses one in BOTH captured thumbnails (`LuEcoqizj0o` "GIVE US WORK, NOT HUNGER",
  * `KE-WJevx-7c` "WE GOT SOLD OUT"): a pale board tilted a few degrees above a grey crowd, carrying
- * two short lines. The lettering is `SerifWords` geometry rather than real text for the same reason
- * everything else here is — a template is topic-agnostic and the episode's words arrive as overlays.
+ * two short lines — REAL WORDS, in both frames, because a placard is a thing somebody wrote.
+ *
+ * `label` is therefore how this prop should be used whenever it is anywhere near the subject
+ * (QA_WATCH item 3: three glyph placards held up as the focal point of `crowdQueue` "read as an
+ * unfinished render"). The `SerifWords` geometry stays as the fallback for a placard deep in a crowd,
+ * where at 40 units tall real lettering would be a smudge and blocks are the honest texture.
  *
  * `y` is where the holder's HANDS are, not the board: a placard whose pole stops in mid-air is the
  * commonest way this prop goes wrong.
  */
 export const Placard: React.FC<{
   x: number; y: number; w?: number; h?: number; tilt?: number; poleH?: number; seed?: number;
-  fill?: string;
-}> = ({x, y, w = 190, h = 120, tilt = -7, poleH = 150, seed = 0, fill}) => {
+  fill?: string; label?: string;
+}> = ({x, y, w = 190, h = 120, tilt = -7, poleH = 150, seed = 0, fill, label}) => {
   const tn = useSceneTones();
   const board = fill ?? PAPER_WHITE;
   const topY = y - poleH;
+  // Two words go on two lines, which is what both reference placards do; one word takes the board.
+  const lines = label ? label.split(' ') : [];
+  const two = lines.length > 1 ? [lines[0], lines.slice(1).join(' ')] : lines;
   return (
     <g transform={`rotate(${tilt} ${x} ${y})`}>
       <rect x={x - 7} y={topY} width={14} height={poleH} fill={shade(tn.card, -2)} stroke={INK} strokeWidth={STROKE_THIN * 0.7} />
       <rect x={x - w / 2} y={topY - h} width={w} height={h} fill={board} stroke={INK} strokeWidth={STROKE} />
-      <SerifWords x={x - w / 2 + w * 0.1} y={topY - h + h * 0.22} w={w * 0.8} h={h * 0.17} words={2} seed={seed * 7} />
-      <SerifWords x={x - w / 2 + w * 0.1} y={topY - h + h * 0.58} w={w * 0.8} h={h * 0.17} words={2} seed={seed * 11} />
+      {label ? (
+        two.map((ln, i) => (
+          <InkWords key={i} x={x - w / 2 + w * 0.08} y={topY - h + h * (two.length > 1 ? 0.16 + i * 0.42 : 0.32)}
+            w={w * 0.84} h={h * (two.length > 1 ? 0.3 : 0.4)} text={ln} align="center" />
+        ))
+      ) : (
+        <g>
+          <SerifWords x={x - w / 2 + w * 0.1} y={topY - h + h * 0.22} w={w * 0.8} h={h * 0.17} words={2} seed={seed * 7} />
+          <SerifWords x={x - w / 2 + w * 0.1} y={topY - h + h * 0.58} w={w * 0.8} h={h * 0.17} words={2} seed={seed * 11} />
+        </g>
+      )}
     </g>
   );
 };
@@ -1408,6 +1426,12 @@ export const WallFrame: React.FC<{
 };
 
 /**
+ * Which way a chart's series goes (QA_WATCH item 7). Lives here rather than in explainer.tsx because
+ * `ChartPlot` is the thing that draws it; the SCENE chooses it (`docs/BIBLE.md` §8 CHART).
+ */
+export type ChartDir = 'up' | 'down' | 'flat';
+
+/**
  * A large flat chart — the subject of a frame rather than a prop on a wall.
  *
  * `WallFrame`'s `bars`/`line` art is a 150px picture; this is the whole board: axes with ticks,
@@ -1426,7 +1450,12 @@ export const WallFrame: React.FC<{
 export const ChartPlot: React.FC<{
   x: number; y: number; w: number; h: number; bars?: number; kind?: 'bars' | 'line' | 'area';
   seed?: number; live?: boolean; ground?: string; crash?: boolean; grid?: number;
-}> = ({x, y, w, h, bars = 9, kind = 'bars', seed = 0, live = false, ground, crash = false, grid = 4}) => {
+  /** QA_WATCH item 7 — which way the series goes. The SCENE decides; see explainer.tsx's TAKE. */
+  dir?: ChartDir;
+  /** QA_WATCH item 3 — real lettering in the title block, instead of glyph blocks. */
+  label?: string;
+}> = ({x, y, w, h, bars = 9, kind = 'bars', seed = 0, live = false, ground, crash = false, grid = 4,
+       dir = 'up', label}) => {
   const f = useCurrentFrame();
   const c = useSceneColors();
   const tn = useSceneTones();
@@ -1435,14 +1464,38 @@ export const ChartPlot: React.FC<{
   const px = x + padL, py = y + padT;
   const pw = w - padL - padR, ph = h - padT - padB;
   const k = live ? stepIndex(f, seed * 2.3 + 7, 120) : 0;
+  // THE SERIES FOLLOWS THE SCENE, NOT THE TEMPLATE (QA_WATCH item 7, HIGH).
+  //
+  // It used to be pure noise with a hard-coded `crash` down-leg painted over it, so the same falling
+  // chart illustrated "use options to CAP the losses and the gains", "FUNNELED IN $7.2 billion" and
+  // both halves of a split whose entire point was "the statements, still CLIMBING". A chart that
+  // contradicts the sentence being read over it is worse than no chart.
+  //
+  // The trend is now a ramp across the plot with the same seeded noise ON TOP, so the direction is
+  // unambiguous at a glance while the series still reads as data rather than as a triangle. `flat`
+  // keeps the noise around the midline. The noise band is deliberately narrower than the ramp
+  // (±0.11 against 0.68) — wide enough that no two bars match, never wide enough to reverse the read.
+  const trend = dir === 'up' ? 1 : dir === 'down' ? -1 : 0;
+  const ramp = (i: number): number => {
+    const t = bars > 1 ? i / (bars - 1) : 0;
+    if (trend === 0) return 0.46;
+    return trend > 0 ? 0.16 + 0.68 * t : 0.84 - 0.68 * t;
+  };
   // the newest column is the only one that re-derives; everything left of it is fixed by its seed
-  const val = (i: number) => 0.18 + rnd(seed * 61 + i * 5 + (i === bars - 1 ? k : 0)) * 0.74;
+  const val = (i: number) => {
+    const n = (rnd(seed * 61 + i * 5 + (i === bars - 1 ? k : 0)) - 0.5) * 0.22;
+    return Math.max(0.08, Math.min(0.96, ramp(i) + n));
+  };
   const bw = pw / bars;
+  const titleH = h * 0.062;
   return (
     <g>
       <rect x={x} y={y} width={w} height={h} fill={face} stroke={INK} strokeWidth={STROKE} />
-      {/* title block — a chart with no heading reads as a window with bars in it */}
-      <SerifWords x={x + padL} y={y + h * 0.045} w={pw * 0.62} h={h * 0.062} words={2} seed={seed * 3} />
+      {/* title block — a chart with no heading reads as a window with bars in it. A chart the
+          narration NAMES gets real words there instead of glyph runs (item 3). */}
+      {label
+        ? <InkWords x={x + padL} y={y + h * 0.045} w={pw * 0.62} h={titleH * 1.35} text={label} />
+        : <SerifWords x={x + padL} y={y + h * 0.045} w={pw * 0.62} h={titleH} words={2} seed={seed * 3} />}
       <line x1={x + padL} y1={y + padT * 0.78} x2={x + w - padR} y2={y + padT * 0.78}
         stroke={INK} strokeWidth={STROKE_THIN * 0.7} opacity={0.5} />
       {/* Ruled gridlines + their value ticks down the left axis, and a VERTICAL rule per category.
@@ -1495,12 +1548,20 @@ export const ChartPlot: React.FC<{
       <line x1={px} y1={py + ph} x2={px + pw} y2={py + ph} stroke={INK} strokeWidth={STROKE * 0.8} />
       {/* category labels under the baseline */}
       <TextLines x={px + bw * 0.2} y={py + ph + padB * 0.3} w={pw * 0.9} n={1} gap={9} th={5} seed={seed * 9} opacity={0.55} />
+      {/* The reference's saturated trend leg (`LuEcoqizj0o/thumb.png`, `KE-WJevx-7c/thumb.png` — a
+          saturated polyline crossing a desaturated field). It is the one saturated note a chart scene
+          gets, so it STAYS on every chart; what changed is that it now goes the way the scene goes
+          instead of always collapsing (item 7). `flat` gives it a shallow drift rather than deleting
+          it, because deleting it takes the frame's only saturated element with it. */}
       {crash && (
         <polyline
           points={Array.from({length: 6}, (_, i) => {
             const t = i / 5;
             const jag = i % 2 ? 0.1 : 0;
-            return `${px + pw * t},${py + ph * (0.14 + 0.72 * t - jag)}`;
+            const yy = trend === 0
+              ? 0.46 + (i % 2 ? 0.05 : -0.05)
+              : trend > 0 ? 0.86 - 0.72 * t + jag : 0.14 + 0.72 * t - jag;
+            return `${px + pw * t},${py + ph * yy}`;
           }).join(' ')}
           fill="none" stroke={c.accent} strokeWidth={STROKE * 1.5} strokeLinejoin="round" strokeLinecap="round" />
       )}
@@ -1546,6 +1607,68 @@ export const SerifWords: React.FC<{
     cx += ww + h * 0.6;
   }
   return <g>{out}</g>;
+};
+
+/**
+ * REAL LETTERING on a prop (QA_WATCH 2026-08-17 item 3, HIGH).
+ *
+ * `SerifWords` above is the right answer for BODY copy: a paragraph at frame scale is texture, and
+ * drawing it as letter-shaped blocks is cheaper, denser and more honest than setting type nobody can
+ * read. It is the wrong answer for the thing the shot is ABOUT. Measured on the madoff episode:
+ * `newsMontage` (19 scenes) rendered whole frames of nothing but black rectangles across seven
+ * documents, under narration about "statements on real letterhead" and "a nineteen-page memo with a
+ * title that did not hide its point"; the `crowdQueue` placards held three sign-shaped glyph runs up
+ * as the focal point. QA: "It reads as an unfinished render."
+ *
+ * So: a headline, a masthead, a placard, a chart title or a lower third carries real words, and the
+ * body copy under it stays glyphs. That split is exactly what the reference frames do.
+ *
+ * TYPOGRAPHY. Caveat, uppercase, with the channel's synthetic forward lean — CRAYON_BIBLE §7 is that
+ * ALL on-screen text is the handwritten script, so a prop cannot quietly open a second typeface.
+ * `crayonFont.ts` holds the render open until the face is live and cancels outright if it never
+ * arrives, and `useCrayonFace` is the same gate `textcard.tsx`/`bubble.tsx` use before measuring:
+ * measuring in a fallback face would size every label wrong. Nothing is drawn until it is ready, and
+ * no frame is ever captured in that state.
+ *
+ * FITTING. The type is set to the box: size is the smaller of the height allowance and the width the
+ * real face needs for this string, so a two-word headline fills its column and a longer one steps
+ * down rather than running off the paper. `h` is the intended INK height (cap height), not the em —
+ * a call site replacing a `SerifWords` block passes the same `h` it passed before and gets lettering
+ * of the same visual weight.
+ */
+/**
+ * Caveat's capital height as a fraction of its em, and the reason `h` means what it says.
+ *
+ * MEASURED on a rendered frame, not assumed: at `fontSize` 70 the caps came out ~65 units tall. A
+ * first pass guessed 0.52 (a normal text face) and every SHORT label — the ones that hit the height
+ * cap rather than the width cap — rendered 1.8× too big and crashed through the rule above it.
+ * Caveat is a large-cap script; 0.9 is what it actually draws.
+ */
+const INK_CAP_EM = 0.9;
+
+export const InkWords: React.FC<{
+  x: number; y: number; w: number; h: number; text: string;
+  fill?: string; align?: 'left' | 'center'; opacity?: number;
+}> = ({x, y, w, h, text, fill, align = 'left', opacity}) => {
+  const ready = useCrayonFace('setdressing:InkWords');
+  const t = text.trim().toUpperCase();
+  if (!ready || t.length === 0) return null;
+  // The synthetic lean throws the top of the line to the right, so the width a label needs is its
+  // advance width PLUS that excursion — the same correction `crayonText.lineEm` applies to a balloon.
+  // Without it a masthead fitted exactly to its column ran off the edge of the paper.
+  const em = measureEm(t, CRAYON_TEXT_WEIGHT) + Math.tan((CRAYON_TEXT_SLANT_DEG * Math.PI) / 180) * INK_CAP_EM;
+  if (em <= 0) return null;
+  const size = Math.min(h / INK_CAP_EM, w / em);
+  const bx = align === 'center' ? x + w / 2 : x;
+  // Baseline at the bottom of the intended ink box, so caps sit inside [y, y + h] exactly where the
+  // block glyphs they replace sat.
+  const by = y + h;
+  return (
+    <g transform={`translate(${bx} ${by}) skewX(${-CRAYON_TEXT_SLANT_DEG})`} opacity={opacity}>
+      <text x={0} y={0} fontFamily={CRAYON_FONT} fontWeight={CRAYON_TEXT_WEIGHT} fontSize={size}
+        fill={fill ?? INK} textAnchor={align === 'center' ? 'middle' : 'start'}>{t}</text>
+    </g>
+  );
 };
 
 /** Ruled body copy — a column of thin ink lines with a ragged last line. */
