@@ -687,8 +687,8 @@ from the scene's own start; omit `at`/`dur` and the line holds for the whole sce
 `at`, not `from` — `from` is a Python keyword and `dict(from=…)` will not parse.)
 
 ```python
-bubbles=[dict(text="Don't panic. It will rise again.", x=0.72, y=0.18, tail="down", tailSkew=-0.25),
-         dict(text="I want to complain!", x=0.30, y=0.62, tail="right", at=3.0, dur=2.5)]
+bubbles=[dict(text="How do you get ten percent every year?", speaker="guest"),
+         dict(text="I don't discuss the strategy. Just the results.", speaker="hero", at=2.0)]
 bubbles=[dict(kind="float", text="Three years of losses, moved off the books.", x=0.30, y=0.24)]
 ```
 
@@ -696,12 +696,50 @@ bubbles=[dict(kind="float", text="Three years of losses, moved off the books.", 
 |---|---|---|
 | `kind` | `"bubble"` | `"bubble"` draws the balloon; `"float"` is bubble-less script laid on the scene |
 | `text` | — | one utterance; the balloon grows to hold it |
-| `x` / `y` | 0.5 / 0.24 | balloon or block centre, as fractions of the frame |
+| `speaker` | the room's speakers in order | balloon only: **who says it**, by role name (below) |
+| `x` / `y` | 0.5 / 0.24 | **float only** — block centre, as fractions of the frame |
 | `at` / `dur` | 0 / rest of scene | seconds from the scene's start, and how long the line holds |
-| `tail` | `"down"` | balloon only: `left` `right` `down` `up` `none` — roughly where the speaker is |
-| `tailAt` / `tailSkew` | 0.5 / 0 | where along that edge the tail sits, and how far its tip leans |
 | `align` / `color` | `"left"` / **black** | float only. See the colour note below before overriding |
 | `maxWidth` / `maxLines` | — | ceilings; past them the text shrinks instead of growing |
+
+**A balloon is placed by naming its SPEAKER, never by typing coordinates (WO-34).** `x`, `y`, `tail`,
+`tailAt`, `tailLength` and `tailSkew` on a `kind="bubble"` line are accepted and **ignored** — they
+are still legal keys only so an older `content.py` cannot kill the nightly build. Stop writing them.
+
+This is a defect that shipped in every bubble scene of an episode. Balloons used to be positioned by a
+writer typing an x, a y and a side into this file against a room he could not see, and nothing in the
+renderer knew where the figures were, so nothing could catch it: at `t063b` both men on the sofa were
+**decapitated by their own balloons**, and in all four boardroom scenes the reply's tail pointed left
+into empty ceiling while the only possible speaker stood at the far right — three of Madoff's lines
+attributed to nobody. Flat fill, camera lock and the colour metrics all PASSED on those frames.
+
+So the renderer now owns the geometry. `src/director.tsx` `STAGING` publishes every template's head
+boxes, measured off its own figure call sites, and `planBalloons` gives each line the lane of frame
+nearest its speaker, stops its bottom edge above every head it would otherwise cross, caps the
+balloons of a scene at 25% of frame between them, and **solves** the tail to point at that speaker's
+head. What you choose is who is talking:
+
+| room | speakers, in the order a scene without `speaker=` hands them out |
+|---|---|
+| `boardroom` | `guest` (far side of the table) · `hero` (standing at the head of it) |
+| `domesticInterior` | `right` · `left` (the couple on the sofa) |
+| `officeFloor` | `colleague` · `hero` (at the near desk) |
+| `broadcastDesk` | `coAnchor` · `anchor` |
+| `courtHearing` | `judge` · `defendant` · `counsel` |
+| `factoryFloor` | `worker` · `hero` |
+| `chartBoard` | `presenter` |
+| `closeUpPortrait` · `crowdQueue` · `cityStreet` · `bankExterior` · `exchangeFloor` | `hero` |
+| `newsMontage` | **nobody** — a `bubbles=` balloon on it raises |
+
+Omit `speaker=` and the scene's balloons go to that list in order, alternating: the visitor asks, the
+principal answers, which is the shape every two-hander in this format has. Name a role that is not in
+the room and the **build halts** with the scene id — the alternative is a balloon pointing at a
+default, which is what shipped. A room with more than one person can hold at most one balloon per
+person, and two speakers standing closer than about a fifth of the frame apart cannot each carry one
+in the same frame; that raises too, with the instruction to stage them apart or use fewer lines.
+
+Floating dialogue is unchanged: it has no tail and no speaker — it is script laid on the frame, not an
+utterance from somebody in it — so `x`/`y` still position it exactly as before.
 
 **Floating dialogue is BLACK by default, and you should almost never override it (WO-25).** This
 device produced the same defect — white script, illegible, on a pale ground — in two consecutive QA
@@ -745,6 +783,16 @@ panels=dict(variant="diagonal2", cells=[dict(template="courtroom"), dict(ground=
 `splitY`, `lean` on the split; `ground`, `scale`, `offsetX`, `offsetY` on a cell. A cell's ground
 defaults to the colour key its own template commits to, which is what keeps the panels
 independently keyed — **so choose templates on DIFFERENT keys**, or two cells land on one hue.
+
+**A cell re-frames onto its room's subject; it no longer takes the middle (WO-34).** A `v2` cell is
+half the frame's width and all of its height — 16:19, not 16:9 — so a centre crop keeps the middle and
+throws the outer quarters away, which is a framing decision made by arithmetic rather than by looking.
+Measured on the shipped episode it cut `chartBoard`'s chart off its own y-axis at the left edge and
+sliced `officeFloor`'s hero down the middle at the gutter, leaving a disembodied arm and hand floating
+at the seam in two of the three panel scenes. A cell now asks the environment where its subject is
+(`STAGING[template].panelX`) and slides onto it, **clamped** so it can never uncover the frame's edge.
+`offsetX` still applies on top for a deliberate override, and templates with no staging keep the
+centre crop.
 
 #### `foreground=` — over-the-shoulder silhouette (bible §6.8)
 One dict. Paints a near-black head-and-shoulder mass against one frame edge, over the scene's art, so
@@ -835,9 +883,20 @@ a hearing and wrong for anything the narration calls a broadcast.
 
 #### `overlay=` — the number note, and the one deliberate deviation from the reference
 
-One dict, `big` plus `sub`. It draws a small flat note low-left over the scene's art: the figure in
+One dict, `big` plus `sub`. It draws a small flat note in a corner of the scene's art: the figure in
 handwritten script on white paper with a uniform black keyline and one flat accent rule, its caption
 under it. A figure that starts with `$` **counts up** to its value; anything else is set verbatim.
+
+**You do not choose the corner, and there is nothing to tune (WO-34).** The note used to be hard-coded
+bottom-left in every overlay scene, plus one hand-written per-scene nudge for the one case somebody
+noticed, and QA found seven more sitting on people: at `t122` it covered two seated figures with their
+heads above the card and their legs below it, at `t150` a seated figure and half a desk, at `t141` and
+`t113` two or three crowd figures each, at `t143` the television the beat is about. The renderer now
+scores all four corners against the template's staged occupancy (`src/director.tsx` `STAGING` — the
+same measured head boxes the balloons use, taken down to the floor, plus the props worth not covering),
+takes the emptiest, and **shrinks** the note to the largest size that is actually clear there rather
+than sitting on somebody at full size. Ties keep the historical bottom-left. The legacy `scenes.tsx`
+templates have no staging and keep the placement they have always had.
 
 ```python
 overlay=dict(big="$613 BILLION", sub="IN DEBT — FILED AT 1:45 A.M.")
