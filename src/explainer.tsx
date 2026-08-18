@@ -2885,11 +2885,29 @@ const BroadcastDesk: React.FC = () => {
               than two of twelve — the coarser grid left the walls as the frame's largest flat
               regions and the template measured 91.7% flat fill, i.e. near the empty end of the
               band. --- */}
+      {/* THE STUDIO BOX COMES OFF THE NEUTRAL SHELL (QA_WATCH item 15).
+          This wall is 1920 x 644 — 60% of the frame before anything is drawn over it — and it was
+          `shade(tn.body, -1)`, i.e. the `alarm` key's own mid mass, a deep crimson. With the accent
+          straps, the chart panel and the desk all keyed on top of it QA read the room as "crimson
+          walls + hot-pink chart panel + mustard bands", and it measured worst of any frame in the
+          episode: 0.268 and 0.304 all-pixel saturation at native 1280 (target 0.15–0.22) on 0.403
+          and 0.449 coloured coverage (target 0.30–0.40). This is the one room with chroma to give
+          back, so unlike chartBoard's wall it is drained rather than lightened.
+          It is also this mood's own written rule: MOODS.alarm says "bg stays keyed; the floor and
+          recesses come off the shell, which is what drains broadcastDesk's 19% of frame". The wall
+          was simply never included in that. A dark neutral studio box is what a news studio looks
+          like, and the frame keeps its `alarm` identity where the identity belongs — the desk, the
+          straps, the lower third and the accent leg on the chart. */}
       <UnitWall x={0} y={148} w={1920} h={644} cols={20} rows={3} handle={false}
-        fill={shade(tn.body, -1)} carcass={tn.deep} />
-      {/* a run of set flats standing proud of the wall, which is what a studio cyclorama is made of */}
+        fill={shade(c.shell, -1)} carcass={shade(c.shell, -2)} />
+      {/* a run of set flats standing proud of the wall, which is what a studio cyclorama is made of.
+          These now carry the KEY the wall behind them gave up: four 44-wide strips are a prop-sized
+          area, not a plane, so this is the chroma being MOVED rather than deleted — COMPARISON §4
+          MISS #1's own instruction — and it puts the room's crimson back on screen as an object
+          standing in front of a neutral box. Measured, it returns the coloured coverage the drained
+          wall cost (0.286 -> 0.30+, the bottom of the target band) at a third of the saturation. */}
       {[0, 1, 2, 3].map((i) => (
-        <rect key={i} x={-20 + i * 660} y={148} width={44} height={644} fill={tn.deep} stroke={INK} strokeWidth={STROKE_THIN} />
+        <rect key={i} x={-20 + i * 660} y={148} width={44} height={644} fill={shade(tn.body, -1)} stroke={INK} strokeWidth={STROKE_THIN} />
       ))}
       {/* --- lighting rig across the top --- */}
       <rect x={0} y={0} width={1920} height={62} fill={shade(tn.deep, -1)} />
@@ -3100,7 +3118,25 @@ const CrowdQueue: React.FC = () => {
   const signs = labelRun(tk, 'placard', 3, 3);
   return (
     <Frame>
-      {/* --- the building line behind: two bands, the far one lifted two rungs --- */}
+      {/* --- A SKY, IN FLAT BANDS (QA_WATCH item 15). The `grey` key's `bg` is a pure neutral by
+              design ("institutional and drained: ground neutral"), and `Frame` paints it edge to
+              edge — so this exterior had "a flat mid-grey sky with no sky feeling at all", one
+              #949494 field from the top of the picture to the rooflines. The fix cannot be a
+              gradient (Chromium dithers them and the flat-fill metric collapses) and should not be
+              chroma (this frame already spends 0.33 coverage), so it is what the reference does:
+              two more FLAT bands, darker at the top and hazier toward the horizon. Same neutral
+              family, no coloured coverage added, and the banding is what reads as depth. --- */}
+      <rect x={0} y={0} width={1920} height={132} fill={shade(c.bg, -2)} />
+      <rect x={0} y={132} width={1920} height={124} fill={shade(c.bg, -1)} />
+      <rect x={0} y={330} width={1920} height={QUEUE_KERB - 330} fill={shade(c.bg, 1)} />
+      {/* --- the building line behind: two bands, the far one lifted two rungs.
+              QA also called the buildings violet, and the obvious move — running the FAR band off
+              the neutral `tn.back`, as `BuildingBand`'s own period branch does — was tried and
+              MEASURED FIRST: it took this frame to 0.240 coloured coverage against a 0.30-0.40
+              target and cost 19 rich colour buckets (98 -> 79), which is COMPARISON §4 MISS #1
+              reopening on the one exterior that scores best on it. The buildings keep their key.
+              What was actually wrong with them is that they stood against nothing; they now stand
+              against a banded sky, and the depth reads off the bands instead of off the hue. --- */}
       <BuildingBand baseY={470} x0={-80} x1={2000} n={9 + v.pick(1, 3)} seed={v.seed(61)} depth={2} minH={180} maxH={400} opacity={0.55} />
       <BuildingBand baseY={628} x0={620} x1={2000} n={4 + v.pick(2, 3)} seed={v.seed(37)} depth={1} minH={230} maxH={430} />
 
@@ -3425,10 +3461,21 @@ const ChartBoard: React.FC = () => {
       {/* --- the room: a panel band under the ceiling, a picture rail, a papered wall --- */}
       <UnitWall x={0} y={162} w={1920} h={132} cols={18} rows={1} handle={false} fill={tn.card} carcass={tn.deep} />
       <rect x={0} y={290} width={1920} height={18} fill={shade(tn.card, 1)} stroke={INK} strokeWidth={STROKE_THIN} />
-      {/* One rung of "time of day" inside the scene's own colour key — the papered wall is the
-          largest flat plane in the frame, so a single rung moves the whole frame's luma without
-          adding a colour, a gradient or any motion. `rung()` clamps into `shade()`'s ±3. */}
-      <rect x={0} y={306} width={1920} height={BOARD_FLOOR - 306} fill={shade(tn.panel, v.rung(0, 51))} />
+      {/* THE WALL DROPS ITS CHROMA, THE PROPS KEEP THEIRS (QA_WATCH item 15).
+          The papered wall is the largest flat plane in the frame — 1920 x 394, better than a third of
+          it — and it was `tn.panel`, i.e. `shade(c.bg, -1)`, which on the gold key is HSV S 0.81.
+          Against gold chairs and a gold-barred chart on top of it, QA read the room as "saturated
+          yellow wall panels + yellow chairs + yellow chart bars, so the data barely separates from
+          the wall": the SUBJECT was the same colour as the room it stood in. Measured at native 1280
+          the four chartBoard frames ran 0.218–0.236 all-pixel saturation against a 0.15–0.22 target.
+          `tn.card` — `shade(c.mid, +3)`, the light material tone — is the SAME gold at HSV S 0.33,
+          less than half the chroma and several rungs lighter. So the wall stays papered gold and
+          stops competing: the chart's bars, its accent leg, the chairs and the rug are now the
+          saturated things in the frame, which is where this key's chroma is supposed to be spent.
+          NOT neutralised to `c.shell`, which was tried and measured first: it took coverage to
+          0.171–0.193 against a 0.30–0.40 target and cost 7 rich colour buckets a frame — reopening
+          COMPARISON §4 MISS #1, which explicitly says not to fix chroma by deleting planes. */}
+      <rect x={0} y={306} width={1920} height={BOARD_FLOOR - 306} fill={shade(tn.card, v.rung(0, 51))} />
       <g stroke={INK} strokeWidth={2} opacity={0.14}>
         {Array.from({length: 38}, (_, i) => <line key={i} x1={i * 52} y1={306} x2={i * 52} y2={BOARD_FLOOR} />)}
       </g>
