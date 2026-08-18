@@ -764,10 +764,51 @@ foreground=dict(kind="overShoulder", side="right", scale=0.8, y=1010)
 | `scale` | no | 0.4–1.6, default 1. Outside that band it raises |
 | `y` | no | baseline in the 1920×1080 frame, default 1080 (the bottom edge) |
 
-⚠ **`side` is required on purpose. Pick the edge AWAY from the scene's colour hero** — measured: a
-right-side silhouette at `scale=1` on `boardroom` (whose hero stands at the right) blacks the hero out
-completely. It also costs a little density: the same scene measured 87.2% flat fill without it and
+⚠ **`side` is required on purpose. Pick the edge AWAY from the scene's colour hero.** Getting it
+wrong no longer blacks the hero out — QA_WATCH item 5 found the silhouette over Madoff's face at
+t058 f9647, so `src/figure.tsx`'s `OverShoulderFigure` now bounds the mass by construction: it rises
+at most 32% of frame height and **never crosses 0.68 of frame height**, which is above every staged
+hero's chin. A wrong `side` now costs you his suit, not his face. It still reads better on the empty
+edge, and it still costs a little density: the same scene measured 87.2% flat fill without it and
 87.8% with, so use it as an occasional depth beat, not on every scene.
+
+The silhouette also carries a light keyline, a hair edge, an ear and a collar/shoulder seam, so it
+reads as the back of a person rather than as the featureless blob QA logged. Nothing about the field
+changed — the same three keys, the same defaults.
+
+#### `cast=` and `mood=` — WHO the scene is about, and how grim it is (QA_WATCH items 6 and 8)
+
+**Status: the renderer half is built and live; the scene half is not wired yet.** `src/figure.tsx`
+implements both, `src/Video2.tsx` does not yet read them off a scene record, and `content.py` does not
+yet emit them. Writing them today does nothing — an unknown key is ignored. They are documented here
+because the wire is one line each and the defect they answer is a writing-side one.
+
+**`cast=` — the person.** The episode's costume is resolved once from the topic (finance → suit,
+military → uniform, medical → scrubs). That is the KIND of person; it is not a person. Every named
+individual in the Madoff episode therefore rendered as the same black-haired man in the same navy suit
+with the same red tie: Harry Markopolos (t074), Peter Madoff (t141), Mark Madoff (t143), and two of
+him side by side on one sofa (t007/t043/t117/t133), which reads as a cloning bug.
+
+`cast` is a **slot**, 0–2, on top of the costume: **0 is the episode's lead** (identical to what
+renders today), **1** is greying and cropped in a cold slate suit with a muted teal tie, **2** is
+brown-haired and shaggier in a warm taupe suit with a muted gold tie. Hair colour, hair shape and tie
+are the three cues that survive at our in-frame size. An out-of-range slot raises.
+
+The rule the writer needs: **the lead keeps slot 0 in every scene he appears in, and each other named
+person keeps ONE slot for the whole episode.** Two people in one frame must never share a slot.
+
+**`mood=` — the register of the beat.** Default `"neutral"`, which is the register this format is
+written in. `"grim"` is for a death, a sentencing, a ruin: no face in the scene can be pleased, and
+the perky brow-raise is capped out. `"bright"` is an explicit opt-in for the rare scene that is
+genuinely up.
+
+This exists because the *default* face was smiling. `'neutral'` was the only mouth shape with no
+branch of its own and fell through to an upward curve, so both news anchors grinned while reporting
+the $50bn fraud (t120) and DiPascali's death (t153), the courtroom gallery smiled at the guilty plea
+(t127), and the living room smiled over Mark Madoff's suicide (t143). **That half is fixed at the
+renderer and needs nothing from the writer**: `'neutral'` is now a level line, a figure smiles only if
+a call site asks for the new `'smile'` mouth, and nothing in the codebase asks. `mood="grim"` is the
+second half — it hardens the faces a scene has already been given, on the beats that deserve it.
 
 #### `period=` — draw the room without its dated machines (WO-27)
 

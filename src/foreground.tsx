@@ -23,7 +23,12 @@
 import React from 'react';
 import {AbsoluteFill} from 'remotion';
 
-import {OverShoulder} from './setdressing';
+// The silhouette moved to `figure.tsx` (QA_WATCH item 5): `setdressing.OverShoulder` is an
+// undetailed black mass with no bound on how much of the frame it covers, and at t058 f9647 it
+// landed on the hero's face. `figure.OverShoulderFigure` is the same device with a keyline, a
+// hairline/ear/collar, and caps that keep it out of any staged face. `setdressing.OverShoulder` is
+// left where it is: it is not this file's to delete.
+import {OverShoulderFigure} from './figure';
 
 /** The one device this field carries today. A union so a second near-plane mass can be added later. */
 export type ForegroundT = {
@@ -68,7 +73,7 @@ export const Foreground: React.FC<{spec: ForegroundT; sceneId: string}> = ({spec
   return (
     <AbsoluteFill>
       <svg viewBox="0 0 1920 1080" width="100%" height="100%">
-        <OverShoulder side={spec.side} y={spec.y} scale={scale} />
+        <OverShoulderFigure side={spec.side} y={spec.y} scale={scale} />
       </svg>
     </AbsoluteFill>
   );

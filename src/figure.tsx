@@ -23,7 +23,59 @@ export type Pose = {
   legFarHip: number; legFarKnee: number;
   bob: number;
 };
-export type Expr = {brow: number; browRaise: number; lid: number; mouth: 'neutral' | 'flat' | 'frown' | 'open' | 'smirk' | 'tight'; look: number};
+export type Expr = {brow: number; browRaise: number; lid: number; mouth: Mouth; look: number};
+
+/**
+ * The mouth shapes. `'smile'` is NEW (2026-08-17) and it is the only shape that curves upward.
+ *
+ * It exists because `'neutral'` used to BE the smile: every shape had an explicit branch except
+ * `'neutral'`, which fell through to a `Q` curve with its control point BELOW the corners — an
+ * unmistakable grin. `FACES.neutral` and `FACES.earnest` both carry `mouth: 'neutral'`, so the two
+ * news anchors reporting the $50bn fraud (t120 f20071) and DiPascali's death (t153 f26653) grinned
+ * through both beats, as did the courtroom gallery at the guilty plea (t127) and the pair in the
+ * living room over Mark Madoff's suicide (t143). This is the SAME class of bug the `'flat'` branch
+ * above was added to fix; that fix patched one caller out of the default instead of the default.
+ *
+ * `'neutral'` is now a small level line — the reference's resting mouth (bible §5, "a small mouth
+ * line"). A figure smiles only when a call site asks for `'smile'`, and `mood` (below) can veto even
+ * that. Nothing in the codebase asks for it today, which is the point: on a noirish explainer the
+ * default face must not be pleased.
+ */
+export type Mouth = 'neutral' | 'flat' | 'frown' | 'open' | 'smirk' | 'tight' | 'smile';
+
+/**
+ * PER-SCENE EMOTIONAL REGISTER (QA_WATCH item 6).
+ *
+ *   - `neutral` — the DEFAULT, and the register this format is written in ("straight and noirish,
+ *                 held throughout", content.py header). An unmotivated smile is suppressed; every
+ *                 other expression a call site asks for is passed through untouched.
+ *   - `grim`    — a death, a sentencing, a ruin. Nothing pleasant survives: smile/smirk/neutral all
+ *                 harden to `flat`, and the perky brow-raise is capped below the threshold that
+ *                 draws brows at all. `frown`, `tight` and `open` (shock) pass through — those are
+ *                 the right faces for a grim beat.
+ *   - `bright`  — an explicit opt-in for the rare scene that is genuinely up. Passes everything.
+ *
+ * A scene sets it by wrapping its art in `<MoodProvider mood="grim">`; a single figure can override
+ * with `mood=`. Both are optional and both default to `neutral`, so an untouched call site renders
+ * exactly what it renders today — minus the smile it never asked for.
+ */
+export type Mood = 'neutral' | 'grim' | 'bright';
+
+export const MoodContext = React.createContext<Mood>('neutral');
+export const MoodProvider: React.FC<{mood: Mood; children?: React.ReactNode}> = ({mood, children}) => (
+  <MoodContext.Provider value={mood}>{children}</MoodContext.Provider>
+);
+
+/** Applies a scene's register to one expression. Pure, exported so a template can reason about it. */
+export function moodExpr(expr: Expr, mood: Mood): Expr {
+  if (mood === 'bright') return expr;
+  if (mood === 'neutral') return expr.mouth === 'smile' ? {...expr, mouth: 'neutral'} : expr;
+  if (mood !== 'grim') {
+    throw new Error(`unknown mood ${JSON.stringify(mood)} — expected 'neutral', 'grim' or 'bright'`);
+  }
+  const soft = expr.mouth === 'smile' || expr.mouth === 'smirk' || expr.mouth === 'neutral';
+  return {...expr, mouth: soft ? 'flat' : expr.mouth, browRaise: Math.min(expr.browRaise, 0.12)};
+}
 /**
  * A palette separates the two things a figure is made of (WO-2c):
  *   - `limb`  — the LINEWORK colour. Every stroke on the figure: silhouette outline, limb sticks,
@@ -156,7 +208,13 @@ const Face: React.FC<{cx: number; cy: number; hw: number; hh: number; expr: Expr
   // 'flat' MUST be a dead-straight line (hardened/hollow/cold). Before this branch it fell
   // through to the smiling default, which put a faint pleasant smile on every late-arc face.
   else if (expr.mouth === 'flat') mouth = <line x1={cx - mw * 0.4} y1={my} x2={cx + mw * 0.4} y2={my} stroke={ink} strokeWidth={ms} strokeLinecap="round" />;
-  else mouth = <path d={`M ${cx - mw * 0.4} ${my} Q ${cx} ${my + hh * 0.06} ${cx + mw * 0.4} ${my}`} fill="none" stroke={ink} strokeWidth={ms} strokeLinecap="round" />;
+  // The ONLY upward curve, and it is now opt-in. See the `Mouth` note: this branch used to be the
+  // fallthrough, so it was also what 'neutral' drew — every default face in the episode was smiling.
+  else if (expr.mouth === 'smile') mouth = <path d={`M ${cx - mw * 0.4} ${my} Q ${cx} ${my + hh * 0.06} ${cx + mw * 0.4} ${my}`} fill="none" stroke={ink} strokeWidth={ms} strokeLinecap="round" />;
+  // 'neutral' — and the fallthrough, so no unrecognised value can smile again. A small level line:
+  // shorter and lighter than 'flat' (settled/hard) and than 'tight' (clenched), so the three still
+  // read apart, but with no curvature in either direction.
+  else mouth = <line x1={cx - mw * 0.30} y1={my} x2={cx + mw * 0.30} y2={my} stroke={ink} strokeWidth={ms * 0.85} strokeLinecap="round" />;
 
   return (<g>
     {eye(-eyeDX, 'el')}{eye(eyeDX, 'er')}
@@ -189,7 +247,7 @@ export function episodeCostume(): Costume {
   for (const [re, name] of COSTUME_HINTS) if (re.test(topic)) return name;
   return 'suit';
 }
-type CostumeSkin = {body: string; accent: string; collar: string; hair: string; hairStyle: 'crop' | 'mop' | 'tuft'};
+export type CostumeSkin = {body: string; accent: string; collar: string; hair: string; hairStyle: 'crop' | 'mop' | 'tuft'};
 export const COSTUMES: Record<Exclude<Costume, 'none'>, CostumeSkin> = {
   suit:    {body: '#202337', accent: '#c9243f', collar: '#ffffff', hair: '#111111', hairStyle: 'mop'},   // founder/finance/mob
   uniform: {body: '#3c4a33', accent: '#d4af37', collar: '#cdd3bd', hair: '#171717', hairStyle: 'crop'},  // military/regime
@@ -198,6 +256,63 @@ export const COSTUMES: Record<Exclude<Costume, 'none'>, CostumeSkin> = {
   street:  {body: '#33383f', accent: '#b8342b', collar: '#9aa0a8', hair: '#15100c', hairStyle: 'mop'},   // cartel/survival
   field:   {body: '#6b5433', accent: '#2f4a2a', collar: '#cbbb95', hair: '#2a1c10', hairStyle: 'tuft'},  // explorer/worker
 };
+
+// ---------------------------------------------------------------------------
+// CAST SLOTS (QA_WATCH item 8, 2026-08-17). "Every named person is drawn as Madoff."
+//
+// `episodeCostume()` resolves ONE wardrobe from the topic and hands it to every figure in the
+// episode as a default, so the hero, Harry Markopolos (t074 f12576), Peter Madoff (t141 f24093) and
+// Mark Madoff (t143 f24488) all rendered as the same black-haired man in the same navy suit with the
+// same red tie — and t007/t043/t117/t133 seated two of him side by side on one sofa, which reads as
+// a cloning bug rather than as two people. The explainer format names several people per episode, so
+// one wardrobe per episode is a structural limit, not a palette nit.
+//
+// A CAST SLOT is a second axis on top of the costume. The costume still says what KIND of person
+// this is (finance/military/medical — chosen once, from the topic); the slot says WHICH person.
+// Slot 0 is the lead and is byte-identical to `COSTUMES[costume]`, so every figure that does not ask
+// for a slot renders exactly as it did before this change.
+//
+// The three cues are the ones that survive at our in-frame size (~10% of frame width): hair COLOUR,
+// hair SHAPE, and the tie. The suit body moves too, but only within the muted band the restyle is
+// scored on — measured saturation of the alternates' body fills is 0.18 and 0.31 against the
+// reference suit's 0.42, so an alternate never becomes the brightest thing in the frame.
+const CAST_ALTERNATES: ReadonlyArray<Pick<CostumeSkin, 'body' | 'accent' | 'hair' | 'hairStyle'>> = [
+  // slot 1 — older, greying, cropped; cold slate suit, muted teal tie
+  {body: '#3c4149', accent: '#3f6b63', hair: '#8d8377', hairStyle: 'crop'},
+  // slot 2 — brown-haired, shaggier; warm taupe suit, muted gold tie
+  {body: '#4a4033', accent: '#a8823c', hair: '#5d4327', hairStyle: 'tuft'},
+];
+/** How many distinguishable people one episode can stage. Slot 0 is the lead. */
+export const CAST_SLOTS = CAST_ALTERNATES.length + 1;
+
+/**
+ * The wardrobe for one member of the cast. `cast` 0 returns the episode's lead wardrobe unchanged.
+ * Throws on an out-of-range slot rather than wrapping — a scene asking for a fourth person is a
+ * content error, and silently re-using person #1 is exactly the defect this exists to fix.
+ */
+export function castCostume(costume: Costume, cast = 0): CostumeSkin | null {
+  if (costume === 'none') return null;
+  if (!Number.isInteger(cast) || cast < 0 || cast >= CAST_SLOTS) {
+    throw new Error(
+      `cast slot ${cast} is out of range — there are ${CAST_SLOTS} slots (0 = the lead, ` +
+        `1..${CAST_SLOTS - 1} = the other named people in the episode)`
+    );
+  }
+  const base = COSTUMES[costume];
+  return cast === 0 ? base : {...base, ...CAST_ALTERNATES[cast - 1]};
+}
+
+/**
+ * A scene declares WHOSE scene it is by wrapping its art in `<CastProvider cast={n}>`; every figure
+ * inside that does not name its own slot picks it up. That is the per-scene selector QA asked for:
+ * one value on the scene record, one wrapper at the scene layer, no template rewrites.
+ *
+ * Default 0 keeps every existing frame identical.
+ */
+export const CastContext = React.createContext<number>(0);
+export const CastProvider: React.FC<{cast: number; children?: React.ReactNode}> = ({cast, children}) => (
+  <CastContext.Provider value={cast}>{children}</CastContext.Provider>
+);
 
 // ---------------------------------------------------------------------------
 // LOCALISED IDLE (WO-14). CRAYON_BIBLE §3 locks the camera; it does NOT freeze the picture — the
@@ -308,14 +423,33 @@ export const StickFigure: React.FC<{
    * Never pass its live position. It also seeds the blink and the gaze, for the same reason.
    */
   seed?: number;
+  /**
+   * WHICH PERSON this is (QA_WATCH item 8). 0 = the episode's lead, 1..CAST_SLOTS-1 = the other
+   * named people. Omitted, it falls back to the enclosing `CastProvider`, and with no provider to 0
+   * — so every existing call site is unchanged. See `castCostume`.
+   */
+  cast?: number;
+  /**
+   * This figure's emotional register (QA_WATCH item 6). Omitted, it falls back to the enclosing
+   * `MoodProvider`, and with no provider to `'neutral'`. See `Mood`.
+   */
+  mood?: Mood;
   /** Accepted and ignored — the sketch filter is gone (see the header note). Kept so call sites compile. */
   rough?: boolean;
 }> = ({
   pose: basePose, x, y, scale = 1, facing = 1, pal = INKPAL, view = 'profile',
-  expr = {brow: 0, browRaise: 0, lid: 0, mouth: 'neutral', look: 0}, frame = 0,
+  expr: exprProp = {brow: 0, browRaise: 0, lid: 0, mouth: 'neutral', look: 0}, frame = 0,
   showFace = true, briefcase = false, lineW = STROKE, costume = episodeCostume(), idle = 'idle',
-  idleGain = 1, seed: idProp,
+  idleGain = 1, seed: idProp, cast: castProp, mood: moodProp,
 }) => {
+  // Identity and register both resolve prop -> scene -> default, in that order. Both defaults are
+  // the no-op, so a template that names neither renders what it rendered before. Both contexts are
+  // read UNCONDITIONALLY — `castProp ?? useContext(...)` would short-circuit the hook away on any
+  // figure that names its own slot, which is a conditional hook call.
+  const sceneCast = React.useContext(CastContext);
+  const sceneMood = React.useContext(MoodContext);
+  const castSlot = castProp ?? sceneCast;
+  const expr = moodExpr(exprProp, moodProp ?? sceneMood);
   const front = view === 'front';
   // Seeded off the figure's own staged position, so two figures in one row are never in phase and
   // the same figure animates identically on every machine and every re-render. A figure that MOVES
@@ -379,7 +513,7 @@ export const StickFigure: React.FC<{
   // --- costume geometry: a filled torso wrapped around the EXISTING spine line, so the pose
   //     rig is untouched. Built from the spine vector so it leans/bobs with the body. The shape
   //     is the reference's bell: rounded shoulders, flaring slightly WIDER at the hem. ---
-  const dressed = costume !== 'none' ? COSTUMES[costume] : null;
+  const dressed = castCostume(costume, castSlot);
   const skin = dressed && crowd ? {...CROWD_SKIN, hairStyle: dressed.hairStyle} : dressed;
   const bodyFill = skin ? skin.body : (crowd ? CROWD_FILL : PAPER_WHITE);
   const torso = (() => {
@@ -478,6 +612,116 @@ export const StickFigure: React.FC<{
       {bone(hipN, kneeN, limbW, ink, 'nl1')}{bone(kneeN, footN, limbW, ink, 'nl2')}{foot(kneeN, footN, 'nf')}
       {bone(shoulder, elbowN, limbW, ink, 'na1')}{bone(elbowN, handN, limbW, ink, 'na2')}{hand(handN, 'nh')}
       {briefcase && <rect x={handN.x - 26} y={handN.y + 4} width={52} height={38} rx={3} fill={skin ? skin.body : PAPER_WHITE} stroke={ink} strokeWidth={lineW} />}
+    </g>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// THE OVER-THE-SHOULDER NEAR PLANE (QA_WATCH item 5, 2026-08-17).
+//
+// WHAT WAS WRONG. `setdressing.OverShoulder` — the shape `foreground.tsx` used to paint — is a
+// single `fill="#0a0a0a"` group with no stroke and no interior line: a black circle on a black mass.
+// It has no rim, no hairline, no collar, no ear, so at t026/t058/t096/t100b/t115/t148 it reads as an
+// unidentifiable blob rather than as the back of somebody's head. And it was BIG: 560 units of
+// extent (29% of frame width) rising ~490 units (45% of frame height), which at t058 f9647 put its
+// head straight over Madoff's face and left a sliver of cheek showing past it.
+//
+// TWO FIXES, and the second is the one that matters.
+//
+// 1. DETAIL. A light keyline round the silhouette, a hair edge and an ear on the side facing the
+//    subject, and a collar notch with a shoulder seam. The head is the SAME rounded-rect skull the
+//    `StickFigure` draws, not a circle, so the near plane is recognisably a person from this show
+//    rather than a shape. Still flat vector, still one flat tone, no gradients — the separation is
+//    all stroke, which is how every other shape in this codebase separates from its neighbour.
+//
+// 2. IT CANNOT REACH A FACE. The mass is bounded by construction, not by the caller's judgement:
+//    it rises at most 32% of frame height and never crosses 0.68 of frame height. That ceiling is
+//    the real fix. `foreground.tsx` takes the SIDE from a content field, and content picked `right`
+//    for t058 — whose hero stands at the right — so no amount of good taste at the call site was
+//    going to keep it off him. Measured on f9647: the hero's head box runs y 565–715 and the
+//    ceiling is 734, so the near plane now passes in front of his SUIT — which is what a near plane
+//    is for — and cannot touch a staged face on any template, on either side.
+//
+//    The head is capped with it: 2×hr = 0.60×rise = 208 units, 10.8% of frame width. The shoulder
+//    base is wider (28%) because a shoulder narrower than its own head reads as a post, and a
+//    shoulder cannot occlude a face when it lives entirely under the ceiling. Total inked area
+//    drops from ~13% of frame to ~6%.
+//
+// It stays out of `director.FramedScene`'s crop for the reason `foreground.tsx` documents: it is
+// painted at native frame scale over the cut, so a 2.2x closeup does not blow it up.
+const OTS_FRAME_W = 1920;
+const OTS_FRAME_H = 1080;
+/** How far the shoulder reaches in from its frame edge. `scale` may shrink it, never grow it. */
+const OTS_SHOULDER_MAX = OTS_FRAME_W * 0.28;
+const OTS_RISE_MAX = OTS_FRAME_H * 0.32;
+/** The line the near plane may never cross. Every staged hero's chin sits above it. */
+const OTS_CEILING = OTS_FRAME_H * 0.68;
+/** Below this the mass is a smudge in the corner rather than a near plane. */
+const OTS_RISE_MIN = 150;
+/** Near-black, and the SAME value the old silhouette used — the mass itself is not the defect. */
+const OTS_MASS = '#0a0a0a';
+/** The keyline. Paper, not white: it is the light the room is lit by, not a highlight. */
+const OTS_RIM = PAPER;
+
+export const OverShoulderFigure: React.FC<{side: 'left' | 'right'; y?: number; scale?: number}> =
+({side, y = OTS_FRAME_H, scale = 1}) => {
+  if (side !== 'left' && side !== 'right') {
+    throw new Error(`OverShoulderFigure: side must be 'left' or 'right', got ${JSON.stringify(side)}`);
+  }
+  const dir = side === 'right' ? -1 : 1;
+  const x0 = side === 'right' ? OTS_FRAME_W : 0;
+  const E = OTS_SHOULDER_MAX * Math.min(scale, 1);
+  const rise = Math.min(OTS_RISE_MAX * scale, OTS_RISE_MAX, y - OTS_CEILING);
+  if (!(rise >= OTS_RISE_MIN)) {
+    throw new Error(
+      `OverShoulderFigure: baseline y=${y} at scale ${scale} leaves only ${Math.round(rise)} units ` +
+        `of mass under the ${OTS_CEILING}-unit face ceiling (minimum ${OTS_RISE_MIN}) — the near ` +
+        `plane must stand on the bottom edge of the frame`
+    );
+  }
+
+  // The head is sized off the VERTICAL budget, so the ceiling governs it directly.
+  const hr = rise * 0.30;
+  const top = y - rise;                     // the highest the mass reaches — at or below OTS_CEILING
+  const hx = x0 + dir * hr * 1.45;          // head centre, tucked into the corner
+  const hy = top + hr * 1.14;
+  const nk = hy + hr * 0.95;                // the shoulder crosses the lower skull, hiding the neck
+  const out = x0 + dir * E;                 // where the shoulder line reaches the floor
+
+  // shoulder + upper arm, sloping from the frame edge out past the head
+  const shoulder = `M ${x0} ${y}
+    L ${x0} ${nk + hr * 0.62}
+    Q ${x0 + dir * hr * 0.35} ${nk + hr * 0.06} ${hx - dir * hr * 0.68} ${nk}
+    L ${hx + dir * hr * 0.68} ${nk}
+    Q ${x0 + dir * E * 0.62} ${nk + hr * 0.50} ${out} ${y} Z`;
+  // hair edge — the line in front of the ear on a head turned away. This is the "hint of hair".
+  const hairEdge = `M ${hx + dir * hr * 0.08} ${hy - hr * 1.06}
+    Q ${hx + dir * hr * 0.52} ${hy - hr * 0.24} ${hx + dir * hr * 0.36} ${hy + hr * 0.72}`;
+  // ear, between the hair edge and the inner rim
+  const earX = hx + dir * hr * 0.68, earY = hy + hr * 0.02;
+  // collar notch off the neck, and the shoulder seam running out from it
+  const collar = `M ${hx - dir * hr * 0.56} ${nk + hr * 0.26}
+    L ${hx - dir * hr * 0.06} ${nk + hr * 0.74} L ${hx + dir * hr * 0.46} ${nk + hr * 0.24}`;
+  const seam = `M ${hx + dir * hr * 0.46} ${nk + hr * 0.24}
+    Q ${x0 + dir * E * 0.60} ${nk + hr * 0.92} ${x0 + dir * E * 0.82} ${y}`;
+
+  const rim = {fill: 'none', stroke: OTS_RIM, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const};
+  const head = {x: hx - hr, y: hy - hr * 1.14, width: hr * 2, height: hr * 2.28, rx: hr * 0.62, ry: hr * 0.62};
+  return (
+    <g>
+      {/* head first, then the shoulder painted over its lower half, so the two read as one mass */}
+      <rect {...head} fill={OTS_MASS} />
+      <rect {...head} {...rim} strokeWidth={STROKE * 0.9} opacity={0.45} />
+      <path d={shoulder} fill={OTS_MASS} />
+      {/* the keyline — the silhouette's own edge, so it stops being a hole in the picture */}
+      <path d={shoulder} {...rim} strokeWidth={STROKE * 0.9} opacity={0.45} />
+      {/* interior: hair edge, ear, collar, shoulder seam */}
+      <g {...rim} strokeWidth={STROKE_THIN * 0.9} opacity={0.34}>
+        <path d={hairEdge} />
+        <ellipse cx={earX} cy={earY} rx={hr * 0.17} ry={hr * 0.27} />
+        <path d={collar} />
+        <path d={seam} />
+      </g>
     </g>
   );
 };
