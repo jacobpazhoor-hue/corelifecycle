@@ -219,11 +219,55 @@ except Exception: print(999)" "$LASTPOST" 2>/dev/null || echo 999)
     echo "last publish : $LASTPOST  (${DARK} day(s) ago)"
     echo "last run     : $STATUS — $STATUS_MSG"
     echo "last log     : $LOG"
+    [ "$STATUS" = "HALT-AUTH" ] && echo "ACTION REQUIRED: the Claude CLI session has EXPIRED. Run:  $CLAUDE /login  — no episode can be written until you do."
   } > runs/CHANNEL_STATUS.txt 2>/dev/null
-  if [ "$STATUS" != "PUBLISHED" ] && [ "${DARK:-999}" -ge 1 ] 2>/dev/null; then
+  # --- ALERT, WITH ESCALATION (2026-08-23) -----------------------------------------------------
+  # 2026-08-20..22 wrote FOUR byte-identical ALERT lines, two hours apart, for a Claude CLI session
+  # that had expired. Each repeat carried LESS information than the last, and the one fact the
+  # reader needed — "this cannot fix itself, a human has to act" — was the one fact never stated.
+  # Two changes: (1) a condition that cannot self-heal (STATUS=HALT-AUTH) alerts on the FIRST run,
+  # not only once the channel is already a day dark, and shouts in a format nobody can mistake for
+  # a content problem; (2) consecutive IDENTICAL alerts are counted and the wording escalates
+  # instead of repeating. The key deliberately drops the trailing "See runs/autopilot/<log>" so the
+  # same failure at a different timestamp still counts as the same failure.
+  local ALERT_NOW=0 ASOUND="Basso" ATITLE="⚠️ CoreLifecycle needs attention"
+  if [ "$STATUS" != "PUBLISHED" ] && [ "${DARK:-999}" -ge 1 ] 2>/dev/null; then ALERT_NOW=1; fi
+  if [ "$STATUS" = "HALT-AUTH" ]; then ALERT_NOW=1; ASOUND="Sosumi"; ATITLE="🔴 CoreLifecycle: LOGIN REQUIRED"; fi
+  if [ "$ALERT_NOW" = 1 ]; then
+    local AS="runs/autopilot/.alert_state" AKEY ACOUNT AFIRST APREV RPT
+    AKEY="$STATUS|${STATUS_MSG%% See runs/*}"
+    APREV="$(sed -n 1p "$AS" 2>/dev/null)"
+    if [ "$AKEY" = "$APREV" ]; then
+      ACOUNT="$(sed -n 2p "$AS" 2>/dev/null)"
+      case "$ACOUNT" in ''|*[!0-9]*) ACOUNT=1 ;; esac
+      ACOUNT=$(( ACOUNT + 1 ))
+      AFIRST="$(sed -n 3p "$AS" 2>/dev/null)"
+    else
+      ACOUNT=1; AFIRST=""
+    fi
+    [ -n "$AFIRST" ] || AFIRST="$(date '+%Y-%m-%d %H:%M')"
+    printf '%s\n%s\n%s\n' "$AKEY" "$ACOUNT" "$AFIRST" > "$AS" 2>/dev/null
+    RPT=""
+    [ "$ACOUNT" -ge 2 ] && RPT=" [REPEAT #${ACOUNT}, unchanged since ${AFIRST}]"
+    [ "$ACOUNT" -ge 3 ] && RPT="${RPT} [ESCALATED — ${ACOUNT} identical failures in a row since ${AFIRST}: this is NOT self-healing, the catchup cannot fix it, a human has to act]"
     local MSG="CoreLifecycle DARK ${DARK}d — last run $STATUS: $STATUS_MSG"
-    echo "$(date '+%Y-%m-%d %H:%M') ALERT $MSG (see $LOG)" >> runs/autopilot/ALERTS.log
-    osascript -e "display notification \"$MSG\" with title \"⚠️ CoreLifecycle needs attention\" sound name \"Basso\"" 2>/dev/null
+    if [ "$STATUS" = "HALT-AUTH" ]; then
+      { echo "================================================================================"
+        echo "$(date '+%Y-%m-%d %H:%M')  ACTION REQUIRED — CLAUDE CLI SESSION EXPIRED${RPT}"
+        echo "  The agent NEVER RAN. This is NOT a content problem and NOT a code fault."
+        echo "  FIX (operator action, one command):   $CLAUDE /login"
+        echo "  Nothing can be written, reviewed or published until that is done, and the"
+        echo "  2-hourly catchup will fail identically every 2h until it is."
+        echo "  channel dark: ${DARK} day(s)   last publish: ${LASTPOST}"
+        echo "  detail: $STATUS_MSG"
+        echo "  log: $LOG"
+        echo "================================================================================"
+      } >> runs/autopilot/ALERTS.log
+      MSG="LOGIN REQUIRED — claude session expired, the agent never ran (dark ${DARK}d)${RPT}"
+    else
+      echo "$(date '+%Y-%m-%d %H:%M') ALERT ${MSG}${RPT} (see $LOG)" >> runs/autopilot/ALERTS.log
+    fi
+    osascript -e "display notification \"$MSG\" with title \"$ATITLE\" sound name \"$ASOUND\"" 2>/dev/null
   fi
   rm -rf "$LOCK" 2>/dev/null  # rm -rf, not rmdir: the lock dir holds a 'started' file (rmdir leaks it)
   [ -n "${GOT_SHARED:-}" ] && rm -rf "$SHARED_LOCK" 2>/dev/null  # release shared lock only if WE hold it
@@ -383,11 +427,29 @@ review() {
   # one in the pipeline (mean $8.97), sharing an account with interactive work. With verdict.json
   # pruned above, a failure here can no longer be papered over by the previous run's verdict — but
   # say so out loud rather than letting decision()'s reject default explain it as a bad episode.
-  "$CLAUDE" --print --model sonnet "$(cat docs/REVIEW_PROMPT.txt)" \
-    || { notify "HALT" "reviewer agent FAILED (non-zero exit) — there is NO verdict for this render. NOT publishing unreviewed, and NOT acting on a previous run's verdict (which is what used to happen). Catchup retries in 2h. See $LOG"; exit 0; }
+  local REVIEW_OUT="runs/autopilot/reviewer_$(date +%H%M%S).txt" REVIEW_RC
+  "$CLAUDE" --print --model sonnet "$(cat docs/REVIEW_PROMPT.txt)" 2>&1 | tee "$REVIEW_OUT"
+  REVIEW_RC=${pipestatus[1]}
+  if [ "${REVIEW_RC:-1}" != 0 ]; then
+    # Same distinction as step 1a: an agent that could not START is an operator problem with a
+    # one-command remedy, and saying so beats a generic "reviewer agent FAILED" that reads like the
+    # reviewer had an opinion. The episode stays OWED here — it is built, rendered and unjudged.
+    if _auth_failure "$REVIEW_OUT"; then
+      notify "HALT-AUTH" "CLAUDE CLI SESSION EXPIRED — the reviewer agent could not start, so there is NO verdict for this render. Run  $CLAUDE /login  on this Mac; nothing else is wrong. The episode is built, rendered and still owed (runs/owed_episode.txt), so the catchup re-reviews these same bytes once the session is restored. The agent said: $(_agent_error_line "$REVIEW_OUT") . See $LOG"
+    else
+      notify "HALT" "reviewer agent FAILED (exit $REVIEW_RC) — there is NO verdict for this render. NOT publishing unreviewed, and NOT acting on a previous run's verdict (which is what used to happen). The agent said: $(_agent_error_line "$REVIEW_OUT") . Catchup retries in 2h. See $LOG"
+    fi
+    exit 0
+  fi
   [ -s out/review/verdict.json ] || { notify "HALT" "reviewer agent exited 0 but wrote no out/review/verdict.json — there is NO verdict for this render. NOT publishing. See $LOG"; exit 0; }
 }
-decision() { python3 -c "import json;print(json.load(open('out/review/verdict.json')).get('decision','reject'))" 2>/dev/null || echo reject; }
+# 'unreadable' is NOT 'reject' (2026-08-23). This used to print `reject` whenever the python call
+# failed — i.e. it turned a FILE/PARSE failure into a REVIEWER VERDICT, and the run then reported
+# "reviewer decision='reject' — left for human" about an episode no reviewer had refused. The two
+# have opposite remedies (rewrite the episode vs re-run the reviewer over the same bytes) and
+# opposite consequences for the owed-marker, so they are now told apart. A verdict file that parses
+# but carries no 'decision' key still defaults to reject, as it always has.
+decision() { python3 -c "import json;print(json.load(open('out/review/verdict.json')).get('decision','reject'))" 2>/dev/null || echo unreadable; }
 
 # --- RESOURCE PRECONDITION FOR THE NIGHT (audit R1) ---------------------------------------------
 # Re-measured here rather than reused from the start-of-run line: the shared-lock wait above can
@@ -476,6 +538,26 @@ _research_fp() {   # CONTENT hash, not `ls -l`: a rewrite within the same minute
   find docs/research -type f -name '*.md' -exec shasum {} + 2>/dev/null | sort | shasum | cut -d' ' -f1
 }
 OWED_FILE="runs/owed_episode.txt"
+# --- NOT OWED MEANS NOT ON DISK (2026-08-23) ----------------------------------------------------
+# The marker and out/episode.mp4 are two halves of ONE fact — "there is an episode this channel is
+# still owed" — and until now only one half was ever cleared. 2026-08-19 16:00 failed the FINAL
+# gate, which deleted runs/owed_episode.txt and left a 246 MB built 'madoff' episode sitting in
+# out/. The pipeline then held both beliefs at once: nothing is owed (no marker) AND an unpublished
+# episode exists (file present). Every run after it printed "WRITE A NEW ONE" at the runner while a
+# complete episode sat on disk inviting the creative agent to reuse it — and the short-circuit
+# detector then flagged the agent for doing so. The non-approve path had the identical hole.
+# So both halves are now cleared together, by one function, at every site that decides the episode
+# is not owed. Nothing is lost by deleting the file: render() deletes out/episode.mp4 as its FIRST
+# act on every run that gets that far, so this only kills it EARLIER — before it can be mistaken
+# for work that is owed. The packaging and the review stamp go with it for the same reason: they
+# describe bytes that no longer exist (see package()'s and review()'s own ABSENT-not-STALE rules).
+_disown_episode() {  # $1 = why, for the log
+  local _had=""
+  [ -f out/episode.mp4 ] && _had=" + out/episode.mp4 ($(stat -f%z out/episode.mp4 2>/dev/null) bytes)"
+  rm -f "$OWED_FILE" out/episode.mp4 out/short.mp4 out/thumbnail.png out/upload_kit.json \
+        out/review/reviewed_render.json 2>/dev/null
+  echo "DISOWNED the built episode — $1. Removed $OWED_FILE${_had} + packaging + review stamp, so no later run can find an unpublished episode that nothing claims to owe."
+}
 PRE_TOPIC="$(_topic_on_disk)"
 PRE_RESEARCH="$(_research_fp)"
 OWED_TOPIC="$(cat "$OWED_FILE" 2>/dev/null)"
@@ -491,20 +573,61 @@ if [ "$REUSE_OK" = 1 ]; then
 The runner built the episode now on disk (topic '$PRE_TOPIC') on an earlier run and it failed at render or upload, so it is still owed to the channel. Do NOT rewrite it and do NOT change the topic. Verify docs/research/<slug>.md exists and is sourced, run the step-5 self-checks, get a BUILD OK, then STOP. Skip steps 1-4. Ignore the REUSE/WRITE test in step 0 below — this directive overrides it."
 else
   echo "step 0 decided by the runner: WRITE A NEW ONE (no owed-episode marker for '$PRE_TOPIC')"
+  # Nothing is owed on this branch, so anything left in out/ is stale BY DEFINITION — including a
+  # marker naming a topic that is not the one on disk, or one already in produced_topics. Clear the
+  # contradiction here, before the creative agent can see a built episode it was just told not to
+  # reuse. (See _disown_episode above for why deleting the mp4 costs nothing.)
+  if [ -f out/episode.mp4 ] || [ -n "$OWED_TOPIC" ]; then
+    _disown_episode "the runner decided WRITE A NEW ONE, so the episode/marker left on disk is stale (marker='${OWED_TOPIC:-none}', topic on disk='${PRE_TOPIC:-none}')"
+  fi
   REUSE_DIRECTIVE="RUNNER DIRECTIVE — STEP 0 IS ALREADY DECIDED, DO NOT RE-DECIDE IT: **WRITE A NEW ONE**.
 The episode on disk (topic '$PRE_TOPIC') is NOT owed to the channel. It is a shape reference and nothing more. Ignore the REUSE/WRITE test in step 0 below — this directive overrides it, and REUSE is not available to you on this run.
 You MUST do steps 1-6 in full: pick a NEW subject, write docs/research/<slug>.md for it, and overwrite content.py and ops/episode_meta.json so the topic is NOT '$PRE_TOPIC'.
 Validating, checking or repairing the episode already on disk is NOT this run's work. The runner detects it — if the topic is unchanged and no research file was written, it treats the pass as FAILED and HALTs the night. Writing a fresh episode is the job."
 fi
 
+# --- DID THE AGENT RUN, OR DID IT FAIL TO START? (2026-08-23) -----------------------------------
+# THE DEFECT THIS CLOSES COST FOUR DARK NIGHTS (2026-08-20 -> 08-22). Every one of them ended with
+#   "creative agent SHORT-CIRCUITED: ... it validated the episode already on disk instead of
+#    writing one"
+# and every one of them said, two lines earlier and in the agent's own words:
+#   "Failed to authenticate: OAuth session expired and could not be refreshed"
+#   "creative agent changed no file (rc=1)"
+# The Claude CLI session had expired. The agent NEVER RAN. The short-circuit test then observed
+# "same topic, no new research" — trivially true of a process that never started — and reported a
+# BEHAVIOURAL fault with total confidence. The owner spent four days looking for a bug in the
+# creative agent; the fix was one /login.
+# The detector's premise is "the agent ran and CHOSE to validate instead of write". That premise is
+# false whenever the invocation failed, so the failure case is now separated out and asked FIRST.
+# The runner already had everything it needed to tell them apart — it printed rc=1 — and threw it
+# away. Now it keeps it, and it keeps the agent's own output too, so the alert can quote the reason
+# instead of inventing one.
+_auth_failure() {  # $1 = file holding an agent's own output. TRUE = this was a login/credentials
+                   # failure, i.e. OPERATOR ACTION, not a code fault and not a content fault.
+                   # Patterns are deliberately specific: this channel writes about finance, so a
+                   # bare "401" or "unauthorized" would match an episode script about a scandal.
+  grep -qiE 'failed to authenticate|authentication failed|authentication_error|oauth session expired|oauth token expired|session expired|token expired|please run /login|run /login|invalid api key|api key not found|not logged in|invalid_token|401 unauthorized' "$1" 2>/dev/null
+}
+_agent_error_line() {  # $1 = agent output file -> ONE short line naming the failure, safe to embed
+                       # in a notify()/osascript string (no quotes, backslashes, backticks or $).
+  local _l
+  if [ ! -s "$1" ]; then echo "(the agent produced no output at all)"; return; fi
+  _l="$(grep -m1 -iE 'error|failed|failure|expired|unauthor|forbidden|denied|quota|rate.?limit|timed? ?out|refus|not logged in|ECONN|ENOTFOUND|network' "$1" 2>/dev/null)"
+  [ -n "$_l" ] || _l="$(grep -v '^[[:space:]]*$' "$1" 2>/dev/null | tail -1)"
+  printf '%s' "$_l" | tr -d '\r' | tr '\n' ' ' | tr -d '"\\`$' | cut -c1-300
+}
+
 # 1) CREATIVE — pick topic, research, write content.py + ops/episode_meta.json (per AUTOPILOT_PROMPT)
 echo "--- creative agent ---"
 PRE_FP="$(_work_fingerprint)"
 rm -f runs/build_attempts.txt   # fresh bounded-build budget for this agent (scripts/build_capped.sh)
+# tee, not a bare call: the output still streams into $LOG exactly as before, and step 1a can now
+# read WHY the pass failed instead of guessing from the files it did not write.
+CREATIVE_OUT="runs/autopilot/creative_$(date +%H%M%S).txt"
 "$CLAUDE" --print --model sonnet "$REUSE_DIRECTIVE
 
-$(cat docs/AUTOPILOT_PROMPT.txt)"
-CREATIVE_RC=$?
+$(cat docs/AUTOPILOT_PROMPT.txt)" 2>&1 | tee "$CREATIVE_OUT"
+CREATIVE_RC=${pipestatus[1]}
 POST_FP="$(_work_fingerprint)"
 if [ "$POST_FP" != "$PRE_FP" ]; then
   count_attempt "creative agent wrote to content.py / episode_meta.json / docs/research"
@@ -521,10 +644,32 @@ else
 fi
 echo "creative agent used $(cat runs/build_attempts.txt 2>/dev/null || echo 0) of ${MAX_BUILD_RERUNS:-4} bounded build attempts"
 
-# 1a) SHORT-CIRCUIT DETECTION — see the block above. Ordered AFTER the budget accounting on purpose:
-#     an agent that burned a real session still burns the day's attempt even though we reject its work.
+# 1a) CLASSIFY THE PASS — "DID IT RUN?" BEFORE "HOW DID IT BEHAVE?" (see the block above step 1).
+#     Ordered AFTER the budget accounting on purpose: an agent that burned a real session still
+#     burns the day's attempt even though we reject its work.
 POST_TOPIC="$(_topic_on_disk)"
 POST_RESEARCH="$(_research_fp)"
+CREATIVE_SILENT=0   # the pass left NOTHING behind: no files, no topic change, no new research
+[ "$POST_FP" = "$PRE_FP" ] && [ "$POST_TOPIC" = "$PRE_TOPIC" ] && [ "$POST_RESEARCH" = "$PRE_RESEARCH" ] && CREATIVE_SILENT=1
+
+# CASE 1 — THE AGENT FAILED TO RUN. Non-zero exit, or (belt and braces) a silent pass whose output
+# carries a login failure. Nothing here is a statement about the agent's judgement, so nothing here
+# may be reported as one. The output scan is confined to passes that died or produced nothing:
+# an agent that exited 0 having written an episode did not fail, and its prose is not evidence.
+if [ "${CREATIVE_RC:-1}" != 0 ] || { [ "$CREATIVE_SILENT" = 1 ] && _auth_failure "$CREATIVE_OUT"; }; then
+  CREATIVE_ERR="$(_agent_error_line "$CREATIVE_OUT")"
+  if [ "$CREATIVE_SILENT" = 1 ]; then CREATIVE_LEFT="it wrote nothing at all"
+  else CREATIVE_LEFT="it left PARTIAL edits on disk (content.py / ops/episode_meta.json / docs/research changed), which the daily budget has been charged for"; fi
+  if _auth_failure "$CREATIVE_OUT"; then
+    notify "HALT-AUTH" "CLAUDE CLI SESSION EXPIRED — the creative agent could not start, so no episode was written tonight. This is OPERATOR ACTION, not a code fault and not a content fault: run  $CLAUDE /login  on this Mac. Every run fails here identically until you do, and the 2-hourly catchup cannot fix it. The agent's own output said: $CREATIVE_ERR . See $LOG"
+  else
+    notify "HALT" "creative agent FAILED TO RUN (exit ${CREATIVE_RC:-?}) — $CREATIVE_LEFT, so there is no new episode. This is an AGENT/TRANSPORT failure, NOT a behavioural one (it did not choose to reuse the episode on disk; it never got that far). The agent said: $CREATIVE_ERR . NOT rendering or publishing stale work. Catchup retries in 2h. See $LOG"
+  fi
+  exit 0
+fi
+
+# CASE 2 — THE AGENT RAN (exit 0) AND SHORT-CIRCUITED. Only now is "it validated instead of writing"
+# an honest description of what happened, because only now is it true that the agent ran at all.
 if [ "$REUSE_OK" != 1 ] && [ "$POST_TOPIC" = "$PRE_TOPIC" ] && [ "$POST_RESEARCH" = "$PRE_RESEARCH" ]; then
   notify "HALT" "creative agent SHORT-CIRCUITED: it was told to WRITE A NEW ONE but came back on the same topic ('$POST_TOPIC') with no new or changed research file — it validated the episode already on disk instead of writing one. Treating this as a FAILED creative pass; NOT rendering or publishing stale work. Catchup retries in 2h. See $LOG"
   exit 0
@@ -536,7 +681,7 @@ fi
 #     job retries in 2h with a working agent. Bulletproof anti-duplicate gate.
 NEWTOPIC=$(python3 -c "import json;print(json.load(open('ops/episode_meta.json')).get('topic',''))" 2>/dev/null)
 if ! python3 -c "import json,sys;t='$NEWTOPIC';p=[x['topic'] for x in json.load(open('ops/produced_topics.json'))['produced']];sys.exit(0 if (t and t not in p) else 1)"; then
-  notify "HALT" "creative agent did not advance to a new topic (got '$NEWTOPIC'; already produced/empty) — likely agent failure. NOT re-posting stale content. Catchup will retry."
+  notify "HALT" "creative agent RAN (exit 0) but did not advance to a new topic (got '$NEWTOPIC'; already produced, or empty) — the pass completed and its work is unusable. This is NOT the agent failing to start; that case exits at step 1a with its own message and its own remedy. NOT re-posting stale content. Catchup will retry."
   exit 0
 fi
 echo "creative agent advanced to NEW topic: $NEWTOPIC"
@@ -580,14 +725,27 @@ python3 build.py 2>&1 | tee "$BUILD_OUT"; BUILD_RC=${pipestatus[1]}
 if [ "${BUILD_RC:-1}" != 0 ]; then
   echo "--- build failed — ONE gate-repair pass ---"
   rm -f runs/build_attempts.txt   # the repair agent gets its own fresh bounded-build budget
+  REPAIR_OUT="runs/autopilot/repair_$(date +%H%M%S).txt"; REPAIR_WHY=""
   "$CLAUDE" --print --model sonnet "You are the production team on the CoreLifecycle crayon explainer pipeline. \`python3 build.py\` HALTED. Its output ends:
 
 $(tail -40 "$BUILD_OUT")
 
-Fix ONLY what made it HALT, in content.py and/or ops/episode_meta.json, and keep the SAME TOPIC — the runner has already committed to it and changing it re-posts stale content. Read docs/BIBLE.md §3 and §3a before you touch anything; the bands ARE the format. The usual causes and their ONLY correct fixes: WPM runtime-inclusive too LOW -> USE SHORTER WORDS, and do NOT add words or scenes. This is measured (WO-32): the voice speaks at a near-constant syllable rate, so WPM runtime is set by SYLLABLES PER WORD and nothing else — WPM ≈ K / (syllables per word). DO NOT COUNT SYLLABLES BY HAND AND DO NOT GUESS K: run \`python3 scripts/wpm_predict.py\`, which counts them, prints the predicted WPM, restates the gate band as the syllables-per-word range it implies, and lists the scenes carrying the most excess syllables. Rewrite those scenes' Latinate words as short concrete ones ('lab' not 'laboratory', 'about' not 'approximately', 'he lied' not 'he misrepresented the situation') and re-run it until it predicts inside the band. Adding words raises the runtime with the word count and barely moves the ratio; removing commas makes it SLOWER, not faster (a period pauses longer than a comma). WPM too HIGH -> SPLIT MORE SCENES (measured: same script, 141 scenes = 154.2 WPM, 196 scenes = 152.7 WPM); runtime over 21 min -> cut scenes AND their words; \`template 'None' not in registry\` -> that scene has no \`template=\`, and EVERY scene needs one from the thirteen explainer environments even when a full-screen \`card=\` covers it; a template name not in the registry -> replace it with one of the thirteen (officeFloor, boardroom, exchangeFloor, cityStreet, domesticInterior, newsMontage, bankExterior, courtHearing, factoryFloor, broadcastDesk, crowdQueue, closeUpPortrait, chartBoard); missing/silent audio -> the scene text, not the audio. Do NOT edit gate.py, build.py, gen_voice_edge.py or docs/CRAYON_BIBLE.md, and never widen a band to pass. Then run \`scripts/build_capped.sh\` in the FOREGROUND — it wraps \`python3 build.py\` and is the ONLY build command you may use. It may time out on a big VO re-synth; if it does, run the SAME command again, because every clip already made is cached and each re-run resumes. YOU GET AT MOST ${MAX_BUILD_RERUNS:-4} ATTEMPTS: the wrapper counts them in runs/build_attempts.txt and REFUSES to start another build once they are gone. Stop the moment it prints BUILD OK, or on a failure you cannot act on. If the cap is reached without a BUILD OK, STOP and say plainly that the build did not complete and what the last failure was — do not look for another way to run it. Then STOP."
+Fix ONLY what made it HALT, in content.py and/or ops/episode_meta.json, and keep the SAME TOPIC — the runner has already committed to it and changing it re-posts stale content. Read docs/BIBLE.md §3 and §3a before you touch anything; the bands ARE the format. The usual causes and their ONLY correct fixes: WPM runtime-inclusive too LOW -> USE SHORTER WORDS, and do NOT add words or scenes. This is measured (WO-32): the voice speaks at a near-constant syllable rate, so WPM runtime is set by SYLLABLES PER WORD and nothing else — WPM ≈ K / (syllables per word). DO NOT COUNT SYLLABLES BY HAND AND DO NOT GUESS K: run \`python3 scripts/wpm_predict.py\`, which counts them, prints the predicted WPM, restates the gate band as the syllables-per-word range it implies, and lists the scenes carrying the most excess syllables. Rewrite those scenes' Latinate words as short concrete ones ('lab' not 'laboratory', 'about' not 'approximately', 'he lied' not 'he misrepresented the situation') and re-run it until it predicts inside the band. Adding words raises the runtime with the word count and barely moves the ratio; removing commas makes it SLOWER, not faster (a period pauses longer than a comma). WPM too HIGH -> SPLIT MORE SCENES (measured: same script, 141 scenes = 154.2 WPM, 196 scenes = 152.7 WPM); runtime over 21 min -> cut scenes AND their words; \`template 'None' not in registry\` -> that scene has no \`template=\`, and EVERY scene needs one from the thirteen explainer environments even when a full-screen \`card=\` covers it; a template name not in the registry -> replace it with one of the thirteen (officeFloor, boardroom, exchangeFloor, cityStreet, domesticInterior, newsMontage, bankExterior, courtHearing, factoryFloor, broadcastDesk, crowdQueue, closeUpPortrait, chartBoard); missing/silent audio -> the scene text, not the audio. Do NOT edit gate.py, build.py, gen_voice_edge.py or docs/CRAYON_BIBLE.md, and never widen a band to pass. Then run \`scripts/build_capped.sh\` in the FOREGROUND — it wraps \`python3 build.py\` and is the ONLY build command you may use. It may time out on a big VO re-synth; if it does, run the SAME command again, because every clip already made is cached and each re-run resumes. YOU GET AT MOST ${MAX_BUILD_RERUNS:-4} ATTEMPTS: the wrapper counts them in runs/build_attempts.txt and REFUSES to start another build once they are gone. Stop the moment it prints BUILD OK, or on a failure you cannot act on. If the cap is reached without a BUILD OK, STOP and say plainly that the build did not complete and what the last failure was — do not look for another way to run it. Then STOP." 2>&1 | tee "$REPAIR_OUT"
+  REPAIR_RC=${pipestatus[1]}
+  # The repair agent's exit code used to be discarded, so an agent that never started was reported
+  # one line later as "build/gate/smoke failed after 1 repair pass" — a content verdict on a build
+  # nobody had attempted to repair. Say which of the two actually happened.
+  if [ "${REPAIR_RC:-1}" != 0 ]; then
+    if _auth_failure "$REPAIR_OUT"; then
+      notify "HALT-AUTH" "CLAUDE CLI SESSION EXPIRED — the gate-repair agent could not start, so the failed build was never repaired. Run  $CLAUDE /login  on this Mac. The build failure below is the ORIGINAL one and is NOT why this run stopped. The agent said: $(_agent_error_line "$REPAIR_OUT") . See $LOG"
+      exit 0
+    fi
+    REPAIR_WHY=" — and note the gate-repair agent ITSELF exited ${REPAIR_RC} ($(_agent_error_line "$REPAIR_OUT")), so the build very likely failed for its ORIGINAL reason, unrepaired"
+    echo "!! gate-repair agent exited ${REPAIR_RC} — rebuilding anyway, but expect the same failure"
+  fi
   python3 build.py 2>&1 | tee -a "$BUILD_OUT"; BUILD_RC=${pipestatus[1]}
 fi
-if [ "${BUILD_RC:-1}" != 0 ]; then notify "HALT" "build/gate/smoke failed after 1 repair pass — not rendering. See $LOG"; exit 0; fi
+if [ "${BUILD_RC:-1}" != 0 ]; then notify "HALT" "build/gate/smoke failed after 1 repair pass${REPAIR_WHY} — not rendering. See $LOG"; exit 0; fi
 echo "gate-repair used $(cat runs/build_attempts.txt 2>/dev/null || echo 0) of ${MAX_BUILD_RERUNS:-4} bounded build attempts"
 
 # --- OWED-EPISODE MARKER (see the write-by-default block above) ---------------------------------
@@ -612,12 +770,27 @@ echo "reviewer decision: $DEC"
 tries=0
 while [ "$DEC" = "revise" ] && [ $tries -lt 2 ]; do
   echo "--- reviewer requested revisions (pass $((tries + 1))) ---"
+  REV_OUT="runs/autopilot/revision_$(date +%H%M%S).txt"
   # WO-32: this prompt used to say "keep the same topic + DOODLE style" and pointed at the LEGACY
   # template files (src/scenes.tsx, src/stage.tsx). On a CRAYON episode that actively pushes the
   # video back toward the retired POV/doodle format and edits files the thirteen explainer
   # environments do not live in. The format is third-person crayon (docs/BIBLE.md +
   # docs/CRAYON_BIBLE.md); the art lives in src/explainer.tsx and its helpers.
-  "$CLAUDE" --print --model sonnet "You are the production team. Read out/review/verdict.json (the reviewer's notes) and apply its 'fixes' PRECISELY. READ AND EDIT IN BATCHES: issue 8-12 tool calls in a SINGLE message rather than one per message. Every round-trip re-sends your whole accumulated context, so serial single-call turns cost quadratically — measured, this step runs 101-123 turns at ONE tool call each, which is the most wasteful shape in the pipeline. Batching changes nothing about what you read or edit; open the verdict, content.py, ops/episode_meta.json and the .tsx files you need in one message, and group independent edits together too. FORMAT: this channel is a THIRD-PERSON, PAST-TENSE crayon-style explainer about a real subject — docs/BIBLE.md is the writer canon and docs/CRAYON_BIBLE.md is the measured style spec. Keep the same topic and the same crayon style: never reintroduce the retired second-person POV / doodle format (line art on warm paper, 'Every Level', level ladders, present tense), and never emit a legacy template name from docs/TEMPLATES.md — the episode uses ONLY the thirteen explainer environments (officeFloor, boardroom, exchangeFloor, cityStreet, domesticInterior, newsMontage, bankExterior, courtHearing, factoryFloor, broadcastDesk, crowdQueue, closeUpPortrait, chartBoard). You MAY edit any of: content.py + ops/episode_meta.json (script, scene fields card=/bubbles=/panels=/foreground=/period=, packaging copy), src/explainer.tsx (the thirteen environments), src/setdressing.tsx + src/crayonStyle.ts (shared props, palette, ink), src/textcard.tsx (full-screen cards), src/bubble.tsx (speech balloons / floating dialogue), src/panels.tsx (multi-panel splits), src/director.tsx + src/Video2.tsx (shot framing + overlay layout), src/thumbs.tsx (thumbnail). Do NOT edit gate.py or docs/CRAYON_BIBLE.md, and do not weaken a rule to make the episode fit it. Apply EVERY actionable fix in the verdict (do not skip a fix because of file scope). Then STOP; the runner will rebuild, re-render, and re-review."
+  "$CLAUDE" --print --model sonnet "You are the production team. Read out/review/verdict.json (the reviewer's notes) and apply its 'fixes' PRECISELY. READ AND EDIT IN BATCHES: issue 8-12 tool calls in a SINGLE message rather than one per message. Every round-trip re-sends your whole accumulated context, so serial single-call turns cost quadratically — measured, this step runs 101-123 turns at ONE tool call each, which is the most wasteful shape in the pipeline. Batching changes nothing about what you read or edit; open the verdict, content.py, ops/episode_meta.json and the .tsx files you need in one message, and group independent edits together too. FORMAT: this channel is a THIRD-PERSON, PAST-TENSE crayon-style explainer about a real subject — docs/BIBLE.md is the writer canon and docs/CRAYON_BIBLE.md is the measured style spec. Keep the same topic and the same crayon style: never reintroduce the retired second-person POV / doodle format (line art on warm paper, 'Every Level', level ladders, present tense), and never emit a legacy template name from docs/TEMPLATES.md — the episode uses ONLY the thirteen explainer environments (officeFloor, boardroom, exchangeFloor, cityStreet, domesticInterior, newsMontage, bankExterior, courtHearing, factoryFloor, broadcastDesk, crowdQueue, closeUpPortrait, chartBoard). You MAY edit any of: content.py + ops/episode_meta.json (script, scene fields card=/bubbles=/panels=/foreground=/period=, packaging copy), src/explainer.tsx (the thirteen environments), src/setdressing.tsx + src/crayonStyle.ts (shared props, palette, ink), src/textcard.tsx (full-screen cards), src/bubble.tsx (speech balloons / floating dialogue), src/panels.tsx (multi-panel splits), src/director.tsx + src/Video2.tsx (shot framing + overlay layout), src/thumbs.tsx (thumbnail). Do NOT edit gate.py or docs/CRAYON_BIBLE.md, and do not weaken a rule to make the episode fit it. Apply EVERY actionable fix in the verdict (do not skip a fix because of file scope). Then STOP; the runner will rebuild, re-render, and re-review." 2>&1 | tee "$REV_OUT"
+  REV_RC=${pipestatus[1]}
+  # An unchecked revision agent was the third copy of this bug: if it never started, the loop
+  # rebuilt and RE-RENDERED byte-identical content (2h) and re-reviewed it ($8.97) only to be told
+  # 'revise' again, and the night ended reporting "reviewer decision='revise' after 2 fix passes" —
+  # i.e. blaming the episode for notes that were never applied. If the fixer did not run, say so
+  # and stop; the episode is still owed and the catchup retries it whole.
+  if [ "${REV_RC:-1}" != 0 ]; then
+    if _auth_failure "$REV_OUT"; then
+      notify "HALT-AUTH" "CLAUDE CLI SESSION EXPIRED — the revision agent could not start, so the reviewer's fixes were NEVER APPLIED. Run  $CLAUDE /login  on this Mac. The episode is built, rendered and still owed; nothing is wrong with it that the reviewer's notes do not describe. The agent said: $(_agent_error_line "$REV_OUT") . See $LOG"
+    else
+      notify "HALT" "revision agent FAILED (exit $REV_RC) — the reviewer's fixes were NEVER APPLIED, so re-rendering and re-reviewing identical content would only reproduce the same verdict at the cost of a full render. This is an AGENT failure, not a rejected episode. The agent said: $(_agent_error_line "$REV_OUT") . The episode stays owed; catchup retries in 2h. See $LOG"
+    fi
+    exit 0
+  fi
   if ! python3 build.py; then notify "HALT" "build failed after revision. See $LOG"; exit 0; fi
   render || { notify "FAIL" "render failed after revision${RENDER_WHY:+ — $RENDER_WHY} See $LOG"; exit 1; }
   package
@@ -627,17 +800,36 @@ while [ "$DEC" = "revise" ] && [ $tries -lt 2 ]; do
   tries=$((tries + 1))
 done
 
+if [ "$DEC" = "unreadable" ]; then
+  # NOT a rejection: out/review/verdict.json exists (review() asserts it) but does not parse. The
+  # episode has not been judged, so it is still owed and its marker and bytes both stay put — the
+  # catchup re-reviews exactly these bytes. Before 2026-08-23 this printed decision='reject' and
+  # threw the episode away over a JSON parse error.
+  notify "HALT" "out/review/verdict.json could not be PARSED — there is no readable verdict for this render. That is a file/agent failure, NOT a rejection of this episode (it used to be reported as decision='reject'). Keeping the built episode and its owed marker so the catchup re-reviews the same bytes. See $LOG"
+  exit 0
+fi
 if [ "$DEC" != "approve" ]; then
-  # The reviewer refused this episode: it is NOT owed to the channel. Drop the marker so tomorrow's
-  # run writes a fresh one instead of REUSING work that was judged not good enough.
-  rm -f "$OWED_FILE"
-  notify "HALT" "reviewer decision='$DEC' after $tries fix pass(es). NOT publishing — left for human."
+  # The reviewer refused this episode: it is NOT owed to the channel. Drop the marker AND the
+  # episode itself so tomorrow's run writes a fresh one instead of REUSING work that was judged not
+  # good enough — leaving the mp4 behind is what created the 08-20 contradiction (see
+  # _disown_episode). A rejected episode is to be rewritten, not re-shipped.
+  _disown_episode "the reviewer returned '$DEC', so this episode is not owed to the channel"
+  notify "HALT" "reviewer decision='$DEC' after $tries fix pass(es). NOT publishing — left for human. The built episode and its owed marker have both been cleared, so the next run writes a fresh one (it is NOT left on disk to be reused)."
   exit 0
 fi
 echo "reviewer APPROVED ✅"
 
 # 5) FINAL FILE GATE — packaging (thumbnail + upload_kit.json) already matches the approved episode
-python3 gate.py out/episode.mp4 || { rm -f "$OWED_FILE"; notify "HALT" "final gate failed — not publishing. See $LOG"; exit 0; }
+# THE EPISODE IS NOT OWED IF THIS FAILS, AND IT DOES NOT STAY ON DISK EITHER (2026-08-23).
+# `gate.py out/episode.mp4` re-runs the FULL content gate (timeline, runtime, runtime-WPM, scene
+# count, template registry, staging anchors, still-frame style) and adds exactly one check about
+# the file itself: that it exists and is over 1 MB. So a failure here is a CONTENT verdict on
+# content.py / src/timeline.json, not a render flake — re-rendering the same script would fail the
+# same way, every 2h, forever. Keeping the episode owed would buy an infinite loop of 2-hour
+# renders; keeping the FILE while dropping the marker (what this line used to do) bought four days
+# of the creative agent being blamed for reusing an episode nobody admitted to owning. Neither.
+# It is not owed, so it goes — marker and bytes together — and the next run writes a fresh one.
+python3 gate.py out/episode.mp4 || { _disown_episode "the FINAL gate rejected this episode after approval"; notify "HALT" "final gate failed on the approved render — not publishing. The gate re-checks the SCRIPT (runtime, WPM, scenes, templates, staging, style), so this is a content failure a re-render cannot fix: the built episode and its owed marker have both been cleared and the next run writes a fresh one. See $LOG"; exit 0; }
 
 # 6) PUBLISH
 if grep -q '"autoUpload": *true' ops/routine.json; then
