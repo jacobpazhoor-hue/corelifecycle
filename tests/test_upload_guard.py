@@ -40,6 +40,36 @@ class GuardCase(unittest.TestCase):
     def stamp(self):
         return upload_guard.stamp_review(self.video, root=self.root)
 
+    def audit_ok(self, verdict="pass"):
+        """A PASSING pre-publish audit record bound to the video's CURRENT bytes.
+
+        Since 2026-08-24 the guard requires one (checks 9-13): a reviewer approval proves a human
+        watched these bytes, not that the episode is true. Every test below that expects a CLEAR
+        publish has to satisfy both locks, which is the point.
+        """
+        src = os.path.join(self.root, "content.py")
+        if not os.path.exists(src):
+            with open(src, "w") as fh:
+                fh.write("SCENES = []\n")
+        rec = {
+            "verdict": verdict,
+            "generatedAt": "2026-08-24T00:00:00",
+            "topic": "ftx",
+            "video": os.path.basename(self.video),
+            "sha256": upload_guard.sha256_file(self.video),
+            "size": os.path.getsize(self.video),
+            "sources": {"content.py": upload_guard.sha256_file(src)},
+            "fails": [] if verdict == "pass" else ["a named person's legal status is unsourced"],
+            "warns": [],
+        }
+        path = os.path.join(self.root, "out", "review", "prepublish_audit.json")
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w") as fh:
+            json.dump(rec, fh)
+        # the audit must not be OLDER than the render
+        os.utime(path, (time.time() + 5, time.time() + 5))
+        return path
+
     def check(self):
         return upload_guard.check(self.video, root=self.root, lock=self.lock)
 
@@ -72,6 +102,7 @@ class TestBlocksRenderNewerThanVerdict(GuardCase):
     def test_rerender_after_approval_is_blocked(self):
         self.stamp()
         v = self.verdict("approve")
+        self.audit_ok()
         self.assertEqual(self.check(), [], "sanity: approved render should start clear")
         # the revision agent's fixes land and the runner re-renders
         _render(self.video, b"a-DIFFERENT-render-with-the-facts-fixed")
@@ -95,6 +126,7 @@ class TestAllowsApprovedRender(GuardCase):
     def test_approved_render_passes(self):
         self.stamp()
         self.verdict("approve")
+        self.audit_ok()
         self.assertEqual(self.check(), [])
         upload_guard.assert_publishable(self.video, root=self.root, lock=self.lock)  # no raise
 
@@ -102,6 +134,7 @@ class TestAllowsApprovedRender(GuardCase):
         # the autopilot uploads UNDER runs/.lock; the holder is our own ancestor, so it is allowed
         self.stamp()
         self.verdict("approve")
+        self.audit_ok()
         os.makedirs(self.lock, exist_ok=True)
         with open(os.path.join(self.lock, "holder"), "w") as fh:
             fh.write(str(os.getpid()))
@@ -123,6 +156,7 @@ class TestRunInFlight(GuardCase):
     def test_dead_holder_is_a_stale_lock_not_a_run(self):
         self.stamp()
         self.verdict("approve")
+        self.audit_ok()
         proc = subprocess.Popen([sys.executable, "-c", "pass"])
         proc.wait()
         os.makedirs(self.lock, exist_ok=True)
@@ -182,10 +216,21 @@ class TestEndToEndUploadScript(unittest.TestCase):
                               capture_output=True, text=True, cwd=self.root, timeout=120)
 
     def approve(self):
+        """Both locks: the reviewer's approval AND a passing pre-publish audit (2026-08-24)."""
         subprocess.run([sys.executable, os.path.join(self.root, "scripts", "upload_guard.py"),
                         "stamp", self.video], check=True, capture_output=True, cwd=self.root)
         with open(os.path.join(self.root, "out", "review", "verdict.json"), "w") as fh:
             json.dump({"decision": "approve"}, fh)
+        src = os.path.join(self.root, "content.py")
+        with open(src, "w") as fh:
+            fh.write("SCENES = []\n")
+        path = os.path.join(self.root, "out", "review", "prepublish_audit.json")
+        with open(path, "w") as fh:
+            json.dump({"verdict": "pass", "topic": "ftx", "video": "episode.mp4",
+                       "sha256": upload_guard.sha256_file(self.video),
+                       "sources": {"content.py": upload_guard.sha256_file(src)},
+                       "fails": [], "warns": []}, fh)
+        os.utime(path, (time.time() + 5, time.time() + 5))
 
     def test_rejected_render_never_reaches_youtube(self):
         with open(os.path.join(self.root, "out", "review", "verdict.json"), "w") as fh:

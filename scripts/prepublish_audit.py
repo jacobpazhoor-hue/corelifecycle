@@ -439,11 +439,18 @@ def money_amounts(text):
                          text, re.I):
         val = float(m.group(1).replace(",", ""))
         out.add(val * _MULT.get((m.group(2) or "").lower(), 1))
-    for m in re.finditer(r"((?:[A-Za-z]+[\s\-]+){1,7}?)(thousand|million|billion|trillion)\s+dollars",
+    for m in re.finditer(r"((?:[A-Za-z]+[\s\-]+){1,8}?)(thousand|million|billion|trillion)\s+dollars",
                          text, re.I):
-        n = _words_to_number(re.split(r"[\s\-]+", m.group(1).strip()))
-        if n is not None:
-            out.add(n * _MULT[m.group(2).lower()])
+        # The capture runs back through ordinary prose ("the company was worth nine billion
+        # dollars" captures "the company was worth nine"), so parse the longest TRAILING run of
+        # number words rather than the whole capture. Demanding that every captured token be a
+        # numeral made this silently find nothing at all outside the simplest sentence.
+        words = re.split(r"[\s\-]+", m.group(1).strip())
+        for i in range(len(words)):
+            n = _words_to_number(words[i:])
+            if n is not None:
+                out.add(n * _MULT[m.group(2).lower()])
+                break
     return out
 
 
