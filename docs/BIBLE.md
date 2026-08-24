@@ -373,7 +373,9 @@ At this cut rate the 13-name template list is not enough on its own. What counts
   have. Spend it on reactions and verdicts.
 
 Budget per episode, roughly: 5 chapter cards · 4–6 narration cards · 3–4 word cards · 1–3 object cards ·
-3–4 panel splits · 3–5 over-the-shoulder foregrounds · 5–10 bubble/float beats.
+3–4 panel splits · 3–5 over-the-shoulder foregrounds · 5–10 bubble/float beats. **That is a shopping
+list; the RATE it has to land at, and the cap on any one room, are §8 "THE DEVICE BUDGET" — check both
+on the built timeline, not on your impression of the script.**
 
 ### Two mechanical consequences of short scenes
 
@@ -699,12 +701,19 @@ title, a shop fascia, a lower third, a ticker.
 
 Where those words come from, in order: this field if you set it; otherwise the words the scene
 already says on screen (its `card` title, its `overlay` subtitle, its balloon text); otherwise a
-short per-role lexicon of the format's own furniture words ("THE RECORD", "THE FUND", "GIVE IT BACK"),
+short per-role lexicon of the format's own furniture words ("THE RECORD", "THE FUND", "THE TAPE"),
 which is real English rather than a run of rectangles. Keep entries SHORT — one or two words. They are
 set to a box, so a sentence only shrinks to unreadable.
 
+**That last tier names the OBJECT, never the story**, because it fires exactly when the scene said
+nothing — so every word in it has to be true of the prop under any narration. "THE TRIBUNE" is what a
+newspaper is called whatever the beat; "THE LOSSES" was a claim about the story, and it was in the
+headline pool until 2026-08-24. Placards had a whole pool of claims: see PLACARDS below. If you want
+the picture to assert something, assert it in a field — a scene that says nothing must not have
+something asserted for it.
+
 ```python
-dict(id="t097", template="crowdQueue", labels=["GIVE IT BACK", "WHERE IS IT"])
+dict(id="t093", template="chartBoard", chart="down", labels=["EIGHT LOOKS", "SIXTEEN YEARS"])
 ```
 
 > ✅ **Plumbed end to end** (2026-08-17). `gen_voice_edge.py` copies visual keys into
@@ -714,6 +723,31 @@ dict(id="t097", template="crowdQueue", labels=["GIVE IT BACK", "WHERE IS IT"])
 > timeline and rendering the frame: the chart drew falling and the board read `EIGHT LOOKS` instead of
 > the lexicon's `RETURNS`. If you add another scene field, add it to that tuple in the same commit —
 > a field the renderer reads and the tuple drops is silent, and silent is how this one shipped.
+
+### PLACARDS — what the crowd is holding up, and ONLY if you say so
+
+**`placards=["…", "…"]`, on a `crowdQueue` scene. Optional; up to three. Default: no signs at all.**
+
+`crowdQueue` used to letter its three placards from a grievance pool — GIVE IT BACK · WHERE IS IT ·
+PAY US · ANSWERS NOW · OUR SAVINGS — whenever the scene's own copy gave it nothing to letter. A scene
+with no `card`, no `overlay` and no balloon has nothing to letter, which is most scenes, so the
+fallback fired on **eleven of the ftx episode's eleven `crowdQueue` scenes**. Three of them played
+under growth beats: "new users signed up by the millions", the $40M of donations, and Forbes's
+under-30 ranking — all of them minutes BEFORE the bank run those signs depict.
+
+A queue is legitimately a queue: depositors, sign-ups, a run on the bank. **Only the last of those
+wants slogans**, so slogans are now something a scene asks for. Unset, the template draws the queue
+with nothing over it, which is the one picture that is honest under any line.
+
+```python
+dict(id="t133", template="crowdQueue", mood="grim", placards=["GIVE IT BACK", "WHERE IS IT", "PAY US"])
+```
+
+One entry, one board (left to right, largest last). Keep each to 1–3 words: two words set as two
+lines, which is what both reference placards do ("GIVE US WORK, NOT HUNGER", "WE GOT SOLD OUT").
+**Not `labels=`** — that field also feeds the NAME roles, so grievance copy sent through it letters
+itself across the bank's own frontage and the shopfront fascia. A fourth entry, or anything that is
+not a list of non-empty strings, **raises** with the scene id.
 
 ### MOOD — the emotional register of one beat
 
@@ -755,6 +789,39 @@ bank exterior · street · domestic interior · courtroom · factory · newspape
 crowd · close-up · chart) now all exist as real names above. The three that never became rooms —
 **multi-panel split**, **full-screen text card** and the **over-the-shoulder foreground** — are the
 devices below, and at the §3a cut rate they carry as much of the variety as the rooms do.
+
+### THE DEVICE BUDGET — a rate for the devices, a cap on any one room
+
+§3a budgets the RHYTHM: how often to cut, and how the lengths must spread. This is the same kind of
+budget for the PICTURE: how often it has to change kind, and how much of the episode one room may
+carry. It exists because the ftx episode hit every rhythm number in §3a — median under mean, sd 2.39,
+a 15.4s hold, 22 punches — and still played 43 scenes in one room with nothing in front of it.
+
+A **device scene** is one carrying `card`, `bubbles`, `panels` or `foreground`. Measured on every
+crayon-format episode this pipeline has built, off each one's own `timeline.json`:
+
+| episode | scenes | device scenes | cards/bubbles/panels/fg | longest run with none | most-used room |
+|---|---|---|---|---|---|
+| lehman | 202 | 30 (15%) | 17 / 5 / 4 / 4 | 19 | boardroom 21 (10%) |
+| theranos | 184 | 26 (14%) | 14 / 5 / 3 / 4 | 17 | closeUpPortrait 25 (14%) |
+| madoff | 184 | 28 (15%) | 15 / 5 / 3 / 5 | 16 | closeUpPortrait 27 (15%) |
+| **ftx** | 200 | **16 (8%)** | **11 / 2 / 1 / 2** | **46** | **closeUpPortrait 43 (22%)** |
+
+**Write to this, and measure it on the built timeline:**
+
+- **one device scene in every 8** (≈25 in a 200-scene episode), and every kind spent: **≥12 cards,
+  ≥4 scenes with bubbles, ≥3 panel splits, ≥3 foregrounds**;
+- **never more than 20 scenes in a row carrying none** — the three episodes before ftx never went
+  past 19, and ftx went 46 (t142 onward: the whole trial and aftermath with nothing in front of it);
+- **no room past 1 use in 6** (≈16%). Aim at 1 in 10; 1 in 6 is the wall, not the target.
+  `closeUpPortrait` and `newsMontage` are the two that run away — count those first.
+
+Why these numbers and not stricter ones: they are the floor of what this pipeline has already shipped
+and rendered well, not an ambition. Three consecutive episodes cleared all of them without trying.
+
+**`gate.py` WARNs on each of these and never HALTs on them.** A stylistic budget that blocks
+publishing is worth less than the defect it catches — this project has lost days to guards firing on
+rules the writer was never told. The rule is here first; the check only repeats it.
 
 ### SIGNATURE DEVICES — AVAILABLE TODAY (WO-12a wired them to the renderer)
 

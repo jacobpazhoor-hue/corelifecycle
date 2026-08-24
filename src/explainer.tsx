@@ -149,6 +149,7 @@ type TimelineScene = {
   /** OPT-IN scene fields, `docs/BIBLE.md` §8 */
   chart?: string;
   labels?: string[];
+  placards?: string[];
 };
 
 const SCENE_BY_START = new Map<number, TimelineScene>();
@@ -216,9 +217,42 @@ export type Take = {
   chart: ChartDir;
   /** Item 3: short real words this scene has actually said, in narration order. */
   words: string[];
+  /**
+   * What the crowd in this scene is HOLDING UP, if the writer asked for signs. Empty = no signs, and
+   * empty is the default: see `MAX_PLACARDS` for why this is a field of its own and not a lexicon.
+   */
+  placards: string[];
 };
 
-const DEFAULT_TAKE: Take = {id: '', seed: 0, chart: 'up', words: []};
+const DEFAULT_TAKE: Take = {id: '', seed: 0, chart: 'up', words: [], placards: []};
+
+/**
+ * PLACARDS ARE OPT-IN, AND THEY HAVE NO DEFAULT (2026-08-24).
+ *
+ * `crowdQueue` used to letter its three signs from `LEXICON.placard` — 'GIVE IT BACK', 'WHERE IS
+ * IT', 'PAY US', 'ANSWERS NOW', 'OUR SAVINGS' — whenever the scene's own copy yielded no words. That
+ * fallback fired on ELEVEN of the ftx episode's eleven `crowdQueue` scenes, i.e. every one of them,
+ * because a scene with no card/overlay/balloon has no words to mine. So the template drew a
+ * grievance protest under "new users signed up by the millions", under the $40M of donations, and
+ * under Forbes's under-30 ranking — minutes BEFORE the bank run those signs actually depict. Three
+ * of those shipped; two were caught by moving the scene to another template, and the third was found
+ * in the finished render.
+ *
+ * THE TEMPLATE IS NOT THE BUG. A queue is legitimately a queue — depositors, sign-ups, a bank run —
+ * and only the last of those wants slogans. What was wrong is that the DEFAULT was the most dramatic
+ * reading available, so silence from the writer was rendered as an accusation.
+ *
+ * A placard is not furniture the way a masthead is. A masthead names the building it hangs on
+ * whatever the beat; a placard is a sentence a person in the frame is saying, and there is no
+ * neutral sentence. Hence: no pool, no inference, no fallback. Signs are drawn from `placards=` on
+ * the scene and nowhere else, and a scene without it renders the queue with no signs over it — which
+ * is the one picture that is honest under any line.
+ *
+ * NOT `labels=`: that field feeds `wordsFrom`, which feeds the NAME roles too, so asking for
+ * "GIVE IT BACK" through `labels` also letters it across the bank's own frontage (`masthead`, salt
+ * 5) and the shopfront fascia (salt 43). The register needs its own field or it vandalises the set.
+ */
+const MAX_PLACARDS = 3;
 
 /**
  * `chart` is validated HERE, with the scene id in hand, and RAISES on an unknown value — the same
@@ -233,6 +267,22 @@ const takeFor = (rec: TimelineScene): Take => {
       `${CHART_DIRS.map((d) => `'${d}'`).join(', ')} (docs/BIBLE.md §8 CHART)`
     );
   }
+  // `placards` is validated on the same contract as `chart`: with the scene id in hand, and RAISING.
+  // A malformed value that fell back to "no signs" would be indistinguishable from not asking, which
+  // is precisely the silence this field exists to break.
+  const placards = rec.placards ?? [];
+  if (!Array.isArray(placards) || placards.some((s) => typeof s !== 'string' || !s.trim())) {
+    throw new Error(
+      `${rec.id}: placards must be a list of non-empty strings, got ${JSON.stringify(rec.placards)} ` +
+      `(docs/BIBLE.md §8 PLACARDS)`
+    );
+  }
+  if (placards.length > MAX_PLACARDS) {
+    throw new Error(
+      `${rec.id}: ${placards.length} placards, but crowdQueue holds up ${MAX_PLACARDS} — the extra ` +
+      `copy would be silently dropped (docs/BIBLE.md §8 PLACARDS)`
+    );
+  }
   return {
     id: rec.id,
     seed: hashId(rec.id),
@@ -243,6 +293,7 @@ const takeFor = (rec: TimelineScene): Take => {
     // money arriving; the crash is the exception and now has to be asked for.
     chart: (rec.chart as ChartDir | undefined) ?? 'up',
     words: wordsFrom(rec),
+    placards: placards.map((s) => s.toUpperCase()),
   };
 };
 
@@ -316,16 +367,30 @@ const useVary = (): Vary => varyFor(useTake());
  *
  * It is deliberately SHORT copy. A headline is 1–2 words at this size, and `InkWords` sets to the
  * box, so a long string would only shrink to unreadable.
+ *
+ * TIER 3 NAMES THE OBJECT, NEVER THE STORY (2026-08-24). A scene that says nothing must not make the
+ * picture ASSERT something, and tier 3 fires exactly when the scene said nothing — so every word in
+ * it has to be true of the PROP regardless of the beat it plays under. "THE TRIBUNE" is what a
+ * newspaper is called under any narration; "THE LOSSES" is a claim about the story, and it was in
+ * the headline pool. The pools below are furniture words only. The three that were not are gone:
+ *   · `placard` — DELETED as a role, see `Take.placards`. A placard is a thing a person in the frame
+ *     is SAYING; there is no furniture version of it, so it has no default at all.
+ *   · `headline` — 'THE LOSSES' -> 'THE MARKET', 'THE INQUIRY' -> 'THE ACCOUNTS'. A newsstand under
+ *     a growth beat was one draw away from headlining the crash that had not happened yet.
+ *   · `lowerThird` — 'BREAKING' -> 'THE BULLETIN'. A chyron reading BREAKING over a biography beat
+ *     asserts urgency the line does not have. 'LIVE' stays: it is true of a broadcast desk, and it
+ *     says nothing about the story.
+ * Pool SIZES are unchanged, which matters: `labelRun` steps through the pool, so shrinking `headline`
+ * below 6 would print the same word twice across `newsMontage`'s six documents.
  */
-type LabelRole = 'masthead' | 'headline' | 'placard' | 'chartTitle' | 'ticker' | 'lowerThird';
+type LabelRole = 'masthead' | 'headline' | 'chartTitle' | 'ticker' | 'lowerThird';
 
 const LEXICON: Record<LabelRole, readonly string[]> = {
   masthead: ['THE RECORD', 'THE LEDGER', 'THE TRIBUNE', 'THE HERALD', 'CITY PRESS'],
-  headline: ['THE FUND', 'THE FILING', 'THE AUDIT', 'THE RETURNS', 'THE LOSSES', 'THE INQUIRY'],
-  placard: ['GIVE IT BACK', 'WHERE IS IT', 'PAY US', 'ANSWERS NOW', 'OUR SAVINGS'],
+  headline: ['THE FUND', 'THE FILING', 'THE AUDIT', 'THE RETURNS', 'THE MARKET', 'THE ACCOUNTS'],
   chartTitle: ['RETURNS', 'THE FUND', 'NET FLOWS', 'THE YEARS', 'THE MONEY'],
   ticker: ['MARKET OPEN', 'LAST TRADE', 'THE TAPE', 'VOLUME'],
-  lowerThird: ['THE STORY', 'LIVE', 'THE REPORT', 'BREAKING'],
+  lowerThird: ['THE STORY', 'LIVE', 'THE REPORT', 'THE BULLETIN'],
 };
 
 /**
@@ -339,7 +404,7 @@ const label = (tk: Take, role: LabelRole, salt: number): string => {
   if (words.length > 0) {
     const i = Math.floor(rnd(tk.seed * 1.37 + salt * 5.7 + 2.5) * words.length) % words.length;
     // Two words where the scene has two to spare and the role is a headline-shaped one.
-    if ((role === 'headline' || role === 'placard') && words.length > 1) {
+    if (role === 'headline' && words.length > 1) {
       return `${words[i]} ${words[(i + 1) % words.length]}`;
     }
     return words[i];
@@ -348,8 +413,8 @@ const label = (tk: Take, role: LabelRole, salt: number): string => {
 };
 
 /**
- * `n` labels for one run of identical props (a ticker, a row of signs), guaranteed to STEP through
- * the pool rather than draw from it independently. Four independent draws out of a five-word pool
+ * `n` labels for one run of identical props (a ticker, a wall of documents), guaranteed to STEP
+ * through the pool rather than draw from it independently. Four independent draws out of a five-word pool
  * printed "VOLUME · VOLUME · VOLUME · MARKET OPEN" across the exchange ticker, which reads as a bug.
  */
 const labelRun = (tk: Take, role: LabelRole, n: number, salt: number): string[] => {
@@ -3247,9 +3312,14 @@ const CrowdQueue: React.FC = () => {
   // THE TAKE (item 2) and THE PLACARDS (item 3). QA: "the protest placards at t001c f370 / t097
   // f15984 (three signs, all glyphs, held up as the focal point)". A placard is a thing somebody
   // wrote; it now says something, and the institution's own name board does too.
+  //
+  // ONE SIGN PER ENTRY IN `placards=`, AND NO ENTRIES MEANS NO SIGNS (see `MAX_PLACARDS`). The queue
+  // is the picture; the slogans are a register the scene has to ask for. Everything else in this
+  // frame is unchanged when they are absent, so the queue keeps its own density: three crowd layers,
+  // the shut frontage, the barriers, the street furniture.
   const tk = useTake();
   const v = useVary();
-  const signs = labelRun(tk, 'placard', 3, 3);
+  const signs = tk.placards;
   return (
     <Frame>
       {/* --- A SKY, IN FLAT BANDS (QA_WATCH item 15). The `grey` key's `bg` is a pure neutral by
@@ -3312,16 +3382,22 @@ const CrowdQueue: React.FC = () => {
         scaleNear={1.02} scaleFar={0.36} seed={v.seed(4)} facing={-1} view="profile" alive={0.15}
         expr={FACES.tired} />
       {/* placards over the crowd — the reference carries one in BOTH captured thumbnails, and in
-          both of them it is LETTERED ("GIVE US WORK, NOT HUNGER", "WE GOT SOLD OUT"). */}
-      <Placard x={352 + v.off(6, 40)} y={806} w={158} h={104} tilt={-9 + v.off(7, 4)} poleH={168} seed={v.seed(3)}
-        label={signs[0]} />
-      <Placard x={846 + v.off(8, 50)} y={862} w={190} h={122} tilt={7 + v.off(9, 4)} poleH={196} seed={v.seed(8)}
-        label={signs[1]} />
-      {/* The third placard used to stand at x=1258 with its board at y 592-732, which is exactly
-          where the coloured hero's head is: drawn later, he painted over the bottom line of it. Now
-          it stands right of him and higher, so the board is whole. */}
-      <Placard x={1516 + v.off(10, 40)} y={930} w={224} h={140} tilt={-5 + v.off(11, 4)} poleH={250} seed={v.seed(14)}
-        label={signs[2]} />
+          both of them it is LETTERED ("GIVE US WORK, NOT HUNGER", "WE GOT SOLD OUT"). Drawn only for
+          the entries `placards=` actually carries: one sign, one board. The third slot stood at
+          x=1258 with its board at y 592-732, which is exactly where the coloured hero's head is —
+          drawn later, he painted over its bottom line — so it now stands right of him and higher. */}
+      {signs[0] ? (
+        <Placard x={352 + v.off(6, 40)} y={806} w={158} h={104} tilt={-9 + v.off(7, 4)} poleH={168} seed={v.seed(3)}
+          label={signs[0]} />
+      ) : null}
+      {signs[1] ? (
+        <Placard x={846 + v.off(8, 50)} y={862} w={190} h={122} tilt={7 + v.off(9, 4)} poleH={196} seed={v.seed(8)}
+          label={signs[1]} />
+      ) : null}
+      {signs[2] ? (
+        <Placard x={1516 + v.off(10, 40)} y={930} w={224} h={140} tilt={-5 + v.off(11, 4)} poleH={250} seed={v.seed(14)}
+          label={signs[2]} />
+      ) : null}
 
       {/* --- barriers between the queue and the kerb --- */}
       <Fence x0={40} x1={780} y={840} h={62} posts={11} opacity={0.55} />

@@ -151,6 +151,12 @@ DO, in order:
        `closeUpPortrait` as a genuine cut-in on a reaction. Budget per episode: 5 chapter cards,
        4–6 narration cards, 3–4 word cards, 1–3 object cards, 3–4 panel splits, 3–5 foregrounds,
        5–10 bubble/float beats.
+     • THE DEVICE BUDGET (BIBLE.md §8) — the rate that shopping list has to land at. COUNT IT ON THE
+       BUILT TIMELINE: >=1 scene in 8 carries a device (card/bubbles/panels/foreground), >=12 cards,
+       >=4 with bubbles, >=3 panels, >=3 foregrounds, and NEVER 20+ scenes in a row with none. And no
+       room past 1 use in 6 (aim 1 in 10). ftx shipped 1 in 12, a 46-scene device-free run and
+       closeUpPortrait at 1 in 4.6; the three episodes before it cleared every one of these numbers.
+       gate.py WARNs on all of them — a WARN here means off-format, and it still publishes.
      • Set `breath=True` by hand on ~10–15 scenes. The automatic breath only fires above 48 words and
        no scene at this length reaches it, so without this the whole episode never breathes.
      • Do NOT set `gap=` per scene (except the one `gap=1.4` before the midpoint reversal). The
@@ -257,10 +263,12 @@ DO, in order:
      • DO NOT LEAN ON ONE ROOM. A room used ~20 times in a ~196-scene episode reads as "the same
        picture again" long before the adjacency rule breaks, because its contents never change
        between placements (QA scored this on officeFloor at 20 uses, 12 of them a plain full frame).
-       Print the template histogram before you stop and keep it flat — no room much past ~1 use per
-       10 scenes. Fix an over-used room by PLACING IT LESS (there is usually a room that fits the
-       line better) and by VARYING WHAT SURROUNDS IT (a panels= split so it arrives as half a frame,
-       a foreground= silhouette, a card on the beat beside it).
+       Print the template histogram before you stop and keep it flat — aim 1 use per 10 scenes, and
+       1 in 6 is the wall (THE DEVICE BUDGET above). Fix an over-used room by PLACING IT LESS (there
+       is usually a room that fits the line better) and by VARYING WHAT SURROUNDS IT (a panels= split
+       so it arrives as half a frame, a foreground= silhouette, a card on the beat beside it).
+     • PLACARDS ARE OPT-IN. `crowdQueue` draws signs ONLY on a scene with `placards=[...]` (BIBLE.md
+       §8) — write them for a run on the bank, leave them off a queue that is just a queue.
    PROMISE -> PAYOFF LEDGER: at the top of content.py, comment every setup you plant and the scene id
    where it pays off. All must pay off. STRUCTURAL VARIATION: check the last ~2 entries in
    produced_topics.json and deliberately differ in hook variant, chapter shape, and ending flavour
@@ -399,17 +407,17 @@ DO, in order:
      • ADJACENT REPEATS. Four pairs of neighbouring scenes shared a template. gate.py only WARNs on
        this, so it publishes. Walk the list yourself: for every i, assert SCENES[i]['template'] !=
        SCENES[i-1]['template'].
-     • A LOPSIDED HISTOGRAM. closeUpPortrait ran 28 times in 158 scenes (18%), domesticInterior 20,
-       while broadcastDesk got 2 and bankExterior 5. The cap is ~len(SCENES)/10 per room. The cut-in
-       templates (closeUpPortrait, newsMontage) are the ones that run away — count them first.
+     • A LOPSIDED HISTOGRAM. closeUpPortrait ran 28 times in 158 scenes (18%), then 43 in 200 (22%)
+       on ftx. The cut-in templates (closeUpPortrait, newsMontage) are the ones that run away — count
+       them first, against the 1-in-6 wall.
      • DEVICES UNDER-SPENT — THE MOST REPEATED MISS, and the one the reviewer will send back.
-       THREE cold runs in a row under-spent the signature devices, two of them using ZERO
-       dialogue= exchanges (dialogue is a PRIMARY device, at least 4 per episode), 2–3 bubbles
-       against a 5–10 budget, and 2–4 foregrounds/panels. The structural numbers (scene count,
-       mean, cuts/min) are the ones you keep hitting; these are the ones you keep missing, so
-       COUNT THEM EXPLICITLY before you build — dialogue=, bubbles=, panels=, foreground=, and
-       each card kind — and place the missing ones rather than trusting your impression of the
-       script. A run that hits every rhythm number and carries no dialogue is still off-format.
+       FOUR cold runs have now under-spent them, two using ZERO dialogue= exchanges (dialogue is a
+       PRIMARY device, at least 4 per episode) and ftx landing 11 cards / 2 bubbles / 1 panel / 2
+       foregrounds. The structural numbers (scene count, mean, cuts/min) are the ones you keep
+       hitting; these are the ones you keep missing, so COUNT THEM EXPLICITLY before you build —
+       dialogue=, bubbles=, panels=, foreground=, and each card kind, against THE DEVICE BUDGET —
+       and place the missing ones rather than trusting your impression of the script. A run that
+       hits every rhythm number and carries no dialogue is still off-format.
      • PUNCHES UNDER-SPENT alongside them: one cold run finished with 18 scenes at <=2.5s against
        a 25–30 budget and exactly ONE at ~1s against ~6. The bare date, the single word and the
        one-line verdict are what make the rhythm read as deliberate rather than even.

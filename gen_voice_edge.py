@@ -370,8 +370,14 @@ async def main():
         # which is the exact defect each of these three exists to close. Validation stays where it
         # already is (explainer.tsx raises on an unknown `chart`, Video2.tsx on an out-of-range
         # `cast`); this loop's only job is not to drop them.
+        #   * `placards` — up to three short lines the crowd in a `crowdQueue` scene is HOLDING UP
+        #                (explainer.tsx `takeFor` -> `CrowdQueue`). The same lesson again, and the
+        #                most expensive instance of it so far: the signs used to be lettered from a grievance
+        #                lexicon whenever the scene's own copy yielded no words, which was ALL ELEVEN
+        #                crowdQueue scenes of the ftx episode — so a growth beat played under OUR
+        #                SAVINGS / GIVE IT BACK. There is no default now; unset means no signs.
         for key in ("card", "bubbles", "panels", "foreground", "period", "chart", "labels", "cast",
-                    "mood"):
+                    "mood", "placards"):
             if sc.get(key) is not None:
                 rec[key] = sc[key]
         scenes_out.append(rec)

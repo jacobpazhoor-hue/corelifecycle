@@ -314,6 +314,63 @@ fails += _tfails
 warns += _twarns
 
 # ============================================================================
+# 3d) DEVICE AND TEMPLATE BUDGET — docs/BIBLE.md §8 "THE DEVICE BUDGET". **WARN ONLY, DELIBERATELY.**
+#
+# The rhythm budget (§3a) is the only writer-budget anything checked, and an episode can hit every one
+# of its numbers while showing the same room forty-three times with nothing in front of it — which is
+# what the ftx episode did (16 device scenes in 200, a 46-scene run with none, closeUpPortrait at
+# 22%, against 26-30 / <=19 / <=15% on each of the three episodes before it).
+#
+# WHY IT NEVER HALTS. This project has lost eight days this month to guards firing on conditions the
+# writer was never told about, and a stylistic budget is exactly the wrong thing to go dark for: an
+# episode that is one panel split short is worth far more published than not. The rule is written
+# down FIRST (BIBLE §8, and the numbers are repeated in docs/AUTOPILOT_PROMPT.txt where the writer
+# reads them) and this only repeats it. If you are tempted to promote any of these to a failure,
+# promote the WRITING instruction first and give it three episodes.
+#
+# The thresholds are the FLOOR of what this pipeline has already shipped and rendered well, not an
+# ambition — lehman, theranos and madoff clear every one of them. Read off each episode's own
+# timeline.json; the table is in BIBLE §8.
+# ============================================================================
+DEVICE_KEYS = ("card", "bubbles", "panels", "foreground")
+DEVICE_EVERY = 8                                              # >= 1 device scene per this many scenes
+DEVICE_FLOORS = (("card", 12), ("bubbles", 4), ("panels", 3), ("foreground", 3))
+DEVICE_MAX_RUN = 20                                           # consecutive scenes carrying none
+TEMPLATE_CAP = 6                                              # no room past 1 use in this many scenes
+
+_n = len(tl["scenes"])
+_dev = [s for s in tl["scenes"] if any(s.get(k) for k in DEVICE_KEYS)]
+_need = _n // DEVICE_EVERY
+if len(_dev) < _need:
+    warns.append(f"device budget: {len(_dev)} of {_n} scenes carry a device "
+                 f"({'/'.join(DEVICE_KEYS)}), need >= {_need} (1 in {DEVICE_EVERY}) — BIBLE §8")
+for _k, _floor in DEVICE_FLOORS:
+    _c = sum(1 for s in tl["scenes"] if s.get(_k))
+    if _c < _floor:
+        warns.append(f"device budget: {_c} scene(s) with `{_k}`, budget is >= {_floor} per "
+                     f"full-length episode — BIBLE §8")
+_run = _worst = 0
+_worst_at = None
+for s in tl["scenes"]:
+    if any(s.get(k) for k in DEVICE_KEYS):
+        _run = 0
+        continue
+    _run += 1
+    if _run > _worst:
+        _worst, _worst_at = _run, s["id"]
+if _worst > DEVICE_MAX_RUN:
+    warns.append(f"device budget: {_worst} scenes in a row carry no device (ending at {_worst_at}), "
+                 f"limit is {DEVICE_MAX_RUN} — BIBLE §8")
+_hist = {}
+for s in tl["scenes"]:
+    _hist[s.get("template")] = _hist.get(s.get("template"), 0) + 1
+_cap = max(1, _n // TEMPLATE_CAP)
+for _t, _c in sorted(_hist.items(), key=lambda kv: -kv[1]):
+    if _c > _cap:
+        warns.append(f"template budget: '{_t}' carries {_c} of {_n} scenes ({100 * _c / _n:.0f}%), "
+                     f"cap is {_cap} (1 in {TEMPLATE_CAP}; aim 1 in 10) — BIBLE §8")
+
+# ============================================================================
 # 4) CRAYON STYLE on RENDERED FRAMES — flat fill (bible §5) and camera lock (bible §3).
 #
 # RESOLUTION IS PART OF THE ASSERTION. Flat fill counts pixels exactly equal to their right
