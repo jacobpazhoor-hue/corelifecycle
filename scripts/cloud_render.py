@@ -56,8 +56,24 @@ def load_cfg():
                 k, v = line.split("=", 1); cfg[k.strip()] = v.strip()
     for k in ("GH_OWNER", "GH_REPO", "GH_TOKEN"):
         cfg[k] = os.environ.get(k, cfg.get(k, ""))
+    # 2026-08-24: the PAT in secrets/gh.env (minted 2026-07-03) started returning 401, so every
+    # dispatch silently failed and the runner fell back to a LOCAL render — which the disk floor
+    # then refuses. A static token is a scheduled outage: it expires or gets revoked, and the only
+    # symptom is a dark channel. The `gh` CLI keeps a live OAuth token in the system keyring and
+    # refreshes it itself, so prefer that and keep the file as the fallback. Verified 2026-08-24:
+    # scopes 'repo' + 'workflow', HTTP 200 against the Actions API.
+    if not cfg["GH_TOKEN"] or os.environ.get("CLOUD_RENDER_PREFER_GH") == "1":
+        try:
+            tok = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True,
+                                 timeout=15).stdout.strip()
+            if tok:
+                cfg["GH_TOKEN"] = tok
+                print("cloud_render: using the gh CLI's token (secrets/gh.env had none or was overridden)")
+        except Exception as e:
+            print(f"cloud_render: gh auth token unavailable ({e})")
+    for k in ("GH_OWNER", "GH_REPO", "GH_TOKEN"):
         if not cfg[k]:
-            sys.exit(f"cloud_render: missing {k} (set in secrets/gh.env or env)")
+            sys.exit(f"cloud_render: missing {k} (set in secrets/gh.env, env, or run `gh auth login`)")
     return cfg
 
 
