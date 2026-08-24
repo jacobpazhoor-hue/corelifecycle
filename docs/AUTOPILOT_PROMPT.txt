@@ -56,6 +56,64 @@ DO, in order:
    unverified item explicitly. Anything still unverified when you write must be CUT, not softened —
    the subject is real, and invented detail is now a defect, not a device. No fictional composites.
 
+   THIS FILE IS NOW CHECKED AGAINST YOUR SCRIPT, AUTOMATICALLY, BEFORE ANYTHING PUBLISHES.
+   `scripts/prepublish_audit.py` runs after the render and HALTs the night on the rules below. It
+   does not know what is TRUE — it knows what is TRACEABLE to docs/research/<slug>.md. So the file
+   is no longer notes-for-yourself: it is the evidence every claim in the episode is checked
+   against, and a fact that is right but missing from it reads to the audit exactly like a fact you
+   invented. Write down everything you use.
+
+   WHY (2026-08-24, and this is the whole reason the audit exists): the ftx episode's scene t169
+   said "Gary Wang and Nishad Singh are still waiting on their own sentences." Both had been
+   sentenced in late 2024. docs/research/ftx.md never said anything of the kind — it recorded their
+   guilty pleas and nothing about sentencing. A false statement about two named living people was
+   one approval away from a public video, and it was caught only because a reviewer happened to
+   look. The five rules below are what that turned into.
+
+   THE FIVE THINGS THAT WILL HALT THE NIGHT (each names the scene and the fix when it fires):
+
+   R1. LEGAL STATUS THAT IS STILL OPEN. If you write that a named person is awaiting sentencing,
+       still faces charges, is serving a sentence, remains in custody, has yet to be tried, or is
+       appealing — docs/research/<slug>.md must SAY SO, about that person, WITH A DATE. This is the
+       t169 rule and it is the strictest one here, because an open-status claim rots on its own:
+       nobody edits the script and it becomes false anyway. THE SAFE MOVE IS ALWAYS THE SAME —
+       write the RESOLVED, DATED fact ("pleaded guilty in December 2022 and testified against him")
+       instead of the open one ("is still waiting to learn his fate"). If you genuinely need the
+       open status, source it in the research file with the date you checked.
+       Saying it about someone who is NOT in the research file at all halts too.
+
+   R2. YEARS. Every four-digit year in the narration, in on-screen text, in the title and in the
+       description must appear somewhere in docs/research/<slug>.md. If you mention 1998, put 1998
+       in the research file. This one has no tolerance and no judgement in it.
+
+   R3. QUOTATIONS. Any quoted run of six or more words must match something in the research file.
+       Condensing a sourced quote for a card is fine (that only warns); inventing one, or
+       paraphrasing so far that the file no longer recognises it, halts. Put every quote you intend
+       to use in the research file's Quotations section, verbatim, with its speaker and occasion.
+
+   R4. A LEGAL CLAIM ABOUT SOMEONE THE RESEARCH FILE HAS NEVER HEARD OF. If you write that a named
+       person was convicted, charged, sentenced, arrested, pleaded, testified, was acquitted, sued
+       or fined, that person must be IN docs/research/<slug>.md. Name-drop a person with no claim
+       attached and you only get a warning; attach a legal claim to them and the night stops.
+
+   R5. THE RESEARCH FILE ITSELF. It must exist at docs/research/<topic>.md, matching the `topic` in
+       ops/episode_meta.json exactly, and it must be a real sourced file. No research file means
+       nothing in the episode is checkable, and the audit refuses to run rather than pass it.
+
+   THE AUDIT ALSO WARNS, AND WARNINGS DO NOT STOP THE NIGHT — they go to the reviewer, who then
+   asks you about them. You will save yourself a revision pass by clearing them first. They are:
+   a figure that is not in the research file; a person named in the script who is not in it; a
+   superlative ("the richest", "the biggest", "the first") whose wording it does not carry; a claim
+   attributed to a named outlet or agency it never cites; a quote reworded off the sourced version.
+   ALL FIVE HAVE THE SAME FIX, AND IT IS USUALLY NOT "CUT IT": if the claim is true, put it in
+   docs/research/<slug>.md with its source. That is what the file is for. On the 2026-08-24 episode
+   these warnings were, exactly, the four things a human reviewer found by hand — three celebrity
+   endorsers who appear nowhere in the research file, and a Forbes superlative it never carried.
+
+   WHAT THE AUDIT DOES *NOT* ASK OF YOU. It never asks you to hedge. "Some say", "reportedly",
+   "it is believed" do not satisfy any rule here and are not the way out of one — softening an
+   unsourced claim leaves it unsourced. Source it or cut it.
+
 3. WRITE — overwrite content.py per docs/BIBLE.md, grounded in that research.
    THIRD PERSON, PAST TENSE, about the real subject. ~2,000–3,100 words. TARGET RUNTIME 13–21 min.
    Each scene dict: id, level (see below), narration, overlay ({big,sub} or None), `template`, and

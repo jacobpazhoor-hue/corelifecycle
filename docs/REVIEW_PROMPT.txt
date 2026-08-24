@@ -56,6 +56,19 @@ is a night the channel does not publish.
   per-scene word-coverage + loudness/clipping/silence. This is your EARS — use it for the SOUND rubric.
 - docs/research/<slug>.md — the factual source for this episode (match the slug in content.py /
   ops/episode_meta.json). The subject is REAL: invented detail is a defect, not a device.
+- out/review/prepublish_audit.json — the PRE-PUBLISH AUDIT's shortlist of claims it could not trace
+  back to that research file. The audit runs before you and HALTs the night on the clear cases (an
+  unsourced pending legal status about a named person, a year or a quotation that is not in the
+  research file), so if you are reading this the episode has already passed those. What is left is
+  its `warns` array: claims that MIGHT be fine and need a human. Read it FIRST — it is the shortlist
+  for the ACCURACY rubric, and it is the shortlist because a machine cannot settle any of them.
+  On 2026-08-24 those warnings were, precisely, what a reviewer found by hand: three celebrities
+  vouching for the company who appear nowhere in the research file, a Forbes superlative the file
+  never carries, and a quote card reworded off the sourced wording. Each entry names the scene.
+  It is a list of QUESTIONS, not defects — a company or a place will show up in it as if it were a
+  person, and a figure can be flagged because a spelled-out number parsed wrong. Judge each one; if
+  a claim is true but untraceable, the fix is usually to source it into docs/research/<slug>.md
+  rather than to cut it. If the file is missing, check the accuracy rubric by hand as before.
 - docs/BIBLE.md        — the WRITER canon (what the script says, and the numbers it must hit).
 - docs/CRAYON_BIBLE.md — the measured STYLE spec (art, camera, editing, type, sound, packaging).
   Both are read-only evidence for you. Never propose editing CRAYON_BIBLE.md to make an episode fit.

@@ -392,7 +392,10 @@ review() {
   # ABSENCE IS SAFE AND DOCUMENTED (REVIEW_PROMPT.txt:49: "If the file is missing, fall back to
   # measuring by hand"). STALENESS is what reviews the wrong episode. out/ is a workspace; every
   # stage now clears its own artifacts before it writes them.
-  rm -f out/review/facts.json out/review/audio_report.json out/review/verdict.json out/review/reviewed_render.json 2>/dev/null
+  #   prepublish_audit.json — the factual sweep's verdict. It is sha- and source-hash-bound so a
+  #                       stale one cannot clear tonight's render, but it goes with the rest so
+  #                       this whole directory obeys ONE rule: absent, never stale.
+  rm -f out/review/facts.json out/review/audio_report.json out/review/verdict.json out/review/reviewed_render.json out/review/prepublish_audit.json 2>/dev/null
   python3 qa_watch.py out/episode.mp4 || python3 qa_sample.py
   # HARD ASSERT — fail LOUDLY rather than review nothing. With the prune above, zero frames means
   # qa_watch AND qa_sample both failed, and the reviewer would be judging an empty directory. A
@@ -413,6 +416,26 @@ review() {
   # a later re-render, and including a hand-run upload while this loop is still revising.
   python3 scripts/upload_guard.py stamp out/episode.mp4 \
     || echo "review stamp FAILED — upload will be blocked by the review guard until this is fixed"
+  # --- PRE-PUBLISH AUDIT (2026-08-24) ----------------------------------------------------------
+  # RUN BEFORE THE REVIEWER, NOT AFTER. Three reasons, in order of how much they cost:
+  #   1. It is the cheap one. The sweep is ~0.1s of file reads plus one sha256; the reviewer call
+  #      is the most expensive step in the pipeline (mean $8.97). Spending that on an episode that
+  #      asserts something unsourced about a named living person is money spent to be told so.
+  #   2. Its findings reach the reviewer. out/review/prepublish_audit.json lists the claims it
+  #      could not trace, and REVIEW_PROMPT.txt points at it, so the human-shaped check gets the
+  #      machine-shaped one's shortlist instead of re-deriving it by eye. On the 2026-08-24 episode
+  #      that shortlist is exactly what the reviewer found by hand: Brady/Bundchen/Curry, the
+  #      Forbes superlative, the reworded quote card.
+  #   3. It HALTs the night here rather than after an approval, so the failure is reported as
+  #      "this script says something it cannot support" and not as a mysterious upload refusal.
+  # The audit is ALSO enforced at the chokepoint (scripts/upload_guard.py checks 9-13), so this
+  # call is the cheap early one, not the load-bearing one — deleting this block would not make an
+  # unaudited episode publishable, it would only make the failure late and expensive.
+  if ! python3 scripts/prepublish_audit.py out/episode.mp4; then
+    _disown_episode "the pre-publish audit found claims this episode cannot support"
+    notify "HALT" "PRE-PUBLISH AUDIT FAILED — this render asserts something that is not traceable to docs/research/, or its packaging does not match it. NOT publishing and NOT paying for a review of it. The failures are listed in out/review/prepublish_audit.json and in $LOG; each one names the scene and the fix. The built episode and its owed marker have both been cleared so the next run writes a fresh one."
+    exit 0
+  fi
   python3 qa_audio.py || echo "!! qa_audio failed (non-fatal)"
   [ -s out/review/audio_report.json ] || echo "!! out/review/audio_report.json was NOT written — the reviewer judges sound from the frames and the script. ABSENT, never stale."
   # --- PRECOMPUTED FACTS (token audit §7 S7) — emit the deterministic statistics the reviewer used
