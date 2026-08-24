@@ -294,16 +294,6 @@ class TestTheShippingEpisode(unittest.TestCase):
         self.assertEqual(p.returncode, 0, f"the shipping episode must pass the audit:\n{out}")
         self.assertIn("AUDIT: PASS", out)
 
-    def test_the_warnings_are_the_ones_a_human_found(self):
-        """The reviewer's own untraceable-claim findings must survive as WARNs, not vanish."""
-        p = subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "prepublish_audit.py")],
-                           capture_output=True, text=True, cwd=ROOT, timeout=180)
-        warns = " ".join(ln for ln in (p.stdout + p.stderr).splitlines()
-                         if ln.strip().startswith("WARN:"))
-        for needle in ("Tom Brady", "Steph Curry", "Forbes", "richest"):
-            self.assertIn(needle, warns, f"{needle} should be surfaced for judgement")
-
-
 # ==================================================================================================
 # every other check: fires on bad input, passes on good
 # ==================================================================================================
@@ -312,6 +302,27 @@ class TestCleanTreePasses(AuditCase):
     def test_the_fixture_itself_passes(self):
         rc, out = self.fixture().write().run()
         self.assertEqual(rc, 0, out)
+
+    def test_an_unsourced_claim_about_a_named_person_is_surfaced(self):
+        """The reviewer's untraceable-claim findings must be surfaced as WARNs.
+
+        2026-08-24: this used to assert the LIVE tree still warned on "Tom Brady", "Steph Curry",
+        "Forbes" and "richest". Commits 1fb45a4 / 8aed704 SOURCED all four into
+        docs/research/ftx.md, so the audit correctly stopped warning and the test began failing —
+        it was asserting the defect, not the behaviour. A test pinned to one episode's unfixed
+        state rots the moment the episode is fixed. It now proves the MECHANISM on a fixture: an
+        unsourced name warns, and sourcing it into the research file silences that warning."""
+        f = self.fixture()
+        f.scenes[0] = dict(f.scenes[0], narration="Tom Brady put his face on it.")
+        rc, out = f.write().run()
+        self.assertEqual(rc, 0, f"an unsourced NAME is a WARN, never a FAIL:\n{out}")
+        self.assertIn("Tom Brady", out, "an unsourced named person must be surfaced for judgement")
+
+        f.research += "\n- **Tom Brady** fronted a paid ambassador deal (2021).\n"
+        rc2, out2 = f.write().run()
+        self.assertEqual(rc2, 0, out2)
+        self.assertNotIn("Tom Brady", out2,
+                         "once sourced in the research file the warning must clear")
 
     def test_it_also_passes_with_the_render_bound(self):
         f = self.fixture().write()
