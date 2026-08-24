@@ -327,6 +327,19 @@ and in §3 above comes from one build (lehman, 2026-08-15) which speaks ~5% fast
 episodes produced since at the same nominal rate, for reasons nobody has explained; 210 is what this
 pipeline currently does.
 
+**A short Latinate → Anglo-Saxon swap list, since every fraud/finance topic reaches for the same
+costly words by default** (validated on theranos 08-16 and ftx 08-23 — both financial-fraud subjects,
+both needed this exact pass to land in-band): `cryptocurrency`→crypto, `regulators`/`investigators`→
+watchdogs/police/the government, `customers`→users, `approximately`/`roughly`→about, `financial`
+(drop it — "fraud" already implies money) `cooperation`/`cooperating`→help/helping, `prosecutors`→
+the government/lawyers/they, `testimony`/`testified`→took the stand/said, `mechanism`→trick/how it
+worked, `collateral`→backup, `liquidated`/`liquidation`→shut down/wiped out, `subsidiary`/
+`affiliated companies`→arm/linked firms, `forfeiture`/`forfeit`→pay back, `microseconds`→a blink,
+`derivatives`→bets, `sophisticated`/`unprecedented`→cut entirely, `actually`→trim it, it is almost
+always filler. Verbatim quotes keep their own words no matter the cost (a direct quote is never
+paraphrased for syllable count) — pay for them by shortening the sentence around them, not by editing
+the quote.
+
 ### Why 10–13 cuts/min and not more, when the gate would allow it
 
 The measured band leaves room to cut faster still. Four reasons not to, and none of them is taste:

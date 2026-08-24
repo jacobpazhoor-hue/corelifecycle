@@ -393,7 +393,7 @@ SCENES = [
          overlay=None),
 
     dict(id="t070", level=None, template="crowdQueue",
-         narration=("Forbes called him the richest self-made man alive under thirty."),
+         narration=("Forbes put him at the top of its under-thirty wealth list."),
          overlay=None),
 
     dict(id="t071", level=None, template="domesticInterior",
@@ -669,7 +669,7 @@ SCENES = [
          overlay=None),
 
     dict(id="t127", level=None, template="domesticInterior",
-         card=dict(kind="narration", text="\"I f---ed up,\nshould've done better.\""),
+         card=dict(kind="narration", text="\"I f---ed up,\nand should have done better.\""),
          narration=("Then he admitted, in his own words, that he'd messed up."),
          overlay=None),
 

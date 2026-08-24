@@ -118,6 +118,20 @@ footage). All dates and dollar figures below are cross-confirmed across at least
    complete failure of corporate controls and such a complete absence of trustworthy financial
    information as occurred here."
 
+## Endorsements, media and figures used in the script (added 2026-08-24, prepublish audit)
+
+- **Celebrity endorsers (paid promotional deals, not endorsements of the fraud):** FTX ran a paid
+  marketing campaign fronted by **Tom Brady** and **Gisele Bündchen** (equity/ambassador deal announced
+  June 2021) and **Steph Curry** (ambassador deal announced September 2021). All three were later named
+  among defendants in a class action over the promotion of FTX. The script names them only as the faces
+  of the marketing, and must NOT say they vouched for, endorsed or knew about the fraud.
+- **Forbes:** Forbes ranked Bankman-Fried on its 2021 "Forbes 400" and covered him repeatedly as the
+  wealthiest person under 30 by its own estimate. The superlative in the script is Forbes's estimate, not
+  an independent fact, and must be attributed to Forbes.
+- **$25 million a day:** early Alameda/FTX trading volume figure used in the growth beat.
+- **$6 billion in 72 hours:** the scale of withdrawal requests during the 6-8 November 2022 run, the
+  figure FTX itself cited as it halted withdrawals.
+
 ## Cut / unverified — NOT used in the script
 
 - The commonly repeated paraphrase of the FTX ad as "a little bit sketchy, but it's not a scam" could
