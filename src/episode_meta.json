@@ -1,18 +1,20 @@
 {
   "thumb": {
-    "kicker": "$64.8 BILLION",
-    "line1": "FAKE.",
+    "kicker": "$32 BILLION",
+    "line1": "TO ZERO",
     "line2": "",
-    "tag": "TEN PERCENT. EVERY YEAR.",
-    "archetype": "band",
-    "big": "150 YEARS",
+    "tag": "TEN DAYS. $8 BILLION. GONE.",
+    "archetype": "beforeafter",
+    "before": "$32 BILLION",
+    "after": "25 YEARS",
+    "big": "$8B GONE",
     "expr": "cold",
     "mood": "crime",
-    "keyword": "MADOFF",
-    "question": "DID ANYONE CHECK?",
-    "word": "FAKE",
-    "before": "$64.8 BILLION",
-    "after": "$0"
+    "keyword": "FTX",
+    "question": "WHO CHECKED THE BOOKS?",
+    "word": "GONE",
+    "setting": "",
+    "prop": ""
   },
-  "topic": "madoff"
+  "topic": "ftx"
 }
