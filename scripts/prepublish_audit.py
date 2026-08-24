@@ -102,6 +102,8 @@ import os
 import sys
 import re
 import json
+import re as _re
+_CHAPTER_LINE_RE = _re.compile(r'^\d{1,2}:\d{2}(:\d{2})?\s')
 import hashlib
 import struct
 import difflib
@@ -625,11 +627,29 @@ def audit(root=ROOT, video=None):
 
     desc = kit.get("description") or ""
     body = meta.get("body") or ""
-    if body.strip() and body.strip() not in desc:
-        fails.append("packaging description: ops/episode_meta.json's 'body' is NOT inside "
-                     "out/upload_kit.json's description — the kit predates the current copy "
-                     "(this is how last night's chapters reach tonight's video). Re-run "
-                     "`python3 gen_packaging.py`")
+    # Staleness test. NOT an exact substring match: gen_packaging.py legitimately reflows the body
+    # (it REWRITES the in-body chapter list from the rendered timeline — the 2026-08-15 fix that
+    # stopped description chapter names drifting from the on-screen cards) and the description is
+    # hook + body + extras, so `body in desc` is false on a perfectly fresh kit. What actually
+    # detects a stale kit is CONTENT: a kit built from an older episode carries older sentences.
+    # Compare on normalised prose lines, ignoring the chapter block (whose timestamps are rewritten
+    # by design) and blank lines.
+    def _prose_lines(t):
+        out = []
+        for ln in (t or "").splitlines():
+            ln = " ".join(ln.split())
+            if not ln or _CHAPTER_LINE_RE.match(ln):
+                continue
+            out.append(ln)
+        return out
+    _body_lines = _prose_lines(body)
+    _desc_blob = " ".join(_prose_lines(desc))
+    _missing = [ln for ln in _body_lines if ln not in _desc_blob]
+    if _body_lines and _missing:
+        fails.append("packaging description: ops/episode_meta.json's 'body' is not reflected in "
+                     "out/upload_kit.json's description — the kit predates the current copy (this "
+                     "is how last night's chapters reach tonight's video). First missing line: "
+                     f"{_missing[0][:90]!r}. Re-run `python3 gen_packaging.py`")
     if len(title) > YT_TITLE_MAX:
         fails.append(f"title is {len(title)} characters — YouTube's limit is {YT_TITLE_MAX} and "
                      f"scripts/yt_upload.py truncates it silently. Shorten it in "

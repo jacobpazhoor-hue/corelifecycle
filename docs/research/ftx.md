@@ -132,6 +132,25 @@ footage). All dates and dollar figures below are cross-confirmed across at least
 - **$6 billion in 72 hours:** the scale of withdrawal requests during the 6-8 November 2022 run, the
   figure FTX itself cited as it halted withdrawals.
 
+## Press framing, scale figures and losses (added 2026-08-24, second prepublish sweep)
+
+- **Press epithets:** in 2021-22 mainstream coverage repeatedly framed Bankman-Fried as crypto's most
+  respectable figure — variations on "the King of Crypto" and comparisons to **J.P. Morgan** (the banker
+  who backstopped the 1907 panic) appeared across business press profiles. Prosecutor **Damian Williams**
+  separately used the "one of the biggest financial frauds in American history" framing at the charging
+  announcement. The script may use the press epithets as PRESS framing; it must not attribute them to a
+  named individual who did not say them.
+- **Nishad Singh's reaction:** Singh testified at trial that on learning the scale of the shortfall he
+  felt physically sick and described being "blindsided" — his own testimony, not a paraphrase of others.
+- **~1 million creditors:** FTX's Chapter 11 filings list creditors "in excess of one million".
+- **~$10 billion daily volume:** FTX's reported peak daily trading volume at its 2021 height.
+- **Ontario Teachers' Pension Plan:** invested US$95M across two FTX rounds (2021-22) and wrote the
+  position down to zero in November 2022 — the "teachers' pension" reference.
+- **Bahamas penthouse:** the Albany resort penthouse used by Bankman-Fried and colleagues was reported at
+  roughly $30M, and was later surrendered as part of the forfeiture.
+- **Two-year freeze:** customer accounts frozen at the November 2022 halt remained inaccessible through
+  the bankruptcy; first meaningful distributions did not begin until 2024.
+
 ## Cut / unverified — NOT used in the script
 
 - The commonly repeated paraphrase of the FTX ad as "a little bit sketchy, but it's not a scam" could

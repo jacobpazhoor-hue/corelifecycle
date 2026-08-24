@@ -285,7 +285,7 @@ SCENES = [
          narration=("Some funded side bets: sports teams, AI firms, a stake in a bank."),
          overlay=None),
 
-    dict(id="t048", level=None, template="crowdQueue",
+    dict(id="t048", level=None, template="officeFloor",
          narration=("Some of it — you already know this — the forty million in donations."),
          overlay=None),
 
@@ -355,7 +355,7 @@ SCENES = [
          narration=("From outside, the machine looked unstoppable."),
          overlay=None),
 
-    dict(id="t063", level=None, template="crowdQueue",
+    dict(id="t063", level=None, template="cityStreet",
          narration=("New users signed up by the millions, chasing what everyone called the safest "
                     "name in crypto."),
          overlay=None),
@@ -464,7 +464,7 @@ SCENES = [
          overlay=None),
 
     dict(id="t085b", level=None, template="closeUpPortrait",
-         narration=("All vouching for him."),
+         narration=("All paid to put their faces on it."),
          overlay=None),
 
     dict(id="t086", level=None, template="exchangeFloor", overlay=dict(big="$40M", sub="POLITICAL DONATIONS, 2022"),
