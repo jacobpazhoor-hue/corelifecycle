@@ -290,6 +290,30 @@ fails += _sfails
 warns += _swarns
 
 # ============================================================================
+# 3c) THUMBNAIL FIELD COMBINATION — `thumb.kicker` against the archetype that will draw it.
+#
+# src/thumbs.tsx THROWS when a kicker is set on an archetype whose layout has no kicker slot, and
+# that throw is right: the alternative it replaced was silently dropping the writer's copy. But it
+# fires in the RENDERER, which is the ~40-minute cloud job at the end of the night — the `ftx`
+# episode lost three consecutive nights (runs 32681047721 / 32697183054 / 32710038527) to a pair
+# that was readable off ops/episode_meta.json before a frame existed. thumb_check.py derives both
+# archetype sets from src/thumbs.tsx itself so they cannot drift, and ports pickName()'s topic-hash
+# fallback so a typo'd archetype name that hashes onto a kickerless layout is caught too.
+#
+# Parses source, renders nothing, costs milliseconds — so like 3b it runs unconditionally, not
+# behind GATE_STYLE_FRAMES.
+# ============================================================================
+import thumb_check
+try:
+    _tfails, _twarns = thumb_check.check()
+except thumb_check.ThumbParseError as e:
+    _tfails, _twarns = [f"thumbnail field check could not read src/thumbs.tsx: {e}"], []
+except (OSError, ValueError) as e:
+    _tfails, _twarns = [f"thumbnail field check could not read ops/episode_meta.json: {e}"], []
+fails += _tfails
+warns += _twarns
+
+# ============================================================================
 # 4) CRAYON STYLE on RENDERED FRAMES — flat fill (bible §5) and camera lock (bible §3).
 #
 # RESOLUTION IS PART OF THE ASSERTION. Flat fill counts pixels exactly equal to their right

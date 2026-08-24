@@ -29,10 +29,25 @@ try:
     meta = json.load(open(os.path.join(ROOT, "ops", "episode_meta.json")))
     for k in ("title", "hook", "body", "tags", "thumb"):
         assert meta.get(k), f"episode_meta.json missing '{k}'"
-    for k in ("kicker", "line1", "tag"):
+    for k in ("line1", "tag"):
         assert meta["thumb"].get(k), f"episode_meta.json thumb missing '{k}'"
 except Exception as e:
     die(f"ops/episode_meta.json invalid: {e}")
+
+# `kicker` is required only where it can be DRAWN. `wordmark` and `beforeafter` have no kicker slot
+# and src/thumbs.tsx THROWS rather than dropping the copy, so on those two an EMPTY kicker is the
+# correct value — demanding one unconditionally (as this did until 2026-08-24) would make the
+# archetype rotation unbuildable half the time. thumb_check.py owns both sets, derived from
+# src/thumbs.tsx; it also runs in gate.py, which is where the wrong-pair HALT is reported in full.
+# A thumbs.tsx this cannot parse is its own HALT, not a silently skipped requirement.
+import thumb_check
+try:
+    _arch_order, _kickerless = thumb_check.arch_sets()
+except thumb_check.ThumbParseError as e:
+    die(f"cannot read the thumbnail archetype sets out of src/thumbs.tsx: {e}")
+_arch, _ = thumb_check.resolve_archetype(meta, _arch_order)
+if _arch not in _kickerless and not meta["thumb"].get("kicker"):
+    die(f"ops/episode_meta.json thumb missing 'kicker' (the '{_arch}' archetype draws one)")
 
 # sync the Remotion-importable copy the Thumbnail reads
 json.dump({"thumb": meta["thumb"], "topic": meta.get("topic", "")}, open(os.path.join(ROOT, "src", "episode_meta.json"), "w"), indent=2)

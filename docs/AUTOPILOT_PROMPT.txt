@@ -248,6 +248,20 @@ DO, in order:
      number      the one colossal figure (thumb.big) over a grey crowd, red underline, hero reacting
      question    thumb.question in outlined white caps left, worried hero right with "??"
      ladder      grey climbers on rising steps, colour hero big in front, under the amber bar
+   KICKER SLOTS — the one archetype/copy pair that HALTS the render. `wordmark` and `beforeafter`
+   have NOWHERE to put thumb.kicker: wordmark gives the whole top of the frame to one enormous word,
+   and beforeafter fills both top corners with its own pair of labels. On those two, src/thumbs.tsx
+   THROWS on a non-empty kicker rather than silently dropping your copy — the `ftx` episode lost
+   THREE consecutive nightly renders to exactly this. The other seven carry a kicker: band, crash,
+   setting, poster, number, question, ladder.
+     wordmark / beforeafter  ->  thumb.kicker MUST be "" (empty).
+   THIS DOES NOT OVERRIDE THE ROTATION RULE ABOVE. When the no-repeat-in-last-3 rotation lands on
+   wordmark or beforeafter, KEEP that archetype and clear the kicker — do NOT reach for a
+   kicker-carrying archetype just to keep the line, which would collapse the rotation back into a
+   handful of layouts. Those two layouts have their own copy fields, so put the words there instead:
+   wordmark -> thumb.word, beforeafter -> thumb.before / thumb.after.
+   gate.py now checks this pair from ops/episode_meta.json BEFORE anything renders, so getting it
+   wrong costs seconds rather than a night's upload.
    The five v2-era names (pov, scaleterror, redacted, eyeline, climb) and `face` are GONE — they were
    POV-format devices with no basis in the measured reference. The ROTATION RULE ABOVE survived the
    rebuild unchanged.
