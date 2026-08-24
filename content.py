@@ -406,7 +406,7 @@ SCENES = [
                     "changed."),
          overlay=None),
 
-    dict(id="t073", level=None, template="newsMontage", labels=["THE NEW J.P. MORGAN"],
+    dict(id="t073", level=None, template="newsMontage", labels=["THE KING OF CRYPTO"],
          narration=("The press even had a nickname ready: the King of Crypto."),
          overlay=None),
 
@@ -459,7 +459,7 @@ SCENES = [
                     "about this stuff.' It's now the most quoted line in the whole disaster."),
          overlay=None),
 
-    dict(id="t085", level=None, template="crowdQueue",
+    dict(id="t085", level=None, template="broadcastDesk",
          narration=("Tom Brady. Gisele Bündchen. Steph Curry."),
          overlay=None),
 
@@ -881,7 +881,7 @@ SCENES = [
          overlay=None),
 
     dict(id="t169", level=None, template="bankExterior",
-         narration=("Gary Wang and Nishad Singh are still waiting on their own sentences."),
+         narration=("Gary Wang and Nishad Singh had both pleaded guilty and testified against him."),
          overlay=None),
 
     dict(id="t170", level=None, template="courtHearing", mood="grim",

@@ -2,7 +2,7 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 28729,
+  "totalFrames": 28762,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
@@ -911,7 +911,7 @@
       "durationInFrames": 117,
       "gap": 0.51,
       "labels": [
-        "THE NEW J.P. MORGAN"
+        "THE KING OF CRYPTO"
       ]
     },
     {
@@ -1044,7 +1044,7 @@
       "id": "t085",
       "level": null,
       "overlay": null,
-      "template": "crowdQueue",
+      "template": "broadcastDesk",
       "audio": "audio/t085.wav",
       "audioStartFrame": 3,
       "startFrame": 13001,
@@ -2198,7 +2198,7 @@
       "audio": "audio/t169.wav",
       "audioStartFrame": 3,
       "startFrame": 26309,
-      "durationInFrames": 136,
+      "durationInFrames": 169,
       "gap": 0.259
     },
     {
@@ -2208,7 +2208,7 @@
       "template": "courtHearing",
       "audio": "audio/t170.wav",
       "audioStartFrame": 3,
-      "startFrame": 26445,
+      "startFrame": 26478,
       "durationInFrames": 121,
       "gap": 0.304,
       "mood": "grim"
@@ -2220,7 +2220,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t171.wav",
       "audioStartFrame": 3,
-      "startFrame": 26566,
+      "startFrame": 26599,
       "durationInFrames": 164,
       "gap": 0.494
     },
@@ -2231,7 +2231,7 @@
       "template": "cityStreet",
       "audio": "audio/t172.wav",
       "audioStartFrame": 3,
-      "startFrame": 26730,
+      "startFrame": 26763,
       "durationInFrames": 212,
       "gap": 0.256
     },
@@ -2242,7 +2242,7 @@
       "template": "domesticInterior",
       "audio": "audio/t173.wav",
       "audioStartFrame": 3,
-      "startFrame": 26942,
+      "startFrame": 26975,
       "durationInFrames": 110,
       "gap": 0.333
     },
@@ -2253,7 +2253,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t174.wav",
       "audioStartFrame": 3,
-      "startFrame": 27052,
+      "startFrame": 27085,
       "durationInFrames": 118,
       "gap": 0.39
     },
@@ -2264,7 +2264,7 @@
       "template": "newsMontage",
       "audio": "audio/t174b.wav",
       "audioStartFrame": 3,
-      "startFrame": 27170,
+      "startFrame": 27203,
       "durationInFrames": 75,
       "gap": 0.301
     },
@@ -2275,7 +2275,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t174c.wav",
       "audioStartFrame": 3,
-      "startFrame": 27245,
+      "startFrame": 27278,
       "durationInFrames": 84,
       "gap": 0.382
     },
@@ -2286,7 +2286,7 @@
       "template": "crowdQueue",
       "audio": "audio/t175.wav",
       "audioStartFrame": 3,
-      "startFrame": 27329,
+      "startFrame": 27362,
       "durationInFrames": 90,
       "gap": 0.391
     },
@@ -2297,7 +2297,7 @@
       "template": "newsMontage",
       "audio": "audio/t176.wav",
       "audioStartFrame": 3,
-      "startFrame": 27419,
+      "startFrame": 27452,
       "durationInFrames": 82,
       "gap": 0.329
     },
@@ -2308,7 +2308,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t177.wav",
       "audioStartFrame": 3,
-      "startFrame": 27501,
+      "startFrame": 27534,
       "durationInFrames": 77,
       "gap": 0.318
     },
@@ -2319,7 +2319,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t178.wav",
       "audioStartFrame": 3,
-      "startFrame": 27578,
+      "startFrame": 27611,
       "durationInFrames": 106,
       "gap": 0.47
     },
@@ -2330,7 +2330,7 @@
       "template": "newsMontage",
       "audio": "audio/t179.wav",
       "audioStartFrame": 3,
-      "startFrame": 27684,
+      "startFrame": 27717,
       "durationInFrames": 195,
       "gap": 0.413
     },
@@ -2341,7 +2341,7 @@
       "template": "bankExterior",
       "audio": "audio/t180.wav",
       "audioStartFrame": 3,
-      "startFrame": 27879,
+      "startFrame": 27912,
       "durationInFrames": 155,
       "gap": 0.455
     },
@@ -2352,7 +2352,7 @@
       "template": "officeFloor",
       "audio": "audio/t181.wav",
       "audioStartFrame": 3,
-      "startFrame": 28034,
+      "startFrame": 28067,
       "durationInFrames": 150,
       "gap": 0.436
     },
@@ -2363,7 +2363,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t182.wav",
       "audioStartFrame": 3,
-      "startFrame": 28184,
+      "startFrame": 28217,
       "durationInFrames": 130,
       "gap": 0.483
     },
@@ -2374,7 +2374,7 @@
       "template": "cityStreet",
       "audio": "audio/t183.wav",
       "audioStartFrame": 3,
-      "startFrame": 28314,
+      "startFrame": 28347,
       "durationInFrames": 415,
       "gap": 0.478
     }
