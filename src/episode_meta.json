@@ -1,20 +1,20 @@
 {
   "thumb": {
-    "kicker": "",
-    "line1": "TO ZERO",
+    "kicker": "NASDAQ CHAIRMAN",
+    "line1": "PONZI SCHEME",
     "line2": "",
-    "tag": "TEN DAYS. $8 BILLION. GONE.",
-    "archetype": "beforeafter",
-    "before": "$32 BILLION",
-    "after": "25 YEARS",
-    "big": "$8B GONE",
-    "expr": "cold",
+    "tag": "HE NEVER MADE ONE TRADE.",
+    "archetype": "number",
+    "before": "",
+    "after": "",
+    "big": "$64.8B",
+    "expr": "shock",
     "mood": "crime",
-    "keyword": "FTX",
-    "question": "WHO CHECKED THE BOOKS?",
-    "word": "GONE",
+    "keyword": "PONZI",
+    "question": "WHO CHECKED THE MATH?",
+    "word": "FAKE",
     "setting": "",
     "prop": ""
   },
-  "topic": "ftx"
+  "topic": "madoff"
 }

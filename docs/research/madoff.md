@@ -107,6 +107,23 @@ FBI]
 - Madoff reported having stage-4 kidney disease by January 2014. He died in federal prison on
   **April 14, 2021**, at age **82.** [CNBC, PBS]
 
+## Framing / superlatives used in the script
+
+- **"The largest Ponzi scheme in history" / "history's largest fraud."** Widely and consistently
+  described this way by the FBI, DOJ and SEC themselves in their own releases on the case (e.g.
+  FBI.gov's retrospective calls it "the largest Ponzi scheme in world history"; SEC press release
+  2008-293 and the DOJ SDNY press materials use equivalent framing). Supported by the raw scale
+  figures already in this file: $64.8B fictitious value / $17.5B real cash losses, both far larger
+  than any prior prosecuted Ponzi scheme.
+- **"The most trusted man on Wall Street."** Descriptive framing, not a quoted phrase, built directly
+  from sourced facts above: three separate years as non-executive chairman of the NASDAQ board
+  [EBSCO, CNN], decades as a respected market-making pioneer, and a client roster that included
+  major charitable foundations (e.g. the Elie Wiesel Foundation) — i.e., an unusually high level of
+  institutional trust by any ordinary measure, prior to the fraud's exposure.
+- **Quote re-use**: "I am sorry. I know it will not help you." is used twice in the script (once at
+  the sentencing beat, once as a closing callback) — both instances are the same verified sentencing
+  allocution quote [CNBC, Daily Beast], not two different quotes.
+
 ## CUT — could not independently verify to this run's standard; not used in content.py
 
 - The specific neighborhood within Queens (some sources say Laurelton) — not independently confirmed

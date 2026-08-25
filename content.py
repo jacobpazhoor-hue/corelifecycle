@@ -1,68 +1,72 @@
 #!/usr/bin/env python3
-"""How Sam Bankman-Fried Actually Lost $8 Billion — CRAYON-format explainer, ~16-18 min.
+"""The Madoff Ponzi Scheme Explained Like You're 5 — CRAYON-format explainer, ~16-18 min.
 
 FORMAT: third-person past-tense explainer about a REAL subject (docs/BIBLE.md §1). Every date, figure
-and quote is verified in docs/research/ftx.md with a source; anything unverifiable to that standard is
-in that file's CUT list and is absent here. Register: straight and noirish, held throughout (§2) — real
-users lost real money, so a comic register would read as callous, same reasoning as lehman_brothers,
-theranos and the unshipped madoff draft this episode replaces.
+and quote is verified in docs/research/madoff.md with a source; anything unverifiable to that standard
+is in that file's CUT list and is absent here. Register: straight and noirish, held throughout (§2) —
+real retirees and real charities lost real money, so a comic register would read as callous, same
+reasoning as lehman_brothers, theranos and ftx.
 
 STRUCTURAL VARIATION vs the last two PRODUCED crayon-format episodes (lehman_brothers 08-15,
-theranos 08-16 — the topic 'madoff' sitting on disk at the start of this run was never published and
-is not counted as produced; this episode replaces it with a new subject):
+theranos 08-16 — ftx and an earlier madoff attempt both sat on disk unpublished between those and this
+run and are not counted as produced):
   * lehman opened DEATH-FIRST and closed on REFLECTION + COMPLICIT "WE" + CALLBACK, no forward tease,
     five chapters. theranos opened on the classic five-step THESIS hook and closed on an UNANSWERED
     QUESTION + QUOTE, four chapters. This script also opens on the classic five-step THESIS hook (a
     person-subject requires the thesis variant, never the question-thesis reserved for systemic
-    subjects with no birthplace — the hook SHAPE necessarily echoes theranos; its CONTENT does not),
-    but closes on REFLECTION + COMPLICIT "WE" + CALLBACK + a FORWARD TEASE — the one ending shape
-    neither prior produced episode used in full — and runs FIVE chapters shaped as a clean rise ->
-    mechanism -> peak -> reversal -> reckoning escalation, distinct from theranos's four-part shape.
+    subjects with no birthplace — BIBLE §4 says so explicitly), but closes on REFLECTION + COMPLICIT
+    "WE" + a direct QUOTE CALLBACK + a FORWARD TEASE — the one ending shape neither prior produced
+    episode used in full — and runs FIVE chapters shaped as a clean rise -> mechanism -> exposure
+    attempt -> reversal -> reckoning, distinct from theranos's four-part shape.
   * MOTIF: theranos ran "one drop of blood"; lehman ran "the thing nobody could pay for, sold on".
-    This one runs TWO interlocking through-lines: THE BACK DOOR (a literal secret exception in FTX's
-    own code, planted as an unseen "second business" in Ch1, defined mechanically in Ch2, referenced
-    at the Ch3 peak, and triggering the Ch4 collapse) and THE EPITHET ("the King of Crypto", coined by
-    the press at the Ch3 peak, read back as the government's own description of the fraud at the Ch5
-    verdict).
-  * WARDROBE CALLBACK: the rumpled T-shirt and cargo shorts, planted at the Ch3 peak as a trust signal,
-    paid off in the closing hold as the uniform of "the next kid" already raising money on the same
-    promise.
+    This one runs TWO interlocking through-lines: THE PROMISE ("ten percent, every year, like
+    clockwork" — planted in the hook, defined mechanically in Ch2, proven mathematically impossible in
+    Ch3, read back in the closing reflection as the fantasy every investor secretly wants) and
+    THE FLOOR BELOW (the walled-off 17th-floor unit — planted Ch1, is the whole subject of Ch2, and
+    is read back as a share-worthy irony in Ch3: a former NASDAQ chairman running history's largest
+    fraud one floor under his own legitimate firm).
+  * CALLBACK OBJECT: the Elie Wiesel Foundation's endowment, planted in Ch1 as one of the trusting
+    names on his client list, paid off in Ch5 as one of the accounts that lost every dollar.
 
 CHAPTERS (§1, `Evocative Noun: Plain Explanation`, emitted as card=dict(kind="chapter", ...) and used
 verbatim in the description timestamps):
-  1 The Prodigy        : A Trader's Bet on Crypto
-  2 The Backdoor       : How the Money Actually Moved
-  3 The King of Crypto : Buying Trust in Bulk
-  4 The Run            : Ten Days That Ended It
-  5 The Reckoning      : Seven Counts, Twenty-Five Years
+  1 The Prophet      : Wall Street's Trusted Face
+  2 The Split Floor  : How the Lie Worked
+  3 The Whistleblower: Nine Years, No Answer
+  4 The Confession   : Five Days in December
+  5 The Reckoning    : 150 Years, No Trial
 
 PROMISE -> PAYOFF LEDGER:
-  * Hook promise: "a back door into every user's account" -> mechanism PAID in Ch2 (Gary Wang's code
-    exception, the $65B uncapped line, no margin calls for Alameda).
-  * "Second business, nobody outside a small circle knew about it" planted Ch1 close -> paid off as
-    Ch2's entire subject.
-  * EPITHET: "the King of Crypto" coined by the press, planted Ch3 -> read back as Damian Williams's
-    own description of the fraud at the Ch5 verdict.
-  * WARDROBE MOTIF: T-shirt/cargo shorts as trust signal, planted Ch3 -> paid off in the final hold.
-  * Larry David's Super Bowl line, "I don't think so. And I'm never wrong about this stuff," planted
-    Ch3 -> re-triggered as unintentionally correct in the closing reflection -> a SECOND payoff in Ch5
-    (the government cites the same ad in court as evidence FTX.US was never really kept separate).
-  * Congress testimony SCHEDULED for Dec 13 planted Ch3 -> paid off Ch4 (arrested the night before).
-  * share-worthy beat #1: the hidden credit line regulators later sized at $65 billion.
-  * share-worthy beat #2: FTX bought 19 years of naming rights on a Miami arena and kept the name for
-    about eighteen months of it.
-  * share-worthy beat #3: the man who took over as CEO to clean up the wreckage had done the same job
-    for Enron, and said on the record he'd never seen anything this bad.
-  * MIDPOINT REVERSAL (§5, "the moment the subject's own machine turns on them"): Nov 6 2022, CZ —
-    the rival Bankman-Fried had once done a deal with — announces Binance will dump its FTT holdings.
-    gap=1.4 on the scene immediately before that line.
+  * Hook promise: "ten percent, every year, like clockwork" -> mechanism PAID in Ch2 (split-strike
+    conversion, no real trades, DiPascali's fabricated statements) -> proven impossible in Ch3
+    (Markopolos's math) -> read back in the closing reflection as the fantasy every investor wants.
+  * "One floor below" planted Ch1 (the 17th-floor unit) -> paid off as Ch2's entire subject -> a
+    second payoff as Ch3's share-worthy irony (NASDAQ's own former chairman, one floor under himself).
+  * Elie Wiesel Foundation planted Ch1 (a name on the client list) -> paid off Ch5 (lost its entire
+    endowment, $15.2M).
+  * Fairfield Greenwich / feeder-fund motif planted Ch1 ($7.2B funneled in for fees) -> paid off Ch4
+    as one of the funds gutted in the run.
+  * Markopolos's report title, "The World's Largest Hedge Fund Is a Fraud," planted Ch3 -> paid off
+    Ch4 when the 2008 run proves him right nine years after he wrote it.
+  * The sons, Mark and Andrew, planted Ch1 (they work in the real, legitimate business one floor up)
+    -> paid off Ch4 (they are the ones who turn him in) -> paid off again, darker, Ch5 (Mark's death).
+  * Peter Madoff, the brother and compliance officer, planted Ch1 -> paid off Ch5 (his own guilty
+    plea and sentence).
+  * MIDPOINT REVERSAL (§5, "the moment the subject's own machine turns on them"): the 2008 financial
+    crisis triggers a wave of redemption requests Madoff cannot cover — his own scheme's fuel supply
+    turns on him. gap=1.4 on the scene immediately before that line.
+  * share-worthy beat #1: a former chairman of NASDAQ ran history's largest fraud one floor under his
+    own real firm.
+  * share-worthy beat #2: the fictitious value on client statements was $64.8B; the real cash that
+    ever existed and vanished was about $17.5B — two very different "size of the fraud" numbers.
+  * share-worthy beat #3: Mark Madoff died by his own hand exactly two years, to the day, after his
+    father's arrest.
 
 Numbers, sentence lengths and WPM are self-checked against docs/BIBLE.md §3 before build; see the
 tail of this file for the narration-rate stamp. Vocabulary is deliberately short (Anglo-Saxon over
-Latinate: "help" not "cooperation", "shut down" not "liquidated", "linked firms" not "affiliated
-companies", "back door" not "mechanism") to hit the syllables-per-word band the WPM gate requires
-(docs/BIBLE.md §3a "THE WPM RULE IS A RULE ABOUT WORD LENGTH") — checked with scripts/wpm_predict.py
-before every build.
+Latinate: "help" not "cooperation", "shut down" not "liquidated", "watchdog" not "regulatory agency",
+"lawyers" not "prosecutors") to hit the syllables-per-word band the WPM gate requires (docs/BIBLE.md
+§3a "THE WPM RULE IS A RULE ABOUT WORD LENGTH") — checked with scripts/wpm_predict.py before build.
 """
 
 FPS = 30
@@ -70,895 +74,417 @@ FPS = 30
 NARRATION_RATE = "-5%"   # matches the current channel-wide retune (docs/BIBLE.md §3), unchanged here
 
 SCENES = [
-    # ================= HOOK — five steps, first ~30s =================
-    dict(id="t001", level=None, template="cityStreet",
-         narration=("He ran a crypto exchange worth thirty-two billion dollars."),
-         overlay=None),
-
-    dict(id="t002", level=None, template="officeFloor",
-         narration=("And gave himself a back door into every user's cash."),
-         overlay=None),
-
-    dict(id="t003", level=None, template="bankExterior",
-         narration=("Eight billion dollars of it. Gone in ten days."),
-         overlay=None),
-
-    dict(id="t004", level=None, template="crowdQueue",
-         narration=("A million people, still waiting on money that was never there."),
-         overlay=None),
-
-    dict(id="t005", level=None, template="domesticInterior",
-         narration=("He gave forty million dollars to politicians."),
-         overlay=None),
-
-    dict(id="t006", level=None, template="newsMontage",
-         narration=("Congress called him to testify. He got arrested instead."),
-         overlay=None,
-         card=dict(kind="narration", text="A hearing he\nnever reached.")),
-
-    dict(id="t007", level=None, template="boardroom",
-         narration=("This is the story of Sam Bankman-Fried — the boy genius they crowned the King "
-                    "of Crypto."),
-         overlay=None),
-
-    dict(id="t008", level=None, template="closeUpPortrait",
-         narration=("Rumpled shirt. Cargo shorts."),
-         overlay=None),
-
-    dict(id="t008b", level=None, template="domesticInterior",
-         narration=("The most trusted man in crypto."),
-         overlay=None),
-
-    dict(id="t009", level=None, template="cityStreet",
-         narration=("Berkeley, California. 2017."),
-         overlay=None),
-
-    # ================= CHAPTER 1 — The Prodigy =================
-    dict(id="t010", level="CH 1", template="officeFloor", breath=True,
-         narration=("Before all this, he was just a physics major at MIT."),
-         overlay=None,
-         card=dict(kind="chapter", title="The Prodigy", subtitle="A Trader's Bet on Crypto", hold=2.4)),
-
-    dict(id="t011", level=None, template="closeUpPortrait",
-         narration=("Both parents taught law at Stanford."),
-         overlay=None),
-
-    dict(id="t012", level=None, template="domesticInterior",
-         narration=("He grew up arguing ethics at the dinner table."),
-         overlay=None),
-
-    dict(id="t013", level=None, template="officeFloor",
-         narration=("After school, he took a job at Jane Street — one of Wall Street's most "
-                    "secretive firms."),
-         overlay=None),
-
-    dict(id="t014", level=None, template="chartBoard", chart="up",
-         narration=("He learned to price risk fast, and never flinch."),
-         overlay=None),
-
-    dict(id="t015", level=None, template="domesticInterior",
-         narration=("He believed in something called effective altruism."),
-         overlay=None,
-         bubbles=[dict(text="Why give away everything you make?", speaker="left"),
-                  dict(text="A dollar does more good out there than in my pocket.", speaker="right", at=2.2)]),
-
-    dict(id="t016", level=None, template="closeUpPortrait",
-         narration=("Earn a fortune. Give away nearly all of it."),
-         overlay=None),
-
-    dict(id="t017", level=None, template="cityStreet",
-         narration=("In 2017, he quit Jane Street."),
-         overlay=None),
-
-    dict(id="t018", level=None, template="closeUpPortrait",
-         narration=("He chased a new idea instead: crypto arbitrage."),
-         overlay=None),
-
-    dict(id="t019", level=None, template="exchangeFloor",
-         narration=("Bitcoin traded for different prices on different sites."),
-         overlay=None),
-
-    dict(id="t020", level=None, template="chartBoard", chart="up",
-         narration=("Sometimes ten percent apart, on the same coin."),
-         overlay=None),
-
-    dict(id="t021", level=None, template="officeFloor",
-         narration=("Buy it low in Japan. Sell it high in the U.S."),
-         overlay=None),
-
-    dict(id="t022", level=None, template="exchangeFloor",
-         narration=("You didn't need Wall Street to see that gap. That gap alone was the whole "
-                    "business."),
-         overlay=None),
-
-    dict(id="t023", level=None, template="officeFloor",
-         narration=("He named the firm Alameda Research, run out of an apartment in Berkeley."),
-         overlay=None),
-
-    dict(id="t024", level=None, template="closeUpPortrait",
-         narration=("Within a year, it moved twenty-five million dollars a day."),
-         overlay=None),
-
-    dict(id="t025", level=None, template="domesticInterior",
-         narration=("He hired from his own world: old classmates, fellow traders."),
-         overlay=None),
-
-    dict(id="t026", level=None, template="officeFloor", cast=1,
-         narration=("One was Caroline Ellison, a Jane Street alum."),
-         overlay=None),
-
-    dict(id="t027", level=None, template="closeUpPortrait", cast=2,
-         narration=("Another was Gary Wang, a coder since he was a teen."),
-         overlay=None),
-
-    dict(id="t028", level=None, template="cityStreet",
-         narration=("In 2019, he and Wang built something bigger."),
-         overlay=None),
-
-    dict(id="t029", level=None, template="newsMontage", labels=["FTX"],
-         narration=("An exchange of their own. They called it FTX."),
-         overlay=None),
-
-    dict(id="t030", level=None, template="exchangeFloor",
-         narration=("A place to trade the bets nobody else would touch. Complex bets, dozens of "
-                    "coins, huge leverage."),
-         overlay=None),
-
-    dict(id="t031", level=None, template="boardroom",
-         narration=("2021 was crypto's best year ever, and bitcoin kept setting new records."),
-         overlay=None),
-
-    dict(id="t032", level=None, template="closeUpPortrait",
-         narration=("Within two years, FTX moved ten billion dollars a day."),
-         overlay=None),
-
-    dict(id="t033", level=None, template="officeFloor",
-         narration=("Investors lined up: Sequoia, SoftBank, a piece of Singapore's own wealth fund."),
-         overlay=None),
-
-    dict(id="t034", level=None, template="closeUpPortrait",
-         narration=("Staff called him the smartest boss they'd ever had."),
-         overlay=None),
-
-    dict(id="t035", level=None, template="boardroom",
-         narration=("But nobody outside a small circle knew about the second business."),
-         overlay=None),
-
-    dict(id="t036", level=None, template="cityStreet",
-         narration=("Its own floor. Its own staff."),
-         overlay=None),
-
-    dict(id="t036b", level=None, template="closeUpPortrait",
-         narration=("Almost no one let in."),
-         overlay=None),
-
-    # ================= CHAPTER 2 — The Backdoor =================
-    dict(id="t037", level="CH 2", template="exchangeFloor", breath=True,
-         narration=("That second business was Alameda Research. It wasn't like any other account on "
-                    "FTX."),
-         overlay=None,
-         card=dict(kind="chapter", title="The Backdoor", subtitle="How the Money Actually Moved", hold=2.4)),
-
-    dict(id="t038", level=None, template="officeFloor", cast=2,
-         narration=("Gary Wang built it a secret exception in FTX's own code."),
-         overlay=None),
-
-    dict(id="t039", level=None, template="closeUpPortrait",
-         narration=("Here's the trick, in one line: Alameda's balance could go negative. No limit. "
-                    "No warning."),
-         overlay=None),
-
-    dict(id="t040", level=None, template="chartBoard", chart="flat",
-         narration=("Every other user who overdrew got shut down fast."),
-         overlay=None),
-
-    dict(id="t040b", level=None, template="officeFloor",
-         narration=("Alameda never did."),
-         overlay=None),
-
-    dict(id="t041", level=None, template="bankExterior", overlay=dict(big="$65B", sub="ALAMEDA'S HIDDEN CREDIT LINE"),
-         narration=("Regulators later sized that hidden line at sixty-five billion dollars."),
-         ),
-
-    dict(id="t042", level=None, template="officeFloor",
-         narration=("In plain terms: user cash and Alameda's trading pot were one pool of money."),
-         overlay=None),
-
-    dict(id="t043", level=None, template="domesticInterior",
-         card=dict(kind="word", word="Same."),
-         narration=("Same."),
-         overlay=None),
-
-    dict(id="t044", level=None, template="exchangeFloor",
-         narration=("About ten billion dollars moved from FTX users into Alameda."),
-         overlay=None),
-
-    dict(id="t045", level=None, template="chartBoard", chart="down",
-         narration=("Alameda spent it to cover trading losses nobody else saw."),
-         overlay=None),
-
-    dict(id="t046", level=None, template="bankExterior",
-         narration=("Some bought Bahamas real estate, homes tied to staff."),
-         overlay=None),
-
-    dict(id="t047", level=None, template="boardroom",
-         narration=("Some funded side bets: sports teams, AI firms, a stake in a bank."),
-         overlay=None),
-
-    dict(id="t048", level=None, template="officeFloor",
-         narration=("Some of it — you already know this — the forty million in donations."),
-         overlay=None),
-
-    dict(id="t049", level=None, template="exchangeFloor",
-         narration=("And one thing held the whole structure up: FTX's own coin, FTT."),
-         overlay=None),
-
-    dict(id="t050", level=None, template="chartBoard", chart="up",
-         narration=("FTX had simply made FTT up."),
-         overlay=None),
-
-    dict(id="t051", level=None, template="officeFloor",
-         narration=("Alameda held billions of it as backup — backup that FTX itself set the price "
-                    "of."),
-         overlay=None),
-
-    # §3a RHYTHM — HOLD, 12-16s, one of the budgeted 4-6 holds (the mechanism reveal).
-    dict(id="t052", level=None, template="closeUpPortrait", breath=True,
-         narration=("Picture a bank that owns the only press that prints its own money — a press "
-                    "only it is allowed to run. That's what Alameda's books actually were: numbers on "
-                    "a page, not real money in a vault."),
-         overlay=None),
-
-    dict(id="t053", level=None, template="bankExterior",
-         narration=("On paper, none of it looked like a crime. It looked like a very good trading "
-                    "firm, run by people everyone already trusted."),
-         overlay=None),
-
-    dict(id="t054", level=None, template="domesticInterior",
-         narration=("Users checking their FTX balance saw a normal number, sitting there, ready to "
-                    "pull out."),
-         overlay=None),
-
-    dict(id="t055", level=None, template="crowdQueue",
-         narration=("It wasn't ready. It had already left the building."),
-         overlay=None),
-
-    dict(id="t056", level=None, template="newsMontage",
-         narration=("Auditors signed off. Investors wired in more cash. Nobody asked where Alameda's "
-                    "side of the books actually went, or why one firm never got checked the same "
-                    "way."),
-         overlay=None),
-
-    dict(id="t057", level=None, template="boardroom",
-         narration=("Even inside FTX, only a few people knew how deep the hole went."),
-         overlay=None),
-
-    dict(id="t058", level=None, template="officeFloor",
-         narration=("Nishad Singh, the head engineer, later said the real numbers made him sick."),
-         overlay=None),
-
-    dict(id="t059", level=None, template="closeUpPortrait", cast=1,
-         narration=("Caroline Ellison ran Alameda day to day, and answered, in the end, to one man."),
-         overlay=None),
-
-    dict(id="t060", level=None, template="boardroom", cast=1,
-         narration=("The answer to every shortfall was always the same."),
-         overlay=None,
-         dialogue=dict(text="The numbers don't work. We're short.")),
-
-    dict(id="t061", level=None, template="closeUpPortrait", cast=1,
-         narration=("Borrow more against the back door. Keep moving."),
-         overlay=None,
-         dialogue=dict(text="Use the FTX line. It's always been fine.")),
-
-    dict(id="t062", level=None, template="chartBoard", chart="up",
-         narration=("From outside, the machine looked unstoppable."),
-         overlay=None),
-
-    dict(id="t063", level=None, template="cityStreet",
-         narration=("New users signed up by the millions, chasing what everyone called the safest "
-                    "name in crypto."),
-         overlay=None),
-
-    dict(id="t064", level=None, template="newsMontage",
-         narration=("Magazines called him the next J.P. Morgan — the man who would finally clean the "
-                    "whole industry up, the same way Morgan once had."),
-         overlay=None),
-
-    dict(id="t065", level=None, template="closeUpPortrait",
-         narration=("The joke: his own firm was the dirtiest book in it."),
-         overlay=None),
-
-    dict(id="t066", level=None, template="exchangeFloor",
-         narration=("For three years, the back door held. Then, in the fall of 2022, somebody outside "
-                    "the firm finally opened the real books, line by line."),
-         overlay=None),
-
-    # ================= CHAPTER 3 — The King of Crypto =================
-    dict(id="t067", level="CH 3", template="boardroom", breath=True,
-         narration=("By January 2022, FTX was worth thirty-two billion dollars."),
-         overlay=None,
-         card=dict(kind="chapter", title="The King of Crypto", subtitle="Buying Trust in Bulk", hold=2.4)),
-
-    dict(id="t068", level=None, template="chartBoard", chart="up", overlay=dict(big="$32B", sub="JANUARY 2022 VALUATION"),
-         narration=("Sequoia. SoftBank. Even a Canadian teachers' pension fund."),
-         ),
-
-    dict(id="t069", level=None, template="bankExterior",
-         narration=("On paper, Bankman-Fried himself was worth up to twenty-six billion."),
-         overlay=None),
-
-    dict(id="t069b", level=None, template="closeUpPortrait",
-         narration=("Twenty-nine years old."),
-         overlay=None),
-
-    dict(id="t070", level=None, template="crowdQueue",
-         narration=("Forbes put him at the top of its under-thirty wealth list."),
-         overlay=None),
-
-    dict(id="t071", level=None, template="domesticInterior",
-         narration=("He didn't dress like it. Same rumpled shirt. Same cargo shorts. Same wild "
-                    "hair."),
-         overlay=None),
-
-    dict(id="t072", level=None, template="broadcastDesk",
-         narration=("Reporters loved that. It made him look like the one billionaire who hadn't "
-                    "changed."),
-         overlay=None),
-
-    dict(id="t073", level=None, template="newsMontage", labels=["THE KING OF CRYPTO"],
-         narration=("The press even had a nickname ready: the King of Crypto."),
-         overlay=None),
-
-    dict(id="t074", level=None, template="boardroom",
-         narration=("But FTX had almost no real board — no outside directors asking hard questions."),
-         overlay=None),
-
-    dict(id="t075", level=None, template="officeFloor",
-         narration=("No one really minding the books, either."),
-         overlay=None),
-
-    dict(id="t076", level=None, template="closeUpPortrait", breath=True,
-         narration=("A firm moving billions a day was run less like a bank, more like a dorm — a "
-                    "tight circle of friends who trusted each other completely, and answered to "
-                    "almost no one else."),
-         overlay=None),
-
-    dict(id="t077", level=None, template="domesticInterior",
-         narration=("Most of that circle lived together, in one Bahamas penthouse worth tens of "
-                    "millions."),
-         overlay=None),
-
-    dict(id="t078", level=None, template="crowdQueue",
-         narration=("The Bahamas gave FTX low taxes and a friendly regulator."),
-         overlay=None),
-
-    dict(id="t079", level=None, template="bankExterior",
-         narration=("In 2021, FTX bought nineteen years of naming rights on a Miami arena."),
-         overlay=None),
-
-    dict(id="t080", level=None, template="chartBoard", chart="up",
-         narration=("A hundred and thirty-five million dollars, just to put its name on the door."),
-         overlay=None),
-
-    dict(id="t081", level=None, template="broadcastDesk",
-         narration=("Then came the Super Bowl."),
-         overlay=None),
-
-    dict(id="t082", level=None, template="newsMontage", foreground=dict(kind="overShoulder", side="left"),
-         narration=("FTX bought a national ad starring Larry David."),
-         overlay=None),
-
-    dict(id="t083", level=None, template="broadcastDesk",
-         narration=("David spent the whole minute mocking history's best ideas — the wheel, the "
-                    "toilet, coffee."),
-         overlay=None),
-
-    dict(id="t084", level=None, template="closeUpPortrait", breath=True,
-         narration=("Then he looks at FTX, and says the line: 'I don't think so. And I'm never wrong "
-                    "about this stuff.' It's now the most quoted line in the whole disaster."),
-         overlay=None),
-
-    dict(id="t085", level=None, template="broadcastDesk",
-         narration=("Tom Brady. Gisele Bündchen. Steph Curry."),
-         overlay=None),
-
-    dict(id="t085b", level=None, template="closeUpPortrait",
-         narration=("All paid to put their faces on it."),
-         overlay=None),
-
-    dict(id="t086", level=None, template="exchangeFloor", overlay=dict(big="$40M", sub="POLITICAL DONATIONS, 2022"),
-         narration=("That year, he gave away about forty million dollars in donations."),
-         ),
-
-    dict(id="t087", level=None, template="newsMontage",
-         narration=("Second-biggest donor to Democrats in the whole country, behind only George "
-                    "Soros."),
-         overlay=None),
-
-    dict(id="t088", level=None, template="boardroom",
-         narration=("He testified to Congress about crypto rules. Lawmakers treated him like the one "
-                    "adult in a room full of people who didn't understand the technology."),
-         overlay=None),
-
-    dict(id="t089", level=None, template="closeUpPortrait",
-         narration=("He was booked to testify again that December."),
-         overlay=None),
-
-    dict(id="t090", level=None, template="officeFloor",
-         card=dict(kind="objects", items=["cashStack", "houseModel", "laptop"]),
-         narration=("Real estate. Startup stakes. New gear in every office."),
-         overlay=None),
-
-    dict(id="t091", level=None, template="chartBoard", chart="up",
-         narration=("You didn't need a finance degree to see the number climb."),
-         overlay=None),
-
-    dict(id="t092", level=None, template="bankExterior",
-         narration=("You just had to trust the T-shirt."),
-         overlay=None),
-
-    dict(id="t092b", level=None, template="closeUpPortrait",
-         narration=("It wasn't real."),
-         overlay=None),
-
-    dict(id="t093", level=None, template="chartBoard", chart="up",
-         narration=("It was a number on a screen, propped up by a coin FTX made itself."),
-         overlay=None),
-
-    dict(id="t094", level=None, template="crowdQueue",
-         narration=("Nobody lining up to invest could see that part."),
-         overlay=None),
-
-    dict(id="t095", level=None, template="exchangeFloor",
-         narration=("The valuation, the net worth, the naming rights — all of it sat on the same "
-                    "hollow floor."),
-         overlay=None),
-
-    dict(id="t096", level=None, template="closeUpPortrait",
-         narration=("And that floor was about to be tested by the one thing crypto can never fake."),
-         overlay=None),
-
-    dict(id="t097", level=None, template="boardroom",
-         narration=("A wave of people wanting their money back, all at once."),
-         overlay=None),
-
-    # ================= CHAPTER 4 — The Run =================
-    dict(id="t098", level="CH 4", template="exchangeFloor", breath=True,
-         narration=("November 2nd, 2022. A crypto news site published a leak — Alameda's own balance "
-                    "sheet."),
-         overlay=None,
-         card=dict(kind="chapter", title="The Run", subtitle="Ten Days That Ended It", hold=2.4)),
-
-    dict(id="t099", level=None, template="officeFloor",
-         narration=("Fourteen point six billion dollars in assets, the leak said."),
-         overlay=None),
-
-    dict(id="t100", level=None, template="closeUpPortrait", breath=True,
-         narration=("But the single biggest piece, over three and a half billion, was FTT — the coin "
-                    "FTX had made up itself."),
-         overlay=None),
-
-    dict(id="t101", level=None, template="exchangeFloor",
-         narration=("Alameda's cushion was mostly a coin only its own exchange could price."),
-         overlay=None),
-
-    dict(id="t102", level=None, template="newsMontage", labels=["ALAMEDA'S BOOKS"],
-         narration=("The story spread across crypto Twitter within hours."),
-         overlay=None),
-
-    dict(id="t103", level=None, template="bankExterior",
-         narration=("One reader was watching very closely."),
-         overlay=None),
-
-    dict(id="t103b", level=None, template="officeFloor",
-         narration=("He ran FTX's biggest rival."),
-         overlay=None),
-
-    dict(id="t104", level=None, template="closeUpPortrait", cast=2,
-         narration=("Changpeng Zhao — everyone called him CZ — ran Binance, the largest crypto "
-                    "exchange on Earth."),
-         overlay=None),
-
-    dict(id="t105", level=None, template="boardroom",
-         narration=("Years earlier, Binance sold its own FTX stake back to Bankman-Fried."),
-         overlay=None),
-
-    dict(id="t105b", level=None, template="exchangeFloor",
-         narration=("Paid in FTT."),
-         overlay=None),
-
-    dict(id="t106", level=None, template="domesticInterior",
-         narration=("Binance was still sitting on billions of that same coin."),
-         overlay=None),
-
-    # §3a RHYTHM — the gap before the reversal. gap=1.4 is the ONE licensed use per episode.
-    dict(id="t107", level=None, template="chartBoard", chart="down", gap=1.4,
-         narration=("For four days, CZ said nothing in public."),
-         overlay=None),
-
-    # MIDPOINT REVERSAL — the subject's own machine (his rival, his own token) turns on him.
-    dict(id="t108", level=None, template="broadcastDesk",
-         narration=("Then, on November 6th, he posted one tweet: Binance would sell every FTT token "
-                    "it held."),
-         overlay=None),
-
-    dict(id="t109", level=None, template="closeUpPortrait",
-         narration=("The man he'd once done a deal with had just declared war."),
-         overlay=None),
-
-    dict(id="t110", level=None, template="chartBoard", chart="down",
-         narration=("FTT's price started falling within minutes."),
-         overlay=None),
-
-    dict(id="t111", level=None, template="exchangeFloor",
-         narration=("Down ten percent. Then twenty. Then more."),
-         overlay=None),
-
-    dict(id="t112", level=None, template="crowdQueue", foreground=dict(kind="overShoulder", side="right"),
-         narration=("You could watch the number fall, live, in an app."),
-         overlay=None),
-
-    dict(id="t113", level=None, template="cityStreet",
-         narration=("Users did the only sane thing: they tried to get their money out."),
-         overlay=None),
-
-    dict(id="t114", level=None, template="bankExterior",
-         narration=("A bank run — on a bank that swore it could never have one."),
-         overlay=None),
-
-    dict(id="t115", level=None, template="newsMontage", overlay=dict(big="$6B", sub="WITHDRAWALS IN 72 HOURS"),
-         narration=("Withdrawal requests hit six billion dollars in seventy-two hours."),
-         ),
-
-    dict(id="t116", level=None, template="officeFloor",
-         narration=("Inside FTX, staff found the money wasn't there to give back."),
-         overlay=None),
-
-    dict(id="t117", level=None, template="domesticInterior",
-         narration=("The gap between what users were owed, and what FTX held, was huge."),
-         overlay=None,
-         bubbles=[dict(text="How much can we actually cover?", speaker="left"),
-                  dict(text="Maybe a few hundred million. Not six billion.", speaker="right", at=2.0)]),
-
-    dict(id="t118", level=None, template="boardroom",
-         narration=("November 8th. FTX froze withdrawals completely."),
-         overlay=None),
-
-    dict(id="t119", level=None, template="bankExterior",
-         narration=("That same day, Binance agreed to buy the whole company."),
-         overlay=None),
-
-    dict(id="t120", level=None, template="closeUpPortrait",
-         narration=("For about a day, it looked like a rescue."),
-         overlay=None),
-
-    dict(id="t121", level=None, template="newsMontage",
-         narration=("Then Binance's own accountants opened the books."),
-         overlay=None),
-
-    dict(id="t122", level=None, template="chartBoard", chart="down", breath=True,
-         narration=("What they found, people close to it said, was a hole running into the billions. "
-                    "Money that should have sat untouched. It simply wasn't there. Binance walked "
-                    "away the next day."),
-         overlay=None),
-
-    dict(id="t122b", level=None, template="closeUpPortrait",
-         narration=("November 9th."),
-         overlay=None),
-
-    dict(id="t123", level=None, template="crowdQueue",
-         narration=("The deal was dead, and so, most assumed, was FTX."),
-         overlay=None),
-
-    dict(id="t123b", level=None, template="officeFloor",
-         narration=("November 10th."),
-         overlay=None),
-
-    dict(id="t124", level=None, template="bankExterior",
-         narration=("The Bahamas froze what was left of FTX's local assets."),
-         overlay=None),
-
-    dict(id="t125", level=None, template="domesticInterior",
-         narration=("That same day, Bankman-Fried posted the first of twenty-two tweets."),
-         overlay=None),
-
-    dict(id="t126", level=None, template="closeUpPortrait",
-         card=dict(kind="narration", text="\"I'm sorry.\""),
-         narration=("He opened with two words."),
-         overlay=None),
-
-    dict(id="t127", level=None, template="domesticInterior",
-         card=dict(kind="narration", text="\"I f---ed up,\nand should have done better.\""),
-         narration=("Then he admitted, in his own words, that he'd messed up."),
-         overlay=None),
-
-    dict(id="t128", level=None, template="newsMontage",
-         narration=("November 11th. FTX, Alameda, and about a hundred and thirty linked firms filed "
-                    "for bankruptcy."),
-         overlay=None),
-
-    dict(id="t129", level=None, template="boardroom",
-         narration=("Bankman-Fried resigned as CEO that same day."),
-         overlay=None),
-
-    dict(id="t130", level=None, template="officeFloor",
-         narration=("His replacement had one very specific résumé line."),
-         overlay=None),
-
-    dict(id="t131", level=None, template="closeUpPortrait", cast=2,
-         narration=("John Ray had spent his career cleaning up wrecks."),
-         overlay=None),
-
-    dict(id="t131b", level=None, template="officeFloor", cast=2,
-         narration=("Including one called Enron."),
-         overlay=None),
-
-    # §3a RHYTHM — HOLD, 14-16s, one of the budgeted 4-6 holds.
-    dict(id="t132", level=None, template="bankExterior", breath=True,
-         narration=("Ray filed a court statement: 'Never in my career have I seen such a complete "
-                    "failure of corporate controls and such a complete absence of trustworthy "
-                    "financial information as occurred here.' And Ray had cleaned up Enron once "
-                    "already."),
-         overlay=None),
-
-    dict(id="t133", level=None, template="crowdQueue", mood="grim",
-         narration=("A million people were suddenly owed money nobody could find."),
-         overlay=None),
-
-    dict(id="t134", level=None, template="officeFloor",
-         card=dict(kind="objects", items=["safe", "laptop"]),
-         narration=("Behind the clean app, there was supposed to be a vault."),
-         overlay=None),
-
-    dict(id="t134b", level=None, template="closeUpPortrait",
-         narration=("There wasn't."),
-         overlay=None),
-
-    dict(id="t135", level=None, template="newsMontage",
-         panels=dict(variant="grid4", cells=[dict(template="chartBoard"), dict(template="crowdQueue"),
-                                             dict(template="bankExterior"), dict(template="boardroom")]),
-         narration=("Every headline that week said some version of the same thing: the money is not "
-                    "there."),
-         overlay=None),
-
-    dict(id="t136", level=None, template="cityStreet",
-         narration=("December 12th, 2022. Nassau, the Bahamas."),
-         overlay=None),
-
-    dict(id="t137", level=None, template="bankExterior",
-         narration=("The next morning, he was set to testify before Congress, about exactly what had "
-                    "gone wrong."),
-         overlay=None),
-
-    dict(id="t138", level=None, template="closeUpPortrait",
-         narration=("He never got the chance."),
-         overlay=None),
-
-    dict(id="t139", level=None, template="newsMontage",
-         narration=("That night, Bahamian police arrested him, on a U.S. request."),
-         overlay=None),
-
-    dict(id="t140", level=None, template="crowdQueue",
-         narration=("The hearing happened without him."),
-         overlay=None),
-
-    dict(id="t140b", level=None, template="closeUpPortrait",
-         narration=("The next conversation would be in a courtroom."),
-         overlay=None),
-
-    # ================= CHAPTER 5 — The Reckoning =================
-    dict(id="t141", level="CH 5", template="courtHearing", breath=True,
-         narration=("Within weeks, the people closest to him started talking."),
-         overlay=None,
-         card=dict(kind="chapter", title="The Reckoning", subtitle="Seven Counts, Twenty-Five Years", hold=2.4)),
-
-    dict(id="t142", level=None, template="closeUpPortrait", cast=2,
-         narration=("Gary Wang, who wrote the original code, pleaded guilty, and agreed to help the "
-                    "government."),
-         overlay=None),
-
-    dict(id="t143", level=None, template="courtHearing", cast=1,
-         narration=("So did Caroline Ellison, who'd run the numbers herself."),
-         overlay=None),
-
-    dict(id="t144", level=None, template="officeFloor",
-         narration=("Nishad Singh, the engineer the real numbers made sick, pleaded guilty too."),
-         overlay=None),
-
-    dict(id="t144b", level=None, template="closeUpPortrait",
-         narration=("Three of his closest people."),
-         overlay=None),
-
-    dict(id="t145", level=None, template="courtHearing",
-         narration=("Testifying against him, before the trial had even started."),
-         overlay=None),
-
-    dict(id="t146", level=None, template="newsMontage",
-         narration=("October 3rd, 2023. His criminal trial opened in Manhattan."),
-         overlay=None),
-
-    dict(id="t147", level=None, template="courtHearing",
-         narration=("The case was simple, they said: he took users' money, and spent it like his "
-                    "own."),
-         overlay=None),
-
-    dict(id="t148", level=None, template="closeUpPortrait", cast=1, breath=True,
-         narration=("Caroline Ellison spent nearly three days on the stand. She said he'd told her to "
-                    "use user funds for Alameda's losses, for investments, for real estate, for the "
-                    "donations."),
-         overlay=None),
-
-    dict(id="t149", level=None, template="courtHearing", cast=1,
-         narration=("When it all fell apart, part of her felt relief."),
-         overlay=None),
-
-    dict(id="t150", level=None, template="closeUpPortrait", cast=1,
-         narration=("She didn't have to lie anymore."),
-         overlay=None),
-
-    dict(id="t151", level=None, template="courtHearing",
-         narration=("Bankman-Fried took the stand himself — a risky move, in his own defense."),
-         overlay=None,
-         dialogue=dict(text="I never meant to steal from anyone.")),
-
-    dict(id="t152", level=None, template="closeUpPortrait",
-         narration=("His lawyers said he never meant to steal anything, just to move fast, in a "
-                    "business that moved fast."),
-         overlay=None,
-         dialogue=dict(text="You spent it like it was already yours.")),
-
-    dict(id="t153", level=None, template="newsMontage",
-         narration=("They even used the Super Bowl ad against him."),
-         overlay=None),
-
-    dict(id="t154", level=None, template="broadcastDesk",
-         narration=("Proof, they argued, that FTX never really kept its U.S. users separate."),
-         overlay=None),
-
-    dict(id="t155", level=None, template="closeUpPortrait",
-         narration=("If you sat in that jury box, the T-shirt wasn't the point anymore."),
-         overlay=None),
-
-    dict(id="t156", level=None, template="newsMontage",
-         narration=("The jury did not agree."),
-         overlay=None),
-
-    dict(id="t157", level=None, template="courtHearing", overlay=dict(big="GUILTY", sub="ALL SEVEN COUNTS"),
-         narration=("November 2nd, 2023. Guilty, on all seven counts."),
-         ),
-
-    dict(id="t158", level=None, template="newsMontage", labels=["GUILTY"],
-         narration=("Wire fraud. Conspiracy. Securities fraud. Money laundering."),
-         overlay=None),
-
-    dict(id="t159", level=None, template="broadcastDesk",
-         narration=("U.S. Attorney Damian Williams stepped up to the microphones."),
-         overlay=None),
-
-    dict(id="t160", level=None, template="closeUpPortrait", breath=True,
-         narration=("He said: 'Sam Bankman-Fried perpetrated one of the biggest financial frauds in "
-                    "American history — a multibillion-dollar scheme designed to make him the King of "
-                    "Crypto.'"),
-         overlay=None),
-
-    dict(id="t161", level=None, template="newsMontage",
-         narration=("The nickname the magazines gave him, read back as a charge sheet."),
-         overlay=None),
-
-    dict(id="t162", level=None, template="bankExterior",
-         narration=("March 28th, 2024. Sentencing day."),
-         overlay=None),
-
-    dict(id="t163", level=None, template="courtHearing", overlay=dict(big="25 YEARS", sub="FEDERAL PRISON"),
-         narration=("Judge Lewis Kaplan gave him twenty-five years."),
-         ),
-
-    dict(id="t164", level=None, template="officeFloor", overlay=dict(big="$11B", sub="ORDERED FORFEITURE"),
-         narration=("And ordered him to pay back eleven billion dollars."),
-         ),
-
-    dict(id="t165", level=None, template="chartBoard", chart="down",
-         narration=("Eight billion of it tied to the users who lost their cash."),
-         overlay=None),
-
-    dict(id="t166", level=None, template="crowdQueue", mood="grim",
-         narration=("The rest: money raised on false promises, and debts owed to Alameda's own "
-                    "lenders."),
-         overlay=None),
-
-    dict(id="t167", level=None, template="closeUpPortrait", cast=1,
-         narration=("Caroline Ellison was sentenced separately, that September."),
-         overlay=None),
-
-    dict(id="t167b", level=None, template="bankExterior",
-         narration=("To two years."),
-         overlay=None),
-
-    dict(id="t168", level=None, template="officeFloor",
-         narration=("The judge called her help 'very, very substantial,' and drew a hard line between "
-                    "her and him."),
-         overlay=None),
-
-    dict(id="t169", level=None, template="bankExterior",
-         narration=("Gary Wang and Nishad Singh had both pleaded guilty and testified against him."),
-         overlay=None),
-
-    dict(id="t170", level=None, template="courtHearing", mood="grim",
-         narration=("The company is still being unwound, one claim at a time."),
-         overlay=None),
-
-    dict(id="t171", level=None, template="closeUpPortrait",
-         narration=("None of it un-froze the accounts that stayed frozen two straight years."),
-         overlay=None),
-
-    dict(id="t172", level=None, template="cityStreet",
-         narration=("The boy genius who was going to save crypto from itself is now just another "
-                    "name on a very long list."),
-         overlay=None),
-
-    # ================= ENDING — reflection + complicit "we" + callback + forward tease =================
-    dict(id="t173", level=None, template="domesticInterior",
-         narration=("For a while, almost everyone believed the story."),
-         overlay=None),
-
-    dict(id="t174", level=None, template="broadcastDesk",
-         narration=("The regulators who let him testify like an expert."),
-         overlay=None),
-
-    dict(id="t174b", level=None, template="newsMontage",
-         narration=("The reporters who loved the T-shirt."),
-         overlay=None),
-
-    dict(id="t174c", level=None, template="closeUpPortrait",
-         narration=("The politicians who cashed his checks."),
-         overlay=None),
-
-    dict(id="t175", level=None, template="crowdQueue",
-         narration=("We wanted a genius who could make crypto safe."),
-         overlay=None),
-
-    dict(id="t176", level=None, template="newsMontage",
-         narration=("We got a fraud who made it look safe instead."),
-         overlay=None),
-
-    dict(id="t177", level=None, template="closeUpPortrait",
-         narration=("Even the ad got it right, by accident."),
-         overlay=None),
-
-    dict(id="t178", level=None, template="broadcastDesk",
-         narration=("'I don't think so. And I'm never wrong about this stuff.'"),
-         overlay=None),
-
-    dict(id="t179", level=None, template="newsMontage",
-         narration=("The one man whose whole job was to say no, said yes, and got paid for a Super "
-                    "Bowl ad to prove it."),
-         overlay=None),
-
-    dict(id="t180", level=None, template="bankExterior",
-         narration=("The back door that made him rich is gone now, deleted along with the company."),
-         overlay=None),
-
-    dict(id="t181", level=None, template="officeFloor",
-         narration=("But the shape of it — trust me, don't check the books — never really goes "
-                    "away."),
-         overlay=None),
-
-    dict(id="t182", level=None, template="closeUpPortrait",
-         narration=("He built a business on being the one guy you never had to double-check."),
-         overlay=None),
-
-    # §3a RHYTHM — LAST SHOT, the longest hold, callback to the opening image AND a forward tease.
-    dict(id="t183", level=None, template="cityStreet", breath=True,
-         narration=("It started in a Berkeley apartment, on a bet that the numbers would hold. It "
-                    "ended in a cell, twenty-five years long. Somewhere tonight, another kid in cargo "
-                    "shorts is raising a round on that very same promise."),
-         overlay=None),
+    dict(id='t001', level=None, template='domesticInterior', narration='He told investors their money grew ten percent a year, like clockwork, no matter what the market did.', overlay=None),
+
+    dict(id='t002', level=None, template='crowdQueue', narration='Retirees lost pensions. Charities shut their doors for good.', overlay=None),
+
+    dict(id='t003', level=None, template='officeFloor', narration='One man begged watchdogs to look. Nine years straight.', overlay=None),
+
+    dict(id='t004', level=None, template='boardroom', narration='And every single time, nobody checked.', overlay=None, card={'kind': 'narration', 'text': 'Nobody\nchecked.'}),
+
+    dict(id='t005', level=None, template='newsMontage', narration='This is the story of Bernie Madoff, the most trusted man on Wall Street, who built the largest fraud in its history.', overlay=None),
+
+    dict(id='t006', level=None, template='bankExterior', narration='Sixty-four billion dollars, on paper. Almost none of it real.', overlay=None),
+
+    dict(id='t007', level=None, template='broadcastDesk', narration='Chairman of NASDAQ. Advisor to thousands.', overlay=None),
+
+    dict(id='t008', level=None, template='cityStreet', narration='Then, one December morning, the FBI came knocking.', overlay=None),
+
+    dict(id='t009', level=None, template='closeUpPortrait', narration="You could have been one of his clients. You'd never have known.", overlay=None),
+
+    dict(id='t009b', level=None, template='cityStreet', period='mid20c', narration='April 29th, 1938. Queens, New York.', overlay=None),
+
+    # ================= CH 1 =================
+    dict(id='t010', level='CH 1', template='domesticInterior', period='mid20c', breath=True, narration='A baby was born into an ordinary family, in an ordinary borough.', overlay=None, card={'kind': 'chapter', 'title': 'The Prophet', 'subtitle': "Wall Street's Trusted Face", 'hold': 2.4}),
+
+    dict(id='t011', level=None, template='cityStreet', period='mid20c', narration='He earned his first money as a lifeguard, and installing lawn sprinklers.', overlay=None),
+
+    dict(id='t012', level=None, template='chartBoard', chart='up', narration='By 1960, he had saved five thousand dollars.', overlay=None),
+
+    dict(id='t013', level=None, template='officeFloor', period='mid20c', narration='At twenty-two, he used every dollar of it to start his own firm.', overlay=None),
+
+    dict(id='t014', level=None, template='bankExterior', narration='Bernard L. Madoff Investment Securities.', overlay=None),
+
+    dict(id='t015', level=None, template='exchangeFloor', narration='It grew into one of the busiest market makers on Wall Street.', overlay=None),
+
+    dict(id='t016', level=None, template='boardroom', narration='Madoff helped build the technology behind a brand-new stock exchange.', overlay=None),
+
+    dict(id='t017', level=None, template='chartBoard', chart='up', narration='NASDAQ. Still young. Still finding its feet.', overlay=None),
+
+    dict(id='t018', level=None, template='broadcastDesk', narration='He sat on its board. He served as its chairman. Three separate years.', overlay=None, panels={'variant': 'v2', 'cells': [{'template': 'broadcastDesk'}, {'template': 'boardroom'}]}),
+
+    dict(id='t019', level=None, template='cityStreet', narration='To the outside world, he was Wall Street royalty.', overlay=None),
+
+    dict(id='t020', level=None, template='boardroom', mood='bright', narration='Trusted. Steady. Almost dull.', overlay=None),
+
+    dict(id='t021', level=None, template='bankExterior', narration='His firm sat on the nineteenth floor of a Manhattan tower, nicknamed the Lipstick Building.', overlay=None),
+
+    dict(id='t021b', level=None, template='cityStreet', narration='Within a decade, his firm was one of the most active traders on Wall Street.', overlay=None),
+
+    dict(id='t021c', level=None, template='boardroom', narration='Watchdogs liked him. Rivals respected him. Almost nobody said a bad word.', overlay=None),
+
+    dict(id='t021d', level=None, template='domesticInterior', narration='His wife, Ruth, stood beside him through all of it.', overlay=None),
+
+    dict(id='t021e', level=None, template='officeFloor', narration='The two businesses shared a building. They never shared a set of books.', overlay=None),
+
+    dict(id='t021f', level=None, template='cityStreet', narration='Clients rarely asked to see the trading floor for themselves.', overlay=None),
+
+    dict(id='t021g', level=None, template='domesticInterior', narration='Why would they. The checks cleared. The statements arrived right on schedule.', overlay=None),
+
+    dict(id='t021h', level=None, template='chartBoard', chart='flat', narration='Not one bad quarter ever showed up in the paperwork.', overlay=None),
+
+    dict(id='t021i', level=None, template='boardroom', narration='That alone should have been the tell.', overlay=None),
+
+    dict(id='t021j', level=None, template='newsMontage', narration='Instead, it became the whole sales pitch.', overlay=None),
+
+    dict(id='t021k', level=None, template='crowdQueue', narration="People didn't just want to invest with him. They wanted to be seen investing with him.", overlay=None),
+
+    dict(id='t022', level=None, template='officeFloor', narration='His sons, Mark and Andrew, worked there — trading real stocks, in real time.', overlay=None),
+
+    dict(id='t023', level=None, template='domesticInterior', narration='His brother Peter ran compliance. The rules, on paper, looked airtight.', overlay=None),
+
+    dict(id='t024', level=None, template='officeFloor', breath=True, narration='But one floor below, on floor seventeen, something else was happening.', overlay=None),
+
+    dict(id='t025', level=None, template='newsMontage', narration='A separate unit. Walled off.', overlay=None),
+
+    dict(id='t026', level=None, template='officeFloor', narration='No more than twenty-four employees. Its own doors. Its own rules.', overlay=None),
+
+    dict(id='t027', level=None, template='cityStreet', narration='This was the money side — the part almost nobody outside a small circle ever saw.', overlay=None, card={'kind': 'narration', 'text': 'One floor\nbelow.'}),
+
+    dict(id='t028', level=None, template='domesticInterior', narration='Clients here were told something simple.', overlay=None),
+
+    dict(id='t029', level=None, template='chartBoard', chart='up', narration='Give Bernie your money, and it grows ten percent a year.', overlay=None),
+
+    dict(id='t030', level=None, template='boardroom', narration='Not eight one year, fourteen the next.', overlay=None),
+
+    dict(id='t031', level=None, template='chartBoard', chart='up', narration='Ten. Every year. Like clockwork.', overlay=None),
+
+    dict(id='t032', level=None, template='domesticInterior', narration="It didn't matter if the market soared or crashed. The number never moved.", overlay=None),
+
+    dict(id='t033', level=None, template='crowdQueue', narration='New investors begged to get in.', overlay=None),
+
+    dict(id='t034', level=None, template='boardroom', narration='Being turned away only made it more exclusive.', overlay=None, bubbles=[{'text': 'How is it possible, ten percent, every single year?', 'speaker': 'left'}, {'text': "Bernie doesn't miss.", 'speaker': 'right', 'at': 2.2}], foreground={'kind': 'overShoulder', 'side': 'left'}),
+
+    dict(id='t035', level=None, template='cityStreet', narration='Whole funds sprang up just to funnel money his way.', overlay=None),
+
+    dict(id='t036', level=None, template='chartBoard', chart='up', narration='One firm alone, Fairfield Greenwich, sent him seven point two billion dollars.', overlay=None),
+
+    dict(id='t037', level=None, template='cityStreet', narration='And collected hundreds of millions in fees, for doing almost nothing.', overlay=None),
+
+    dict(id='t038', level=None, template='domesticInterior', narration="Even a foundation carrying Elie Wiesel's name trusted him with its entire endowment.", overlay=None),
+
+    dict(id='t039', level=None, template='broadcastDesk', narration='Money magazines put him on their covers. A model of quiet, steady success.', overlay=None, bubbles=[{'text': "What's the secret?", 'speaker': 'left'}, {'text': "Consistency. That's all it is.", 'speaker': 'right', 'at': 2.0}]),
+
+    dict(id='t040', level=None, template='cityStreet', narration='Everyone assumed someone, somewhere, was checking the math.', overlay=None),
+
+    dict(id='t041', level=None, template='closeUpPortrait', mood='grim', breath=True, narration='Nobody was.', overlay=None, card={'kind': 'narration', 'text': 'Nobody\nwas.'}),
+
+    # ================= CH 2 =================
+    dict(id='t042', level='CH 2', template='officeFloor', breath=True, narration='Madoff called his strategy split-strike conversion.', overlay=None, card={'kind': 'chapter', 'title': 'The Split Floor', 'subtitle': 'How the Lie Worked', 'hold': 2.4}),
+
+    dict(id='t043', level=None, template='chartBoard', chart='flat', narration='In plain terms: buy a basket of blue-chip stocks.', overlay=None),
+
+    dict(id='t044', level=None, template='exchangeFloor', narration='Then buy options that cap both the gains and the losses.', overlay=None),
+
+    dict(id='t044b', level=None, template='chartBoard', chart='flat', narration='A collar limits how far a stock can rise, and how far it can fall.', overlay=None),
+
+    dict(id='t044c', level=None, template='exchangeFloor', narration='It trades away the big wins, to avoid the big losses.', overlay=None),
+
+    dict(id='t044d', level=None, template='officeFloor', narration="Reasonable. Boring. Exactly the kind of strategy that shouldn't beat the market every single year.", overlay=None),
+
+    dict(id='t044e', level=None, template='chartBoard', chart='up', narration="But Madoff's numbers beat it anyway. Every year. Without fail.", overlay=None),
+
+    dict(id='t044f', level=None, template='officeFloor', narration='Nobody on the seventeenth floor was buying options. Nobody was buying stocks.', overlay=None),
+
+    dict(id='t044g', level=None, template='closeUpPortrait', narration='They were buying time.', overlay=None),
+
+    dict(id='t044h', level=None, template='officeFloor', narration='A handful of people generated years of fake trade confirmations, by hand.', overlay=None),
+
+    dict(id='t044i', level=None, template='newsMontage', narration='Every one of them dated to look exactly like a normal trading day.', overlay=None),
+
+    dict(id='t044j', level=None, template='exchangeFloor', narration='The lie had to hold up every single day the market was open.', overlay=None),
+
+    dict(id='t044k', level=None, template='closeUpPortrait', narration='For decades, it was.', overlay=None),
+
+    dict(id='t045', level=None, template='boardroom', narration="It's a real strategy. Funds still use it today.", overlay=None),
+
+    dict(id='t046', level=None, template='officeFloor', breath=True, narration="There was just one problem. Madoff's version had no trades in it at all.", overlay=None),
+
+    dict(id='t047', level=None, template='boardroom', mood='grim', narration='Not one.', overlay=None),
+
+    dict(id='t048', level=None, template='officeFloor', narration='On the seventeenth floor, statements were typed up by hand.', overlay=None),
+
+    dict(id='t049', level=None, template='chartBoard', chart='up', narration='Backdated. Made to look real.', overlay=None),
+
+    dict(id='t050', level=None, template='bankExterior', narration="The firm's own numbers people built the entire paper trail, page by page.", overlay=None),
+
+    dict(id='t051', level=None, template='officeFloor', narration='Frank DiPascali ran that floor. He was the money man in charge.', overlay=None),
+
+    dict(id='t052', level=None, template='courtHearing', narration='Years later, he pleaded guilty, and admitted it in three words.', overlay=None),
+
+    dict(id='t053', level=None, template='closeUpPortrait', mood='grim', narration='The statements were fake.', overlay=None, card={'kind': 'word', 'text': 'FAKE'}),
+
+    dict(id='t054', level=None, template='newsMontage', narration='The auditor was a three-man shop.', overlay=None),
+
+    dict(id='t055', level=None, template='cityStreet', narration='Working out of a strip mall, in a town most auditors had never heard of.', overlay=None),
+
+    dict(id='t056', level=None, template='officeFloor', narration='David Friehling signed the books, year after year.', overlay=None),
+
+    dict(id='t057', level=None, template='courtHearing', narration='And never once caught anything. Because he never really looked.', overlay=None),
+
+    dict(id='t058', level=None, template='bankExterior', narration='No auditor ever picked up a phone and asked a bank to confirm a balance.', overlay=None),
+
+    dict(id='t059', level=None, template='chartBoard', chart='down', breath=True, narration='Here is the whole machine, in one sentence: new money paid old money, and the books were faked to hide it.', overlay=None),
+
+    dict(id='t060', level=None, template='crowdQueue', narration='Picture a birthday party. You drop five dollars in a jar, and so does everyone else.', overlay=None),
+
+    dict(id='t061', level=None, template='officeFloor', narration='Next month, you take your five dollars back out. Plus a little more.', overlay=None),
+
+    dict(id='t062', level=None, template='domesticInterior', narration='As long as new guests keep showing up, nobody checks the jar.', overlay=None),
+
+    dict(id='t063', level=None, template='closeUpPortrait', mood='grim', narration="That's a Ponzi scheme. That was Bernie Madoff's whole business.", overlay=None),
+
+    dict(id='t064', level=None, template='chartBoard', chart='down', narration='It only works as long as new money arrives faster than old money leaves.', overlay=None),
+
+    dict(id='t065', level=None, template='bankExterior', narration='Stop that flow for even a month, and the whole structure caves in.', overlay=None),
+
+    dict(id='t066', level=None, template='officeFloor', narration='Everyone who touched money at that firm should have wondered.', overlay=None),
+
+    dict(id='t067', level=None, template='boardroom', narration='Almost none of them asked.', overlay=None),
+
+    dict(id='t068', level=None, template='domesticInterior', narration='Investors got quarterly statements, thick with real-looking trades.', overlay=None),
+
+    dict(id='t069', level=None, template='chartBoard', chart='up', narration='Buys and sells that never happened, on stocks that were entirely real.', overlay=None),
+
+    dict(id='t070', level=None, template='officeFloor', narration='Printed on real letterhead. Filed in real drawers.', overlay=None),
+
+    dict(id='t071', level=None, template='cityStreet', narration='For most clients, that paper was the whole relationship.', overlay=None),
+
+    dict(id='t072', level=None, template='newsMontage', breath=True, narration='But mathematically, this was never sustainable. And one man on the outside had already done the math.', overlay=None, card={'kind': 'narration', 'text': 'One man\nalready knew.'}),
+
+    # ================= CH 3 =================
+    dict(id='t073', level='CH 3', template='officeFloor', breath=True, narration='Harry Markopolos was a money analyst, not a watchdog, not a cop.', overlay=None, card={'kind': 'chapter', 'title': 'The Whistleblower', 'subtitle': 'Nine Years, No Answer', 'hold': 2.4}),
+
+    dict(id='t074', level=None, template='chartBoard', chart='flat', narration="In the late 1990s, he tried to copy Madoff's returns, using Madoff's own strategy.", overlay=None),
+
+    dict(id='t074b', level=None, template='officeFloor', narration='Markopolos worked in the same industry, selling the same kind of strategy.', overlay=None),
+
+    dict(id='t074c', level=None, template='closeUpPortrait', narration='He knew, better than almost anyone, what the returns should have looked like.', overlay=None),
+
+    dict(id='t074d', level=None, template='chartBoard', chart='up', narration="They didn't look like that. They looked flawless.", overlay=None),
+
+    dict(id='t074e', level=None, template='exchangeFloor', chart='flat', narration="Real markets have bad months. Madoff's fund, on paper, barely had bad weeks.", overlay=None),
+
+    dict(id='t075', level=None, template='boardroom', narration="He couldn't. Not even close.", overlay=None),
+
+    dict(id='t076', level=None, template='officeFloor', narration='He ran the numbers again.', overlay=None),
+
+    dict(id='t077', level=None, template='chartBoard', chart='flat', narration='And again.', overlay=None),
+
+    dict(id='t078', level=None, template='boardroom', breath=True, narration="His verdict: Madoff's numbers weren't just unlikely. They were flat-out impossible.", overlay=None),
+
+    dict(id='t079', level=None, template='newsMontage', narration='Markopolos wrote to the SEC.', overlay=None),
+
+    dict(id='t080', level=None, template='cityStreet', narration='In 1999.', overlay=None),
+
+    dict(id='t081', level=None, template='boardroom', narration='He wrote again.', overlay=None),
+
+    dict(id='t082', level=None, template='bankExterior', narration='And again.', overlay=None),
+
+    dict(id='t083', level=None, template='newsMontage', breath=True, narration='Six formal warnings in nine years — 1999, 2000, 2001, 2005, 2007, 2008.', overlay=None, panels={'variant': 'grid4', 'cells': [{'template': 'newsMontage'}, {'template': 'newsMontage'}, {'template': 'boardroom'}, {'template': 'closeUpPortrait'}]}),
+
+    dict(id='t084', level=None, template='chartBoard', chart='flat', narration='His most detailed report ran twenty-nine pages.', overlay=None),
+
+    dict(id='t085', level=None, template='cityStreet', narration='With a title that left nothing to the imagination.', overlay=None, card={'kind': 'narration', 'text': '“The World’s Largest\nHedge Fund Is a Fraud.”'}),
+
+    dict(id='t085b', level=None, template='boardroom', narration='Markopolos laid out twenty-nine separate red flags, in one memo.', overlay=None),
+
+    dict(id='t085c', level=None, template='officeFloor', narration='Any one of them, followed up, could have ended it years early.', overlay=None),
+
+    dict(id='t086', level=None, template='boardroom', narration='The SEC brought Madoff in and asked him directly.', overlay=None, bubbles=[{'text': 'Are you running a Ponzi scheme?', 'speaker': 'left'}, {'text': 'No.', 'speaker': 'right', 'at': 2.0}], foreground={'kind': 'overShoulder', 'side': 'right'}),
+
+    dict(id='t087', level=None, template='officeFloor', mood='grim', narration="By the SEC's own later count, that was close to the whole probe.", overlay=None),
+
+    dict(id='t087b', level=None, template='bankExterior', narration='Fund managers who fed him money never asked either — the fees were too good to slow down for questions.', overlay=None),
+
+    dict(id='t087c', level=None, template='chartBoard', chart='up', narration='So the number kept climbing, warning after warning, year after year.', overlay=None),
+
+    dict(id='t088', level=None, template='bankExterior', narration='Nobody called a bank. Nobody called a custodian.', overlay=None),
+
+    dict(id='t089', level=None, template='exchangeFloor', narration='Nobody checked a single trade against the market it supposedly happened on.', overlay=None),
+
+    dict(id='t090', level=None, template='crowdQueue', narration='Meanwhile, the money kept coming.', overlay=None),
+
+    dict(id='t091', level=None, template='chartBoard', chart='up', narration='By the mid-2000s, Madoff was managing tens of billions of dollars.', overlay=None),
+
+    dict(id='t092', level=None, template='domesticInterior', narration='For thousands of clients. Retirees in Florida. Some of the largest charities in the country.', overlay=None),
+
+    dict(id='t093', level=None, template='broadcastDesk', narration="You'd have trusted him too. Almost everyone who met him did.", overlay=None),
+
+    dict(id='t094', level=None, template='officeFloor', mood='grim', narration="A former chairman of NASDAQ, running history's largest fraud one floor under his own real firm.", overlay=None, card={'kind': 'objects', 'text': 'One floor\nunder himself.'}),
+
+    dict(id='t095', level=None, template='cityStreet', narration='For nine years, the warnings went nowhere.', overlay=None),
+
+    dict(id='t096', level=None, template='closeUpPortrait', breath=True, narration='Then, in 2008, something happened that no forged statement could fix.', overlay=None, card={'kind': 'narration', 'text': 'Something\nno paper could fix.'}),
+
+    # ================= CH 4 =================
+    dict(id='t097', level='CH 4', template='exchangeFloor', chart='down', breath=True, narration="The 2008 crash hit every portfolio on earth, Madoff's clients included.", overlay=None, card={'kind': 'chapter', 'title': 'The Confession', 'subtitle': 'Five Days in December', 'hold': 2.4}),
+
+    dict(id='t097b', level=None, template='chartBoard', chart='flat', narration='For a decade, redemptions had been small, predictable, easy to cover with new deposits.', overlay=None),
+
+    dict(id='t097c', level=None, template='newsMontage', narration='2008 broke that pattern completely.', overlay=None),
+
+    dict(id='t097d', level=None, template='broadcastDesk', narration='Markets crashed everywhere. People wanted cash now, not paper.', overlay=None),
+
+    dict(id='t098', level=None, template='crowdQueue', narration='Panicked investors wanted their money back. All at once.', overlay=None, placards=['GIVE IT BACK', "WHERE'S OUR MONEY", 'ANSWERS NOW']),
+
+    dict(id='t099', level=None, template='chartBoard', chart='down', narration='Roughly seven billion dollars in withdrawal requests landed on his desk.', overlay=None),
+
+    dict(id='t099b', level=None, template='officeFloor', narration='Madoff tried calling in favors, chasing fresh money from the funds that fed him.', overlay=None),
+
+    dict(id='t099c', level=None, template='bankExterior', narration="There wasn't enough new money left anywhere to cover this hole.", overlay=None),
+
+    dict(id='t099d', level=None, template='officeFloor', narration='His own employees on the nineteenth floor — the real business — had no idea what was coming.', overlay=None),
+
+    dict(id='t100', level=None, template='bankExterior', mood='grim', narration="He didn't have it.", overlay=None),
+
+    dict(id='t101', level=None, template='officeFloor', mood='grim', gap=1.4, narration='He never had it.', overlay=None),
+
+    dict(id='t102', level=None, template='domesticInterior', mood='grim', narration='On December 9th, 2008, Madoff sat his sons down.', overlay=None, dialogue={'text': "It's one big lie. Basically, a giant Ponzi scheme."}, foreground={'kind': 'overShoulder', 'side': 'right'}),
+
+    dict(id='t103', level=None, template='newsMontage', mood='grim', narration='Mark and Andrew had spent their whole careers in the real business, upstairs.', overlay=None),
+
+    dict(id='t104', level=None, template='boardroom', mood='grim', breath=True, narration='They reported their own father to federal agents the very next day.', overlay=None),
+
+    dict(id='t105', level=None, template='newsMontage', narration='December 10th, 2008.', overlay=None),
+
+    dict(id='t106', level=None, template='cityStreet', narration='FBI Special Agent Ted Cacioppi came to his apartment the next morning.', overlay=None),
+
+    dict(id='t107', level=None, template='domesticInterior', mood='grim', narration='December 11th.', overlay=None, bubbles=[{'text': 'Is there an innocent explanation?', 'speaker': 'left'}, {'text': "There is no innocent explanation. I've been running a massive Ponzi scheme.", 'speaker': 'right', 'at': 2.4}], foreground={'kind': 'overShoulder', 'side': 'left'}),
+
+    dict(id='t108', level=None, template='closeUpPortrait', mood='grim', narration='He was arrested on the spot.', overlay=None),
+
+    dict(id='t108b', level=None, template='cityStreet', narration='In three days, decades of paperwork stopped mattering.', overlay=None),
+
+    dict(id='t108c', level=None, template='bankExterior', narration='Word spread through the firm before the sun came up.', overlay=None),
+
+    dict(id='t108d', level=None, template='broadcastDesk', narration='By breakfast, federal agents were already in the lobby.', overlay=None),
+
+    dict(id='t108e', level=None, template='newsMontage', narration='By lunch, it was the biggest story in American finance.', overlay=None),
+
+    dict(id='t109', level=None, template='broadcastDesk', narration='Nine years after Markopolos wrote the words down, he had been exactly right.', overlay=None),
+
+    dict(id='t110', level=None, template='chartBoard', chart='down', narration="The SEC's first estimate put the fraud at fifty billion dollars.", overlay=None),
+
+    dict(id='t111', level=None, template='newsMontage', narration='A fuller accounting later found something stranger.', overlay=None, panels={'variant': 'v2', 'cells': [{'template': 'chartBoard'}, {'template': 'chartBoard'}]}),
+
+    dict(id='t112', level=None, template='chartBoard', chart='down', breath=True, narration='Sixty-four point eight billion dollars, in fake gains, sitting on client statements.', overlay=None),
+
+    dict(id='t113', level=None, template='broadcastDesk', narration='The real cash that vanished — money people handed over, and never saw again — was about seventeen and a half billion.', overlay=None),
+
+    dict(id='t114', level=None, template='crowdQueue', narration='Two very different numbers. Both called "the size of the fraud."', overlay=None),
+
+    dict(id='t115', level=None, template='bankExterior', narration='Fairfield Greenwich — the fund that sent him $7.2 billion — was gutted along with everyone else.', overlay=None),
+
+    dict(id='t116', level=None, template='officeFloor', narration="The SEC's own watchdog later admitted it had failed, again and again, to catch it.", overlay=None),
+
+    dict(id='t117', level=None, template='closeUpPortrait', mood='grim', narration="Fake numbers on paper don't go to prison.", overlay=None),
+
+    dict(id='t118', level=None, template='newsMontage', mood='grim', narration='A person does.', overlay=None, card={'kind': 'narration', 'text': 'A person\ndoes.'}),
+
+    # ================= CH 5 =================
+    dict(id='t119', level='CH 5', template='courtHearing', breath=True, narration='March 12th, 2009. Madoff walked into a federal courtroom.', overlay=None, card={'kind': 'chapter', 'title': 'The Reckoning', 'subtitle': '150 Years, No Trial', 'hold': 2.4}),
+
+    dict(id='t120', level=None, template='closeUpPortrait', narration='And pleaded guilty.', overlay=None),
+
+    dict(id='t121', level=None, template='courtHearing', narration='All eleven felony counts.', overlay=None),
+
+    dict(id='t122', level=None, template='broadcastDesk', narration='Securities fraud. Wire fraud. Mail fraud.', overlay=None),
+
+    dict(id='t123', level=None, template='courtHearing', narration='Money laundering. Perjury. False filings with his own regulator.', overlay=None),
+
+    dict(id='t124', level=None, template='closeUpPortrait', mood='grim', narration='There was no trial. He admitted everything, out loud, in his own words.', overlay=None),
+
+    dict(id='t124b', level=None, template='courtHearing', narration='The courtroom was packed with the people he had ruined.', overlay=None),
+
+    dict(id='t124c', level=None, template='crowdQueue', narration='Some had lost a retirement. Some had lost a business built over decades.', overlay=None),
+
+    dict(id='t124d', level=None, template='broadcastDesk', narration='The court heard from them, one by one, before sentencing.', overlay=None),
+
+    dict(id='t124e', level=None, template='closeUpPortrait', narration='None of it moved the arithmetic. It moved the sentence.', overlay=None),
+
+    dict(id='t125', level=None, template='courtHearing', breath=True, narration='On June 29th, Judge Denny Chin handed down the maximum possible sentence.', overlay=None),
+
+    dict(id='t126', level=None, template='closeUpPortrait', mood='grim', narration='One hundred fifty years.', overlay=None, card={'kind': 'word', 'text': '150 YEARS'}),
+
+    dict(id='t127', level=None, template='courtHearing', narration='Madoff was seventy-one years old.', overlay=None),
+
+    dict(id='t128', level=None, template='closeUpPortrait', mood='grim', breath=True, narration='"I am sorry," he told the courtroom. "I know it will not help you."', overlay=None),
+
+    dict(id='t129', level=None, template='courtHearing', mood='grim', narration='Judge Chin called the crimes extraordinarily evil.', overlay=None),
+
+    dict(id='t130', level=None, template='broadcastDesk', mood='grim', narration='Not a bloodless crime on paper, he said, but one with a staggering human toll.', overlay=None),
+
+    dict(id='t131', level=None, template='boardroom', narration="His brother Peter, the firm's chief compliance officer, pleaded guilty too.", overlay=None),
+
+    dict(id='t132', level=None, template='courtHearing', narration='Sentenced, in 2012, to ten years.', overlay=None),
+
+    dict(id='t132b', level=None, template='boardroom', narration="Peter's sentence read like an echo of his brother's: guilty, and out of excuses.", overlay=None),
+
+    dict(id='t132c', level=None, template='bankExterior', narration="The trustee's job was almost impossible: chase real money through a paper trail built entirely on lies.", overlay=None),
+
+    dict(id='t133', level=None, template='chartBoard', chart='down', narration='Forced to give up a symbolic one hundred forty-three point one billion dollars.', overlay=None),
+
+    dict(id='t134', level=None, template='closeUpPortrait', narration='Money that no longer existed outside a spreadsheet.', overlay=None),
+
+    dict(id='t135', level=None, template='domesticInterior', mood='grim', breath=True, narration="Two years to the day after his father's arrest, Mark Madoff was found dead in his apartment.", overlay=None),
+
+    dict(id='t136', level=None, template='closeUpPortrait', mood='grim', narration='By his own hand.', overlay=None, card={'kind': 'narration', 'text': 'Two years,\nto the day.'}),
+
+    dict(id='t137', level=None, template='bankExterior', narration="A trustee spent over a decade clawing money back from people who had, without knowing it, gained from other people's losses.", overlay=None),
+
+    dict(id='t138', level=None, template='chartBoard', chart='up', narration='It worked, more than anyone had a right to expect.', overlay=None),
+
+    dict(id='t139', level=None, template='crowdQueue', narration="By 2024, victims had gotten back something like ninety-three percent of what they'd lost.", overlay=None),
+
+    dict(id='t139b', level=None, template='chartBoard', chart='up', narration='Somehow, it worked far better than anyone predicted at the start.', overlay=None),
+
+    dict(id='t139c', level=None, template='crowdQueue', narration="Ninety-three cents on the dollar, eventually, for people who'd once been told they'd get nothing.", overlay=None),
+
+    dict(id='t139d', level=None, template='courtHearing', narration="Madoff never got any of it back himself. He wasn't the one it was for.", overlay=None),
+
+    dict(id='t140', level=None, template='domesticInterior', mood='grim', narration='Some names never came back.', overlay=None),
+
+    dict(id='t141', level=None, template='closeUpPortrait', mood='grim', narration='The Elie Wiesel Foundation for Humanity lost its entire endowment.', overlay=None),
+
+    dict(id='t142', level=None, template='chartBoard', chart='down', narration='Fifteen point two million dollars. Gone in one signature.', overlay=None),
+
+    dict(id='t143', level=None, template='newsMontage', mood='grim', narration='Madoff spent his final years in a federal prison in North Carolina.', overlay=None),
+
+    dict(id='t144', level=None, template='domesticInterior', mood='grim', narration='Sick. Aging. Forgotten by the men he once golfed with.', overlay=None),
+
+    dict(id='t144b', level=None, template='officeFloor', narration="The firm that once impressed NASDAQ's own board no longer exists, in any form.", overlay=None),
+
+    dict(id='t145', level=None, template='cityStreet', narration='He died on April 14th, 2021.', overlay=None),
+
+    dict(id='t146', level=None, template='closeUpPortrait', mood='grim', narration='He was eighty-two.', overlay=None, card={'kind': 'narration', 'text': 'Age 82.'}),
+
+    dict(id='t147', level=None, template='domesticInterior', breath=True, narration="Maybe the strangest part isn't that he lied for so long.", overlay=None),
+
+    dict(id='t148', level=None, template='closeUpPortrait', narration="It's how badly we wanted to believe him.", overlay=None),
+
+    dict(id='t149', level=None, template='chartBoard', chart='up', narration='A steady ten percent, year after year, market up or down.', overlay=None),
+
+    dict(id='t150', level=None, template='boardroom', breath=True, narration="That isn't just a good return. It's the fantasy every investor secretly wants to be true.", overlay=None),
+
+    dict(id='t151', level=None, template='courtHearing', mood='grim', breath=True, narration='"I am sorry," he said. "I know it will not help you."', overlay=None),
+
+    dict(id='t152', level=None, template='closeUpPortrait', mood='grim', narration="It didn't.", overlay=None, card={'kind': 'narration', 'text': "It didn't."}),
+
+    dict(id='t153', level=None, template='domesticInterior', narration='And somewhere, right now, another advisor is telling another client that their money is growing exactly the way they were promised.', overlay=None),
+
+    dict(id='t154', level=None, template='broadcastDesk', mood='grim', breath=True, narration='If you ever hear that pitch, you already know the one question worth asking.', overlay=None),
+
+    dict(id='t155', level=None, template='closeUpPortrait', mood='grim', narration="Who's checking the math?", overlay=None, card={'kind': 'narration', 'text': "Who's checking\nthe math?"}),
+
 ]
-
-# Apply the measured narration rate to every scene. `gen_voice_edge.py` reads `sc.get("rate", RATE)`,
-# so this is the writer-side field the pipeline already documents (docs/BIBLE.md §8) — nothing in
-# gen_voice_edge.py is edited. A scene that wants its own prosody can still set `rate=` explicitly in
-# its own dict above; setdefault leaves that alone.
-for _s in SCENES:
-    _s.setdefault("rate", NARRATION_RATE)
