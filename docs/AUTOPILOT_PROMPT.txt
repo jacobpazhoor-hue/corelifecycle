@@ -117,6 +117,12 @@ DO, in order:
 3. WRITE — overwrite content.py per docs/BIBLE.md, grounded in that research.
    THIRD PERSON, PAST TENSE, about the real subject. ~2,000–3,100 words. TARGET RUNTIME 13–21 min.
    Each scene dict: id, level (see below), narration, overlay ({big,sub} or None), `template`, and
+
+SPEAKER NAMES (bubbles=): name who is talking POSITIONALLY — speaker:"left", "right" or "centre".
+Those work in every room and are resolved against where the figures actually stand. A room's own
+role names ('hero', 'guest', 'anchor') also work but are NOT guessable — a wrong one is a HARD
+render failure, not a warning. When in doubt use left/right. Only templates with staged speakers
+accept bubbles= at all; for narration over any other template use card= or a kind="float" line.
    optional `card=` / `bubbles=` / `panels=` / `foreground=` / `dialogue=dict(text=...)` / `breath=` /
    `gap=` (all documented in BIBLE.md §8).
 

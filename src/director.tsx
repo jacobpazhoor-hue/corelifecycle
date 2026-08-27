@@ -312,11 +312,26 @@ export const speakerHead = (
     );
   }
   if (role === undefined) return st.speakers[index % st.speakers.length].head;
+  // POSITIONAL ALIASES (2026-08-27). The registry names speakers by ROLE ('hero', 'guest',
+  // 'anchor'), but a writer looking at a two-hander thinks POSITIONALLY — and did: 'left'/'right'
+  // appear on four scenes of the madoff script, which HALTed the cloud render for three days
+  // ("nobody called \"left\" is in 'boardroom'"). The role name is not knowable from the prompt
+  // without memorising a per-template table, and a wrong guess is a hard render failure. So accept
+  // position as a first-class way to name a speaker, resolved against where the figures actually
+  // are: 'left' = the westmost staged speaker, 'right' = the eastmost, 'centre'/'center' = nearest
+  // frame middle. On a one-speaker room every alias resolves to that speaker.
+  const byX = [...st.speakers].sort((a, b) => a.head.cx - b.head.cx);
+  if (role === 'left') return byX[0].head;
+  if (role === 'right') return byX[byX.length - 1].head;
+  if (role === 'centre' || role === 'center') {
+    return byX.reduce((best, s) =>
+      Math.abs(s.head.cx - 0.5) < Math.abs(best.head.cx - 0.5) ? s : best).head;
+  }
   const hit = st.speakers.find((s) => s.role === role);
   if (!hit) {
     throw new Error(
       `${sceneId}: nobody called ${JSON.stringify(role)} is in '${template}' — its speakers are ` +
-      `${st.speakers.map((s) => `'${s.role}'`).join(', ')}`
+      `${st.speakers.map((s) => `'${s.role}'`).join(', ')} (or the positional aliases 'left', 'right', 'centre')`
     );
   }
   return hit.head;
