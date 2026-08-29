@@ -123,7 +123,7 @@ SCENES = [
 
     dict(id='t021c', level=None, template='boardroom', narration='Watchdogs liked him. Rivals respected him. Almost nobody said a bad word.', overlay=None),
 
-    dict(id='t021d', level=None, template='domesticInterior', narration='His wife, Ruth, stood beside him through all of it.', overlay=None),
+    dict(id='t021d', level=None, template='domesticInterior', narration='He had a wife, Ruth, and two sons in the business.', overlay=None),
 
     dict(id='t021e', level=None, template='officeFloor', narration='The two businesses shared a building. They never shared a set of books.', overlay=None),
 
@@ -291,9 +291,9 @@ SCENES = [
 
     dict(id='t082', level=None, template='bankExterior', narration='And again.', overlay=None),
 
-    dict(id='t083', level=None, template='newsMontage', breath=True, narration='Six formal warnings in nine years — 1999, 2000, 2001, 2005, 2007, 2008.', overlay=None, panels={'variant': 'grid4', 'cells': [{'template': 'newsMontage'}, {'template': 'newsMontage'}, {'template': 'boardroom'}, {'template': 'closeUpPortrait'}]}),
+    dict(id='t083', level=None, template='newsMontage', breath=True, narration='Six formal warnings in nine years — 1999, 2000, 2001, 2005, 2007, 2008.', overlay=None, panels={'variant': 'grid4', 'cells': [{'template': 'newsMontage'}, {'template': 'exchangeFloor'}, {'template': 'boardroom'}, {'template': 'closeUpPortrait'}]}),
 
-    dict(id='t084', level=None, template='chartBoard', chart='flat', narration='His most detailed report ran twenty-nine pages.', overlay=None),
+    dict(id='t084', level=None, template='chartBoard', chart='flat', narration='His most detailed report went to the SEC in 2005.', overlay=None),
 
     dict(id='t085', level=None, template='cityStreet', narration='With a title that left nothing to the imagination.', overlay=None, card={'kind': 'narration', 'text': '“The World’s Largest\nHedge Fund Is a Fraud.”'}),
 

@@ -319,6 +319,77 @@ def name_candidates(text):
     return out
 
 
+_WORD_NUM = {"one":1,"two":2,"three":3,"four":4,"five":5,"six":6,"seven":7,"eight":8,"nine":9,
+             "ten":10,"eleven":11,"twelve":12,"thirteen":13,"fourteen":14,"fifteen":15,
+             "sixteen":16,"seventeen":17,"eighteen":18,"nineteen":19,"twenty":20,"thirty":30,
+             "forty":40,"fifty":50,"sixty":60,"seventy":70,"eighty":80,"ninety":90,
+             "hundred":100,"thousand":1000}
+# The number half must only ever match a REAL number token. An earlier version allowed any word
+# there: on "ran twenty-nine pages" the scan matched "ran twenty" first, consumed through "twenty",
+# and read the remainder as "nine pages" — parsing 9 and missing the defect it was written to catch.
+_NUMWORD = ("twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand|"
+            "eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|"
+            "one|two|three|four|five|six|seven|eight|nine|ten")
+_COUNT_RE = re.compile(
+    r'\b((?:\d{1,3}(?:,\d{3})*|\d+)|(?:%s)(?:-(?:%s))?)\s+'
+    r'((?:[a-z]{3,}\s?){1,3})' % (_NUMWORD, _NUMWORD), re.I)
+
+
+def _stem(w):
+    """Crude singular/plural fold so 'pages' and 'page' compare equal."""
+    w = w.lower().strip()
+    for suf in ("ies", "es", "s"):
+        if w.endswith(suf) and len(w) > len(suf) + 2:
+            return w[: -len(suf)]
+    return w
+
+
+def _spelled(tok):
+    """'twenty-nine' -> 29; a bare digit string -> int; anything else -> None."""
+    t = tok.lower().replace(",", "")
+    if t.isdigit():
+        return int(t)
+    total, ok = 0, False
+    for part in t.split("-"):
+        if part in _WORD_NUM:
+            total += _WORD_NUM[part]; ok = True
+        elif part:
+            return None
+    return total if ok else None
+
+
+def counted_nouns(text):
+    """Yield (int, noun) for '<number> <noun>' in prose. Years and money are handled elsewhere."""
+    out = []
+    for m in _COUNT_RE.finditer(text or ""):
+        n = _spelled(m.group(1))
+        if n is None or n > 100000 or 1800 < n < 2200:
+            continue                      # skip years; F2 owns those
+        if n < 4:
+            continue                      # 'one man', 'two sons' — quantifier prose, not a sourced count
+        ctx = [w for w in m.group(2).lower().split()
+               if w not in ("percent", "million", "billion", "trillion", "thousand", "hundred",
+                            "dollars", "separate", "different", "very", "and", "more", "other",
+                            # "eight point one" parses as 8 + "one year": decimals are F6's
+                            "point", "back", "out", "over", "under", "into", "about")]
+        ctx = [w for w in ctx if _spelled(w) is None]   # "8 one year" -> the "one" is a decimal tail
+        if not ctx:
+            continue                      # money/scale words; F6 owns those
+        out.append((n, ctx))
+    return out
+
+
+def research_counted(research_text):
+    """Map every number in the research file to the nouns it is written next to."""
+    d = {}
+    for m in _COUNT_RE.finditer(research_text or ""):
+        n = _spelled(m.group(1))
+        if n is None or n > 100000 or 1800 < n < 2200:
+            continue
+        d.setdefault(n, set()).update(m.group(2).lower().split())
+    return d
+
+
 def research_words(research):
     return set(re.findall(r"[A-Za-z'À-ɏ]+", research))
 
@@ -830,6 +901,7 @@ def audit(root=ROOT, video=None):
     research_norm = " ".join(rtokens)
     research_money = money_amounts(research)
     research_years = set(YEAR_RE.findall(research))
+    research_counts = research_counted(research)
     seen_names = {}
 
     corpus = []                                   # (where, field, text)
@@ -854,6 +926,24 @@ def audit(root=ROOT, video=None):
                 warns.append(f"{where} {field}: the figure ${amt:,.0f} is not in "
                              f"docs/research/{topic}.md. Source it there or cut it "
                              f"(spelled-out numbers can parse wrong — verify before acting)")
+
+        # F6b — COUNTED NOUNS: the right digits bolted to the WRONG noun (added 2026-08-29).
+        # The madoff episode said "his most detailed report ran twenty-nine pages". The research
+        # file says the memo "laid out 29 RED FLAGS", and the NEXT scene said that correctly — so
+        # the script asserted the same 29 twice in two different units, one of them invented, on the
+        # episode's most-quoted document. F2/F6 both passed it because 29 IS in the file; they match
+        # VALUES, not what the value counts. A human reviewer caught it. This asks the narrower
+        # question: when the script counts a noun, does the file ever put that number near that noun?
+        # WARN, not FAIL — spelled-out parsing is unreliable and a noun can legitimately be reworded.
+        for num, ctx in counted_nouns(text):
+            if num not in research_counts:
+                continue          # F2/F6 already speak to a number that is absent entirely
+            if not any(_stem(c) == _stem(n) for c in ctx for n in research_counts[num]):
+                seen = sorted({n for n in research_counts[num]})[:3]
+                warns.append(
+                    f"{where} {field}: says {num} {' '.join(ctx)!r}, but docs/research/{topic}.md only ever "
+                    f"attaches {num} to {seen} — the number is sourced, the THING IT COUNTS is not. "
+                    f"Check you have not moved a figure onto the wrong noun")
 
         # F1/F4/F5/F7 — claims about named people. PROSE ONLY: see PROSE_FIELDS above for the
         # measurement that says why display copy is excluded from name detection.
