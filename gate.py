@@ -290,6 +290,22 @@ fails += _sfails
 warns += _swarns
 
 # ============================================================================
+# 3b2) CARD SHAPE — every card must carry the field its OWN kind renders.
+#
+# 2026-08-29: three cards named a field the renderer does not read for that kind — twice
+# `{kind:'word', text:...}` (the word card reads `word`) and once `{kind:'objects', text:...}`
+# (objects needs `items`). The first died 100s into a CLOUD render as "TypeError: Cannot read
+# properties of undefined (reading 'trim')" — no scene id, no stack in the CI log — and the run then
+# fell back to a local render the disk floor refuses. `text` being correct for the commonest kind is
+# exactly what makes the others guessable-wrong, so this is a writer trap, not a typo. Milliseconds
+# here instead of a lost night there.
+# ============================================================================
+import card_check
+_cfails, _cwarns = card_check.check()
+fails += _cfails
+warns += _cwarns
+
+# ============================================================================
 # 3c) THUMBNAIL FIELD COMBINATION — `thumb.kicker` against the archetype that will draw it.
 #
 # src/thumbs.tsx THROWS when a kicker is set on an archetype whose layout has no kicker slot, and

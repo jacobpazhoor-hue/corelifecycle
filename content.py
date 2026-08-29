@@ -222,7 +222,7 @@ SCENES = [
 
     dict(id='t052', level=None, template='courtHearing', narration='Years later, he pleaded guilty, and admitted it in three words.', overlay=None),
 
-    dict(id='t053', level=None, template='closeUpPortrait', mood='grim', narration='The statements were fake.', overlay=None, card={'kind': 'word', 'text': 'FAKE'}),
+    dict(id='t053', level=None, template='closeUpPortrait', mood='grim', narration='The statements were fake.', overlay=None, card={'kind': 'word', 'word': 'FAKE'}),
 
     dict(id='t054', level=None, template='newsMontage', narration='The auditor was a three-man shop.', overlay=None),
 
@@ -321,7 +321,7 @@ SCENES = [
 
     dict(id='t093', level=None, template='broadcastDesk', narration="You'd have trusted him too. Almost everyone who met him did.", overlay=None),
 
-    dict(id='t094', level=None, template='officeFloor', mood='grim', narration="A former chairman of NASDAQ, running history's largest fraud one floor under his own real firm.", overlay=None, card={'kind': 'objects', 'text': 'One floor\nunder himself.'}),
+    dict(id='t094', level=None, template='officeFloor', mood='grim', narration="A former chairman of NASDAQ, running history's largest fraud one floor under his own real firm.", overlay=None, card={'kind': 'narration', 'text': 'One floor\nunder himself.'}),
 
     dict(id='t095', level=None, template='cityStreet', narration='For nine years, the warnings went nowhere.', overlay=None),
 
@@ -415,7 +415,7 @@ SCENES = [
 
     dict(id='t125', level=None, template='courtHearing', breath=True, narration='On June 29th, Judge Denny Chin handed down the maximum possible sentence.', overlay=None),
 
-    dict(id='t126', level=None, template='closeUpPortrait', mood='grim', narration='One hundred fifty years.', overlay=None, card={'kind': 'word', 'text': '150 YEARS'}),
+    dict(id='t126', level=None, template='closeUpPortrait', mood='grim', narration='One hundred fifty years.', overlay=None, card={'kind': 'word', 'word': '150 YEARS'}),
 
     dict(id='t127', level=None, template='courtHearing', narration='Madoff was seventy-one years old.', overlay=None),
 
