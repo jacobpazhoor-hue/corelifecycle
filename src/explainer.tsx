@@ -3663,7 +3663,15 @@ const ChartBoard: React.FC = () => {
   // — drawn after the head, as all near limbs are — is painted straight across the face. 104° puts
   // the elbow outboard of the head's half-width first and only then lifts the forearm, which is the
   // gesture reading as pointing rather than as scratching an ear.
-  const presenting = {...A.stand(f), armNearShoulder: 104, armNearElbow: 34};
+  // STAGING VARIATION (review: 28 chartBoard scenes across the episode read as "the same picture
+  // again" in sampled frames, because the presenter held one fixed pose every time regardless of
+  // which take was playing. A third of takes now turn him to address the room instead of pointing
+  // at the board -- arm dropped to an open, relaxed gesture -- so repeats read as different moments
+  // in the same room rather than a frozen photo of the first one.
+  const pointingAtBoard = v.pick(23, 3) !== 0;
+  const presenting = pointingAtBoard
+    ? {...A.stand(f), armNearShoulder: 104, armNearElbow: 34}
+    : {...A.stand(f), armNearShoulder: 24, armNearElbow: 98};
   return (
     <Frame>
       <Ceiling y={150} lights={3} />

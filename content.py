@@ -33,7 +33,7 @@ verbatim in the description timestamps):
   1 The Prophet      : Wall Street's Trusted Face
   2 The Split Floor  : How the Lie Worked
   3 The Whistleblower: Nine Years, No Answer
-  4 The Confession   : Five Days in December
+  4 The Confession   : Three Days in December
   5 The Reckoning    : 150 Years, No Trial
 
 PROMISE -> PAYOFF LEDGER:
@@ -99,9 +99,9 @@ SCENES = [
 
     dict(id='t011', level=None, template='cityStreet', period='mid20c', narration='He earned his first money as a lifeguard, and installing lawn sprinklers.', overlay=None),
 
-    dict(id='t012', level=None, template='chartBoard', chart='up', narration='By 1960, he had saved five thousand dollars.', overlay=None),
+    dict(id='t012', level=None, template='chartBoard', chart='up', narration="By 1960, he'd saved up five thousand dollars.", overlay=None),
 
-    dict(id='t013', level=None, template='officeFloor', period='mid20c', narration='At twenty-two, he used every dollar of it to start his own firm.', overlay=None),
+    dict(id='t013', level=None, template='boardroom', period='mid20c', narration='At twenty-two, he used every dollar of it to start his own firm.', overlay=None),
 
     dict(id='t014', level=None, template='bankExterior', narration='Bernard L. Madoff Investment Securities.', overlay=None),
 
@@ -109,13 +109,13 @@ SCENES = [
 
     dict(id='t016', level=None, template='boardroom', narration='Madoff helped build the technology behind a brand-new stock exchange.', overlay=None),
 
-    dict(id='t017', level=None, template='chartBoard', chart='up', narration='NASDAQ. Still young. Still finding its feet.', overlay=None),
+    dict(id='t017', level=None, template='exchangeFloor', narration='NASDAQ. Still young. Still finding its feet.', overlay=None),
 
     dict(id='t018', level=None, template='broadcastDesk', narration='He sat on its board. He served as its chairman. Three separate years.', overlay=None, panels={'variant': 'v2', 'cells': [{'template': 'broadcastDesk'}, {'template': 'boardroom'}]}),
 
     dict(id='t019', level=None, template='cityStreet', narration='To the outside world, he was Wall Street royalty.', overlay=None),
 
-    dict(id='t020', level=None, template='boardroom', mood='bright', narration='Trusted. Steady. Almost dull.', overlay=None),
+    dict(id='t020', level=None, template='boardroom', mood='bright', narration='Trusted, steady, almost dull.', overlay=None),
 
     dict(id='t021', level=None, template='bankExterior', narration='His firm sat on the nineteenth floor of a Manhattan tower, nicknamed the Lipstick Building.', overlay=None),
 
@@ -131,7 +131,7 @@ SCENES = [
 
     dict(id='t021g', level=None, template='domesticInterior', narration='Why would they. The checks cleared. The statements arrived right on schedule.', overlay=None),
 
-    dict(id='t021h', level=None, template='chartBoard', chart='flat', narration='Not one bad quarter ever showed up in the paperwork.', overlay=None),
+    dict(id='t021h', level=None, template='bankExterior', narration='Not one bad quarter ever showed up in the paperwork.', overlay=None),
 
     dict(id='t021i', level=None, template='boardroom', narration='That alone should have been the tell.', overlay=None),
 
@@ -139,7 +139,7 @@ SCENES = [
 
     dict(id='t021k', level=None, template='crowdQueue', narration="People didn't just want to invest with him. They wanted to be seen investing with him.", overlay=None),
 
-    dict(id='t022', level=None, template='officeFloor', narration='His sons, Mark and Andrew, worked there — trading real stocks, in real time.', overlay=None),
+    dict(id='t022', level=None, template='exchangeFloor', narration='His sons, Mark and Andrew, worked there — trading real stocks, in real time.', overlay=None),
 
     dict(id='t023', level=None, template='domesticInterior', narration='His brother Peter ran compliance. The rules, on paper, looked airtight.', overlay=None),
 
@@ -155,9 +155,9 @@ SCENES = [
 
     dict(id='t029', level=None, template='chartBoard', chart='up', narration='Give Bernie your money, and it grows ten percent a year.', overlay=None),
 
-    dict(id='t030', level=None, template='boardroom', narration='Not eight one year, fourteen the next.', overlay=None),
+    dict(id='t030', level=None, template='boardroom', narration='Not eight percent one year, fourteen the next.', overlay=None),
 
-    dict(id='t031', level=None, template='chartBoard', chart='up', narration='Ten. Every year. Like clockwork.', overlay=None),
+    dict(id='t031', level=None, template='chartBoard', chart='up', narration='Ten percent, every year, like clockwork.', overlay=None),
 
     dict(id='t032', level=None, template='domesticInterior', narration="It didn't matter if the market soared or crashed. The number never moved.", overlay=None),
 
@@ -165,15 +165,15 @@ SCENES = [
 
     dict(id='t034', level=None, template='boardroom', narration='Being turned away only made it more exclusive.', overlay=None, bubbles=[{'text': 'How is it possible, ten percent, every single year?', 'speaker': 'left'}, {'text': "Bernie doesn't miss.", 'speaker': 'right', 'at': 2.2}], foreground={'kind': 'overShoulder', 'side': 'left'}),
 
-    dict(id='t035', level=None, template='cityStreet', narration='Whole funds sprang up just to funnel money his way.', overlay=None),
+    dict(id='t035', level=None, template='cityStreet', narration='Entire funds sprang up just to funnel money his way.', overlay=None),
 
-    dict(id='t036', level=None, template='chartBoard', chart='up', narration='One firm alone, Fairfield Greenwich, sent him seven point two billion dollars.', overlay=None),
+    dict(id='t036', level=None, template='chartBoard', chart='up', narration='One firm alone, Fairfield Greenwich, funneled him seven point two billion dollars.', overlay=None),
 
     dict(id='t037', level=None, template='cityStreet', narration='And collected hundreds of millions in fees, for doing almost nothing.', overlay=None),
 
     dict(id='t038', level=None, template='domesticInterior', narration="Even a foundation carrying Elie Wiesel's name trusted him with its entire endowment.", overlay=None),
 
-    dict(id='t039', level=None, template='broadcastDesk', narration='Money magazines put him on their covers. A model of quiet, steady success.', overlay=None, bubbles=[{'text': "What's the secret?", 'speaker': 'left'}, {'text': "Consistency. That's all it is.", 'speaker': 'right', 'at': 2.0}]),
+    dict(id='t039', level=None, template='broadcastDesk', narration='Money magazines put him on their covers. A model of quiet, steady success.', overlay=None, labels=['STEADY', 'RETURNS'], bubbles=[{'text': "What's the secret?", 'speaker': 'left'}, {'text': "Consistency. That's all it is.", 'speaker': 'right', 'at': 2.0}]),
 
     dict(id='t040', level=None, template='cityStreet', narration='Everyone assumed someone, somewhere, was checking the math.', overlay=None),
 
@@ -182,7 +182,7 @@ SCENES = [
     # ================= CH 2 =================
     dict(id='t042', level='CH 2', template='officeFloor', breath=True, narration='Madoff called his strategy split-strike conversion.', overlay=None, card={'kind': 'chapter', 'title': 'The Split Floor', 'subtitle': 'How the Lie Worked', 'hold': 2.4}),
 
-    dict(id='t043', level=None, template='chartBoard', chart='flat', narration='In plain terms: buy a basket of blue-chip stocks.', overlay=None),
+    dict(id='t043', level=None, template='exchangeFloor', narration='In plain terms: buy a basket of blue-chip stocks.', overlay=None),
 
     dict(id='t044', level=None, template='exchangeFloor', narration='Then buy options that cap both the gains and the losses.', overlay=None),
 
@@ -190,7 +190,7 @@ SCENES = [
 
     dict(id='t044c', level=None, template='exchangeFloor', narration='It trades away the big wins, to avoid the big losses.', overlay=None),
 
-    dict(id='t044d', level=None, template='officeFloor', narration="Reasonable. Boring. Exactly the kind of strategy that shouldn't beat the market every single year.", overlay=None),
+    dict(id='t044d', level=None, template='boardroom', narration="Reasonable. Boring. Exactly the kind of strategy that shouldn't beat the market every single year.", overlay=None),
 
     dict(id='t044e', level=None, template='chartBoard', chart='up', narration="But Madoff's numbers beat it anyway. Every year. Without fail.", overlay=None),
 
@@ -210,11 +210,11 @@ SCENES = [
 
     dict(id='t046', level=None, template='officeFloor', breath=True, narration="There was just one problem. Madoff's version had no trades in it at all.", overlay=None),
 
-    dict(id='t047', level=None, template='boardroom', mood='grim', narration='Not one.', overlay=None),
+    dict(id='t047', level=None, template='boardroom', mood='grim', narration='Not a single one.', overlay=None),
 
     dict(id='t048', level=None, template='officeFloor', narration='On the seventeenth floor, statements were typed up by hand.', overlay=None),
 
-    dict(id='t049', level=None, template='chartBoard', chart='up', narration='Backdated. Made to look real.', overlay=None),
+    dict(id='t049', level=None, template='bankExterior', narration='Backdated. Made to look real.', overlay=None),
 
     dict(id='t050', level=None, template='bankExterior', narration="The firm's own numbers people built the entire paper trail, page by page.", overlay=None),
 
@@ -228,13 +228,13 @@ SCENES = [
 
     dict(id='t055', level=None, template='cityStreet', narration='Working out of a strip mall, in a town most auditors had never heard of.', overlay=None),
 
-    dict(id='t056', level=None, template='officeFloor', narration='David Friehling signed the books, year after year.', overlay=None),
+    dict(id='t056', level=None, template='boardroom', narration='David Friehling signed the books, year after year.', overlay=None),
 
     dict(id='t057', level=None, template='courtHearing', narration='And never once caught anything. Because he never really looked.', overlay=None),
 
     dict(id='t058', level=None, template='bankExterior', narration='No auditor ever picked up a phone and asked a bank to confirm a balance.', overlay=None),
 
-    dict(id='t059', level=None, template='chartBoard', chart='down', breath=True, narration='Here is the whole machine, in one sentence: new money paid old money, and the books were faked to hide it.', overlay=None),
+    dict(id='t059', level=None, template='chartBoard', chart='down', breath=True, narration='Here is the whole machine, in one sentence: new money paid off the old money, the books were faked to hide it, and nobody in the room ever had a real reason to check.', overlay=None),
 
     dict(id='t060', level=None, template='crowdQueue', narration='Picture a birthday party. You drop five dollars in a jar, and so does everyone else.', overlay=None),
 
@@ -248,13 +248,13 @@ SCENES = [
 
     dict(id='t065', level=None, template='bankExterior', narration='Stop that flow for even a month, and the whole structure caves in.', overlay=None),
 
-    dict(id='t066', level=None, template='officeFloor', narration='Everyone who touched money at that firm should have wondered.', overlay=None),
+    dict(id='t066', level=None, template='bankExterior', narration='Everyone who touched money at that firm should have wondered.', overlay=None),
 
     dict(id='t067', level=None, template='boardroom', narration='Almost none of them asked.', overlay=None),
 
     dict(id='t068', level=None, template='domesticInterior', narration='Investors got quarterly statements, thick with real-looking trades.', overlay=None),
 
-    dict(id='t069', level=None, template='chartBoard', chart='up', narration='Buys and sells that never happened, on stocks that were entirely real.', overlay=None),
+    dict(id='t069', level=None, template='exchangeFloor', narration='Buys and sells that never happened, on stocks that were entirely real.', overlay=None),
 
     dict(id='t070', level=None, template='officeFloor', narration='Printed on real letterhead. Filed in real drawers.', overlay=None),
 
@@ -277,19 +277,15 @@ SCENES = [
 
     dict(id='t075', level=None, template='boardroom', narration="He couldn't. Not even close.", overlay=None),
 
-    dict(id='t076', level=None, template='officeFloor', narration='He ran the numbers again.', overlay=None),
-
-    dict(id='t077', level=None, template='chartBoard', chart='flat', narration='And again.', overlay=None),
+    dict(id='t076', level=None, template='officeFloor', narration='He ran the numbers again. And again.', overlay=None),
 
     dict(id='t078', level=None, template='boardroom', breath=True, narration="His verdict: Madoff's numbers weren't just unlikely. They were flat-out impossible.", overlay=None),
 
     dict(id='t079', level=None, template='newsMontage', narration='Markopolos wrote to the SEC.', overlay=None),
 
-    dict(id='t080', level=None, template='cityStreet', narration='In 1999.', overlay=None),
+    dict(id='t080', level=None, template='cityStreet', narration='The year was 1999.', overlay=None),
 
-    dict(id='t081', level=None, template='boardroom', narration='He wrote again.', overlay=None),
-
-    dict(id='t082', level=None, template='bankExterior', narration='And again.', overlay=None),
+    dict(id='t081', level=None, template='boardroom', narration='He wrote again. And again.', overlay=None),
 
     dict(id='t083', level=None, template='newsMontage', breath=True, narration='Six formal warnings in nine years — 1999, 2000, 2001, 2005, 2007, 2008.', overlay=None, panels={'variant': 'grid4', 'cells': [{'template': 'newsMontage'}, {'template': 'exchangeFloor'}, {'template': 'boardroom'}, {'template': 'closeUpPortrait'}]}),
 
@@ -328,7 +324,7 @@ SCENES = [
     dict(id='t096', level=None, template='closeUpPortrait', breath=True, narration='Then, in 2008, something happened that no forged statement could fix.', overlay=None, card={'kind': 'narration', 'text': 'Something\nno paper could fix.'}),
 
     # ================= CH 4 =================
-    dict(id='t097', level='CH 4', template='exchangeFloor', chart='down', breath=True, narration="The 2008 crash hit every portfolio on earth, Madoff's clients included.", overlay=None, card={'kind': 'chapter', 'title': 'The Confession', 'subtitle': 'Five Days in December', 'hold': 2.4}),
+    dict(id='t097', level='CH 4', template='exchangeFloor', chart='down', breath=True, narration="The 2008 crash hit every portfolio on earth, Madoff's clients included.", overlay=None, card={'kind': 'chapter', 'title': 'The Confession', 'subtitle': 'Three Days in December', 'hold': 2.4}),
 
     dict(id='t097b', level=None, template='chartBoard', chart='flat', narration='For a decade, redemptions had been small, predictable, easy to cover with new deposits.', overlay=None),
 
@@ -356,7 +352,7 @@ SCENES = [
 
     dict(id='t104', level=None, template='boardroom', mood='grim', breath=True, narration='They reported their own father to federal agents the very next day.', overlay=None),
 
-    dict(id='t105', level=None, template='newsMontage', narration='December 10th, 2008.', overlay=None),
+    dict(id='t105', level=None, template='newsMontage', narration='That was December 10th, 2008.', overlay=None),
 
     dict(id='t106', level=None, template='cityStreet', narration='FBI Special Agent Ted Cacioppi came to his apartment the next morning.', overlay=None),
 
@@ -378,7 +374,7 @@ SCENES = [
 
     dict(id='t111', level=None, template='newsMontage', narration='A fuller accounting later found something stranger.', overlay=None, panels={'variant': 'v2', 'cells': [{'template': 'chartBoard'}, {'template': 'chartBoard'}]}),
 
-    dict(id='t112', level=None, template='chartBoard', chart='down', breath=True, narration='Sixty-four point eight billion dollars, in fake gains, sitting on client statements.', overlay=None),
+    dict(id='t112', level=None, template='chartBoard', chart='down', breath=True, narration='Sixty-four point eight billion dollars in fake gains, sitting right there on client statements.', overlay=None),
 
     dict(id='t113', level=None, template='broadcastDesk', narration='The real cash that vanished — money people handed over, and never saw again — was about seventeen and a half billion.', overlay=None),
 
@@ -395,7 +391,7 @@ SCENES = [
     # ================= CH 5 =================
     dict(id='t119', level='CH 5', template='courtHearing', breath=True, narration='March 12th, 2009. Madoff walked into a federal courtroom.', overlay=None, card={'kind': 'chapter', 'title': 'The Reckoning', 'subtitle': '150 Years, No Trial', 'hold': 2.4}),
 
-    dict(id='t120', level=None, template='closeUpPortrait', narration='And pleaded guilty.', overlay=None),
+    dict(id='t120', level=None, template='closeUpPortrait', narration='And he pleaded guilty.', overlay=None),
 
     dict(id='t121', level=None, template='courtHearing', narration='All eleven felony counts.', overlay=None),
 
@@ -415,9 +411,9 @@ SCENES = [
 
     dict(id='t125', level=None, template='courtHearing', breath=True, narration='On June 29th, Judge Denny Chin handed down the maximum possible sentence.', overlay=None),
 
-    dict(id='t126', level=None, template='closeUpPortrait', mood='grim', narration='One hundred fifty years.', overlay=None, card={'kind': 'word', 'word': '150 YEARS'}),
+    dict(id='t126', level=None, template='closeUpPortrait', mood='grim', narration='One hundred and fifty years.', overlay=None, card={'kind': 'word', 'word': '150 YEARS'}),
 
-    dict(id='t127', level=None, template='courtHearing', narration='Madoff was seventy-one years old.', overlay=None),
+    dict(id='t127', level=None, template='courtHearing', narration='Madoff was seventy-one years old at sentencing.', overlay=None),
 
     dict(id='t128', level=None, template='closeUpPortrait', mood='grim', breath=True, narration='"I am sorry," he told the courtroom. "I know it will not help you."', overlay=None),
 
@@ -433,7 +429,7 @@ SCENES = [
 
     dict(id='t132c', level=None, template='bankExterior', narration="The trustee's job was almost impossible: chase real money through a paper trail built entirely on lies.", overlay=None),
 
-    dict(id='t133', level=None, template='chartBoard', chart='down', narration='Forced to give up a symbolic one hundred forty-three point one billion dollars.', overlay=None),
+    dict(id='t133', level=None, template='chartBoard', chart='down', narration='Forced to forfeit a symbolic one hundred forty-three point one billion dollars.', overlay=None),
 
     dict(id='t134', level=None, template='closeUpPortrait', narration='Money that no longer existed outside a spreadsheet.', overlay=None),
 
@@ -457,7 +453,7 @@ SCENES = [
 
     dict(id='t141', level=None, template='closeUpPortrait', mood='grim', narration='The Elie Wiesel Foundation for Humanity lost its entire endowment.', overlay=None),
 
-    dict(id='t142', level=None, template='chartBoard', chart='down', narration='Fifteen point two million dollars. Gone in one signature.', overlay=None),
+    dict(id='t142', level=None, template='chartBoard', chart='down', narration='Fifteen point two million dollars, gone in one signature.', overlay=None),
 
     dict(id='t143', level=None, template='newsMontage', mood='grim', narration='Madoff spent his final years in a federal prison in North Carolina.', overlay=None),
 
@@ -467,7 +463,7 @@ SCENES = [
 
     dict(id='t145', level=None, template='cityStreet', narration='He died on April 14th, 2021.', overlay=None),
 
-    dict(id='t146', level=None, template='closeUpPortrait', mood='grim', narration='He was eighty-two.', overlay=None, card={'kind': 'narration', 'text': 'Age 82.'}),
+    dict(id='t146', level=None, template='closeUpPortrait', mood='grim', narration='He was eighty-two years old.', overlay=None, card={'kind': 'narration', 'text': 'Age 82.'}),
 
     dict(id='t147', level=None, template='domesticInterior', breath=True, narration="Maybe the strangest part isn't that he lied for so long.", overlay=None),
 

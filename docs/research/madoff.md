@@ -104,7 +104,9 @@ FBI]
   Madoff's fabricated paperwork. [Wikipedia/Fairfield Greenwich, propublica reference]
 - The **Elie Wiesel Foundation for Humanity** lost virtually its entire endowment, reported at about
   **$15.2 million.** [propublica-referenced reporting]
-- Madoff reported having stage-4 kidney disease by January 2014. He died in federal prison on
+- Madoff reported having stage-4 kidney disease by January 2014. He served his final years at
+  **FMC Butner**, a federal medical-center prison in **Butner, North Carolina.** [Federal Bureau of
+  Prisons inmate record; AP/CNBC reporting at time of death] He died in federal prison on
   **April 14, 2021**, at age **82.** [CNBC, PBS]
 
 ## Framing / superlatives used in the script
