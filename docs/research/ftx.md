@@ -151,6 +151,21 @@ footage). All dates and dollar figures below are cross-confirmed across at least
 - **Two-year freeze:** customer accounts frozen at the November 2022 halt remained inaccessible through
   the bankruptcy; first meaningful distributions did not begin until 2024.
 
+## Re-verification pass (2026-08-31, this run)
+
+- All facts, dates and quotations above were re-checked against this file before writing `content.py`
+  for the "How Sam Bankman-Fried Actually Lost $8 Billion" episode. No new facts were added; the file
+  was already sourced sufficiently for a full script.
+- R1 (open legal status) safety note: this file does **not** state a current/open legal status for
+  Gary Wang or Nishad Singh beyond their Dec 2022 guilty pleas (both dated, resolved facts). The
+  script therefore makes **no claim** about their sentencing status — it only says they pleaded guilty
+  and cooperated, which this file supports. If a future revision wants to add their sentencing outcome,
+  it must be added here first, dated and sourced, before it can appear in narration.
+- Every four-digit year used in the script (2014, 2017, 2019, 2021, 2022, 2023, 2024) appears above.
+- Every quoted run of six or more words used in the script (the Larry David ad line, both apology
+  tweets, the Damian Williams indictment line, John Ray's bankruptcy-filing line) is copied verbatim
+  from the Quotations section above.
+
 ## Cut / unverified — NOT used in the script
 
 - The commonly repeated paraphrase of the FTX ad as "a little bit sketchy, but it's not a scam" could

@@ -2,141 +2,118 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 27022,
+  "totalFrames": 26662,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
       "id": "t001",
       "level": null,
       "overlay": null,
-      "template": "domesticInterior",
+      "template": "closeUpPortrait",
       "audio": "audio/t001.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 205,
+      "durationInFrames": 170,
       "gap": 0.435
     },
     {
       "id": "t002",
       "level": null,
       "overlay": null,
-      "template": "crowdQueue",
+      "template": "chartBoard",
       "audio": "audio/t002.wav",
       "audioStartFrame": 3,
-      "startFrame": 205,
-      "durationInFrames": 142,
-      "gap": 0.499
+      "startFrame": 170,
+      "durationInFrames": 86,
+      "gap": 0.499,
+      "chart": "down"
     },
     {
       "id": "t003",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "crowdQueue",
       "audio": "audio/t003.wav",
       "audioStartFrame": 3,
-      "startFrame": 347,
-      "durationInFrames": 113,
+      "startFrame": 256,
+      "durationInFrames": 101,
       "gap": 0.369
     },
     {
       "id": "t004",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "newsMontage",
       "audio": "audio/t004.wav",
       "audioStartFrame": 3,
-      "startFrame": 460,
-      "durationInFrames": 88,
+      "startFrame": 357,
+      "durationInFrames": 91,
       "gap": 0.53,
       "card": {
-        "kind": "narration",
-        "text": "Nobody\nchecked."
+        "kind": "word",
+        "word": "Gone."
       }
     },
     {
       "id": "t005",
       "level": null,
       "overlay": null,
-      "template": "newsMontage",
+      "template": "closeUpPortrait",
       "audio": "audio/t005.wav",
       "audioStartFrame": 3,
-      "startFrame": 548,
-      "durationInFrames": 234,
+      "startFrame": 448,
+      "durationInFrames": 119,
       "gap": 0.418
     },
     {
       "id": "t006",
       "level": null,
       "overlay": null,
-      "template": "bankExterior",
+      "template": "officeFloor",
       "audio": "audio/t006.wav",
       "audioStartFrame": 3,
-      "startFrame": 782,
-      "durationInFrames": 134,
+      "startFrame": 567,
+      "durationInFrames": 182,
       "gap": 0.364
     },
     {
       "id": "t007",
       "level": null,
       "overlay": null,
-      "template": "broadcastDesk",
+      "template": "domesticInterior",
       "audio": "audio/t007.wav",
       "audioStartFrame": 3,
-      "startFrame": 916,
-      "durationInFrames": 110,
-      "gap": 0.355
+      "startFrame": 749,
+      "durationInFrames": 119,
+      "gap": 0.74
     },
     {
       "id": "t008",
-      "level": null,
+      "level": "CH 1",
       "overlay": null,
       "template": "cityStreet",
       "audio": "audio/t008.wav",
       "audioStartFrame": 3,
-      "startFrame": 1026,
-      "durationInFrames": 113,
-      "gap": 0.352
+      "startFrame": 868,
+      "durationInFrames": 124,
+      "gap": 0.352,
+      "card": {
+        "kind": "chapter",
+        "title": "The Boy King",
+        "subtitle": "Built an Empire From One Apartment",
+        "hold": 2.4
+      }
     },
     {
       "id": "t009",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "officeFloor",
       "audio": "audio/t009.wav",
       "audioStartFrame": 3,
-      "startFrame": 1139,
-      "durationInFrames": 99,
+      "startFrame": 992,
+      "durationInFrames": 269,
       "gap": 0.354
-    },
-    {
-      "id": "t009b",
-      "level": null,
-      "overlay": null,
-      "template": "cityStreet",
-      "audio": "audio/t009b.wav",
-      "audioStartFrame": 3,
-      "startFrame": 1238,
-      "durationInFrames": 162,
-      "gap": 0.729,
-      "period": "mid20c"
-    },
-    {
-      "id": "t010",
-      "level": "CH 1",
-      "overlay": null,
-      "template": "domesticInterior",
-      "audio": "audio/t010.wav",
-      "audioStartFrame": 3,
-      "startFrame": 1400,
-      "durationInFrames": 153,
-      "gap": 0.477,
-      "card": {
-        "kind": "chapter",
-        "title": "The Prophet",
-        "subtitle": "Wall Street's Trusted Face",
-        "hold": 2.4
-      },
-      "period": "mid20c"
     },
     {
       "id": "t011",
@@ -145,66 +122,64 @@
       "template": "cityStreet",
       "audio": "audio/t011.wav",
       "audioStartFrame": 3,
-      "startFrame": 1553,
-      "durationInFrames": 143,
-      "gap": 0.444,
-      "period": "mid20c"
+      "startFrame": 1261,
+      "durationInFrames": 75,
+      "gap": 0.444
     },
     {
       "id": "t012",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "domesticInterior",
       "audio": "audio/t012.wav",
       "audioStartFrame": 3,
-      "startFrame": 1696,
-      "durationInFrames": 129,
-      "gap": 0.446,
-      "chart": "up"
+      "startFrame": 1336,
+      "durationInFrames": 179,
+      "gap": 0.446
     },
     {
       "id": "t013",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "exchangeFloor",
       "audio": "audio/t013.wav",
       "audioStartFrame": 3,
-      "startFrame": 1825,
-      "durationInFrames": 128,
-      "gap": 0.453,
-      "period": "mid20c"
+      "startFrame": 1515,
+      "durationInFrames": 104,
+      "gap": 0.453
     },
     {
       "id": "t014",
       "level": null,
       "overlay": null,
-      "template": "bankExterior",
+      "template": "chartBoard",
       "audio": "audio/t014.wav",
       "audioStartFrame": 3,
-      "startFrame": 1953,
-      "durationInFrames": 106,
-      "gap": 0.316
+      "startFrame": 1619,
+      "durationInFrames": 118,
+      "gap": 0.316,
+      "chart": "up"
     },
     {
       "id": "t015",
       "level": null,
       "overlay": null,
-      "template": "exchangeFloor",
+      "template": "newsMontage",
       "audio": "audio/t015.wav",
       "audioStartFrame": 3,
-      "startFrame": 2059,
-      "durationInFrames": 117,
+      "startFrame": 1737,
+      "durationInFrames": 132,
       "gap": 0.413
     },
     {
       "id": "t016",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "officeFloor",
       "audio": "audio/t016.wav",
       "audioStartFrame": 3,
-      "startFrame": 2176,
-      "durationInFrames": 155,
+      "startFrame": 1869,
+      "durationInFrames": 198,
       "gap": 0.514
     },
     {
@@ -214,41 +189,52 @@
       "template": "exchangeFloor",
       "audio": "audio/t017.wav",
       "audioStartFrame": 3,
-      "startFrame": 2331,
-      "durationInFrames": 115,
+      "startFrame": 2067,
+      "durationInFrames": 139,
       "gap": 0.388
     },
     {
       "id": "t018",
       "level": null,
       "overlay": null,
-      "template": "broadcastDesk",
+      "template": "officeFloor",
       "audio": "audio/t018.wav",
       "audioStartFrame": 3,
-      "startFrame": 2446,
-      "durationInFrames": 147,
+      "startFrame": 2206,
+      "durationInFrames": 100,
       "gap": 0.383,
       "panels": {
         "variant": "v2",
         "cells": [
           {
-            "template": "broadcastDesk"
+            "template": "domesticInterior"
           },
           {
-            "template": "boardroom"
+            "template": "officeFloor"
           }
         ]
       }
     },
     {
+      "id": "t018b",
+      "level": null,
+      "overlay": null,
+      "template": "bankExterior",
+      "audio": "audio/t018b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 2306,
+      "durationInFrames": 191,
+      "gap": 0.336
+    },
+    {
       "id": "t019",
       "level": null,
       "overlay": null,
-      "template": "cityStreet",
+      "template": "exchangeFloor",
       "audio": "audio/t019.wav",
       "audioStartFrame": 3,
-      "startFrame": 2593,
-      "durationInFrames": 110,
+      "startFrame": 2497,
+      "durationInFrames": 191,
       "gap": 0.273
     },
     {
@@ -258,224 +244,149 @@
       "template": "boardroom",
       "audio": "audio/t020.wav",
       "audioStartFrame": 3,
-      "startFrame": 2703,
-      "durationInFrames": 85,
+      "startFrame": 2688,
+      "durationInFrames": 194,
       "gap": 0.438,
-      "mood": "bright"
+      "cast": 2
     },
     {
       "id": "t021",
       "level": null,
       "overlay": null,
-      "template": "bankExterior",
+      "template": "closeUpPortrait",
       "audio": "audio/t021.wav",
       "audioStartFrame": 3,
-      "startFrame": 2788,
-      "durationInFrames": 184,
-      "gap": 0.367
-    },
-    {
-      "id": "t021b",
-      "level": null,
-      "overlay": null,
-      "template": "cityStreet",
-      "audio": "audio/t021b.wav",
-      "audioStartFrame": 3,
-      "startFrame": 2972,
-      "durationInFrames": 144,
-      "gap": 0.378
-    },
-    {
-      "id": "t021c",
-      "level": null,
-      "overlay": null,
-      "template": "boardroom",
-      "audio": "audio/t021c.wav",
-      "audioStartFrame": 3,
-      "startFrame": 3116,
-      "durationInFrames": 151,
-      "gap": 0.448
-    },
-    {
-      "id": "t021d",
-      "level": null,
-      "overlay": null,
-      "template": "domesticInterior",
-      "audio": "audio/t021d.wav",
-      "audioStartFrame": 3,
-      "startFrame": 3267,
-      "durationInFrames": 119,
-      "gap": 0.439
-    },
-    {
-      "id": "t021e",
-      "level": null,
-      "overlay": null,
-      "template": "officeFloor",
-      "audio": "audio/t021e.wav",
-      "audioStartFrame": 3,
-      "startFrame": 3386,
-      "durationInFrames": 134,
-      "gap": 0.374
-    },
-    {
-      "id": "t021f",
-      "level": null,
-      "overlay": null,
-      "template": "cityStreet",
-      "audio": "audio/t021f.wav",
-      "audioStartFrame": 3,
-      "startFrame": 3520,
-      "durationInFrames": 120,
-      "gap": 0.335
-    },
-    {
-      "id": "t021g",
-      "level": null,
-      "overlay": null,
-      "template": "domesticInterior",
-      "audio": "audio/t021g.wav",
-      "audioStartFrame": 3,
-      "startFrame": 3640,
-      "durationInFrames": 158,
-      "gap": 0.335
-    },
-    {
-      "id": "t021h",
-      "level": null,
-      "overlay": null,
-      "template": "bankExterior",
-      "audio": "audio/t021h.wav",
-      "audioStartFrame": 3,
-      "startFrame": 3798,
-      "durationInFrames": 118,
-      "gap": 0.278
-    },
-    {
-      "id": "t021i",
-      "level": null,
-      "overlay": null,
-      "template": "boardroom",
-      "audio": "audio/t021i.wav",
-      "audioStartFrame": 3,
-      "startFrame": 3916,
-      "durationInFrames": 70,
-      "gap": 0.485
-    },
-    {
-      "id": "t021j",
-      "level": null,
-      "overlay": null,
-      "template": "newsMontage",
-      "audio": "audio/t021j.wav",
-      "audioStartFrame": 3,
-      "startFrame": 3986,
-      "durationInFrames": 88,
-      "gap": 0.401
-    },
-    {
-      "id": "t021k",
-      "level": null,
-      "overlay": null,
-      "template": "crowdQueue",
-      "audio": "audio/t021k.wav",
-      "audioStartFrame": 3,
-      "startFrame": 4074,
-      "durationInFrames": 124,
-      "gap": 0.252
+      "startFrame": 2882,
+      "durationInFrames": 164,
+      "gap": 0.367,
+      "cast": 1
     },
     {
       "id": "t022",
       "level": null,
       "overlay": null,
-      "template": "exchangeFloor",
+      "template": "officeFloor",
       "audio": "audio/t022.wav",
       "audioStartFrame": 3,
-      "startFrame": 4198,
-      "durationInFrames": 171,
+      "startFrame": 3046,
+      "durationInFrames": 133,
       "gap": 0.413
     },
     {
       "id": "t023",
       "level": null,
       "overlay": null,
-      "template": "domesticInterior",
+      "template": "cityStreet",
       "audio": "audio/t023.wav",
       "audioStartFrame": 3,
-      "startFrame": 4369,
-      "durationInFrames": 171,
+      "startFrame": 3179,
+      "durationInFrames": 95,
       "gap": 0.541
+    },
+    {
+      "id": "t023b",
+      "level": null,
+      "overlay": null,
+      "template": "broadcastDesk",
+      "audio": "audio/t023b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 3274,
+      "durationInFrames": 100,
+      "gap": 0.396
     },
     {
       "id": "t024",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "chartBoard",
       "audio": "audio/t024.wav",
       "audioStartFrame": 3,
-      "startFrame": 4540,
-      "durationInFrames": 158,
-      "gap": 0.523
+      "startFrame": 3374,
+      "durationInFrames": 167,
+      "gap": 0.523,
+      "chart": "up"
+    },
+    {
+      "id": "t024b",
+      "level": null,
+      "overlay": null,
+      "template": "courtHearing",
+      "audio": "audio/t024b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 3541,
+      "durationInFrames": 181,
+      "gap": 0.326
+    },
+    {
+      "id": "t024c",
+      "level": null,
+      "overlay": null,
+      "template": "boardroom",
+      "audio": "audio/t024c.wav",
+      "audioStartFrame": 3,
+      "startFrame": 3722,
+      "durationInFrames": 58,
+      "gap": 0.409
     },
     {
       "id": "t025",
       "level": null,
       "overlay": null,
-      "template": "newsMontage",
+      "template": "exchangeFloor",
       "audio": "audio/t025.wav",
       "audioStartFrame": 3,
-      "startFrame": 4698,
-      "durationInFrames": 72,
+      "startFrame": 3780,
+      "durationInFrames": 106,
       "gap": 0.34
     },
     {
       "id": "t026",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "newsMontage",
       "audio": "audio/t026.wav",
       "audioStartFrame": 3,
-      "startFrame": 4770,
-      "durationInFrames": 157,
+      "startFrame": 3886,
+      "durationInFrames": 187,
       "gap": 0.451
     },
     {
       "id": "t027",
       "level": null,
       "overlay": null,
-      "template": "cityStreet",
+      "template": "closeUpPortrait",
       "audio": "audio/t027.wav",
       "audioStartFrame": 3,
-      "startFrame": 4927,
-      "durationInFrames": 167,
+      "startFrame": 4073,
+      "durationInFrames": 151,
       "gap": 0.453,
-      "card": {
-        "kind": "narration",
-        "text": "One floor\nbelow."
+      "foreground": {
+        "kind": "overShoulder",
+        "side": "right"
       }
     },
     {
       "id": "t028",
       "level": null,
       "overlay": null,
-      "template": "domesticInterior",
+      "template": "crowdQueue",
       "audio": "audio/t028.wav",
       "audioStartFrame": 3,
-      "startFrame": 5094,
-      "durationInFrames": 71,
-      "gap": 0.433
+      "startFrame": 4224,
+      "durationInFrames": 83,
+      "gap": 0.433,
+      "mood": "bright"
     },
     {
       "id": "t029",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "domesticInterior",
       "audio": "audio/t029.wav",
       "audioStartFrame": 3,
-      "startFrame": 5165,
-      "durationInFrames": 109,
-      "gap": 0.302,
-      "chart": "up"
+      "startFrame": 4307,
+      "durationInFrames": 132,
+      "gap": 0.302
     },
     {
       "id": "t030",
@@ -484,8 +395,8 @@
       "template": "boardroom",
       "audio": "audio/t030.wav",
       "audioStartFrame": 3,
-      "startFrame": 5274,
-      "durationInFrames": 103,
+      "startFrame": 4439,
+      "durationInFrames": 121,
       "gap": 0.408
     },
     {
@@ -495,102 +406,90 @@
       "template": "chartBoard",
       "audio": "audio/t031.wav",
       "audioStartFrame": 3,
-      "startFrame": 5377,
-      "durationInFrames": 89,
-      "gap": 0.258,
-      "chart": "up"
+      "startFrame": 4560,
+      "durationInFrames": 489,
+      "gap": 0.258
     },
     {
       "id": "t032",
       "level": null,
       "overlay": null,
-      "template": "domesticInterior",
+      "template": "bankExterior",
       "audio": "audio/t032.wav",
       "audioStartFrame": 3,
-      "startFrame": 5466,
-      "durationInFrames": 139,
+      "startFrame": 5049,
+      "durationInFrames": 166,
       "gap": 0.392
     },
     {
       "id": "t033",
       "level": null,
       "overlay": null,
-      "template": "crowdQueue",
+      "template": "chartBoard",
       "audio": "audio/t033.wav",
       "audioStartFrame": 3,
-      "startFrame": 5605,
-      "durationInFrames": 71,
-      "gap": 0.428
+      "startFrame": 5215,
+      "durationInFrames": 103,
+      "gap": 0.428,
+      "chart": "up"
     },
     {
       "id": "t034",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "bankExterior",
       "audio": "audio/t034.wav",
       "audioStartFrame": 3,
-      "startFrame": 5676,
-      "durationInFrames": 96,
-      "gap": 0.308,
-      "bubbles": [
-        {
-          "text": "How is it possible, ten percent, every single year?",
-          "speaker": "left"
-        },
-        {
-          "text": "Bernie doesn't miss.",
-          "speaker": "right",
-          "at": 2.2
-        }
-      ],
+      "startFrame": 5318,
+      "durationInFrames": 50,
+      "gap": 0.308
+    },
+    {
+      "id": "t035",
+      "level": null,
+      "overlay": null,
+      "template": "exchangeFloor",
+      "audio": "audio/t035.wav",
+      "audioStartFrame": 3,
+      "startFrame": 5368,
+      "durationInFrames": 117,
+      "gap": 0.432,
       "foreground": {
         "kind": "overShoulder",
         "side": "left"
       }
     },
     {
-      "id": "t035",
-      "level": null,
-      "overlay": null,
-      "template": "cityStreet",
-      "audio": "audio/t035.wav",
-      "audioStartFrame": 3,
-      "startFrame": 5772,
-      "durationInFrames": 106,
-      "gap": 0.432
-    },
-    {
       "id": "t036",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "newsMontage",
       "audio": "audio/t036.wav",
       "audioStartFrame": 3,
-      "startFrame": 5878,
-      "durationInFrames": 176,
-      "gap": 0.505,
-      "chart": "up"
+      "startFrame": 5485,
+      "durationInFrames": 212,
+      "gap": 0.505
     },
     {
       "id": "t037",
       "level": null,
       "overlay": null,
-      "template": "cityStreet",
+      "template": "broadcastDesk",
       "audio": "audio/t037.wav",
       "audioStartFrame": 3,
-      "startFrame": 6054,
-      "durationInFrames": 159,
+      "startFrame": 5697,
+      "durationInFrames": 207,
       "gap": 0.451
     },
     {
       "id": "t038",
       "level": null,
       "overlay": null,
-      "template": "domesticInterior",
+      "template": "newsMontage",
       "audio": "audio/t038.wav",
       "audioStartFrame": 3,
-      "startFrame": 6213,
-      "durationInFrames": 186,
+      "startFrame": 5904,
+      "durationInFrames": 98,
       "gap": 0.533
     },
     {
@@ -600,540 +499,409 @@
       "template": "broadcastDesk",
       "audio": "audio/t039.wav",
       "audioStartFrame": 3,
-      "startFrame": 6399,
-      "durationInFrames": 166,
+      "startFrame": 6002,
+      "durationInFrames": 284,
       "gap": 0.292,
       "bubbles": [
         {
-          "text": "What's the secret?",
-          "speaker": "left"
-        },
-        {
-          "text": "Consistency. That's all it is.",
-          "speaker": "right",
-          "at": 2.0
+          "kind": "float",
+          "text": "\"I don't think so. And I'm never wrong about this stuff.\""
         }
-      ],
-      "labels": [
-        "STEADY",
-        "RETURNS"
       ]
-    },
-    {
-      "id": "t040",
-      "level": null,
-      "overlay": null,
-      "template": "cityStreet",
-      "audio": "audio/t040.wav",
-      "audioStartFrame": 3,
-      "startFrame": 6565,
-      "durationInFrames": 128,
-      "gap": 0.384
     },
     {
       "id": "t041",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "domesticInterior",
       "audio": "audio/t041.wav",
       "audioStartFrame": 3,
-      "startFrame": 6693,
-      "durationInFrames": 61,
-      "gap": 0.774,
-      "card": {
-        "kind": "narration",
-        "text": "Nobody\nwas."
-      },
-      "mood": "grim"
+      "startFrame": 6286,
+      "durationInFrames": 86,
+      "gap": 0.38
     },
     {
       "id": "t042",
-      "level": "CH 2",
+      "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "broadcastDesk",
       "audio": "audio/t042.wav",
       "audioStartFrame": 3,
-      "startFrame": 6754,
-      "durationInFrames": 114,
-      "gap": 0.299,
-      "card": {
-        "kind": "chapter",
-        "title": "The Split Floor",
-        "subtitle": "How the Lie Worked",
-        "hold": 2.4
-      }
-    },
-    {
-      "id": "t043",
-      "level": null,
-      "overlay": null,
-      "template": "exchangeFloor",
-      "audio": "audio/t043.wav",
-      "audioStartFrame": 3,
-      "startFrame": 6868,
-      "durationInFrames": 112,
-      "gap": 0.295
-    },
-    {
-      "id": "t044",
-      "level": null,
-      "overlay": null,
-      "template": "exchangeFloor",
-      "audio": "audio/t044.wav",
-      "audioStartFrame": 3,
-      "startFrame": 6980,
-      "durationInFrames": 117,
-      "gap": 0.433
-    },
-    {
-      "id": "t044b",
-      "level": null,
-      "overlay": null,
-      "template": "chartBoard",
-      "audio": "audio/t044b.wav",
-      "audioStartFrame": 3,
-      "startFrame": 7097,
-      "durationInFrames": 144,
-      "gap": 0.492,
-      "chart": "flat"
-    },
-    {
-      "id": "t044c",
-      "level": null,
-      "overlay": null,
-      "template": "exchangeFloor",
-      "audio": "audio/t044c.wav",
-      "audioStartFrame": 3,
-      "startFrame": 7241,
-      "durationInFrames": 121,
-      "gap": 0.372
-    },
-    {
-      "id": "t044d",
-      "level": null,
-      "overlay": null,
-      "template": "boardroom",
-      "audio": "audio/t044d.wav",
-      "audioStartFrame": 3,
-      "startFrame": 7362,
-      "durationInFrames": 204,
-      "gap": 0.321
-    },
-    {
-      "id": "t044e",
-      "level": null,
-      "overlay": null,
-      "template": "chartBoard",
-      "audio": "audio/t044e.wav",
-      "audioStartFrame": 3,
-      "startFrame": 7566,
-      "durationInFrames": 148,
-      "gap": 0.399,
-      "chart": "up"
-    },
-    {
-      "id": "t044f",
-      "level": null,
-      "overlay": null,
-      "template": "officeFloor",
-      "audio": "audio/t044f.wav",
-      "audioStartFrame": 3,
-      "startFrame": 7714,
-      "durationInFrames": 165,
-      "gap": 0.422
-    },
-    {
-      "id": "t044g",
-      "level": null,
-      "overlay": null,
-      "template": "closeUpPortrait",
-      "audio": "audio/t044g.wav",
-      "audioStartFrame": 3,
-      "startFrame": 7879,
-      "durationInFrames": 47,
-      "gap": 0.486
-    },
-    {
-      "id": "t044h",
-      "level": null,
-      "overlay": null,
-      "template": "officeFloor",
-      "audio": "audio/t044h.wav",
-      "audioStartFrame": 3,
-      "startFrame": 7926,
-      "durationInFrames": 177,
-      "gap": 0.317
-    },
-    {
-      "id": "t044i",
-      "level": null,
-      "overlay": null,
-      "template": "newsMontage",
-      "audio": "audio/t044i.wav",
-      "audioStartFrame": 3,
-      "startFrame": 8103,
-      "durationInFrames": 125,
-      "gap": 0.505
-    },
-    {
-      "id": "t044j",
-      "level": null,
-      "overlay": null,
-      "template": "exchangeFloor",
-      "audio": "audio/t044j.wav",
-      "audioStartFrame": 3,
-      "startFrame": 8228,
-      "durationInFrames": 115,
-      "gap": 0.506
-    },
-    {
-      "id": "t044k",
-      "level": null,
-      "overlay": null,
-      "template": "closeUpPortrait",
-      "audio": "audio/t044k.wav",
-      "audioStartFrame": 3,
-      "startFrame": 8343,
-      "durationInFrames": 55,
-      "gap": 0.319
+      "startFrame": 6372,
+      "durationInFrames": 276,
+      "gap": 0.299
     },
     {
       "id": "t045",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "newsMontage",
       "audio": "audio/t045.wav",
       "audioStartFrame": 3,
-      "startFrame": 8398,
-      "durationInFrames": 111,
+      "startFrame": 6648,
+      "durationInFrames": 236,
       "gap": 0.533
     },
     {
       "id": "t046",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "boardroom",
       "audio": "audio/t046.wav",
       "audioStartFrame": 3,
-      "startFrame": 8509,
-      "durationInFrames": 144,
+      "startFrame": 6884,
+      "durationInFrames": 114,
       "gap": 0.423
     },
     {
       "id": "t047",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "chartBoard",
       "audio": "audio/t047.wav",
       "audioStartFrame": 3,
-      "startFrame": 8653,
-      "durationInFrames": 38,
-      "gap": 0.254,
-      "mood": "grim"
-    },
-    {
-      "id": "t048",
-      "level": null,
-      "overlay": null,
-      "template": "officeFloor",
-      "audio": "audio/t048.wav",
-      "audioStartFrame": 3,
-      "startFrame": 8691,
-      "durationInFrames": 117,
-      "gap": 0.333
+      "startFrame": 6998,
+      "durationInFrames": 278,
+      "gap": 0.254
     },
     {
       "id": "t049",
       "level": null,
       "overlay": null,
-      "template": "bankExterior",
+      "template": "cityStreet",
       "audio": "audio/t049.wav",
       "audioStartFrame": 3,
-      "startFrame": 8808,
-      "durationInFrames": 66,
+      "startFrame": 7276,
+      "durationInFrames": 90,
       "gap": 0.315
     },
     {
       "id": "t050",
       "level": null,
       "overlay": null,
-      "template": "bankExterior",
+      "template": "courtHearing",
       "audio": "audio/t050.wav",
       "audioStartFrame": 3,
-      "startFrame": 8874,
-      "durationInFrames": 159,
+      "startFrame": 7366,
+      "durationInFrames": 152,
       "gap": 0.434
     },
     {
       "id": "t051",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "bankExterior",
       "audio": "audio/t051.wav",
       "audioStartFrame": 3,
-      "startFrame": 9033,
-      "durationInFrames": 140,
+      "startFrame": 7518,
+      "durationInFrames": 152,
       "gap": 0.364
     },
     {
       "id": "t052",
       "level": null,
       "overlay": null,
-      "template": "courtHearing",
+      "template": "chartBoard",
       "audio": "audio/t052.wav",
       "audioStartFrame": 3,
-      "startFrame": 9173,
-      "durationInFrames": 164,
+      "startFrame": 7670,
+      "durationInFrames": 145,
       "gap": 0.466
     },
     {
       "id": "t053",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "boardroom",
       "audio": "audio/t053.wav",
       "audioStartFrame": 3,
-      "startFrame": 9337,
-      "durationInFrames": 56,
-      "gap": 0.531,
-      "card": {
-        "kind": "word",
-        "word": "FAKE"
-      },
-      "mood": "grim"
+      "startFrame": 7815,
+      "durationInFrames": 169,
+      "gap": 0.531
     },
     {
       "id": "t054",
       "level": null,
       "overlay": null,
-      "template": "newsMontage",
+      "template": "domesticInterior",
       "audio": "audio/t054.wav",
       "audioStartFrame": 3,
-      "startFrame": 9393,
-      "durationInFrames": 67,
+      "startFrame": 7984,
+      "durationInFrames": 117,
       "gap": 0.268
     },
     {
       "id": "t055",
       "level": null,
       "overlay": null,
-      "template": "cityStreet",
+      "template": "boardroom",
       "audio": "audio/t055.wav",
       "audioStartFrame": 3,
-      "startFrame": 9460,
-      "durationInFrames": 138,
+      "startFrame": 8101,
+      "durationInFrames": 92,
       "gap": 0.349
     },
     {
       "id": "t056",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "chartBoard",
       "audio": "audio/t056.wav",
       "audioStartFrame": 3,
-      "startFrame": 9598,
-      "durationInFrames": 104,
-      "gap": 0.376
+      "startFrame": 8193,
+      "durationInFrames": 159,
+      "gap": 0.376,
+      "chart": "up"
     },
     {
       "id": "t057",
       "level": null,
       "overlay": null,
-      "template": "courtHearing",
+      "template": "domesticInterior",
       "audio": "audio/t057.wav",
       "audioStartFrame": 3,
-      "startFrame": 9702,
-      "durationInFrames": 126,
+      "startFrame": 8352,
+      "durationInFrames": 117,
       "gap": 0.434
     },
     {
       "id": "t058",
       "level": null,
       "overlay": null,
-      "template": "bankExterior",
+      "template": "crowdQueue",
       "audio": "audio/t058.wav",
       "audioStartFrame": 3,
-      "startFrame": 9828,
-      "durationInFrames": 145,
-      "gap": 0.302
+      "startFrame": 8469,
+      "durationInFrames": 152,
+      "gap": 0.302,
+      "mood": "bright"
     },
     {
       "id": "t059",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "officeFloor",
       "audio": "audio/t059.wav",
       "audioStartFrame": 3,
-      "startFrame": 9973,
-      "durationInFrames": 364,
+      "startFrame": 8621,
+      "durationInFrames": 100,
       "gap": 0.276,
-      "chart": "down"
+      "card": {
+        "kind": "objects",
+        "items": [
+          "laptop",
+          "coinStack",
+          "cashStack"
+        ]
+      }
     },
     {
       "id": "t060",
       "level": null,
       "overlay": null,
-      "template": "crowdQueue",
+      "template": "exchangeFloor",
       "audio": "audio/t060.wav",
       "audioStartFrame": 3,
-      "startFrame": 10337,
-      "durationInFrames": 167,
+      "startFrame": 8721,
+      "durationInFrames": 109,
       "gap": 0.419
     },
     {
       "id": "t061",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "closeUpPortrait",
       "audio": "audio/t061.wav",
       "audioStartFrame": 3,
-      "startFrame": 10504,
-      "durationInFrames": 125,
+      "startFrame": 8830,
+      "durationInFrames": 178,
       "gap": 0.275
     },
     {
       "id": "t062",
       "level": null,
       "overlay": null,
-      "template": "domesticInterior",
+      "template": "officeFloor",
       "audio": "audio/t062.wav",
       "audioStartFrame": 3,
-      "startFrame": 10629,
-      "durationInFrames": 120,
+      "startFrame": 9008,
+      "durationInFrames": 152,
       "gap": 0.401
     },
     {
       "id": "t063",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "boardroom",
       "audio": "audio/t063.wav",
       "audioStartFrame": 3,
-      "startFrame": 10749,
-      "durationInFrames": 128,
-      "gap": 0.336,
-      "mood": "grim"
+      "startFrame": 9160,
+      "durationInFrames": 139,
+      "gap": 0.715,
+      "panels": {
+        "variant": "v2",
+        "cells": [
+          {
+            "template": "exchangeFloor"
+          },
+          {
+            "template": "boardroom"
+          }
+        ]
+      }
     },
     {
       "id": "t064",
-      "level": null,
+      "level": "CH 2",
       "overlay": null,
-      "template": "chartBoard",
+      "template": "officeFloor",
       "audio": "audio/t064.wav",
       "audioStartFrame": 3,
-      "startFrame": 10877,
-      "durationInFrames": 144,
+      "startFrame": 9299,
+      "durationInFrames": 81,
       "gap": 0.469,
-      "chart": "down"
+      "card": {
+        "kind": "chapter",
+        "title": "The Backdoor",
+        "subtitle": "How Alameda Got a Blank Check",
+        "hold": 2.4
+      }
+    },
+    {
+      "id": "t064b",
+      "level": null,
+      "overlay": null,
+      "template": "exchangeFloor",
+      "audio": "audio/t064b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 9380,
+      "durationInFrames": 74,
+      "gap": 0.471
     },
     {
       "id": "t065",
       "level": null,
       "overlay": null,
-      "template": "bankExterior",
+      "template": "closeUpPortrait",
       "audio": "audio/t065.wav",
       "audioStartFrame": 3,
-      "startFrame": 11021,
-      "durationInFrames": 144,
+      "startFrame": 9454,
+      "durationInFrames": 407,
       "gap": 0.407
     },
     {
       "id": "t066",
       "level": null,
       "overlay": null,
-      "template": "bankExterior",
+      "template": "chartBoard",
       "audio": "audio/t066.wav",
       "audioStartFrame": 3,
-      "startFrame": 11165,
-      "durationInFrames": 101,
+      "startFrame": 9861,
+      "durationInFrames": 181,
       "gap": 0.379
     },
     {
       "id": "t067",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "exchangeFloor",
       "audio": "audio/t067.wav",
       "audioStartFrame": 3,
-      "startFrame": 11266,
-      "durationInFrames": 52,
+      "startFrame": 10042,
+      "durationInFrames": 115,
       "gap": 0.398
     },
     {
       "id": "t068",
       "level": null,
       "overlay": null,
-      "template": "domesticInterior",
+      "template": "closeUpPortrait",
       "audio": "audio/t068.wav",
       "audioStartFrame": 3,
-      "startFrame": 11318,
-      "durationInFrames": 139,
+      "startFrame": 10157,
+      "durationInFrames": 191,
       "gap": 0.343
     },
     {
       "id": "t069",
       "level": null,
       "overlay": null,
-      "template": "exchangeFloor",
+      "template": "boardroom",
       "audio": "audio/t069.wav",
       "audioStartFrame": 3,
-      "startFrame": 11457,
-      "durationInFrames": 149,
+      "startFrame": 10348,
+      "durationInFrames": 182,
       "gap": 0.472
     },
     {
       "id": "t070",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "exchangeFloor",
       "audio": "audio/t070.wav",
       "audioStartFrame": 3,
-      "startFrame": 11606,
-      "durationInFrames": 118,
+      "startFrame": 10530,
+      "durationInFrames": 116,
       "gap": 0.33
     },
     {
       "id": "t071",
       "level": null,
       "overlay": null,
-      "template": "cityStreet",
+      "template": "domesticInterior",
       "audio": "audio/t071.wav",
       "audioStartFrame": 3,
-      "startFrame": 11724,
-      "durationInFrames": 124,
+      "startFrame": 10646,
+      "durationInFrames": 135,
       "gap": 0.533
+    },
+    {
+      "id": "t071b",
+      "level": null,
+      "overlay": null,
+      "template": "crowdQueue",
+      "audio": "audio/t071b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 10781,
+      "durationInFrames": 135,
+      "gap": 0.336
+    },
+    {
+      "id": "t071c",
+      "level": null,
+      "overlay": null,
+      "template": "bankExterior",
+      "audio": "audio/t071c.wav",
+      "audioStartFrame": 3,
+      "startFrame": 10916,
+      "durationInFrames": 132,
+      "gap": 0.504
     },
     {
       "id": "t072",
       "level": null,
       "overlay": null,
-      "template": "newsMontage",
+      "template": "officeFloor",
       "audio": "audio/t072.wav",
       "audioStartFrame": 3,
-      "startFrame": 11848,
-      "durationInFrames": 223,
-      "gap": 0.662,
+      "startFrame": 11048,
+      "durationInFrames": 30,
+      "gap": 0.296,
       "card": {
-        "kind": "narration",
-        "text": "One man\nalready knew."
+        "kind": "word",
+        "word": "It didn't."
       }
     },
     {
       "id": "t073",
-      "level": "CH 3",
+      "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "exchangeFloor",
       "audio": "audio/t073.wav",
       "audioStartFrame": 3,
-      "startFrame": 12071,
-      "durationInFrames": 163,
-      "gap": 0.51,
-      "card": {
-        "kind": "chapter",
-        "title": "The Whistleblower",
-        "subtitle": "Nine Years, No Answer",
-        "hold": 2.4
-      }
+      "startFrame": 11078,
+      "durationInFrames": 152,
+      "gap": 0.51
     },
     {
       "id": "t074",
@@ -1142,56 +910,10 @@
       "template": "chartBoard",
       "audio": "audio/t074.wav",
       "audioStartFrame": 3,
-      "startFrame": 12234,
-      "durationInFrames": 193,
+      "startFrame": 11230,
+      "durationInFrames": 74,
       "gap": 0.268,
-      "chart": "flat"
-    },
-    {
-      "id": "t074b",
-      "level": null,
-      "overlay": null,
-      "template": "officeFloor",
-      "audio": "audio/t074b.wav",
-      "audioStartFrame": 3,
-      "startFrame": 12427,
-      "durationInFrames": 166,
-      "gap": 0.437
-    },
-    {
-      "id": "t074c",
-      "level": null,
-      "overlay": null,
-      "template": "closeUpPortrait",
-      "audio": "audio/t074c.wav",
-      "audioStartFrame": 3,
-      "startFrame": 12593,
-      "durationInFrames": 141,
-      "gap": 0.355
-    },
-    {
-      "id": "t074d",
-      "level": null,
-      "overlay": null,
-      "template": "chartBoard",
-      "audio": "audio/t074d.wav",
-      "audioStartFrame": 3,
-      "startFrame": 12734,
-      "durationInFrames": 91,
-      "gap": 0.386,
-      "chart": "up"
-    },
-    {
-      "id": "t074e",
-      "level": null,
-      "overlay": null,
-      "template": "exchangeFloor",
-      "audio": "audio/t074e.wav",
-      "audioStartFrame": 3,
-      "startFrame": 12825,
-      "durationInFrames": 184,
-      "gap": 0.447,
-      "chart": "flat"
+      "chart": "down"
     },
     {
       "id": "t075",
@@ -1200,52 +922,63 @@
       "template": "boardroom",
       "audio": "audio/t075.wav",
       "audioStartFrame": 3,
-      "startFrame": 13009,
-      "durationInFrames": 76,
+      "startFrame": 11304,
+      "durationInFrames": 63,
       "gap": 0.528
     },
     {
       "id": "t076",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "bankExterior",
       "audio": "audio/t076.wav",
       "audioStartFrame": 3,
-      "startFrame": 13085,
+      "startFrame": 11367,
       "durationInFrames": 79,
       "gap": 0.515
+    },
+    {
+      "id": "t077",
+      "level": null,
+      "overlay": null,
+      "template": "boardroom",
+      "audio": "audio/t077.wav",
+      "audioStartFrame": 3,
+      "startFrame": 11446,
+      "durationInFrames": 75,
+      "gap": 0.324
     },
     {
       "id": "t078",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "chartBoard",
       "audio": "audio/t078.wav",
       "audioStartFrame": 3,
-      "startFrame": 13164,
-      "durationInFrames": 195,
+      "startFrame": 11521,
+      "durationInFrames": 103,
       "gap": 0.537
     },
     {
       "id": "t079",
       "level": null,
       "overlay": null,
-      "template": "newsMontage",
+      "template": "closeUpPortrait",
       "audio": "audio/t079.wav",
       "audioStartFrame": 3,
-      "startFrame": 13359,
-      "durationInFrames": 85,
+      "startFrame": 11624,
+      "durationInFrames": 176,
       "gap": 0.251
     },
     {
       "id": "t080",
       "level": null,
       "overlay": null,
-      "template": "cityStreet",
+      "template": "exchangeFloor",
       "audio": "audio/t080.wav",
       "audioStartFrame": 3,
-      "startFrame": 13444,
-      "durationInFrames": 66,
+      "startFrame": 11800,
+      "durationInFrames": 101,
       "gap": 0.395
     },
     {
@@ -1255,37 +988,31 @@
       "template": "boardroom",
       "audio": "audio/t081.wav",
       "audioStartFrame": 3,
-      "startFrame": 13510,
-      "durationInFrames": 61,
+      "startFrame": 11901,
+      "durationInFrames": 92,
       "gap": 0.284
+    },
+    {
+      "id": "t082",
+      "level": null,
+      "overlay": null,
+      "template": "chartBoard",
+      "audio": "audio/t082.wav",
+      "audioStartFrame": 3,
+      "startFrame": 11993,
+      "durationInFrames": 134,
+      "gap": 0.51
     },
     {
       "id": "t083",
       "level": null,
       "overlay": null,
-      "template": "newsMontage",
+      "template": "exchangeFloor",
       "audio": "audio/t083.wav",
       "audioStartFrame": 3,
-      "startFrame": 13571,
-      "durationInFrames": 307,
-      "gap": 0.272,
-      "panels": {
-        "variant": "grid4",
-        "cells": [
-          {
-            "template": "newsMontage"
-          },
-          {
-            "template": "exchangeFloor"
-          },
-          {
-            "template": "boardroom"
-          },
-          {
-            "template": "closeUpPortrait"
-          }
-        ]
-      }
+      "startFrame": 12127,
+      "durationInFrames": 145,
+      "gap": 0.272
     },
     {
       "id": "t084",
@@ -1294,380 +1021,237 @@
       "template": "chartBoard",
       "audio": "audio/t084.wav",
       "audioStartFrame": 3,
-      "startFrame": 13878,
-      "durationInFrames": 154,
+      "startFrame": 12272,
+      "durationInFrames": 120,
       "gap": 0.325,
-      "chart": "flat"
+      "card": {
+        "kind": "narration",
+        "text": "Confidence\nis not collateral."
+      }
     },
     {
       "id": "t085",
       "level": null,
       "overlay": null,
-      "template": "cityStreet",
+      "template": "domesticInterior",
       "audio": "audio/t085.wav",
       "audioStartFrame": 3,
-      "startFrame": 14032,
-      "durationInFrames": 113,
+      "startFrame": 12392,
+      "durationInFrames": 117,
       "gap": 0.345,
-      "card": {
-        "kind": "narration",
-        "text": "\u201cThe World\u2019s Largest\nHedge Fund Is a Fraud.\u201d"
-      }
-    },
-    {
-      "id": "t085b",
-      "level": null,
-      "overlay": null,
-      "template": "boardroom",
-      "audio": "audio/t085b.wav",
-      "audioStartFrame": 3,
-      "startFrame": 14145,
-      "durationInFrames": 156,
-      "gap": 0.307
-    },
-    {
-      "id": "t085c",
-      "level": null,
-      "overlay": null,
-      "template": "officeFloor",
-      "audio": "audio/t085c.wav",
-      "audioStartFrame": 3,
-      "startFrame": 14301,
-      "durationInFrames": 114,
-      "gap": 0.34
-    },
-    {
-      "id": "t086",
-      "level": null,
-      "overlay": null,
-      "template": "boardroom",
-      "audio": "audio/t086.wav",
-      "audioStartFrame": 3,
-      "startFrame": 14415,
-      "durationInFrames": 116,
-      "gap": 0.358,
-      "bubbles": [
-        {
-          "text": "Are you running a Ponzi scheme?",
-          "speaker": "left"
-        },
-        {
-          "text": "No.",
-          "speaker": "right",
-          "at": 2.0
-        }
-      ],
       "foreground": {
         "kind": "overShoulder",
         "side": "right"
       }
     },
     {
+      "id": "t086",
+      "level": null,
+      "overlay": null,
+      "template": "cityStreet",
+      "audio": "audio/t086.wav",
+      "audioStartFrame": 3,
+      "startFrame": 12509,
+      "durationInFrames": 105,
+      "gap": 0.358
+    },
+    {
       "id": "t087",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "closeUpPortrait",
       "audio": "audio/t087.wav",
       "audioStartFrame": 3,
-      "startFrame": 14531,
-      "durationInFrames": 125,
-      "gap": 0.251,
-      "mood": "grim"
-    },
-    {
-      "id": "t087b",
-      "level": null,
-      "overlay": null,
-      "template": "bankExterior",
-      "audio": "audio/t087b.wav",
-      "audioStartFrame": 3,
-      "startFrame": 14656,
-      "durationInFrames": 210,
-      "gap": 0.294
-    },
-    {
-      "id": "t087c",
-      "level": null,
-      "overlay": null,
-      "template": "chartBoard",
-      "audio": "audio/t087c.wav",
-      "audioStartFrame": 3,
-      "startFrame": 14866,
-      "durationInFrames": 152,
-      "gap": 0.466,
-      "chart": "up"
+      "startFrame": 12614,
+      "durationInFrames": 78,
+      "gap": 0.251
     },
     {
       "id": "t088",
       "level": null,
       "overlay": null,
-      "template": "bankExterior",
+      "template": "exchangeFloor",
       "audio": "audio/t088.wav",
       "audioStartFrame": 3,
-      "startFrame": 15018,
-      "durationInFrames": 106,
+      "startFrame": 12692,
+      "durationInFrames": 38,
       "gap": 0.534
     },
     {
       "id": "t089",
       "level": null,
       "overlay": null,
-      "template": "exchangeFloor",
+      "template": "officeFloor",
       "audio": "audio/t089.wav",
       "audioStartFrame": 3,
-      "startFrame": 15124,
-      "durationInFrames": 158,
+      "startFrame": 12730,
+      "durationInFrames": 260,
       "gap": 0.511
+    },
+    {
+      "id": "t089b",
+      "level": null,
+      "overlay": null,
+      "template": "closeUpPortrait",
+      "audio": "audio/t089b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 12990,
+      "durationInFrames": 77,
+      "gap": 0.278
     },
     {
       "id": "t090",
       "level": null,
       "overlay": null,
-      "template": "crowdQueue",
+      "template": "domesticInterior",
       "audio": "audio/t090.wav",
       "audioStartFrame": 3,
-      "startFrame": 15282,
-      "durationInFrames": 81,
+      "startFrame": 13067,
+      "durationInFrames": 125,
       "gap": 0.308
     },
     {
       "id": "t091",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "bankExterior",
       "audio": "audio/t091.wav",
       "audioStartFrame": 3,
-      "startFrame": 15363,
-      "durationInFrames": 174,
-      "gap": 0.529,
-      "chart": "up"
+      "startFrame": 13192,
+      "durationInFrames": 145,
+      "gap": 0.529
     },
     {
       "id": "t092",
       "level": null,
       "overlay": null,
-      "template": "domesticInterior",
+      "template": "newsMontage",
       "audio": "audio/t092.wav",
       "audioStartFrame": 3,
-      "startFrame": 15537,
-      "durationInFrames": 200,
-      "gap": 0.435
+      "startFrame": 13337,
+      "durationInFrames": 82,
+      "gap": 0.846
     },
     {
       "id": "t093",
-      "level": null,
+      "level": "CH 3",
       "overlay": null,
-      "template": "broadcastDesk",
+      "template": "chartBoard",
       "audio": "audio/t093.wav",
       "audioStartFrame": 3,
-      "startFrame": 15737,
-      "durationInFrames": 117,
-      "gap": 0.543
+      "startFrame": 13419,
+      "durationInFrames": 144,
+      "gap": 0.543,
+      "card": {
+        "kind": "chapter",
+        "title": "The Leak",
+        "subtitle": "One Balance Sheet Brings It Down",
+        "hold": 2.4
+      }
     },
     {
       "id": "t094",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "newsMontage",
       "audio": "audio/t094.wav",
       "audioStartFrame": 3,
-      "startFrame": 15854,
-      "durationInFrames": 205,
-      "gap": 0.49,
-      "card": {
-        "kind": "narration",
-        "text": "One floor\nunder himself."
-      },
-      "mood": "grim"
-    },
-    {
-      "id": "t095",
-      "level": null,
-      "overlay": null,
-      "template": "cityStreet",
-      "audio": "audio/t095.wav",
-      "audioStartFrame": 3,
-      "startFrame": 16059,
-      "durationInFrames": 95,
-      "gap": 0.281
+      "startFrame": 13563,
+      "durationInFrames": 273,
+      "gap": 0.49
     },
     {
       "id": "t096",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "chartBoard",
       "audio": "audio/t096.wav",
       "audioStartFrame": 3,
-      "startFrame": 16154,
-      "durationInFrames": 191,
-      "gap": 0.766,
-      "card": {
-        "kind": "narration",
-        "text": "Something\nno paper could fix."
-      }
-    },
-    {
-      "id": "t097",
-      "level": "CH 4",
-      "overlay": null,
-      "template": "exchangeFloor",
-      "audio": "audio/t097.wav",
-      "audioStartFrame": 3,
-      "startFrame": 16345,
-      "durationInFrames": 186,
-      "gap": 0.457,
-      "card": {
-        "kind": "chapter",
-        "title": "The Confession",
-        "subtitle": "Three Days in December",
-        "hold": 2.4
-      },
+      "startFrame": 13836,
+      "durationInFrames": 96,
+      "gap": 0.375,
       "chart": "down"
     },
     {
-      "id": "t097b",
+      "id": "t097",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
-      "audio": "audio/t097b.wav",
+      "template": "boardroom",
+      "audio": "audio/t097.wav",
       "audioStartFrame": 3,
-      "startFrame": 16531,
-      "durationInFrames": 196,
-      "gap": 0.313,
-      "chart": "flat"
-    },
-    {
-      "id": "t097c",
-      "level": null,
-      "overlay": null,
-      "template": "newsMontage",
-      "audio": "audio/t097c.wav",
-      "audioStartFrame": 3,
-      "startFrame": 16727,
-      "durationInFrames": 113,
-      "gap": 0.33
-    },
-    {
-      "id": "t097d",
-      "level": null,
-      "overlay": null,
-      "template": "broadcastDesk",
-      "audio": "audio/t097d.wav",
-      "audioStartFrame": 3,
-      "startFrame": 16840,
-      "durationInFrames": 150,
-      "gap": 0.415
+      "startFrame": 13932,
+      "durationInFrames": 143,
+      "gap": 0.457
     },
     {
       "id": "t098",
       "level": null,
       "overlay": null,
-      "template": "crowdQueue",
+      "template": "chartBoard",
       "audio": "audio/t098.wav",
       "audioStartFrame": 3,
-      "startFrame": 16990,
-      "durationInFrames": 117,
+      "startFrame": 14075,
+      "durationInFrames": 140,
       "gap": 0.498,
-      "placards": [
-        "GIVE IT BACK",
-        "WHERE'S OUR MONEY",
-        "ANSWERS NOW"
-      ]
+      "chart": "down"
     },
     {
       "id": "t099",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "closeUpPortrait",
       "audio": "audio/t099.wav",
       "audioStartFrame": 3,
-      "startFrame": 17107,
-      "durationInFrames": 153,
+      "startFrame": 14215,
+      "durationInFrames": 158,
       "gap": 0.289,
-      "chart": "down"
-    },
-    {
-      "id": "t099b",
-      "level": null,
-      "overlay": null,
-      "template": "officeFloor",
-      "audio": "audio/t099b.wav",
-      "audioStartFrame": 3,
-      "startFrame": 17260,
-      "durationInFrames": 171,
-      "gap": 0.307
-    },
-    {
-      "id": "t099c",
-      "level": null,
-      "overlay": null,
-      "template": "bankExterior",
-      "audio": "audio/t099c.wav",
-      "audioStartFrame": 3,
-      "startFrame": 17431,
-      "durationInFrames": 113,
-      "gap": 0.387
-    },
-    {
-      "id": "t099d",
-      "level": null,
-      "overlay": null,
-      "template": "officeFloor",
-      "audio": "audio/t099d.wav",
-      "audioStartFrame": 3,
-      "startFrame": 17544,
-      "durationInFrames": 180,
-      "gap": 0.341
+      "card": {
+        "kind": "narration",
+        "text": "A receipt\nfor its own IOU."
+      }
     },
     {
       "id": "t100",
       "level": null,
       "overlay": null,
-      "template": "bankExterior",
+      "template": "chartBoard",
       "audio": "audio/t100.wav",
       "audioStartFrame": 3,
-      "startFrame": 17724,
-      "durationInFrames": 31,
-      "gap": 0.265,
-      "mood": "grim"
+      "startFrame": 14373,
+      "durationInFrames": 110,
+      "gap": 0.265
     },
     {
       "id": "t101",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "newsMontage",
       "audio": "audio/t101.wav",
       "audioStartFrame": 3,
-      "startFrame": 17755,
-      "durationInFrames": 67,
-      "gap": 1.4,
-      "mood": "grim"
+      "startFrame": 14483,
+      "durationInFrames": 108,
+      "gap": 0.532
     },
     {
       "id": "t102",
       "level": null,
       "overlay": null,
-      "template": "domesticInterior",
+      "template": "closeUpPortrait",
       "audio": "audio/t102.wav",
       "audioStartFrame": 3,
-      "startFrame": 17822,
-      "durationInFrames": 275,
-      "gap": 0.429,
-      "foreground": {
-        "kind": "overShoulder",
-        "side": "right"
-      },
-      "mood": "grim"
+      "startFrame": 14591,
+      "durationInFrames": 63,
+      "gap": 1.4
     },
     {
       "id": "t103",
       "level": null,
       "overlay": null,
-      "template": "newsMontage",
+      "template": "broadcastDesk",
       "audio": "audio/t103.wav",
       "audioStartFrame": 3,
-      "startFrame": 18097,
-      "durationInFrames": 160,
+      "startFrame": 14654,
+      "durationInFrames": 476,
       "gap": 0.437,
       "mood": "grim"
     },
@@ -1675,219 +1259,223 @@
       "id": "t104",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "crowdQueue",
       "audio": "audio/t104.wav",
       "audioStartFrame": 3,
-      "startFrame": 18257,
-      "durationInFrames": 133,
+      "startFrame": 15130,
+      "durationInFrames": 94,
       "gap": 0.277,
-      "mood": "grim"
+      "mood": "grim",
+      "placards": [
+        "GIVE IT BACK",
+        "WHERE IS IT"
+      ]
     },
     {
       "id": "t105",
       "level": null,
       "overlay": null,
-      "template": "newsMontage",
+      "template": "chartBoard",
       "audio": "audio/t105.wav",
       "audioStartFrame": 3,
-      "startFrame": 18390,
-      "durationInFrames": 87,
-      "gap": 0.356
+      "startFrame": 15224,
+      "durationInFrames": 156,
+      "gap": 0.356,
+      "chart": "down"
     },
     {
       "id": "t106",
       "level": null,
       "overlay": null,
-      "template": "cityStreet",
+      "template": "officeFloor",
       "audio": "audio/t106.wav",
       "audioStartFrame": 3,
-      "startFrame": 18477,
-      "durationInFrames": 177,
-      "gap": 0.333
+      "startFrame": 15380,
+      "durationInFrames": 123,
+      "gap": 0.333,
+      "mood": "grim"
+    },
+    {
+      "id": "t106b",
+      "level": null,
+      "overlay": null,
+      "template": "crowdQueue",
+      "audio": "audio/t106b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 15503,
+      "durationInFrames": 96,
+      "gap": 0.267,
+      "mood": "grim"
     },
     {
       "id": "t107",
       "level": null,
       "overlay": null,
-      "template": "domesticInterior",
+      "template": "boardroom",
       "audio": "audio/t107.wav",
       "audioStartFrame": 3,
-      "startFrame": 18654,
-      "durationInFrames": 40,
-      "gap": 0.296,
-      "bubbles": [
-        {
-          "text": "Is there an innocent explanation?",
-          "speaker": "left"
-        },
-        {
-          "text": "There is no innocent explanation. I've been running a massive Ponzi scheme.",
-          "speaker": "right",
-          "at": 2.4
-        }
-      ],
-      "foreground": {
-        "kind": "overShoulder",
-        "side": "left"
-      },
-      "mood": "grim"
+      "startFrame": 15599,
+      "durationInFrames": 106,
+      "gap": 0.296
     },
     {
       "id": "t108",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "newsMontage",
       "audio": "audio/t108.wav",
       "audioStartFrame": 3,
-      "startFrame": 18694,
-      "durationInFrames": 57,
+      "startFrame": 15705,
+      "durationInFrames": 82,
       "gap": 0.471,
       "mood": "grim"
-    },
-    {
-      "id": "t108b",
-      "level": null,
-      "overlay": null,
-      "template": "cityStreet",
-      "audio": "audio/t108b.wav",
-      "audioStartFrame": 3,
-      "startFrame": 18751,
-      "durationInFrames": 128,
-      "gap": 0.302
-    },
-    {
-      "id": "t108c",
-      "level": null,
-      "overlay": null,
-      "template": "bankExterior",
-      "audio": "audio/t108c.wav",
-      "audioStartFrame": 3,
-      "startFrame": 18879,
-      "durationInFrames": 91,
-      "gap": 0.508
-    },
-    {
-      "id": "t108d",
-      "level": null,
-      "overlay": null,
-      "template": "broadcastDesk",
-      "audio": "audio/t108d.wav",
-      "audioStartFrame": 3,
-      "startFrame": 18970,
-      "durationInFrames": 107,
-      "gap": 0.283
-    },
-    {
-      "id": "t108e",
-      "level": null,
-      "overlay": null,
-      "template": "newsMontage",
-      "audio": "audio/t108e.wav",
-      "audioStartFrame": 3,
-      "startFrame": 19077,
-      "durationInFrames": 120,
-      "gap": 0.289
     },
     {
       "id": "t109",
       "level": null,
       "overlay": null,
-      "template": "broadcastDesk",
+      "template": "officeFloor",
       "audio": "audio/t109.wav",
       "audioStartFrame": 3,
-      "startFrame": 19197,
-      "durationInFrames": 168,
+      "startFrame": 15787,
+      "durationInFrames": 61,
       "gap": 0.388
+    },
+    {
+      "id": "t109b",
+      "level": null,
+      "overlay": null,
+      "template": "bankExterior",
+      "audio": "audio/t109b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 15848,
+      "durationInFrames": 153,
+      "gap": 0.512,
+      "mood": "grim"
     },
     {
       "id": "t110",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "newsMontage",
       "audio": "audio/t110.wav",
       "audioStartFrame": 3,
-      "startFrame": 19365,
-      "durationInFrames": 153,
+      "startFrame": 16001,
+      "durationInFrames": 164,
       "gap": 0.259,
-      "chart": "down"
+      "mood": "grim"
     },
     {
       "id": "t111",
       "level": null,
       "overlay": null,
-      "template": "newsMontage",
+      "template": "closeUpPortrait",
       "audio": "audio/t111.wav",
       "audioStartFrame": 3,
-      "startFrame": 19518,
-      "durationInFrames": 99,
+      "startFrame": 16165,
+      "durationInFrames": 120,
       "gap": 0.401,
-      "panels": {
-        "variant": "v2",
-        "cells": [
-          {
-            "template": "chartBoard"
-          },
-          {
-            "template": "chartBoard"
-          }
-        ]
-      }
+      "mood": "grim"
     },
     {
       "id": "t112",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "domesticInterior",
       "audio": "audio/t112.wav",
       "audioStartFrame": 3,
-      "startFrame": 19617,
-      "durationInFrames": 204,
+      "startFrame": 16285,
+      "durationInFrames": 128,
       "gap": 0.402,
-      "chart": "down"
+      "bubbles": [
+        {
+          "kind": "float",
+          "text": "\"I'm sorry. That's the biggest thing. I f---ed up, and should have done better.\"",
+          "at": 0
+        },
+        {
+          "kind": "float",
+          "text": "\"...at a very high level, I f---ed up twice.\"",
+          "at": 3.2
+        }
+      ],
+      "mood": "grim"
     },
     {
       "id": "t113",
       "level": null,
       "overlay": null,
-      "template": "broadcastDesk",
+      "template": "crowdQueue",
       "audio": "audio/t113.wav",
       "audioStartFrame": 3,
-      "startFrame": 19821,
-      "durationInFrames": 254,
-      "gap": 0.346
+      "startFrame": 16413,
+      "durationInFrames": 123,
+      "gap": 0.346,
+      "mood": "grim",
+      "placards": [
+        "PAY US",
+        "ANSWERS NOW"
+      ]
     },
     {
       "id": "t114",
       "level": null,
       "overlay": null,
-      "template": "crowdQueue",
+      "template": "newsMontage",
       "audio": "audio/t114.wav",
       "audioStartFrame": 3,
-      "startFrame": 20075,
-      "durationInFrames": 124,
-      "gap": 0.485
+      "startFrame": 16536,
+      "durationInFrames": 80,
+      "gap": 0.485,
+      "mood": "grim"
+    },
+    {
+      "id": "t114b",
+      "level": null,
+      "overlay": null,
+      "template": "domesticInterior",
+      "audio": "audio/t114b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 16616,
+      "durationInFrames": 149,
+      "gap": 0.439,
+      "mood": "grim"
+    },
+    {
+      "id": "t114c",
+      "level": null,
+      "overlay": null,
+      "template": "cityStreet",
+      "audio": "audio/t114c.wav",
+      "audioStartFrame": 3,
+      "startFrame": 16765,
+      "durationInFrames": 110,
+      "gap": 0.349,
+      "mood": "grim"
     },
     {
       "id": "t115",
       "level": null,
       "overlay": null,
-      "template": "bankExterior",
+      "template": "officeFloor",
       "audio": "audio/t115.wav",
       "audioStartFrame": 3,
-      "startFrame": 20199,
-      "durationInFrames": 224,
-      "gap": 0.534
+      "startFrame": 16875,
+      "durationInFrames": 225,
+      "gap": 0.534,
+      "mood": "grim"
     },
     {
       "id": "t116",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "newsMontage",
       "audio": "audio/t116.wav",
       "audioStartFrame": 3,
-      "startFrame": 20423,
-      "durationInFrames": 185,
-      "gap": 0.335
+      "startFrame": 17100,
+      "durationInFrames": 174,
+      "gap": 0.335,
+      "mood": "grim"
     },
     {
       "id": "t117",
@@ -1896,153 +1484,96 @@
       "template": "closeUpPortrait",
       "audio": "audio/t117.wav",
       "audioStartFrame": 3,
-      "startFrame": 20608,
-      "durationInFrames": 92,
-      "gap": 0.411,
-      "mood": "grim"
+      "startFrame": 17274,
+      "durationInFrames": 124,
+      "gap": 0.814
     },
     {
       "id": "t118",
-      "level": null,
+      "level": "CH 4",
       "overlay": null,
-      "template": "newsMontage",
+      "template": "boardroom",
       "audio": "audio/t118.wav",
       "audioStartFrame": 3,
-      "startFrame": 20700,
-      "durationInFrames": 58,
-      "gap": 0.881,
-      "card": {
-        "kind": "narration",
-        "text": "A person\ndoes."
-      },
-      "mood": "grim"
-    },
-    {
-      "id": "t119",
-      "level": "CH 5",
-      "overlay": null,
-      "template": "courtHearing",
-      "audio": "audio/t119.wav",
-      "audioStartFrame": 3,
-      "startFrame": 20758,
-      "durationInFrames": 162,
-      "gap": 0.526,
+      "startFrame": 17398,
+      "durationInFrames": 79,
+      "gap": 0.461,
       "card": {
         "kind": "chapter",
-        "title": "The Reckoning",
-        "subtitle": "150 Years, No Trial",
+        "title": "The Fall",
+        "subtitle": "Bankruptcy, Handcuffs, and an Indictment",
         "hold": 2.4
       }
     },
     {
-      "id": "t120",
+      "id": "t119",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
-      "audio": "audio/t120.wav",
+      "template": "courtHearing",
+      "audio": "audio/t119.wav",
       "audioStartFrame": 3,
-      "startFrame": 20920,
-      "durationInFrames": 52,
-      "gap": 0.3
+      "startFrame": 17477,
+      "durationInFrames": 291,
+      "gap": 0.526
     },
     {
       "id": "t121",
       "level": null,
       "overlay": null,
-      "template": "courtHearing",
+      "template": "chartBoard",
       "audio": "audio/t121.wav",
       "audioStartFrame": 3,
-      "startFrame": 20972,
-      "durationInFrames": 66,
+      "startFrame": 17768,
+      "durationInFrames": 92,
       "gap": 0.528
     },
     {
       "id": "t122",
       "level": null,
       "overlay": null,
-      "template": "broadcastDesk",
+      "template": "boardroom",
       "audio": "audio/t122.wav",
       "audioStartFrame": 3,
-      "startFrame": 21038,
-      "durationInFrames": 119,
-      "gap": 0.363
+      "startFrame": 17860,
+      "durationInFrames": 77,
+      "gap": 0.363,
+      "mood": "grim"
     },
     {
       "id": "t123",
       "level": null,
       "overlay": null,
-      "template": "courtHearing",
+      "template": "newsMontage",
       "audio": "audio/t123.wav",
       "audioStartFrame": 3,
-      "startFrame": 21157,
-      "durationInFrames": 140,
-      "gap": 0.494
+      "startFrame": 17937,
+      "durationInFrames": 103,
+      "gap": 0.494,
+      "foreground": {
+        "kind": "overShoulder",
+        "side": "right"
+      }
     },
     {
       "id": "t124",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "boardroom",
       "audio": "audio/t124.wav",
       "audioStartFrame": 3,
-      "startFrame": 21297,
-      "durationInFrames": 175,
-      "gap": 0.505,
-      "mood": "grim"
-    },
-    {
-      "id": "t124b",
-      "level": null,
-      "overlay": null,
-      "template": "courtHearing",
-      "audio": "audio/t124b.wav",
-      "audioStartFrame": 3,
-      "startFrame": 21472,
-      "durationInFrames": 85,
-      "gap": 0.264
-    },
-    {
-      "id": "t124c",
-      "level": null,
-      "overlay": null,
-      "template": "crowdQueue",
-      "audio": "audio/t124c.wav",
-      "audioStartFrame": 3,
-      "startFrame": 21557,
-      "durationInFrames": 151,
-      "gap": 0.357
-    },
-    {
-      "id": "t124d",
-      "level": null,
-      "overlay": null,
-      "template": "broadcastDesk",
-      "audio": "audio/t124d.wav",
-      "audioStartFrame": 3,
-      "startFrame": 21708,
-      "durationInFrames": 125,
-      "gap": 0.444
-    },
-    {
-      "id": "t124e",
-      "level": null,
-      "overlay": null,
-      "template": "closeUpPortrait",
-      "audio": "audio/t124e.wav",
-      "audioStartFrame": 3,
-      "startFrame": 21833,
-      "durationInFrames": 115,
-      "gap": 0.292
+      "startFrame": 18040,
+      "durationInFrames": 149,
+      "gap": 0.505
     },
     {
       "id": "t125",
       "level": null,
       "overlay": null,
-      "template": "courtHearing",
+      "template": "chartBoard",
       "audio": "audio/t125.wav",
       "audioStartFrame": 3,
-      "startFrame": 21948,
-      "durationInFrames": 186,
+      "startFrame": 18189,
+      "durationInFrames": 52,
       "gap": 0.476
     },
     {
@@ -2052,117 +1583,121 @@
       "template": "closeUpPortrait",
       "audio": "audio/t126.wav",
       "audioStartFrame": 3,
-      "startFrame": 22134,
-      "durationInFrames": 56,
+      "startFrame": 18241,
+      "durationInFrames": 353,
       "gap": 0.396,
       "card": {
-        "kind": "word",
-        "word": "150 YEARS"
-      },
-      "mood": "grim"
+        "kind": "narration",
+        "text": "\"A complete failure\nof corporate controls.\""
+      }
     },
     {
       "id": "t127",
       "level": null,
       "overlay": null,
-      "template": "courtHearing",
+      "template": "boardroom",
       "audio": "audio/t127.wav",
       "audioStartFrame": 3,
-      "startFrame": 22190,
-      "durationInFrames": 101,
+      "startFrame": 18594,
+      "durationInFrames": 103,
       "gap": 0.546
     },
     {
       "id": "t128",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "cityStreet",
       "audio": "audio/t128.wav",
       "audioStartFrame": 3,
-      "startFrame": 22291,
-      "durationInFrames": 137,
-      "gap": 0.517,
-      "mood": "grim"
+      "startFrame": 18697,
+      "durationInFrames": 129,
+      "gap": 0.517
     },
     {
       "id": "t129",
       "level": null,
       "overlay": null,
-      "template": "courtHearing",
+      "template": "closeUpPortrait",
       "audio": "audio/t129.wav",
       "audioStartFrame": 3,
-      "startFrame": 22428,
-      "durationInFrames": 110,
+      "startFrame": 18826,
+      "durationInFrames": 59,
       "gap": 0.447,
+      "foreground": {
+        "kind": "overShoulder",
+        "side": "left"
+      },
+      "mood": "grim"
+    },
+    {
+      "id": "t129b",
+      "level": null,
+      "overlay": null,
+      "template": "newsMontage",
+      "audio": "audio/t129b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 18885,
+      "durationInFrames": 90,
+      "gap": 0.458,
       "mood": "grim"
     },
     {
       "id": "t130",
       "level": null,
       "overlay": null,
-      "template": "broadcastDesk",
+      "template": "cityStreet",
       "audio": "audio/t130.wav",
       "audioStartFrame": 3,
-      "startFrame": 22538,
-      "durationInFrames": 183,
-      "gap": 0.478,
+      "startFrame": 18975,
+      "durationInFrames": 116,
+      "gap": 0.478
+    },
+    {
+      "id": "t130b",
+      "level": null,
+      "overlay": null,
+      "template": "bankExterior",
+      "audio": "audio/t130b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 19091,
+      "durationInFrames": 122,
+      "gap": 0.334,
+      "mood": "grim"
+    },
+    {
+      "id": "t130c",
+      "level": null,
+      "overlay": null,
+      "template": "broadcastDesk",
+      "audio": "audio/t130c.wav",
+      "audioStartFrame": 3,
+      "startFrame": 19213,
+      "durationInFrames": 114,
+      "gap": 0.397,
       "mood": "grim"
     },
     {
       "id": "t131",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "courtHearing",
       "audio": "audio/t131.wav",
       "audioStartFrame": 3,
-      "startFrame": 22721,
-      "durationInFrames": 152,
-      "gap": 0.461
+      "startFrame": 19327,
+      "durationInFrames": 127,
+      "gap": 0.461,
+      "mood": "grim"
     },
     {
       "id": "t132",
       "level": null,
       "overlay": null,
-      "template": "courtHearing",
+      "template": "newsMontage",
       "audio": "audio/t132.wav",
       "audioStartFrame": 3,
-      "startFrame": 22873,
-      "durationInFrames": 111,
+      "startFrame": 19454,
+      "durationInFrames": 217,
       "gap": 0.477
-    },
-    {
-      "id": "t132b",
-      "level": null,
-      "overlay": null,
-      "template": "boardroom",
-      "audio": "audio/t132b.wav",
-      "audioStartFrame": 3,
-      "startFrame": 22984,
-      "durationInFrames": 208,
-      "gap": 0.434
-    },
-    {
-      "id": "t132c",
-      "level": null,
-      "overlay": null,
-      "template": "bankExterior",
-      "audio": "audio/t132c.wav",
-      "audioStartFrame": 3,
-      "startFrame": 23192,
-      "durationInFrames": 228,
-      "gap": 0.424
-    },
-    {
-      "id": "t133",
-      "level": null,
-      "overlay": null,
-      "template": "chartBoard",
-      "audio": "audio/t133.wav",
-      "audioStartFrame": 3,
-      "startFrame": 23420,
-      "durationInFrames": 173,
-      "gap": 0.378,
-      "chart": "down"
     },
     {
       "id": "t134",
@@ -2171,141 +1706,132 @@
       "template": "closeUpPortrait",
       "audio": "audio/t134.wav",
       "audioStartFrame": 3,
-      "startFrame": 23593,
-      "durationInFrames": 114,
-      "gap": 0.526
+      "startFrame": 19671,
+      "durationInFrames": 120,
+      "gap": 0.526,
+      "bubbles": [
+        {
+          "kind": "float",
+          "text": "\"...one of the biggest financial frauds in American history \u2014 a multibillion-dollar scheme designed to make him the King of Crypto.\""
+        }
+      ],
+      "mood": "grim"
     },
     {
       "id": "t135",
       "level": null,
       "overlay": null,
-      "template": "domesticInterior",
+      "template": "newsMontage",
       "audio": "audio/t135.wav",
       "audioStartFrame": 3,
-      "startFrame": 23707,
-      "durationInFrames": 195,
-      "gap": 0.303,
-      "mood": "grim"
+      "startFrame": 19791,
+      "durationInFrames": 140,
+      "gap": 0.303
     },
     {
       "id": "t136",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "courtHearing",
       "audio": "audio/t136.wav",
       "audioStartFrame": 3,
-      "startFrame": 23902,
-      "durationInFrames": 49,
+      "startFrame": 19931,
+      "durationInFrames": 108,
       "gap": 0.522,
-      "card": {
-        "kind": "narration",
-        "text": "Two years,\nto the day."
-      },
-      "mood": "grim"
+      "cast": 2
     },
     {
       "id": "t137",
       "level": null,
       "overlay": null,
-      "template": "bankExterior",
+      "template": "closeUpPortrait",
       "audio": "audio/t137.wav",
       "audioStartFrame": 3,
-      "startFrame": 23951,
-      "durationInFrames": 245,
-      "gap": 0.448
+      "startFrame": 20039,
+      "durationInFrames": 62,
+      "gap": 0.448,
+      "cast": 1
     },
     {
       "id": "t138",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "courtHearing",
       "audio": "audio/t138.wav",
       "audioStartFrame": 3,
-      "startFrame": 24196,
-      "durationInFrames": 93,
-      "gap": 0.326,
-      "chart": "up"
+      "startFrame": 20101,
+      "durationInFrames": 90,
+      "gap": 0.326
     },
     {
       "id": "t139",
       "level": null,
       "overlay": null,
-      "template": "crowdQueue",
+      "template": "closeUpPortrait",
       "audio": "audio/t139.wav",
       "audioStartFrame": 3,
-      "startFrame": 24289,
-      "durationInFrames": 178,
-      "gap": 0.269
-    },
-    {
-      "id": "t139b",
-      "level": null,
-      "overlay": null,
-      "template": "chartBoard",
-      "audio": "audio/t139b.wav",
-      "audioStartFrame": 3,
-      "startFrame": 24467,
-      "durationInFrames": 133,
-      "gap": 0.431,
-      "chart": "up"
-    },
-    {
-      "id": "t139c",
-      "level": null,
-      "overlay": null,
-      "template": "crowdQueue",
-      "audio": "audio/t139c.wav",
-      "audioStartFrame": 3,
-      "startFrame": 24600,
-      "durationInFrames": 184,
-      "gap": 0.47
-    },
-    {
-      "id": "t139d",
-      "level": null,
-      "overlay": null,
-      "template": "courtHearing",
-      "audio": "audio/t139d.wav",
-      "audioStartFrame": 3,
-      "startFrame": 24784,
-      "durationInFrames": 131,
-      "gap": 0.383
+      "startFrame": 20191,
+      "durationInFrames": 144,
+      "gap": 0.269,
+      "cast": 2
     },
     {
       "id": "t140",
       "level": null,
       "overlay": null,
-      "template": "domesticInterior",
+      "template": "boardroom",
       "audio": "audio/t140.wav",
       "audioStartFrame": 3,
-      "startFrame": 24915,
-      "durationInFrames": 55,
+      "startFrame": 20335,
+      "durationInFrames": 148,
       "gap": 0.451,
+      "mood": "grim"
+    },
+    {
+      "id": "t140b",
+      "level": null,
+      "overlay": null,
+      "template": "officeFloor",
+      "audio": "audio/t140b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 20483,
+      "durationInFrames": 128,
+      "gap": 0.401,
+      "mood": "grim"
+    },
+    {
+      "id": "t140c",
+      "level": null,
+      "overlay": null,
+      "template": "crowdQueue",
+      "audio": "audio/t140c.wav",
+      "audioStartFrame": 3,
+      "startFrame": 20611,
+      "durationInFrames": 145,
+      "gap": 0.532,
       "mood": "grim"
     },
     {
       "id": "t141",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "newsMontage",
       "audio": "audio/t141.wav",
       "audioStartFrame": 3,
-      "startFrame": 24970,
-      "durationInFrames": 158,
-      "gap": 0.346,
-      "mood": "grim"
+      "startFrame": 20756,
+      "durationInFrames": 197,
+      "gap": 0.346
     },
     {
       "id": "t142",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "cityStreet",
       "audio": "audio/t142.wav",
       "audioStartFrame": 3,
-      "startFrame": 25128,
-      "durationInFrames": 130,
-      "gap": 0.369,
-      "chart": "down"
+      "startFrame": 20953,
+      "durationInFrames": 122,
+      "gap": 0.369
     },
     {
       "id": "t143",
@@ -2314,105 +1840,119 @@
       "template": "newsMontage",
       "audio": "audio/t143.wav",
       "audioStartFrame": 3,
-      "startFrame": 25258,
-      "durationInFrames": 136,
-      "gap": 0.253,
-      "mood": "grim"
+      "startFrame": 21075,
+      "durationInFrames": 69,
+      "gap": 0.604
     },
     {
       "id": "t144",
-      "level": null,
+      "level": "CH 5",
       "overlay": null,
-      "template": "domesticInterior",
+      "template": "courtHearing",
       "audio": "audio/t144.wav",
       "audioStartFrame": 3,
-      "startFrame": 25394,
-      "durationInFrames": 137,
+      "startFrame": 21144,
+      "durationInFrames": 130,
       "gap": 0.313,
-      "mood": "grim"
-    },
-    {
-      "id": "t144b",
-      "level": null,
-      "overlay": null,
-      "template": "officeFloor",
-      "audio": "audio/t144b.wav",
-      "audioStartFrame": 3,
-      "startFrame": 25531,
-      "durationInFrames": 194,
-      "gap": 0.364
+      "card": {
+        "kind": "chapter",
+        "title": "The Verdict",
+        "subtitle": "A Trial, a Conviction, Two Sentences",
+        "hold": 2.4
+      }
     },
     {
       "id": "t145",
       "level": null,
       "overlay": null,
-      "template": "cityStreet",
+      "template": "closeUpPortrait",
       "audio": "audio/t145.wav",
       "audioStartFrame": 3,
-      "startFrame": 25725,
-      "durationInFrames": 109,
+      "startFrame": 21274,
+      "durationInFrames": 70,
       "gap": 0.409
+    },
+    {
+      "id": "t145b",
+      "level": null,
+      "overlay": null,
+      "template": "newsMontage",
+      "audio": "audio/t145b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 21344,
+      "durationInFrames": 73,
+      "gap": 0.475
     },
     {
       "id": "t146",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "courtHearing",
       "audio": "audio/t146.wav",
       "audioStartFrame": 3,
-      "startFrame": 25834,
-      "durationInFrames": 62,
+      "startFrame": 21417,
+      "durationInFrames": 369,
       "gap": 0.385,
-      "card": {
-        "kind": "narration",
-        "text": "Age 82."
-      },
-      "mood": "grim"
+      "cast": 1
     },
     {
       "id": "t147",
       "level": null,
       "overlay": null,
-      "template": "domesticInterior",
+      "template": "closeUpPortrait",
       "audio": "audio/t147.wav",
       "audioStartFrame": 3,
-      "startFrame": 25896,
-      "durationInFrames": 119,
-      "gap": 0.329
+      "startFrame": 21786,
+      "durationInFrames": 109,
+      "gap": 0.329,
+      "bubbles": [
+        {
+          "kind": "float",
+          "text": "\"...didn't have to lie anymore.\""
+        }
+      ],
+      "cast": 1
     },
     {
       "id": "t148",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "newsMontage",
       "audio": "audio/t148.wav",
       "audioStartFrame": 3,
-      "startFrame": 26015,
-      "durationInFrames": 80,
-      "gap": 0.502
+      "startFrame": 21895,
+      "durationInFrames": 77,
+      "gap": 0.502,
+      "cast": 2
     },
     {
       "id": "t149",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "courtHearing",
       "audio": "audio/t149.wav",
       "audioStartFrame": 3,
-      "startFrame": 26095,
-      "durationInFrames": 148,
-      "gap": 0.507,
-      "chart": "up"
+      "startFrame": 21972,
+      "durationInFrames": 100,
+      "gap": 0.507
     },
     {
       "id": "t150",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "closeUpPortrait",
       "audio": "audio/t150.wav",
       "audioStartFrame": 3,
-      "startFrame": 26243,
-      "durationInFrames": 199,
-      "gap": 0.423
+      "startFrame": 22072,
+      "durationInFrames": 98,
+      "gap": 0.423,
+      "bubbles": [
+        {
+          "kind": "float",
+          "text": "\"blindsided\""
+        }
+      ],
+      "cast": 2
     },
     {
       "id": "t151",
@@ -2421,8 +1961,8 @@
       "template": "courtHearing",
       "audio": "audio/t151.wav",
       "audioStartFrame": 3,
-      "startFrame": 26442,
-      "durationInFrames": 106,
+      "startFrame": 22170,
+      "durationInFrames": 124,
       "gap": 0.352,
       "mood": "grim"
     },
@@ -2433,52 +1973,378 @@
       "template": "closeUpPortrait",
       "audio": "audio/t152.wav",
       "audioStartFrame": 3,
-      "startFrame": 26548,
-      "durationInFrames": 26,
+      "startFrame": 22294,
+      "durationInFrames": 75,
       "gap": 0.262,
       "card": {
-        "kind": "narration",
-        "text": "It didn't."
+        "kind": "word",
+        "word": "Guilty."
       },
+      "mood": "grim"
+    },
+    {
+      "id": "t152b",
+      "level": null,
+      "overlay": null,
+      "template": "boardroom",
+      "audio": "audio/t152b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 22369,
+      "durationInFrames": 59,
+      "gap": 0.432,
       "mood": "grim"
     },
     {
       "id": "t153",
       "level": null,
       "overlay": null,
-      "template": "domesticInterior",
+      "template": "chartBoard",
       "audio": "audio/t153.wav",
       "audioStartFrame": 3,
-      "startFrame": 26574,
-      "durationInFrames": 257,
+      "startFrame": 22428,
+      "durationInFrames": 166,
       "gap": 0.417
     },
     {
       "id": "t154",
       "level": null,
       "overlay": null,
-      "template": "broadcastDesk",
+      "template": "courtHearing",
       "audio": "audio/t154.wav",
       "audioStartFrame": 3,
-      "startFrame": 26831,
-      "durationInFrames": 142,
-      "gap": 0.429,
-      "mood": "grim"
+      "startFrame": 22594,
+      "durationInFrames": 326,
+      "gap": 0.429
     },
     {
-      "id": "t155",
+      "id": "t156b",
+      "level": null,
+      "overlay": null,
+      "template": "chartBoard",
+      "audio": "audio/t156b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 22920,
+      "durationInFrames": 173,
+      "gap": 0.352
+    },
+    {
+      "id": "t157",
       "level": null,
       "overlay": null,
       "template": "closeUpPortrait",
-      "audio": "audio/t155.wav",
+      "audio": "audio/t157.wav",
       "audioStartFrame": 3,
-      "startFrame": 26973,
-      "durationInFrames": 49,
-      "gap": 0.424,
+      "startFrame": 23093,
+      "durationInFrames": 120,
+      "gap": 0.306,
+      "mood": "grim"
+    },
+    {
+      "id": "t158",
+      "level": null,
+      "overlay": null,
+      "template": "courtHearing",
+      "audio": "audio/t158.wav",
+      "audioStartFrame": 3,
+      "startFrame": 23213,
+      "durationInFrames": 106,
+      "gap": 0.434,
+      "mood": "grim"
+    },
+    {
+      "id": "t158b",
+      "level": null,
+      "overlay": null,
+      "template": "crowdQueue",
+      "audio": "audio/t158b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 23319,
+      "durationInFrames": 138,
+      "gap": 0.286,
+      "mood": "grim"
+    },
+    {
+      "id": "t159",
+      "level": null,
+      "overlay": null,
+      "template": "chartBoard",
+      "audio": "audio/t159.wav",
+      "audioStartFrame": 3,
+      "startFrame": 23457,
+      "durationInFrames": 91,
+      "gap": 0.351,
+      "chart": "down"
+    },
+    {
+      "id": "t159b",
+      "level": null,
+      "overlay": null,
+      "template": "officeFloor",
+      "audio": "audio/t159b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 23548,
+      "durationInFrames": 118,
+      "gap": 0.26
+    },
+    {
+      "id": "t160",
+      "level": null,
+      "overlay": null,
+      "template": "exchangeFloor",
+      "audio": "audio/t160.wav",
+      "audioStartFrame": 3,
+      "startFrame": 23666,
+      "durationInFrames": 112,
+      "gap": 0.458,
+      "mood": "grim"
+    },
+    {
+      "id": "t161",
+      "level": null,
+      "overlay": null,
+      "template": "chartBoard",
+      "audio": "audio/t161.wav",
+      "audioStartFrame": 3,
+      "startFrame": 23778,
+      "durationInFrames": 148,
+      "gap": 0.392,
+      "chart": "down"
+    },
+    {
+      "id": "t162",
+      "level": null,
+      "overlay": null,
+      "template": "closeUpPortrait",
+      "audio": "audio/t162.wav",
+      "audioStartFrame": 3,
+      "startFrame": 23926,
+      "durationInFrames": 149,
+      "gap": 0.44
+    },
+    {
+      "id": "t163",
+      "level": null,
+      "overlay": null,
+      "template": "courtHearing",
+      "audio": "audio/t163.wav",
+      "audioStartFrame": 3,
+      "startFrame": 24075,
+      "durationInFrames": 125,
+      "gap": 0.524,
+      "foreground": {
+        "kind": "overShoulder",
+        "side": "left"
+      },
+      "cast": 1
+    },
+    {
+      "id": "t164",
+      "level": null,
+      "overlay": null,
+      "template": "closeUpPortrait",
+      "audio": "audio/t164.wav",
+      "audioStartFrame": 3,
+      "startFrame": 24200,
+      "durationInFrames": 135,
+      "gap": 0.543,
+      "cast": 1
+    },
+    {
+      "id": "t165",
+      "level": null,
+      "overlay": null,
+      "template": "crowdQueue",
+      "audio": "audio/t165.wav",
+      "audioStartFrame": 3,
+      "startFrame": 24335,
+      "durationInFrames": 114,
+      "gap": 0.357,
+      "mood": "grim"
+    },
+    {
+      "id": "t166",
+      "level": null,
+      "overlay": null,
+      "template": "chartBoard",
+      "audio": "audio/t166.wav",
+      "audioStartFrame": 3,
+      "startFrame": 24449,
+      "durationInFrames": 133,
+      "gap": 0.446,
+      "chart": "up"
+    },
+    {
+      "id": "t167",
+      "level": null,
+      "overlay": null,
+      "template": "domesticInterior",
+      "audio": "audio/t167.wav",
+      "audioStartFrame": 3,
+      "startFrame": 24582,
+      "durationInFrames": 143,
+      "gap": 0.389
+    },
+    {
+      "id": "t168",
+      "level": null,
+      "overlay": null,
+      "template": "closeUpPortrait",
+      "audio": "audio/t168.wav",
+      "audioStartFrame": 3,
+      "startFrame": 24725,
+      "durationInFrames": 151,
+      "gap": 0.25
+    },
+    {
+      "id": "t169",
+      "level": null,
+      "overlay": null,
+      "template": "newsMontage",
+      "audio": "audio/t169.wav",
+      "audioStartFrame": 3,
+      "startFrame": 24876,
+      "durationInFrames": 90,
+      "gap": 0.259,
       "card": {
         "kind": "narration",
-        "text": "Who's checking\nthe math?"
-      },
+        "text": "How badly\nwe wanted it true."
+      }
+    },
+    {
+      "id": "t170",
+      "level": null,
+      "overlay": null,
+      "template": "boardroom",
+      "audio": "audio/t170.wav",
+      "audioStartFrame": 3,
+      "startFrame": 24966,
+      "durationInFrames": 196,
+      "gap": 0.304
+    },
+    {
+      "id": "t171",
+      "level": null,
+      "overlay": null,
+      "template": "broadcastDesk",
+      "audio": "audio/t171.wav",
+      "audioStartFrame": 3,
+      "startFrame": 25162,
+      "durationInFrames": 115,
+      "gap": 0.494,
+      "bubbles": [
+        {
+          "kind": "float",
+          "text": "\"...I'm never wrong about this stuff.\""
+        }
+      ]
+    },
+    {
+      "id": "t172",
+      "level": null,
+      "overlay": null,
+      "template": "closeUpPortrait",
+      "audio": "audio/t172.wav",
+      "audioStartFrame": 3,
+      "startFrame": 25277,
+      "durationInFrames": 122,
+      "gap": 0.256,
+      "mood": "grim"
+    },
+    {
+      "id": "t173",
+      "level": null,
+      "overlay": null,
+      "template": "domesticInterior",
+      "audio": "audio/t173.wav",
+      "audioStartFrame": 3,
+      "startFrame": 25399,
+      "durationInFrames": 125,
+      "gap": 0.333
+    },
+    {
+      "id": "t174",
+      "level": null,
+      "overlay": null,
+      "template": "crowdQueue",
+      "audio": "audio/t174.wav",
+      "audioStartFrame": 3,
+      "startFrame": 25524,
+      "durationInFrames": 177,
+      "gap": 0.39,
+      "mood": "grim"
+    },
+    {
+      "id": "t175",
+      "level": null,
+      "overlay": null,
+      "template": "boardroom",
+      "audio": "audio/t175.wav",
+      "audioStartFrame": 3,
+      "startFrame": 25701,
+      "durationInFrames": 133,
+      "gap": 0.391,
+      "panels": {
+        "variant": "v2",
+        "cells": [
+          {
+            "template": "boardroom"
+          },
+          {
+            "template": "courtHearing"
+          }
+        ]
+      }
+    },
+    {
+      "id": "t176",
+      "level": null,
+      "overlay": null,
+      "template": "domesticInterior",
+      "audio": "audio/t176.wav",
+      "audioStartFrame": 3,
+      "startFrame": 25834,
+      "durationInFrames": 119,
+      "gap": 0.329
+    },
+    {
+      "id": "t176b",
+      "level": null,
+      "overlay": null,
+      "template": "closeUpPortrait",
+      "audio": "audio/t176b.wav",
+      "audioStartFrame": 3,
+      "startFrame": 25953,
+      "durationInFrames": 121,
+      "gap": 0.362
+    },
+    {
+      "id": "t177",
+      "level": null,
+      "overlay": null,
+      "template": "courtHearing",
+      "audio": "audio/t177.wav",
+      "audioStartFrame": 3,
+      "startFrame": 26074,
+      "durationInFrames": 164,
+      "gap": 0.318,
+      "mood": "grim"
+    },
+    {
+      "id": "t178",
+      "level": null,
+      "overlay": null,
+      "template": "closeUpPortrait",
+      "audio": "audio/t178.wav",
+      "audioStartFrame": 3,
+      "startFrame": 26238,
+      "durationInFrames": 424,
+      "gap": 0.47,
+      "bubbles": [
+        {
+          "kind": "float",
+          "text": "\"...didn't have to lie anymore.\""
+        }
+      ],
       "mood": "grim"
     }
   ]

@@ -1,20 +1,20 @@
 {
   "thumb": {
-    "kicker": "NASDAQ CHAIRMAN",
-    "line1": "PONZI SCHEME",
-    "line2": "",
-    "tag": "HE NEVER MADE ONE TRADE.",
-    "archetype": "number",
+    "kicker": "$8B VANISHED",
+    "line1": "KING OF",
+    "line2": "CRYPTO",
+    "tag": "HE SAID HE WAS NEVER WRONG.",
+    "archetype": "band",
     "before": "",
     "after": "",
-    "big": "$64.8B",
+    "big": "",
     "expr": "shock",
     "mood": "crime",
-    "keyword": "PONZI",
-    "question": "WHO CHECKED THE MATH?",
-    "word": "FAKE",
+    "keyword": "FRAUD",
+    "question": "",
+    "word": "",
     "setting": "",
     "prop": ""
   },
-  "topic": "madoff"
+  "topic": "ftx"
 }
