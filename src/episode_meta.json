@@ -1,20 +1,20 @@
 {
   "thumb": {
-    "kicker": "$8B VANISHED",
-    "line1": "KING OF",
-    "line2": "CRYPTO",
-    "tag": "HE SAID HE WAS NEVER WRONG.",
-    "archetype": "band",
+    "kicker": "$47B TO $0",
+    "line1": "BURNED",
+    "line2": "$47 BILLION",
+    "tag": "IT MAILED ITS OWN CONFESSION.",
+    "archetype": "poster",
     "before": "",
     "after": "",
     "big": "",
     "expr": "shock",
-    "mood": "crime",
-    "keyword": "FRAUD",
+    "mood": "money",
+    "keyword": "COLLAPSE",
     "question": "",
     "word": "",
     "setting": "",
-    "prop": ""
+    "prop": "tower"
   },
-  "topic": "ftx"
+  "topic": "wework"
 }
