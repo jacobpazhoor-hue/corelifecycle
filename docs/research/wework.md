@@ -45,6 +45,19 @@ apply. Write accordingly: "resigned," "stepped down," "gave up the bid," never "
     from 20 votes/share to **10 votes/share**. [CNBC "WeWork makes sweeping corporate governance
     changes ahead of IPO," Sept 13 2019]
   - [CNBC "WeWork releases S-1 filing for IPO"; Crunchbase News "WeWork Files Its S-1"; Wolf Street]
+- **The six-week valuation collapse** — Marketed off the $47 billion January 2019 round, the IPO
+  roadshow's revised guidance reportedly fell as low as **$10-12 billion**, and by the time the
+  filing was withdrawn on September 30 bankers were discussing a SoftBank rescue valuing the firm
+  around **$7.5-8 billion** — a drop of roughly **$38-40 billion** from the $47 billion peak inside
+  the six weeks between the August 14 S-1 filing and the September 30 withdrawal. [The Conversation,
+  "Fallout from WeWork's failed IPO shows the folly of excessive valuations"; contemporaneous CNBC/
+  Reuters coverage of the collapsing valuation guidance]
+- **Lease term vs. membership term** — WeWork's own disclosed average lease commitment ran about
+  **15 years**, while the average member membership term was reported around **19 months** and
+  WeWork's standard membership terms allow cancellation on short notice (WeWork's published
+  membership terms cite a 5-day notice ahead of a commitment term's end, with 30 days' notice used
+  for fee changes) — the "years of fixed rent against a walk-away-anytime membership" gap the
+  episode names. [WeWork membership agreement terms; Not So Deep Dive: WeWork Stock (Ticker: WE)]
 - **September 24, 2019** — Adam Neumann **resigned as CEO** under investor and board pressure.
   [multiple, incl. idealsvdr.com]
 - **September 30, 2019** — The We Company formally **withdrew** its S-1 IPO filing. [CNBC "WeWork

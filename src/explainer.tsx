@@ -386,9 +386,12 @@ const useVary = (): Vary => varyFor(useTake());
 type LabelRole = 'masthead' | 'headline' | 'chartTitle' | 'ticker' | 'lowerThird';
 
 const LEXICON: Record<LabelRole, readonly string[]> = {
-  masthead: ['THE RECORD', 'THE LEDGER', 'THE TRIBUNE', 'THE HERALD', 'CITY PRESS'],
-  headline: ['THE FUND', 'THE FILING', 'THE AUDIT', 'THE RETURNS', 'THE MARKET', 'THE ACCOUNTS'],
-  chartTitle: ['RETURNS', 'THE FUND', 'NET FLOWS', 'THE YEARS', 'THE MONEY'],
+  masthead: ['THE RECORD', 'THE LEDGER', 'THE TRIBUNE', 'THE HERALD', 'CITY PRESS', 'THE COURIER',
+    'THE STANDARD', 'THE GAZETTE'],
+  headline: ['THE FUND', 'THE FILING', 'THE AUDIT', 'THE RETURNS', 'THE MARKET', 'THE ACCOUNTS',
+    'THE NUMBERS', 'THE BOOKS', 'THE NOTICE'],
+  chartTitle: ['RETURNS', 'THE FUND', 'NET FLOWS', 'THE YEARS', 'THE MONEY', 'THE BALANCE',
+    'THE TOTAL', 'THE MARGIN'],
   ticker: ['MARKET OPEN', 'LAST TRADE', 'THE TAPE', 'VOLUME'],
   lowerThird: ['THE STORY', 'LIVE', 'THE REPORT', 'THE BULLETIN'],
 };
@@ -2036,17 +2039,17 @@ const NewsMontage: React.FC = () => {
           Stocks run across four rungs of newsprint tan plus ONE white hero sheet, because a pile of
           identical rectangles reads as one object however many outlines it carries — and because a
           pile of identical WHITE ones also has no colour in it (WO-20). --- */}
-      <NewsSheet x={60} y={150 + v.off(1, 26)} w={512} h={628} rot={-15 + v.off(2, 5)} seed={v.seed(3)}
+      <NewsSheet x={60} y={150 + v.off(1, 42)} w={512} h={628} rot={-15 + v.off(2, 10)} seed={v.seed(3)}
         photo={v.one(3, ['chart', 'head', 'none'] as const)} stock={shade(tn.card, 2)}
         masthead={mast[0]} />
-      <NewsSheet x={1340} y={128 + v.off(4, 26)} w={512} h={628} rot={13 + v.off(5, 5)} seed={v.seed(9)}
+      <NewsSheet x={1340} y={128 + v.off(4, 42)} w={512} h={628} rot={13 + v.off(5, 10)} seed={v.seed(9)}
         photo={v.one(6, ['head', 'chart', 'none'] as const)}
         masthead={mast[1]} headline={head[1]} />
-      <NewsSheet x={706} y={72} w={470} h={556} rot={-4 + v.off(7, 4)} seed={v.seed(17)} photo="none" stock={tn.card}
+      <NewsSheet x={706} y={72} w={470} h={556} rot={-4 + v.off(7, 8)} seed={v.seed(17)} photo="none" stock={tn.card}
         masthead={mast[2]} />
-      <NewsSheet x={1176} y={330} w={470} h={556} rot={20 + v.off(8, 4)} seed={v.seed(19)} photo="none" stock={shade(tn.card, 1)} />
+      <NewsSheet x={1176} y={330} w={470} h={556} rot={20 + v.off(8, 8)} seed={v.seed(19)} photo="none" stock={shade(tn.card, 1)} />
       <Nudge seed={5} cx={710} cy={732}>
-        <NewsSheet x={430} y={402} w={560} h={660} rot={7 + v.off(9, 4)} seed={v.seed(5)}
+        <NewsSheet x={430} y={402} w={560} h={660} rot={7 + v.off(9, 8)} seed={v.seed(5)}
           photo={v.one(10, ['head', 'chart'] as const)} stock={PAPER_WHITE} flash
           masthead={mast[3]} headline={head[3]} />
       </Nudge>

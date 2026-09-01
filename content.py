@@ -84,7 +84,7 @@ SCENES = [
          narration='A firm that rented out desks and chairs was once worth forty-seven billion dollars.'),
 
     dict(id='t002', level=None, overlay=None, template='chartBoard', chart='up',
-         narration='More than Ford. More than General Motors.'),
+         narration='More than Ford.'),
 
     dict(id='t003', level=None, overlay=None, template='newsMontage',
          narration='Then it tried to sell shares to the public, and in six weeks lost thirty-eight billion dollars of that worth — without selling a single one.'),
@@ -158,7 +158,7 @@ SCENES = [
     dict(id='t024', level=None, overlay=None, template='cityStreet',
          narration='New buildings. New cities. Almost every month.'),
 
-    dict(id='t024b', level=None, overlay=None, template='courtHearing',
+    dict(id='t024b', level=None, overlay=None, template='boardroom',
          narration='No watchdog asked how those leases really worked.'),
 
     dict(id='t025', level=None, overlay=None, template='newsMontage',
@@ -204,7 +204,7 @@ SCENES = [
          narration='By January 2019, a new funding round set the firm\'s worth at forty-seven billion dollars.'),
 
     dict(id='t039', level=None, overlay=None, template='newsMontage',
-         narration='More than Ford. More than General Motors — a firm that owned almost none of its own floors.'),
+         narration='More than Ford — a firm that owned almost none of its own floors.'),
 
     dict(id='t040', level=None, overlay=None, template='bankExterior',
          narration='It renamed itself "The We Company," a name meant to sound bigger than office space.'),
