@@ -167,13 +167,13 @@ SCENES = [
     dict(id='t026', level=None, overlay=None, template='closeUpPortrait',
          narration='He stayed about thirty minutes.'),
 
-    dict(id='t027', level=None, overlay=None, template='boardroom', bubbles=[{'kind': 'float', 'text': '"In a fight, who wins — the smart guy or the crazy guy?"'}],
+    dict(id='t027', level=None, overlay=None, template='officeFloor', bubbles=[{'kind': 'float', 'text': '"In a fight, who wins — the smart guy or the crazy guy?"'}],
          narration='Son asked him one thing, Neumann later told Forbes: in a fight, who wins — the smart guy, or the crazy guy?'),
 
     dict(id='t028', level=None, overlay=None, template='closeUpPortrait', bubbles=[{'kind': 'float', 'text': '"Crazy guy."'}],
          narration='"Crazy guy," Neumann said back.'),
 
-    dict(id='t029', level=None, overlay=None, template='boardroom', bubbles=[{'kind': 'float', 'text': '"You are correct, but you are not crazy enough."'}],
+    dict(id='t029', level=None, overlay=None, template='courtHearing', bubbles=[{'kind': 'float', 'text': '"You are correct, but you are not crazy enough."'}],
          narration='"You are correct," Son told him. "But you are not crazy enough."'),
 
     dict(id='t030', level=None, overlay=None, template='chartBoard', chart='up',
@@ -194,7 +194,7 @@ SCENES = [
     dict(id='t035', level=None, overlay=None, template='officeFloor',
          narration='"Our mission," the firm would later write, "is to elevate the world\'s consciousness."'),
 
-    dict(id='t036', level=None, overlay=None, template='boardroom',
+    dict(id='t036', level=None, overlay=None, template='exchangeFloor',
          narration='A line about desks, dressed up as a spiritual quest.'),
 
     dict(id='t037', level=None, overlay=None, template='newsMontage',
@@ -204,7 +204,10 @@ SCENES = [
          narration='By January 2019, a new funding round set the firm\'s worth at forty-seven billion dollars.'),
 
     dict(id='t039', level=None, overlay=None, template='newsMontage',
-         narration='More than Ford — a firm that owned almost none of its own floors.'),
+         narration='More than Ford.'),
+
+    dict(id='t039b', level=None, overlay=None, template='officeFloor',
+         narration='A firm that owned almost none of its own floors.'),
 
     dict(id='t040', level=None, overlay=None, template='bankExterior',
          narration='It renamed itself "The We Company," a name meant to sound bigger than office space.'),
@@ -218,7 +221,7 @@ SCENES = [
     dict(id='t043', level=None, overlay=None, template='courtHearing', card={'kind': 'narration', 'text': 'A trademark,\nsold to himself.'},
          narration='WeWork paid five point nine million dollars for rights to the word "We" — to a firm Neumann himself ran.'),
 
-    dict(id='t044', level=None, overlay=None, template='boardroom',
+    dict(id='t044', level=None, overlay=None, template='officeFloor',
          narration='His own shares carried twenty votes each.'),
 
     dict(id='t045', level=None, overlay=None, template='exchangeFloor',
@@ -233,13 +236,13 @@ SCENES = [
     dict(id='t048', level=None, overlay=None, template='chartBoard', chart='up',
          narration='And by then the firm had already built its own way to count profit.'),
 
-    dict(id='t049', level=None, overlay=None, template='boardroom',
+    dict(id='t049', level=None, overlay=None, template='courtHearing',
          narration='It called the figure "Community Adjusted EBITDA."'),
 
     dict(id='t050', level=None, overlay=None, template='officeFloor',
          narration='Nobody outside the room knew yet what that figure left out.'),
 
-    dict(id='t051', level=None, overlay=None, template='boardroom',
+    dict(id='t051', level=None, overlay=None, template='courtHearing',
          narration='To sell shares to the public, the firm would have to write it all down first.'),
 
     # ================= CH 2: The Filing =================
@@ -269,13 +272,7 @@ SCENES = [
          narration='It had lost more than it made.'),
 
     dict(id='t059', level=None, overlay=None, template='boardroom',
-         narration='Plain EBITDA means earnings before interest, tax, and wear on the buildings — a rough read on the real business.'),
-
-    dict(id='t060', level=None, overlay=None, template='officeFloor',
-         narration='"Community Adjusted" went further.'),
-
-    dict(id='t061', level=None, overlay=None, template='chartBoard',
-         narration='It stripped out marketing, too. Growth costs. Even plain overhead.'),
+         narration='Plain EBITDA means earnings before interest, tax, and wear on the buildings — a rough read on the real business. "Community Adjusted" went further. It stripped out marketing, too. Growth costs. Even plain overhead.'),
 
     dict(id='t062', level=None, overlay=None, template='crowdQueue', card={'kind': 'narration', 'text': 'A profit with the\nlosses removed.'},
          dialogue=dict(text="So it's profit, minus the part where you didn't make any?"),
@@ -612,7 +609,10 @@ SCENES = [
          narration='Still renting out desks and chairs.'),
 
     dict(id='t165', level=None, overlay=None, template='domesticInterior',
-         narration='No trial. No verdict. Nobody from WeWork ever stood in a courtroom over what the filing said.'),
+         narration='No trial. No verdict.'),
+
+    dict(id='t165b', level=None, overlay=None, template='courtHearing',
+         narration='Nobody from WeWork ever stood in a courtroom over what the filing said.'),
 
     dict(id='t166', level=None, overlay=None, template='closeUpPortrait',
          narration='That was never the crime here.'),
@@ -630,14 +630,8 @@ SCENES = [
     dict(id='t170', level=None, overlay=None, template='newsMontage', card={'kind': 'narration', 'text': 'How badly\nwe wanted it true.'},
          narration="It's how badly we wanted the story to be true."),
 
-    dict(id='t171', level=None, overlay=None, template='boardroom',
-         narration='We called a landlord a tech firm because it said the word "community" enough times.'),
-
-    dict(id='t172', level=None, overlay=None, template='closeUpPortrait',
-         narration='We read "elevate the world\'s consciousness" next to a balance sheet, and let the balance sheet wait its turn.'),
-
-    dict(id='t173', level=None, overlay=None, template='domesticInterior',
-         narration='You can dress a spreadsheet up as a mission. Sooner or later, someone reads the spreadsheet anyway.'),
+    dict(id='t171', level=None, overlay=None, template='closeUpPortrait',
+         narration='We called a landlord a tech firm because it said the word "community" enough times. We read "elevate the world\'s consciousness" next to a balance sheet, and let the balance sheet wait its turn. You can dress a spreadsheet up as a mission. Sooner or later, someone reads the spreadsheet anyway.'),
 
     dict(id='t174', level=None, overlay=None, template='chartBoard',
          narration='Forty-seven billion dollars, once. Then two point nine. Then nine. Then two hundred seventy million.'),
