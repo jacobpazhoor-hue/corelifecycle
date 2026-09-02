@@ -1,20 +1,20 @@
 {
   "thumb": {
-    "kicker": "ONCE WORTH MORE THAN FORD",
-    "line1": "$47B",
-    "line2": "-> $270M",
-    "tag": "IT MAILED ITS OWN CONFESSION.",
-    "archetype": "crash",
+    "kicker": "WORTH $26 BILLION AT 29",
+    "line1": "$8B",
+    "line2": "GONE",
+    "tag": "HE BUILT THE BACKDOOR HIMSELF.",
+    "archetype": "ladder",
     "before": "",
     "after": "",
     "big": "",
     "expr": "shock",
-    "mood": "money",
+    "mood": "crime",
     "keyword": "COLLAPSE",
     "question": "",
     "word": "",
     "setting": "",
-    "prop": "tower"
+    "prop": ""
   },
-  "topic": "wework"
+  "topic": "ftx"
 }
