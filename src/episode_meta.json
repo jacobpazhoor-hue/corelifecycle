@@ -1,20 +1,20 @@
 {
   "thumb": {
-    "kicker": "WORTH $26 BILLION AT 29",
-    "line1": "$8B",
-    "line2": "GONE",
-    "tag": "HE BUILT THE BACKDOOR HIMSELF.",
-    "archetype": "ladder",
+    "kicker": "SOLD AS CLEAN DIESEL",
+    "line1": "11M",
+    "line2": "",
+    "tag": "EVERY OFFICIAL TEST, IT PASSED.",
+    "archetype": "number",
     "before": "",
     "after": "",
-    "big": "",
+    "big": "11M",
     "expr": "shock",
     "mood": "crime",
-    "keyword": "COLLAPSE",
+    "keyword": "DEFEAT DEVICE",
     "question": "",
     "word": "",
     "setting": "",
     "prop": ""
   },
-  "topic": "ftx"
+  "topic": "volkswagen_dieselgate"
 }
