@@ -128,7 +128,10 @@ SCENES = [
          narration='Sold across the whole VW Group: Volkswagen, Audi, Porsche, Skoda, Seat.'),
 
     dict(id='t019', level=None, overlay=None, template='boardroom',
-         narration='The firm that built the cheap "people\'s car" had built a green one too. That was the pitch.'),
+         narration='The firm that built the cheap "people\'s car" had built a green one too.'),
+
+    dict(id='t155', level=None, overlay=None, template='closeUpPortrait',
+         narration='That was the pitch.'),
 
     dict(id='t020', level=None, overlay=None, template='officeFloor',
          narration='About five hundred ninety thousand of those cars were sold right here, in the US.'),
@@ -458,7 +461,10 @@ SCENES = [
          narration='Hanno Jelden, who led powertrain tech, got two years and seven months.'),
 
     dict(id='t129', level=None, overlay=None, template='boardroom',
-         narration='Four men who had once run the engine program. Two prison terms, two paused.'),
+         narration='Four men who had once run the engine program.'),
+
+    dict(id='t158', level=None, overlay=None, template='newsMontage',
+         narration='Two prison terms, two paused.'),
 
     dict(id='t130', level=None, overlay=None, template='exchangeFloor',
          narration='Two more, more senior still, walked out with paused terms.'),

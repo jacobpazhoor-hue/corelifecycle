@@ -3621,8 +3621,14 @@ const CloseUpPortrait: React.FC = () => {
           what the reference's own pushed-face frames do. */}
       {/* The head shifts along its own mark by ±44 units — a close-up recomposed, not a new
           template — and stays right of `CAPTION_SAFE_X`. */}
+      {/* QA_WATCH (reviewer note, 2026-09-04, LOW): 28 uses of this template read as one generic
+          reaction because the face was pinned to FACES.shock every time. The take is still a
+          "shocked reaction" beat by design, but shock has a family of close relatives — picked
+          per take off the same deterministic seed everything else here already uses, so the same
+          scene id still always draws the same face. */}
       <StickFigure pose={A.stand(0)} x={1180 + v.off(20, 62)} y={headHip} scale={headS} facing={-1} view="front"
-        expr={FACES.shock} pal={LIGHT} frame={f} idle="subtle" idleGain={0.3}
+        expr={v.one(40, [FACES.shock, FACES.worried, FACES.hardened, FACES.awe] as const)}
+        pal={LIGHT} frame={f} idle="subtle" idleGain={0.3}
         lineW={STROKE / headS} />
     </Frame>
   );
