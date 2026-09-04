@@ -259,7 +259,7 @@ SCENES = [
     dict(id='t061', level=None, overlay=None, template='officeFloor',
          narration='On rollers, in a lab, those same two cars had always passed.'),
 
-    dict(id='t062', level=None, overlay=None, template='closeUpPortrait', breath=True,
+    dict(id='t062', level=None, overlay=None, template='closeUpPortrait', breath=True, gap=1.4,
          narration='A steering wheel that never stopped turning had done what a decade of lab tests never had.'),
 
     dict(id='t063', level=None, overlay=None, template='newsMontage',
@@ -274,7 +274,7 @@ SCENES = [
     dict(id='t066', level=None, overlay=None, template='cityStreet',
          narration='They threatened to withhold approval for the next model year.'),
 
-    dict(id='t067', level=None, overlay=None, template='boardroom', gap=1.4,
+    dict(id='t067', level=None, overlay=None, template='boardroom',
          narration='On September 3rd, 2015, its own engineers at last owned up.'),
 
     dict(id='t068', level=None, overlay=None, template='newsMontage', mood='grim', card={'kind': 'narration', 'text': 'The cars had\na defeat device.'},
@@ -388,7 +388,7 @@ SCENES = [
     dict(id='t104', level='CH 5', overlay=None, template='courtHearing', breath=True, card={'kind': 'chapter', 'title': 'The Verdict', 'subtitle': 'Prison Terms, Nine Years Late', 'hold': 2.4},
          narration='The sentences, when they at last landed, landed unevenly.'),
 
-    dict(id='t105', level=None, overlay=None, template='closeUpPortrait',
+    dict(id='t105', level=None, overlay=None, template='broadcastDesk',
          narration='James Liang, the engineer, was sentenced in August 2017.'),
 
     dict(id='t106', level=None, overlay={'big': '40 MONTHS', 'sub': 'JAMES LIANG, AUG 2017'}, template='chartBoard', chart='down',
@@ -409,7 +409,7 @@ SCENES = [
     dict(id='t111', level=None, overlay=None, template='courtHearing',
          narration='The heaviest US prison term handed to anyone in this case. Heavier than the man who built the code.'),
 
-    dict(id='t112', level=None, overlay=None, template='closeUpPortrait',
+    dict(id='t112', level=None, overlay=None, template='domesticInterior',
          narration='In May 2018, a grand jury indicted Martin Winterkorn himself.'),
 
     dict(id='t113', level=None, overlay=None, template='courtHearing',
@@ -445,7 +445,7 @@ SCENES = [
     dict(id='t123', level=None, overlay=None, template='courtHearing', panels={'variant': 'grid4', 'cells': [{'template': 'courtHearing'}, {'template': 'boardroom'}, {'template': 'officeFloor'}, {'template': 'newsMontage'}]},
          narration='September 3rd, 2024. Nine years after he quit.'),
 
-    dict(id='t124', level=None, overlay=None, template='closeUpPortrait',
+    dict(id='t124', level=None, overlay=None, template='domesticInterior',
          narration='He denied each charge, through his lawyer.'),
 
     dict(id='t125', level=None, overlay=None, template='broadcastDesk',
@@ -526,7 +526,7 @@ SCENES = [
     dict(id='t149', level=None, overlay=None, template='boardroom',
          narration='We built the tests. We wrote the rules.'),
 
-    dict(id='t150', level=None, overlay=None, template='closeUpPortrait',
+    dict(id='t150', level=None, overlay=None, template='broadcastDesk',
          narration='We still let a steering wheel decide when to believe our own eyes.'),
 
     dict(id='t151', level=None, overlay=None, template='newsMontage', breath=True,

@@ -807,8 +807,8 @@
       "audio": "audio/t062.wav",
       "audioStartFrame": 3,
       "startFrame": 10354,
-      "durationInFrames": 177,
-      "gap": 0.401
+      "durationInFrames": 207,
+      "gap": 1.4
     },
     {
       "id": "t063",
@@ -817,7 +817,7 @@
       "template": "newsMontage",
       "audio": "audio/t063.wav",
       "audioStartFrame": 3,
-      "startFrame": 10531,
+      "startFrame": 10561,
       "durationInFrames": 214,
       "gap": 0.336
     },
@@ -828,7 +828,7 @@
       "template": "boardroom",
       "audio": "audio/t064.wav",
       "audioStartFrame": 3,
-      "startFrame": 10745,
+      "startFrame": 10775,
       "durationInFrames": 173,
       "gap": 0.469
     },
@@ -839,7 +839,7 @@
       "template": "officeFloor",
       "audio": "audio/t065.wav",
       "audioStartFrame": 3,
-      "startFrame": 10918,
+      "startFrame": 10948,
       "durationInFrames": 100,
       "gap": 0.407,
       "card": {
@@ -854,7 +854,7 @@
       "template": "cityStreet",
       "audio": "audio/t066.wav",
       "audioStartFrame": 3,
-      "startFrame": 11018,
+      "startFrame": 11048,
       "durationInFrames": 106,
       "gap": 0.379
     },
@@ -865,9 +865,9 @@
       "template": "boardroom",
       "audio": "audio/t067.wav",
       "audioStartFrame": 3,
-      "startFrame": 11124,
-      "durationInFrames": 189,
-      "gap": 1.4
+      "startFrame": 11154,
+      "durationInFrames": 159,
+      "gap": 0.398
     },
     {
       "id": "t068",
@@ -1382,7 +1382,7 @@
       "id": "t105",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "broadcastDesk",
       "audio": "audio/t105.wav",
       "audioStartFrame": 3,
       "startFrame": 18442,
@@ -1467,7 +1467,7 @@
       "id": "t112",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "domesticInterior",
       "audio": "audio/t112.wav",
       "audioStartFrame": 3,
       "startFrame": 19510,
@@ -1626,7 +1626,7 @@
       "id": "t124",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "domesticInterior",
       "audio": "audio/t124.wav",
       "audioStartFrame": 3,
       "startFrame": 21706,
@@ -1936,7 +1936,7 @@
       "id": "t150",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "broadcastDesk",
       "audio": "audio/t150.wav",
       "audioStartFrame": 3,
       "startFrame": 25179,
