@@ -1,20 +1,20 @@
 {
   "thumb": {
-    "kicker": "CLEAN DIESEL LIE",
-    "line1": "11M",
+    "kicker": "KING OF CRYPTO",
+    "line1": "$8B",
     "line2": "",
-    "tag": "EVERY OFFICIAL TEST, IT PASSED.",
-    "archetype": "band",
+    "tag": "HE HAD A BACKDOOR NOBODY ELSE COULD SEE.",
+    "archetype": "question",
     "before": "",
     "after": "",
-    "big": "11M",
-    "expr": "shock",
+    "big": "",
+    "expr": "worried",
     "mood": "crime",
-    "keyword": "DEFEAT DEVICE",
-    "question": "",
+    "keyword": "BACKDOOR",
+    "question": "WHERE DID THE MONEY GO?",
     "word": "",
     "setting": "",
     "prop": ""
   },
-  "topic": "volkswagen_dieselgate"
+  "topic": "ftx"
 }
