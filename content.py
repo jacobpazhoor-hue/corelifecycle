@@ -146,7 +146,7 @@ SCENES = [
          narration='A setting no driver would ever see. A door that only opened when needed.'),
 
     dict(id='t025', level=None, overlay=None, template='domesticInterior',
-         narration='None knocked.'),
+         narration='None of them ever knocked.'),
 
     dict(id='t026', level=None, overlay=None, template='cityStreet', breath=True,
          narration='For six years, it worked.'),
@@ -227,7 +227,7 @@ SCENES = [
          narration='They gave West Virginia University a grant.'),
 
     dict(id='t052', level=None, overlay={'big': '$69,000', 'sub': 'THE GRANT THAT FOUND IT'}, template='bankExterior',
-         narration='Sixty-nine thousand.'),
+         narration='Sixty-nine thousand dollars, in grant money.'),
 
     dict(id='t053', level=None, overlay=None, template='boardroom',
          narration='Grad students built a portable emissions rig, small enough to fit in a trunk. It cost less than a used car.'),
@@ -280,7 +280,7 @@ SCENES = [
     dict(id='t069', level=None, overlay=None, template='closeUpPortrait', mood='grim',
          narration='Nine years of quiet cheating, said out loud in one room.'),
 
-    dict(id='t070', level='CH 4', overlay=None, template='broadcastDesk', mood='grim', breath=True, card={'kind': 'chapter', 'title': 'The Reckoning', 'subtitle': 'Fines, a Resignation, and Guilty Pleas', 'hold': 2.4},
+    dict(id='t070', level='CH 4', overlay=None, template='broadcastDesk', mood='grim', breath=True, card={'kind': 'chapter', 'title': 'The Reckoning', 'subtitle': 'Fines, a Resignation, Guilty Pleas', 'hold': 2.4},
          narration='Fifteen days later, on September 18th, 2015, the EPA made it public.'),
 
     dict(id='t071', level=None, overlay=None, template='closeUpPortrait', mood='grim',
@@ -319,7 +319,7 @@ SCENES = [
     dict(id='t082', level=None, overlay=None, template='domesticInterior', card={'kind': 'narration', 'text': 'Nine years\nto test that claim.'},
          narration='Nine years. That is how long it took to test that claim in a courtroom.'),
 
-    dict(id='t083', level=None, overlay=None, template='newsMontage',
+    dict(id='t083', level=None, overlay=None, template='bankExterior',
          narration='Two days later, Porsche chief Matthias Müller was named the new CEO.'),
 
     dict(id='t084', level=None, overlay=None, template='cityStreet',
@@ -370,7 +370,7 @@ SCENES = [
     dict(id='t099', level=None, overlay=None, template='bankExterior', chart='down',
          narration='Two point eight billion of it criminal. One point five billion civil.'),
 
-    dict(id='t100', level=None, overlay=None, template='newsMontage',
+    dict(id='t100', level=None, overlay=None, template='crowdQueue',
          narration='Six Volkswagen executives and employees were indicted alongside the deal.'),
 
     dict(id='t101', level=None, overlay=None, template='boardroom',
@@ -401,7 +401,7 @@ SCENES = [
          narration='Oliver Schmidt, the compliance chief, was sentenced that December.'),
 
     dict(id='t110', level=None, overlay={'big': '7 YEARS', 'sub': 'OLIVER SCHMIDT, DEC 2017'}, template='chartBoard', chart='down',
-         narration='Seven years, and a four hundred thousand dollar fine.'),
+         narration='Seven years in prison, and a four hundred thousand dollar fine.'),
 
     dict(id='t111', level=None, overlay=None, template='courtHearing',
          narration='The heaviest US prison term handed to anyone in this case. Heavier than the man who built the code.'),
@@ -418,7 +418,7 @@ SCENES = [
     dict(id='t115', level=None, overlay=None, template='cityStreet',
          narration='Germany does not hand its own citizens over.'),
 
-    dict(id='t116', level=None, overlay=None, template='closeUpPortrait',
+    dict(id='t116', level=None, overlay=None, template='exchangeFloor',
          narration='Winterkorn never faced that case at all.'),
 
     dict(id='t117', level=None, overlay=None, template='courtHearing',
@@ -460,7 +460,7 @@ SCENES = [
     dict(id='t129', level=None, overlay=None, template='boardroom',
          narration='Four men who had once run the engine program. Two prison terms, two paused.'),
 
-    dict(id='t130', level=None, overlay=None, template='newsMontage',
+    dict(id='t130', level=None, overlay=None, template='exchangeFloor',
          narration='Two more, more senior still, walked out with paused terms.'),
 
     dict(id='t131', level=None, overlay=None, template='courtHearing',
@@ -485,10 +485,10 @@ SCENES = [
          narration='Nearly thirty-five billion dollars, by the exchange rate of the time.'),
 
     dict(id='t138', level=None, overlay=None, template='domesticInterior',
-         narration='The group that first caught it had spent sixty-nine thousand dollars.'),
+         narration='The group that had first caught it had spent just sixty-nine thousand dollars.'),
 
     dict(id='t139', level=None, overlay=None, template='closeUpPortrait',
-         narration='Do the math, and it comes out close to five hundred thousand to one.'),
+         narration='Do the math, and the ratio comes out close to five hundred thousand to one.'),
 
     dict(id='t140', level=None, overlay=None, template='officeFloor',
          narration='That is the ratio between the grant that found the lie and the cost of it.'),
@@ -530,7 +530,7 @@ SCENES = [
          narration='Eleven million cars.'),
 
     dict(id='t153', level=None, overlay=None, template='bankExterior',
-         narration='Thirty-five billion dollars.'),
+         narration='Thirty-five billion dollars, all told.'),
 
     dict(id='t154', level=None, overlay=None, template='closeUpPortrait', breath=True,
          narration='One sentence that at last told the truth.')
