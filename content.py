@@ -192,7 +192,7 @@ SCENES = [
     dict(id="t033", level=None, template="broadcastDesk",
          narration="Math genius. College dropout. Billionaire before thirty.", overlay=None),
 
-    dict(id="t034", level=None, template="closeUpPortrait",
+    dict(id="t034", level=None, template="newsMontage",
          narration="The myth wrote itself, and reporters kept writing it.", overlay=None),
 
     dict(id="t035", level=None, template="broadcastDesk",
@@ -234,7 +234,7 @@ SCENES = [
     dict(id="t046", level=None, template="officeFloor",
          narration="Quietly, his colleagues sent comparable money to the other side too.", overlay=None),
 
-    dict(id="t047", level=None, template="broadcastDesk",
+    dict(id="t047", level=None, template="cityStreet",
          narration="Washington took his calls. Watchdogs took his meetings.", overlay=None),
 
     dict(id="t048", level=None, template="courtHearing",
@@ -374,7 +374,7 @@ SCENES = [
     # ================= CH 3: The Leak =================
     dict(id="t089", level="CH 3", template="newsMontage", breath=True,
          narration="November 2nd, 2022. A crypto news site called CoinDesk published a leaked balance sheet.",
-         overlay=None, card=dict(kind="chapter", title="The Leak", subtitle="A Balance Sheet Nobody Was Supposed to See", hold=2.4)),
+         overlay=None, card=dict(kind="chapter", title="The Leak", subtitle="A Balance Sheet Nobody Should See", hold=2.4)),
 
     dict(id="t090", level=None, template="officeFloor",
          narration="Alameda's own numbers, laid out in black and white.", overlay=None),
@@ -594,7 +594,7 @@ SCENES = [
     # ================= CH 5: The Verdict =================
     dict(id="t157", level="CH 5", template="courtHearing", breath=True,
          narration="October 3rd, 2023. The trial opened in a federal courtroom in New York.",
-         overlay=None, card=dict(kind="chapter", title="The Verdict", subtitle="Twenty-Five Years for the King of Crypto", hold=2.4)),
+         overlay=None, card=dict(kind="chapter", title="The Verdict", subtitle="25 Years for the King of Crypto", hold=2.4)),
 
     dict(id="t158", level=None, template="closeUpPortrait",
          narration="Judge Lewis Kaplan presided.", overlay=None),

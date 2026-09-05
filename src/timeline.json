@@ -442,7 +442,7 @@
       "id": "t034",
       "level": null,
       "overlay": null,
-      "template": "closeUpPortrait",
+      "template": "newsMontage",
       "audio": "audio/t034.wav",
       "audioStartFrame": 3,
       "startFrame": 5057,
@@ -596,7 +596,7 @@
       "id": "t047",
       "level": null,
       "overlay": null,
-      "template": "broadcastDesk",
+      "template": "cityStreet",
       "audio": "audio/t047.wav",
       "audioStartFrame": 3,
       "startFrame": 6923,
@@ -1128,7 +1128,7 @@
       "card": {
         "kind": "chapter",
         "title": "The Leak",
-        "subtitle": "A Balance Sheet Nobody Was Supposed to See",
+        "subtitle": "A Balance Sheet Nobody Should See",
         "hold": 2.4
       }
     },
@@ -1950,7 +1950,7 @@
       "card": {
         "kind": "chapter",
         "title": "The Verdict",
-        "subtitle": "Twenty-Five Years for the King of Crypto",
+        "subtitle": "25 Years for the King of Crypto",
         "hold": 2.4
       }
     },
