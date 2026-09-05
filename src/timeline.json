@@ -2,7 +2,7 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "totalFrames": 26826,
+  "totalFrames": 26974,
   "voice": "en-US-AndrewMultilingualNeural",
   "scenes": [
     {
@@ -13,7 +13,7 @@
       "audio": "audio/t001.wav",
       "audioStartFrame": 3,
       "startFrame": 0,
-      "durationInFrames": 185,
+      "durationInFrames": 173,
       "gap": 0.435
     },
     {
@@ -23,7 +23,7 @@
       "template": "chartBoard",
       "audio": "audio/t002.wav",
       "audioStartFrame": 3,
-      "startFrame": 185,
+      "startFrame": 173,
       "durationInFrames": 85,
       "gap": 0.499,
       "chart": "up"
@@ -35,7 +35,7 @@
       "template": "officeFloor",
       "audio": "audio/t003.wav",
       "audioStartFrame": 3,
-      "startFrame": 270,
+      "startFrame": 258,
       "durationInFrames": 83,
       "gap": 0.369
     },
@@ -46,8 +46,8 @@
       "template": "crowdQueue",
       "audio": "audio/t004.wav",
       "audioStartFrame": 3,
-      "startFrame": 353,
-      "durationInFrames": 171,
+      "startFrame": 341,
+      "durationInFrames": 167,
       "gap": 0.53,
       "mood": "grim"
     },
@@ -58,7 +58,7 @@
       "template": "newsMontage",
       "audio": "audio/t005.wav",
       "audioStartFrame": 3,
-      "startFrame": 524,
+      "startFrame": 508,
       "durationInFrames": 180,
       "gap": 0.418
     },
@@ -69,7 +69,7 @@
       "template": "chartBoard",
       "audio": "audio/t006.wav",
       "audioStartFrame": 3,
-      "startFrame": 704,
+      "startFrame": 688,
       "durationInFrames": 60,
       "gap": 0.364,
       "chart": "down"
@@ -81,7 +81,7 @@
       "template": "courtHearing",
       "audio": "audio/t007.wav",
       "audioStartFrame": 3,
-      "startFrame": 764,
+      "startFrame": 748,
       "durationInFrames": 201,
       "gap": 0.355
     },
@@ -92,7 +92,7 @@
       "template": "domesticInterior",
       "audio": "audio/t008.wav",
       "audioStartFrame": 3,
-      "startFrame": 965,
+      "startFrame": 949,
       "durationInFrames": 222,
       "gap": 0.736,
       "card": {
@@ -107,7 +107,7 @@
       "template": "cityStreet",
       "audio": "audio/t009.wav",
       "audioStartFrame": 3,
-      "startFrame": 1187,
+      "startFrame": 1171,
       "durationInFrames": 216,
       "gap": 0.354,
       "card": {
@@ -121,10 +121,10 @@
       "id": "t010",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "newsMontage",
       "audio": "audio/t010.wav",
       "audioStartFrame": 3,
-      "startFrame": 1403,
+      "startFrame": 1387,
       "durationInFrames": 150,
       "gap": 0.477
     },
@@ -135,7 +135,7 @@
       "template": "domesticInterior",
       "audio": "audio/t011.wav",
       "audioStartFrame": 3,
-      "startFrame": 1553,
+      "startFrame": 1537,
       "durationInFrames": 192,
       "gap": 0.444
     },
@@ -146,7 +146,7 @@
       "template": "cityStreet",
       "audio": "audio/t012.wav",
       "audioStartFrame": 3,
-      "startFrame": 1745,
+      "startFrame": 1729,
       "durationInFrames": 101,
       "gap": 0.446
     },
@@ -157,7 +157,7 @@
       "template": "officeFloor",
       "audio": "audio/t013.wav",
       "audioStartFrame": 3,
-      "startFrame": 1846,
+      "startFrame": 1830,
       "durationInFrames": 76,
       "gap": 0.453
     },
@@ -165,10 +165,10 @@
       "id": "t014",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "bankExterior",
       "audio": "audio/t014.wav",
       "audioStartFrame": 3,
-      "startFrame": 1922,
+      "startFrame": 1906,
       "durationInFrames": 192,
       "gap": 0.316
     },
@@ -179,7 +179,7 @@
       "template": "domesticInterior",
       "audio": "audio/t015.wav",
       "audioStartFrame": 3,
-      "startFrame": 2114,
+      "startFrame": 2098,
       "durationInFrames": 180,
       "gap": 0.413
     },
@@ -190,7 +190,7 @@
       "template": "crowdQueue",
       "audio": "audio/t016.wav",
       "audioStartFrame": 3,
-      "startFrame": 2294,
+      "startFrame": 2278,
       "durationInFrames": 193,
       "gap": 0.514
     },
@@ -201,7 +201,7 @@
       "template": "domesticInterior",
       "audio": "audio/t017.wav",
       "audioStartFrame": 3,
-      "startFrame": 2487,
+      "startFrame": 2471,
       "durationInFrames": 75,
       "gap": 0.388,
       "bubbles": [
@@ -220,10 +220,10 @@
       "id": "t018",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "exchangeFloor",
       "audio": "audio/t018.wav",
       "audioStartFrame": 3,
-      "startFrame": 2562,
+      "startFrame": 2546,
       "durationInFrames": 243,
       "gap": 0.383,
       "chart": "up"
@@ -235,7 +235,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t018b.wav",
       "audioStartFrame": 3,
-      "startFrame": 2805,
+      "startFrame": 2789,
       "durationInFrames": 106,
       "gap": 0.336
     },
@@ -243,10 +243,10 @@
       "id": "t019",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "exchangeFloor",
       "audio": "audio/t019.wav",
       "audioStartFrame": 3,
-      "startFrame": 2911,
+      "startFrame": 2895,
       "durationInFrames": 115,
       "gap": 0.273
     },
@@ -257,8 +257,8 @@
       "template": "cityStreet",
       "audio": "audio/t020.wav",
       "audioStartFrame": 3,
-      "startFrame": 3026,
-      "durationInFrames": 175,
+      "startFrame": 3010,
+      "durationInFrames": 226,
       "gap": 0.438,
       "panels": {
         "variant": "grid4",
@@ -282,10 +282,10 @@
       "id": "t021",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "newsMontage",
       "audio": "audio/t021.wav",
       "audioStartFrame": 3,
-      "startFrame": 3201,
+      "startFrame": 3236,
       "durationInFrames": 176,
       "gap": 0.367
     },
@@ -296,7 +296,7 @@
       "template": "domesticInterior",
       "audio": "audio/t022.wav",
       "audioStartFrame": 3,
-      "startFrame": 3377,
+      "startFrame": 3412,
       "durationInFrames": 185,
       "gap": 0.413
     },
@@ -304,10 +304,10 @@
       "id": "t023",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "exchangeFloor",
       "audio": "audio/t023.wav",
       "audioStartFrame": 3,
-      "startFrame": 3562,
+      "startFrame": 3597,
       "durationInFrames": 140,
       "gap": 0.541
     },
@@ -318,7 +318,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t024.wav",
       "audioStartFrame": 3,
-      "startFrame": 3702,
+      "startFrame": 3737,
       "durationInFrames": 142,
       "gap": 0.523
     },
@@ -329,7 +329,7 @@
       "template": "domesticInterior",
       "audio": "audio/t025.wav",
       "audioStartFrame": 3,
-      "startFrame": 3844,
+      "startFrame": 3879,
       "durationInFrames": 67,
       "gap": 0.34
     },
@@ -340,7 +340,7 @@
       "template": "boardroom",
       "audio": "audio/t026.wav",
       "audioStartFrame": 3,
-      "startFrame": 3911,
+      "startFrame": 3946,
       "durationInFrames": 61,
       "gap": 0.451,
       "bubbles": [
@@ -362,7 +362,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t027.wav",
       "audioStartFrame": 3,
-      "startFrame": 3972,
+      "startFrame": 4007,
       "durationInFrames": 304,
       "gap": 0.453,
       "card": {
@@ -377,10 +377,10 @@
         "big": "$4.4B",
         "sub": "ONE MEETING, SOFTBANK"
       },
-      "template": "chartBoard",
+      "template": "exchangeFloor",
       "audio": "audio/t028.wav",
       "audioStartFrame": 3,
-      "startFrame": 4276,
+      "startFrame": 4311,
       "durationInFrames": 121,
       "gap": 0.433,
       "chart": "up"
@@ -389,10 +389,10 @@
       "id": "t029",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "bankExterior",
       "audio": "audio/t029.wav",
       "audioStartFrame": 3,
-      "startFrame": 4397,
+      "startFrame": 4432,
       "durationInFrames": 120,
       "gap": 0.302
     },
@@ -403,7 +403,7 @@
       "template": "cityStreet",
       "audio": "audio/t030.wav",
       "audioStartFrame": 3,
-      "startFrame": 4517,
+      "startFrame": 4552,
       "durationInFrames": 124,
       "gap": 0.408
     },
@@ -411,10 +411,10 @@
       "id": "t031",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "bankExterior",
       "audio": "audio/t031.wav",
       "audioStartFrame": 3,
-      "startFrame": 4641,
+      "startFrame": 4676,
       "durationInFrames": 184,
       "gap": 0.258
     },
@@ -425,7 +425,7 @@
       "template": "domesticInterior",
       "audio": "audio/t032.wav",
       "audioStartFrame": 3,
-      "startFrame": 4825,
+      "startFrame": 4860,
       "durationInFrames": 173,
       "gap": 0.392
     },
@@ -436,7 +436,7 @@
       "template": "crowdQueue",
       "audio": "audio/t032b.wav",
       "audioStartFrame": 3,
-      "startFrame": 4998,
+      "startFrame": 5033,
       "durationInFrames": 143,
       "gap": 0.543
     },
@@ -444,10 +444,10 @@
       "id": "t033",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "newsMontage",
       "audio": "audio/t033.wav",
       "audioStartFrame": 3,
-      "startFrame": 5141,
+      "startFrame": 5176,
       "durationInFrames": 145,
       "gap": 0.428
     },
@@ -455,10 +455,10 @@
       "id": "t034",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "bankExterior",
       "audio": "audio/t034.wav",
       "audioStartFrame": 3,
-      "startFrame": 5286,
+      "startFrame": 5321,
       "durationInFrames": 66,
       "gap": 0.308,
       "chart": "up"
@@ -470,7 +470,7 @@
       "template": "cityStreet",
       "audio": "audio/t035.wav",
       "audioStartFrame": 3,
-      "startFrame": 5352,
+      "startFrame": 5387,
       "durationInFrames": 156,
       "gap": 0.432
     },
@@ -478,10 +478,10 @@
       "id": "t036",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "exchangeFloor",
       "audio": "audio/t036.wav",
       "audioStartFrame": 3,
-      "startFrame": 5508,
+      "startFrame": 5543,
       "durationInFrames": 177,
       "gap": 0.505,
       "card": {
@@ -496,7 +496,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t037.wav",
       "audioStartFrame": 3,
-      "startFrame": 5685,
+      "startFrame": 5720,
       "durationInFrames": 126,
       "gap": 0.451
     },
@@ -507,7 +507,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t038.wav",
       "audioStartFrame": 3,
-      "startFrame": 5811,
+      "startFrame": 5846,
       "durationInFrames": 174,
       "gap": 0.533,
       "card": {
@@ -522,7 +522,7 @@
       "template": "crowdQueue",
       "audio": "audio/t039.wav",
       "audioStartFrame": 3,
-      "startFrame": 5985,
+      "startFrame": 6020,
       "durationInFrames": 129,
       "gap": 0.292
     },
@@ -533,7 +533,7 @@
       "template": "officeFloor",
       "audio": "audio/t040.wav",
       "audioStartFrame": 3,
-      "startFrame": 6114,
+      "startFrame": 6149,
       "durationInFrames": 182,
       "gap": 0.384
     },
@@ -544,7 +544,7 @@
       "template": "domesticInterior",
       "audio": "audio/t041.wav",
       "audioStartFrame": 3,
-      "startFrame": 6296,
+      "startFrame": 6331,
       "durationInFrames": 142,
       "gap": 0.38
     },
@@ -555,7 +555,7 @@
       "template": "bankExterior",
       "audio": "audio/t042.wav",
       "audioStartFrame": 3,
-      "startFrame": 6438,
+      "startFrame": 6473,
       "durationInFrames": 153,
       "gap": 0.299
     },
@@ -563,10 +563,10 @@
       "id": "t043",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "courtHearing",
       "audio": "audio/t043.wav",
       "audioStartFrame": 3,
-      "startFrame": 6591,
+      "startFrame": 6626,
       "durationInFrames": 88,
       "gap": 0.295
     },
@@ -577,8 +577,8 @@
       "template": "boardroom",
       "audio": "audio/t044.wav",
       "audioStartFrame": 3,
-      "startFrame": 6679,
-      "durationInFrames": 113,
+      "startFrame": 6714,
+      "durationInFrames": 104,
       "gap": 0.844
     },
     {
@@ -588,7 +588,7 @@
       "template": "bankExterior",
       "audio": "audio/t045.wav",
       "audioStartFrame": 3,
-      "startFrame": 6792,
+      "startFrame": 6818,
       "durationInFrames": 121,
       "gap": 0.533,
       "card": {
@@ -605,7 +605,7 @@
       "template": "officeFloor",
       "audio": "audio/t046.wav",
       "audioStartFrame": 3,
-      "startFrame": 6913,
+      "startFrame": 6939,
       "durationInFrames": 135,
       "gap": 0.423
     },
@@ -616,7 +616,7 @@
       "template": "bankExterior",
       "audio": "audio/t047.wav",
       "audioStartFrame": 3,
-      "startFrame": 7048,
+      "startFrame": 7074,
       "durationInFrames": 132,
       "gap": 0.254
     },
@@ -627,7 +627,7 @@
       "template": "chartBoard",
       "audio": "audio/t048.wav",
       "audioStartFrame": 3,
-      "startFrame": 7180,
+      "startFrame": 7206,
       "durationInFrames": 132,
       "gap": 0.333,
       "chart": "flat"
@@ -639,7 +639,7 @@
       "template": "exchangeFloor",
       "audio": "audio/t049.wav",
       "audioStartFrame": 3,
-      "startFrame": 7312,
+      "startFrame": 7338,
       "durationInFrames": 425,
       "gap": 0.315
     },
@@ -650,7 +650,7 @@
       "template": "officeFloor",
       "audio": "audio/t050.wav",
       "audioStartFrame": 3,
-      "startFrame": 7737,
+      "startFrame": 7763,
       "durationInFrames": 92,
       "gap": 0.434
     },
@@ -661,7 +661,7 @@
       "template": "domesticInterior",
       "audio": "audio/t051.wav",
       "audioStartFrame": 3,
-      "startFrame": 7829,
+      "startFrame": 7855,
       "durationInFrames": 90,
       "gap": 0.364
     },
@@ -672,7 +672,7 @@
       "template": "bankExterior",
       "audio": "audio/t051b.wav",
       "audioStartFrame": 3,
-      "startFrame": 7919,
+      "startFrame": 7945,
       "durationInFrames": 136,
       "gap": 0.281
     },
@@ -683,7 +683,7 @@
       "template": "crowdQueue",
       "audio": "audio/t052.wav",
       "audioStartFrame": 3,
-      "startFrame": 8055,
+      "startFrame": 8081,
       "durationInFrames": 102,
       "gap": 0.466,
       "mood": "grim"
@@ -695,7 +695,7 @@
       "template": "chartBoard",
       "audio": "audio/t053.wav",
       "audioStartFrame": 3,
-      "startFrame": 8157,
+      "startFrame": 8183,
       "durationInFrames": 123,
       "gap": 0.531,
       "chart": "flat"
@@ -707,7 +707,7 @@
       "template": "domesticInterior",
       "audio": "audio/t054.wav",
       "audioStartFrame": 3,
-      "startFrame": 8280,
+      "startFrame": 8306,
       "durationInFrames": 121,
       "gap": 0.268
     },
@@ -718,7 +718,7 @@
       "template": "officeFloor",
       "audio": "audio/t055.wav",
       "audioStartFrame": 3,
-      "startFrame": 8401,
+      "startFrame": 8427,
       "durationInFrames": 160,
       "gap": 0.349
     },
@@ -729,7 +729,7 @@
       "template": "crowdQueue",
       "audio": "audio/t056.wav",
       "audioStartFrame": 3,
-      "startFrame": 8561,
+      "startFrame": 8587,
       "durationInFrames": 78,
       "gap": 0.376
     },
@@ -740,7 +740,7 @@
       "template": "chartBoard",
       "audio": "audio/t057.wav",
       "audioStartFrame": 3,
-      "startFrame": 8639,
+      "startFrame": 8665,
       "durationInFrames": 82,
       "gap": 0.434,
       "chart": "up"
@@ -752,7 +752,7 @@
       "template": "domesticInterior",
       "audio": "audio/t057b.wav",
       "audioStartFrame": 3,
-      "startFrame": 8721,
+      "startFrame": 8747,
       "durationInFrames": 37,
       "gap": 0.382
     },
@@ -763,7 +763,7 @@
       "template": "officeFloor",
       "audio": "audio/t058.wav",
       "audioStartFrame": 3,
-      "startFrame": 8758,
+      "startFrame": 8784,
       "durationInFrames": 117,
       "gap": 0.302
     },
@@ -777,8 +777,8 @@
       "template": "bankExterior",
       "audio": "audio/t059.wav",
       "audioStartFrame": 3,
-      "startFrame": 8875,
-      "durationInFrames": 138,
+      "startFrame": 8901,
+      "durationInFrames": 160,
       "gap": 0.276
     },
     {
@@ -791,8 +791,8 @@
       "template": "boardroom",
       "audio": "audio/t060.wav",
       "audioStartFrame": 3,
-      "startFrame": 9013,
-      "durationInFrames": 117,
+      "startFrame": 9061,
+      "durationInFrames": 114,
       "gap": 0.419
     },
     {
@@ -802,7 +802,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t061.wav",
       "audioStartFrame": 3,
-      "startFrame": 9130,
+      "startFrame": 9175,
       "durationInFrames": 94,
       "gap": 0.275
     },
@@ -810,10 +810,10 @@
       "id": "t062",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "newsMontage",
       "audio": "audio/t062.wav",
       "audioStartFrame": 3,
-      "startFrame": 9224,
+      "startFrame": 9269,
       "durationInFrames": 83,
       "gap": 0.401
     },
@@ -821,10 +821,10 @@
       "id": "t063",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "exchangeFloor",
       "audio": "audio/t063.wav",
       "audioStartFrame": 3,
-      "startFrame": 9307,
+      "startFrame": 9352,
       "durationInFrames": 73,
       "gap": 0.336
     },
@@ -832,10 +832,10 @@
       "id": "t064",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "courtHearing",
       "audio": "audio/t064.wav",
       "audioStartFrame": 3,
-      "startFrame": 9380,
+      "startFrame": 9425,
       "durationInFrames": 157,
       "gap": 0.469,
       "card": {
@@ -851,7 +851,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t065.wav",
       "audioStartFrame": 3,
-      "startFrame": 9537,
+      "startFrame": 9582,
       "durationInFrames": 160,
       "gap": 0.407
     },
@@ -859,10 +859,10 @@
       "id": "t066",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "courtHearing",
       "audio": "audio/t066.wav",
       "audioStartFrame": 3,
-      "startFrame": 9697,
+      "startFrame": 9742,
       "durationInFrames": 236,
       "gap": 0.379,
       "chart": "flat"
@@ -874,7 +874,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t067.wav",
       "audioStartFrame": 3,
-      "startFrame": 9933,
+      "startFrame": 9978,
       "durationInFrames": 190,
       "gap": 0.398
     },
@@ -882,10 +882,10 @@
       "id": "t067b",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "exchangeFloor",
       "audio": "audio/t067b.wav",
       "audioStartFrame": 3,
-      "startFrame": 10123,
+      "startFrame": 10168,
       "durationInFrames": 104,
       "gap": 0.328
     },
@@ -896,7 +896,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t068.wav",
       "audioStartFrame": 3,
-      "startFrame": 10227,
+      "startFrame": 10272,
       "durationInFrames": 60,
       "gap": 0.343,
       "mood": "grim"
@@ -908,7 +908,7 @@
       "template": "newsMontage",
       "audio": "audio/t069.wav",
       "audioStartFrame": 3,
-      "startFrame": 10287,
+      "startFrame": 10332,
       "durationInFrames": 86,
       "gap": 0.472,
       "card": {
@@ -923,7 +923,7 @@
       "template": "crowdQueue",
       "audio": "audio/t070.wav",
       "audioStartFrame": 3,
-      "startFrame": 10373,
+      "startFrame": 10418,
       "durationInFrames": 118,
       "gap": 0.33
     },
@@ -934,10 +934,10 @@
         "big": "528",
         "sub": "LOCATIONS WORLDWIDE"
       },
-      "template": "officeFloor",
+      "template": "cityStreet",
       "audio": "audio/t071.wav",
       "audioStartFrame": 3,
-      "startFrame": 10491,
+      "startFrame": 10536,
       "durationInFrames": 105,
       "gap": 0.533
     },
@@ -948,7 +948,7 @@
       "template": "exchangeFloor",
       "audio": "audio/t072.wav",
       "audioStartFrame": 3,
-      "startFrame": 10596,
+      "startFrame": 10641,
       "durationInFrames": 194,
       "gap": 0.296
     },
@@ -959,7 +959,7 @@
       "template": "bankExterior",
       "audio": "audio/t073.wav",
       "audioStartFrame": 3,
-      "startFrame": 10790,
+      "startFrame": 10835,
       "durationInFrames": 113,
       "gap": 0.51
     },
@@ -970,7 +970,7 @@
       "template": "domesticInterior",
       "audio": "audio/t074.wav",
       "audioStartFrame": 3,
-      "startFrame": 10903,
+      "startFrame": 10948,
       "durationInFrames": 169,
       "gap": 0.268
     },
@@ -978,10 +978,10 @@
       "id": "t075",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "courtHearing",
       "audio": "audio/t075.wav",
       "audioStartFrame": 3,
-      "startFrame": 11072,
+      "startFrame": 11117,
       "durationInFrames": 87,
       "gap": 0.528
     },
@@ -992,8 +992,8 @@
       "template": "cityStreet",
       "audio": "audio/t076.wav",
       "audioStartFrame": 3,
-      "startFrame": 11159,
-      "durationInFrames": 182,
+      "startFrame": 11204,
+      "durationInFrames": 203,
       "gap": 0.954
     },
     {
@@ -1003,7 +1003,7 @@
       "template": "officeFloor",
       "audio": "audio/t077.wav",
       "audioStartFrame": 3,
-      "startFrame": 11341,
+      "startFrame": 11407,
       "durationInFrames": 165,
       "gap": 0.324,
       "card": {
@@ -1020,7 +1020,7 @@
       "template": "courtHearing",
       "audio": "audio/t078.wav",
       "audioStartFrame": 3,
-      "startFrame": 11506,
+      "startFrame": 11572,
       "durationInFrames": 138,
       "gap": 0.537
     },
@@ -1031,7 +1031,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t079.wav",
       "audioStartFrame": 3,
-      "startFrame": 11644,
+      "startFrame": 11710,
       "durationInFrames": 161,
       "gap": 0.251,
       "card": {
@@ -1046,7 +1046,7 @@
       "template": "crowdQueue",
       "audio": "audio/t080.wav",
       "audioStartFrame": 3,
-      "startFrame": 11805,
+      "startFrame": 11871,
       "durationInFrames": 93,
       "gap": 0.395
     },
@@ -1057,7 +1057,7 @@
       "template": "newsMontage",
       "audio": "audio/t081.wav",
       "audioStartFrame": 3,
-      "startFrame": 11898,
+      "startFrame": 11964,
       "durationInFrames": 82,
       "gap": 0.284
     },
@@ -1068,10 +1068,10 @@
         "big": "-$900M",
         "sub": "FIRST HALF OF 2019"
       },
-      "template": "chartBoard",
+      "template": "exchangeFloor",
       "audio": "audio/t082.wav",
       "audioStartFrame": 3,
-      "startFrame": 11980,
+      "startFrame": 12046,
       "durationInFrames": 175,
       "gap": 0.51,
       "chart": "down"
@@ -1080,10 +1080,10 @@
       "id": "t083",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "bankExterior",
       "audio": "audio/t083.wav",
       "audioStartFrame": 3,
-      "startFrame": 12155,
+      "startFrame": 12221,
       "durationInFrames": 106,
       "gap": 0.272
     },
@@ -1094,7 +1094,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t084.wav",
       "audioStartFrame": 3,
-      "startFrame": 12261,
+      "startFrame": 12327,
       "durationInFrames": 49,
       "gap": 0.325
     },
@@ -1102,10 +1102,10 @@
       "id": "t085",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "courtHearing",
       "audio": "audio/t085.wav",
       "audioStartFrame": 3,
-      "startFrame": 12310,
+      "startFrame": 12376,
       "durationInFrames": 130,
       "gap": 0.345,
       "card": {
@@ -1123,7 +1123,7 @@
       "template": "boardroom",
       "audio": "audio/t086.wav",
       "audioStartFrame": 3,
-      "startFrame": 12440,
+      "startFrame": 12506,
       "durationInFrames": 123,
       "gap": 0.358,
       "bubbles": [
@@ -1145,7 +1145,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t087.wav",
       "audioStartFrame": 3,
-      "startFrame": 12563,
+      "startFrame": 12629,
       "durationInFrames": 62,
       "gap": 0.251,
       "mood": "grim"
@@ -1154,10 +1154,10 @@
       "id": "t088",
       "level": null,
       "overlay": null,
-      "template": "officeFloor",
+      "template": "newsMontage",
       "audio": "audio/t088.wav",
       "audioStartFrame": 3,
-      "startFrame": 12625,
+      "startFrame": 12691,
       "durationInFrames": 53,
       "gap": 0.534
     },
@@ -1165,10 +1165,10 @@
       "id": "t089",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "courtHearing",
       "audio": "audio/t089.wav",
       "audioStartFrame": 3,
-      "startFrame": 12678,
+      "startFrame": 12744,
       "durationInFrames": 105,
       "gap": 0.511
     },
@@ -1176,10 +1176,10 @@
       "id": "t090",
       "level": null,
       "overlay": null,
-      "template": "chartBoard",
+      "template": "exchangeFloor",
       "audio": "audio/t090.wav",
       "audioStartFrame": 3,
-      "startFrame": 12783,
+      "startFrame": 12849,
       "durationInFrames": 42,
       "gap": 0.308,
       "chart": "flat"
@@ -1191,7 +1191,7 @@
       "template": "boardroom",
       "audio": "audio/t091.wav",
       "audioStartFrame": 3,
-      "startFrame": 12825,
+      "startFrame": 12891,
       "durationInFrames": 185,
       "gap": 0.529,
       "card": {
@@ -1206,7 +1206,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t092.wav",
       "audioStartFrame": 3,
-      "startFrame": 13010,
+      "startFrame": 13076,
       "durationInFrames": 144,
       "gap": 0.435
     },
@@ -1217,7 +1217,7 @@
       "template": "boardroom",
       "audio": "audio/t093.wav",
       "audioStartFrame": 3,
-      "startFrame": 13154,
+      "startFrame": 13220,
       "durationInFrames": 123,
       "gap": 0.543
     },
@@ -1228,7 +1228,7 @@
       "template": "crowdQueue",
       "audio": "audio/t094.wav",
       "audioStartFrame": 3,
-      "startFrame": 13277,
+      "startFrame": 13343,
       "durationInFrames": 38,
       "gap": 0.49,
       "mood": "grim"
@@ -1240,7 +1240,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t095.wav",
       "audioStartFrame": 3,
-      "startFrame": 13315,
+      "startFrame": 13381,
       "durationInFrames": 134,
       "gap": 0.281
     },
@@ -1248,10 +1248,10 @@
       "id": "t096",
       "level": null,
       "overlay": null,
-      "template": "boardroom",
+      "template": "exchangeFloor",
       "audio": "audio/t096.wav",
       "audioStartFrame": 3,
-      "startFrame": 13449,
+      "startFrame": 13515,
       "durationInFrames": 125,
       "gap": 0.375
     },
@@ -1262,7 +1262,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t097.wav",
       "audioStartFrame": 3,
-      "startFrame": 13574,
+      "startFrame": 13640,
       "durationInFrames": 178,
       "gap": 0.457
     },
@@ -1273,7 +1273,7 @@
       "template": "newsMontage",
       "audio": "audio/t098.wav",
       "audioStartFrame": 3,
-      "startFrame": 13752,
+      "startFrame": 13818,
       "durationInFrames": 296,
       "gap": 0.498,
       "panels": {
@@ -1301,7 +1301,7 @@
       "template": "boardroom",
       "audio": "audio/t099.wav",
       "audioStartFrame": 3,
-      "startFrame": 14048,
+      "startFrame": 14114,
       "durationInFrames": 219,
       "gap": 1.4
     },
@@ -1312,7 +1312,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t100.wav",
       "audioStartFrame": 3,
-      "startFrame": 14267,
+      "startFrame": 14333,
       "durationInFrames": 383,
       "gap": 0.265,
       "mood": "grim"
@@ -1324,7 +1324,7 @@
       "template": "newsMontage",
       "audio": "audio/t101.wav",
       "audioStartFrame": 3,
-      "startFrame": 14650,
+      "startFrame": 14716,
       "durationInFrames": 94,
       "gap": 0.532
     },
@@ -1335,7 +1335,7 @@
       "template": "chartBoard",
       "audio": "audio/t102.wav",
       "audioStartFrame": 3,
-      "startFrame": 14744,
+      "startFrame": 14810,
       "durationInFrames": 107,
       "gap": 0.429,
       "chart": "down"
@@ -1347,7 +1347,7 @@
       "template": "bankExterior",
       "audio": "audio/t103.wav",
       "audioStartFrame": 3,
-      "startFrame": 14851,
+      "startFrame": 14917,
       "durationInFrames": 131,
       "gap": 0.437,
       "card": {
@@ -1362,7 +1362,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t104.wav",
       "audioStartFrame": 3,
-      "startFrame": 14982,
+      "startFrame": 15048,
       "durationInFrames": 130,
       "gap": 0.277,
       "mood": "grim"
@@ -1374,7 +1374,7 @@
       "template": "boardroom",
       "audio": "audio/t105.wav",
       "audioStartFrame": 3,
-      "startFrame": 15112,
+      "startFrame": 15178,
       "durationInFrames": 79,
       "gap": 0.356
     },
@@ -1385,8 +1385,8 @@
       "template": "crowdQueue",
       "audio": "audio/t106.wav",
       "audioStartFrame": 3,
-      "startFrame": 15191,
-      "durationInFrames": 170,
+      "startFrame": 15257,
+      "durationInFrames": 233,
       "gap": 0.71,
       "mood": "grim"
     },
@@ -1397,7 +1397,7 @@
       "template": "cityStreet",
       "audio": "audio/t107.wav",
       "audioStartFrame": 3,
-      "startFrame": 15361,
+      "startFrame": 15490,
       "durationInFrames": 107,
       "gap": 0.296,
       "card": {
@@ -1414,7 +1414,7 @@
       "template": "boardroom",
       "audio": "audio/t108.wav",
       "audioStartFrame": 3,
-      "startFrame": 15468,
+      "startFrame": 15597,
       "durationInFrames": 170,
       "gap": 0.471,
       "foreground": {
@@ -1430,7 +1430,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t109.wav",
       "audioStartFrame": 3,
-      "startFrame": 15638,
+      "startFrame": 15767,
       "durationInFrames": 119,
       "gap": 0.388,
       "mood": "grim"
@@ -1442,7 +1442,7 @@
       "template": "officeFloor",
       "audio": "audio/t110.wav",
       "audioStartFrame": 3,
-      "startFrame": 15757,
+      "startFrame": 15886,
       "durationInFrames": 204,
       "gap": 0.259
     },
@@ -1453,7 +1453,7 @@
       "template": "newsMontage",
       "audio": "audio/t111.wav",
       "audioStartFrame": 3,
-      "startFrame": 15961,
+      "startFrame": 16090,
       "durationInFrames": 36,
       "gap": 0.401,
       "card": {
@@ -1468,7 +1468,7 @@
       "template": "crowdQueue",
       "audio": "audio/t112.wav",
       "audioStartFrame": 3,
-      "startFrame": 15997,
+      "startFrame": 16126,
       "durationInFrames": 160,
       "gap": 0.402,
       "mood": "grim"
@@ -1480,7 +1480,7 @@
       "template": "bankExterior",
       "audio": "audio/t113.wav",
       "audioStartFrame": 3,
-      "startFrame": 16157,
+      "startFrame": 16286,
       "durationInFrames": 213,
       "gap": 0.346
     },
@@ -1494,7 +1494,7 @@
       "template": "chartBoard",
       "audio": "audio/t114.wav",
       "audioStartFrame": 3,
-      "startFrame": 16370,
+      "startFrame": 16499,
       "durationInFrames": 122,
       "gap": 0.485,
       "chart": "down"
@@ -1506,7 +1506,7 @@
       "template": "bankExterior",
       "audio": "audio/t115.wav",
       "audioStartFrame": 3,
-      "startFrame": 16492,
+      "startFrame": 16621,
       "durationInFrames": 173,
       "gap": 0.534,
       "foreground": {
@@ -1521,7 +1521,7 @@
       "template": "boardroom",
       "audio": "audio/t116.wav",
       "audioStartFrame": 3,
-      "startFrame": 16665,
+      "startFrame": 16794,
       "durationInFrames": 96,
       "gap": 0.335,
       "bubbles": [
@@ -1543,8 +1543,8 @@
       "template": "chartBoard",
       "audio": "audio/t117.wav",
       "audioStartFrame": 3,
-      "startFrame": 16761,
-      "durationInFrames": 418,
+      "startFrame": 16890,
+      "durationInFrames": 411,
       "gap": 0.411,
       "card": {
         "kind": "narration",
@@ -1559,7 +1559,7 @@
       "template": "crowdQueue",
       "audio": "audio/t118.wav",
       "audioStartFrame": 3,
-      "startFrame": 17179,
+      "startFrame": 17301,
       "durationInFrames": 154,
       "gap": 0.461,
       "mood": "grim"
@@ -1571,7 +1571,7 @@
       "template": "domesticInterior",
       "audio": "audio/t118b.wav",
       "audioStartFrame": 3,
-      "startFrame": 17333,
+      "startFrame": 17455,
       "durationInFrames": 94,
       "gap": 0.254,
       "mood": "grim"
@@ -1583,7 +1583,7 @@
       "template": "officeFloor",
       "audio": "audio/t119.wav",
       "audioStartFrame": 3,
-      "startFrame": 17427,
+      "startFrame": 17549,
       "durationInFrames": 125,
       "gap": 0.526,
       "mood": "grim"
@@ -1595,7 +1595,7 @@
       "template": "boardroom",
       "audio": "audio/t120.wav",
       "audioStartFrame": 3,
-      "startFrame": 17552,
+      "startFrame": 17674,
       "durationInFrames": 151,
       "gap": 0.3,
       "mood": "grim"
@@ -1610,7 +1610,7 @@
       "template": "crowdQueue",
       "audio": "audio/t121.wav",
       "audioStartFrame": 3,
-      "startFrame": 17703,
+      "startFrame": 17825,
       "durationInFrames": 180,
       "gap": 0.528,
       "mood": "grim"
@@ -1622,7 +1622,7 @@
       "template": "officeFloor",
       "audio": "audio/t122.wav",
       "audioStartFrame": 3,
-      "startFrame": 17883,
+      "startFrame": 18005,
       "durationInFrames": 79,
       "gap": 0.363,
       "mood": "grim"
@@ -1634,7 +1634,7 @@
       "template": "domesticInterior",
       "audio": "audio/t123.wav",
       "audioStartFrame": 3,
-      "startFrame": 17962,
+      "startFrame": 18084,
       "durationInFrames": 94,
       "gap": 0.494,
       "mood": "grim"
@@ -1646,7 +1646,7 @@
       "template": "officeFloor",
       "audio": "audio/t124.wav",
       "audioStartFrame": 3,
-      "startFrame": 18056,
+      "startFrame": 18178,
       "durationInFrames": 159,
       "gap": 0.505,
       "mood": "grim"
@@ -1658,7 +1658,7 @@
       "template": "bankExterior",
       "audio": "audio/t125.wav",
       "audioStartFrame": 3,
-      "startFrame": 18215,
+      "startFrame": 18337,
       "durationInFrames": 167,
       "gap": 0.476
     },
@@ -1669,7 +1669,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t126.wav",
       "audioStartFrame": 3,
-      "startFrame": 18382,
+      "startFrame": 18504,
       "durationInFrames": 133,
       "gap": 0.396,
       "mood": "grim"
@@ -1681,7 +1681,7 @@
       "template": "newsMontage",
       "audio": "audio/t127.wav",
       "audioStartFrame": 3,
-      "startFrame": 18515,
+      "startFrame": 18637,
       "durationInFrames": 162,
       "gap": 0.546
     },
@@ -1692,8 +1692,8 @@
       "template": "officeFloor",
       "audio": "audio/t128.wav",
       "audioStartFrame": 3,
-      "startFrame": 18677,
-      "durationInFrames": 214,
+      "startFrame": 18799,
+      "durationInFrames": 207,
       "gap": 0.956
     },
     {
@@ -1703,7 +1703,7 @@
       "template": "boardroom",
       "audio": "audio/t129.wav",
       "audioStartFrame": 3,
-      "startFrame": 18891,
+      "startFrame": 19006,
       "durationInFrames": 124,
       "gap": 0.447,
       "card": {
@@ -1720,7 +1720,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t130.wav",
       "audioStartFrame": 3,
-      "startFrame": 19015,
+      "startFrame": 19130,
       "durationInFrames": 249,
       "gap": 0.478,
       "foreground": {
@@ -1736,7 +1736,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t131.wav",
       "audioStartFrame": 3,
-      "startFrame": 19264,
+      "startFrame": 19379,
       "durationInFrames": 245,
       "gap": 0.461,
       "mood": "grim"
@@ -1748,7 +1748,7 @@
       "template": "newsMontage",
       "audio": "audio/t132.wav",
       "audioStartFrame": 3,
-      "startFrame": 19509,
+      "startFrame": 19624,
       "durationInFrames": 121,
       "gap": 0.477,
       "card": {
@@ -1767,8 +1767,8 @@
       "template": "chartBoard",
       "audio": "audio/t133.wav",
       "audioStartFrame": 3,
-      "startFrame": 19630,
-      "durationInFrames": 144,
+      "startFrame": 19745,
+      "durationInFrames": 147,
       "gap": 0.378,
       "chart": "down"
     },
@@ -1779,8 +1779,8 @@
       "template": "bankExterior",
       "audio": "audio/t134.wav",
       "audioStartFrame": 3,
-      "startFrame": 19774,
-      "durationInFrames": 125,
+      "startFrame": 19892,
+      "durationInFrames": 134,
       "gap": 0.526
     },
     {
@@ -1790,7 +1790,7 @@
       "template": "boardroom",
       "audio": "audio/t135.wav",
       "audioStartFrame": 3,
-      "startFrame": 19899,
+      "startFrame": 20026,
       "durationInFrames": 173,
       "gap": 0.303
     },
@@ -1801,7 +1801,7 @@
       "template": "crowdQueue",
       "audio": "audio/t136.wav",
       "audioStartFrame": 3,
-      "startFrame": 20072,
+      "startFrame": 20199,
       "durationInFrames": 172,
       "gap": 0.522
     },
@@ -1812,7 +1812,7 @@
       "template": "officeFloor",
       "audio": "audio/t137.wav",
       "audioStartFrame": 3,
-      "startFrame": 20244,
+      "startFrame": 20371,
       "durationInFrames": 143,
       "gap": 0.448
     },
@@ -1823,7 +1823,7 @@
       "template": "exchangeFloor",
       "audio": "audio/t138.wav",
       "audioStartFrame": 3,
-      "startFrame": 20387,
+      "startFrame": 20514,
       "durationInFrames": 129,
       "gap": 0.326,
       "chart": "up"
@@ -1835,7 +1835,7 @@
       "template": "chartBoard",
       "audio": "audio/t139.wav",
       "audioStartFrame": 3,
-      "startFrame": 20516,
+      "startFrame": 20643,
       "durationInFrames": 150,
       "gap": 0.269,
       "chart": "up",
@@ -1848,7 +1848,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t140.wav",
       "audioStartFrame": 3,
-      "startFrame": 20666,
+      "startFrame": 20793,
       "durationInFrames": 127,
       "gap": 0.451
     },
@@ -1859,7 +1859,7 @@
       "template": "chartBoard",
       "audio": "audio/t141.wav",
       "audioStartFrame": 3,
-      "startFrame": 20793,
+      "startFrame": 20920,
       "durationInFrames": 115,
       "gap": 0.346,
       "chart": "down"
@@ -1871,7 +1871,7 @@
       "template": "newsMontage",
       "audio": "audio/t142.wav",
       "audioStartFrame": 3,
-      "startFrame": 20908,
+      "startFrame": 21035,
       "durationInFrames": 124,
       "gap": 0.369
     },
@@ -1882,7 +1882,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t143.wav",
       "audioStartFrame": 3,
-      "startFrame": 21032,
+      "startFrame": 21159,
       "durationInFrames": 160,
       "gap": 0.253
     },
@@ -1893,7 +1893,7 @@
       "template": "officeFloor",
       "audio": "audio/t144.wav",
       "audioStartFrame": 3,
-      "startFrame": 21192,
+      "startFrame": 21319,
       "durationInFrames": 82,
       "gap": 0.313
     },
@@ -1904,7 +1904,7 @@
       "template": "chartBoard",
       "audio": "audio/t145.wav",
       "audioStartFrame": 3,
-      "startFrame": 21274,
+      "startFrame": 21401,
       "durationInFrames": 124,
       "gap": 0.409,
       "chart": "down"
@@ -1916,7 +1916,7 @@
       "template": "domesticInterior",
       "audio": "audio/t146.wav",
       "audioStartFrame": 3,
-      "startFrame": 21398,
+      "startFrame": 21525,
       "durationInFrames": 115,
       "gap": 0.385,
       "card": {
@@ -1934,7 +1934,7 @@
       "template": "boardroom",
       "audio": "audio/t147.wav",
       "audioStartFrame": 3,
-      "startFrame": 21513,
+      "startFrame": 21640,
       "durationInFrames": 66,
       "gap": 0.329
     },
@@ -1945,7 +1945,7 @@
       "template": "officeFloor",
       "audio": "audio/t148.wav",
       "audioStartFrame": 3,
-      "startFrame": 21579,
+      "startFrame": 21706,
       "durationInFrames": 97,
       "gap": 0.502,
       "bubbles": [
@@ -1970,7 +1970,7 @@
       "template": "chartBoard",
       "audio": "audio/t149.wav",
       "audioStartFrame": 3,
-      "startFrame": 21676,
+      "startFrame": 21803,
       "durationInFrames": 144,
       "gap": 0.507,
       "chart": "up"
@@ -1982,7 +1982,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t150.wav",
       "audioStartFrame": 3,
-      "startFrame": 21820,
+      "startFrame": 21947,
       "durationInFrames": 116,
       "gap": 0.423
     },
@@ -1993,7 +1993,7 @@
       "template": "crowdQueue",
       "audio": "audio/t151.wav",
       "audioStartFrame": 3,
-      "startFrame": 21936,
+      "startFrame": 22063,
       "durationInFrames": 97,
       "gap": 0.352,
       "mood": "grim"
@@ -2005,7 +2005,7 @@
       "template": "officeFloor",
       "audio": "audio/t152.wav",
       "audioStartFrame": 3,
-      "startFrame": 22033,
+      "startFrame": 22160,
       "durationInFrames": 150,
       "gap": 0.262
     },
@@ -2016,7 +2016,7 @@
       "template": "crowdQueue",
       "audio": "audio/t153.wav",
       "audioStartFrame": 3,
-      "startFrame": 22183,
+      "startFrame": 22310,
       "durationInFrames": 150,
       "gap": 0.417,
       "mood": "grim"
@@ -2031,7 +2031,7 @@
       "template": "chartBoard",
       "audio": "audio/t154.wav",
       "audioStartFrame": 3,
-      "startFrame": 22333,
+      "startFrame": 22460,
       "durationInFrames": 173,
       "gap": 0.429,
       "chart": "down"
@@ -2043,7 +2043,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t155.wav",
       "audioStartFrame": 3,
-      "startFrame": 22506,
+      "startFrame": 22633,
       "durationInFrames": 123,
       "gap": 0.424,
       "mood": "grim"
@@ -2055,7 +2055,7 @@
       "template": "crowdQueue",
       "audio": "audio/t156.wav",
       "audioStartFrame": 3,
-      "startFrame": 22629,
+      "startFrame": 22756,
       "durationInFrames": 136,
       "gap": 0.506,
       "mood": "grim"
@@ -2067,8 +2067,8 @@
       "template": "courtHearing",
       "audio": "audio/t157.wav",
       "audioStartFrame": 3,
-      "startFrame": 22765,
-      "durationInFrames": 434,
+      "startFrame": 22892,
+      "durationInFrames": 455,
       "gap": 0.306,
       "mood": "grim"
     },
@@ -2079,7 +2079,7 @@
       "template": "chartBoard",
       "audio": "audio/t158.wav",
       "audioStartFrame": 3,
-      "startFrame": 23199,
+      "startFrame": 23347,
       "durationInFrames": 195,
       "gap": 0.434,
       "chart": "flat"
@@ -2091,7 +2091,7 @@
       "template": "courtHearing",
       "audio": "audio/t159.wav",
       "audioStartFrame": 3,
-      "startFrame": 23394,
+      "startFrame": 23542,
       "durationInFrames": 140,
       "gap": 0.351
     },
@@ -2102,7 +2102,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t160.wav",
       "audioStartFrame": 3,
-      "startFrame": 23534,
+      "startFrame": 23682,
       "durationInFrames": 178,
       "gap": 0.458,
       "mood": "grim"
@@ -2114,7 +2114,7 @@
       "template": "bankExterior",
       "audio": "audio/t161.wav",
       "audioStartFrame": 3,
-      "startFrame": 23712,
+      "startFrame": 23860,
       "durationInFrames": 75,
       "gap": 0.392
     },
@@ -2125,7 +2125,7 @@
       "template": "boardroom",
       "audio": "audio/t162.wav",
       "audioStartFrame": 3,
-      "startFrame": 23787,
+      "startFrame": 23935,
       "durationInFrames": 108,
       "gap": 0.44
     },
@@ -2136,7 +2136,7 @@
       "template": "chartBoard",
       "audio": "audio/t163.wav",
       "audioStartFrame": 3,
-      "startFrame": 23895,
+      "startFrame": 24043,
       "durationInFrames": 110,
       "gap": 0.524,
       "card": {
@@ -2152,7 +2152,7 @@
       "template": "boardroom",
       "audio": "audio/t164.wav",
       "audioStartFrame": 3,
-      "startFrame": 24005,
+      "startFrame": 24153,
       "durationInFrames": 125,
       "gap": 0.543,
       "mood": "grim"
@@ -2164,7 +2164,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t165.wav",
       "audioStartFrame": 3,
-      "startFrame": 24130,
+      "startFrame": 24278,
       "durationInFrames": 166,
       "gap": 0.357
     },
@@ -2175,7 +2175,7 @@
       "template": "courtHearing",
       "audio": "audio/t166.wav",
       "audioStartFrame": 3,
-      "startFrame": 24296,
+      "startFrame": 24444,
       "durationInFrames": 177,
       "gap": 0.446
     },
@@ -2189,7 +2189,7 @@
       "template": "chartBoard",
       "audio": "audio/t167.wav",
       "audioStartFrame": 3,
-      "startFrame": 24473,
+      "startFrame": 24621,
       "durationInFrames": 105,
       "gap": 0.389,
       "chart": "up"
@@ -2201,7 +2201,7 @@
       "template": "bankExterior",
       "audio": "audio/t168.wav",
       "audioStartFrame": 3,
-      "startFrame": 24578,
+      "startFrame": 24726,
       "durationInFrames": 97,
       "gap": 0.25
     },
@@ -2212,7 +2212,7 @@
       "template": "chartBoard",
       "audio": "audio/t169.wav",
       "audioStartFrame": 3,
-      "startFrame": 24675,
+      "startFrame": 24823,
       "durationInFrames": 141,
       "gap": 0.259,
       "chart": "up"
@@ -2224,7 +2224,7 @@
       "template": "officeFloor",
       "audio": "audio/t170.wav",
       "audioStartFrame": 3,
-      "startFrame": 24816,
+      "startFrame": 24964,
       "durationInFrames": 57,
       "gap": 0.304
     },
@@ -2235,7 +2235,7 @@
       "template": "domesticInterior",
       "audio": "audio/t171.wav",
       "audioStartFrame": 3,
-      "startFrame": 24873,
+      "startFrame": 25021,
       "durationInFrames": 293,
       "gap": 0.494,
       "panels": {
@@ -2257,7 +2257,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t172.wav",
       "audioStartFrame": 3,
-      "startFrame": 25166,
+      "startFrame": 25314,
       "durationInFrames": 127,
       "gap": 0.256
     },
@@ -2268,7 +2268,7 @@
       "template": "domesticInterior",
       "audio": "audio/t172b.wav",
       "audioStartFrame": 3,
-      "startFrame": 25293,
+      "startFrame": 25441,
       "durationInFrames": 66,
       "gap": 0.382
     },
@@ -2279,7 +2279,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t173.wav",
       "audioStartFrame": 3,
-      "startFrame": 25359,
+      "startFrame": 25507,
       "durationInFrames": 123,
       "gap": 0.333
     },
@@ -2290,7 +2290,7 @@
       "template": "boardroom",
       "audio": "audio/t174.wav",
       "audioStartFrame": 3,
-      "startFrame": 25482,
+      "startFrame": 25630,
       "durationInFrames": 142,
       "gap": 0.39
     },
@@ -2301,7 +2301,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t175.wav",
       "audioStartFrame": 3,
-      "startFrame": 25624,
+      "startFrame": 25772,
       "durationInFrames": 73,
       "gap": 0.391,
       "card": {
@@ -2316,7 +2316,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t176.wav",
       "audioStartFrame": 3,
-      "startFrame": 25697,
+      "startFrame": 25845,
       "durationInFrames": 161,
       "gap": 0.329,
       "mood": "grim"
@@ -2328,7 +2328,7 @@
       "template": "boardroom",
       "audio": "audio/t177.wav",
       "audioStartFrame": 3,
-      "startFrame": 25858,
+      "startFrame": 26006,
       "durationInFrames": 236,
       "gap": 0.318
     },
@@ -2339,7 +2339,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t178.wav",
       "audioStartFrame": 3,
-      "startFrame": 26094,
+      "startFrame": 26242,
       "durationInFrames": 137,
       "gap": 0.47
     },
@@ -2350,7 +2350,7 @@
       "template": "domesticInterior",
       "audio": "audio/t179.wav",
       "audioStartFrame": 3,
-      "startFrame": 26231,
+      "startFrame": 26379,
       "durationInFrames": 161,
       "gap": 0.413
     },
@@ -2361,7 +2361,7 @@
       "template": "closeUpPortrait",
       "audio": "audio/t180.wav",
       "audioStartFrame": 3,
-      "startFrame": 26392,
+      "startFrame": 26540,
       "durationInFrames": 66,
       "gap": 0.455,
       "mood": "grim"
@@ -2373,7 +2373,7 @@
       "template": "broadcastDesk",
       "audio": "audio/t181.wav",
       "audioStartFrame": 3,
-      "startFrame": 26458,
+      "startFrame": 26606,
       "durationInFrames": 368,
       "gap": 0.436
     }

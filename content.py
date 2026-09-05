@@ -79,7 +79,7 @@ NARRATION_RATE = "-5%"   # matches the current channel-wide retune (docs/BIBLE.m
 SCENES = [
     # ================= HOOK =================
     dict(id="t001", level=None, template="closeUpPortrait",
-         narration="In January 2019, one firm was worth forty-seven billion dollars.", overlay=None),
+         narration="By January 2019, one company was worth forty-seven billion dollars.", overlay=None),
 
     dict(id="t002", level=None, template="chartBoard", chart="up",
          narration="It didn't own a single building it worked out of.", overlay=None),
@@ -88,7 +88,7 @@ SCENES = [
          narration="It just rented out desks, one at a time.", overlay=None),
 
     dict(id="t004", level=None, template="crowdQueue", mood="grim",
-         narration="That same year, it lost nearly two billion dollars finding out that wasn't enough.", overlay=None),
+         narration="It had already lost nearly two billion dollars finding out that wasn't enough.", overlay=None),
 
     dict(id="t005", level=None, template="newsMontage",
          narration="Six weeks after it tried to go public, the forty-seven billion dollar number was simply gone.", overlay=None),
@@ -109,7 +109,7 @@ SCENES = [
          narration="Brooklyn, New York, 2010. Two men bet an office could sell a feeling, not just a desk.",
          overlay=None, card=dict(kind="chapter", title="The Believer", subtitle="A Startup That Sold a Feeling", hold=2.4)),
 
-    dict(id="t010", level=None, template="officeFloor",
+    dict(id="t010", level=None, template="newsMontage",
          narration="Adam Neumann and Miguel McKelvey had already tried something like it once.", overlay=None),
 
     dict(id="t011", level=None, template="domesticInterior",
@@ -121,7 +121,7 @@ SCENES = [
     dict(id="t013", level=None, template="officeFloor",
          narration="This time, they called it WeWork.", overlay=None),
 
-    dict(id="t014", level=None, template="boardroom",
+    dict(id="t014", level=None, template="bankExterior",
          narration="The first location opened in Manhattan's SoHo, backed by fifteen million dollars from an early investor.", overlay=None),
 
     dict(id="t015", level=None, template="domesticInterior",
@@ -135,28 +135,28 @@ SCENES = [
          bubbles=[dict(text="How is this different from a normal office lease?", speaker="left"),
                   dict(text="We're not selling a lease. We're selling a feeling.", speaker="right", at=2.0)]),
 
-    dict(id="t018", level=None, template="chartBoard", chart="up",
+    dict(id="t018", level=None, template="exchangeFloor", chart="up",
          narration="Between 2014 and 2016, its worth climbed from one point four billion dollars to ten point five billion.",
          overlay=None),
 
     dict(id="t018b", level=None, template="closeUpPortrait",
          narration="You'd have called that a good bet, in 2016.", overlay=None),
 
-    dict(id="t019", level=None, template="officeFloor",
+    dict(id="t019", level=None, template="exchangeFloor",
          narration="Within a few years, it wasn't just a New York firm anymore.", overlay=None),
 
     dict(id="t020", level=None, template="cityStreet",
-         narration="London. Tel Aviv. Shanghai. New cities, every few months.", overlay=None,
+         narration="A rapid, expensive rush into new cities followed -- more of them than most outside the company could track.", overlay=None,
          panels=dict(variant="grid4", cells=[dict(template="cityStreet"), dict(template="officeFloor"),
                                               dict(template="boardroom"), dict(template="domesticInterior")])),
 
-    dict(id="t021", level=None, template="boardroom",
+    dict(id="t021", level=None, template="newsMontage",
          narration="Miguel McKelvey, the architect of the two, designed the look every location shared.", overlay=None),
 
     dict(id="t022", level=None, template="domesticInterior",
          narration="Glass walls. Reclaimed wood. A ping-pong table no one ever quite finished a game on.", overlay=None),
 
-    dict(id="t023", level=None, template="boardroom",
+    dict(id="t023", level=None, template="exchangeFloor",
          narration="In 2017, the world's biggest tech investor came calling.", overlay=None),
 
     dict(id="t024", level=None, template="closeUpPortrait",
@@ -174,17 +174,17 @@ SCENES = [
          narration="Son didn't stop there. \"You are correct,\" he said, \"but you and Miguel are not crazy enough\" -- and backed the sentence with four point four billion dollars.",
          overlay=None, card=dict(kind="narration", text="\"Not crazy\nenough.\"")),
 
-    dict(id="t028", level=None, template="chartBoard", chart="up",
+    dict(id="t028", level=None, template="exchangeFloor", chart="up",
          narration="Four point four billion dollars, through SoftBank's Vision Fund.",
          overlay=dict(big="$4.4B", sub="ONE MEETING, SOFTBANK")),
 
-    dict(id="t029", level=None, template="officeFloor",
+    dict(id="t029", level=None, template="bankExterior",
          narration="\"Crazy\" stopped being a warning. It became the business plan.", overlay=None),
 
     dict(id="t030", level=None, template="cityStreet",
          narration="New offices opened faster than most firms could staff them.", overlay=None),
 
-    dict(id="t031", level=None, template="officeFloor",
+    dict(id="t031", level=None, template="bankExterior",
          narration="Construction crews built out new floors nearly as fast as leases got signed.", overlay=None),
 
     dict(id="t032", level=None, template="domesticInterior",
@@ -193,16 +193,16 @@ SCENES = [
     dict(id="t032b", level=None, template="crowdQueue",
          narration="You could believe almost anything, one free kombucha at a time.", overlay=None),
 
-    dict(id="t033", level=None, template="officeFloor",
+    dict(id="t033", level=None, template="newsMontage",
          narration="Former workers told the press Neumann sometimes walked the office barefoot.", overlay=None),
 
-    dict(id="t034", level=None, template="chartBoard", chart="up",
+    dict(id="t034", level=None, template="bankExterior", chart="up",
          narration="None of it slowed the money down.", overlay=None),
 
     dict(id="t035", level=None, template="cityStreet",
          narration="By January 2019, it went by a bigger name: The We Company.", overlay=None),
 
-    dict(id="t036", level=None, template="boardroom",
+    dict(id="t036", level=None, template="exchangeFloor",
          narration="Another SoftBank-led round valued it at forty-seven billion dollars.",
          overlay=None, card=dict(kind="narration", text="$47 billion.")),
 
@@ -225,11 +225,11 @@ SCENES = [
     dict(id="t042", level=None, template="bankExterior",
          narration="Forty percent of them were big firms now, not lone freelancers.", overlay=None),
 
-    dict(id="t043", level=None, template="officeFloor",
+    dict(id="t043", level=None, template="courtHearing",
          narration="On paper, it looked like it couldn't lose.", overlay=None),
 
     dict(id="t044", level=None, template="boardroom", breath=True,
-         narration="But paper is exactly the word to watch.", overlay=None),
+         narration="But what was actually written on all that paper?", overlay=None),
 
     # ================= CH 2: The Ledger =================
     dict(id="t045", level="CH 2", template="bankExterior", breath=True,
@@ -283,37 +283,37 @@ SCENES = [
          narration="Revenue climbed every year. So did the losses.", overlay=None),
 
     dict(id="t059", level=None, template="bankExterior",
-         narration="In 2018, it brought in one point eight two billion dollars.",
+         narration="By the end of 2018, it had brought in one point eight two billion dollars.",
          overlay=dict(big="$1.82B", sub="2018 REVENUE")),
 
     dict(id="t060", level=None, template="boardroom",
-         narration="And lost one point nine three billion dollars doing it.",
+         narration="And it lost one point nine three billion dollars doing it.",
          overlay=dict(big="-$1.93B", sub="2018 NET LOSS")),
 
     dict(id="t061", level=None, template="broadcastDesk",
          narration="Almost a dollar lost for every dollar earned.", overlay=None),
 
-    dict(id="t062", level=None, template="boardroom",
+    dict(id="t062", level=None, template="newsMontage",
          narration="By normal math, that's a firm on fire.", overlay=None),
 
-    dict(id="t063", level=None, template="officeFloor",
+    dict(id="t063", level=None, template="exchangeFloor",
          narration="WeWork didn't use normal accounting.", overlay=None),
 
-    dict(id="t064", level=None, template="chartBoard", chart="flat",
+    dict(id="t064", level=None, template="courtHearing", chart="flat",
          narration="It invented its own number instead: Community Adjusted EBITDA.",
          overlay=None, card=dict(kind="narration", text="\"Community\nAdjusted EBITDA.\"")),
 
     dict(id="t065", level=None, template="broadcastDesk",
          narration="A regular EBITDA adds back interest, taxes, and depreciation.", overlay=None),
 
-    dict(id="t066", level=None, template="chartBoard", chart="flat", breath=True,
+    dict(id="t066", level=None, template="courtHearing", chart="flat", breath=True,
          narration="WeWork's version also added back marketing, building costs, and even the losses on desks no one had rented yet.",
          overlay=None),
 
     dict(id="t067", level=None, template="broadcastDesk",
          narration="Strip out everything expensive enough, and almost any firm can look like it's making money.", overlay=None),
 
-    dict(id="t067b", level=None, template="officeFloor",
+    dict(id="t067b", level=None, template="exchangeFloor",
          narration="You don't need a finance degree to spot math this cooked.", overlay=None),
 
     dict(id="t068", level=None, template="closeUpPortrait", mood="grim",
@@ -326,7 +326,7 @@ SCENES = [
     dict(id="t070", level=None, template="crowdQueue",
          narration="For now, almost no one outside finance was reading that closely.", overlay=None),
 
-    dict(id="t071", level=None, template="officeFloor",
+    dict(id="t071", level=None, template="cityStreet",
          narration="Five hundred twenty-eight locations, worldwide.",
          overlay=dict(big="528", sub="LOCATIONS WORLDWIDE")),
 
@@ -339,11 +339,11 @@ SCENES = [
     dict(id="t074", level=None, template="domesticInterior",
          narration="It wasn't. A normal landlord doesn't sell kombucha and a mission statement.", overlay=None),
 
-    dict(id="t075", level=None, template="boardroom",
+    dict(id="t075", level=None, template="courtHearing",
          narration="The pitch had grown up. The math hadn't.", overlay=None),
 
     dict(id="t076", level=None, template="cityStreet",
-         narration="And in August of 2019, it finally had to show its math to everyone.", overlay=None),
+         narration="So what happened when, in August of 2019, it finally had to show its math to everyone?", overlay=None),
 
     # ================= CH 3: The Filing =================
     dict(id="t077", level="CH 3", template="officeFloor", breath=True,
@@ -363,17 +363,17 @@ SCENES = [
     dict(id="t081", level=None, template="newsMontage",
          narration="Then they found the numbers sitting underneath it.", overlay=None),
 
-    dict(id="t082", level=None, template="chartBoard", chart="down",
+    dict(id="t082", level=None, template="exchangeFloor", chart="down",
          narration="Over nine hundred million dollars lost in the first six months of 2019 alone.",
          overlay=dict(big="-$900M", sub="FIRST HALF OF 2019")),
 
-    dict(id="t083", level=None, template="boardroom",
+    dict(id="t083", level=None, template="bankExterior",
          narration="On one point five four billion dollars of revenue.", overlay=None),
 
     dict(id="t084", level=None, template="broadcastDesk",
          narration="Then came the rules.", overlay=None),
 
-    dict(id="t085", level=None, template="officeFloor",
+    dict(id="t085", level=None, template="courtHearing",
          narration="It had paid five point nine million dollars for the rights to its own name.",
          overlay=None, card=dict(kind="objects", items=["safe", "coinStack"])),
 
@@ -385,13 +385,13 @@ SCENES = [
     dict(id="t087", level=None, template="closeUpPortrait", mood="grim",
          narration="The backlash was immediate.", overlay=None),
 
-    dict(id="t088", level=None, template="officeFloor",
+    dict(id="t088", level=None, template="newsMontage",
          narration="He gave the money back.", overlay=None),
 
-    dict(id="t089", level=None, template="boardroom",
+    dict(id="t089", level=None, template="courtHearing",
          narration="By then, it was too late to fix the damage.", overlay=None),
 
-    dict(id="t090", level=None, template="chartBoard", chart="flat",
+    dict(id="t090", level=None, template="exchangeFloor", chart="flat",
          narration="Then there was the stock.", overlay=None),
 
     dict(id="t091", level=None, template="boardroom",
@@ -410,7 +410,7 @@ SCENES = [
     dict(id="t095", level=None, template="broadcastDesk",
          narration="Wall Street had seen firms lose money and still go public before.", overlay=None),
 
-    dict(id="t096", level=None, template="boardroom",
+    dict(id="t096", level=None, template="exchangeFloor",
          narration="It had rarely seen one explain its own math this strangely.", overlay=None),
 
     dict(id="t097", level=None, template="closeUpPortrait",
@@ -447,7 +447,7 @@ SCENES = [
          narration="And it hadn't even gone public yet.", overlay=None),
 
     dict(id="t106", level=None, template="crowdQueue", mood="grim",
-         narration="Two hundred pages. Forty billion dollars. One very bad six weeks.", overlay=None),
+         narration="Two hundred pages, forty billion dollars on the line -- what would one very bad six weeks actually cost?", overlay=None),
 
     # ================= CH 4: The Withdrawal =================
     dict(id="t107", level="CH 4", template="cityStreet", breath=True,
@@ -488,7 +488,7 @@ SCENES = [
                   dict(text="Enough that nobody calls it a firing.", speaker="right", at=2.0)]),
 
     dict(id="t117", level=None, template="chartBoard", chart="up", breath=True,
-         narration="Up to one point seven billion dollars, total: nine hundred seventy million for his shares, a hundred eighty-five million billed as a consulting fee, and five hundred million more in credit against his own loans.",
+         narration="Up to one point seven billion dollars, total. Nine hundred seventy million for his shares, a hundred eighty-five million billed as a consulting fee, and five hundred million more in credit against his own loans.",
          overlay=None, card=dict(kind="narration", text="$1.7 billion.\nOn the way out.")),
 
     dict(id="t118", level=None, template="crowdQueue", mood="grim",
@@ -526,7 +526,7 @@ SCENES = [
          narration="The press who'd once written the myth started unwriting it, line by line.", overlay=None),
 
     dict(id="t128", level=None, template="officeFloor", breath=True,
-         narration="The crazy guy had been right about one thing all along: someone was always going to pay for the belief.",
+         narration="The crazy guy had been right about one thing all along -- so who was left to pay for the belief?",
          overlay=None),
 
     # ================= CH 5: The Reckoning =================
@@ -547,11 +547,11 @@ SCENES = [
          overlay=None, card=dict(kind="narration", text="\"I was\nwrong.\"")),
 
     dict(id="t133", level=None, template="chartBoard", chart="down",
-         narration="SoftBank marked its own stake down to two point nine billion dollars.",
+         narration="SoftBank marked its own stake down to just two point nine billion dollars.",
          overlay=dict(big="$2.9B", sub="SOFTBANK'S NEW PRICE TAG")),
 
     dict(id="t134", level=None, template="bankExterior",
-         narration="Down from forty-seven billion, eighteen months earlier.", overlay=None),
+         narration="Down from forty-seven billion dollars, eighteen months earlier.", overlay=None),
 
     dict(id="t135", level=None, template="boardroom",
          narration="SoftBank had put in about eighteen and a half billion dollars, total, chasing that number.", overlay=None),
@@ -625,7 +625,7 @@ SCENES = [
          narration="The firm that once sold the future of work couldn't guarantee its own.", overlay=None),
 
     dict(id="t157", level=None, template="courtHearing", mood="grim", breath=True,
-         narration="On November 6th, 2023, WeWork and five hundred seventeen linked firms filed for bankruptcy in New Jersey, listing eighteen point six billion dollars in debt against fifteen billion dollars in assets.",
+         narration="On November 6th, 2023, WeWork and five hundred seventeen linked firms filed for bankruptcy in New Jersey. The filing listed eighteen point six billion dollars in debt against fifteen billion dollars in assets.",
          overlay=None),
 
     dict(id="t158", level=None, template="chartBoard", chart="flat",
