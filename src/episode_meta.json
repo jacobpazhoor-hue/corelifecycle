@@ -1,20 +1,20 @@
 {
   "thumb": {
-    "kicker": "KING OF CRYPTO",
-    "line1": "$8B",
+    "kicker": "CRAZY GUY",
+    "line1": "$47B",
     "line2": "",
-    "tag": "HE HAD A BACKDOOR NOBODY ELSE COULD SEE.",
-    "archetype": "question",
+    "tag": "HE SOLD A FEELING. IT WENT BANKRUPT.",
+    "archetype": "poster",
     "before": "",
     "after": "",
     "big": "",
-    "expr": "worried",
-    "mood": "crime",
-    "keyword": "BACKDOOR",
-    "question": "WHERE DID THE MONEY GO?",
-    "word": "",
+    "expr": "shock",
+    "mood": "money",
+    "keyword": "CRAZY",
+    "question": "",
+    "word": "BANKRUPT",
     "setting": "",
-    "prop": ""
+    "prop": "tower"
   },
-  "topic": "ftx"
+  "topic": "wework"
 }
